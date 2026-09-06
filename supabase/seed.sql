@@ -48,3 +48,5 @@ BEGIN
     ON CONFLICT (university_id, course_code) DO NOTHING;
 
 END \$\$;
+
+-- Trigger CI Sync: 06/09/2026
