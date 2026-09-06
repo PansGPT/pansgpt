@@ -1,0 +1,16 @@
+{
+  "name": "@pansgpt/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.json && electron .",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@pansgpt/typescript-config": "workspace:*",
+    "electron": "^33.2.1",
+    "typescript": "^5.7.3"
+  }
+}

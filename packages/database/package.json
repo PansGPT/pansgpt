@@ -1,0 +1,11 @@
+{
+  "name": "@pansgpt/database",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "db:types": "supabase gen types typescript --local > types.ts"
+  },
+  "devDependencies": {
+    "supabase": "^2.15.8"
+  }
+}

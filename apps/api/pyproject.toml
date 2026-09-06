@@ -1,0 +1,38 @@
+[project]
+name = "pansgpt-api"
+version = "0.1.0"
+description = "PansGPT 2.0 Core Backend Engine (FastAPI)"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.8",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.7.1",
+    "httpx>=0.28.1",
+    "structlog>=25.1.0",
+    "boto3>=1.36.19",
+    "pymupdf>=1.25.3",
+    "google-genai>=0.1.1",
+    "groq>=0.18.0",
+    "arq>=0.26.1",
+    "redis>=5.2.1",
+    "pyjwt[crypto]>=2.10.1",
+    "cryptography>=44.0.1",
+    "sentry-sdk[fastapi]>=2.20.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.3",
+    "ruff>=0.9.6"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

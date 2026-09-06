@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "PansGPT",
+    "slug": "pansgpt",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "scheme": "pansgpt",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0284c7"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pansgpt.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0284c7"
+      },
+      "package": "com.pansgpt.app"
+    },
+    "plugins": ["expo-router"]
+  }
+}

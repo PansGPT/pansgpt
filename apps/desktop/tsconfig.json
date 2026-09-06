@@ -1,0 +1,9 @@
+{
+  "extends": "@pansgpt/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "ES2022",
+    "module": "commonjs"
+  },
+  "include": ["src/**/*"]
+}
