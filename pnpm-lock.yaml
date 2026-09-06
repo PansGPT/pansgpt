@@ -11,6 +11,9 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.9.6
+      supabase:
+        specifier: ^2.116.0
+        version: 2.116.0
       turbo:
         specifier: ^2.4.4
         version: 2.10.12
