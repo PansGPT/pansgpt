@@ -111,16 +111,16 @@ PR reviewed + CI green → merged to main
 
 ## 📋 Phase Overview
 
-| # | Phase | What Gets Built | Gate Before Continuing |
-|:---:|---|---|---|
-| **0** | Local Dev Environment | Every developer runs the full stack locally | All services start without errors |
-| **1** | Monorepo Scaffold + CI | Repo structure, turbo.json, git hooks, PR templates, blocking CI | CI passes on an empty repo push |
-| **2** | Secrets + Config | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation | App refuses to start with missing vars |
-| **3** | Environments Wired | Local, staging, production Supabase + Vercel + Render all connected | Staging URL is reachable; `/health/ready` returns 200 |
-| **4** | Database Foundation | All migrations, RLS policies, enums, indexes, seed data | `supabase db reset` succeeds locally; migrations apply cleanly to staging |
-| **5** | Document Ingestion Engine | R2 storage, PyMuPDF, 8-stage pipeline, `gemini-embedding-002` HNSW | A PDF can be uploaded and fully indexed via pytest API test |
-| **6** | AI / LLM Orchestration Engine | Gemma 4 primary, Groq fallback, OpenRouter safety net, tools, SSE streaming | Streamed AI response over a document works via pytest API test |
-| **7** | Auth Backend | JWKS, JWT validation, RBAC role guards, per-client API keys | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| # | Phase | Status | What Gets Built | Gate Before Continuing |
+|:---:|---|:---:|---|---|
+| **0** | Local Dev Environment | ✅ **Done** | Every developer runs the full stack locally | All services start without errors |
+| **1** | Monorepo Scaffold + CI | ✅ **Done** | Repo structure, turbo.json, git hooks, PR templates, blocking CI | CI passes on an empty repo push |
+| **2** | Secrets + Config | ✅ **Done** | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation | App refuses to start with missing vars |
+| **3** | Environments Wired | ✅ **Done** | Local, staging, production Supabase + Vercel + Render all connected | Staging URL is reachable; `/health/ready` returns 200 |
+| **4** | Database Foundation | ✅ **Done** | All migrations, RLS policies, enums, indexes, seed data | `supabase db reset` succeeds locally; migrations apply cleanly to staging |
+| **5** | Document Ingestion Engine | 🔄 **Next Up** | R2 storage, PyMuPDF, 8-stage pipeline, `gemini-embedding-001` (1536d) HNSW | A PDF can be uploaded and fully indexed via pytest API test |
+| **6** | AI / LLM Orchestration Engine | ⏳ Pending | Gemma 4 primary, Groq fallback, OpenRouter safety net, tools, SSE streaming | Streamed AI response over a document works via pytest API test |
+| **7** | Auth Backend | ⏳ Pending | JWKS, JWT validation, RBAC role guards, per-client API keys | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8** | Walking Skeleton Web UI | Thin auth + upload + chat — proves all 3 engines together | Student signs up, uploads a doc, gets an AI response — on staging |
 | **9** | Design System + App Shell | OKLCH tokens, atomic components, 3 themes, navigation | Core screens navigable with real design |
 | **10** | PDF Reader (Web) | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat | Student opens, reads, highlights, and Snips to Chat |
@@ -151,44 +151,44 @@ PR reviewed + CI green → merged to main
 > Goal: every developer can start all services locally from a fresh machine in under 30 minutes.
 
 ### 0.1 Workstation Prerequisites
-- [ ] **Git** — configured with name, email, SSH key added to GitHub
-- [ ] **Node.js** — installed via `nvm`. Version pinned in `.nvmrc` at repo root
-- [ ] **pnpm** — installed globally (`npm install -g pnpm`)
-- [ ] **Python 3.12** — installed via `pyenv`. Version pinned in `apps/api/.python-version`
-- [ ] **uv** — Python package manager: `pip install uv`
-- [ ] **Docker Desktop** — required to run local Supabase
-- [ ] **Supabase CLI** — installed and authenticated
+- [x] **Git** — configured with name, email, SSH key added to GitHub
+- [x] **Node.js** — installed via `nvm`. Version pinned in `.nvmrc` at repo root
+- [x] **pnpm** — installed globally (`npm install -g pnpm`)
+- [x] **Python 3.12** — installed via `pyenv`. Version pinned in `apps/api/.python-version`
+- [x] **uv** — Python package manager: `pip install uv`
+- [x] **Docker Desktop** — required to run local Supabase
+- [x] **Supabase CLI** — installed and authenticated
 
 ### 0.2 IDE Setup (VS Code — shared `.vscode/settings.json` committed to repo)
-- [ ] `editor.formatOnSave: true`
-- [ ] Default formatter: `esbenp.prettier-vscode` (TypeScript), `charliermarsh.ruff` (Python)
-- [ ] Extensions every developer installs: ESLint, Prettier, Tailwind CSS IntelliSense, Pylance, Ruff, GitLens, Supabase
+- [x] `editor.formatOnSave: true`
+- [x] Default formatter: `esbenp.prettier-vscode` (TypeScript), `charliermarsh.ruff` (Python)
+- [x] Extensions every developer installs: ESLint, Prettier, Tailwind CSS IntelliSense, Pylance, Ruff, GitLens, Supabase
 
 ### 0.3 Running All Services Locally
-- [ ] `supabase start` → local Postgres + Auth + Storage + pgvector + Realtime + Studio on Docker
-- [ ] Confirm Studio at `http://localhost:54323`
-- [ ] `pnpm install` from monorepo root
-- [ ] `uv sync` inside `apps/api/`
-- [ ] `pnpm dev --filter=web` → Next.js at `http://localhost:3000`
-- [ ] `uvicorn main:app --reload` in `apps/api/` → FastAPI at `http://localhost:8000`
-- [ ] `http://localhost:8000/docs` → OpenAPI docs load successfully
+- [x] `supabase start` → local Postgres + Auth + Storage + pgvector + Realtime + Studio on Docker
+- [x] Confirm Studio at `http://localhost:54323`
+- [x] `pnpm install` from monorepo root
+- [x] `uv sync` inside `apps/api/`
+- [x] `pnpm dev --filter=web` → Next.js at `http://localhost:3000`
+- [x] `uvicorn main:app --reload` in `apps/api/` → FastAPI at `http://localhost:8000`
+- [x] `http://localhost:8000/docs` → OpenAPI docs load successfully
 
 ### 0.4 Onboarding Documentation (Written Before Any Feature Code)
-- [ ] `README.md` — prerequisites, local setup steps, how to run each service, how to run tests, how to apply migrations
-- [ ] `CONTRIBUTING.md` — branch naming, commit format, PR process, Definition of Done
-- [ ] `docs/dev-playbook.md` — how to write a migration, how to add a shared type, how to add a feature flag, how to debug SSE streaming
+- [x] `README.md` — prerequisites, local setup steps, how to run each service, how to run tests, how to apply migrations
+- [x] `CONTRIBUTING.md` — branch naming, commit format, PR process, Definition of Done
+- [x] `docs/dev-playbook.md` — how to write a migration, how to add a shared type, how to add a feature flag, how to debug SSE streaming
 
 ---
 
 ## 🏗️ PHASE 1 — Monorepo Scaffold + CI Tooling
 
 ### 1.1 Repository Setup
-- [ ] Create GitHub repository — initialize with `main` as the default branch
-- [ ] Enable **branch protection on `main`**:
+- [x] Create GitHub repository — initialize with `main` as the default branch
+- [x] Enable **branch protection on `main`**:
   - Require PR review before merge
   - Require all CI status checks to pass
   - **No direct pushes — ever. Including from admins.**
-- [ ] Add `CODEOWNERS` file
+- [x] Add `CODEOWNERS` file
 
 ### 1.2 Turborepo Workspace Structure
 ```
@@ -208,21 +208,21 @@ pansgpt/
 └── tooling/        ← CI scripts, type codegen, keep-alive pinger
 ```
 
-- [ ] `pnpm-workspace.yaml` — lists `apps/*` and `packages/*`
-- [ ] `turbo.json` — defines `build`, `dev`, `lint`, `typecheck`, `test` pipelines
+- [x] `pnpm-workspace.yaml` — lists `apps/*` and `packages/*`
+- [x] `turbo.json` — defines `build`, `dev`, `lint`, `typecheck`, `test` pipelines
   - `build` has `dependsOn: ["^build"]` — packages build before apps that consume them
   - Remote caching configured (Vercel Remote Cache, free for open teams)
 
 ### 1.3 Shared Package Configs (`packages/config`)
-- [ ] `eslint-base` — ESLint config (React, Next.js, import sorting)
-- [ ] `typescript-base` — `tsconfig.json` with `"strict": true` — no `any`, no exceptions
-- [ ] `prettier-base` — Prettier config (consistent formatting across every developer)
-- [ ] `tailwind-base` — Tailwind v4 config consuming `packages/ui` design tokens
+- [x] `eslint-base` — ESLint config (React, Next.js, import sorting)
+- [x] `typescript-base` — `tsconfig.json` with `"strict": true` — no `any`, no exceptions
+- [x] `prettier-base` — Prettier config (consistent formatting across every developer)
+- [x] `tailwind-base` — Tailwind v4 config consuming `packages/ui` design tokens
 
 ### 1.4 Git Hooks (Local Quality Gates)
-- [ ] **Husky** — manages git hooks from the repo
-- [ ] **lint-staged** — runs checks only on staged files (keeps pre-commit under 5 seconds)
-- [ ] **commitlint** — enforces Conventional Commits:
+- [x] **Husky** — manages git hooks from the repo
+- [x] **lint-staged** — runs checks only on staged files (keeps pre-commit under 5 seconds)
+- [x] **commitlint** — enforces Conventional Commits:
   ```
   feat:     new feature
   fix:      bug fix
@@ -232,33 +232,33 @@ pansgpt/
   refactor: no functional change
   perf:     performance improvement
   ```
-- [ ] `.husky/pre-commit` → `lint-staged` (ESLint, Prettier on TS; Ruff on Python staged files)
-- [ ] `.husky/commit-msg` → `commitlint` (rejects non-conventional messages)
-- [ ] **detect-secrets** hook — scans staged files for secrets before any commit
+- [x] `.husky/pre-commit` → `lint-staged` (ESLint, Prettier on TS; Ruff on Python staged files)
+- [x] `.husky/commit-msg` → `commitlint` (rejects non-conventional messages)
+- [x] **detect-secrets** hook — scans staged files for secrets before any commit
 
 ### 1.5 GitHub Actions — Blocking CI
 `.github/workflows/ci.yml` runs on every PR:
-- [ ] `lint` — ESLint on all TS workspaces + Ruff on `apps/api/`
-- [ ] `typecheck` — `tsc --noEmit` across all TypeScript packages
-- [ ] `test-api` — `pytest` unit tests on `apps/api/`
-- [ ] `test-web` — `vitest` unit tests on `apps/web/`
-- [ ] `build-web` — `next build` smoke check
-- [ ] `security-scan` — `pip-audit` (Python deps) + `npm audit` (Node deps)
-- [ ] **All jobs must pass for merge** — no exceptions, no bypasses
+- [x] `lint` — ESLint on all TS workspaces + Ruff on `apps/api/`
+- [x] `typecheck` — `tsc --noEmit` across all TypeScript packages
+- [x] `test-api` — `pytest` unit tests on `apps/api/`
+- [x] `test-web` — `vitest` unit tests on `apps/web/`
+- [x] `build-web` — `next build` smoke check
+- [x] `security-scan` — `pip-audit` (Python deps) + `npm audit` (Node deps)
+- [x] **All jobs must pass for merge** — no exceptions, no bypasses
 
 ### 1.6 PR + Issue Templates
-- [ ] `.github/PULL_REQUEST_TEMPLATE.md`:
+- [x] `.github/PULL_REQUEST_TEMPLATE.md`:
   - What changed and why (link to issue)
   - How to test this
   - Risk / rollback plan
   - Checklist: tests added, migration included, staging verified, Sentry clean
-- [ ] `.github/ISSUE_TEMPLATE/bug_report.md` — links Sentry event, reproduction steps
-- [ ] `.github/ISSUE_TEMPLATE/feature_request.md`
+- [x] `.github/ISSUE_TEMPLATE/bug_report.md` — links Sentry event, reproduction steps
+- [x] `.github/ISSUE_TEMPLATE/feature_request.md`
 
 ### 1.7 Semantic Versioning
-- [ ] Adopt `MAJOR.MINOR.PATCH`
-- [ ] `CHANGELOG.md` — start with `## [Unreleased]`
-- [ ] Update on every milestone release using Conventional Commit history
+- [x] Adopt `MAJOR.MINOR.PATCH`
+- [x] `CHANGELOG.md` — start with `## [Unreleased]`
+- [x] Update on every milestone release using Conventional Commit history
 
 ---
 
@@ -298,18 +298,18 @@ pansgpt/
 | `X_API_KEY_DESKTOP` | Desktop client identity header |
 
 ### 2.2 .env Discipline
-- [ ] Create `.env.example` in each app (committed — no real values, only `YOUR_VALUE_HERE` placeholders)
-- [ ] Add `.env`, `.env.local`, `.env.*.local` to root `.gitignore`
-- [ ] Enable **GitHub Secret Scanning** on the repository
+- [x] Create `.env.example` in each app (committed — no real values, only `YOUR_VALUE_HERE` placeholders)
+- [x] Add `.env`, `.env.local`, `.env.*.local` to root `.gitignore`
+- [x] Enable **GitHub Secret Scanning** on the repository
 
 ### 2.3 Validated Config Loading (Apps Refuse to Start with Missing Vars)
-- [ ] **`apps/api`** — Pydantic `BaseSettings` in `core/config.py`:
+- [x] **`apps/api`** — Pydantic `BaseSettings` in `core/config.py`:
   - All required env vars declared as fields with types
   - Missing var at startup → `ValidationError` → app exits with a clear error message
-- [ ] **`apps/web`** — `@t3-oss/env-nextjs`:
+- [x] **`apps/web`** — `@t3-oss/env-nextjs`:
   - Build fails if required env vars missing
   - Runtime validation on startup
-- [ ] **`apps/mobile`** — typed `appConfig.ts` with `expo-constants`
+- [x] **`apps/mobile`** — typed `appConfig.ts` with `expo-constants`
 
 ### 2.4 Where Secrets Live Per Environment
 | Environment | Location |
@@ -327,31 +327,31 @@ pansgpt/
 > This phase proves the deployment pipeline works before any product code exists.
 
 ### 3.1 Local Dev
-- [ ] `supabase start` confirmed working (Docker)
-- [ ] `apps/api/.env` + `apps/web/.env.local` populated from `.env.example` with local values
-- [ ] `GET /health/ready` returns `{"status": "ok", "db": "ok", "redis": "ok"}`
-- [ ] Next.js renders at `localhost:3000` without errors
+- [x] `supabase start` confirmed working (Docker)
+- [x] `apps/api/.env` + `apps/web/.env.local` populated from `.env.example` with local values
+- [x] `GET /health/ready` returns `{"status": "ok", "db": "ok", "redis": "ok"}`
+- [x] Next.js renders at `localhost:3000` without errors
 
 ### 3.2 Staging
-- [ ] Create **Supabase Hosted Project #1** (Staging) — note URL and API keys
-- [ ] Write `apps/api/Dockerfile` (multi-stage, non-root user, production-ready)
-- [ ] Write `render.yaml` — defines:
+- [x] Create **Supabase Hosted Project #1** (Staging) — note URL and API keys
+- [x] Write `apps/api/Dockerfile` (multi-stage, non-root user, production-ready)
+- [x] Write `render.yaml` — defines:
   - `web` service (FastAPI API) — `pnpm dev` → `gunicorn` in prod
   - `worker` service (ARQ worker) — **NOTE**: at bootstrap both run in same Render service to stay within free hours
-- [ ] Connect Render to GitHub — auto-deploys on push to `main`
-- [ ] Connect `apps/web` to Vercel — every PR gets an automatic Preview URL
-- [ ] Set staging env vars in Vercel (Preview) and Render (staging service)
-- [ ] Confirm staging API reachable at its Render URL
-- [ ] Confirm Vercel Preview deployment renders the Next.js app
+- [x] Connect Render to GitHub — auto-deploys on push to `main`
+- [x] Connect `apps/web` to Vercel — every PR gets an automatic Preview URL
+- [x] Set staging env vars in Vercel (Preview) and Render (staging service)
+- [x] Confirm staging API reachable at its Render URL
+- [x] Confirm Vercel Preview deployment renders the Next.js app
 
 ### 3.3 Production
-- [ ] Create **Supabase Hosted Project #2** (Production) — completely isolated from staging
-- [ ] Set production env vars in Vercel (Production) and Render (production service)
-- [ ] Configure custom domain in Vercel and point DNS records
-- [ ] Confirm HTTPS active on the custom domain
-- [ ] **Production receives no data until Phase 28 (Launch)**
-- [ ] Set up cron-job.org to ping `GET /health/ready` every 10 minutes (keeps Render awake)
-- [ ] Set up Better Uptime to monitor production API and web URLs
+- [x] Create **Supabase Hosted Project #2** (Production) — completely isolated from staging
+- [x] Set production env vars in Vercel (Production) and Render (production service)
+- [x] Configure custom domain in Vercel and point DNS records
+- [x] Confirm HTTPS active on the custom domain
+- [x] **Production receives no data until Phase 28 (Launch)**
+- [x] Set up cron-job.org to ping `GET /health/ready` every 10 minutes (keeps Render awake)
+- [x] Set up Better Uptime to monitor production API and web URLs
 
 ---
 
@@ -360,11 +360,11 @@ pansgpt/
 > The schema is the contract all engines are built on. Get it right before building engines.
 
 ### 4.1 Migration Governance (Non-Negotiable Rules)
-- [ ] Every schema change = `supabase migration new <name>` (auto-generates `YYYYMMDDHHMMSS_<name>.sql`)
-- [ ] **Zero manual SQL Editor edits in any environment — ever**
-- [ ] RLS enabled on every table in its first migration with `ALTER TABLE <t> ENABLE ROW LEVEL SECURITY`
-- [ ] Test every migration locally with `supabase db reset` before pushing to staging
-- [ ] Migrate staging: `supabase db push`
+- [x] Every schema change = `supabase migration new <name>` (auto-generates `YYYYMMDDHHMMSS_<name>.sql`)
+- [x] **Zero manual SQL Editor edits in any environment — ever**
+- [x] RLS enabled on every table in its first migration with `ALTER TABLE <t> ENABLE ROW LEVEL SECURITY`
+- [x] Test every migration locally with `supabase db reset` before pushing to staging
+- [x] Migrate staging: `supabase db push`
 
 ### 4.2 Required Extensions (First Migration)
 ```sql
@@ -414,25 +414,25 @@ Each created with `supabase migration new <name>`. Descriptive names below — a
 - **30-day purge cron** — `purge_soft_deleted_records()` function runs daily
 
 ### 4.6 RLS Policies
-- [ ] `users` — user reads/updates own row only
-- [ ] `documents` — scoped to `university_id` — student only sees their university's documents
-- [ ] `chat_sessions`, `chat_messages` — user sees only their own
-- [ ] `quiz_attempts` — user sees only their own
-- [ ] `general_notes` — user sees only their own
-- [ ] Write pytest security tests proving RLS isolation: Student A cannot read Student B's data
+- [x] `users` — user reads/updates own row only
+- [x] `documents` — scoped to `university_id` — student only sees their university's documents
+- [x] `chat_sessions`, `chat_messages` — user sees only their own
+- [x] `quiz_attempts` — user sees only their own
+- [x] `general_notes` — user sees only their own
+- [x] Write pytest security tests proving RLS isolation: Student A cannot read Student B's data
 
 ### 4.7 Key DB Functions + Triggers
-- [ ] `set_updated_at()` trigger — auto-updates `updated_at` on row mutation (all tables)
-- [ ] `match_document_chunks(query_embedding, threshold, count, doc_id)` — HNSW cosine similarity
-- [ ] `match_documents_global(query_embedding, threshold, count, doc_ids[])` — multi-doc search
-- [ ] `claim_document_ingestion(doc_id, worker_id)` — atomic concurrency lock for ingestion worker
-- [ ] `heartbeat_document_ingestion(doc_id, worker_id)` — 30s heartbeat prevents abandoned jobs
-- [ ] `purge_soft_deleted_records()` — hard deletes rows past 30-day grace period
+- [x] `set_updated_at()` trigger — auto-updates `updated_at` on row mutation (all tables)
+- [x] `match_document_chunks(query_embedding, threshold, count, doc_id)` — HNSW cosine similarity
+- [x] `match_documents_global(query_embedding, threshold, count, doc_ids[])` — multi-doc search
+- [x] `claim_document_ingestion(doc_id, worker_id)` — atomic concurrency lock for ingestion worker
+- [x] `heartbeat_document_ingestion(doc_id, worker_id)` — 30s heartbeat prevents abandoned jobs
+- [x] `purge_soft_deleted_records()` — hard deletes rows past 30-day grace period
 
 ### 4.8 Type Generation + Seed
-- [ ] `tooling/gen-types.sh` — `supabase gen types typescript > packages/types/src/supabase.ts`
-- [ ] `supabase/seed.sql` — 2 Nigerian universities, 3 faculties, 5 levels, 10 test users, sample documents
-- [ ] `supabase db reset` confirms migrations + seed apply cleanly
+- [x] `tooling/gen-types.sh` — `supabase gen types typescript > packages/types/src/supabase.ts`
+- [x] `supabase/seed.sql` — 2 Nigerian universities, 3 faculties, 5 levels, 10 test users, sample documents
+- [x] `supabase db reset` confirms migrations + seed apply cleanly
 
 ---
 
