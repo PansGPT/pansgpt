@@ -485,9 +485,9 @@ Stage 7: Single AI hierarchy + segmentation pass
        │  - Continuation     → append to current segment (title_source = 'inherited')
        │
 Stage 8: Semantic chunking + vector embeddings
-         - Tables + diagrams: atomic chunks (1 table = 1 chunk)
+         - Tables + diagrams: atomic chunks (1 table = 1 chunk, never cut across chunks)
          - Text: segment-bounded recursive splitting (512 tokens, 64-token overlap)
-         - gemini-embedding-002 (3072 dimensions) → HNSW index
+         - gemini-embedding-001 / gemini-embedding-2 (1536 dimensions) → HNSW index
 ```
 
 **Clinical Safety Rule (Stage 5)**: Drug names, dosages, units, and mechanisms must be recovered **verbatim**. Summarization is strictly forbidden. A dosage table flattened into prose actively causes wrong answers for a pharmacy student.
@@ -499,14 +499,14 @@ Stage 8: Semantic chunking + vector embeddings
   - 0–40%: text layer check, native extraction, OCR/Vision transcription
   - 40–60%: table extraction + classification
   - 60–80%: AI hierarchy pass + segment creation
-  - 80–100%: 512-token chunking, `gemini-embedding-002` batch embeddings, HNSW insertion
+  - 80–100%: 512-token chunking, `gemini-embedding-001` (1536d) batch embeddings, HNSW insertion
 - [ ] Supabase Realtime notifies client of progress changes
 - [ ] Retry: failed jobs retry up to 3 times with exponential backoff
 - [ ] On all retries exhausted: `embedding_status = 'failed'` → Realtime notifies client
 
 ### 5.5 Verification (No UI)
-- [ ] Pytest integration: submit a real PDF → confirm `document_chunks` rows with `vector(3072)` exist in DB
-- [ ] Pytest: confirm HNSW similarity search returns relevant chunks
+- [ ] Pytest integration: submit a real PDF → confirm `document_chunks` rows with `vector(1536)` exist in DB
+- [ ] Pytest: confirm HNSW similarity search (`match_document_chunks`) returns relevant chunks
 - [ ] Pytest: confirm concurrent uploads don't deadlock (two workers, two documents)
 
 ---
@@ -521,11 +521,13 @@ apps/api/
 ├── main.py              ← Entry point only. No business logic.
 ├── core/
 │   ├── config.py        ← Pydantic BaseSettings (all env vars)
+│   ├── database.py      ← Async connection pool (psycopg3 + pgvector)
 │   ├── dependencies.py  ← Auth, role guards, university scope
 │   ├── security.py      ← API key validation, JWT, rate limit helpers
 │   └── exceptions.py    ← Custom exception handlers
 ├── routers/             ← One file per domain (auth, chat, library, quiz, etc.)
-├── services/            ← Business logic (LLM engine, storage, email, etc.)
+├── engines/             ← Core engines (storage, embeddings, chunker, extractor, ingestion, rag)
+├── services/            ← Business logic (LLM engine, email, payments, etc.)
 ├── workers/             ← ARQ background job handlers
 ├── models/              ← Pydantic request/response models
 └── tests/
@@ -539,7 +541,7 @@ apps/api/
 | **Fast Fallback** | Groq | `openai/gpt-oss-120b`, `qwen/qwen3.6-27b` | On 429/503/timeout from Google |
 | **Safety Net** | OpenRouter | `nvidia/nemotron-3-ultra-550b-a55b:free`, `nvidia/nemotron-3-super-120b-a12b:free` | When both primary and Groq fail |
 | **Voice (STT)** | Groq | `whisper-large-v3-turbo` (primary), `whisper-large-v3` (fallback) | Voice input transcription |
-| **Embeddings** | Google AI Studio | `gemini-embedding-002` (3072 dimensions) | All vector embeddings — never falls over to another model |
+| **Embeddings** | Google AI Studio | `gemini-embedding-001` / `gemini-embedding-2` (1536 dimensions) | All vector embeddings — never falls over to another model |
 
 **Failover trigger**: `HTTP 429 / 503 / timeout > 8s` from current tier → switch to next tier silently.
 **No "Fast Mode"** — there is a single unified high-quality reasoning pipeline.
@@ -548,21 +550,23 @@ apps/api/
 ### 6.3 Core AI Tools (Always Available)
 | Tool | Parameters | Purpose |
 |---|---|---|
-| `rag_search` | `query, doc_id?, course_code?, expand_full_segment?` | Hybrid retrieval: Vector (3072d HNSW) + FTS + Trigram, merged with RRF k=60, returns Top-8 |
+| `rag_search` | `query, doc_id?, course_code?, expand_full_segment?` | Hybrid retrieval: Multi-Query Expansion + Vector (1536d HNSW) + FTS + Trigram with RRF k=60, returns Top-8 |
 | `read_document` | `doc_id?, file_url?, format, page_range?` | Reads PDF, DOCX, PPTX, TXT, CSV, MD from R2 |
 | `web_search` | `query` | Tavily — verified scientific literature (PubMed, DailyMed, BNF) — feature-flagged via PostHog |
 | `vision_analyze` | `image_url, prompt` | Histology slides, chemical structures, graphs — via Gemma 4 vision |
 
 ### 6.4 Hybrid Retrieval Engine (RAG)
 ```
-Student query → Zero-latency acronym normalizer (200+ medical abbreviations expanded)
-             → 3 parallel pools:
-               ├── Vector pool: gemini-embedding-002 → HNSW cosine → Top 30
+Student query → Acronym normalizer (200+ medical abbreviations expanded)
+             → Multi-Query Expansion & HyDE (OpenAI pattern for ambiguous queries)
+             → 3 parallel database pools:
+               ├── Vector pool: gemini-embedding 1536d → HNSW cosine → Top 30
                ├── FTS pool: websearch_to_tsquery (English) → Top 30
-               └── Trigram pool: word_similarity → Top 30
+               └── Trigram pool: word_similarity (pg_trgm) → Top 30
              → Reciprocal Rank Fusion (k=60): RRF(d) = Σ 1/(60 + rank_m(d))
-             → Deduplicate → Top 8 with confidence metadata (HIGH/MEDIUM/LOW)
+             → Candidate Re-ranking & False-Positive Elimination (Top 5-8)
              → Sibling expansion: ± 1 chunk by default; full segment on follow-up
+             → Verbatim citation mapping to exact PDF page numbers and text coordinates
 ```
 
 **Absence policy**: When no relevant match found — AI does **not** hallucinate. It invokes `web_search` and explicitly notes the topic is not in the university slides.

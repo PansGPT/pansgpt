@@ -2244,18 +2244,24 @@ graph TD
 ```
 
 #### 6.4.1 Hybrid Retrieval Engine Specification *(See [`retrieval_architecture_proposal.md`](retrieval_architecture_proposal.md))*
-1. **Zero-Latency Acronym Normalizer**: Fast in-memory dictionary expands 200+ medical acronyms (`HCTZ`, `MOA`, `Abx`, `ADR`) prior to embedding and text search.
+1. **Query Pre-Processing & Multi-Query Expansion** *(Adopted from OpenAI Knowledge Retrieval Architecture)*:
+   - **Zero-Latency Acronym Normalizer**: Fast in-memory dictionary expands 200+ medical/pharmacy acronyms (`HCTZ`, `MOA`, `Abx`, `ADR`, `MIC`, `GFR`, `CYP450`) prior to embedding and text search.
+   - **Multi-Query Decomposition & HyDE**: For complex multi-part or ambiguous student queries, generates 2–3 targeted sub-queries to maximize lexical and semantic recall across slide decks.
 2. **PostgreSQL 3-Pool Scoped Search (`match_documents_hybrid`)**:
-   - **Vector Pool**: `gemini-embedding-002` (3072d HNSW cosine distance) $\rightarrow$ Top 30 candidates.
+   - **Vector Pool**: `gemini-embedding-001` / `gemini-embedding-2` (1536d HNSW cosine distance) $\rightarrow$ Top 30 candidates.
    - **FTS Lexical Pool**: `content_fts` with `websearch_to_tsquery('english', query)` $\rightarrow$ Top 30 candidates.
-   - **Trigram Similarity Pool**: `word_similarity(query, content)` without threshold gates $\rightarrow$ Top 30 candidates.
+   - **Trigram Similarity Pool**: `word_similarity(query, content)` via `pg_trgm` $\rightarrow$ Top 30 candidates (robust to student spelling errors).
 3. **Unweighted Reciprocal Rank Fusion (RRF, $k=60$)**:
    - Merges candidate pools using rank positions: $RRF(d) = \sum_{m} \frac{1}{60 + \text{rank}_m(d)}$. Missing pool candidates contribute $0$.
-   - Deduplicates and returns Top-8 candidates with **Match Confidence Metadata** (`HIGH`, `MEDIUM`, `LOW`).
-4. **Adaptive Context Sibling Expansion**:
-   - **Default**: Pulls `[order_index - 1, order_index, order_index + 1]` within the same `segment_id`.
-   - **On-Demand Deepening**: Injects the full multi-page segment when `expand_full_segment=True` or on user follow-up / prompt regeneration.
-5. **Strict Grounding & Absence Policy (Option C)**:
+   - Deduplicates and ranks top candidates with **Match Confidence Metadata** (`HIGH`, `MEDIUM`, `LOW`).
+4. **Candidate Re-Ranking & Precision Filtering**:
+   - Scores top candidate chunks against the expanded query to eliminate semantic false-positives before final prompt assembly, selecting the Top 5–8 most authoritative chunks.
+5. **Adaptive Context Sibling Expansion**:
+   - **Default**: Pulls `[order_index - 1, order_index, order_index + 1]` within the same `segment_id` to preserve contiguous pharmacological explanation flow.
+   - **On-Demand Deepening**: Injects the full multi-page segment when `expand_full_segment=True` or on student follow-up / prompt regeneration.
+6. **Verbatim Citation Extraction & Page-Anchored Deep Linking**:
+   - Verifies extracted quotes exist verbatim in source chunks and attaches exact `page_start`, `page_end`, and document metadata, enabling 1-click interactive jump-and-highlight in the PDF Reader.
+7. **Strict Grounding & Absence Policy (Option C)**:
    - When syllabus match confidence is empty or low, the AI does **not** hallucinate. It autonomously invokes **`web_search`** to retrieve verified medical literature (PubMed / DailyMed / BNF), explicitly noting that the topic was not found in their university lecture slides.
 
 ---
