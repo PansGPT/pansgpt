@@ -40,7 +40,25 @@
 
 ---
 
-## 2. Monorepo Structure & Workspace Topology
+## 2. Notion Engineering Workspace Synchronization Protocol
+
+From now on, after any meaningful change to the PansGPT codebase (new feature, bug fix, architecture change, or decision made), update the Engineering gallery in Notion (**Project Overview → 🎯 Engineering**) as follows:
+
+1. **Session / Change Log**:
+   - Add a row with `Summary`, `Date`, `Area`, `Files Touched`.
+   - Check `Verified` ONLY if you actually tested the change.
+2. **Decision Log**:
+   - If the change involved choosing between approaches, add a row with the `Rationale` and `Alternatives Considered`.
+3. **Product Roadmap & Features**:
+   - Update the relevant row's `Status`, or add a new row if it is a new piece of work.
+4. **Knowledge Base**:
+   - ONLY touch Knowledge Base if the change altered the stack, architecture, or a core pattern — never for routine fixes.
+
+> **Formatting Rule**: Keep entries concise and scannable — this is a structured log, not documentation prose.
+
+---
+
+## 3. Monorepo Structure & Workspace Topology
 
 ```
 pansgpt/
@@ -65,7 +83,7 @@ pansgpt/
 
 ---
 
-## 3. Canonical Workflow Commands
+## 4. Canonical Workflow Commands
 
 | Operation | Command | Scope / Notes |
 |---|---|---|
@@ -83,7 +101,7 @@ pansgpt/
 
 ---
 
-## 4. Key Architectural Patterns & Guidelines
+## 5. Key Architectural Patterns & Guidelines
 
 ### A. Database Design
 - **Unified Tables**:
@@ -122,7 +140,7 @@ pansgpt/
 
 ---
 
-## 5. Platform Implementation Sequence
+## 6. Platform Implementation Sequence
 
 1. **Phase 0–3**: Monorepo Scaffolding, Secrets Validation, Multi-Environment Wiring.
 2. **Phase 4**: Database Foundation (Schema, Extensions, RLS, Seed, Functions).
