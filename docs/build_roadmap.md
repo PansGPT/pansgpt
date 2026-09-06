@@ -184,7 +184,7 @@ PR reviewed + CI green → merged to main
 
 ### 1.1 Repository Setup
 - [x] Create GitHub repository — initialize with `main` as the default branch
-- [x] Enable **branch protection on `main`**:
+- [ ] Enable **branch protection on `main`** (via GitHub Settings → Branches):
   - Require PR review before merge
   - Require all CI status checks to pass
   - **No direct pushes — ever. Including from admins.**
@@ -300,7 +300,7 @@ pansgpt/
 ### 2.2 .env Discipline
 - [x] Create `.env.example` in each app (committed — no real values, only `YOUR_VALUE_HERE` placeholders)
 - [x] Add `.env`, `.env.local`, `.env.*.local` to root `.gitignore`
-- [x] Enable **GitHub Secret Scanning** on the repository
+- [ ] Enable **GitHub Secret Scanning** on the repository (via GitHub Settings → Code security & analysis)
 
 ### 2.3 Validated Config Loading (Apps Refuse to Start with Missing Vars)
 - [x] **`apps/api`** — Pydantic `BaseSettings` in `core/config.py`:
