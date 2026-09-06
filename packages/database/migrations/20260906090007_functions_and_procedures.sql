@@ -6,7 +6,7 @@
 
 -- 1. match_document_chunks (Vector search over a specific document)
 CREATE OR REPLACE FUNCTION public.match_document_chunks(
-  query_embedding vector(3072),
+  query_embedding vector(1536),
   match_threshold double precision,
   match_count integer,
   doc_id uuid
@@ -39,7 +39,7 @@ $$;
 
 -- 2. match_documents_global (Vector search across an array of authorized documents)
 CREATE OR REPLACE FUNCTION public.match_documents_global(
-  query_embedding vector(3072),
+  query_embedding vector(1536),
   match_threshold double precision,
   match_count integer,
   doc_ids uuid[]

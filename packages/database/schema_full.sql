@@ -162,7 +162,7 @@ CREATE INDEX IF NOT EXISTS idx_invitations_token ON public.invitations(token) WH
 
 -- ==============================================================================
 -- Migration: 20260906090003_content_and_ingestion.sql
--- Purpose: Unified documents repository, 3072d HNSW vector chunks, sections,
+-- Purpose: Unified documents repository, 1536d HNSW vector chunks, sections,
 --          cropped notes, and reader highlights.
 -- ==============================================================================
 
@@ -206,7 +206,7 @@ CREATE TRIGGER trg_documents_updated_at
   BEFORE UPDATE ON public.documents
   FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
 
--- 2. Document Chunks (3072d vector embeddings for gemini-embedding-002)
+-- 2. Document Chunks (1536d vector embeddings for gemini-embedding-002)
 CREATE TABLE IF NOT EXISTS public.document_chunks (
   id          uuid PRIMARY KEY DEFAULT public.uuid_generate_v7(),
   document_id uuid NOT NULL REFERENCES public.documents(id) ON DELETE CASCADE,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS public.document_chunks (
   page_start  integer,
   page_end    integer,
   chunk_index integer NOT NULL,
-  embedding   vector(3072) NOT NULL,
+  embedding   vector(1536) NOT NULL,
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 
@@ -666,7 +666,7 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_uni ON public.audit_logs(university_id
 
 -- 1. match_document_chunks (Vector search over a specific document)
 CREATE OR REPLACE FUNCTION public.match_document_chunks(
-  query_embedding vector(3072),
+  query_embedding vector(1536),
   match_threshold double precision,
   match_count integer,
   doc_id uuid
@@ -699,7 +699,7 @@ $$;
 
 -- 2. match_documents_global (Vector search across an array of authorized documents)
 CREATE OR REPLACE FUNCTION public.match_documents_global(
-  query_embedding vector(3072),
+  query_embedding vector(1536),
   match_threshold double precision,
   match_count integer,
   doc_ids uuid[]
