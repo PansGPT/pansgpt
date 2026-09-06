@@ -1,0 +1,6 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm --filter=@pansgpt/web build",
+  "installCommand": "pnpm install",
+  "cleanUrls": true
+}
