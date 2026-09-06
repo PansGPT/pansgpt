@@ -56,11 +56,11 @@ class Settings(BaseSettings):
     # AI / LLM Providers ($0 Budget Tier)
     GEMINI_API_KEY: Optional[str] = None
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-002"
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
     GEMINI_EMBEDDING_DIMENSIONS: int = 1536
     
     GROQ_API_KEY: Optional[str] = None
-    GROQ_FALLBACK_MODEL: str = "llama-3.3-70b-versatile"
+    GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
     
     OPENROUTER_API_KEY: Optional[str] = None
     
