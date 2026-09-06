@@ -2248,7 +2248,7 @@ graph TD
    - **Zero-Latency Acronym Normalizer**: Fast in-memory dictionary expands 200+ medical/pharmacy acronyms (`HCTZ`, `MOA`, `Abx`, `ADR`, `MIC`, `GFR`, `CYP450`) prior to embedding and text search.
    - **Multi-Query Decomposition & HyDE**: For complex multi-part or ambiguous student queries, generates 2–3 targeted sub-queries to maximize lexical and semantic recall across slide decks.
 2. **PostgreSQL 3-Pool Scoped Search (`match_documents_hybrid`)**:
-   - **Vector Pool**: `gemini-embedding-001` / `gemini-embedding-2` (1536d HNSW cosine distance) $\rightarrow$ Top 30 candidates.
+   - **Vector Pool**: `gemini-embedding-002` (3072d HNSW cosine distance) $\rightarrow$ Top 30 candidates.
    - **FTS Lexical Pool**: `content_fts` with `websearch_to_tsquery('english', query)` $\rightarrow$ Top 30 candidates.
    - **Trigram Similarity Pool**: `word_similarity(query, content)` via `pg_trgm` $\rightarrow$ Top 30 candidates (robust to student spelling errors).
 3. **Unweighted Reciprocal Rank Fusion (RRF, $k=60$)**:
