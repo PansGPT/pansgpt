@@ -1,0 +1,13 @@
+# ==============================================================================
+# PansGPT Codeowners
+# ==============================================================================
+* @PansGPT/core-team
+
+# Backend Engine
+/apps/api/ @PansGPT/backend-leads
+
+# Web App
+/apps/web/ @PansGPT/frontend-leads
+
+# Database Migrations
+/supabase/migrations/ @PansGPT/backend-leads
