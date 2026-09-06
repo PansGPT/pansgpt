@@ -1004,29 +1004,20 @@ CREATE POLICY settings_select ON public.system_settings
 
 -- ==============================================================================
 -- Migration: 20260906090009_seed_nigerian_universities.sql
--- Purpose: Seed accredited Nigerian faculties of pharmacy and initial runtime configurations.
+-- Purpose: Seed University of Jos and initial runtime configurations.
 -- ==============================================================================
 
--- 1. Initial Nigerian Universities with Pharmacy Faculties
+-- 1. Initial University: University of Jos
 INSERT INTO public.universities (name, short_name, slug, state, country, status)
 VALUES
-  ('University of Jos', 'UNIJOS', 'unijos', 'Plateau', 'Nigeria', 'active'),
-  ('University of Ibadan', 'UI', 'ui', 'Oyo', 'Nigeria', 'active'),
-  ('Ahmadu Bello University', 'ABU', 'abu', 'Kaduna', 'Nigeria', 'active'),
-  ('University of Lagos', 'UNILAG', 'unilag', 'Lagos', 'Nigeria', 'active'),
-  ('Obafemi Awolowo University', 'OAU', 'oau', 'Osun', 'Nigeria', 'active'),
-  ('University of Benin', 'UNIBEN', 'uniben', 'Edo', 'Nigeria', 'active'),
-  ('University of Nigeria, Nsukka', 'UNN', 'unn', 'Enugu', 'Nigeria', 'active'),
-  ('Bayero University Kano', 'BUK', 'buk', 'Kano', 'Nigeria', 'active'),
-  ('Olabisi Onabanjo University', 'OOU', 'oou', 'Ogun', 'Nigeria', 'active'),
-  ('Nnamdi Azikiwe University', 'UNIZIK', 'unizik', 'Anambra', 'Nigeria', 'active')
+  ('University of Jos', 'UNIJOS', 'unijos', 'Plateau', 'Nigeria', 'active')
 ON CONFLICT (lower(name)) DO NOTHING;
 
 -- 2. Default System Settings
 INSERT INTO public.system_settings (id, system_prompt, temperature, maintenance_mode, web_search_enabled, rag_threshold)
 VALUES (
   1,
-  'You are the PansGPT AI Study Companion, an intelligent, curriculum-grounded clinical pharmacology mentor designed for Nigerian pharmacy students. Teach with patient rigor, provide step-by-step pharmacokinetic calculations with explicit units, anchor pharmacology concepts to high-yield clinical mnemonics, and cite course lecture slides when answering from uploaded monographs.',
+  'You are the PansGPT AI Study Companion, an intelligent, curriculum-grounded clinical pharmacology mentor designed for University of Jos pharmacy students. Teach with patient rigor, provide step-by-step pharmacokinetic calculations with explicit units, anchor pharmacology concepts to high-yield clinical mnemonics, and cite course lecture slides when answering from uploaded monographs.',
   0.7,
   false,
   true,
@@ -1065,5 +1056,29 @@ VALUES
     true
   )
 ON CONFLICT (slug) DO NOTHING;
+
+
+-- ========================================================
+-- MIGRATION: 20260906121201_scope_to_unijos_only.sql
+-- ========================================================
+
+-- ==============================================================================
+-- Migration: 20260906121201_scope_to_unijos_only.sql
+-- Purpose: Scope platform strictly to University of Jos (UNIJOS) as the sole institution.
+-- ==============================================================================
+
+-- 1. Ensure UNIJOS exists and is active
+INSERT INTO public.universities (name, short_name, slug, state, country, status)
+VALUES ('University of Jos', 'UNIJOS', 'unijos', 'Plateau', 'Nigeria', 'active')
+ON CONFLICT (lower(name)) DO UPDATE SET
+  short_name = 'UNIJOS',
+  slug = 'unijos',
+  state = 'Plateau',
+  country = 'Nigeria',
+  status = 'active';
+
+-- 2. Remove all non-UNIJOS universities
+DELETE FROM public.universities
+WHERE short_name != 'UNIJOS';
 
 
