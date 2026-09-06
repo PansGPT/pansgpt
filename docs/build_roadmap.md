@@ -116,9 +116,9 @@ PR reviewed + CI green → merged to main
 | **0** | Local Dev Environment | ✅ **Done** | Every developer runs the full stack locally | All services start without errors |
 | **1** | Monorepo Scaffold + CI | ✅ **Done** | Repo structure, turbo.json, git hooks, PR templates, blocking CI | CI passes on an empty repo push |
 | **2** | Secrets + Config | ✅ **Done** | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation | App refuses to start with missing vars |
-| **3** | Environments Wired | ✅ **Done** | Local, staging, production Supabase + Vercel + Render all connected | Staging URL is reachable; `/health/ready` returns 200 |
+| **3** | Environments Wired | 🔄 **In Progress** | Local, staging, production Supabase + Vercel + Render deployment | Staging URL is reachable; `/health/ready` returns 200 |
 | **4** | Database Foundation | ✅ **Done** | All migrations, RLS policies, enums, indexes, seed data | `supabase db reset` succeeds locally; migrations apply cleanly to staging |
-| **5** | Document Ingestion Engine | 🔄 **Next Up** | R2 storage, PyMuPDF, 8-stage pipeline, `gemini-embedding-001` (1536d) HNSW | A PDF can be uploaded and fully indexed via pytest API test |
+| **5** | Document Ingestion Engine | ⏳ Pending | R2 storage, PyMuPDF, 8-stage pipeline, `gemini-embedding-001` (1536d) HNSW | A PDF can be uploaded and fully indexed via pytest API test |
 | **6** | AI / LLM Orchestration Engine | ⏳ Pending | Gemma 4 primary, Groq fallback, OpenRouter safety net, tools, SSE streaming | Streamed AI response over a document works via pytest API test |
 | **7** | Auth Backend | ⏳ Pending | JWKS, JWT validation, RBAC role guards, per-client API keys | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8** | Walking Skeleton Web UI | Thin auth + upload + chat — proves all 3 engines together | Student signs up, uploads a doc, gets an AI response — on staging |
@@ -329,29 +329,27 @@ pansgpt/
 ### 3.1 Local Dev
 - [x] `supabase start` confirmed working (Docker)
 - [x] `apps/api/.env` + `apps/web/.env.local` populated from `.env.example` with local values
-- [x] `GET /health/ready` returns `{"status": "ok", "db": "ok", "redis": "ok"}`
+- [x] `GET /health/ready` endpoint implemented (`{"status": "ok", "db": "ok", "redis": "ok"}`)
 - [x] Next.js renders at `localhost:3000` without errors
 
 ### 3.2 Staging
-- [x] Create **Supabase Hosted Project #1** (Staging) — note URL and API keys
+- [x] Identify **Supabase Hosted Project #1** (Staging credentials configured)
 - [x] Write `apps/api/Dockerfile` (multi-stage, non-root user, production-ready)
-- [x] Write `render.yaml` — defines:
-  - `web` service (FastAPI API) — `pnpm dev` → `gunicorn` in prod
-  - `worker` service (ARQ worker) — **NOTE**: at bootstrap both run in same Render service to stay within free hours
-- [x] Connect Render to GitHub — auto-deploys on push to `main`
-- [x] Connect `apps/web` to Vercel — every PR gets an automatic Preview URL
-- [x] Set staging env vars in Vercel (Preview) and Render (staging service)
-- [x] Confirm staging API reachable at its Render URL
-- [x] Confirm Vercel Preview deployment renders the Next.js app
+- [x] Write `render.yaml` (FastAPI service + background worker spec)
+- [ ] Connect Render to GitHub — auto-deploys on push to `main`
+- [ ] Connect `apps/web` to Vercel — every PR gets an automatic Preview URL
+- [ ] Set staging env vars in Vercel (Preview) and Render (staging service)
+- [ ] Confirm staging API reachable at its Render URL
+- [ ] Confirm Vercel Preview deployment renders the Next.js app
 
 ### 3.3 Production
-- [x] Create **Supabase Hosted Project #2** (Production) — completely isolated from staging
-- [x] Set production env vars in Vercel (Production) and Render (production service)
-- [x] Configure custom domain in Vercel and point DNS records
-- [x] Confirm HTTPS active on the custom domain
-- [x] **Production receives no data until Phase 28 (Launch)**
-- [x] Set up cron-job.org to ping `GET /health/ready` every 10 minutes (keeps Render awake)
-- [x] Set up Better Uptime to monitor production API and web URLs
+- [ ] Create **Supabase Hosted Project #2** (Production) — completely isolated from staging
+- [ ] Set production env vars in Vercel (Production) and Render (production service)
+- [ ] Configure custom domain in Vercel and point DNS records
+- [ ] Confirm HTTPS active on the custom domain
+- [ ] **Production receives no data until Phase 28 (Launch)**
+- [ ] Set up cron-job.org to ping `GET /health/ready` every 10 minutes (keeps Render awake)
+- [ ] Set up Better Uptime to monitor production API and web URLs
 
 ---
 
