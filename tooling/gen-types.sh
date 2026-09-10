@@ -5,7 +5,7 @@
 # =======================================================================
 set -e
 
-TARGET=${1:-"2ocal"}
+TARGET=${1:-"local"}
 
 if [ "$TARGET" = "local" ]; then
   echo "Generating types from local Supabase instance..."

@@ -14,6 +14,7 @@ A clear and concise description of what the bug is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -23,6 +24,7 @@ Steps to reproduce the behavior:
 A clear and concise description of what you expected to happen.
 
 **Environment (please complete the following information):**
- - OS: [e.g. iOS, Windows, macOS, Android]
- - Browser / Client: [e.g. Chrome, Next.js Web, Expo Mobile, Electron Desktop]
- - University / Faculty: [e.g. UNIJOS / Pharmacy]
+
+- OS: [e.g. iOS, Windows, macOS, Android]
+- Browser / Client: [e.g. Chrome, Next.js Web, Expo Mobile, Electron Desktop]
+- University / Faculty: [e.g. UNIJOS / Pharmacy]

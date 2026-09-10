@@ -3,16 +3,20 @@
 # ==============================================================================
 
 import asyncio
+
 from fastapi import FastAPI, status
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
 from app.core.config import settings
+from app.routers.chat import router as chat_router
+from app.routers.library import router as library_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_PREFIX}/openapi.json",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 
 # Configure CORS
@@ -24,15 +28,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Register API v1 Routers
+app.include_router(library_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
+
 
 @app.get("/health/live", tags=["Health"])
 async def liveness_check():
     """Quick endpoint for keep-alive pingers to prevent host sleep."""
-    return {
-        "status": "ok",
-        "environment": settings.ENVIRONMENT,
-        "service": "api"
-    }
+    return {"status": "ok", "environment": settings.ENVIRONMENT, "service": "api"}
 
 
 @app.get("/health/ready", tags=["Health"])
@@ -40,14 +44,15 @@ async def readiness_check():
     """Comprehensive readiness probe verifying database and downstream engines."""
     db_status = "unconfigured"
     db_details = None
-    
+
     if settings.DATABASE_URL:
         try:
             import asyncpg
-            # Clean connection timeout of 3s
+
+            # Clean connection with statement_cache_size=0 for Supabase pooler compatibility
             conn = await asyncio.wait_for(
-                asyncpg.connect(settings.DATABASE_URL),
-                timeout=3.0
+                asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0),
+                timeout=5.0,
             )
             val = await conn.fetchval("SELECT 1;")
             await conn.close()
@@ -57,14 +62,15 @@ async def readiness_check():
             db_details = str(e)
 
     redis_status = "unconfigured"
-    if settings.REDIS_URL:
+    if settings.redis_connection_url:
         try:
             import redis.asyncio as aioredis
-            r = aioredis.from_url(settings.REDIS_URL, socket_timeout=2.0)
+
+            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=3.0)
             pong = await r.ping()
             await r.aclose()
             redis_status = "ok" if pong else "error"
-        except Exception as e:
+        except Exception:
             redis_status = "error"
 
     is_ready = db_status in ["ok", "unconfigured"]
@@ -80,6 +86,6 @@ async def readiness_check():
                 "database": db_status,
                 "redis": redis_status,
             },
-            **({"db_error": db_details} if db_details else {})
-        }
+            **({"db_error": db_details} if db_details else {}),
+        },
     )

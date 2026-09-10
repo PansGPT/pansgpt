@@ -1,1 +1,3 @@
+#!/bin/sh
+python tooling/check-secrets.py
 pnpm lint-staged

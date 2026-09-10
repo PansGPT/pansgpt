@@ -1,5 +1,5 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,5 +13,5 @@ export interface ThemeColors {
   accent: string;
 }
 
-export const THEME_NAMES = ['light', 'dark', 'sepia'] as const;
-export type ThemeName = typeof THEME_NAMES[number];
+export const THEME_NAMES = ["light", "dark", "sepia"] as const;
+export type ThemeName = (typeof THEME_NAMES)[number];

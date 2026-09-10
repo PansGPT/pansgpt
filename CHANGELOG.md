@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Monorepo scaffold with Turborepo and pnpm workspaces (`apps/web`, `apps/api`, `packages/*`).
 - FastAPI backend framework with Pydantic v2 configuration and async PostgreSQL pool.
 - 10 Supabase PostgreSQL migrations establishing 27 clean multi-tenant tables, 1536d pgvector HNSW indexes, RLS policies, and UNIJOS staging seed.

@@ -3,21 +3,16 @@
 // Auto-aligned with Phase 4 Migrations (27 Tables)
 // ==============================================================================
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[]
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
-export type UniversityLevel = '100' | '200' | '300' | '400' | '500' | '600';
-export type UserRole = 'student' | 'lecturer' | 'university_admin' | 'super_admin';
-export type DocumentStatus = 'pending_review' | 'active' | 'rejected' | 'archived';
-export type AiProvider = 'google' | 'groq' | 'openrouter';
-export type InteractionRole = 'user' | 'assistant';
-export type SkillType = 'prompt' | 'python_tool' | 'api_webhook';
-export type QuizJobStatus = 'queued' | 'retrieving' | 'generating' | 'saving' | 'completed' | 'failed' | 'cancelled';
+export type UniversityLevel = "100" | "200" | "300" | "400" | "500" | "600";
+export type UserRole = "student" | "lecturer" | "university_admin" | "super_admin";
+export type DocumentStatus = "pending_review" | "active" | "rejected" | "archived";
+export type AiProvider = "google" | "groq" | "openrouter";
+export type InteractionRole = "user" | "assistant";
+export type SkillType = "prompt" | "python_tool" | "api_webhook";
+export type QuizJobStatus =
+  "queued" | "retrieving" | "generating" | "saving" | "completed" | "failed" | "cancelled";
 
 export interface Database {
   public: {
@@ -37,12 +32,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['universities']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["universities"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['universities']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["universities"]["Insert"]>;
       };
       academic_terms: {
         Row: {
@@ -56,12 +54,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['academic_terms']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["academic_terms"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['academic_terms']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["academic_terms"]["Insert"]>;
       };
       users: {
         Row: {
@@ -79,11 +80,11 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['users']['Row'], 'created_at' | 'updated_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["users"]["Row"], "created_at" | "updated_at"> & {
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['users']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["users"]["Insert"]>;
       };
       invitations: {
         Row: {
@@ -97,11 +98,11 @@ export interface Database {
           accepted_at: string | null;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['invitations']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["invitations"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['invitations']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["invitations"]["Insert"]>;
       };
       documents: {
         Row: {
@@ -134,12 +135,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['documents']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["documents"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['documents']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["documents"]["Insert"]>;
       };
       document_chunks: {
         Row: {
@@ -153,11 +157,14 @@ export interface Database {
           embedding: number[];
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['document_chunks']['Row'], 'id' | 'content_fts' | 'created_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["document_chunks"]["Row"],
+          "id" | "content_fts" | "created_at"
+        > & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['document_chunks']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["document_chunks"]["Insert"]>;
       };
       document_sections: {
         Row: {
@@ -172,11 +179,14 @@ export interface Database {
           check_questions: Json | null;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['document_sections']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["document_sections"]["Row"],
+          "id" | "created_at"
+        > & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['document_sections']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["document_sections"]["Insert"]>;
       };
       document_notes: {
         Row: {
@@ -191,12 +201,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['document_notes']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["document_notes"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['document_notes']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["document_notes"]["Insert"]>;
       };
       document_highlights: {
         Row: {
@@ -211,12 +224,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['document_highlights']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["document_highlights"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['document_highlights']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["document_highlights"]["Insert"]>;
       };
       study_progress: {
         Row: {
@@ -230,12 +246,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['study_progress']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["study_progress"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['study_progress']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["study_progress"]["Insert"]>;
       };
       quizzes: {
         Row: {
@@ -248,11 +267,11 @@ export interface Database {
           created_at: string;
           deleted_at: string | null;
         };
-        Insert: Omit<Database['public']['Tables']['quizzes']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["quizzes"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['quizzes']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["quizzes"]["Insert"]>;
       };
       quiz_questions: {
         Row: {
@@ -266,11 +285,11 @@ export interface Database {
           points: number;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['quiz_questions']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["quiz_questions"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['quiz_questions']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["quiz_questions"]["Insert"]>;
       };
       quiz_attempts: {
         Row: {
@@ -284,11 +303,11 @@ export interface Database {
           completed_at: string;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['quiz_attempts']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["quiz_attempts"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['quiz_attempts']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["quiz_attempts"]["Insert"]>;
       };
       chat_sessions: {
         Row: {
@@ -300,12 +319,15 @@ export interface Database {
           updated_at: string;
           deleted_at: string | null;
         };
-        Insert: Omit<Database['public']['Tables']['chat_sessions']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["chat_sessions"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['chat_sessions']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["chat_sessions"]["Insert"]>;
       };
       chat_messages: {
         Row: {
@@ -319,11 +341,11 @@ export interface Database {
           reasoning_content: string | null;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['chat_messages']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["chat_messages"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['chat_messages']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["chat_messages"]["Insert"]>;
       };
       ai_skills: {
         Row: {
@@ -337,12 +359,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['ai_skills']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["ai_skills"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['ai_skills']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["ai_skills"]["Insert"]>;
       };
       timetables: {
         Row: {
@@ -360,12 +385,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['timetables']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["timetables"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['timetables']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["timetables"]["Insert"]>;
       };
       student_tasks: {
         Row: {
@@ -379,12 +407,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['student_tasks']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["student_tasks"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['student_tasks']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["student_tasks"]["Insert"]>;
       };
       course_knowledge: {
         Row: {
@@ -399,12 +430,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['course_knowledge']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["course_knowledge"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['course_knowledge']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["course_knowledge"]["Insert"]>;
       };
       general_notes: {
         Row: {
@@ -419,12 +453,15 @@ export interface Database {
           created_at: string;
           updated_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['general_notes']['Row'], 'id' | 'created_at' | 'updated_at'> & {
+        Insert: Omit<
+          Database["public"]["Tables"]["general_notes"]["Row"],
+          "id" | "created_at" | "updated_at"
+        > & {
           id?: string;
           created_at?: string;
           updated_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['general_notes']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["general_notes"]["Insert"]>;
       };
       system_settings: {
         Row: {
@@ -436,8 +473,8 @@ export interface Database {
           rag_threshold: number;
           updated_at: string;
         };
-        Insert: Database['public']['Tables']['system_settings']['Row'];
-        Update: Partial<Database['public']['Tables']['system_settings']['Insert']>;
+        Insert: Database["public"]["Tables"]["system_settings"]["Row"];
+        Update: Partial<Database["public"]["Tables"]["system_settings"]["Insert"]>;
       };
       audit_logs: {
         Row: {
@@ -451,11 +488,11 @@ export interface Database {
           user_agent: string | null;
           created_at: string;
         };
-        Insert: Omit<Database['public']['Tables']['audit_logs']['Row'], 'id' | 'created_at'> & {
+        Insert: Omit<Database["public"]["Tables"]["audit_logs"]["Row"], "id" | "created_at"> & {
           id?: string;
           created_at?: string;
         };
-        Update: Partial<Database['public']['Tables']['audit_logs']['Insert']>;
+        Update: Partial<Database["public"]["Tables"]["audit_logs"]["Insert"]>;
       };
     };
     Functions: {

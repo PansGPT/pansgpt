@@ -1,17 +1,20 @@
 # ==============================================================================
 # PansGPT 2.0 Render Staging & Production Blueprint (Phase 3 Spec)
+# Multi-Stage Docker Build with FastAPI Web Engine & ARQ Background Workers
 # ==============================================================================
 
 services:
-  # 1. FastAPI Core Engine Web Service
+  # ----------------------------------------------------------------------------
+  # 1. Staging: FastAPI Core Engine Web Service
+  # ----------------------------------------------------------------------------
   - type: web
     name: pansgpt-api-staging
-    env: python
+    env: docker
     region: frankfurt
     plan: free
     rootDir: apps/api
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /health/ready
     autoDeploy: true
     envVars:
@@ -27,9 +30,256 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: GEMINI_PRIMARY_MODEL
+        value: gemma-4-31b-it
+      - key: GEMINI_SECONDARY_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-002
+      - key: GEMINI_EMBEDDING_DIMENSIONS
+        value: "3072"
       - key: GROQ_API_KEY
         sync: false
+      - key: GROQ_FALLBACK_MODEL
+        value: openai/gpt-oss-120b
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_FALLBACK_MODEL
+        value: google/gemma-2-27b-it
+      - key: TAVILY_API_KEY
+        sync: false
       - key: REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: CLOUDFLARE_R2_ACCOUNT_ID
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_STAGING
+        value: pansgpt-library-staging
+      - key: R2_PUBLIC_DOMAIN
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: PansGPT <support@pansgpt.com>
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_WEBHOOK_SECRET
+        sync: false
+      - key: FLUTTERWAVE_SECRET_KEY
+        sync: false
+      - key: FLUTTERWAVE_WEBHOOK_SECRET
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: X_API_KEY_WEB
+        sync: false
+      - key: X_API_KEY_MOBILE
+        sync: false
+      - key: X_API_KEY_DESKTOP
+        sync: false
+
+  # ----------------------------------------------------------------------------
+  # 2. Staging: ARQ Background Task Worker
+  # ----------------------------------------------------------------------------
+  - type: worker
+    name: pansgpt-worker-staging
+    env: docker
+    region: frankfurt
+    plan: free
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: python -m arq workers.tasks.WorkerSettings
+    autoDeploy: true
+    envVars:
+      - key: ENVIRONMENT
+        value: staging
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_PRIMARY_MODEL
+        value: gemma-4-31b-it
+      - key: GEMINI_SECONDARY_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-002
+      - key: GEMINI_EMBEDDING_DIMENSIONS
+        value: "3072"
+      - key: REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: CLOUDFLARE_R2_ACCOUNT_ID
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_STAGING
+        value: pansgpt-library-staging
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  # ----------------------------------------------------------------------------
+  # 3. Production: FastAPI Core Engine Web Service
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: pansgpt-api-production
+    env: docker
+    region: frankfurt
+    plan: starter
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health/ready
+    autoDeploy: false
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PROJECT_NAME
+        value: PansGPT 2.0 Core Engine (Production)
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_PRIMARY_MODEL
+        value: gemma-4-31b-it
+      - key: GEMINI_SECONDARY_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-002
+      - key: GEMINI_EMBEDDING_DIMENSIONS
+        value: "3072"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_FALLBACK_MODEL
+        value: openai/gpt-oss-120b
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_FALLBACK_MODEL
+        value: google/gemma-2-27b-it
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: CLOUDFLARE_R2_ACCOUNT_ID
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_PRODUCTION
+        value: pansgpt-library-production
+      - key: R2_PUBLIC_DOMAIN
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: PansGPT <support@pansgpt.com>
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: PAYSTACK_WEBHOOK_SECRET
+        sync: false
+      - key: FLUTTERWAVE_SECRET_KEY
+        sync: false
+      - key: FLUTTERWAVE_WEBHOOK_SECRET
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: X_API_KEY_WEB
+        sync: false
+      - key: X_API_KEY_MOBILE
+        sync: false
+      - key: X_API_KEY_DESKTOP
+        sync: false
+
+  # ----------------------------------------------------------------------------
+  # 4. Production: ARQ Background Task Worker
+  # ----------------------------------------------------------------------------
+  - type: worker
+    name: pansgpt-worker-production
+    env: docker
+    region: frankfurt
+    plan: starter
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: python -m arq workers.tasks.WorkerSettings
+    autoDeploy: false
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_PRIMARY_MODEL
+        value: gemma-4-31b-it
+      - key: GEMINI_SECONDARY_MODEL
+        value: gemma-4-26b-a4b-it
+      - key: GEMINI_EMBEDDING_MODEL
+        value: gemini-embedding-002
+      - key: GEMINI_EMBEDDING_DIMENSIONS
+        value: "3072"
+      - key: REDIS_URL
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: CLOUDFLARE_R2_ACCOUNT_ID
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_PRODUCTION
+        value: pansgpt-library-production
+      - key: RESEND_API_KEY
+        sync: false
+      - key: SENTRY_DSN
         sync: false

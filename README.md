@@ -29,31 +29,33 @@ pansgpt/
 
 ### Core Tech Stack Matrix
 
-| Layer | Technology | Cost / Strategy |
-| :--- | :--- | :--- |
-| **Monorepo** | Turborepo + pnpm workspaces | Zero build overhead, remote caching |
-| **API Engine** | FastAPI (Python 3.11+) + Pydantic v2 | Render Free Web Service ($0) |
-| **Web Frontend** | Next.js 15, React 19, Tailwind CSS v4 | Vercel Hobby ($0) |
-| **Mobile App** | Expo SDK 52+, React Native | EAS Free Tier ($0) |
-| **Desktop App**| Electron 33, better-sqlite3 | GitHub Releases packaging ($0) |
-| **Database** | Supabase PostgreSQL + pgvector | Free Tier ($0) with UUIDv7 + HNSW |
-| **Document Store** | Cloudflare R2 (S3-compatible) | 10 GB free ($0 egress fees) |
-| **AI Primary** | Gemma 4 via Google AI Studio | $0 Free Tier |
-| **AI Fallback**| LLaMA 3.3 70B via Groq | $0 Free Tier (sub-second TTFT) |
-| **Background Jobs** | ARQ + Upstash Serverless Redis | 10,000 cmds/day free ($0) |
-| **Email** | Resend + React Email | 3,000 free emails/mo ($0) |
+| Layer               | Technology                            | Cost / Strategy                     |
+| :------------------ | :------------------------------------ | :---------------------------------- |
+| **Monorepo**        | Turborepo + pnpm workspaces           | Zero build overhead, remote caching |
+| **API Engine**      | FastAPI (Python 3.11+) + Pydantic v2  | Render Free Web Service ($0)        |
+| **Web Frontend**    | Next.js 15, React 19, Tailwind CSS v4 | Vercel Hobby ($0)                   |
+| **Mobile App**      | Expo SDK 52+, React Native            | EAS Free Tier ($0)                  |
+| **Desktop App**     | Electron 33, better-sqlite3           | GitHub Releases packaging ($0)      |
+| **Database**        | Supabase PostgreSQL + pgvector        | Free Tier ($0) with UUIDv7 + HNSW   |
+| **Document Store**  | Cloudflare R2 (S3-compatible)         | 10 GB free ($0 egress fees)         |
+| **AI Primary**      | Gemma 4 via Google AI Studio          | $0 Free Tier                        |
+| **AI Fallback**     | LLaMA 3.3 70B via Groq                | $0 Free Tier (sub-second TTFT)      |
+| **Background Jobs** | ARQ + Upstash Serverless Redis        | 10,000 cmds/day free ($0)           |
+| **Email**           | Resend + React Email                  | 3,000 free emails/mo ($0)           |
 
 ---
 
 ## 🚀 Quickstart (Local Development)
 
 ### 1. Prerequisites
+
 - **Node.js**: `v20.0.0+`
 - **pnpm**: `v9.0.0+` (`npm install -g pnpm`)
 - **Python**: `3.11+`
 - **Docker Desktop**: Required for local Supabase Docker stack
 
 ### 2. Monorepo Setup
+
 ```bash
 # Clone the repository
 git clone https://github.com/PansGPT/pansgpt.git
@@ -71,11 +73,13 @@ cd ../..
 ```
 
 ### 3. Environment Variables
+
 ```bash
 cp .env.example .env
 ```
 
 ### 4. Running Services
+
 ```bash
 # Start all services concurrently via Turborepo
 pnpm dev
@@ -88,6 +92,7 @@ pnpm dev --filter=@pansgpt/api    # FastAPI at http://localhost:8000
 ---
 
 ## 🧪 Testing Strategy
+
 - **API Tests**: `pytest apps/api/tests`
 - **Type Checking**: `pnpm typecheck`
 - **Linting**: `pnpm lint`
@@ -95,4 +100,5 @@ pnpm dev --filter=@pansgpt/api    # FastAPI at http://localhost:8000
 ---
 
 ## 📜 License
+
 MIT License. Copyright (c) 2026 PansGPT Team.

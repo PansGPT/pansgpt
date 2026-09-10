@@ -26,8 +26,9 @@ ENV PATH=/home/appuser/.local/bin:$PATH
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Copy application source code
+# Copy application source code and background worker tasks
 COPY --chown=appuser:appgroup app/ ./app/
+COPY --chown=appuser:appgroup workers/ ./workers/
 COPY --chown=appuser:appgroup pyproject.toml .
 
 USER appuser

@@ -22,18 +22,19 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 
 ### 👥 User Roles
 
-| Role | Description |
-|---|---|
-| `student` | Primary user. Uploads documents, chats with AI, takes quizzes, reads PDFs, takes notes |
-| `lecturer` | Submits course materials through an approval workflow |
-| `admin` | University-level admin. Manages students, lecturers, restrictions, timetable, academic context |
-| `super_admin` | Cross-university admin. Manages multiple institutions |
+| Role          | Description                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------------- |
+| `student`     | Primary user. Uploads documents, chats with AI, takes quizzes, reads PDFs, takes notes         |
+| `lecturer`    | Submits course materials through an approval workflow                                          |
+| `admin`       | University-level admin. Manages students, lecturers, restrictions, timetable, academic context |
+| `super_admin` | Cross-university admin. Manages multiple institutions                                          |
 
 ---
 
 ### 🧩 Features Inventory (Current)
 
 #### 1. Authentication & Onboarding
+
 - Email/password sign-up and login via Supabase Auth
 - Password reset flow
 - Profile setup (personal information modal, avatar selection)
@@ -42,6 +43,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Role-based route protection
 
 #### 2. AI Chat
+
 - Streamed AI responses
 - Full session history (create, fetch, delete sessions)
 - RAG (Retrieval-Augmented Generation) — answers grounded in uploaded documents
@@ -54,6 +56,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Policy guard / prompt injection protection
 
 #### 3. Document Library
+
 - File upload (PDFs)
 - Processing pipeline: text extraction → chunking → embedding → vector index
 - Ingestion progress tracking (with worker claims and run tokens)
@@ -63,6 +66,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Google Drive as storage backend
 
 #### 4. PDF Reader
+
 - Full PDF rendering (PDF.js / react-pdf)
 - Page navigation, zoom, page indicator
 - Reading progress sync (saved per document)
@@ -74,6 +78,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Export support
 
 #### 5. Learn Mode
+
 - AI-generated section outlines per document
 - Per-section explanations
 - Adaptive check questions
@@ -85,6 +90,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Backend fully live; Frontend on `feature/learn-mode` branch (not merged)
 
 #### 6. Quiz System
+
 - Quiz builder modal (configure topics, difficulty, count)
 - Async quiz generation jobs (background processing)
 - Question deduplication (similarity threshold filtering)
@@ -95,6 +101,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Quiz performance modal
 
 #### 7. Notes
+
 - Note creation and management
 - Offline-capable notes storage (IndexedDB via `idb-keyval`)
 - Sync when back online
@@ -102,11 +109,13 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Export
 
 #### 8. Timetable
+
 - Weekly timetable modal
 - Today's classes widget
 - University-scoped timetable data
 
 #### 9. Lecturer Portal
+
 - Lecturer registration flow
 - Admin approval workflow
 - Material submission (file upload)
@@ -115,6 +124,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - File type support
 
 #### 10. Admin Dashboard (University-Level)
+
 - Student management
 - Lecturer management
 - Restriction enforcement (what students can/can't do)
@@ -124,22 +134,26 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - AI usage logs
 
 #### 11. Super Admin Dashboard
+
 - Cross-university management
 - University lifecycle statuses
 - Multi-university scoping
 
 #### 12. Settings
+
 - User settings (profile, avatar, preferences)
 - System settings (admin-controlled)
 - Theme (dark/light mode)
 
 #### 13. Feedback & Support
+
 - Feedback submission modal
 - Report problem modal
 - Contact page
 - FAQ page
 
 #### 14. Public Pages
+
 - Landing page
 - About page
 - Privacy policy
@@ -147,11 +161,13 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - Download page (PWA / Electron)
 
 #### 15. PWA & Desktop
+
 - Full PWA support (installable, offline banner)
 - Electron desktop app (macOS/Windows/Linux)
 - Offline mode with local storage
 
 #### 16. Infrastructure / DevOps (Current)
+
 - **Frontend**: Next.js → Vercel (auto-deploy on push to `main`)
 - **Backend**: FastAPI → separate deployment (not documented where)
 - **Database**: Supabase Postgres with RLS
@@ -167,49 +183,52 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 ### 🔧 Current Tech Stack
 
 #### Frontend
-| Layer | Tech |
-|---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript |
-| UI | React 19 |
-| Styling | Tailwind CSS 4 |
-| Animation | Framer Motion |
-| PDF | PDF.js + react-pdf |
-| Rich text | ReactMarkdown + remark-gfm + remark-math + rehype-katex |
-| Notes editor | BlockNote |
-| Auth UI | Supabase Auth UI |
-| PWA | @ducanh2912/next-pwa |
-| Desktop | Electron |
-| Offline storage | idb-keyval (IndexedDB) |
-| Toast | Sonner |
-| Icons | Lucide React + Heroicons |
+
+| Layer           | Tech                                                    |
+| --------------- | ------------------------------------------------------- |
+| Framework       | Next.js 16 (App Router)                                 |
+| Language        | TypeScript                                              |
+| UI              | React 19                                                |
+| Styling         | Tailwind CSS 4                                          |
+| Animation       | Framer Motion                                           |
+| PDF             | PDF.js + react-pdf                                      |
+| Rich text       | ReactMarkdown + remark-gfm + remark-math + rehype-katex |
+| Notes editor    | BlockNote                                               |
+| Auth UI         | Supabase Auth UI                                        |
+| PWA             | @ducanh2912/next-pwa                                    |
+| Desktop         | Electron                                                |
+| Offline storage | idb-keyval (IndexedDB)                                  |
+| Toast           | Sonner                                                  |
+| Icons           | Lucide React + Heroicons                                |
 
 #### Backend
-| Layer | Tech |
-|---|---|
-| Framework | FastAPI |
-| Language | Python 3.10+ |
-| Validation | Pydantic v2 |
-| Server | Uvicorn |
-| Rate Limiting | SlowAPI |
-| PDF Extraction | PyMuPDF + pypdf |
-| LLM — Primary | Gemini (Google AI) |
-| LLM — Fallback | Groq |
-| LLM — Fallback 2 | OpenRouter |
-| Web Search | Tavily |
-| Auth | PyJWT + Supabase |
-| Error Tracking | Sentry |
-| Email | Zoho SMTP via nodemailer/SMTP |
+
+| Layer            | Tech                          |
+| ---------------- | ----------------------------- |
+| Framework        | FastAPI                       |
+| Language         | Python 3.10+                  |
+| Validation       | Pydantic v2                   |
+| Server           | Uvicorn                       |
+| Rate Limiting    | SlowAPI                       |
+| PDF Extraction   | PyMuPDF + pypdf               |
+| LLM — Primary    | Gemini (Google AI)            |
+| LLM — Fallback   | Groq                          |
+| LLM — Fallback 2 | OpenRouter                    |
+| Web Search       | Tavily                        |
+| Auth             | PyJWT + Supabase              |
+| Error Tracking   | Sentry                        |
+| Email            | Zoho SMTP via nodemailer/SMTP |
 
 #### Infrastructure
-| Layer | Tech |
-|---|---|
-| Database | Supabase Postgres |
-| Auth | Supabase Auth |
-| Vector Search | Supabase pgvector |
-| File Storage | Google Drive |
-| Frontend Host | Vercel |
-| Backend Host | Unknown / unspecified |
+
+| Layer         | Tech                  |
+| ------------- | --------------------- |
+| Database      | Supabase Postgres     |
+| Auth          | Supabase Auth         |
+| Vector Search | Supabase pgvector     |
+| File Storage  | Google Drive          |
+| Frontend Host | Vercel                |
+| Backend Host  | Unknown / unspecified |
 
 ---
 
@@ -238,7 +257,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - [x] **Section 2: System Architecture**
 - [x] **Section 3: Auth**
 - [x] **Section 4: Database Design**
-- [ ] **Section 5: Pricing / Business Model** *(Pending co-founder alignment)*
+- [ ] **Section 5: Pricing / Business Model** _(Pending co-founder alignment)_
 - [x] **Section 6: AI & LLM Engine**
 - [x] **Section 7: Document Library**
 - [x] **Section 8: Chat System**
@@ -271,7 +290,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - **Section 2: System Architecture** — High-level blueprint of how all system components connect: frontend clients → API gateway → backend services → database → storage → background workers. Covers service boundaries, data flows, and deployment topology.
 - **Section 3: Auth** — Authentication and authorisation system design. Supabase Auth, JWT strategy, role enforcement (student / lecturer / university_admin / super_admin), per-client API keys, session management, and RLS policy design principles.
 - **Section 4: Database Design** — Full Postgres schema: all 25+ tables, indexes, enums, foreign key constraints, HNSW vector index, soft-delete strategy, RLS patterns, ER diagram, and core stored procedures / triggers.
-- **Section 5: Pricing / Business Model** *(Pending co-founder alignment — see [`credits_pricing_architecture.md`](credits_pricing_architecture.md))* — Credit-based monetisation model. Defines credit packages, per-action pricing, Paystack/Flutterwave payment integration, unit economics, gross margin calculations, and the database objects that power the credit engine (`user_credits`, `credit_ledger`, `credit_pricing`, `credit_purchases`).
+- **Section 5: Pricing / Business Model** _(Pending co-founder alignment — see [`credits_pricing_architecture.md`](credits_pricing_architecture.md))_ — Credit-based monetisation model. Defines credit packages, per-action pricing, Paystack/Flutterwave payment integration, unit economics, gross margin calculations, and the database objects that power the credit engine (`user_credits`, `credit_ledger`, `credit_pricing`, `credit_purchases`).
 - **Section 6: AI & LLM Engine** — The brain of PansGPT. Covers study-first embedded AI across surfaces, warm/helpful pedagogical personality, place-of-call adaptation, provider topology (Google AI Studio primary, Groq fast fallback, OpenRouter safety fallback), intent routing and multi-turn agentic tool loop, core tools (RAG, Web Scraper/Tavily, Vision) and specialized skills (DOCX, Markdown, PDF, PPTX generation, graphing, flashcards, mnemonics), streaming SSE, policy guard, and Zero Data Retention compliance.
 - **Section 7: Document Library** — How university documents (PDFs, slides) are uploaded, stored, processed, and searched. Covers the ingestion pipeline (upload → Cloudflare R2 → text extraction → chunking → embedding → HNSW index), worker concurrency, re-embedding, document metadata, and admin-only upload access controls.
 - **Section 8: Chat System** — End-to-end design of the AI chat feature. Covers session management, the tree/branch message model (parent_message_id, regenerations, edits), SSE streaming to client, context window management, chat title auto-generation, session search, and the credit deduction hook per message turn.
@@ -341,11 +360,11 @@ pansgpt/
 
 ### 3. Environment Topology & Hosted Free-Tier Limits ($0 Strategy)
 
-| Environment | Hosting & Setup | Database / Service Strategy | Quota & Operational Guardrails |
-|---|---|---|---|
-| **Local Dev** | `localhost` / Docker | **Local Supabase CLI (Docker)** | Unlimited, zero-cost, runs offline. Preserves hosted quota. |
-| **Staging** | Vercel Preview + Render Staging | **Hosted Supabase Free Project #1** | Dedicated staging environment. <br/>*Note:* Pauses after 7 days of inactivity. Kept warm or unpaused before staging test runs. |
-| **Production** | Vercel Prod + Render Prod | **Hosted Supabase Free Project #2** | Dedicated production database. Daily active usage prevents idle pause. |
+| Environment    | Hosting & Setup                 | Database / Service Strategy         | Quota & Operational Guardrails                                                                                                 |
+| -------------- | ------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Local Dev**  | `localhost` / Docker            | **Local Supabase CLI (Docker)**     | Unlimited, zero-cost, runs offline. Preserves hosted quota.                                                                    |
+| **Staging**    | Vercel Preview + Render Staging | **Hosted Supabase Free Project #1** | Dedicated staging environment. <br/>_Note:_ Pauses after 7 days of inactivity. Kept warm or unpaused before staging test runs. |
+| **Production** | Vercel Prod + Render Prod       | **Hosted Supabase Free Project #2** | Dedicated production database. Daily active usage prevents idle pause.                                                         |
 
 > [!IMPORTANT]
 > **500MB Database & Vector Storage Growth Path:**
@@ -363,16 +382,495 @@ pansgpt/
 
 ### 5. Team Workflow & Quality Rules
 
-* **Trunk-Based / Short-Lived Branches**: Feature branches live for days, not weeks, preventing divergent merge conflicts.
-* **Mandatory Pull Request Reviews**: Every PR requires a peer review approval before merging to `main`.
-* **Blocking CI Gates**: Merges are mechanically blocked unless GitHub Actions passes `lint + typecheck + test` across all workspaces.
-* **"You Build It, You Watch It"**: The developer who ships a feature is responsible for monitoring its Sentry error rate and logs post-deployment.
-* **Engineering Definition of Done (DoD)**:
+- **Trunk-Based / Short-Lived Branches**: Feature branches live for days, not weeks, preventing divergent merge conflicts.
+- **Mandatory Pull Request Reviews**: Every PR requires a peer review approval before merging to `main`.
+- **Blocking CI Gates**: Merges are mechanically blocked unless GitHub Actions passes `lint + typecheck + test` across all workspaces.
+- **"You Build It, You Watch It"**: The developer who ships a feature is responsible for monitoring its Sentry error rate and logs post-deployment.
+- **Engineering Definition of Done (DoD)**:
   - [x] Code written & self-reviewed.
   - [x] Unit/Integration tests passing in CI.
   - [x] DB migration applied to staging via CLI pipeline.
   - [x] Deployed and verified on preview/staging environment.
   - [x] Zero unresolved Sentry errors in staging.
+
+---
+
+---
+
+## PHASE 0 — LOCAL DEV ENVIRONMENT
+
+### Purpose
+
+To establish a completely reproducible, automated, and isolated local development environment. Every engineer (or AI agent) must be able to go from a fresh git clone to a fully functional stack running locally within minutes, with exact version parity across the team.
+
+### Prerequisites
+
+Before running any project-specific commands, the host machine must have:
+
+- **Docker Desktop** (or equivalent container runtime) allocated with at least 4GB of RAM.
+- **Git** installed and configured.
+- **nvm** (Node Version Manager) for Node.js version management.
+- **pyenv** for Python version management.
+- **curl** or **wget** for downloading binaries.
+
+### Tool Choices & Rationale
+
+- **Node.js (v20 LTS)**: Stable, long-term support version suitable for Next.js 15 and Expo SDK 52. Managed via `.nvmrc` to prevent version drift.
+- **pnpm**: Fast, disk-efficient package manager for monorepos. Chosen over npm/yarn for strict hoisting and workspace support.
+- **Python (3.12)**: Latest stable Python release with major performance improvements. Managed via pyenv.
+- **uv**: Extremely fast Python package installer and resolver written in Rust. Replaces pip/poetry for lightning-fast dependency syncs and strict lockfile (`uv.lock`) enforcement.
+- **Supabase CLI**: Runs the entire Postgres + Auth + Storage stack locally in Docker, providing 1:1 parity with production without incurring hosted costs.
+
+### Step-by-Step Setup
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/PansGPT/pansgpt.git
+   cd pansgpt
+   ```
+
+2. **Setup Node.js Environment**:
+   Run `nvm use` at the root. If the version is not installed, run `nvm install`.
+
+3. **Install and Configure pnpm**:
+   Install pnpm globally and enforce version via package engines constraints:
+
+   ```bash
+   npm install -g pnpm@11.9.0
+   pnpm install
+   ```
+
+4. **Setup Python Environment**:
+   Navigate to the API app and set up the Python environment using `pyenv` and `uv`:
+
+   ```bash
+   cd apps/api
+   pyenv install 3.12
+   pyenv local 3.12
+   uv sync
+   ```
+
+5. **Local Infrastructure via Supabase**:
+   Ensure Docker is running. Install the Supabase CLI globally, then start the local stack:
+
+   ```bash
+   # From the repository root
+   supabase start
+   ```
+
+   This will boot Postgres, Auth, Storage, and pgvector. It automatically applies migrations in `supabase/migrations/` and injects seed data from `supabase/seed.sql`.
+
+6. **Environment Variables**:
+   Copy the example environment files to their local counterparts.
+   ```bash
+   cp .env.example .env.local
+   cp apps/web/.env.example apps/web/.env.local
+   cp apps/api/.env.example apps/api/.env.local
+   ```
+   Fill in the required local URLs and anon keys printed by the `supabase start` command.
+
+### Config Files Spec
+
+- **`.nvmrc`** (Root): Contains `20` to pin the Node.js version.
+- **`apps/api/.python-version`**: Contains `3.12` to pin the Python version via pyenv.
+- **`apps/api/uv.lock`**: Generated by `uv sync`, strictly tracking Python dependencies.
+- **`.vscode/settings.json`**:
+  ```json
+  {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[python]": {
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+      }
+    },
+    "python.analysis.typeCheckingMode": "strict"
+  }
+  ```
+- **`.vscode/extensions.json`**:
+  ```json
+  {
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "charliermarsh.ruff",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "bradlc.vscode-tailwindcss",
+      "eamodio.gitlens",
+      "supabase.supabase-vscode"
+    ]
+  }
+  ```
+- **`Makefile`** (Root):
+  ```makefile
+  .PHONY: dev test migrate reset-db
+
+  dev:
+  	pnpm turbo dev
+
+  test:
+  	pnpm turbo test
+
+  migrate:
+  	supabase migration new $(name)
+
+  reset-db:
+  	supabase db reset
+  ```
+
+### Verification Gate
+
+The local environment is considered ready when the following services are accessible simultaneously:
+
+1. **Next.js Web App**: Responding at `http://localhost:3000`
+2. **FastAPI Backend**: Responding at `http://localhost:8000/docs`
+3. **Supabase Studio**: Responding at `http://localhost:54323`
+4. **Local Redis (if applicable)**: Accessible on port `6379`
+
+### Common Pitfalls
+
+- **Docker Memory Limit**: If `supabase start` fails or hangs, ensure Docker has at least 4GB of RAM allocated.
+- **pgvector Missing**: If migrations fail related to embeddings, ensure the local Supabase Docker image is up to date and supports the `vector` extension.
+- **Port Conflicts**: Ports 3000, 8000, 54321-54330 must be free. Stop conflicting local postgres or web servers.
+
+---
+
+## PHASE 1 — MONOREPO SCAFFOLD + CI TOOLING
+
+### Purpose
+
+To establish a robust, scalable Turborepo monorepo architecture with stringent CI/CD controls. This phase ensures code quality, prevents regressions, strictly enforces formatting/linting via Git hooks, and sets up the structural boundaries of all applications and shared packages.
+
+### Prerequisites
+
+- Phase 0 Local Dev Environment successfully set up.
+- `pnpm` installed globally.
+
+### Tool Choices & Rationale
+
+- **Turborepo**: Optimizes build speeds via aggressive caching and intelligent task orchestration across workspaces.
+- **Husky & lint-staged**: Enforces code quality at the git commit level. Prevents bad code from ever leaving the developer's machine.
+- **Commitlint**: Enforces Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`) for automated changelog generation and clear history.
+- **gitleaks** / **detect-secrets**: Pre-commit secret scanning to prevent API keys and credentials from entering source control.
+- **GitHub Actions**: Automated CI/CD pipeline integrated directly into the repository hosting.
+
+### Step-by-Step Setup
+
+1. **pnpm Workspaces Setup**:
+   Define the workspace boundaries in `pnpm-workspace.yaml` to separate apps from shared packages.
+
+2. **Initialize Turborepo**:
+   Define the task graph in `turbo.json` to handle `build`, `dev`, `lint`, `typecheck`, `test`, and `clean` processes intelligently.
+
+3. **Install Git Hooks**:
+   Install Husky, lint-staged, commitlint, and gitleaks to the root `devDependencies`. Run `pnpm exec husky init`. Config the `.husky/pre-commit` and `.husky/commit-msg` hooks.
+
+4. **Configure Branch Protection**:
+   In the GitHub repository settings:
+   - Require Pull Request reviews before merging.
+   - Require status checks to pass before merging.
+   - Do not allow bypassing the above settings.
+   - Restrict direct pushes to the `main` branch.
+
+### Config Files Spec
+
+- **`pnpm-workspace.yaml`**:
+
+  ```yaml
+  packages:
+    - "apps/*"
+    - "packages/*"
+  ```
+
+- **`turbo.json`**:
+
+  ```json
+  {
+    "$schema": "https://turbo.build/schema.json",
+    "tasks": {
+      "build": { "dependsOn": ["^build"], "outputs": [".next/**", "!.next/cache/**", "dist/**"] },
+      "dev": { "cache": false, "persistent": true },
+      "lint": { "dependsOn": ["^lint"] },
+      "typecheck": { "dependsOn": ["^typecheck"] },
+      "test": { "dependsOn": ["build"] },
+      "clean": { "cache": false }
+    }
+  }
+  ```
+
+- **Workspace Structure**:
+  - `apps/web`: Next.js frontend
+  - `apps/mobile`: Expo React Native app
+  - `apps/desktop`: Electron wrapper
+  - `apps/api`: FastAPI backend
+  - `packages/ui`: Shared Radix/Tailwind components
+  - `packages/types`: Shared TS schemas (Supabase DB generated types, API contracts)
+  - `packages/database`: Migrations and seed data
+  - `packages/eslint-config`: Shared ESLint rules
+  - `packages/typescript-config`: Shared `tsconfig.json` bases
+  - `packages/prettier-config`: Shared Prettier formatting rules
+  - `packages/tailwind-config`: Shared Tailwind preset
+
+- **`lint-staged.config.js`** or **`package.json`** config:
+
+  ```json
+  {
+    "*.{ts,tsx,js,jsx}": ["eslint --fix", "prettier --write"],
+    "*.py": ["ruff check --fix", "ruff format"],
+    "*.{json,md,yml,yaml}": ["prettier --write"]
+  }
+  ```
+
+- **`.husky/pre-commit`**:
+
+  ```bash
+  #!/usr/bin/env sh
+  . "$(dirname -- "$0")/_/husky.sh"
+
+  pnpm exec lint-staged
+  gitleaks protect -v --staged
+  ```
+
+- **`.husky/commit-msg`**:
+
+  ```bash
+  #!/usr/bin/env sh
+  . "$(dirname -- "$0")/_/husky.sh"
+
+  pnpm exec commitlint --edit "$1"
+  ```
+
+- **`.github/workflows/ci.yml`**:
+  A comprehensive GitHub Actions workflow triggered on push/PR to `main`:
+  - **`code-quality` job**: Runs `pnpm turbo lint` (ESLint/Prettier), `ruff check`, and `pyright`/`mypy`.
+  - **`api-tests` job**: Runs `pytest --cov --cov-fail-under=80`.
+  - **`web-tests` job**: Runs `vitest run` on frontend apps.
+  - **`web-build` job**: Runs `next build` as a smoke check for production readiness.
+  - **`security-scan` job**: Runs `pip-audit`, `npm audit`, and `gitleaks`.
+
+- **`.github/workflows/keep_alive.yml`**:
+  A cron workflow running every 10 minutes to hit the `GET /health/ready` endpoints.
+
+- **`tooling/gen-types.sh`**:
+  Script to automate generation of TypeScript interfaces from the Supabase schema into `packages/types/src/supabase.ts`.
+  ```bash
+  #!/bin/bash
+  TARGET=${1:-"local"}
+  if [ "$TARGET" = "local" ]; then
+    npx supabase gen types typescript --local > packages/types/src/supabase.ts
+  else
+    npx supabase gen types typescript --project-id "$PROJECT_ID" > packages/types/src/supabase.ts
+  fi
+  ```
+
+### Verification Gate
+
+Phase 1 is complete and successful when a developer can run:
+
+```bash
+git clone https://github.com/PansGPT/pansgpt.git
+cd pansgpt
+pnpm install
+pnpm turbo lint typecheck test
+```
+
+And receive a 100% green output across the entire monorepo with no uncommitted changes generated. Additionally, attempting to commit a secret or an improperly formatted commit message must be blocked by Git hooks.
+
+### Common Pitfalls
+
+- **Missing DevDependencies**: Forgetting to install `husky`, `lint-staged`, or `@commitlint/cli` at the root level will cause Git hooks to silently fail or error out for new clones.
+- **Cross-Platform Hook Execution**: Git hooks failing on Windows due to line endings. Ensure `.husky` scripts use `LF` line endings.
+- **Strict Dependency Hoisting**: pnpm's strict resolution might break tools that expect flattened `node_modules`. Always declare explicit dependencies in each workspace's `package.json`.
+
+---
+
+# Phase 2 — Secrets + Config
+
+### Philosophy
+
+Fail-fast is non-negotiable. If a required environment variable is missing, the application must refuse to start. We do not use fallback defaults for critical production secrets because this masks configuration errors until they cause runtime failures.
+
+### The 3-Layer Secret System
+
+We employ a strict 3-layer system for managing secrets across all environments:
+
+1. **`.env.example` (Committed)**: Contains all required keys with dummy values. This serves as the blueprint for what the application needs to run. Real secrets are never placed here.
+2. **`.env` or `.env.local` (Gitignored)**: Contains real local development secrets. These files are explicitly ignored in `.gitignore` to prevent accidental commits.
+3. **CI/Hosting Provider Env Vars**: For Staging and Production, secrets are injected directly via the provider's dashboard (e.g., Render, Vercel, EAS).
+
+### Application Environment Blueprints
+
+### `apps/api/.env.example`
+
+The FastAPI backend requires the following configuration surface:
+
+```env
+# Core & Security
+ENVIRONMENT=development
+PROJECT_NAME="PansGPT 2.0 Core Engine"
+API_V1_PREFIX=/api/v1
+ALLOWED_ORIGINS=["http://localhost:3000","https://pansgpt.com","https://staging.pansgpt.com"]
+SUPABASE_JWT_SECRET=YOUR_SUPABASE_JWT_SECRET
+
+# Database & Supabase
+DATABASE_URL=postgresql://postgres:postgres@localhost:54322/postgres
+SUPABASE_URL=http://localhost:54321
+SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_SERVICE_ROLE_KEY
+
+# Cloudflare R2
+R2_ACCOUNT_ID=YOUR_R2_ACCOUNT_ID
+R2_ACCESS_KEY_ID=YOUR_R2_ACCESS_KEY_ID
+R2_SECRET_ACCESS_KEY=YOUR_R2_SECRET_ACCESS_KEY
+R2_BUCKET_NAME=pansgpt-documents-staging
+R2_PUBLIC_DOMAIN=https://documents-staging.pansgpt.com
+
+# AI Providers
+GEMINI_API_KEY=YOUR_GOOGLE_AI_STUDIO_API_KEY
+GEMINI_PRIMARY_MODEL=gemma-4-31b-it
+GEMINI_EMBEDDING_MODEL=gemini-embedding-002
+GROQ_API_KEY=YOUR_GROQ_API_KEY
+GROQ_FALLBACK_MODEL=llama-3.3-70b-versatile
+OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY
+TAVILY_API_KEY=YOUR_TAVILY_API_KEY
+
+# Redis
+REDIS_URL=redis://localhost:6379
+UPSTASH_REDIS_REST_URL=https://YOUR_HOST.upstash.io
+UPSTASH_REDIS_REST_TOKEN=YOUR_UPSTASH_TOKEN
+
+# Transactional Email
+RESEND_API_KEY=re_YOUR_RESEND_KEY
+EMAIL_FROM="PansGPT <support@pansgpt.com>"
+
+# Billing
+PAYSTACK_SECRET_KEY=sk_test_YOUR_PAYSTACK_SECRET
+PAYSTACK_WEBHOOK_SECRET=YOUR_PAYSTACK_WEBHOOK_SECRET
+FLUTTERWAVE_SECRET_KEY=FLWSECK_TEST-YOUR_FLUTTERWAVE_SECRET
+FLUTTERWAVE_WEBHOOK_SECRET=YOUR_FLUTTERWAVE_WEBHOOK_SECRET
+
+# Client Identity Keys
+X_API_KEY_WEB=YOUR_WEB_CLIENT_KEY
+X_API_KEY_MOBILE=YOUR_MOBILE_CLIENT_KEY
+X_API_KEY_DESKTOP=YOUR_DESKTOP_CLIENT_KEY
+
+# Observability
+SENTRY_DSN=https://YOUR_KEY@sentry.io/PROJECT_ID
+```
+
+### `apps/web/.env.example`
+
+The Next.js frontend uses a combination of public and server-only variables:
+
+```env
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_YOUR_PAYSTACK_KEY
+NEXT_PUBLIC_FLUTTERWAVE_PUBLIC_KEY=FLWPUBK_TEST-YOUR_FLUTTERWAVE_KEY
+NEXT_PUBLIC_POSTHOG_KEY=YOUR_POSTHOG_KEY
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+NEXT_PUBLIC_SENTRY_DSN=https://YOUR_KEY@sentry.io/PROJECT_ID
+X_API_KEY_WEB=YOUR_WEB_CLIENT_KEY
+```
+
+### `apps/mobile/.env.example` and `apps/desktop/.env.example`
+
+Both the Expo app and Electron app follow the same pattern, focusing on API endpoints and public keys:
+
+```env
+EXPO_PUBLIC_API_URL=http://localhost:8000
+EXPO_PUBLIC_SUPABASE_URL=http://localhost:54321
+EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+EXPO_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_YOUR_PAYSTACK_KEY
+X_API_KEY_MOBILE=YOUR_MOBILE_CLIENT_KEY
+# (Use X_API_KEY_DESKTOP for desktop)
+```
+
+### Pydantic v2 BaseSettings Implementation Spec (Backend)
+
+To enforce fail-fast validation in `apps/api/app/core/config.py`:
+
+- No defaults for production secrets (i.e. do not use `= "default_value"` for keys).
+- Organize settings into domain-specific sub-models: `DatabaseSettings`, `AISettings`, `StorageSettings`, `PaymentSettings`.
+- Use a root `Settings` class that composes these sub-models.
+- **Startup Validation**: Implement a `model_validator(mode="after")` that inspects the configuration. If `ENVIRONMENT == "production"` or `ENVIRONMENT == "staging"` and any critical key (like `DATABASE_URL`, `SUPABASE_JWT_SECRET`, `PAYSTACK_SECRET_KEY`) is empty or contains placeholder text, it must raise a `ValueError` immediately.
+
+### @t3-oss/env-nextjs Implementation Spec (Web)
+
+For Next.js (`apps/web/env.ts`):
+
+- Implement using `@t3-oss/env-nextjs` and `zod`.
+- Separate variables into strict `server` and `client` blocks.
+- **No fallback defaults** for required variables in production (e.g., do not use `.default("...")` for database or API URLs).
+- Set `skipValidation: !!process.env.SKIP_ENV_VALIDATION` to allow CI builds to pass (only if explicitly requested during standard lint/build steps that don't need real keys).
+
+### Shared `@pansgpt/config` Package Spec
+
+Create a dedicated package (`packages/config` or `@pansgpt/env`) to house shared configuration patterns. While secrets themselves aren't shared, this package will contain:
+
+- Base TypeScript types for environment schema definitions (if applicable).
+- Standard ESLint, Prettier, and TypeScript configurations ensuring all workspaces conform to the same strict standards.
+- Other apps will import standard base configurations to avoid duplication.
+
+### Security Rules
+
+1. **Never Log Secrets**: Application loggers must be configured to mask or exclude sensitive keys.
+2. **Never Commit Secrets**: Any commit containing a real secret must be immediately purged from git history, and the secret must be revoked.
+3. **Rotation**: Document a clear runbook for rotating secrets via the respective provider dashboards (Supabase, Resend, LLMs) and updating Vercel/Render accordingly.
+
+### Verification Gate
+
+- **Test**: Start the API locally with an empty `.env` file (or with `ENVIRONMENT="staging"` and missing keys).
+- **Expected Outcome**: The application must crash immediately with a clear `ValidationError` message detailing exactly which environment variables are missing.
+
+---
+
+# Phase 3 — Environments Wired
+
+### Full 3-Tier Environment System
+
+### Local Environment Setup
+
+- **Supabase**: Run `supabase start` and confirm all local services (API, DB, Studio, etc.) are healthy.
+- **Web Env**: Copy `apps/web/.env.example` to `apps/web/.env.local` and populate it with local Supabase credentials and dummy API keys.
+- **Backend Env**: Copy `apps/api/.env.example` to `apps/api/.env`. Verify that `DATABASE_URL` and `SUPABASE_URL` point to the local Supabase instance.
+- **Redis**: Run a local Redis instance via Docker (`docker run -p 6379:6379 redis`) or install it directly.
+
+### Staging Environment Setup
+
+- **Supabase**: Provision Hosted Project #1 exclusively for Staging.
+- **Render Web Service**: Define the staging API in `render.yaml` using `env: docker` and referencing `apps/api/Dockerfile` (do not use raw `env: python`). Pass all required environment variables via the Render dashboard. Enable auto-deploy from the `main` branch.
+- **Render Background Worker**: Expand `render.yaml` to include a separate worker service running the ARQ worker process (e.g., `startCommand: arq app.worker.WorkerSettings`).
+- **Vercel Staging**: Connect the GitHub repository to a Vercel project with the root directory set appropriately. Configure Preview environment variables.
+- **Migration Workflow**: Ensure `supabase db push --linked` is run to apply migrations to the Staging project _before_ the application code is deployed.
+- **Health Checks**: Verify that `GET /health/live` and `GET /health/ready` return `HTTP 200 OK` from the public staging API URL.
+
+### Production Environment Setup
+
+- **Supabase**: Provision Hosted Project #2 exclusively for Production. **Never share databases between environments.**
+- **Render Production Service**: Add production service definitions (web and worker) to `render.yaml` corresponding to the production environment, tracking stable release tags or a dedicated `production` branch.
+- **Vercel Production**: Bind the custom domain (`pansgpt.com`) to the production deployment and supply production-grade environment variables.
+
+### Monitoring and Keep-Alive Strategy
+
+- **Render Keep-Alive**: Since Render free tier spins down after 15 minutes of inactivity, configure **cron-job.org** to issue an HTTP GET to `/health/ready` every 10 minutes to prevent cold starts.
+- **Uptime Monitoring**: Configure **Better Uptime** to monitor both the API (`/health/live`) and the Web URL, dispatching alerts to email/Slack upon downtime.
+- **GitHub Actions**: Implement a `.github/workflows/keep_alive.yml` workflow as a secondary mechanism to ping the application endpoints periodically.
+
+### Free Tier Constraints & Management
+
+- **Supabase ($0)**: Keep an eye on the 500MB database limit and project pause rules (projects pause after 7 days of inactivity). Use regular staging tests or keep-alive pings to prevent unprompted pausing on the staging DB.
+- **Render ($0)**: The free tier allocates 750 instance hours per month. Running multiple services (API + Worker) across the same account will exhaust this limit quickly. Keep track of usage and consider isolating the staging worker or upgrading to the first paid tier when necessary.
+
+### Verification Gate
+
+- **Staging URL Reachable**: The staging API must be publicly accessible.
+- **Health OK**: A request to the public staging `GET /health/ready` endpoint must return HTTP 200 OK with `database: ok` in the payload, confirming successful remote connectivity.
 
 ---
 
@@ -401,6 +899,7 @@ pansgpt/
 ```
 
 **Why Turborepo:**
+
 - Caches builds intelligently — only rebuilds what changed
 - Web, Mobile, and Desktop share `packages/types` and `packages/config`
 - One repo, one CI pipeline, one PR process
@@ -408,6 +907,7 @@ pansgpt/
 - Remote caching drastically speeds up CI
 
 **Why separate `apps/api`:**
+
 - FastAPI is Python, so it can't share JS packages — it lives in its own app
 - But it's still in the same repo so PRs, issues, and history are unified
 - Backend and frontend changes that go together ship in the same PR
@@ -416,55 +916,57 @@ pansgpt/
 
 ### 🌐 Frontend — Web
 
-| Decision | Choice | Why |
-|---|---|---|
-| Framework | **Next.js 15 (App Router)** | App Router is mature, RSC reduces bundle size, streaming built-in |
-| Language | **TypeScript (strict mode)** | No `any`, no vibe coding. Strict mode catches real bugs |
-| Styling | **Tailwind CSS v4** | CSS-native, no config file, fastest option, same utility classes as mobile |
-| Animation | **Framer Motion** | Best-in-class for the interactions PansGPT needs |
-| State (global) | **Zustand** | Lightweight, no boilerplate, TypeScript-first, same library used on mobile |
-| State (server) | **TanStack Query (React Query)** | Eliminates manual fetch/loading/error patterns. Caching, background refetch, pagination |
-| Rich text / Notes | **Tiptap** | Total design control over toolbars/menus; BlockNote is just a wrapper on Tiptap/ProseMirror with unnecessary overhead |
-| PDF | **PDF.js (pdfjs-dist)** | Industry standard for web PDF rendering |
-| Markdown | **react-markdown + remark-gfm + remark-math + rehype-katex** | Correct for AI chat output with math and tables |
-| Icons | **Lucide React** | Consistent, well-maintained, TypeScript-native icon set |
-| Toast | **Sonner** | Clean, accessible, minimal |
-| Forms | **React Hook Form + Zod** | Consistent validation across every form in the app |
-| Auth UI | **Custom-built** | Full control over the auth experience. No third-party opinionated UI |
-| Component primitives | **Radix UI** | Accessible headless components (dialogs, selects, checkboxes) |
-| Chat UI Components | **assistant-ui (@assistant-ui/react)** | Headless, composable AI chat primitives. Native message branching (<BranchPicker />), Generative UI for skills (makeAssistantToolUI), autoscroll, and LaTeX math |
-| PWA | **@serwist/next** | Actively-developed successor to `@ducanh2912/next-pwa` with native Next.js App Router and Workbox v7 support |
+| Decision             | Choice                                                       | Why                                                                                                                                                              |
+| -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework            | **Next.js 15 (App Router)**                                  | App Router is mature, RSC reduces bundle size, streaming built-in                                                                                                |
+| Language             | **TypeScript (strict mode)**                                 | No `any`, no vibe coding. Strict mode catches real bugs                                                                                                          |
+| Styling              | **Tailwind CSS v4**                                          | CSS-native, no config file, fastest option, same utility classes as mobile                                                                                       |
+| Animation            | **Framer Motion**                                            | Best-in-class for the interactions PansGPT needs                                                                                                                 |
+| State (global)       | **Zustand**                                                  | Lightweight, no boilerplate, TypeScript-first, same library used on mobile                                                                                       |
+| State (server)       | **TanStack Query (React Query)**                             | Eliminates manual fetch/loading/error patterns. Caching, background refetch, pagination                                                                          |
+| Rich text / Notes    | **Tiptap**                                                   | Total design control over toolbars/menus; BlockNote is just a wrapper on Tiptap/ProseMirror with unnecessary overhead                                            |
+| PDF                  | **PDF.js (pdfjs-dist)**                                      | Industry standard for web PDF rendering                                                                                                                          |
+| Markdown             | **react-markdown + remark-gfm + remark-math + rehype-katex** | Correct for AI chat output with math and tables                                                                                                                  |
+| Icons                | **Lucide React**                                             | Consistent, well-maintained, TypeScript-native icon set                                                                                                          |
+| Toast                | **Sonner**                                                   | Clean, accessible, minimal                                                                                                                                       |
+| Forms                | **React Hook Form + Zod**                                    | Consistent validation across every form in the app                                                                                                               |
+| Auth UI              | **Custom-built**                                             | Full control over the auth experience. No third-party opinionated UI                                                                                             |
+| Component primitives | **Radix UI**                                                 | Accessible headless components (dialogs, selects, checkboxes)                                                                                                    |
+| Chat UI Components   | **assistant-ui (@assistant-ui/react)**                       | Headless, composable AI chat primitives. Native message branching (<BranchPicker />), Generative UI for skills (makeAssistantToolUI), autoscroll, and LaTeX math |
+| PWA                  | **@serwist/next**                                            | Actively-developed successor to `@ducanh2912/next-pwa` with native Next.js App Router and Workbox v7 support                                                     |
 
 ---
 
 ### 📱 Mobile App — NEW
 
-| Decision | Choice | Why |
-|---|---|---|
-| Framework | **Expo (React Native)** | Cross-platform iOS + Android. Shares TypeScript, types, and logic patterns with web |
-| Navigation | **Expo Router** | File-based routing just like Next.js — consistent mental model across web and mobile |
-| Styling | **NativeWind v4** | Tailwind CSS utility classes in React Native — same class names as web where possible |
-| State (global) | **Zustand** | Same library as web — shared mental model |
-| State (server) | **TanStack Query** | Same library as web — shared patterns |
-| Chat UI Components | **@assistant-ui/react-native** | Official React Native chat runtime and primitives sharing thread state and branching logic with web |
-| Notes Editor | **@10play/tentap-editor** | Dedicated React Native bridge for Tiptap (WebView core + native toolbar/keyboard); shares exact Tiptap JSON schema with web |
-| PDF Viewer | **react-native-pdf** | Wraps Apple PDFKit (iOS) and Android PdfRenderer — the same native engine GoodNotes uses on iOS |
-| Offline storage | **MMKV** | Replaces idb-keyval on mobile. 10x faster than AsyncStorage, used by Shopify |
-| Push Notifications | **Expo Notifications** | Built-in, works with FCM and APNs |
-| Voice Input | **Expo Audio + Speech** | Native mic access, better than browser Web Speech API |
-| Build & Distribution | **EAS (Expo Application Services)** | Cloud builds, OTA updates, App Store / Play Store submission |
-| Camera / File Picker | **Expo ImagePicker / DocumentPicker** | For future file upload from mobile |
+| Decision             | Choice                                | Why                                                                                                                         |
+| -------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Framework            | **Expo (React Native)**               | Cross-platform iOS + Android. Shares TypeScript, types, and logic patterns with web                                         |
+| Navigation           | **Expo Router**                       | File-based routing just like Next.js — consistent mental model across web and mobile                                        |
+| Styling              | **NativeWind v4**                     | Tailwind CSS utility classes in React Native — same class names as web where possible                                       |
+| State (global)       | **Zustand**                           | Same library as web — shared mental model                                                                                   |
+| State (server)       | **TanStack Query**                    | Same library as web — shared patterns                                                                                       |
+| Chat UI Components   | **@assistant-ui/react-native**        | Official React Native chat runtime and primitives sharing thread state and branching logic with web                         |
+| Notes Editor         | **@10play/tentap-editor**             | Dedicated React Native bridge for Tiptap (WebView core + native toolbar/keyboard); shares exact Tiptap JSON schema with web |
+| PDF Viewer           | **react-native-pdf**                  | Wraps Apple PDFKit (iOS) and Android PdfRenderer — the same native engine GoodNotes uses on iOS                             |
+| Offline storage      | **MMKV**                              | Replaces idb-keyval on mobile. 10x faster than AsyncStorage, used by Shopify                                                |
+| Push Notifications   | **Expo Notifications**                | Built-in, works with FCM and APNs                                                                                           |
+| Voice Input          | **Expo Audio + Speech**               | Native mic access, better than browser Web Speech API                                                                       |
+| Build & Distribution | **EAS (Expo Application Services)**   | Cloud builds, OTA updates, App Store / Play Store submission                                                                |
+| Camera / File Picker | **Expo ImagePicker / DocumentPicker** | For future file upload from mobile                                                                                          |
 
 > [!WARNING]
 > **Notes Editor Prototype Requirement:** While `@10play/tentap-editor` provides cross-platform Tiptap schema parity, it is a newer ecosystem library than core Tiptap. It requires an early prototype / sanity check during Sprint 1 to validate keyboard accessory performance and custom node rendering before full UI integration.
 
 **Why Expo over bare React Native:**
+
 - Managed workflow handles native config — no Xcode hell for standard features
 - EAS Build removes the need for Mac to build iOS (cloud build)
 - OTA (Over-The-Air) updates — push JS updates without app store review
 - Expo SDK covers 95% of what PansGPT needs natively
 
 **What's shared between Web and Mobile:**
+
 - `packages/types` — all API request/response types
 - `packages/config` — ESLint, tsconfig base
 - Notes JSON document schemas & extensions (via Tiptap & TenTap)
@@ -476,8 +978,8 @@ pansgpt/
 
 ### 🖥️ Desktop App
 
-| Decision | Choice | Why |
-|---|---|---|
+| Decision | Choice                                                    | Why                                          |
+| -------- | --------------------------------------------------------- | -------------------------------------------- |
 | Strategy | **Electron — offline-first, built properly from scratch** | 90% offline experience is a core requirement |
 
 - PansGPT is a study app — students study offline (libraries, dorms, no wifi)
@@ -487,6 +989,7 @@ pansgpt/
 - Built offline-first from day 1 — not bolted on after the fact
 
 **Offline-first architecture for Electron:**
+
 ```
 Electron App
 ├── Local SQLite DB  ← notes, chat history, quiz history, reading progress
@@ -496,6 +999,7 @@ Electron App
 ```
 
 **3 clients, 1 API:**
+
 - Web → Vercel (online-first, PWA for light offline via `@serwist/next`)
 - Mobile → Expo (iOS + Android, MMKV for offline, TenTap for notes)
 - Desktop → Electron (offline-first, SQLite + file system, Tiptap for notes)
@@ -504,20 +1008,21 @@ Electron App
 
 ### ⚙️ Backend
 
-| Decision | Choice | Why |
-|---|---|---|
-| Framework | **FastAPI** | Keep — Python is the right language for LLM-heavy work. Ecosystem is unmatched |
-| Language | **Python 3.12** | Latest stable, faster, better typing support than 3.10 |
-| Validation | **Pydantic v2** | Keep — fast, strict, excellent for API contracts |
-| Server | **Uvicorn + Gunicorn** | Uvicorn for async workers, Gunicorn as process manager in production |
-| Task Queue | **ARQ (Async Redis Queue)** | Replaces ad-hoc async. ARQ is async-native for Python — handles quiz gen + embedding jobs properly |
-| Rate Limiting | **SlowAPI** | Keep — already integrated, works well |
-| PDF Processing | **PyMuPDF** | Keep — fast and reliable, remove pypdf duplication |
-| HTTP Client | **HTTPX** | Keep — async-native |
-| Auth | **PyJWT + Supabase Admin** | Keep pattern, clean it up |
-| Structure | **Proper router separation** | Break up `api.py` monolith into clean domain routers |
+| Decision       | Choice                       | Why                                                                                                |
+| -------------- | ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| Framework      | **FastAPI**                  | Keep — Python is the right language for LLM-heavy work. Ecosystem is unmatched                     |
+| Language       | **Python 3.12**              | Latest stable, faster, better typing support than 3.10                                             |
+| Validation     | **Pydantic v2**              | Keep — fast, strict, excellent for API contracts                                                   |
+| Server         | **Uvicorn + Gunicorn**       | Uvicorn for async workers, Gunicorn as process manager in production                               |
+| Task Queue     | **ARQ (Async Redis Queue)**  | Replaces ad-hoc async. ARQ is async-native for Python — handles quiz gen + embedding jobs properly |
+| Rate Limiting  | **SlowAPI**                  | Keep — already integrated, works well                                                              |
+| PDF Processing | **PyMuPDF**                  | Keep — fast and reliable, remove pypdf duplication                                                 |
+| HTTP Client    | **HTTPX**                    | Keep — async-native                                                                                |
+| Auth           | **PyJWT + Supabase Admin**   | Keep pattern, clean it up                                                                          |
+| Structure      | **Proper router separation** | Break up `api.py` monolith into clean domain routers                                               |
 
 **New Backend Structure:**
+
 ```
 api/
 ├── main.py              ← Entry point only. No business logic.
@@ -537,23 +1042,24 @@ api/
 
 ### 🗄️ Database
 
-| Decision | Choice | Why |
-|---|---|---|
-| Primary DB | **Supabase Postgres** | Keep — RLS, Auth, pgvector, Realtime in one platform |
-| Vector Search | **pgvector (via Supabase)** | Keep — no need for a separate vector DB at PansGPT's scale |
-| Migrations | **Plain SQL migration files** | Keep the approach, but enforce naming convention and ordering |
-| ORM | **None (raw SQL via Supabase client)** | FastAPI + Supabase SDK handles this well. Adding SQLAlchemy would be overkill |
-| Caching | **Redis** | New addition. Needed for ARQ (task queue) and for caching frequent queries |
+| Decision      | Choice                                 | Why                                                                           |
+| ------------- | -------------------------------------- | ----------------------------------------------------------------------------- |
+| Primary DB    | **Supabase Postgres**                  | Keep — RLS, Auth, pgvector, Realtime in one platform                          |
+| Vector Search | **pgvector (via Supabase)**            | Keep — no need for a separate vector DB at PansGPT's scale                    |
+| Migrations    | **Plain SQL migration files**          | Keep the approach, but enforce naming convention and ordering                 |
+| ORM           | **None (raw SQL via Supabase client)** | FastAPI + Supabase SDK handles this well. Adding SQLAlchemy would be overkill |
+| Caching       | **Redis**                              | New addition. Needed for ARQ (task queue) and for caching frequent queries    |
 
 ---
 
 ### 📁 File Storage
 
-| Decision | Choice | Why |
-|---|---|---|
-| Storage | **Cloudflare R2** | Replaces Google Drive |
+| Decision | Choice            | Why                   |
+| -------- | ----------------- | --------------------- |
+| Storage  | **Cloudflare R2** | Replaces Google Drive |
 
 **Why replace Google Drive:**
+
 - Google Drive is not designed as an app file storage backend
 - No CDN, no signed URLs, no fine-grained object-level access control
 - Drive API is verbose and fragile
@@ -561,10 +1067,10 @@ api/
 
 **Why Cloudflare R2 (and bootstrap-friendly numbers):**
 
-| Tier | Storage | Writes | Reads | Egress |
-|---|---|---|---|---|
-| **Free forever** | **10 GB** | 1M ops/month | 10M ops/month | **$0 always** |
-| Paid (after free) | $0.015/GB | $4.50/M ops | $0.36/M ops | Still $0 |
+| Tier              | Storage   | Writes       | Reads         | Egress        |
+| ----------------- | --------- | ------------ | ------------- | ------------- |
+| **Free forever**  | **10 GB** | 1M ops/month | 10M ops/month | **$0 always** |
+| Paid (after free) | $0.015/GB | $4.50/M ops  | $0.36/M ops   | Still $0      |
 
 - **10 GB free** = roughly 500–2,000 university PDFs. Enough to launch.
 - **Zero egress fees always** — this is where AWS S3 destroys bootstrapped startups silently
@@ -575,6 +1081,7 @@ api/
 - When you outgrow 10 GB, the paid rate is the cheapest in the market
 
 **File flow:**
+
 ```
 User uploads PDF → FastAPI → Cloudflare R2 (stored)
                           → Supabase DB (metadata: file_id, r2_key, user_id, university_id)
@@ -594,77 +1101,84 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 #### 🧉 Model Inventory by Provider
 
 **Google AI Studio (Gemma 4 & Gemini Embeddings — Free tier)**
-| Model ID | Type | Multimodal Support | Context | Latency | Reasoning Support | Tool Calling |
-|---|---|---|---|---|---|---|
-| `gemma-4-31b-it` | Dense 31B | Yes (Text + Image) | 256K | ~1.5s – 2.5s | Yes (Native Thinking Mode) | Yes (Native Function Calling) |
-| `gemma-4-26b-a4b-it` | MoE (A4B) | Yes (Text + Image) | 256K | ~800ms – 1.5s | Yes (Native Thinking Mode with Budget Control) | Yes (Native Function Calling) |
-| `gemini-embedding-002` | Embedding | Text (Embedding) | 8K (3072d) | ~50ms – 150ms | N/A | N/A |
+
+| Model ID               | Type      | Multimodal Support | Context    | Latency       | Reasoning Support                              | Tool Calling                  |
+| ---------------------- | --------- | ------------------ | ---------- | ------------- | ---------------------------------------------- | ----------------------------- |
+| `gemma-4-31b-it`       | Dense 31B | Yes (Text + Image) | 256K       | ~1.5s – 2.5s  | Yes (Native Thinking Mode)                     | Yes (Native Function Calling) |
+| `gemma-4-26b-a4b-it`   | MoE (A4B) | Yes (Text + Image) | 256K       | ~800ms – 1.5s | Yes (Native Thinking Mode with Budget Control) | Yes (Native Function Calling) |
+| `gemini-embedding-002` | Embedding | Text (Embedding)   | 8K (3072d) | ~50ms – 150ms | N/A                                            | N/A                           |
 
 **Groq (Ultra-Fast Inference — Free rate-limited tier)**
-| Model ID | Type | Multimodal Support | Context | Latency | Reasoning Support | Tool Calling |
-|---|---|---|---|---|---|---|
-| `openai/gpt-oss-120b` | MoE 120B | Text-only | 128K | ~300ms – 600ms (500+ tok/s) | Yes (Configurable CoT / Reasoning Effort) | Yes (Native Function Calling) |
-| `qwen/qwen3.6-27b` | Dense 27B | Yes (Text + Image) | 128K | ~250ms – 500ms | Yes (Thinking Mode / CoT) | Yes (Native Function Calling) |
-| `whisper-large-v3-turbo` | Audio STT | Audio-only | ~25s chunk | ~200ms – 400ms | N/A | N/A |
-| `whisper-large-v3` | Audio STT | Audio-only | ~25s chunk | ~400ms – 800ms | N/A | N/A |
+
+| Model ID                 | Type      | Multimodal Support | Context    | Latency                     | Reasoning Support                         | Tool Calling                  |
+| ------------------------ | --------- | ------------------ | ---------- | --------------------------- | ----------------------------------------- | ----------------------------- |
+| `openai/gpt-oss-120b`    | MoE 120B  | Text-only          | 128K       | ~300ms – 600ms (500+ tok/s) | Yes (Configurable CoT / Reasoning Effort) | Yes (Native Function Calling) |
+| `qwen/qwen3.6-27b`       | Dense 27B | Yes (Text + Image) | 128K       | ~250ms – 500ms              | Yes (Thinking Mode / CoT)                 | Yes (Native Function Calling) |
+| `whisper-large-v3-turbo` | Audio STT | Audio-only         | ~25s chunk | ~200ms – 400ms              | N/A                                       | N/A                           |
+| `whisper-large-v3`       | Audio STT | Audio-only         | ~25s chunk | ~400ms – 800ms              | N/A                                       | N/A                           |
 
 **OpenRouter (NVIDIA Free Models & Fallbacks)**
-| Model ID | Type | Multimodal Support | Context | Latency | Reasoning Support | Tool Calling |
-|---|---|---|---|---|---|---|
-| `nvidia/nemotron-3-ultra-550b-a55b:free` | MoE 550B (A55B) | Text-only | 1M (1,048,576) | ~1.5s – 3.0s | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools) |
-| `nvidia/nemotron-3-super-120b-a12b:free` | MoE 120B (A12B) | Text-only | 1M (1,048,576) | ~600ms – 1.2s | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools) |
-| `nvidia/nemotron-3-nano-30b-a3b:free` | MoE-Mamba 30B (A3B) | Text-only | 128K | ~200ms – 500ms | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools) |
-| `nvidia/nemotron-nano-12b-v2-vl:free` | Vision-Language 12B | Yes (Text + Image + Video) | 128K | ~400ms – 800ms | Yes (Visual & Text Reasoning Mode) | Yes (Tool Calling & Structured Output) |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | Omnimodal 30B (A3B) | Yes (Text + Image + Video + Audio) | 128K | ~500ms – 1.0s | Yes (Dedicated Omni Reasoning Model) | Yes (Multimodal Tool Calling) |
+
+| Model ID                                             | Type                | Multimodal Support                 | Context        | Latency        | Reasoning Support                              | Tool Calling                           |
+| ---------------------------------------------------- | ------------------- | ---------------------------------- | -------------- | -------------- | ---------------------------------------------- | -------------------------------------- |
+| `nvidia/nemotron-3-ultra-550b-a55b:free`             | MoE 550B (A55B)     | Text-only                          | 1M (1,048,576) | ~1.5s – 3.0s   | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools)          |
+| `nvidia/nemotron-3-super-120b-a12b:free`             | MoE 120B (A12B)     | Text-only                          | 1M (1,048,576) | ~600ms – 1.2s  | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools)          |
+| `nvidia/nemotron-3-nano-30b-a3b:free`                | MoE-Mamba 30B (A3B) | Text-only                          | 128K           | ~200ms – 500ms | Yes (Controllable Thinking / Reasoning Budget) | Yes (OpenAI-compatible tools)          |
+| `nvidia/nemotron-nano-12b-v2-vl:free`                | Vision-Language 12B | Yes (Text + Image + Video)         | 128K           | ~400ms – 800ms | Yes (Visual & Text Reasoning Mode)             | Yes (Tool Calling & Structured Output) |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | Omnimodal 30B (A3B) | Yes (Text + Image + Video + Audio) | 128K           | ~500ms – 1.0s  | Yes (Dedicated Omni Reasoning Model)           | Yes (Multimodal Tool Calling)          |
 
 ---
 
 #### ⏱️ Model Rate Limits & Quotas (Free Tier)
 
 **Google AI Studio**
-| Model ID | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-|---|---|---|---|
-| `gemma-4-26b-a4b-it` | 30 | 16K | 14.4K |
-| `gemma-4-31b-it` | 30 | 16K | 14.4K |
-| `gemini-embedding-002` | 1,500 | 1,000K | 10K |
+
+| Model ID               | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
+| ---------------------- | ------------- | ---------------- | ------------- |
+| `gemma-4-26b-a4b-it`   | 30            | 16K              | 14.4K         |
+| `gemma-4-31b-it`       | 30            | 16K              | 14.4K         |
+| `gemini-embedding-002` | 1,500         | 1,000K           | 10K           |
 
 **Groq (Text & Audio)**
-| Model ID | RPM (Req/Min) | RPD (Req/Day) | TPM (Tokens/Min) | TPD (Tokens/Day) | Audio Sec/Hr | Audio Sec/Day |
-|---|---|---|---|---|---|---|
-| `openai/gpt-oss-120b` | 30 | 1K | 8K | 200K | — | — |
-| `qwen/qwen3.6-27b` | 30 | 1K | 8K | 200K | — | — |
-| `whisper-large-v3` | 20 | 2K | — | — | 7.2K (2 hrs) | 28.8K (8 hrs) |
-| `whisper-large-v3-turbo` | 20 | 2K | — | — | 7.2K (2 hrs) | 28.8K (8 hrs) |
+
+| Model ID                 | RPM (Req/Min) | RPD (Req/Day) | TPM (Tokens/Min) | TPD (Tokens/Day) | Audio Sec/Hr | Audio Sec/Day |
+| ------------------------ | ------------- | ------------- | ---------------- | ---------------- | ------------ | ------------- |
+| `openai/gpt-oss-120b`    | 30            | 1K            | 8K               | 200K             | —            | —             |
+| `qwen/qwen3.6-27b`       | 30            | 1K            | 8K               | 200K             | —            | —             |
+| `whisper-large-v3`       | 20            | 2K            | —                | —                | 7.2K (2 hrs) | 28.8K (8 hrs) |
+| `whisper-large-v3-turbo` | 20            | 2K            | —                | —                | 7.2K (2 hrs) | 28.8K (8 hrs) |
 
 **OpenRouter (Free Tier `:free`)**
-| Model ID | RPM (Req/Min) | RPD (Req/Day) | TPM / Notes |
-|---|---|---|---|
-| `nvidia/nemotron-3-ultra-550b-a55b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-super-120b-a12b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-nano-30b-a3b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-nano-12b-v2-vl:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+
+| Model ID                                             | RPM (Req/Min) | RPD (Req/Day)                | TPM / Notes                           |
+| ---------------------------------------------------- | ------------- | ---------------------------- | ------------------------------------- |
+| `nvidia/nemotron-3-ultra-550b-a55b:free`             | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-super-120b-a12b:free`             | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-nano-30b-a3b:free`                | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-nano-12b-v2-vl:free`                | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
 
 ---
 
 ### 🔐 Auth
 
-| Decision | Choice | Why |
-|---|---|---|
-| Auth Provider | **Supabase Auth** | Handles JWT, sessions, OAuth, email verification out of the box |
-| Session Strategy | **JWT (Supabase access token)** | Stateless, works across web, mobile, and desktop |
-| Role System | **Custom roles in Supabase DB** | student / lecturer / admin / super_admin — enforced server-side |
-| API Gate | **Per-client API Keys** | Separate keys for web, mobile, and desktop clients |
+| Decision         | Choice                          | Why                                                             |
+| ---------------- | ------------------------------- | --------------------------------------------------------------- |
+| Auth Provider    | **Supabase Auth**               | Handles JWT, sessions, OAuth, email verification out of the box |
+| Session Strategy | **JWT (Supabase access token)** | Stateless, works across web, mobile, and desktop                |
+| Role System      | **Custom roles in Supabase DB** | student / lecturer / admin / super_admin — enforced server-side |
+| API Gate         | **Per-client API Keys**         | Separate keys for web, mobile, and desktop clients              |
 
 ---
 
 ### 📧 Email
 
-| Decision | Choice | Why |
-|---|---|---|
+| Decision | Choice     | Why                |
+| -------- | ---------- | ------------------ |
 | Provider | **Resend** | Replaces Zoho SMTP |
 
 **Why Resend:**
+
 - Purpose-built for transactional email from apps
 - Clean REST API — no SMTP configuration
 - React Email for templating (beautiful emails, typed)
@@ -676,17 +1190,18 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 
 ### 🚀 Hosting & Deployment
 
-| Service | Host (Bootstrap) | Host (Funded) | Why |
-|---|---|---|---|
-| Web Frontend | **Vercel** (free) | Vercel Pro | Best Next.js deployment, zero config |
-| Mobile App | **EAS** (free builds) | EAS Production | Cloud builds + OTA + App Store / Play Store |
-| Backend API | **Render** (free) | Render paid / Railway | Free web service + keep-alive strategy |
+| Service      | Host (Bootstrap)                | Host (Funded)           | Why                                                 |
+| ------------ | ------------------------------- | ----------------------- | --------------------------------------------------- |
+| Web Frontend | **Vercel** (free)               | Vercel Pro              | Best Next.js deployment, zero config                |
+| Mobile App   | **EAS** (free builds)           | EAS Production          | Cloud builds + OTA + App Store / Play Store         |
+| Backend API  | **Render** (free)               | Render paid / Railway   | Free web service + keep-alive strategy              |
 | Task Workers | **Render** (free, same service) | Separate worker service | ARQ workers run in same Render service at bootstrap |
-| Redis | **Upstash** (free) | Upstash paid | 10,000 commands/day free, serverless |
-| File Storage | **Cloudflare R2** (free 10GB) | R2 paid | As decided above |
-| Database | **Supabase** (free) | Supabase Pro | As decided above |
+| Redis        | **Upstash** (free)              | Upstash paid            | 10,000 commands/day free, serverless                |
+| File Storage | **Cloudflare R2** (free 10GB)   | R2 paid                 | As decided above                                    |
+| Database     | **Supabase** (free)             | Supabase Pro            | As decided above                                    |
 
 **Render Free Tier — Full Details:**
+
 - ✅ Free web service
 - ✅ 750 free instance hours/month (720hrs = exactly 1 month of 24/7)
 - ⚠️ Sleeps after **15 minutes of inactivity**
@@ -694,11 +1209,13 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 - ✅ Dockerfile support, auto-deploy from GitHub, private networking
 
 **Keep-Alive Strategy — cron-job.org (your choice, confirmed valid):**
+
 ```
 cron-job.org (free) → pings GET /health every 10 minutes
 → Render service never reaches 15min inactivity threshold
 → Service stays awake 24/7 at $0
 ```
+
 - cron-job.org is free, no account limit on cron frequency
 - Ping the `/health` endpoint we will build into the new FastAPI backend
 - Works reliably — standard practice for thousands of bootstrapped apps
@@ -709,28 +1226,28 @@ cron-job.org (free) → pings GET /health every 10 minutes
 
 ### 📊 Monitoring & Observability
 
-| Layer | Tool | Why |
-|---|---|---|
-| Error Tracking | **Sentry (Web + Mobile + Backend)** | All 3 clients + backend covered from day one |
-| Uptime | **Better Uptime** | Pings API + web, free tier |
-| Logging | **Render Logs + Sentry breadcrumbs** | Structured logs from day one |
-| Analytics | **PostHog** | Product analytics, session replay, feature flags — covers web + mobile |
+| Layer          | Tool                                 | Why                                                                    |
+| -------------- | ------------------------------------ | ---------------------------------------------------------------------- |
+| Error Tracking | **Sentry (Web + Mobile + Backend)**  | All 3 clients + backend covered from day one                           |
+| Uptime         | **Better Uptime**                    | Pings API + web, free tier                                             |
+| Logging        | **Render Logs + Sentry breadcrumbs** | Structured logs from day one                                           |
+| Analytics      | **PostHog**                          | Product analytics, session replay, feature flags — covers web + mobile |
 
 ---
 
 ### 🧪 Testing
 
-| Layer | Tool |
-|---|---|
-| Backend unit/integration | **pytest** |
-| Frontend (Web) unit | **Vitest + React Testing Library** |
-| Mobile unit | **Jest + React Native Testing Library** |
-| Desktop (Electron) unit | **Vitest + Electron Testing Library** |
-| E2E Web | **Playwright** |
-| E2E Mobile | **Maestro** |
-| E2E Desktop | **Playwright (Electron mode)** |
-| API contract | **Pytest + HTTPX** |
-| Security | **Dedicated pytest security tests** |
+| Layer                    | Tool                                    |
+| ------------------------ | --------------------------------------- |
+| Backend unit/integration | **pytest**                              |
+| Frontend (Web) unit      | **Vitest + React Testing Library**      |
+| Mobile unit              | **Jest + React Native Testing Library** |
+| Desktop (Electron) unit  | **Vitest + Electron Testing Library**   |
+| E2E Web                  | **Playwright**                          |
+| E2E Mobile               | **Maestro**                             |
+| E2E Desktop              | **Playwright (Electron mode)**          |
+| API contract             | **Pytest + HTTPX**                      |
+| Security                 | **Dedicated pytest security tests**     |
 
 ---
 
@@ -812,7 +1329,7 @@ Testing
 
 ---
 
-*Next: Section 2 — System Architecture*
+_Next: Section 2 — System Architecture_
 
 ---
 
@@ -843,7 +1360,7 @@ flowchart TD
         Routes["Domain Routers"]
         Engine["LLM Engine"]
         ARQ["ARQ Task Queue"]
-        
+
         Auth --> Rate --> Routes
         Routes --> Engine
         Routes --> ARQ
@@ -871,19 +1388,19 @@ flowchart TD
     %% Connections
     Clients --> Gate
     Gate --> Backend
-    
+
     Routes <--> DB
     ARQ --> Redis
     Routes --> R2
-    
+
     Redis --> Worker
     Worker <--> R2
     Worker <--> DB
-    
+
     Engine <--> Groq
     Engine <--> Google
     Engine <--> Nvidia
-    
+
     Clients -.->|Signed URL Stream| R2
 ```
 
@@ -896,28 +1413,28 @@ Every request from any client goes through this same gate before reaching any ro
 ```mermaid
 flowchart TD
     Req["Client Request\n(Auth: Bearer <jwt>, x-api-key: <key>)"]
-    
+
     Step1{"1. API Key Check"}
     Err1["401 Unauthorized\n(Invalid/Missing Key)"]
-    
+
     Step2{"2. JWT Decode & Verify\n(Supabase Public Key)"}
     Err2["401 Unauthorized\n(Expired/Tampered)"]
-    
+
     Step3["3. Resolve User ID\n(from JWT sub)"]
-    
+
     Step4["4. Fetch Role & Context\n(DB via Redis Cache)"]
-    
+
     Step5["5. Attach Context\n{user_id, role, uni_id, client_type}"]
-    
+
     Step6(("6. Route Handler\nProcesses Request"))
 
     Req --> Step1
     Step1 -- Fail --> Err1
     Step1 -- Pass --> Step2
-    
+
     Step2 -- Fail --> Err2
     Step2 -- Pass --> Step3
-    
+
     Step3 --> Step4
     Step4 --> Step5
     Step5 --> Step6
@@ -930,12 +1447,12 @@ flowchart TD
 ```mermaid
 flowchart TD
     Client["Client POST /chat/message"]
-    
+
     Auth["1. Auth + RBAC Check"]
     Guard["2. Prompt Safety Guard"]
-    
+
     Agent{"3. Agentic LLM Engine\n(Decides Tool vs Direct Answer)"}
-    
+
     subgraph Tools["Available Tools"]
         direction TB
         RAG["RAG Search\n(pgvector)"]
@@ -943,22 +1460,22 @@ flowchart TD
         Read["File Reading/Analysis"]
         Create["File Creation\n(PDF, MD, DOCX)"]
     end
-    
+
     ModelTier{"4. LLM Routing\n(Tiered Failover)"}
     Primary["Primary (e.g., gpt-oss-120b)"]
     Secondary["Secondary Fallback"]
     Tertiary["Tertiary Fallback"]
     Quaternary["Quaternary Fallback"]
     FailErr["Error 503\nLLM Unavailable"]
-    
+
     Stream["5. Stream SSE tokens to Client"]
     Save[("6. Save to Supabase")]
-    
+
     Client --> Auth --> Guard --> Agent
-    
+
     Agent <--> Tools
     Agent --> ModelTier
-    
+
     ModelTier --> Primary
     Primary -- Success --> Stream
     Primary -- Fail --> Secondary
@@ -968,7 +1485,7 @@ flowchart TD
     Tertiary -- Fail --> Quaternary
     Quaternary -- Success --> Stream
     Quaternary -- Fail --> FailErr
-    
+
     FailErr --> ClientErr["Return 503 to Client\n(No LLM Available)"]
     Stream --> Save
 ```
@@ -981,20 +1498,20 @@ flowchart TD
 flowchart TD
     %% Client Upload
     ClientUp["Client Uploads File\n(PDF, DOCX, PPTX)"]
-    
+
     %% API Processing
     Validate["1. FastAPI: Validate File\n& RBAC (Admins Only)"]
     Convert{"2. Is PDF?"}
     LibreOffice["LibreOffice Headless\nConvert to PDF"]
-    
+
     UploadR2[("3. Upload to Cloudflare R2")]
     InsertDB[("4. Insert Supabase Row\n(status: processing)")]
     Enqueue["5. Enqueue ARQ Job"]
     ReturnAPI["6. Return 201 Created"]
-    
+
     %% Client Polling
     ClientPoll{"Client Polls Status\nor Realtime Sub"}
-    
+
     %% Background Worker
     subgraph ARQ["ARQ Worker Pipeline"]
         direction TD
@@ -1004,12 +1521,12 @@ flowchart TD
         Chunk["Chunk Text (512 tokens)"]
         Embed["Embed (gemini-embedding)"]
         InsertVec[("Insert pgvector")]
-        
+
         JobFail{"Did it fail?"}
         DeadLetter[("Update Status: error")]
         UpdateDoc[("Update Status: ready")]
     end
-    
+
     Notify["Supabase Realtime Notifies Client"]
 
     ClientUp --> Validate
@@ -1018,15 +1535,15 @@ flowchart TD
     Convert -- Yes --> UploadR2
     LibreOffice --> UploadR2
     LibreOffice -- Fails --> DeadLetter
-    
+
     UploadR2 --> InsertDB --> Enqueue --> ReturnAPI -.-> ClientPoll
-    
+
     Enqueue -.-> Job --> Download --> PyMuPDF --> Chunk --> Embed --> InsertVec
     InsertVec --> JobFail
-    
+
     JobFail -- Yes --> DeadLetter
     JobFail -- No --> UpdateDoc
-    
+
     UpdateDoc -.-> Notify
     DeadLetter -.-> Notify
     Notify -.-> ClientPoll
@@ -1046,7 +1563,7 @@ flowchart TD
         Sign["Generates R2 Signed URL\n(15 min TTL)"]
         Ret["Returns URL"]
         Stream["Client streams PDF\ndirectly from R2 CDN"]
-        
+
         Open --> Req
         Req --> Val
         Val --> Sign
@@ -1058,11 +1575,11 @@ flowchart TD
         direction TD
         Timer["Every 30 seconds"]
         Patch["PATCH /library/{doc_id}/progress\n{page: N, offset: Y}"]
-        
+
         Store{"Client Type"}
         DB[("Supabase\nreading_progress table")]
         LocalDB[("Local Storage\n(IndexedDB / SQLite)")]
-        
+
         Timer --> Patch
         Patch --> Store
         Store -- "Online" --> DB
@@ -1080,7 +1597,7 @@ flowchart TD
     API["FastAPI (Producer)"]
     Queue[("Upstash Redis\n(ARQ Job Queue)")]
     Worker["ARQ Worker (Consumer)\n(Same Render instance)"]
-    
+
     subgraph JobTypes["Job Handlers"]
         direction TB
         J1["embed_document(doc_id)\nPDF → Text → Embed → pgvector"]
@@ -1088,7 +1605,7 @@ flowchart TD
         J3["fix_notes_typos(note_id)\nllama-3.1-8b → Corrected Text → DB"]
         J4["send_email(data)\nResend API → Delivered"]
     end
-    
+
     DB[("Supabase\n(jobs table)")]
     Client["Client\nGET /jobs/{job_id}"]
 
@@ -1108,25 +1625,25 @@ flowchart TD
 ```mermaid
 flowchart TD
     Start{"App Starts\nCheck Connectivity"}
-    
+
     subgraph ModeOffline["OFFLINE MODE"]
         direction TB
         OffRead["All Reads → Local DB\n(SQLite)"]
         OffWrite["All Writes → Local DB\n{synced: false}"]
         OffAI["AI Features Blocked\n'Requires Internet'"]
-        
+
         OffRead ~~~ OffWrite ~~~ OffAI
     end
-    
+
     subgraph ModeOnline["ONLINE MODE"]
         direction TB
         OnRead["Reads → FastAPI → Supabase"]
         OnWrite["Writes → FastAPI → Supabase"]
         OnMirror["Local DB mirrors responses\nin background"]
-        
+
         OnRead ~~~ OnWrite ~~~ OnMirror
     end
-    
+
     subgraph Reconnect["RECONNECT FLOW"]
         direction TB
         Rec1["1. Connectivity Restored"]
@@ -1134,7 +1651,7 @@ flowchart TD
         Rec3["3. Upload Pending Writes\n(Last-write-wins)"]
         Rec4["4. Pull latest DB\nUpdate Local DB"]
         Rec5["5. Mark synced = true"]
-        
+
         Rec1 --> Rec2 --> Rec3 --> Rec4 --> Rec5
     end
 
@@ -1145,6 +1662,7 @@ flowchart TD
 ```
 
 **What works fully offline (Mobile & Desktop):**
+
 - Reading notes, editing notes
 - Reviewing completed quiz results
 - Browsing document library (metadata)
@@ -1153,6 +1671,7 @@ flowchart TD
 - Reviewing learn mode progress
 
 **What requires internet (all platforms):**
+
 - All Agentic AI features (Tools, LLM inference, RAG)
 - Document upload (Admin only)
 - Auth token refresh
@@ -1163,40 +1682,146 @@ flowchart TD
 
 ### 2.8 Data Flow by Client Type
 
-| Operation | Web (Internet Required) | Mobile (SQLite) | Desktop (SQLite) |
-|---|---|---|---|
-| Auth | Supabase JS SDK | Supabase JS SDK | Supabase JS SDK / Cached JWT |
-| Chat | API → Supabase | API → Supabase | API → Supabase / Unavailable offline |
-| Notes R/W | API → Supabase | Local DB → API sync | Local DB → API sync |
-| PDF Open | R2 signed URL | R2 signed URL / Local cache | R2 signed URL / Local cache |
-| Quiz | API → Supabase | API → Supabase / Review offline | API → Supabase / Review offline |
-| Progress | API → Supabase | Local DB → API sync | Local DB → API sync |
-| File Upload | API → R2 (Admin) | API → R2 (Admin) | API → R2 (Admin) |
+| Operation   | Web (Internet Required) | Mobile (SQLite)                 | Desktop (SQLite)                     |
+| ----------- | ----------------------- | ------------------------------- | ------------------------------------ |
+| Auth        | Supabase JS SDK         | Supabase JS SDK                 | Supabase JS SDK / Cached JWT         |
+| Chat        | API → Supabase          | API → Supabase                  | API → Supabase / Unavailable offline |
+| Notes R/W   | API → Supabase          | Local DB → API sync             | Local DB → API sync                  |
+| PDF Open    | R2 signed URL           | R2 signed URL / Local cache     | R2 signed URL / Local cache          |
+| Quiz        | API → Supabase          | API → Supabase / Review offline | API → Supabase / Review offline      |
+| Progress    | API → Supabase          | Local DB → API sync             | Local DB → API sync                  |
+| File Upload | API → R2 (Admin)        | API → R2 (Admin)                | API → R2 (Admin)                     |
 
 ---
 
 ### 2.9 External Services Map
 
-| Service | How We Use It | Called By |
-|---|---|---|
-| **Supabase Auth** | JWT issue, refresh, OAuth | Clients directly |
-| **Supabase Postgres** | All app data, pgvector | FastAPI only |
-| **Upstash Redis** | ARQ queue + response cache | FastAPI only |
-| **Cloudflare R2** | PDF/file storage | FastAPI (upload), Clients (read via signed URL) |
-| **Groq** | LLM inference + Whisper STT | FastAPI only |
-| **Google AI Studio** | Gemma 4 inference + embeddings | FastAPI only |
-| **OpenRouter** | NVIDIA model inference | FastAPI only |
-| **Resend** | Transactional email | FastAPI ARQ worker only |
-| **cron-job.org** | Keep-alive ping | External (hits `/health`) |
-| **Sentry** | Error reporting | Web, Mobile, Desktop, FastAPI |
-| **PostHog** | Analytics + feature flags | Web, Mobile |
-| **Better Uptime** | Uptime monitoring | External (hits API + Vercel) |
+| Service               | How We Use It                  | Called By                                       |
+| --------------------- | ------------------------------ | ----------------------------------------------- |
+| **Supabase Auth**     | JWT issue, refresh, OAuth      | Clients directly                                |
+| **Supabase Postgres** | All app data, pgvector         | FastAPI only                                    |
+| **Upstash Redis**     | ARQ queue + response cache     | FastAPI only                                    |
+| **Cloudflare R2**     | PDF/file storage               | FastAPI (upload), Clients (read via signed URL) |
+| **Groq**              | LLM inference + Whisper STT    | FastAPI only                                    |
+| **Google AI Studio**  | Gemma 4 inference + embeddings | FastAPI only                                    |
+| **OpenRouter**        | NVIDIA model inference         | FastAPI only                                    |
+| **Resend**            | Transactional email            | FastAPI ARQ worker only                         |
+| **cron-job.org**      | Keep-alive ping                | External (hits `/health`)                       |
+| **Sentry**            | Error reporting                | Web, Mobile, Desktop, FastAPI                   |
+| **PostHog**           | Analytics + feature flags      | Web, Mobile                                     |
+| **Better Uptime**     | Uptime monitoring              | External (hits API + Vercel)                    |
 
 > **Rule**: Clients (Web, Mobile, Desktop) **never** call LLM providers directly. All AI calls go through FastAPI. API keys for Groq, Google AI Studio, and OpenRouter live server-side only.
 
 ---
 
-*Next: Section 3 — Auth*
+_Next: Section 3 — Auth_
+
+---
+
+---
+
+## ✅ SECTION 28 — PHASE 8: WALKING SKELETON
+
+---
+
+### 28.1 Purpose
+
+The walking skeleton is the most important milestone in the build: it proves that Auth + Document Ingestion + AI Chat all work end-to-end, deployed to staging, with a real user account. It is deliberately thin — not pretty, not complete, but real. Catch integration bugs early.
+
+### 28.2 What Gets Built (Deliberately Minimal)
+
+- **Auth flow (web only)**: Sign up ? Email confirm ? Sign in ? useSession() hook wired
+- **Document upload**: Simple file picker <input type=file> ? POST /api/v1/library/upload ? shows upload status
+- **AI Chat**: Plain <textarea> ? POST /api/v1/ai/chat/sessions/{id}/stream ? streamed response displayed in <pre>
+- **No design**: no components, no animations — just wired HTML and fetch calls
+
+### 28.3 What Does NOT Get Built
+
+- Design tokens, themed components, navigation shell, loading states, error boundaries (save for Phase 9+)
+- Mobile, Desktop
+
+### 28.4 Staging Deployment
+
+Everything must work on the Render API URL + Vercel Preview URL, not just localhost.
+
+### 28.5 API Contract
+
+- signUp / signIn (Supabase Auth)
+- session refresh (Supabase SDK)
+- upload file (POST /api/v1/library/upload)
+- chat stream (POST /api/v1/ai/chat/sessions/{id}/stream)
+
+### 28.6 Next.js App Router Wiring
+
+Minimal route structure:
+
+- /auth/signup
+- /auth/login
+- /library/upload
+- /chat
+
+### 28.7 Supabase Client Setup
+
+- @supabase/ssr for server-side session management
+- createBrowserClient vs createServerClient
+
+### 28.8 Verification Gate
+
+A non-developer can sign up, upload a PDF, send a chat message, and read an AI-grounded response — on staging.
+
+---
+
+## ✅ SECTION 29 — PHASE 9: DESIGN SYSTEM + APP SHELL
+
+---
+
+### 29.1 Why Design System First
+
+Every screen shares tokens, components, and layouts. Building it once prevents divergence. Once the skeleton works, dress it properly before building individual screens.
+
+### 29.2 OKLCH Color Token System
+
+- **Why OKLCH over HSL/RGB**: perceptual uniformity, better dark mode
+- **Token hierarchy**: Primitive ? Semantic ? Component
+- **3 themes**: Light (default), Dark, Sepia (eye comfort for long reading sessions)
+- **How themes are applied**: CSS custom properties on html[data-theme]
+- **Tailwind v4 integration**: CSS-first config, @theme directive for custom tokens
+- **Core token categories**: --color-surface-_, --color-text-_, --color-accent-_, --color-border-_, --radius-_, --spacing-_, --font-*
+
+### 29.3 Atomic Component Library (packages/ui)
+
+- Button (variants: primary, secondary, ghost, destructive; sizes: sm, md, lg)
+- Input, Textarea, Select, Checkbox, RadioGroup
+- Card, Sheet, Dialog/Modal
+- Avatar (initials-based, with Supabase avatar URL fallback)
+- Badge, Tag
+- Skeleton (loading placeholder)
+- Toast/Snackbar (using sonner)
+- Spinner
+- **All components**: accessible (ARIA), keyboard navigable, theme-aware
+
+### 29.4 App Shell / Navigation
+
+- **Sidebar layout (web)**: collapsible sidebar, top bar with user avatar + settings
+- **Bottom tab navigation (mobile)**: 5 tabs (Home, Library, Chat, Quiz, Profile)
+- **Route groups in Next.js App Router**: (app)/ for authenticated, (public)/ for unauthenticated
+- **Auth guard middleware**: redirect to /auth/login if no session
+
+### 29.5 Typography Scale
+
+- **Font**: Inter (body), Geist Mono (code blocks)
+- **Scale**: xs/sm/base/lg/xl/2xl/3xl using
+  em units
+
+### 29.6 Icon System & Animation
+
+- **Icon System**: Lucide React — list which icons are used for navigation, actions, status
+- **Animation**: CSS transitions for theme switching, Framer Motion for page transitions
+
+### 29.7 Verification Gate
+
+All 3 themes apply correctly, keyboard nav works on all components, Storybook (or basic demo page) shows all components.
 
 ---
 
@@ -1208,15 +1833,15 @@ flowchart TD
 
 Auth is handled entirely by **Supabase Auth**. No custom auth server. No rolling our own JWT signing.
 
-| Concern | Solution |
-|---|---|
-| Identity provider | Supabase Auth (email/password + Google/Apple OAuth) |
-| Token format | JWT (RS256, signed by Supabase) |
-| Token verification | FastAPI validates using Supabase JWKS endpoint |
-| Session persistence | Supabase SDK handles refresh automatically on Web/Mobile |
-| Desktop session | JWT + refresh token stored in Electron `safeStorage` (encrypted) |
-| Role storage | Dedicated roles table in Supabase Postgres (designed in Section 4) |
-| Client identification | `x-api-key` header per client (Web / Mobile / Desktop) |
+| Concern               | Solution                                                           |
+| --------------------- | ------------------------------------------------------------------ |
+| Identity provider     | Supabase Auth (email/password + Google/Apple OAuth)                |
+| Token format          | JWT (RS256, signed by Supabase)                                    |
+| Token verification    | FastAPI validates using Supabase JWKS endpoint                     |
+| Session persistence   | Supabase SDK handles refresh automatically on Web/Mobile           |
+| Desktop session       | JWT + refresh token stored in Electron `safeStorage` (encrypted)   |
+| Role storage          | Dedicated roles table in Supabase Postgres (designed in Section 4) |
+| Client identification | `x-api-key` header per client (Web / Mobile / Desktop)             |
 
 ---
 
@@ -1247,12 +1872,12 @@ student
 
 ### 3.3 Auth Methods
 
-| Method | Who | Notes |
-|---|---|---|
-| Email + Password | All users | Supabase email auth. Email confirmation required. |
-| Google OAuth | All users | Supabase OAuth provider. Redirect-based. |
-| Apple OAuth | All users | Supabase OAuth provider. Required for iOS App Store compliance. |
-| Invite Link | Lecturers | Admin generates an invite link. Lecturer sets password on first login. |
+| Method           | Who       | Notes                                                                  |
+| ---------------- | --------- | ---------------------------------------------------------------------- |
+| Email + Password | All users | Supabase email auth. Email confirmation required.                      |
+| Google OAuth     | All users | Supabase OAuth provider. Redirect-based.                               |
+| Apple OAuth      | All users | Supabase OAuth provider. Required for iOS App Store compliance.        |
+| Invite Link      | Lecturers | Admin generates an invite link. Lecturer sets password on first login. |
 
 ---
 
@@ -1262,25 +1887,25 @@ student
 flowchart TD
     A["User visits Sign Up"]
     B{"Sign-up method"}
-    
+
     EP["Email + Password"]
     GO["Google OAuth"]
     AO["Apple OAuth"]
 
     SupaAuthEmail["Supabase Auth creates user\n(email + password)"]
     SupaAuthOAuth["Supabase Auth creates user\n(pre-verified by Google/Apple)"]
-    
+
     Confirm{"Email confirmed?"}
     ResendEmail["Resend confirmation email"]
-    
+
     NameManual["User enters:\nFirst name + Other names"]
     OAuthName["Pre-filled from\nGoogle / Apple profile"]
-    
+
     UniStep["Select University"]
     LevelStep["Select Level\n(100 - 600)"]
     Terms{"Agrees to Terms\n& Privacy Policy?"}
     Declined["Cannot proceed\n(Terms declined)"]
-    
+
     Profile["Create student profile"]
     Home["User lands on Home"]
 
@@ -1288,17 +1913,17 @@ flowchart TD
     B --> EP --> SupaAuthEmail
     B --> GO --> SupaAuthOAuth
     B --> AO --> SupaAuthOAuth
-    
+
     SupaAuthEmail --> Confirm
     Confirm -- No --> ResendEmail
     ResendEmail -.-> Confirm
     Confirm -- Yes --> NameManual
-    
+
     SupaAuthOAuth --> OAuthName
-    
+
     NameManual --> UniStep
     OAuthName --> UniStep
-    
+
     UniStep --> LevelStep
     LevelStep --> Terms
     Terms -- Declined --> Declined
@@ -1314,29 +1939,29 @@ flowchart TD
 flowchart TD
     Login["User logs in"]
     SupaIssue["Supabase issues JWT + Refresh Token"]
-    
+
     Store{"Client Platform"}
     WebStore["Web: Supabase SDK stores in memory + cookie"]
     MobStore["Mobile: Supabase SDK stores in AsyncStorage"]
     DeskStore["Desktop: JWT stored in Electron safeStorage (encrypted)"]
-    
+
     APIReq["Client makes API request\nAuthorization: Bearer <jwt>"]
-    
+
     Expiry{"JWT expired?"}
     Refresh["Supabase SDK auto-refreshes token\nusing refresh token"]
     ValidReq["FastAPI validates JWT\nvia Supabase JWKS"]
-    
+
     Granted["Request proceeds"]
 
     Login --> SupaIssue
     SupaIssue --> Store
-    
+
     Store --> WebStore
     Store --> MobStore
     Store --> DeskStore
-    
+
     WebStore & MobStore & DeskStore --> APIReq
-    
+
     APIReq --> Expiry
     Expiry -- Yes --> Refresh
     Refresh --> APIReq
@@ -1376,14 +2001,14 @@ flowchart TD
     AdminAct["Admin creates lecturer invite\nPOST /admin/lecturers/invite"]
     InviteRow["Store invite:\n{email, university_id, token, expires_at (admin-set)}"]
     Email["Resend: send invite email with link"]
-    
+
     Click["Lecturer clicks link"]
     Validate{"Token valid?\n(not expired)"}
     Expired["Error: Invite expired"]
-    
+
     SetupPass["Lecturer sets password\n(Supabase updateUser)"]
     LecturerProfile["Create lecturer profile record"]
-    
+
     Dashboard["Lecturer lands on dashboard"]
 
     AdminAct --> InviteRow
@@ -1402,14 +2027,14 @@ flowchart TD
 
 ### 3.8 Auth Per Platform
 
-| Concern | Web | Mobile (Expo) | Desktop (Electron) |
-|---|---|---|---|
-| SDK | `@supabase/supabase-js` | `@supabase/supabase-js` | `@supabase/supabase-js` |
-| Token storage | In-memory + HttpOnly cookie (SSR) | Expo SecureStore | Electron `safeStorage` (OS keychain) |
-| Auto token refresh | Yes (SDK) | Yes (SDK) | Yes (SDK), or on reconnect |
-| OAuth redirect | Browser redirect | `expo-auth-session` deep link | Opens system browser, captures redirect |
-| Offline auth | N/A (internet required) | Cached JWT valid up to expiry | Cached JWT valid up to expiry |
-| Logout | Clear cookie + memory | Clear SecureStore | Clear safeStorage + SQLite session |
+| Concern            | Web                               | Mobile (Expo)                 | Desktop (Electron)                      |
+| ------------------ | --------------------------------- | ----------------------------- | --------------------------------------- |
+| SDK                | `@supabase/supabase-js`           | `@supabase/supabase-js`       | `@supabase/supabase-js`                 |
+| Token storage      | In-memory + HttpOnly cookie (SSR) | Expo SecureStore              | Electron `safeStorage` (OS keychain)    |
+| Auto token refresh | Yes (SDK)                         | Yes (SDK)                     | Yes (SDK), or on reconnect              |
+| OAuth redirect     | Browser redirect                  | `expo-auth-session` deep link | Opens system browser, captures redirect |
+| Offline auth       | N/A (internet required)           | Cached JWT valid up to expiry | Cached JWT valid up to expiry           |
+| Logout             | Clear cookie + memory             | Clear SecureStore             | Clear safeStorage + SQLite session      |
 
 ---
 
@@ -1418,6 +2043,7 @@ flowchart TD
 All Supabase tables will have RLS enabled. The exact per-table RLS policies will be defined in **Section 4: Database Design** once the schema is fully mapped.
 
 **Principles (apply to all tables):**
+
 - Clients (Web, Mobile, Desktop) only ever call Supabase directly for: `signIn`, `signUp`, `signOut`, `onAuthStateChange`, and OAuth. **Everything else goes through FastAPI.**
 - FastAPI uses the **service role key**, which bypasses RLS server-side.
 - RLS on Supabase exists as a defense-in-depth safety net — not the primary access control layer.
@@ -1439,7 +2065,7 @@ All Supabase tables will have RLS enabled. The exact per-table RLS policies will
 
 ---
 
-*Next: Section 4 — Database Design*
+_Next: Section 4 — Database Design_
 
 ---
 
@@ -1451,17 +2077,17 @@ All Supabase tables will have RLS enabled. The exact per-table RLS policies will
 
 ### 4.1 First Principles Design Decisions
 
-| Decision | Why |
-|---|---|
-| **UUIDv7 for Primary Keys** | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables. |
-| **Unified `users` table** | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`). |
-| **Unified `documents` table** | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication. |
+| Decision                                   | Why                                                                                                                                                                                                                                                                                |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UUIDv7 for Primary Keys**                | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables.                                                                                                |
+| **Unified `users` table**                  | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`).                                               |
+| **Unified `documents` table**              | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication.                                                                          |
 | **Dynamic Claude-Style `ai_skills` Table** | Instead of hardcoding all AI tools in code, specialized academic & clinical tools (e.g. dosage calculators, drug interaction checkers, OSCE case simulators) are stored in an `ai_skills` table with short metadata for the model router and full on-demand markdown instructions. |
-| **HNSW Indexing for `pgvector`** | Using `gemini-embedding-002` (3072 dimensions) with `HNSW (vector_cosine_ops)`. HNSW provides superior recall, sub-linear query latency, and does not require periodic manual index rebuilds unlike IVFFlat. |
-| **Soft Deletes with Retention Window** | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period. |
-| **Cloudflare R2 Blob Storage** | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2. |
-| **Async Background Job Architecture** | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts. |
-| **Greenfield Clean-Slate Deployment** | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities. |
+| **HNSW Indexing for `pgvector`**           | Using `gemini-embedding-002` (3072 dimensions) with `HNSW (vector_cosine_ops)`. HNSW provides superior recall, sub-linear query latency, and does not require periodic manual index rebuilds unlike IVFFlat.                                                                       |
+| **Soft Deletes with Retention Window**     | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period.                                                  |
+| **Cloudflare R2 Blob Storage**             | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2.                                                                                         |
+| **Async Background Job Architecture**      | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts.                                                  |
+| **Greenfield Clean-Slate Deployment**      | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities.                                                                                                                        |
 
 ---
 
@@ -1491,36 +2117,36 @@ CREATE TYPE quiz_job_status AS ENUM ('queued', 'retrieving', 'generating', 'savi
 
 ### 4.4 Table Inventory (27 Clean Tables)
 
-| Domain | Table | Purpose |
-|---|---|---|
-| **Identity & Access** | `universities` | University registry (name, state, country, active status). |
-| | `academic_terms` | Active session (e.g. 2024/2025) and active semester per university. |
-| | `users` | Unified profile, role array, university link, and soft-delete state. |
-| | `invitations` | Multi-use invite links with role grants and usage limits. |
-| **Content & Ingestion**| `documents` | Unified document catalog (admin uploads & lecturer submissions). |
-| | `document_chunks` | 3072-dim vector chunks for RAG. |
-| | `document_sections` | AI-generated structured sections for Learn Mode. |
-| | `document_notes` | PDF screenshot cropped notes with AI commentary (R2 keys). |
-| | `document_highlights` | User text highlights with colors, page indices, and bounding boxes. |
-| **Learning & Quizzes** | `study_progress` | Per-user document reading position and section mastery. |
-| | `quizzes` | Quiz metadata and configuration. |
-| | `quiz_questions` | Individual questions with JSONB options and explanations. |
-| | `quiz_attempts` | Completed user attempts with score and detailed answers. |
-| | `quiz_generation_jobs`| Async background job tracker for AI quiz generation. |
-| **Learn Mode Spaced Repetition**| `document_learn_progress` | Section-level mastery state (`not_started`, `in_progress`, `needs_review`, `mastered`). |
-| | `document_learn_pending_retests` | Spaced repetition retest queue for failed check questions. |
-| **AI Interactions & Skills** | `chat_sessions` | Chat conversation threads with optional document scoping. |
-| | `chat_messages` | Messages with JSONB tool calls, citations, and thinking traces. |
-| | `ai_skills` | Claude-style dynamic agent skills registry with on-demand instructions. |
-| | `ai_telemetry` | Per-request token analytics, latency, provider, and error logs. |
-| **Academic Operations**| `timetables` | Weekly lecture schedule per university/level/day. |
-| | `student_tasks` | Student custom tasks, timetable action items, and study deadlines with urgency states. |
-| | `course_knowledge` | Institutional curriculum knowledge injected into AI context. |
-| | `exam_restrictions` | Time-locked windows that disable AI assistance during exams. |
-| **System & Notes** | `general_notes` | Standalone rich-text/markdown user notes. |
-| | `system_settings` | Global runtime AI configurations (prompt, temperature, switches). |
-| | `system_settings_history`| Audit log for system prompt & parameter modifications. |
-| | `audit_logs` | Security and administrative audit trail. |
+| Domain                           | Table                            | Purpose                                                                                 |
+| -------------------------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| **Identity & Access**            | `universities`                   | University registry (name, state, country, active status).                              |
+|                                  | `academic_terms`                 | Active session (e.g. 2024/2025) and active semester per university.                     |
+|                                  | `users`                          | Unified profile, role array, university link, and soft-delete state.                    |
+|                                  | `invitations`                    | Multi-use invite links with role grants and usage limits.                               |
+| **Content & Ingestion**          | `documents`                      | Unified document catalog (admin uploads & lecturer submissions).                        |
+|                                  | `document_chunks`                | 3072-dim vector chunks for RAG.                                                         |
+|                                  | `document_sections`              | AI-generated structured sections for Learn Mode.                                        |
+|                                  | `document_notes`                 | PDF screenshot cropped notes with AI commentary (R2 keys).                              |
+|                                  | `document_highlights`            | User text highlights with colors, page indices, and bounding boxes.                     |
+| **Learning & Quizzes**           | `study_progress`                 | Per-user document reading position and section mastery.                                 |
+|                                  | `quizzes`                        | Quiz metadata and configuration.                                                        |
+|                                  | `quiz_questions`                 | Individual questions with JSONB options and explanations.                               |
+|                                  | `quiz_attempts`                  | Completed user attempts with score and detailed answers.                                |
+|                                  | `quiz_generation_jobs`           | Async background job tracker for AI quiz generation.                                    |
+| **Learn Mode Spaced Repetition** | `document_learn_progress`        | Section-level mastery state (`not_started`, `in_progress`, `needs_review`, `mastered`). |
+|                                  | `document_learn_pending_retests` | Spaced repetition retest queue for failed check questions.                              |
+| **AI Interactions & Skills**     | `chat_sessions`                  | Chat conversation threads with optional document scoping.                               |
+|                                  | `chat_messages`                  | Messages with JSONB tool calls, citations, and thinking traces.                         |
+|                                  | `ai_skills`                      | Claude-style dynamic agent skills registry with on-demand instructions.                 |
+|                                  | `ai_telemetry`                   | Per-request token analytics, latency, provider, and error logs.                         |
+| **Academic Operations**          | `timetables`                     | Weekly lecture schedule per university/level/day.                                       |
+|                                  | `student_tasks`                  | Student custom tasks, timetable action items, and study deadlines with urgency states.  |
+|                                  | `course_knowledge`               | Institutional curriculum knowledge injected into AI context.                            |
+|                                  | `exam_restrictions`              | Time-locked windows that disable AI assistance during exams.                            |
+| **System & Notes**               | `general_notes`                  | Standalone rich-text/markdown user notes.                                               |
+|                                  | `system_settings`                | Global runtime AI configurations (prompt, temperature, switches).                       |
+|                                  | `system_settings_history`        | Audit log for system prompt & parameter modifications.                                  |
+|                                  | `audit_logs`                     | Security and administrative audit trail.                                                |
 
 ---
 
@@ -1529,6 +2155,7 @@ CREATE TYPE quiz_job_status AS ENUM ('queued', 'retrieving', 'generating', 'savi
 #### 4.5.1 Identity & Access
 
 **`universities`**
+
 ```sql
 CREATE TABLE public.universities (
   id          uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1544,6 +2171,7 @@ CREATE UNIQUE INDEX unq_universities_name_lower ON public.universities (lower(na
 ```
 
 **`academic_terms`**
+
 ```sql
 CREATE TABLE public.academic_terms (
   id                uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1556,6 +2184,7 @@ CREATE TABLE public.academic_terms (
 ```
 
 **`users`** (Consolidates `profiles`, `user_roles`, and `lecturer_profiles`)
+
 ```sql
 CREATE TABLE public.users (
   id                uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -1578,6 +2207,7 @@ CREATE INDEX idx_users_deleted ON public.users(deleted_at) WHERE deleted_at IS N
 ```
 
 **`invitations`**
+
 ```sql
 CREATE TABLE public.invitations (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1604,6 +2234,7 @@ CREATE TABLE public.invitations (
 > Students have zero upload capability at any level.
 
 **`documents`** (Unified Library — University-Scoped)
+
 ```sql
 CREATE TABLE public.documents (
   id                  uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1639,6 +2270,7 @@ CREATE INDEX idx_documents_ingestion ON public.documents(embedding_status) WHERE
 ```
 
 **`document_chunks`**
+
 ```sql
 CREATE TABLE public.document_chunks (
   id          uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1657,6 +2289,7 @@ CREATE INDEX idx_document_chunks_doc ON public.document_chunks(document_id);
 ```
 
 **`document_sections`**
+
 ```sql
 CREATE TABLE public.document_sections (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1674,6 +2307,7 @@ CREATE INDEX idx_document_sections_doc ON public.document_sections(document_id, 
 ```
 
 **`document_notes`**
+
 ```sql
 CREATE TABLE public.document_notes (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1691,13 +2325,14 @@ CREATE INDEX idx_document_notes_user_doc ON public.document_notes(user_id, docum
 ```
 
 **`document_highlights`** (Text Selection Highlights & Persistent Colors)
+
 ```sql
 CREATE TABLE public.document_highlights (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
   user_id         uuid NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   document_id     uuid NOT NULL REFERENCES public.documents(id) ON DELETE CASCADE,
   page_number     integer NOT NULL,
-  color           text NOT NULL DEFAULT 'yellow' 
+  color           text NOT NULL DEFAULT 'yellow'
                   CHECK (color IN ('yellow', 'green', 'blue', 'pink')),
   selected_text   text NOT NULL,
   -- Bounding box coordinates (percentages relative to page width/height so it scales across zoom levels)
@@ -1714,6 +2349,7 @@ CREATE INDEX idx_document_highlights_lookup ON public.document_highlights(user_i
 #### 4.5.3 Learning, Quizzes & Background Generation
 
 **`study_progress`**
+
 ```sql
 CREATE TABLE public.study_progress (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1727,6 +2363,7 @@ CREATE TABLE public.study_progress (
 ```
 
 **`quizzes`**
+
 ```sql
 CREATE TABLE public.quizzes (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1747,6 +2384,7 @@ CREATE INDEX idx_quizzes_user ON public.quizzes(user_id);
 ```
 
 **`quiz_questions`**
+
 ```sql
 CREATE TABLE public.quiz_questions (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1763,6 +2401,7 @@ CREATE INDEX idx_quiz_questions_quiz ON public.quiz_questions(quiz_id, question_
 ```
 
 **`quiz_attempts`**
+
 ```sql
 CREATE TABLE public.quiz_attempts (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1779,6 +2418,7 @@ CREATE INDEX idx_quiz_attempts_user ON public.quiz_attempts(user_id, completed_a
 ```
 
 **`quiz_generation_jobs`** (Async generation queue)
+
 ```sql
 CREATE TABLE public.quiz_generation_jobs (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1802,6 +2442,7 @@ CREATE INDEX idx_quiz_jobs_user ON public.quiz_generation_jobs(user_id, status);
 #### 4.5.4 Learn Mode Spaced Repetition
 
 **`document_learn_progress`**
+
 ```sql
 CREATE TABLE public.document_learn_progress (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1816,6 +2457,7 @@ CREATE TABLE public.document_learn_progress (
 ```
 
 **`document_learn_pending_retests`**
+
 ```sql
 CREATE TABLE public.document_learn_pending_retests (
   id                    uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1837,6 +2479,7 @@ CREATE INDEX idx_learn_retests_queue ON public.document_learn_pending_retests(us
 #### 4.5.5 AI Interactions & Claude-Style Dynamic Skills
 
 **`ai_skills`** (Dynamic Claude-Style Agent Skills Registry)
+
 ```sql
 CREATE TABLE public.ai_skills (
   id                uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1854,6 +2497,7 @@ CREATE TABLE public.ai_skills (
 ```
 
 **`chat_sessions`**
+
 ```sql
 CREATE TABLE public.chat_sessions (
   id            uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1869,7 +2513,8 @@ CREATE INDEX idx_chat_sessions_user ON public.chat_sessions(user_id, updated_at 
 ```
 
 **`chat_messages`**
-```sql
+
+````sql
 
 > [!NOTE]
 > **Message Tree Architecture**: `chat_messages` is a tree, not a flat array. `parent_message_id` links each
@@ -1904,9 +2549,10 @@ CREATE INDEX idx_chat_messages_session ON public.chat_messages(session_id, creat
 CREATE INDEX idx_chat_messages_parent ON public.chat_messages(session_id, parent_message_id, is_active_branch);
 -- Image hash index for fast SHA-256 deduplication and edit cache validation
 CREATE INDEX idx_chat_messages_image_hash ON public.chat_messages(image_hash) WHERE image_hash IS NOT NULL;
-```
+````
 
 **`ai_telemetry`**
+
 ```sql
 CREATE TABLE public.ai_telemetry (
   id                uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1931,6 +2577,7 @@ CREATE INDEX idx_ai_telemetry_time ON public.ai_telemetry(created_at DESC);
 #### 4.5.6 Academic Operations
 
 **`timetables`**
+
 ```sql
 CREATE TABLE public.timetables (
   id            uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1949,6 +2596,7 @@ CREATE TABLE public.timetables (
 ```
 
 **`student_tasks`** (Student Custom Tasks & Timetable Action Items)
+
 ```sql
 CREATE TABLE public.student_tasks (
   id                    uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1957,7 +2605,7 @@ CREATE TABLE public.student_tasks (
   title                 text NOT NULL,                 -- e.g. 'Review research paper', 'Finish outline'
   subtitle              text,                          -- e.g. 'Pharmacognosy Research', 'Research Outline.docx'
   course_code           text,                          -- e.g. 'PCL 421' (optional course tag)
-  task_type             text NOT NULL DEFAULT 'custom' 
+  task_type             text NOT NULL DEFAULT 'custom'
                         CHECK (task_type IN ('class', 'reading', 'assignment', 'lab', 'presentation', 'meeting', 'custom')),
   due_date              date NOT NULL,                 -- e.g. '2026-09-02'
   due_time              time,                          -- e.g. '14:00:00'
@@ -1965,12 +2613,12 @@ CREATE TABLE public.student_tasks (
   completed_at          timestamptz,
   source                text NOT NULL DEFAULT 'custom'
                         CHECK (source IN ('custom', 'timetable', 'ai_generated')),
-  
+
   -- Deep-link to linked study resource in PansGPT
   linked_resource_type  text NOT NULL DEFAULT 'none'
                         CHECK (linked_resource_type IN ('document', 'note', 'chat_session', 'quiz', 'none')),
   linked_resource_id    uuid,                          -- points to document_id, note_id, etc.
-  
+
   created_at            timestamptz NOT NULL DEFAULT now(),
   updated_at            timestamptz NOT NULL DEFAULT now()
 );
@@ -1979,6 +2627,7 @@ CREATE INDEX idx_student_tasks_user ON public.student_tasks(user_id, created_at 
 ```
 
 **`course_knowledge`** (Admin & Faculty Knowledge)
+
 ```sql
 CREATE TABLE public.course_knowledge (
   id            uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -1993,6 +2642,7 @@ CREATE INDEX idx_course_knowledge_lookup ON public.course_knowledge(university_i
 ```
 
 **`exam_restrictions`** (Exam Lockout Windows)
+
 ```sql
 CREATE TABLE public.exam_restrictions (
   id            uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -2017,6 +2667,7 @@ CREATE INDEX idx_exam_restrictions_window ON public.exam_restrictions(university
 #### 4.5.7 Platform Admin & Notes
 
 **`general_notes`**
+
 ```sql
 CREATE TABLE public.general_notes (
   id          uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -2032,6 +2683,7 @@ CREATE INDEX idx_general_notes_user ON public.general_notes(user_id, updated_at 
 ```
 
 **`system_settings`** & **`system_settings_history`**
+
 ```sql
 CREATE TABLE public.system_settings (
   id                  integer PRIMARY KEY DEFAULT 1 CHECK (id = 1),
@@ -2058,6 +2710,7 @@ CREATE TABLE public.system_settings_history (
 ```
 
 **`audit_logs`**
+
 ```sql
 CREATE TABLE public.audit_logs (
   id            uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
@@ -2125,14 +2778,14 @@ erDiagram
 
 ### 4.7 Key Database Functions & Triggers
 
-| Function | Purpose |
-|---|---|
-| `set_updated_at()` | Trigger attached to all tables to auto-update `updated_at` timestamps on row mutation. |
-| `match_document_chunks(query_embedding, match_threshold, match_count, doc_id)` | Cosine similarity vector search over `document_chunks` using `HNSW` index. |
-| `match_documents_global(query_embedding, match_threshold, match_count, doc_ids[])` | Multi-document vector search across an entire university or course cohort. |
-| `claim_document_ingestion(doc_id, worker_id)` | Concurrency lock that atomically assigns a document to a background ingestion worker. |
-| `heartbeat_document_ingestion(doc_id, worker_id)` | Refreshes worker heartbeat to prevent deadlocks during long chunking/embedding tasks. |
-| `purge_soft_deleted_records()` | Cron function (runs daily) that hard-deletes records past their 30-day grace period. Handles in order: (1) `users` where `deleted_at < now() - '30 days'` — hard DELETE with cascade (destroys all child rows across all tables); (2) `chat_sessions` where `deleted_at < now() - '30 days'` — hard DELETE (cascades to `chat_messages`); (3) `quizzes` where `deleted_at < now() - '30 days'` — hard DELETE (cascades to `quiz_questions`, `quiz_attempts`); (4) `general_notes` where `deleted_at < now() - '30 days'` — hard DELETE. **Note:** `document_chunks` for university-scoped documents are NOT deleted when an uploader's account is deleted — `uploaded_by` is `SET NULL`. Documents are only removed if the university itself is deleted or an admin explicitly deletes them. |
+| Function                                                                           | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `set_updated_at()`                                                                 | Trigger attached to all tables to auto-update `updated_at` timestamps on row mutation.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `match_document_chunks(query_embedding, match_threshold, match_count, doc_id)`     | Cosine similarity vector search over `document_chunks` using `HNSW` index.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `match_documents_global(query_embedding, match_threshold, match_count, doc_ids[])` | Multi-document vector search across an entire university or course cohort.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `claim_document_ingestion(doc_id, worker_id)`                                      | Concurrency lock that atomically assigns a document to a background ingestion worker.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `heartbeat_document_ingestion(doc_id, worker_id)`                                  | Refreshes worker heartbeat to prevent deadlocks during long chunking/embedding tasks.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `purge_soft_deleted_records()`                                                     | Cron function (runs daily) that hard-deletes records past their 30-day grace period. Handles in order: (1) `users` where `deleted_at < now() - '30 days'` — hard DELETE with cascade (destroys all child rows across all tables); (2) `chat_sessions` where `deleted_at < now() - '30 days'` — hard DELETE (cascades to `chat_messages`); (3) `quizzes` where `deleted_at < now() - '30 days'` — hard DELETE (cascades to `quiz_questions`, `quiz_attempts`); (4) `general_notes` where `deleted_at < now() - '30 days'` — hard DELETE. **Note:** `document_chunks` for university-scoped documents are NOT deleted when an uploader's account is deleted — `uploaded_by` is `SET NULL`. Documents are only removed if the university itself is deleted or an admin explicitly deletes them. |
 
 ---
 
@@ -2143,6 +2796,7 @@ erDiagram
 > **Dedicated Reference Artifact**: All unit economics, gross margins, Paystack purchase flows, ledger schemas, and atomic stored procedures are fully documented in [`credits_pricing_architecture.md`](file:///C:/Users/GODGIVE%20COMPUTER%20LTD/.gemini/antigravity/brain/e9d76191-fc11-46ea-9d1e-ba7a61b253b2/credits_pricing_architecture.md).
 >
 > When approved, this section will define:
+>
 > - Credit bundles & pricing in Naira (Starter, Semester Standard, Exam Warrior, Institutional)
 > - Dynamic per-action credit costs (`credit_pricing`)
 > - Fast denormalized balances (`user_credits`) & double-entry immutable ledger (`credit_ledger`)
@@ -2161,11 +2815,13 @@ erDiagram
 ### 6.1 AI Personality & Pedagogical Tone
 
 #### 6.1.1 Identity & Voice
+
 - **Name**: **Unnamed AI Assistant** (PansGPT AI / Embedded Study Copilot).
-- **Voice & Tone**: Warm, welcoming, helpful, and polite. Greets and affirms student requests naturally (e.g., *"Sure! I'd be happy to help you with that!"*).
+- **Voice & Tone**: Warm, welcoming, helpful, and polite. Greets and affirms student requests naturally (e.g., _"Sure! I'd be happy to help you with that!"_).
 - **Brand Essence**: **Calm Confidence** — patient, clear, structured, and curriculum-grounded.
 
 #### 6.1.2 Pedagogical Rules & Behavioral Guardrails
+
 1. **Teaching Approach (Direct vs. Guided)**:
    - **Guided Walkthrough (Socratic)**: For concept explanations and theory teaching, the AI guides the student step-by-step through underlying mechanisms rather than giving a superficial summary.
    - **Direct Answer**: For quizzes, summarization, finding facts, planning, grammar/notes correction, and file generation, the AI provides the answer or artifact directly without unnecessary friction.
@@ -2175,7 +2831,7 @@ erDiagram
    - Weaves in high-yield mnemonics, visual analogies, and practical clinical hooks when explaining multi-step pharmacology or anatomy concepts.
 4. **Transparent Source Grounding**:
    - When answering from student materials, it explicitly references the document/section.
-   - When stepping beyond uploaded materials, it flags this clearly: *"This is based on standard clinical pharmacology guidelines; please cross-check with your lecturer's specific course slides."*
+   - When stepping beyond uploaded materials, it flags this clearly: _"This is based on standard clinical pharmacology guidelines; please cross-check with your lecturer's specific course slides."_
 
 ---
 
@@ -2183,13 +2839,13 @@ erDiagram
 
 The AI dynamically adapts its system prompt, output density, and tool availability based on **where** the student interacts with it:
 
-| Entry Point / Surface | Role & Tone | Active Tools & Skills | Output Style |
-|---|---|---|---|
-| **PDF Reader Sidebar** | Document-grounded reader assistant | `rag_search` (scoped to active doc), `read_document` | Crisp bullet points, snip annotations, direct definitions & concept breakdowns |
-| **Chat Hub (Dedicated Page)** | Full conversational study partner | `rag_search` (global/course), `read_document`, `web_search`, `create_doc`, `create_md`, `create_pdf`, `create_pptx`, `plot_graph`, `generate_flashcards`, `generate_mnemonics`, `vision_analyze` | Rich markdown, LaTeX math, interactive skill cards, file downloads |
-| **Notes Editor Copilot** | Inline writing assistant | `format_math`, `summarize_notes`, `rag_search` | Contextual completions, clean markdown, structured study outlines |
-| **Study Planner Page** | Strategic academic coach | `get_timetable`, `analyze_syllabus_coverage`, `recommend_study_blocks` | Timeline roadmaps, prioritized revision checklists |
-| **Quiz Review & Diagnostic** | Explanatory instructor | `rag_search`, `explain_mcq_distractors` | Breakdown of correct answers vs. common student misconceptions |
+| Entry Point / Surface         | Role & Tone                        | Active Tools & Skills                                                                                                                                                                            | Output Style                                                                   |
+| ----------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| **PDF Reader Sidebar**        | Document-grounded reader assistant | `rag_search` (scoped to active doc), `read_document`                                                                                                                                             | Crisp bullet points, snip annotations, direct definitions & concept breakdowns |
+| **Chat Hub (Dedicated Page)** | Full conversational study partner  | `rag_search` (global/course), `read_document`, `web_search`, `create_doc`, `create_md`, `create_pdf`, `create_pptx`, `plot_graph`, `generate_flashcards`, `generate_mnemonics`, `vision_analyze` | Rich markdown, LaTeX math, interactive skill cards, file downloads             |
+| **Notes Editor Copilot**      | Inline writing assistant           | `format_math`, `summarize_notes`, `rag_search`                                                                                                                                                   | Contextual completions, clean markdown, structured study outlines              |
+| **Study Planner Page**        | Strategic academic coach           | `get_timetable`, `analyze_syllabus_coverage`, `recommend_study_blocks`                                                                                                                           | Timeline roadmaps, prioritized revision checklists                             |
+| **Quiz Review & Diagnostic**  | Explanatory instructor             | `rag_search`, `explain_mcq_distractors`                                                                                                                                                          | Breakdown of correct answers vs. common student misconceptions                 |
 
 ---
 
@@ -2198,23 +2854,25 @@ The AI dynamically adapts its system prompt, output density, and tool availabili
 The engine uses a two-tier registry of **Always-Loaded Core Tools** and **Dynamic Database-Driven Skills (`ai_skills`)**:
 
 #### 6.3.1 Always-Available Core Tools
-| Tool Name | Parameters | Purpose |
-|---|---|---|
-| `rag_search` | `query: str, doc_id: Optional[uuid], course_code: Optional[str], expand_full_segment: bool = false` | Multi-pool hybrid retrieval (Vector + FTS + Trigram with RRF $k=60$) over university materials with adaptive sibling expansion ($\pm 1$ default vs full segment on-demand). |
-| `read_document` | `doc_id: Optional[uuid], file_url: Optional[str], format: str, page_range: Optional[str]` | Reads and extracts text/content from diverse document formats (`.pdf`, `.docx`, `.pptx`, `.txt`, `.csv`, `.md`) across the study workspace. |
-| `web_search` | `query: str` | Verified scientific literature search (PubMed, DailyMed, BNF). Autonomous escalation fallback when syllabus match confidence is low/empty. |
-| `vision_analyze` | `image_url: str, prompt: str` | Analyzes uploaded histological slides, chemical structures, graphs, or handwritten equations. |
+
+| Tool Name        | Parameters                                                                                          | Purpose                                                                                                                                                                     |
+| ---------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `rag_search`     | `query: str, doc_id: Optional[uuid], course_code: Optional[str], expand_full_segment: bool = false` | Multi-pool hybrid retrieval (Vector + FTS + Trigram with RRF $k=60$) over university materials with adaptive sibling expansion ($\pm 1$ default vs full segment on-demand). |
+| `read_document`  | `doc_id: Optional[uuid], file_url: Optional[str], format: str, page_range: Optional[str]`           | Reads and extracts text/content from diverse document formats (`.pdf`, `.docx`, `.pptx`, `.txt`, `.csv`, `.md`) across the study workspace.                                 |
+| `web_search`     | `query: str`                                                                                        | Verified scientific literature search (PubMed, DailyMed, BNF). Autonomous escalation fallback when syllabus match confidence is low/empty.                                  |
+| `vision_analyze` | `image_url: str, prompt: str`                                                                       | Analyzes uploaded histological slides, chemical structures, graphs, or handwritten equations.                                                                               |
 
 #### 6.3.2 Specialized Workspace Skills (`ai_skills` Table Driven)
-| Skill Name | Output Artifact | Description |
-|---|---|---|
-| `create_doc` | `.docx` File | Generates fully formatted Word documents with headings, tables, and references for lab reports and assignments. |
-| `create_md` | `.md` File | Generates structured Markdown notes with KaTeX formulas, checklists, and code snippets for personal study. |
-| `create_pdf` | `.pdf` File | Compiles structured revision cheat sheets, clinical reference sheets, or lecture summaries ready for printing. |
-| `create_pptx` | `.pptx` File | Generates styled presentation decks for student seminar presentations and group study projects. |
-| `plot_graph` | Interactive Chart | Generates Chart.js / Mermaid graphs for pharmacokinetic curves, dose-response relationships, and data trends. |
-| `generate_flashcards` | Flashcard Deck | Generates question/answer flashcard decks with spaced-repetition tags. |
-| `generate_mnemonics` | Mnemonic Card | Generates memorable visual/phonetic mnemonics for drug classes, microbial classifications, and anatomy. |
+
+| Skill Name                | Output Artifact              | Description                                                                                                                            |
+| ------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `create_doc`              | `.docx` File                 | Generates fully formatted Word documents with headings, tables, and references for lab reports and assignments.                        |
+| `create_md`               | `.md` File                   | Generates structured Markdown notes with KaTeX formulas, checklists, and code snippets for personal study.                             |
+| `create_pdf`              | `.pdf` File                  | Compiles structured revision cheat sheets, clinical reference sheets, or lecture summaries ready for printing.                         |
+| `create_pptx`             | `.pptx` File                 | Generates styled presentation decks for student seminar presentations and group study projects.                                        |
+| `plot_graph`              | Interactive Chart            | Generates Chart.js / Mermaid graphs for pharmacokinetic curves, dose-response relationships, and data trends.                          |
+| `generate_flashcards`     | Flashcard Deck               | Generates question/answer flashcard decks with spaced-repetition tags.                                                                 |
+| `generate_mnemonics`      | Mnemonic Card                | Generates memorable visual/phonetic mnemonics for drug classes, microbial classifications, and anatomy.                                |
 | `draw_chemical_structure` | Interactive Structure Drawer | Integrates SMILES/PubChem chemical structure drawing canvas enabling AI-generated reaction mechanism breakdowns for Pharmacy students. |
 
 ---
@@ -2228,23 +2886,24 @@ graph TD
     A[Incoming User Request + Surface Context] --> B[Policy Guard: Injection & Safety Check]
     B --> C[Resolve Intent & Place-of-Call Context]
     C --> D{Determine Task Complexity}
-    
+
     D -- "Simple / Direct Query\n(Definitions, Explanations, Greetings)" --> E[Direct LLM Generation\n(Fast Path, Zero Tool Overhead)]
     D -- "Complex / Tool Required\n(Retrieval, File Read, Artifact Gen, Math)" --> F[Model Inference with Active Tools & Skills]
-    
+
     F --> G{Did Model Call a Tool/Skill?}
     G -- No --> E
     G -- Yes --> H[Execute Tool Handler with RLS / Auth Scoping]
     H --> I[Append Tool Result to Context]
     I --> F
-    
+
     E --> J[Post-Generation Policy Guard: Leak Check]
     J --> K[Stream Response to Client via SSE]
     K --> L[Async Telemetry & Token Logging]
 ```
 
-#### 6.4.1 Hybrid Retrieval Engine Specification *(See [`retrieval_architecture_proposal.md`](retrieval_architecture_proposal.md))*
-1. **Query Pre-Processing & Multi-Query Expansion** *(Adopted from OpenAI Knowledge Retrieval Architecture)*:
+#### 6.4.1 Hybrid Retrieval Engine Specification _(See [`retrieval_architecture_proposal.md`](retrieval_architecture_proposal.md))_
+
+1. **Query Pre-Processing & Multi-Query Expansion** _(Adopted from OpenAI Knowledge Retrieval Architecture)_:
    - **Zero-Latency Acronym Normalizer**: Fast in-memory dictionary expands 200+ medical/pharmacy acronyms (`HCTZ`, `MOA`, `Abx`, `ADR`, `MIC`, `GFR`, `CYP450`) prior to embedding and text search.
    - **Multi-Query Decomposition & HyDE**: For complex multi-part or ambiguous student queries, generates 2–3 targeted sub-queries to maximize lexical and semantic recall across slide decks.
 2. **PostgreSQL 3-Pool Scoped Search (`match_documents_hybrid`)**:
@@ -2271,45 +2930,50 @@ graph TD
 Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast inference and audio**, and OpenRouter provides **deep reasoning and safety fallback**.
 
 #### 6.5.1 Model Inventory Roster
-| Model ID | Provider | Type | Modality | Context | Latency | Reasoning Support | Tool Calling Support | Role |
-|---|---|---|---|---|---|---|---|---|
-| `gemma-4-31b-it` | Google AI Studio | Dense 31B | Text + Image | 256K | ~1.5s – 2.5s | Yes (Native Thinking) | Yes (Native Function Calling) | **Primary Chat & Deep Study** |
-| `gemma-4-26b-a4b-it` | Google AI Studio | MoE (A4B) | Text + Image | 256K | ~800ms – 1.5s | Yes (Native Thinking) | Yes (Native Function Calling) | **Primary Fast Chat & OCR** |
-| `gemini-embedding-002` | Google AI Studio | Embedding | Text | 8K (3072d) | ~50ms – 150ms | N/A | N/A | **Vector Embeddings (HNSW)** |
-| `openai/gpt-oss-120b` | Groq | MoE 120B | Text-only | 128K | ~300ms – 600ms | Yes (Configurable CoT) | Yes (Native Function Calling) | **Fast Fallback & Quiz Engine** |
-| `qwen/qwen3.6-27b` | Groq | Dense 27B | Text + Image | 128K | ~250ms – 500ms | Yes (Thinking Mode) | Yes (Native Function Calling) | **Fast Multimodal Fallback** |
-| `whisper-large-v3-turbo`| Groq | STT | Audio-only | ~25s chunk | ~200ms – 400ms | N/A | N/A | **Voice Input (Primary)** |
-| `whisper-large-v3` | Groq | STT | Audio-only | ~25s chunk | ~400ms – 800ms | N/A | N/A | **Voice Input (Fallback)** |
-| `nvidia/nemotron-3-ultra-550b-a55b:free` | OpenRouter | MoE 550B | Text-only | 1M | ~1.5s – 3.0s | Yes (Controllable Budget) | Yes (OpenAI-compatible) | **Complex Reasoning Fallback** |
-| `nvidia/nemotron-3-super-120b-a12b:free` | OpenRouter | MoE 120B | Text-only | 1M | ~600ms – 1.2s | Yes (Controllable Budget) | Yes (OpenAI-compatible) | **General Fallback** |
-| `nvidia/nemotron-3-nano-30b-a3b:free` | OpenRouter | MoE 30B | Text-only | 128K | ~200ms – 500ms | Yes (Controllable Budget) | Yes (OpenAI-compatible) | **Small Task Fallback** |
-| `nvidia/nemotron-nano-12b-v2-vl:free` | OpenRouter | Vision 12B | Text+Image+Video| 128K | ~400ms – 800ms | Yes (Visual Reasoning) | Yes (Tool Calling) | **Vision Fallback** |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free`| OpenRouter | Omni 30B | Text+Image+Audio| 128K | ~500ms – 1.0s | Yes (Omni Reasoning) | Yes (Multimodal Tools) | **Omni Fallback** |
+
+| Model ID                                             | Provider         | Type       | Modality         | Context    | Latency        | Reasoning Support         | Tool Calling Support          | Role                            |
+| ---------------------------------------------------- | ---------------- | ---------- | ---------------- | ---------- | -------------- | ------------------------- | ----------------------------- | ------------------------------- |
+| `gemma-4-31b-it`                                     | Google AI Studio | Dense 31B  | Text + Image     | 256K       | ~1.5s – 2.5s   | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Chat & Deep Study**   |
+| `gemma-4-26b-a4b-it`                                 | Google AI Studio | MoE (A4B)  | Text + Image     | 256K       | ~800ms – 1.5s  | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Fast Chat & OCR**     |
+| `gemini-embedding-002`                               | Google AI Studio | Embedding  | Text             | 8K (3072d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**    |
+| `openai/gpt-oss-120b`                                | Groq             | MoE 120B   | Text-only        | 128K       | ~300ms – 600ms | Yes (Configurable CoT)    | Yes (Native Function Calling) | **Fast Fallback & Quiz Engine** |
+| `qwen/qwen3.6-27b`                                   | Groq             | Dense 27B  | Text + Image     | 128K       | ~250ms – 500ms | Yes (Thinking Mode)       | Yes (Native Function Calling) | **Fast Multimodal Fallback**    |
+| `whisper-large-v3-turbo`                             | Groq             | STT        | Audio-only       | ~25s chunk | ~200ms – 400ms | N/A                       | N/A                           | **Voice Input (Primary)**       |
+| `whisper-large-v3`                                   | Groq             | STT        | Audio-only       | ~25s chunk | ~400ms – 800ms | N/A                       | N/A                           | **Voice Input (Fallback)**      |
+| `nvidia/nemotron-3-ultra-550b-a55b:free`             | OpenRouter       | MoE 550B   | Text-only        | 1M         | ~1.5s – 3.0s   | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Complex Reasoning Fallback**  |
+| `nvidia/nemotron-3-super-120b-a12b:free`             | OpenRouter       | MoE 120B   | Text-only        | 1M         | ~600ms – 1.2s  | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **General Fallback**            |
+| `nvidia/nemotron-3-nano-30b-a3b:free`                | OpenRouter       | MoE 30B    | Text-only        | 128K       | ~200ms – 500ms | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Small Task Fallback**         |
+| `nvidia/nemotron-nano-12b-v2-vl:free`                | OpenRouter       | Vision 12B | Text+Image+Video | 128K       | ~400ms – 800ms | Yes (Visual Reasoning)    | Yes (Tool Calling)            | **Vision Fallback**             |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | OpenRouter       | Omni 30B   | Text+Image+Audio | 128K       | ~500ms – 1.0s  | Yes (Omni Reasoning)      | Yes (Multimodal Tools)        | **Omni Fallback**               |
 
 #### 6.5.2 Model Rate Limits & Quotas (Free Tier)
+
 **Google AI Studio**
-| Model ID | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-|---|---|---|---|
-| `gemma-4-26b-a4b-it` | 30 | 16K | 14.4K |
-| `gemma-4-31b-it` | 30 | 16K | 14.4K |
-| `gemini-embedding-002` | 1,500 | 1,000K | 10K |
+
+| Model ID               | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
+| ---------------------- | ------------- | ---------------- | ------------- |
+| `gemma-4-26b-a4b-it`   | 30            | 16K              | 14.4K         |
+| `gemma-4-31b-it`       | 30            | 16K              | 14.4K         |
+| `gemini-embedding-002` | 1,500         | 1,000K           | 10K           |
 
 **Groq (Text & Audio)**
-| Model ID | RPM (Req/Min) | RPD (Req/Day) | TPM (Tokens/Min) | TPD (Tokens/Day) | Audio Sec/Hr | Audio Sec/Day |
-|---|---|---|---|---|---|---|
-| `openai/gpt-oss-120b` | 30 | 1K | 8K | 200K | — | — |
-| `qwen/qwen3.6-27b` | 30 | 1K | 8K | 200K | — | — |
-| `whisper-large-v3` | 20 | 2K | — | — | 7.2K (2 hrs) | 28.8K (8 hrs) |
-| `whisper-large-v3-turbo` | 20 | 2K | — | — | 7.2K (2 hrs) | 28.8K (8 hrs) |
+
+| Model ID                 | RPM (Req/Min) | RPD (Req/Day) | TPM (Tokens/Min) | TPD (Tokens/Day) | Audio Sec/Hr | Audio Sec/Day |
+| ------------------------ | ------------- | ------------- | ---------------- | ---------------- | ------------ | ------------- |
+| `openai/gpt-oss-120b`    | 30            | 1K            | 8K               | 200K             | —            | —             |
+| `qwen/qwen3.6-27b`       | 30            | 1K            | 8K               | 200K             | —            | —             |
+| `whisper-large-v3`       | 20            | 2K            | —                | —                | 7.2K (2 hrs) | 28.8K (8 hrs) |
+| `whisper-large-v3-turbo` | 20            | 2K            | —                | —                | 7.2K (2 hrs) | 28.8K (8 hrs) |
 
 **OpenRouter (Free Tier `:free`)**
-| Model ID | RPM (Req/Min) | RPD (Req/Day) | TPM / Notes |
-|---|---|---|---|
-| `nvidia/nemotron-3-ultra-550b-a55b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-super-120b-a12b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-nano-30b-a3b:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-nano-12b-v2-vl:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | 20 | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+
+| Model ID                                             | RPM (Req/Min) | RPD (Req/Day)                | TPM / Notes                           |
+| ---------------------------------------------------- | ------------- | ---------------------------- | ------------------------------------- |
+| `nvidia/nemotron-3-ultra-550b-a55b:free`             | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-super-120b-a12b:free`             | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-nano-30b-a3b:free`                | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-nano-12b-v2-vl:free`                | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | 20            | 50 (1,000 with >$10 credits) | Subject to upstream provider capacity |
 
 ---
 
@@ -2343,7 +3007,7 @@ VISION_EXTRACTION_CASCADE = [
    - Primary: Google AI Studio (`gemma-4-31b-it` / `gemma-4-26b-a4b-it`)
    - Secondary (on 429 / 503 / timeout): Groq (`openai/gpt-oss-120b` / `qwen/qwen3.6-27b`)
    - Tertiary (safety net): OpenRouter (`nvidia/nemotron-3-ultra-550b-a55b:free` / `nvidia/nemotron-3-super-120b-a12b:free`)
-   - *Note*: The platform operates on a single unified high-quality reasoning pipeline. There is no degraded "fast mode" toggle.
+   - _Note_: The platform operates on a single unified high-quality reasoning pipeline. There is no degraded "fast mode" toggle.
 2. **Structured Output Resilience (Tagged XML & Schema Fallbacks)**:
    - **Tagged XML Blocks (Default for Quizzes)**: For multi-question quiz generation and outlines, prompts use `<question>...</question>` tagged blocks with explicit fields (`QUESTION:`, `TYPE:`, `A:`..`E:`, `ANSWER:`, `EXPLANATION:`). This is parsed deterministically with regex and validated against Pydantic models (`QuizQuestionModel`), avoiding JSON syntax fragility across different open-source models.
    - **JSON Fallback**: For tool calls and JSON responses, models use native function calling or `json_object` mode with Pydantic validation and retry hooks on syntax errors.
@@ -2377,13 +3041,13 @@ VISION_EXTRACTION_CASCADE = [
 
 ### 7.1 Scope & Governance Model
 
-| Rule | Specification | Rationale |
-|---|---|---|
-| **Institution Scoping** | Every document belongs to a `university_id`. | Strict multi-tenant isolation. Students only access materials from their enrolled university. |
-| **Upload RBAC** | Only `university_admin` and `super_admin` can upload directly to the active library. | Prevents library clutter and unauthorized uploads. Students have **zero upload capability**. |
-| **Lecturer Submissions** | Lecturers submit materials through the Lecturer Portal (`status = 'pending_review'`). | Requires admin approval before triggering ingestion and becoming visible to students. |
-| **Audit Trail Ownership** | `uploaded_by` column is `REFERENCES users(id) ON DELETE SET NULL`. | Deleting an admin's account does **not** delete institutional library documents. |
-| **Academic Scoping** | Target levels (`100`–`600`), `academic_session` (e.g. `2024/2025`), and `semester` (`first` / `second`). | Enables students to filter materials relevant to their current academic term. |
+| Rule                      | Specification                                                                                            | Rationale                                                                                     |
+| ------------------------- | -------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **Institution Scoping**   | Every document belongs to a `university_id`.                                                             | Strict multi-tenant isolation. Students only access materials from their enrolled university. |
+| **Upload RBAC**           | Only `university_admin` and `super_admin` can upload directly to the active library.                     | Prevents library clutter and unauthorized uploads. Students have **zero upload capability**.  |
+| **Lecturer Submissions**  | Lecturers submit materials through the Lecturer Portal (`status = 'pending_review'`).                    | Requires admin approval before triggering ingestion and becoming visible to students.         |
+| **Audit Trail Ownership** | `uploaded_by` column is `REFERENCES users(id) ON DELETE SET NULL`.                                       | Deleting an admin's account does **not** delete institutional library documents.              |
+| **Academic Scoping**      | Target levels (`100`–`600`), `academic_session` (e.g. `2024/2025`), and `semester` (`first` / `second`). | Enables students to filter materials relevant to their current academic term.                 |
 
 ---
 
@@ -2408,6 +3072,7 @@ Cloudflare R2 Bucket: pansgpt-library-production
 ```
 
 #### Storage Benefits & Zero-Egress Economics
+
 - **Immutable Originals**: The original file is stored exactly as uploaded and never overwritten. All extracted text, images, tables, segments, and vectors are derived data that can be reprocessed anytime.
 - **10 GB Free Storage**: Supports ~500–2,000 university course PDFs and slides at launch ($0 cost).
 - **$0 Egress Fees**: Eliminates bandwidth costs when thousands of students stream PDF pages simultaneously.
@@ -2418,6 +3083,7 @@ Cloudflare R2 Bucket: pansgpt-library-production
 ### 7.3 Why This Processing Pipeline Exists
 
 Pharmacy and medical lecture materials are highly heterogeneous. A single PDF can mix:
+
 - Native, selectable text.
 - Fully scanned pages (image only, no text layer).
 - Normal text pages with embedded diagrams, chemical pathways, or screenshots of typed/handwritten notes.
@@ -2434,26 +3100,26 @@ Treating a document as "either scanned or normal" at the whole-document level, o
 flowchart TD
     %% Stage 1
     S1["Stage 1: Upload & Immutable R2 Storage"] --> S2{"Stage 2: Per-Page Text-Layer Check"}
-    
+
     %% Stage 2 & 3
     S2 -- "Has text layer" --> S3A["Stage 3a: Native Text Extraction\n+ Scan for Embedded Images"]
     S2 -- "No text layer (Scanned)" --> S3B["Stage 3b: Treat Whole Page as 1 Image"]
-    
+
     %% Stage 4
     S3A --> S4{"Stage 4: Classify-Then-Route\n(Every Image Encountered)"}
     S3B --> S4
-    
+
     %% Stage 5 & 6
     S4 -- "Text Image / Scan / Note Screenshot" --> S5["Stage 5: Text-Image Transcription\n(OCR-First → Vision Verbatim Fallback)"]
     S4 -- "Diagram / Figure / Pathway" --> S4D["Stage 4b: Vision Model (Description Mode)\n[Visual Description: ...]"]
     S4 -- "Table (Image or Native)" --> S6["Stage 6: Dual-Path Table Extraction\n• Native: Cell Geometry (Exact, $0)\n• Image: Vision Structured Output"]
-    
+
     %% Stage 7
     S3A --> S7["Stage 7: AI Hierarchy & Segmentation\n(Single Pass, Reading Order, Title Sources)"]
     S5 --> S7
     S4D --> S7
     S6 --> S7
-    
+
     %% Stage 8
     S7 --> S8["Stage 8: Semantic Chunking & Vector Embeddings\n• Tables & Diagrams: Atomic Chunks (1:1)\n• Text: Segment-Bounded Recursive Chunks (512 tok)\n• Gemini-Embedding-002 (3072d) → HNSW Index"]
 ```
@@ -2461,64 +3127,74 @@ flowchart TD
 ---
 
 #### Stage 1 — Upload & Storage
+
 The original file is stored in Cloudflare R2 and marked immutable. All downstream representations (pages, elements, segments, chunks, vectors) are derived data. If OCR models or chunking strategies improve, documents can be reprocessed without re-uploading.
 
 #### Stage 2 — Per-Page Text-Layer Check
+
 A deterministic, zero-cost programmatic check per page using PyMuPDF (`fitz`): does this page contain a selectable text layer?
+
 - **Yes** $\rightarrow$ Routes to Stage 3a.
 - **No** $\rightarrow$ Routes to Stage 3b.
 
 #### Stage 3a — Text-Layer Page
+
 1. Native text is extracted directly (fast, 100% exact, zero AI cost).
 2. The page is scanned for embedded images (figures, pathways, screenshots of text, tables).
 3. Any embedded images found are queued for Stage 4.
 
 #### Stage 3b — No Text-Layer Page (Fully Scanned)
+
 The entire page canvas is rendered and treated as a single image. No arbitrary whole-document scan assumption is made.
 $\rightarrow$ Queued for Stage 4.
 
 #### Stage 4 — Classify-then-Route (Universal Image Handler)
+
 Every image encountered—whether a 200px inline diagram or a full scanned page—passes through a unified classifier:
 
-| Classification | Destination | Output Type |
-|---|---|---|
-| **Text Image** (scan, notes screenshot) | **Stage 5** | Exact text transcription |
+| Classification                            | Destination            | Output Type                                      |
+| ----------------------------------------- | ---------------------- | ------------------------------------------------ |
+| **Text Image** (scan, notes screenshot)   | **Stage 5**            | Exact text transcription                         |
 | **Diagram / Figure / Chemical Structure** | **Vision Description** | Descriptive markdown `[Visual Description: ...]` |
-| **Table** (bitmap or scanned table) | **Stage 6** | Structured markdown / JSON table |
+| **Table** (bitmap or scanned table)       | **Stage 6**            | Structured markdown / JSON table                 |
 
 #### Stage 5 — Text-Image Transcription (OCR-First $\rightarrow$ Vision Fallback)
+
 - **Clinical Safety Rule**: Content must be recovered **verbatim** (exact drug names, dosages, units, mechanisms). **No summarization or paraphrasing is permitted.**
 - **Process**:
   1. **OCR-First**: Fast deterministic OCR (Tesseract / PyMuPDF OCR) processes clean printed scans ($0 cost).
   2. **Vision-Fallback**: If OCR confidence is low, empty, or garbled (handwriting, noisy scans), `gemma-4-26b-a4b-it` / vision fallback is explicitly prompted to transcribe text verbatim.
 
 #### Stage 6 — Dual-Path Table Extraction
+
 Tables are extracted into a unified schema regardless of origin:
 
-| Table Source | Extraction Mechanism | Cost & Precision |
-|---|---|---|
-| **Text-Layer Table** | Structural extraction (PyMuPDF `page.find_tables()` cell geometry) | 100% exact, deterministic, $0 token cost |
+| Table Source          | Extraction Mechanism                                                   | Cost & Precision                                 |
+| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
+| **Text-Layer Table**  | Structural extraction (PyMuPDF `page.find_tables()` cell geometry)     | 100% exact, deterministic, $0 token cost         |
 | **Image-Based Table** | Vision model prompted for structured markdown/JSON row & column arrays | Structured rows/columns, avoids prose flattening |
 
 Both paths output with `content_type: table` and preserve raw tabular alignment for downstream context assembly and citations.
 
 #### Stage 7 — Hierarchy & Segmentation (Single AI Pass)
+
 A single AI pass evaluates all extracted elements (native text, transcribed text, diagram descriptions, tables) in page order.
 
 **Segmentation Logic & Title Sources**:
+
 - **Explicit Heading Found** $\rightarrow$ Creates new segment; `title_source = 'explicit'`.
 - **Topic Shift Detected (No Heading)** $\rightarrow$ Creates new segment; `title_source = 'synthesized'`.
 - **No Heading, No Topic Shift** $\rightarrow$ Appends content to the currently open segment; `title_source = 'inherited'`.
 
-**Cross-Page Continuity**: Cross-page topics (e.g. *Sulfonamides* discussed across pages 3, 4, and 12) are **not** linked with brittle ingestion-time pointers. Instead, cross-page topic continuity is dynamically reconstructed at query time using **Hybrid Retrieval** (keyword BM25 + 3072d vector search + re-ranking).
+**Cross-Page Continuity**: Cross-page topics (e.g. _Sulfonamides_ discussed across pages 3, 4, and 12) are **not** linked with brittle ingestion-time pointers. Instead, cross-page topic continuity is dynamically reconstructed at query time using **Hybrid Retrieval** (keyword BM25 + 3072d vector search + re-ranking).
 
 #### Stage 8 — Chunking Mechanics & Vector Embeddings
 
-| Element Type | Chunking Behavior | Token Size | Overlap |
-|---|---|---|---|
-| **Tables (`table`)** | **Atomic (1 Table = 1 Chunk)** | Intact | None |
-| **Diagrams (`diagram`)** | **Atomic (1 Diagram = 1 Chunk)** | Intact (`[Visual Description: ...]`) | None |
-| **Long Text (`text`)** | **Segment-Bounded Recursive Splitting** | **512 tokens** (~2,000 chars) | **64 tokens** (~250 chars) |
+| Element Type             | Chunking Behavior                       | Token Size                           | Overlap                    |
+| ------------------------ | --------------------------------------- | ------------------------------------ | -------------------------- |
+| **Tables (`table`)**     | **Atomic (1 Table = 1 Chunk)**          | Intact                               | None                       |
+| **Diagrams (`diagram`)** | **Atomic (1 Diagram = 1 Chunk)**        | Intact (`[Visual Description: ...]`) | None                       |
+| **Long Text (`text`)**   | **Segment-Bounded Recursive Splitting** | **512 tokens** (~2,000 chars)        | **64 tokens** (~250 chars) |
 
 - **Boundary Enforcement**: Text chunks never split across segment boundaries.
 - **Page Tagging**: Every chunk retains `page_start` and `page_end` for exact reader deep-linking.
@@ -2590,6 +3266,7 @@ CREATE INDEX idx_document_chunks_lookup ON public.document_chunks(document_id, s
 ### 7.6 Task Queue & Worker Concurrency (ARQ / Redis)
 
 Ingestion is executed asynchronously using **ARQ (Async Redis Queue)**:
+
 - **Concurrency Locks**: Worker claims document via `claim_document_ingestion` with a unique UUID worker lock token.
 - **Progress Telemetry**:
   - `0% – 40%`: Text layer check, native extraction, OCR/Vision transcription.
@@ -2634,16 +3311,17 @@ graph TD
     M1["User: Explain Beta-Blockers (id: msg_1, parent: null)"] --> M2["Assistant: Beta-blockers antagonist... (id: msg_2, parent: msg_1)"]
     M2 --> M3["User: What about dosage? (id: msg_3, parent: msg_2)"]
     M3 --> M4["Assistant: For Metoprolol 50mg... (id: msg_4, parent: msg_3)"]
-    
+
     %% Branching on Regeneration
     M3 -.->|Regenerate Response| M5["Assistant (Branch 2): In clinical practice... (id: msg_5, parent: msg_3)"]
-    
+
     %% Branching on Edit
     M1 -.->|Edit Prompt| M6["User (Edited): Explain Beta-1 Selective Blockers (id: msg_6, parent: null)"]
     M6 --> M7["Assistant: Beta-1 selective agents... (id: msg_7, parent: msg_6)"]
 ```
 
 #### Trajectory Reconstruction & Branch Navigation
+
 - Each message references its `parent_message_id`.
 - The session tracks `active_leaf_message_id`. The active linear conversation is reconstructed by traversing backwards from `active_leaf_message_id` to the root message (`parent_message_id IS NULL`), then reversing the list.
 - **`assistant-ui` `<BranchPicker />` Integration**: Sibling message indices (`sibling_index` of `total_siblings`) map directly to `assistant-ui`'s native branch switcher (`< 1/2 >`), allowing seamless navigation across multiple regenerations without custom state synchronization.
@@ -2654,12 +3332,13 @@ graph TD
 
 PansGPT adopts **`assistant-ui`** as the client-side chat foundation across web, desktop, and mobile:
 
-| Platform | Package | Role |
-|---|---|---|
-| **Web & Desktop (Next.js / Electron)** | `@assistant-ui/react` | Headless, composable chat primitives styled with Tailwind CSS and shadcn/ui tokens. |
-| **Mobile (Expo / React Native)** | `@assistant-ui/react-native` | Native mobile chat runtime and UI components sharing the exact same thread state model. |
+| Platform                               | Package                      | Role                                                                                    |
+| -------------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------- |
+| **Web & Desktop (Next.js / Electron)** | `@assistant-ui/react`        | Headless, composable chat primitives styled with Tailwind CSS and shadcn/ui tokens.     |
+| **Mobile (Expo / React Native)**       | `@assistant-ui/react-native` | Native mobile chat runtime and UI components sharing the exact same thread state model. |
 
 #### 8.2.1 Core Primitives & Components
+
 - `<Thread />`: Full conversation container handling auto-scrolling, virtualization, and status banners.
 - `<Message />`: Renders message bubbles, avatar indicators, timestamps, and collapsible reasoning/thinking blocks.
 - `<Composer />`: Multi-line text input with auto-resize, paste/attachment handling for histological slides and files, and speech-to-text dictation hooks.
@@ -2667,6 +3346,7 @@ PansGPT adopts **`assistant-ui`** as the client-side chat foundation across web,
 - `<ActionBar />`: Copy message button, thumbs up/down feedback buttons, retry/regenerate, and edit triggers.
 
 #### 8.2.2 Generative UI for Skills (`makeAssistantToolUI`)
+
 When the backend executes workspace skills, `assistant-ui` renders custom interactive React components directly in the stream:
 
 ```tsx
@@ -2701,10 +3381,10 @@ flowchart TD
     B --> C[2. Credit Balance Check & Reservation]
     C --> D[3. Load Active Conversation History Trajectory]
     D --> E[4. Intent & Complexity Classifier]
-    
+
     E -- "Simple / Conversational" --> F[Direct Stream Generation\n(Fast Path, Zero Tool Latency)]
     E -- "Complex / Tool Required" --> G[Multi-Turn Agentic Tool Loop]
-    
+
     subgraph Tool_Loop["Multi-Turn Tool Execution Loop (Max 5 Turns)"]
         direction TB
         G1[Model Generates Tool Call Request] --> G2{Is Tool Call Emitted?}
@@ -2714,11 +3394,11 @@ flowchart TD
         G5 --> G6[Append Tool Result to Context]
         G6 --> G1
     end
-    
+
     G --> Tool_Loop
     Tool_Loop --> H[5. Post-LLM Guard: Prompt Leak Check]
     F --> H
-    
+
     H --> I[6. SSE Stream: text_chunk & artifact_ready]
     I --> J[7. Fire-and-Forget Credit Ledger Deduction]
     J --> K[8. Async Title Generation & Telemetry Logging]
@@ -2732,16 +3412,16 @@ All chat interactions communicate over `text/event-stream` with strict typing. A
 
 #### 8.4.1 SSE Event Schema
 
-| Event Name | Payload Format | Description |
-|---|---|---|
-| `event: init` | `{"session_id": "uuid", "user_message_id": "uuid"}` | Confirms message creation and active session ID. |
-| `event: thinking_chunk` | `{"delta": "text"}` | Streamed chain-of-thought reasoning tokens (for models with thinking modes enabled). |
-| `event: text_chunk` | `{"delta": "text"}` | Streamed markdown content tokens for the assistant's visible response. |
-| `event: tool_start` | `{"tool_name": "create_pptx", "tool_id": "call_123", "args": {...}}` | Notifies client that a tool/skill has started executing. |
-| `event: tool_end` | `{"tool_id": "call_123", "status": "success", "summary": "..."}` | Notifies client of tool completion. |
-| `event: artifact_ready` | `{"artifact_id": "uuid", "type": "docx|pdf|pptx|graph", "title": "...", "download_url": "..."}` | Delivers a downloadable or interactive artifact card. |
-| `event: error` | `{"code": "RATE_LIMIT|TIMEOUT", "message": "...", "retryable": true}` | Emits graceful structured error payload. |
-| `event: done` | `{"assistant_message_id": "uuid", "tokens": 420, "finish_reason": "stop"}` | Terminal event signaling stream closure. |
+| Event Name              | Payload Format                                                             | Description                                                                          |
+| ----------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `event: init`           | `{"session_id": "uuid", "user_message_id": "uuid"}`                        | Confirms message creation and active session ID.                                     |
+| `event: thinking_chunk` | `{"delta": "text"}`                                                        | Streamed chain-of-thought reasoning tokens (for models with thinking modes enabled). |
+| `event: text_chunk`     | `{"delta": "text"}`                                                        | Streamed markdown content tokens for the assistant's visible response.               |
+| `event: tool_start`     | `{"tool_name": "create_pptx", "tool_id": "call_123", "args": {...}}`       | Notifies client that a tool/skill has started executing.                             |
+| `event: tool_end`       | `{"tool_id": "call_123", "status": "success", "summary": "..."}`           | Notifies client of tool completion.                                                  |
+| `event: artifact_ready` | `{"artifact_id": "uuid", "type": "docx                                     | pdf                                                                                  | pptx                                     | graph", "title": "...", "download_url": "..."}` | Delivers a downloadable or interactive artifact card. |
+| `event: error`          | `{"code": "RATE_LIMIT                                                      | TIMEOUT", "message": "...", "retryable": true}`                                      | Emits graceful structured error payload. |
+| `event: done`           | `{"assistant_message_id": "uuid", "tokens": 420, "finish_reason": "stop"}` | Terminal event signaling stream closure.                                             |
 
 ---
 
@@ -2794,6 +3474,7 @@ flowchart TD
 ```
 
 #### 8.6.1 Core Vision Invariants:
+
 1. **Mandatory Initial Extraction Protocol**:
    - Extraction is strictly mandatory on initial image upload. The system no longer falls back to raw un-indexed image answering.
    - If all extraction models in `VISION_EXTRACTION_CASCADE` fail or time out ($>8.0\text{s}$), the request hard-stops with a retryable client error and prevents corrupted conversational state in PostgreSQL.
@@ -2825,11 +3506,13 @@ To guarantee reliable performance across model contexts without exceeding limits
 ### 8.8 Auto-Title Generation & Session Search
 
 #### 8.8.1 Lazy Auto-Title Generation
+
 - When a new session is created, it starts with the default title `"New Chat"`.
 - Upon completion of the **first assistant response**, an async background task analyzes the initial user-assistant turn and generates a concise, descriptive title (3–5 words).
-- Sanitized to remove quotes, trailing punctuation, and generic phrases (e.g. *"Pharmacology Help"* $\rightarrow$ *"Beta-Blockers Mechanism & Dosages"*).
+- Sanitized to remove quotes, trailing punctuation, and generic phrases (e.g. _"Pharmacology Help"_ $\rightarrow$ _"Beta-Blockers Mechanism & Dosages"_).
 
 #### 8.8.2 Full-Text Session & Message Search
+
 - PostgreSQL `tsvector` full-text search across `chat_messages.content` and `chat_sessions.title`.
 - Returns highlighted snippet windows (`...found in topic: Metoprolol tartrate dosage...`) for instant cross-session search in the sidebar.
 
@@ -2838,10 +3521,12 @@ To guarantee reliable performance across model contexts without exceeding limits
 ### 8.9 Additional Features & Governance
 
 #### 8.9.1 First-Chat Disclaimer & Academic Agreement Modal
+
 - Mandatory educational and clinical disclaimer modal presented immediately after onboarding before the user submits their first prompt.
 - Explicit agreement saved in user preferences table to avoid repeat blocking.
 
 #### 8.9.2 AI Response Style & Tone Selector
+
 - Dropdown selector in composer:
   - **Concise**: Crisp high-yield bullet points for quick revision.
   - **Exam-focused**: Highlighting marking schemes, past paper formats, and grading criteria.
@@ -2849,6 +3534,7 @@ To guarantee reliable performance across model contexts without exceeding limits
   - **In-depth Academic**: Comprehensive clinical pharmacology mechanisms with KaTeX formulas and citations.
 
 #### 8.9.3 Chat Session Sharing (`/share/[sessionId]`)
+
 - Generates a cryptographically secure token and read-only URL (`/share/[token]`) enabling students to share full interactive conversation branches with study groups.
 
 ---
@@ -2900,7 +3586,7 @@ flowchart TD
         Recents["2. Omni-Recent Activity Carousel\n(Polymorphic: 📄 Document | 📒 Note | ✨ AI Chat | 🧠 Quiz)"]
         Tasks["3. Unified Tasks & Daily Timetable List\n(Timetable Lectures, Course Assignments, Lab Preps + Urgency Badges)"]
         BottomBar["4. Bottom Floating Action Bar\n[🔍 Quick Search] | [ ✨ Ask AI ] | [ 📝 New Note/Task ]"]
-        
+
         TopNav --> Recents
         Recents --> Tasks
         Tasks --> BottomBar
@@ -2915,14 +3601,14 @@ flowchart TD
 
 The header provides high-speed switching across PansGPT's 5 core functional pillars:
 
-| Pillar | Icon | Destination Surface | Role |
-|---|---|---|---|
-| **Avatar** | Circular Profile Pic / Initials | Profile & University Settings Drawer | Displays student name, enrolled university, level (e.g. 400L), and subscription/credit status. |
-| **🏠 Home** | Home Pill Icon (Active) | `/home` (Dashboard) | The daily aggregator hub (Recents + Today's Schedule + Tasks). |
-| **📄 Documents** | Document / Sheet Icon | `/library` (Document Library) | Institutional lecture slides, textbooks, past questions, and departmental handouts. |
-| **💬 Chat** | Chat Bubble Icon | `/chat` (AI Chat Hub) | Multi-turn conversational study hub with interactive workspace skills (`assistant-ui`). |
-| **🧠 Quiz** | Brain Icon | `/quiz` (Diagnostic & Practice) | Socratic practice tests, MCQ drills, past-paper simulations, and diagnostic reviews. |
-| **📝 Notes** | Notebook & Pencil Icon | `/notes` (Notes Workspace) | Rich-text study notebook powered by Tiptap (Web/Desktop) and TenTap (Mobile). |
+| Pillar           | Icon                            | Destination Surface                  | Role                                                                                           |
+| ---------------- | ------------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| **Avatar**       | Circular Profile Pic / Initials | Profile & University Settings Drawer | Displays student name, enrolled university, level (e.g. 400L), and subscription/credit status. |
+| **🏠 Home**      | Home Pill Icon (Active)         | `/home` (Dashboard)                  | The daily aggregator hub (Recents + Today's Schedule + Tasks).                                 |
+| **📄 Documents** | Document / Sheet Icon           | `/library` (Document Library)        | Institutional lecture slides, textbooks, past questions, and departmental handouts.            |
+| **💬 Chat**      | Chat Bubble Icon                | `/chat` (AI Chat Hub)                | Multi-turn conversational study hub with interactive workspace skills (`assistant-ui`).        |
+| **🧠 Quiz**      | Brain Icon                      | `/quiz` (Diagnostic & Practice)      | Socratic practice tests, MCQ drills, past-paper simulations, and diagnostic reviews.           |
+| **📝 Notes**     | Notebook & Pencil Icon          | `/notes` (Notes Workspace)           | Rich-text study notebook powered by Tiptap (Web/Desktop) and TenTap (Mobile).                  |
 
 ---
 
@@ -2933,12 +3619,12 @@ The Recent section is an **omni-channel activity feed** reflecting whatever the 
 - **Layout**: Horizontally scrolling card deck with `"View all >"` link to full activity history.
 - **Polymorphic Card Schema**:
 
-| Activity Type | Icon & Color | Metadata Display | Click / Tap Action |
-|---|---|---|---|
-| **📄 Document** | Document Icon | Tag: `Document`<br>Title: *Pharmacognosy Notes*<br>Timestamp: *Viewed just now* | Opens PDF Reader directly at the exact last-read page. |
-| **📒 Note** | Spiral Notebook Icon | Tag: `Note`<br>Title: *Seminar Ideas*<br>Timestamp: *Viewed 2h ago* | Opens the note directly in the Tiptap editor. |
-| **✨ AI Chat** | Sparkle Chat Icon | Tag: `AI Chat`<br>Title: *Ask AI: Plant Taxonomy*<br>Timestamp: *Viewed yesterday* | Resumes the conversation thread with active message branching. |
-| **🧠 Quiz** | Brain Icon | Tag: `Quiz`<br>Title: *PCL 421 Practice Exam*<br>Timestamp: *Completed 3d ago* | Opens quiz review with score diagnostics and distractor explanations. |
+| Activity Type   | Icon & Color         | Metadata Display                                                                   | Click / Tap Action                                                    |
+| --------------- | -------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **📄 Document** | Document Icon        | Tag: `Document`<br>Title: _Pharmacognosy Notes_<br>Timestamp: _Viewed just now_    | Opens PDF Reader directly at the exact last-read page.                |
+| **📒 Note**     | Spiral Notebook Icon | Tag: `Note`<br>Title: _Seminar Ideas_<br>Timestamp: _Viewed 2h ago_                | Opens the note directly in the Tiptap editor.                         |
+| **✨ AI Chat**  | Sparkle Chat Icon    | Tag: `AI Chat`<br>Title: _Ask AI: Plant Taxonomy_<br>Timestamp: _Viewed yesterday_ | Resumes the conversation thread with active message branching.        |
+| **🧠 Quiz**     | Brain Icon           | Tag: `Quiz`<br>Title: _PCL 421 Practice Exam_<br>Timestamp: _Completed 3d ago_     | Opens quiz review with score diagnostics and distractor explanations. |
 
 ---
 
@@ -2950,11 +3636,11 @@ Combines **institutional university timetables** (lectures, labs, seminars) and 
 - **Interactive Checklist**:
   - Tap circular checkbox $\rightarrow$ marks completed with instant optimistic UI update (and subtle completion haptic/animation).
 - **Task Types & Indicators**:
-  - 📅 **Lecture / Class**: *Review research paper* (`Pharmacognosy Research`) $\rightarrow$ **`Today 🔴`** (High urgency)
-  - 📄 **Document Task**: *Finish outline* (`Research Outline.docx`) $\rightarrow$ **`Tomorrow 🟠`** (Medium urgency)
-  - 📊 **Dataset / Lab**: *Update compound dataset* (`Plant Compounds Data.xlsx`) $\rightarrow$ **`Aug 24 ⚪`** (Upcoming)
-  - 📑 **Presentation Prep**: *Prepare presentation* (`Project Overview.pptx`) $\rightarrow$ **`Aug 26 ⚪`** (Upcoming)
-  - 👥 **Team Meeting**: *Team meeting* (`Pharmacognosy Research`) $\rightarrow$ **`Aug 27 ⚪`** (Upcoming)
+  - 📅 **Lecture / Class**: _Review research paper_ (`Pharmacognosy Research`) $\rightarrow$ **`Today 🔴`** (High urgency)
+  - 📄 **Document Task**: _Finish outline_ (`Research Outline.docx`) $\rightarrow$ **`Tomorrow 🟠`** (Medium urgency)
+  - 📊 **Dataset / Lab**: _Update compound dataset_ (`Plant Compounds Data.xlsx`) $\rightarrow$ **`Aug 24 ⚪`** (Upcoming)
+  - 📑 **Presentation Prep**: _Prepare presentation_ (`Project Overview.pptx`) $\rightarrow$ **`Aug 26 ⚪`** (Upcoming)
+  - 👥 **Team Meeting**: _Team meeting_ (`Pharmacognosy Research`) $\rightarrow$ **`Aug 27 ⚪`** (Upcoming)
 
 ---
 
@@ -2970,9 +3656,9 @@ Fixed floating pill bar at the bottom of the screen:
    - Tapping opens an instant conversational bottom-sheet (or navigates to Chat Hub) pre-injected with the student's active context (University, Level, Enrolled Courses).
 3. **📝 Quick Compose Button (Right)**:
    - Opens quick-create popover:
-     - *New Note* $\rightarrow$ creates blank note in `/notes`
-     - *Add Task* $\rightarrow$ opens fast modal to set a deadline or reminder
-     - *Generate Study Deck* $\rightarrow$ triggers AI skill modal
+     - _New Note_ $\rightarrow$ creates blank note in `/notes`
+     - _Add Task_ $\rightarrow$ opens fast modal to set a deadline or reminder
+     - _Generate Study Deck_ $\rightarrow$ triggers AI skill modal
 
 ---
 
@@ -2983,6 +3669,7 @@ To guarantee lightning-fast initial page loads (<150ms), the Home Page is powere
 #### `GET /api/home/dashboard`
 
 #### Response Schema:
+
 ```json
 {
   "student": {
@@ -3050,6 +3737,7 @@ To guarantee lightning-fast initial page loads (<150ms), the Home Page is powere
 ```
 
 #### `PATCH /api/tasks/{id}/toggle`
+
 - Toggles `is_completed: boolean`.
 - Handled with optimistic cache updates via TanStack Query.
 
@@ -3059,6 +3747,7 @@ To guarantee lightning-fast initial page loads (<150ms), the Home Page is powere
 
 - **Mobile (MMKV)**: Caches the full `dashboard` payload upon successful fetch. If the app is launched offline, the Home Page renders instantly from MMKV.
 - **Desktop (SQLite)**: Queries the local SQLite database for recent notes, reading progress, and timetable entries directly.
+
 ---
 
 ## ✅ SECTION 9 — PDF READER
@@ -3092,7 +3781,7 @@ flowchart TD
         L3["3. Annotation & Highlight SVG Overlay (Yellow/Green/Blue/Pink)"]
         L2["2. Selectable HTML textLayer (<span> Bounding Boxes)"]
         L1["1. High-DPI Canvas Layer (pdfjs-dist @ devicePixelRatio * 1.5)"]
-        
+
         L4 --> L3 --> L2 --> L1
     end
 
@@ -3104,12 +3793,14 @@ flowchart TD
 ### 9.2 Core Rendering Engines & Virtualization
 
 #### 9.2.1 Web & Desktop: `pdfjs-dist` + TanStack Virtualization
+
 - **True Viewport Windowing**: To prevent browser memory exhaustion on 200+ slide decks or 1,000-page textbooks, the reader renders only the **visible viewport pages $\pm 1$ buffer page**. Offscreen canvas nodes are recycled and unmounted. Memory consumption stays under **100MB RAM**.
 - **High-DPI Canvas Rasterization**: Canvas scaling dynamic factor:
   $$\text{Render Scale} = \text{Zoom Level} \times \min(2.0, \text{window.devicePixelRatio})$$
   Ensures crystal-clear formulas and text when zooming into small 8pt slide footnotes.
 
 #### 9.2.2 Mobile (iOS & Android): Native GPU Acceleration
+
 - **Engine**: `react-native-pdf` wrapping **Apple `PDFKit` (iOS)** and **Google Android `PdfRenderer` / `PdfiumAndroid`**.
 - **Hardware Integration**: Native 120Hz ProMotion scrolling, hardware-accelerated pinch-to-zoom, Apple Pencil / stylus support, and zero WebView overhead.
 
@@ -3141,21 +3832,24 @@ Each page in the virtualized reader consists of 4 stacked layers:
 ### 9.4 WPS Office-Inspired Reading Comfort Features
 
 #### 9.4.1 Mobile Text Reflow Mode ("Article Mode")
+
 - **The Challenge**: Reading 16:9 landscape PowerPoint slides on vertical smartphone screens forces constant horizontal panning and eye strain.
 - **The Solution**: An instant toggle switch (`Slide View` $\leftrightarrow$ `Article Mode`):
   - In **Article Mode**, the reader renders the structured text and tables stored in `document_chunks` as a **clean, single-column responsive reading feed**.
   - Includes quick font size scaling controls (`A-` / `A+`), line-height toggles, and image cards.
 
 #### 9.4.2 Eye-Care Themes & Dark Paper Canvas
+
 Late-night dorm study is supported via 3 instant color transform modes:
 
-| Theme | Background | Text Color | Filter Transform | Purpose |
-|---|---|---|---|---|
-| **Default Light** | `#FFFFFF` | `#111827` | None | Standard daylight reading. |
-| **Dark Mode Canvas** | `#18181B` | `#F4F4F5` | `invert(0.88) hue-rotate(180deg)` + text contrast boost | Late-night reading in dark dorm rooms. Zero glare. |
-| **Warm Sepia** | `#FBF0D9` | `#433422` | `sepia(0.35) brightness(0.95)` | Eliminates blue-light eye fatigue during 4-hour revision blocks. |
+| Theme                | Background | Text Color | Filter Transform                                        | Purpose                                                          |
+| -------------------- | ---------- | ---------- | ------------------------------------------------------- | ---------------------------------------------------------------- |
+| **Default Light**    | `#FFFFFF`  | `#111827`  | None                                                    | Standard daylight reading.                                       |
+| **Dark Mode Canvas** | `#18181B`  | `#F4F4F5`  | `invert(0.88) hue-rotate(180deg)` + text contrast boost | Late-night reading in dark dorm rooms. Zero glare.               |
+| **Warm Sepia**       | `#FBF0D9`  | `#433422`  | `sepia(0.35) brightness(0.95)`                          | Eliminates blue-light eye fatigue during 4-hour revision blocks. |
 
 #### 9.4.3 Full-Screen Presentation Mode
+
 - Hides all application navigation, toolbars, and system bars.
 - Allows students to swipe through lecture slides with keyboard arrows (`←` / `→`) or touch gestures like a PowerPoint slideshow.
 
@@ -3164,6 +3858,7 @@ Late-night dorm study is supported via 3 instant color transform modes:
 ### 9.5 Study Intelligence, Highlighting & Selection Actions
 
 #### 9.5.1 Floating Smart Context Menu & Right-Click Trigger (Text Selection)
+
 When a student highlights any text in the PDF, a floating pill appears directly above the selection, or the student can **right-click** the selection to open the full context action menu:
 
 ```
@@ -3185,13 +3880,14 @@ When a student highlights any text in the PDF, a floating pill appears directly 
 ```
 
 ##### Action Handlers:
-- **✨ Explain**: Triggers `handleAIRequest('explain')` $\rightarrow$ sends the highlighted excerpt with context to the AI sidebar (*"Explain this concept simply for a pharmacy/medical student"*).
+
+- **✨ Explain**: Triggers `handleAIRequest('explain')` $\rightarrow$ sends the highlighted excerpt with context to the AI sidebar (_"Explain this concept simply for a pharmacy/medical student"_).
 - **🖍️ Multi-Color Highlighting**: Students can click one of 4 study colors to immediately save a persistent highlight overlay:
   - 🟡 **Yellow**: Key Definitions & Fundamental Principles
   - 🟢 **Green**: Drug Names, Dosages & Chemical Classes
   - 🔵 **Blue**: Biological Pathways & Mechanisms of Action
   - 🔴 **Pink**: Contraindications, Toxicities & Adverse Effects
-  - *Clicking on any existing highlight allows switching colors or deleting it.*
+  - _Clicking on any existing highlight allows switching colors or deleting it._
 - **📖 Define**: Triggers `handleAIRequest('define')` $\rightarrow$ asks AI for exact definition, etymology, and clinical context.
 - **💡 Example**: Triggers `handleAIRequest('example')` $\rightarrow$ asks AI for real-life clinical application examples.
 - **📝 Summarize**: Triggers `handleAIRequest('summarize')` $\rightarrow$ generates a concise 3-bullet summary of the selected text.
@@ -3234,6 +3930,7 @@ sequenceDiagram
 ```
 
 ##### Detailed Lifecycle Steps:
+
 1. **Coordinate Normalization (Zoom & Device Invariance)**:
    - When text is selected, the frontend extracts bounding rectangles via `range.getClientRects()`.
    - Instead of storing raw screen pixels, coordinates are normalized relative to the page's intrinsic width and height:
@@ -3253,9 +3950,7 @@ sequenceDiagram
        "page_number": 4,
        "color": "yellow",
        "selected_text": "Pharmacokinetics involves absorption, distribution, metabolism, excretion.",
-       "rects": [
-         { "x": 12.45, "y": 34.20, "width": 75.10, "height": 3.40 }
-       ]
+       "rects": [{ "x": 12.45, "y": 34.2, "width": 75.1, "height": 3.4 }]
      }
      ```
    - Persisted in PostgreSQL table `document_highlights`.
@@ -3282,18 +3977,21 @@ sequenceDiagram
      - Delete highlight (`DELETE /api/documents/{id}/highlights/{id}`).
 
 #### 9.5.3 Visual Area Snipping Tool & Image Inspector (`SnippetMenu` & `PDFViewerSelectedImageModal`)
+
 When a student taps the **✂️ Snip** tool in the bottom reader toolbar:
+
 1. The student drags a marquee bounding box over any diagram, chemical mechanism, graph, or slide table.
 2. The canvas region is cropped via `HTMLCanvasElement.toDataURL('image/png')` or `canvas.toBlob()`.
 3. A floating **`SnippetMenu`** appears over the cropped region offering:
-   - **✨ Ask AI**: Uploads the cropped PNG blob to Cloudflare R2 via `POST /api/documents/{id}/snip-upload` $\rightarrow$ returns R2 `storage_key` $\rightarrow$ automatically triggers an AI message in the right sidebar with prompt: *"Can you explain this snippet for me?"* (`intent: 'snippet_explain'`, attachments: `[storage_key]`).
+   - **✨ Ask AI**: Uploads the cropped PNG blob to Cloudflare R2 via `POST /api/documents/{id}/snip-upload` $\rightarrow$ returns R2 `storage_key` $\rightarrow$ automatically triggers an AI message in the right sidebar with prompt: _"Can you explain this snippet for me?"_ (`intent: 'snippet_explain'`, attachments: `[storage_key]`).
    - **💬 Add to Chat**: Injects the cropped image directly into the active **Chat Input field** as a staged thumbnail without sending immediately. The student can type a personalized question before sending.
-   - *(Note: 'Add to Notes' button is designed in UI and will be enabled when the Notes system launches post-V1).*
+   - _(Note: 'Add to Notes' button is designed in UI and will be enabled when the Notes system launches post-V1)._
 4. **`PDFViewerSelectedImageModal` (Image Inspector & Lightbox)**:
    - Tapping any cropped diagram or inline figure opens a full-screen image inspector modal.
    - Enables high-resolution zooming, panning, and 1-click PNG image downloading.
 
 #### 9.5.4 Deep-Link Citation Jump Anchors
+
 - Every highlight, annotation, and RAG chunk citation is addressable by a unique URL anchor:
   `https://pansgpt.app/reader/{doc_id}?page=14#hl-8f92`
 - When a student taps an AI source citation in the Chat Hub or AI sidebar, the reader:
@@ -3302,6 +4000,7 @@ When a student taps the **✂️ Snip** tool in the bottom reader toolbar:
   3. Animates a **pulsing yellow highlight ring** over the cited sentence bounding box.
 
 #### 9.5.5 Interactive Onboarding Coachmarks (`StudyModeTutorial.tsx`)
+
 - On the student's first document open, an interactive 3-step coachmark tutorial guides them through:
   1. **Text Highlights & Selection Menu**: Highlighting clinical text for instant explanations.
   2. **Visual Snipping Tool**: Cropping complex histology slides, graphs, and chemical structures.
@@ -3313,6 +4012,7 @@ When a student taps the **✂️ Snip** tool in the bottom reader toolbar:
 ### 9.6 Workspace Layout & Resizable Draggable Divider
 
 #### 9.6.1 Resizable Draggable Divider (Study Mode Chat Sidebar)
+
 - Replaces fixed desktop widths (`w-96`) with dynamic `sidebarWidth` state persisted to local storage.
 - A vertical drag handle positioned between the main PDF viewport and the right AI panel enables smooth horizontal dragging (min width: `320px`, max width: `600px`).
 - While dragging, `iframe` and canvas pointer events are temporarily disabled (`pointer-events-none`) to prevent stutter.
@@ -3344,6 +4044,7 @@ flowchart TD
 
 > [!NOTE]
 > **V1 Scope vs Post-V1 Notes Dock**:
+>
 > - **V1 Scope**: Focuses strictly on high-performance PDF reading, multi-color highlights, WPS-style eye comfort, smart text selection menu (Explain/Highlight/Define/Example/Summarize/Answer/Memory Aid/Copy/Add to Input/Add to Notes), visual canvas snipping, and the interactive **Resizable Right AI Copilot Sidebar**.
 > - **Post-V1 (V2)**: The **Document Notes Panel** will dock on the **Left Pane**, providing a live split-screen editor alongside the PDF and AI assistant (detailed in Section 12).
 
@@ -3352,16 +4053,19 @@ flowchart TD
 ### 9.7 Offline Caching, Background Progress Sync & Error Recovery
 
 #### 9.7.1 Reading Position & Progress Sync
+
 - **Auto-Sync Trigger**: Throttled every 15 seconds of active reading or on page navigation.
 - **Payload**: `PATCH /api/documents/{id}/progress` $\rightarrow$ `{last_page_read: 14, scroll_offset_y: 420.5, total_pages: 56}`.
 - **Resume Flow**: Opening any document instantly resumes at `last_page_read` and scroll offset.
 
 #### 9.7.2 Multi-Tier Offline Engine
+
 1. **Mobile (MMKV & Filesystem)**: On first open, the PDF binary is saved to the local app sandbox (`react-native-fs`). Subsequent opens load from the local cache in <50ms without network calls.
 2. **Desktop (SQLite & Local Disk)**: Electron main process stores PDFs in the user data cache directory. Full reading, search, and local viewing function offline.
 3. **Web (PWA)**: `@serwist/next` service worker caches the active PDF blob in CacheStorage.
 
 #### 9.7.3 Client Reliability, Perceived Performance & Error Recovery
+
 - **`useSimulatedProgress`**: Smooth, non-blocking simulated progress bar providing immediate perceived-performance feedback while large 50MB+ PDFs download and parse.
 - **`LocalErrorBoundary` & `ErrorRecoveryView`**: Wraps the reader component with an isolated recovery boundary. If a corrupt file or network drop occurs, the UI displays a clean recovery view with options to **"Refresh Page"** or return safely to the Document Library without crashing the entire app.
 
@@ -3449,13 +4153,13 @@ flowchart TD
 
 PansGPT supports 5 distinct question formats designed for comprehensive academic & professional health sciences examination:
 
-| Question Type | Format & Options Structure | UI Interaction | Marking / Scoring Mechanism |
-|---|---|---|---|
-| **`OBJECTIVE`** | Single Best Answer (4 options: A, B, C, D) | Single radio button select | **Binary**: $+1$ point if correct, $0$ if incorrect. Max 1 point. |
-| **`MCQ_MULTI_SELECT`**<br>*(MCQ Type 1)* | **5 Options (3 Correct, 2 Wrong)**<br>e.g. *"Select the 3 correct pharmacological properties of Digoxin:"* | Multi-select checkboxes for options A through E | **$+1$ mark for each correct option selected**.<br>Unselected correct options or selected wrong options earn $0$. Max 3 points per question. |
-| **`MCQ_TRUE_FALSE`**<br>*(MCQ Type 2)* | **5 Options (Each Option True or False with Negative Marking)**<br>e.g. *"Regarding Beta-Adrenergic Blockers:"* followed by 5 independent sub-statements A–E | Independent `[ True ]` `[ False ]` toggle button pair per option (or leave unselected) | **$+1$ mark** for correct True/False choice.<br>**$0$ marks** if option left unanswered.<br>**$-1$ mark** penalty for wrong choice.<br>Raw score: $-5$ to $+5$ points per question (floored at $0$ for overall quiz percentage). |
-| **`TRUE_FALSE`** | Single binary statement (True / False) | Single `[ True ]` / `[ False ]` radio choice | **Binary**: $+1$ point if correct, $0$ if incorrect. Max 1 point. |
-| **`SHORT_ANSWER`** | Open-ended clinical case prompt (No options) | Rich textarea for student response | **AI Semantic Grading**: LLM grader evaluates against clinical rubric. Scores awarded $0$ to max points with detailed corrective notes. |
+| Question Type                            | Format & Options Structure                                                                                                                                   | UI Interaction                                                                         | Marking / Scoring Mechanism                                                                                                                                                                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`OBJECTIVE`**                          | Single Best Answer (4 options: A, B, C, D)                                                                                                                   | Single radio button select                                                             | **Binary**: $+1$ point if correct, $0$ if incorrect. Max 1 point.                                                                                                                                                                |
+| **`MCQ_MULTI_SELECT`**<br>_(MCQ Type 1)_ | **5 Options (3 Correct, 2 Wrong)**<br>e.g. _"Select the 3 correct pharmacological properties of Digoxin:"_                                                   | Multi-select checkboxes for options A through E                                        | **$+1$ mark for each correct option selected**.<br>Unselected correct options or selected wrong options earn $0$. Max 3 points per question.                                                                                     |
+| **`MCQ_TRUE_FALSE`**<br>_(MCQ Type 2)_   | **5 Options (Each Option True or False with Negative Marking)**<br>e.g. _"Regarding Beta-Adrenergic Blockers:"_ followed by 5 independent sub-statements A–E | Independent `[ True ]` `[ False ]` toggle button pair per option (or leave unselected) | **$+1$ mark** for correct True/False choice.<br>**$0$ marks** if option left unanswered.<br>**$-1$ mark** penalty for wrong choice.<br>Raw score: $-5$ to $+5$ points per question (floored at $0$ for overall quiz percentage). |
+| **`TRUE_FALSE`**                         | Single binary statement (True / False)                                                                                                                       | Single `[ True ]` / `[ False ]` radio choice                                           | **Binary**: $+1$ point if correct, $0$ if incorrect. Max 1 point.                                                                                                                                                                |
+| **`SHORT_ANSWER`**                       | Open-ended clinical case prompt (No options)                                                                                                                 | Rich textarea for student response                                                     | **AI Semantic Grading**: LLM grader evaluates against clinical rubric. Scores awarded $0$ to max points with detailed corrective notes.                                                                                          |
 
 ---
 
@@ -3475,7 +4179,7 @@ PansGPT supports 5 distinct question formats designed for comprehensive academic
      - **In-Quiz Deduplication**: Rejects candidate questions with text cosine similarity $> 0.82$ against questions already in the active quiz.
      - **Recent History Deduplication**: Rejects questions with similarity $> 0.90$ against the student's last 15 generated questions for that course.
 4. **Interactive Generating Screen (`QuizGeneratingScreen.tsx`)**:
-   - Displays real-time progress (`0%` $\rightarrow$ `100%`) with active step feedback (*"Retrieving lecture chunks..."* $\rightarrow$ *"Generating batch 1 of 2..."* $\rightarrow$ *"Saving questions..."*).
+   - Displays real-time progress (`0%` $\rightarrow$ `100%`) with active step feedback (_"Retrieving lecture chunks..."_ $\rightarrow$ _"Generating batch 1 of 2..."_ $\rightarrow$ _"Saving questions..."_).
    - Features rotating **"Did You Know?" clinical flashcard pearls** (`did-you-know-facts.ts`, swapping every 7 seconds) to keep students engaged during the 5–10s generation window.
    - Includes a **Cancel Generation** button to abort background tasks cleanly.
 5. **Startup Orphan Job Recovery Daemon (`recover_orphaned_quiz_jobs`)**:
@@ -3491,7 +4195,7 @@ PansGPT supports 5 distinct question formats designed for comprehensive academic
    - An SSE stream (`/api/quiz/{id}/events`) pushes subsequent questions into the client state in real time as `question_added` events.
 2. **Interactive UI per Question Type**:
    - **`OBJECTIVE`**: 4 clickable card options with letter badge (A–D).
-   - **`MCQ_MULTI_SELECT` (Type 1)**: 5 checkbox cards with clear helper text (*"Select 3 correct options"*).
+   - **`MCQ_MULTI_SELECT` (Type 1)**: 5 checkbox cards with clear helper text (_"Select 3 correct options"_).
    - **`MCQ_TRUE_FALSE` (Type 2)**: 5 statement rows, each containing a dual-button pill:
      ```
      A. Causes peripheral vasoconstriction        [ True ]  [ False ]
@@ -3539,11 +4243,11 @@ PansGPT supports 5 distinct question formats designed for comprehensive academic
      ```
 2. **Detailed Results View (`QuizResults.tsx`)**:
    - **Performance Banner**: Final score percentage, points earned, and adaptive encouragement badges:
-     - $\ge 90\%$: 🔥 *Outstanding Performance!*
-     - $80 - 89\%$: 🔥 *Distinction Level!*
-     - $70 - 79\%$: ✅ *Great Job!*
-     - $60 - 69\%$: ⚠️ *Room to improve*
-     - $< 60\%$: 📚 *Review the weak areas*
+     - $\ge 90\%$: 🔥 _Outstanding Performance!_
+     - $80 - 89\%$: 🔥 _Distinction Level!_
+     - $70 - 79\%$: ✅ _Great Job!_
+     - $60 - 69\%$: ⚠️ _Room to improve_
+     - $< 60\%$: 📚 _Review the weak areas_
    - **Breakdown Cards**: Count of Correct, Partially Correct, and Incorrect questions.
    - **Option-Level Breakdown (for MCQ Type 2)**:
      - Renders all 5 statements showing `+1` (green), `0` (gray), or `-1` (red) alongside the student's choice vs correct ground truth.
@@ -3575,10 +4279,11 @@ Students can share their quiz achievements directly to WhatsApp study groups, st
 ```
 
 #### Share Engine Features:
+
 - **Client-Side Pixel-Perfect Canvas Rendering**: Generated via `html2canvas` at $2\times$ scale (2000x2000 raster) and rendered in Next.js Image component.
 - **Native Web Share API Integration**: On iOS/Android mobile devices, tapping "Share" opens the native OS Share Sheet with the PNG image pre-attached.
 - **WhatsApp Web Desktop Fallback**: Automatically downloads the high-res PNG and opens WhatsApp Web with a pre-formatted message:
-  > *"18/20 in PCL 421 – thanks to PANSGPT! 🎯\n🔥 Outstanding Performance!\nJoin my study group on PansGPT: https://pansgpt.app"*
+  > _"18/20 in PCL 421 – thanks to PANSGPT! 🎯\n🔥 Outstanding Performance!\nJoin my study group on PansGPT: https://pansgpt.app"_
 - **Download Image**: 1-click download as `pansgpt-quiz-result-{timestamp}.png`.
 - **Public Share Endpoint**: Non-authenticated public view route (`GET /api/quiz/share/{quiz_id}`) for peers opening shared links.
 
@@ -3689,7 +4394,7 @@ GET    /api/quiz/share/{quizId}          ← Public endpoint returning quiz ques
 ## ⏸️ SECTION 12 — NOTES SYSTEM (POSTPONED / POST-V1)
 
 > **Product Stance**: **Post-V1 Document-Anchored Study Notes Suite**  
-> *(Tag: **POSTPONED FOR POST-V1**)*  
+> _(Tag: **POSTPONED FOR POST-V1**)_  
 > The Notes System is scheduled for deployment immediately following the V1 platform release. This allows PansGPT to launch a laser-focused V1 core (Auth, Document Library, AI Chat Hub, PDF Reader, and Quiz System) before rolling out the full split-screen rich-text note editor. The technical design, database models, AI typo correction workers, and deep-linking jump anchors are fully specified below to ensure zero architectural friction during post-V1 implementation.
 
 ---
@@ -3751,6 +4456,7 @@ In the post-V1 release, students can toggle a dedicated **Notes Panel** that doc
 ```
 
 #### Core Panel Capabilities:
+
 1. **Block-Based Rich-Text Structure**:
    - Built on a lightweight Tiptap/ProseMirror editor engine (replacing heavy legacy BlockNote dependencies).
    - Supports markdown headers, bullet lists, bold/italic, callout boxes, and inline LaTeX formulas ($\ KaTeX\ $).
@@ -3777,6 +4483,7 @@ const locationTag = `loc:v1;p=14;x=0.1245;y=0.3420;w=0.7510;h=0.0340;q=Pharmacok
 ```
 
 #### Seamless Jump & Focus Pulse Lifecycle:
+
 1. When a student clicks the **`🔗 Jump to Page 14 ↗`** badge on any note block:
 2. The viewer smoothly scrolls to **Page 14**.
 3. Emits `onFocusPulse({ page: 14, rect, pulseId })`.
@@ -3789,6 +4496,7 @@ const locationTag = `loc:v1;p=14;x=0.1245;y=0.3420;w=0.7510;h=0.0340;q=Pharmacok
 When students rapidly type study notes, lecture annotations, or chemical terms during live lectures, typos and misspellings frequently occur.
 
 #### Asynchronous LLM Typo Cleanup Protocol (`_fix_typos`):
+
 - **Zero UI Latency**: The user's note is saved and rendered **instantaneously** in local state and database.
 - **Background Worker**: An async background task triggers `_background_fix_and_update(note_id, text)`:
   ```python
@@ -3861,7 +4569,7 @@ flowchart TD
         Rasterizer["PyMuPDF / pdf2image\n(High-DPI Page Rendering)"]
         VisionLLM["Gemini 2.5 Flash Multimodal\n(Structured Matrix Extraction Schema)"]
         AutoEnrich["Course Catalog Auto-Enrichment\n('PCL 421' -> 'Chemotherapy of Bacterial Infections')"]
-        
+
         UploadPDF --> Rasterizer --> VisionLLM
         UploadImg --> VisionLLM
         PasteText --> VisionLLM
@@ -3885,7 +4593,7 @@ flowchart TD
         HomeWidget["Home Page: Dynamic Schedule Carousel\n(Classes during lecture season ↔ Exams during exam season)"]
         ScheduleModal["Unified Timetable Modal\n[ 📚 Class Schedule ] | [ 🎯 Exam Timetable ]"]
         AIChat["AI Study Copilot & Chat Hub\n(Injected class & exam schedule context)"]
-        
+
         ClassTable & ExamTable --> HomeWidget & ScheduleModal & AIChat
     end
 ```
@@ -3895,16 +4603,19 @@ flowchart TD
 ### 13.2 AI Vision & Document Ingestion Engine (Images & PDFs)
 
 #### 13.2.1 File Format Support
+
 The ingestion engine accepts all real-world departmental document formats:
+
 - **PDF Documents** (`.pdf`): Both native vector PDFs (exported from Word/Excel) and scanned image PDFs.
 - **Images & Photos** (`.png`, `.jpg`, `.jpeg`, `.webp`, `.heic`): Smartphone camera photos of physical noticeboards, WhatsApp flyers, and graphic design tables.
 - **Raw Text / Clipboard**: Text announcements copied from faculty group chats.
 
 #### 13.2.2 Extraction Logic & Heuristics
+
 The backend invokes Gemini 2.5 Flash Multimodal with a strict structured JSON extraction schema:
 
 1. **Header & Context Detection**:
-   - Extracts University name (e.g. *University of Jos*), Faculty/Department (*Faculty of Pharmaceutical Sciences*), Session (*2025/2026*), Semester (*Second Semester*), Level (*400 Level*), and Schedule Type (*LECTURE_TIMETABLE* vs *EXAM_TIMETABLE*).
+   - Extracts University name (e.g. _University of Jos_), Faculty/Department (_Faculty of Pharmaceutical Sciences_), Session (_2025/2026_), Semester (_Second Semester_), Level (_400 Level_), and Schedule Type (_LECTURE_TIMETABLE_ vs _EXAM_TIMETABLE_).
 2. **Weekly Lecture Matrix Parsing**:
    - **Column & Row Intersections**: Maps day rows (`MONDAY`..`FRIDAY`) against time header columns (`8-9`, `9-10`, `10-11`, `11-12`, `12-1`, `1-2`, `2-3`, `3-6`).
    - **Consecutive Multi-Hour Merging**: Combines consecutive identical course slots (e.g. `WEDNESDAY` from `10-11`, `11-12`, `12-1` having `PCL421P` is merged into a single 3-hour practical: `10:00 AM - 01:00 PM`).
@@ -3913,7 +4624,7 @@ The backend invokes Gemini 2.5 Flash Multimodal with a strict structured JSON ex
 3. **Examination Matrix Parsing**:
    - **Date Extraction**: Converts human dates (e.g. `THURSDAY 13/08/2026`, `TUESDAY 1/09/2026`) into normalized ISO `YYYY-MM-DD`.
    - **Time Ranges & Duration**: Parses `8:00am-11:00am` (3 hours), `11:30am-2:30pm`, `3:00pm-6:00pm`.
-   - **Special Notes & Footers**: Captures floating notes (e.g. *"NOTE: PHY 202 CBT EXAMS WILL BE WRITTEN ON THE 12TH OF AUGUST 2026"*) and creates discrete dated entries.
+   - **Special Notes & Footers**: Captures floating notes (e.g. _"NOTE: PHY 202 CBT EXAMS WILL BE WRITTEN ON THE 12TH OF AUGUST 2026"_) and creates discrete dated entries.
 4. **Course Catalog Auto-Enrichment**:
    - Matches parsed course codes against the university's official database to auto-populate full descriptive titles (e.g. `PCL 421` $\rightarrow$ `Chemotherapy of Bacterial & Parasitic Infections`).
 
@@ -3945,6 +4656,7 @@ Admins are never forced to accept a black-box AI result. The interactive review 
 ```
 
 #### Key Review Controls:
+
 - **Side-by-Side Verification**: Original uploaded image or PDF viewer on the left pane; interactive editable table on the right.
 - **In-Place Cell Editing**: Admins can tap any cell to edit dates, times, course codes, titles, venues, or paper types.
 - **Add / Delete Rows**: Add missing emergency slots or delete canceled classes with a single click.
@@ -3955,6 +4667,7 @@ Admins are never forced to accept a black-box AI result. The interactive review 
 ### 13.4 Student Experience: Dual Schedules & Adaptive UI
 
 #### 13.4.1 Today's Classes Horizontal Snap Carousel (`TodaysClasses.tsx`)
+
 On the Student Home Page dashboard, students have immediate visibility into their day's lectures:
 
 ```
@@ -3971,6 +4684,7 @@ On the Student Home Page dashboard, students have immediate visibility into thei
 ```
 
 ##### Detailed Mechanics:
+
 1. **West Africa Time (WAT / UTC+1) Auto-Detection**: Backend resolves the active day using Nigeria timezone (`datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=1)))`).
 2. **Cohort Level Matching**: Extracted cohort digits (`replace(/\D/g, '')`) ensure students only see their specific level.
 3. **Smart Active Class Calculation & Auto-Scroll**:
@@ -3982,6 +4696,7 @@ On the Student Home Page dashboard, students have immediate visibility into thei
 5. **"See all" Action**: Opens the full **Unified Timetable Modal**.
 
 #### 13.4.2 Examination Timetable View (`ExamTimetableTab.tsx`)
+
 Accessible during examination periods and within the Timetable Modal:
 
 ```
@@ -3999,17 +4714,20 @@ Accessible during examination periods and within the Timetable Modal:
 ```
 
 ##### Detailed Exam Capabilities:
-- **Chronological Timeline**: Grouped by date headers with countdown tags (*"In 2 Days"*, *"Today — Starts in 2h"*, *"Completed ✓"*).
+
+- **Chronological Timeline**: Grouped by date headers with countdown tags (_"In 2 Days"_, _"Today — Starts in 2h"_, _"Completed ✓"_).
 - **Paper Type Badges**: 🟦 **Theory/Written**, 🟩 **CBT**, 🟨 **OSCE/Spotter**, 🟪 **Lab Practical**, 🟧 **Oral/Viva**.
 - **Venues & Seating**: Shows allocated halls, computer labs, and seat numbers.
 
 #### 13.4.3 Dynamic Home Page Schedule Mode Switcher (`TodaysScheduleWidget.tsx`)
+
 - **Segmented Header Control**: `[ 📚 Classes ]` | `[ 🎯 Exams ]`.
 - **Automatic Phase Transition**:
   - During standard lecture weeks (`LECTURE_PERIOD`), defaults to **Today's Classes**.
   - During exam periods (`EXAM_PERIOD`, `REVISION_WEEK`, or when the next exam is within 14 days), automatically defaults to **Upcoming Exams Carousel** with live countdowns so students never see obsolete class hours.
 
 #### 13.4.4 Unified Timetable Modal (`TimetableModal.tsx`)
+
 - **Responsive Dual Rendering**:
   - **Mobile**: Native-feel **`MobileBottomSheet`** with drag-to-dismiss handle and `max-h-[90vh]`.
   - **Desktop / Tablet**: Centered backdrop-blurred modal dialog (`bg-black/60 z-[90]`) with Framer Motion entry animation.
@@ -4031,6 +4749,7 @@ async def get_cached_student_schedule(level: str, current_user: Optional[User] =
 ```
 
 #### Injected Context Format:
+
 ```
 ACADEMIC CONTEXT (University: UNILAG, Level: 400L, Phase: EXAM_PERIOD):
 
@@ -4143,7 +4862,7 @@ flowchart TD
         Pending["Status: 'pending'\n(Locked to /lecturer/pending Status Tracker)"]
         AdminReview["University Admin Review\n(/admin/lecturers)"]
         Approved["Status: 'active'\n(Full Lecturer Portal Access)"]
-        
+
         Signup --> DupCheck --> Pending --> AdminReview
         AdminReview -->|Approve| Approved
         AdminReview -->|Reject| Rejected["Status: 'rejected'"]
@@ -4155,7 +4874,7 @@ flowchart TD
         SubPending["Status: 'pending_review'"]
         AdminMatReview["Admin Material Review\n(/admin/materials)"]
         RAGIngest["Ingestion Worker\n(PyMuPDF -> Chunker -> text-embedding-004 -> HNSW Index)"]
-        
+
         Approved --> Upload
         Upload -.->|On DB Error| Rollback
         Upload --> SubPending --> AdminMatReview
@@ -4177,6 +4896,7 @@ flowchart TD
 ### 14.2 Lecturer Identity, Registration & Access Governance
 
 #### 14.2.1 Registration Protocol (`POST /api/lecturer/register`)
+
 - **Supported Academic Titles**: `Mr`, `Mrs`, `Miss`, `Ms`, `Dr`, `Prof`, `Pharm`, `Pharm Dr`.
 - **Payload Validation**:
   - Institutional email normalization and regex verification.
@@ -4185,11 +4905,12 @@ flowchart TD
 - **Duplicate Account State Machine (`_raise_for_existing_lecturer_profile`)**:
   - `pending`: Returns `{ ok: true, message: "Your lecturer registration is already pending review." }` without duplicating accounts.
   - `active`: Returns `{ ok: true, message: "Your lecturer access is already active." }`.
-  - `rejected`: Returns `HTTP 409 Conflict` (*"Your lecturer registration was rejected. Please contact admin."*).
+  - `rejected`: Returns `HTTP 409 Conflict` (_"Your lecturer registration was rejected. Please contact admin."_).
   - `suspended` / `revoked`: Returns `HTTP 403 Forbidden`.
 - **Audit Trail**: Every registration attempt is logged in `access_control_audit_logs`.
 
 #### 14.2.2 Access Gating & Institutional Suspension Shield
+
 - **Institutional Suspension Guard (`UniversitySuspendedBlocker`)**:
   - Checked before lecturer role routing. If the university has been suspended by Super Admin, all faculty actions are blocked with an institutional notice.
 - **Hierarchy Role Routing**:
@@ -4207,19 +4928,20 @@ flowchart TD
 ```mermaid
 stateDiagram-v2
     [*] --> pending_review: Lecturer Uploads (POST /lecturer/materials)
-    
+
     pending_review --> approved: Admin Approves (POST /admin/materials/{id}/approve)
     pending_review --> rejected: Admin Rejects (POST /admin/materials/{id}/reject)
     pending_review --> cancelled: Lecturer Cancels (POST /lecturer/materials/{id}/cancel)
-    
+
     rejected --> pending_review: Lecturer Resubmits (Strict 1-Resubmission Constraint)
-    
+
     approved --> RAG_Ingestion: Background Chunking & Embedding
     RAG_Ingestion --> LiveDocumentLibrary: Vector Indexing Complete
     cancelled --> R2_Garbage_Collection: Reference-Safe File Purge
 ```
 
 ##### Detailed Ingestion Operations:
+
 1. **Material Upload (`POST /api/lecturer/materials`)**:
    - Accepts multi-part form data: `file` (PDF/Slides), `level` (100–600L), `course_code` (e.g. `PCL 421`), `topic` / `title`, `course_title`.
    - Directly streams file binary to **Cloudflare R2** (`pansgpt-materials/lecturers/{uuid}.pdf`).
@@ -4262,13 +4984,14 @@ Lecturers can temporarily restrict student AI study tools during continuous asse
 ```
 
 #### Detailed Enforcement Mechanics:
+
 - **Scope**: Targeted to a specific course code (e.g. `PCL 421`) or an entire level cohort (`400L`).
 - **Timing Presets**: Quick duration chips (`15m`, `30m`, `45m`, `1h`, `2h`, `3h`, `Custom`) or explicit start/end timestamps.
 - **1-Second Real-Time UI Interval Tick**:
-  - The UI runs an internal 1-second interval (`setNow(Date.now())`) that dynamically updates live countdown badges (*"Active — ends in 42m 15s"*) and auto-transitions statuses (`scheduled` $\rightarrow$ `active` $\rightarrow$ `completed`).
+  - The UI runs an internal 1-second interval (`setNow(Date.now())`) that dynamically updates live countdown badges (_"Active — ends in 42m 15s"_) and auto-transitions statuses (`scheduled` $\rightarrow$ `active` $\rightarrow$ `completed`).
 - **Gateway Interception**:
   - During an active lockout window, student requests to `/api/quiz/jobs` (quiz generation) or `/api/chat/stream` (for that course) are intercepted and rejected with:
-    `HTTP 423 Locked` $\rightarrow$ *"Study access for PCL 421 is currently restricted by Dr. Adeyemi for the ongoing Continuous Assessment Test."*
+    `HTTP 423 Locked` $\rightarrow$ _"Study access for PCL 421 is currently restricted by Dr. Adeyemi for the ongoing Continuous Assessment Test."_
 - **Audit & Cancellation**:
   - Lecturers can cancel active restrictions at any time (`PATCH /api/lecturer/restrictions/{id}/cancel`) with audit reason tracking.
 
@@ -4353,8 +5076,8 @@ CREATE TABLE public.lecturer_material_submissions (
 );
 
 -- Unique constraint enforcing strictly ONE active resubmission per rejected submission
-CREATE UNIQUE INDEX lecturer_material_submissions_one_resubmission_per_rejection_idx 
-ON public.lecturer_material_submissions (resubmitted_from_id) 
+CREATE UNIQUE INDEX lecturer_material_submissions_one_resubmission_per_rejection_idx
+ON public.lecturer_material_submissions (resubmitted_from_id)
 WHERE resubmitted_from_id IS NOT NULL;
 
 -- 3. Exam Study Restrictions
@@ -4443,7 +5166,7 @@ flowchart TD
         AuthDep["get_current_user<br/>(JWKS Token Verification)"]
         ScopeDep["resolve_admin_workspace_university<br/>(Tenant Boundary Enforcement)"]
         RBACDep["require_super_admin_role<br/>require_senior_university_admin"]
-        
+
         subgraph DecoupledRouters ["Domain-Driven Routers"]
             SuperRouter["routers/super_admin/<br/>• Universities Lifecycle<br/>• Platform Admins<br/>• System Settings & 4-Eyes Prompts<br/>• AI Cost & Global Telemetry<br/>• Vector Health & Global Audit Logs"]
             AdminRouter["routers/admin/<br/>• Academic Context & Rollover<br/>• Student Management & Subscriptions<br/>• Workspace Admins (Senior/Standard)<br/>• Lecturer Lifecycle & Reviews<br/>• Material Approval & Conversion<br/>• Exam Restrictions & Timetable<br/>• Workspace Audit Logs"]
@@ -4490,11 +5213,12 @@ flowchart TD
 ```
 
 #### Administrative Tier Governance Matrix:
-| Administrative Tier | Role in `user_roles` | `admin_level` | `university_id` | Scope & Capabilities |
-| :--- | :--- | :--- | :--- | :--- |
-| **Platform Super Admin** | `super_admin` | `NULL` | `NULL` | **Global Platform Control**: Manage all universities, provision senior admins, modify system AI prompts (via 4-eyes approval), inspect global AI usage/costs, trigger vector reindexing, inspect platform audit trails, access any university workspace as super-tenant. |
-| **Senior University Admin** | `university_admin` | `senior` | `NOT NULL` (UUID) | **Institutional Ownership**: Manage standard admins within assigned university, manage student profiles & subscription tiers, approve/reject/suspend lecturers, execute academic semester rollovers, configure academic context, view university audit trails. |
-| **Standard University Admin** | `university_admin` | `standard` | `NOT NULL` (UUID) | **Operational Academic Staff**: Upload and manage library documents, review lecturer material submissions, convert materials to PDF, configure exam restrictions, manage timetables and faculty knowledge base. **Restricted**: Cannot manage other admins, change student subscription tiers, or perform semester rollovers. |
+
+| Administrative Tier           | Role in `user_roles` | `admin_level` | `university_id`   | Scope & Capabilities                                                                                                                                                                                                                                                                                                          |
+| :---------------------------- | :------------------- | :------------ | :---------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Platform Super Admin**      | `super_admin`        | `NULL`        | `NULL`            | **Global Platform Control**: Manage all universities, provision senior admins, modify system AI prompts (via 4-eyes approval), inspect global AI usage/costs, trigger vector reindexing, inspect platform audit trails, access any university workspace as super-tenant.                                                      |
+| **Senior University Admin**   | `university_admin`   | `senior`      | `NOT NULL` (UUID) | **Institutional Ownership**: Manage standard admins within assigned university, manage student profiles & subscription tiers, approve/reject/suspend lecturers, execute academic semester rollovers, configure academic context, view university audit trails.                                                                |
+| **Standard University Admin** | `university_admin`   | `standard`    | `NOT NULL` (UUID) | **Operational Academic Staff**: Upload and manage library documents, review lecturer material submissions, convert materials to PDF, configure exam restrictions, manage timetables and faculty knowledge base. **Restricted**: Cannot manage other admins, change student subscription tiers, or perform semester rollovers. |
 
 ---
 
@@ -4511,7 +5235,7 @@ CREATE TABLE IF NOT EXISTS public.access_control_audit_logs (
     university_id UUID REFERENCES public.universities(id) ON DELETE SET NULL,
     action TEXT NOT NULL,
     category TEXT NOT NULL DEFAULT 'access_control' CHECK (category IN (
-        'access_control', 'user_management', 'academic_operations', 
+        'access_control', 'user_management', 'academic_operations',
         'ai_configuration', 'security_incident', 'system_maintenance'
     )),
     target_type TEXT NOT NULL,
@@ -4531,8 +5255,8 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON public.access_control_audit_
 CREATE INDEX IF NOT EXISTS idx_audit_logs_category ON public.access_control_audit_logs(category, created_at DESC);
 
 -- 2. Student User Status & Suspension Extensions
-ALTER TABLE public.profiles 
-ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active' 
+ALTER TABLE public.profiles
+ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'active'
 CHECK (status IN ('active', 'suspended', 'banned', 'pending_verification')),
 ADD COLUMN IF NOT EXISTS suspension_reason TEXT,
 ADD COLUMN IF NOT EXISTS suspended_at TIMESTAMPTZ,
@@ -4691,21 +5415,21 @@ USING (user_id = auth.uid() OR public.is_super_admin());
 
 ```tsx
 // frontend/components/UserInitialsAvatar.tsx
-import React from 'react';
+import React from "react";
 
 const AVATAR_PALETTE = [
-  { bg: 'bg-emerald-600', text: 'text-white' },
-  { bg: 'bg-blue-600', text: 'text-white' },
-  { bg: 'bg-indigo-600', text: 'text-white' },
-  { bg: 'bg-purple-600', text: 'text-white' },
-  { bg: 'bg-amber-600', text: 'text-white' },
-  { bg: 'bg-rose-600', text: 'text-white' },
-  { bg: 'bg-teal-600', text: 'text-white' },
-  { bg: 'bg-cyan-600', text: 'text-white' },
+  { bg: "bg-emerald-600", text: "text-white" },
+  { bg: "bg-blue-600", text: "text-white" },
+  { bg: "bg-indigo-600", text: "text-white" },
+  { bg: "bg-purple-600", text: "text-white" },
+  { bg: "bg-amber-600", text: "text-white" },
+  { bg: "bg-rose-600", text: "text-white" },
+  { bg: "bg-teal-600", text: "text-white" },
+  { bg: "bg-cyan-600", text: "text-white" },
 ];
 
 export function getInitials(name?: string | null): string {
-  if (!name) return 'P';
+  if (!name) return "P";
   const parts = name.trim().split(/\s+/);
   if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
@@ -4721,28 +5445,28 @@ export function getDeterministicColor(identifier: string) {
 
 export function UserInitialsAvatar({
   name,
-  size = 'md',
-  className = '',
+  size = "md",
+  className = "",
 }: {
   name?: string | null;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   className?: string;
 }) {
   const initials = getInitials(name);
-  const color = getDeterministicColor(name || 'PansGPT');
+  const color = getDeterministicColor(name || "PansGPT");
 
   const sizeClasses = {
-    xs: 'w-6 h-6 text-xs font-semibold',
-    sm: 'w-8 h-8 text-sm font-semibold',
-    md: 'w-10 h-10 text-base font-bold',
-    lg: 'w-12 h-12 text-lg font-bold',
-    xl: 'w-16 h-16 text-2xl font-extrabold',
+    xs: "w-6 h-6 text-xs font-semibold",
+    sm: "w-8 h-8 text-sm font-semibold",
+    md: "w-10 h-10 text-base font-bold",
+    lg: "w-12 h-12 text-lg font-bold",
+    xl: "w-16 h-16 text-2xl font-extrabold",
   }[size];
 
   return (
     <div
       className={`inline-flex items-center justify-center rounded-full select-none ${color.bg} ${color.text} ${sizeClasses} ${className}`}
-      aria-label={`Profile avatar for ${name || 'User'}`}
+      aria-label={`Profile avatar for ${name || "User"}`}
     >
       {initials}
     </div>
@@ -4824,7 +5548,7 @@ flowchart TD
 CREATE TYPE public.support_ticket_status AS ENUM ('open', 'in_progress', 'waiting_on_student', 'resolved', 'closed');
 CREATE TYPE public.support_ticket_priority AS ENUM ('low', 'medium', 'high', 'critical');
 CREATE TYPE public.support_ticket_category AS ENUM (
-    'bug_glitch', 'academic_inaccuracy', 'account_billing', 
+    'bug_glitch', 'academic_inaccuracy', 'account_billing',
     'material_request', 'feature_suggestion', 'general_inquiry'
 );
 
@@ -4918,13 +5642,20 @@ export interface ClientDiagnostics {
 
 export function collectClientDiagnostics(routeHistory: string[] = []): ClientDiagnostics {
   return {
-    app_version: process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
-    url: typeof window !== 'undefined' ? window.location.href : '',
+    app_version: process.env.NEXT_PUBLIC_APP_VERSION || "1.0.0",
+    url: typeof window !== "undefined" ? window.location.href : "",
     route_history: routeHistory.slice(-5),
-    user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : '',
-    platform: typeof navigator !== 'undefined' ? (navigator as any).userAgentData?.platform || navigator.platform : '',
-    viewport: typeof window !== 'undefined' ? { width: window.innerWidth, height: window.innerHeight } : { width: 0, height: 0 },
-    network_type: typeof navigator !== 'undefined' ? (navigator as any).connection?.effectiveType : undefined,
+    user_agent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+    platform:
+      typeof navigator !== "undefined"
+        ? (navigator as any).userAgentData?.platform || navigator.platform
+        : "",
+    viewport:
+      typeof window !== "undefined"
+        ? { width: window.innerWidth, height: window.innerHeight }
+        : { width: 0, height: 0 },
+    network_type:
+      typeof navigator !== "undefined" ? (navigator as any).connection?.effectiveType : undefined,
     recent_errors: (window as any).__RECENT_ERRORS__ || [],
   };
 }
@@ -4995,67 +5726,84 @@ frontend/app/
 
 ```tsx
 // frontend/app/(public)/opengraph-image.tsx
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from "next/og";
 
-export const runtime = 'edge';
-export const alt = 'PansGPT — AI Study Companion for Pharmacy Students';
+export const runtime = "edge";
+export const alt = "PansGPT — AI Study Companion for Pharmacy Students";
 export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
+export const contentType = "image/png";
 
 export default async function OpenGraphImage() {
   return new ImageResponse(
-    (
+    <div
+      style={{
+        background: "linear-gradient(135deg, #090d16 0%, #111a2e 50%, #052e16 100%)",
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "space-between",
+        padding: "80px",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div
+          style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "12px",
+            background: "#10b981",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#ffffff",
+            fontSize: "28px",
+            fontWeight: 800,
+          }}
+        >
+          P
+        </div>
+        <span
+          style={{ color: "#ffffff", fontSize: "32px", fontWeight: 700, letterSpacing: "-0.5px" }}
+        >
+          PansGPT
+        </span>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px", maxWidth: "900px" }}>
+        <h1
+          style={{
+            color: "#ffffff",
+            fontSize: "56px",
+            fontWeight: 800,
+            lineHeight: 1.1,
+            margin: 0,
+          }}
+        >
+          The AI Study Companion for Pharmacy Students
+        </h1>
+        <p style={{ color: "#94a3b8", fontSize: "24px", lineHeight: 1.4, margin: 0 }}>
+          Master pharmacology, incourse past questions, and lecture slides across Nigerian
+          universities.
+        </p>
+      </div>
+
       <div
         style={{
-          background: 'linear-gradient(135deg, #090d16 0%, #111a2e 50%, #052e16 100%)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          padding: '80px',
-          fontFamily: 'sans-serif',
+          display: "flex",
+          gap: "32px",
+          color: "#10b981",
+          fontSize: "20px",
+          fontWeight: 600,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
-              background: '#10b981',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              fontSize: '28px',
-              fontWeight: 800,
-            }}
-          >
-            P
-          </div>
-          <span style={{ color: '#ffffff', fontSize: '32px', fontWeight: 700, letterSpacing: '-0.5px' }}>
-            PansGPT
-          </span>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', maxWidth: '900px' }}>
-          <h1 style={{ color: '#ffffff', fontSize: '56px', fontWeight: 800, lineHeight: 1.1, margin: 0 }}>
-            The AI Study Companion for Pharmacy Students
-          </h1>
-          <p style={{ color: '#94a3b8', fontSize: '24px', lineHeight: 1.4, margin: 0 }}>
-            Master pharmacology, incourse past questions, and lecture slides across Nigerian universities.
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', gap: '32px', color: '#10b981', fontSize: '20px', fontWeight: 600 }}>
-          <span>✓ Grounded in Verified Lecture Slides</span>
-          <span>✓ Instant Incourse Quiz Prep</span>
-          <span>✓ Nigerian Pharmacy Curriculum</span>
-        </div>
+        <span>✓ Grounded in Verified Lecture Slides</span>
+        <span>✓ Instant Incourse Quiz Prep</span>
+        <span>✓ Nigerian Pharmacy Curriculum</span>
       </div>
-    ),
+    </div>,
     { ...size }
   );
 }
@@ -5067,7 +5815,7 @@ export default async function OpenGraphImage() {
 
 ```tsx
 // frontend/components/seo/JsonLd.tsx
-import React from 'react';
+import React from "react";
 
 export function JsonLd({ schema }: { schema: Record<string, any> }) {
   return (
@@ -5079,21 +5827,21 @@ export function JsonLd({ schema }: { schema: Record<string, any> }) {
 }
 
 export const PANSGPT_APP_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'PansGPT',
-  operatingSystem: 'Web, Android, iOS, Windows, macOS, Linux',
-  applicationCategory: 'EducationalApplication',
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "PansGPT",
+  operatingSystem: "Web, Android, iOS, Windows, macOS, Linux",
+  applicationCategory: "EducationalApplication",
   offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'NGN',
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "NGN",
   },
-  description: 'AI study platform designed specifically for Nigerian pharmacy students.',
+  description: "AI study platform designed specifically for Nigerian pharmacy students.",
   aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '1250',
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    ratingCount: "1250",
   },
 };
 ```
@@ -5104,24 +5852,31 @@ export const PANSGPT_APP_SCHEMA = {
 
 ```typescript
 // frontend/app/sitemap.ts
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
-const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://pansgpt.site';
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://pansgpt.site";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticRoutes = ['', '/about', '/contact', '/download', '/faq', '/privacy', '/terms', '/usage'].map(
-    (route) => ({
-      url: `${BASE_URL}${route}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: route === '' ? 1.0 : 0.8,
-    })
-  );
+  const staticRoutes = [
+    "",
+    "/about",
+    "/contact",
+    "/download",
+    "/faq",
+    "/privacy",
+    "/terms",
+    "/usage",
+  ].map((route) => ({
+    url: `${BASE_URL}${route}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: route === "" ? 1.0 : 0.8,
+  }));
 
-  const campusRoutes = ['unijos', 'unilag', 'abu', 'ui', 'oau', 'unn', 'uniben'].map((slug) => ({
+  const campusRoutes = ["unijos", "unilag", "abu", "ui", "oau", "unn", "uniben"].map((slug) => ({
     url: `${BASE_URL}/universities/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: "monthly" as const,
     priority: 0.9,
   }));
 
@@ -5129,16 +5884,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 // frontend/app/robots.ts
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://pansgpt.site';
+  const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://pansgpt.site";
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin/', '/super-admin/', '/main/', '/quiz/', '/reader/', '/settings/', '/api/'],
+        userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/admin/",
+          "/super-admin/",
+          "/main/",
+          "/quiz/",
+          "/reader/",
+          "/settings/",
+          "/api/",
+        ],
       },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
@@ -5160,12 +5923,12 @@ export default function robots(): MetadataRoute.Robots {
 ```mermaid
 flowchart TD
     Req["Browser HTTP Request"] --> Router{"Resource Type Router"}
-    
+
     Router -->|R2 PDF Binary Streams| CacheFirst["CacheFirst Strategy\n(RangeRequestsPlugin + LRU Max 30 Decks / 30 Days)"]
     Router -->|Read APIs (/documents, /notes)| NetFirst["NetworkFirst Strategy\n(3-Second Timeout -> Fallback to IndexedDB)"]
     Router -->|Fonts & Static Icons| SWR["StaleWhileRevalidate Strategy\n(Max 365 Days)"]
     Router -->|Mutations & AI SSE Stream| NetOnly["NetworkOnly Strategy\n(Queued in Offline Mutation Outbox if Disconnected)"]
-    
+
     CacheFirst --> R2Cache[("Cache API: 'pans-pdf-cache'")]
     NetFirst --> IDBCache[("IndexedDB: 'pansgpt-idb-v8'")]
     NetOnly --> Outbox[("IndexedDB Outbox Queue\n(Auto-Flushes on Network Reconnect)")]
@@ -5177,9 +5940,16 @@ flowchart TD
 
 ```typescript
 // frontend/app/sw.ts
-import { defaultCache } from '@serwist/next/worker';
-import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist';
-import { Serwist, CacheFirst, NetworkFirst, StaleWhileRevalidate, RangeRequestsPlugin, ExpirationPlugin } from 'serwist';
+import { defaultCache } from "@serwist/next/worker";
+import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
+import {
+  Serwist,
+  CacheFirst,
+  NetworkFirst,
+  StaleWhileRevalidate,
+  RangeRequestsPlugin,
+  ExpirationPlugin,
+} from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -5197,9 +5967,10 @@ const serwist = new Serwist({
   runtimeCaching: [
     // 1. Cloudflare R2 / S3 PDF Stream Caching (Range-Request & LRU 30 Items)
     {
-      matcher: ({ url }) => url.pathname.includes('/documents/') && url.pathname.includes('/stream'),
+      matcher: ({ url }) =>
+        url.pathname.includes("/documents/") && url.pathname.includes("/stream"),
       handler: new CacheFirst({
-        cacheName: 'pans-pdf-streams-v1',
+        cacheName: "pans-pdf-streams-v1",
         plugins: [
           new RangeRequestsPlugin(),
           new ExpirationPlugin({
@@ -5212,13 +5983,13 @@ const serwist = new Serwist({
     },
     // 2. Read-Only API Endpoints (3s Network Timeout fallback to cache)
     {
-      matcher: ({ url }) => url.pathname.startsWith('/api/') && (
-        url.pathname.includes('/documents') ||
-        url.pathname.includes('/notes') ||
-        url.pathname.includes('/me/bootstrap')
-      ),
+      matcher: ({ url }) =>
+        url.pathname.startsWith("/api/") &&
+        (url.pathname.includes("/documents") ||
+          url.pathname.includes("/notes") ||
+          url.pathname.includes("/me/bootstrap")),
       handler: new NetworkFirst({
-        cacheName: 'pans-api-cache-v1',
+        cacheName: "pans-api-cache-v1",
         networkTimeoutSeconds: 3,
         plugins: [
           new ExpirationPlugin({
@@ -5230,9 +6001,10 @@ const serwist = new Serwist({
     },
     // 3. Web Fonts & Google Fonts
     {
-      matcher: ({ url }) => url.origin.includes('fonts.googleapis.com') || url.origin.includes('fonts.gstatic.com'),
+      matcher: ({ url }) =>
+        url.origin.includes("fonts.googleapis.com") || url.origin.includes("fonts.gstatic.com"),
       handler: new StaleWhileRevalidate({
-        cacheName: 'pans-fonts-cache',
+        cacheName: "pans-fonts-cache",
         plugins: [
           new ExpirationPlugin({
             maxEntries: 20,
@@ -5254,7 +6026,7 @@ serwist.addEventListeners();
 
 ```typescript
 // frontend/lib/offline/idb-manager.ts
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from "idb";
 
 interface PansGPTDBSchema extends DBSchema {
   documents: {
@@ -5268,7 +6040,7 @@ interface PansGPTDBSchema extends DBSchema {
       file_url: string;
       cached_at: number;
     };
-    indexes: { 'by-course': string; 'by-level': string };
+    indexes: { "by-course": string; "by-level": string };
   };
   rich_notes: {
     key: string;
@@ -5294,7 +6066,7 @@ interface PansGPTDBSchema extends DBSchema {
     value: {
       id?: number;
       endpoint: string;
-      method: 'POST' | 'PATCH' | 'DELETE' | 'PUT';
+      method: "POST" | "PATCH" | "DELETE" | "PUT";
       payload: any;
       retry_count: number;
       created_at: number;
@@ -5306,21 +6078,21 @@ let dbPromise: Promise<IDBPDatabase<PansGPTDBSchema>> | null = null;
 
 export function getOfflineDB() {
   if (!dbPromise) {
-    dbPromise = openDB<PansGPTDBSchema>('pansgpt-offline-v8', 1, {
+    dbPromise = openDB<PansGPTDBSchema>("pansgpt-offline-v8", 1, {
       upgrade(db) {
-        if (!db.objectStoreNames.contains('documents')) {
-          const docStore = db.createObjectStore('documents', { keyPath: 'id' });
-          docStore.createIndex('by-course', 'course_code');
-          docStore.createIndex('by-level', 'level');
+        if (!db.objectStoreNames.contains("documents")) {
+          const docStore = db.createObjectStore("documents", { keyPath: "id" });
+          docStore.createIndex("by-course", "course_code");
+          docStore.createIndex("by-level", "level");
         }
-        if (!db.objectStoreNames.contains('rich_notes')) {
-          db.createObjectStore('rich_notes', { keyPath: 'document_id' });
+        if (!db.objectStoreNames.contains("rich_notes")) {
+          db.createObjectStore("rich_notes", { keyPath: "document_id" });
         }
-        if (!db.objectStoreNames.contains('chat_sessions')) {
-          db.createObjectStore('chat_sessions', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains("chat_sessions")) {
+          db.createObjectStore("chat_sessions", { keyPath: "id" });
         }
-        if (!db.objectStoreNames.contains('mutation_queue')) {
-          db.createObjectStore('mutation_queue', { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains("mutation_queue")) {
+          db.createObjectStore("mutation_queue", { keyPath: "id", autoIncrement: true });
         }
       },
     });
@@ -5338,17 +6110,18 @@ export function getOfflineDB() {
    - Shows dismissal cooldown (persisted for 7 days if dismissed).
 2. **iOS Safari "Add to Home Screen" Drawer (`IosA2HSDrawer.tsx`)**:
    - Detects iOS Safari user agent (`navigator.standalone === false`).
-   - Renders animated visual guide (*"Tap Share [Icon] -> Add to Home Screen"*).
+   - Renders animated visual guide (_"Tap Share [Icon] -> Add to Home Screen"_).
 3. **Service Worker Version Update Toast (`SWUpdateToast.tsx`)**:
-   - Listens to `updatefound` event and prompts: *"New version of PansGPT available — Reload to update"*.
+   - Listens to `updatefound` event and prompts: _"New version of PansGPT available — Reload to update"_.
    - Dispatches `SKIP_WAITING` on click.
-```
+
+````
 
 ---
 
 ## ✅ SECTION 20 — DESKTOP APP (ELECTRON)
 
-> **Product Stance**: **The High-Performance Native Academic Workstation**  
+> **Product Stance**: **The High-Performance Native Academic Workstation**
 > The PansGPT Desktop Application transforms the learning experience into a resilient, desktop-native academic workstation: **90% offline study capabilities** via embedded SQLite with FTS5 search (offline slides, notes, timetable), WPS/Notion-style multi-document tab strip, OS-level secure credential encryption via `safeStorage`, system tray timetable widget, and automated background updates via `electron-updater`.
 
 ---
@@ -5370,7 +6143,7 @@ flowchart TB
         TrayController["System Tray & Timetable Widget Controller"]
         UpdateManager["Auto-Updater (electron-updater + GitHub Releases)"]
         SecureStorageMgr["SafeStorage Manager (Encrypted Credentials)"]
-        
+
         MainEntry --> IPCRouter
         MainEntry --> TrayController
         MainEntry --> UpdateManager
@@ -5381,7 +6154,7 @@ flowchart TB
         SQLiteEngine[("Embedded SQLite 3 (better-sqlite3)\nWAL Mode + FTS5 Full-Text Index")]
         SyncEngine["Bi-Directional Sync Worker (Supabase <-> SQLite)"]
         LocalFileCache["Local File Storage Manager (%USERDATA%/cache/library/*.pdf)"]
-        
+
         SQLiteEngine <--> SyncEngine
         SyncEngine <--> LocalFileCache
     end
@@ -5392,7 +6165,7 @@ flowchart TB
         DocTabs["WPS/Notion Multi-Document Tab Strip"]
         PDFView["Virtualized PDF Reader & Offline Canvas"]
         NoteEditor["BlockNote Offline Rich Text Notes"]
-        
+
         Preload --> NextApp
         NextApp --> DocTabs
         NextApp --> PDFView
@@ -5408,7 +6181,7 @@ flowchart TB
     SQLiteEngine <--> FS
     LocalFileCache <--> FS
     UpdateManager <-->|HTTPS Update Feed| GHReleases["GitHub Releases API"]
-```
+````
 
 ---
 
@@ -5462,15 +6235,15 @@ CREATE TABLE IF NOT EXISTS sync_mutation_queue (
 
 ```typescript
 // electron/main/safe-storage.ts
-import { safeStorage, app } from 'electron';
-import fs from 'fs';
-import path from 'path';
+import { safeStorage, app } from "electron";
+import fs from "fs";
+import path from "path";
 
-const SESSION_FILE = path.join(app.getPath('userData'), 'secure-session.enc');
+const SESSION_FILE = path.join(app.getPath("userData"), "secure-session.enc");
 
 export function saveEncryptedSession(tokenPayload: string): boolean {
   if (!safeStorage.isEncryptionAvailable()) {
-    throw new Error('OS encryption unavailable on this machine');
+    throw new Error("OS encryption unavailable on this machine");
   }
   const encryptedBuffer = safeStorage.encryptString(tokenPayload);
   fs.writeFileSync(SESSION_FILE, encryptedBuffer);
@@ -5489,7 +6262,7 @@ export function getDecryptedSession(): string | null {
 ### 20.4 System Tray & Cross-Platform Distribution
 
 1. **System Tray Timetable Mini-Widget (`electron/main/tray.ts`)**:
-   - Displays real-time class countdown (*"PCL 421 in 25m • Pharmacy Hall A"*).
+   - Displays real-time class countdown (_"PCL 421 in 25m • Pharmacy Hall A"_).
    - 15-minute background native desktop notifications before scheduled lectures.
    - Global Quick-Note shortcut (`Ctrl+Shift+N` on Windows, `Cmd+Shift+N` on macOS).
 2. **Packaging Matrix (`electron-builder.yml`)**:
@@ -5729,12 +6502,12 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
         req_id = request.headers.get("X-Request-ID") or f"req_{uuid.uuid4().hex[:12]}"
         request.state.request_id = req_id
         start_time = time.perf_counter()
-        
+
         try:
             response: Response = await call_next(request)
             elapsed_ms = (time.perf_counter() - start_time) * 1000
             user = getattr(request.state, "user", None)
-            
+
             logger = structlog.get_logger("http.access")
             logger.info("http_request_finished",
                 request_id=req_id,
@@ -5933,26 +6706,33 @@ $$;
 
 ```typescript
 // frontend/e2e/student-complete-journey.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Student Core Learning Flow', () => {
-  test('Complete Student Journey: Login -> Document Select -> Chat Streaming -> Quiz Submission', async ({ page }) => {
+test.describe("Student Core Learning Flow", () => {
+  test("Complete Student Journey: Login -> Document Select -> Chat Streaming -> Quiz Submission", async ({
+    page,
+  }) => {
     // 1. Authentication
-    await page.goto('/login');
-    await page.fill('input[type="email"]', 'test-student@pansgpt.edu');
-    await page.fill('input[type="password"]', 'PansGptSecurePassword2026!');
+    await page.goto("/login");
+    await page.fill('input[type="email"]', "test-student@pansgpt.edu");
+    await page.fill('input[type="password"]', "PansGptSecurePassword2026!");
     await page.click('button[type="submit"]');
 
     // 2. Dashboard & Document Selection
-    await expect(page).toHaveURL('/home');
-    await page.click('text=PCH 412 - Autonomic Nervous System.pdf');
+    await expect(page).toHaveURL("/home");
+    await page.click("text=PCH 412 - Autonomic Nervous System.pdf");
     await expect(page.locator('[data-testid="pdf-canvas-container"]')).toBeVisible();
 
     // 3. AI Chat Query & Streaming Reasoning
-    await page.fill('textarea[placeholder*="Ask PansGPT"]', 'Explain the mechanism of action of Atropine');
+    await page.fill(
+      'textarea[placeholder*="Ask PansGPT"]',
+      "Explain the mechanism of action of Atropine"
+    );
     await page.click('button[aria-label="Send message"]');
     await expect(page.locator('[data-testid="thinking-block"]')).toBeVisible();
-    await expect(page.locator('.message-bubble:has-text("competitive antagonist")')).toBeVisible({ timeout: 15000 });
+    await expect(page.locator('.message-bubble:has-text("competitive antagonist")')).toBeVisible({
+      timeout: 15000,
+    });
 
     // 4. Instant Quiz Generation & Submission
     await page.click('button:has-text("Generate Quiz on this Topic")');
@@ -5962,7 +6742,7 @@ test.describe('Student Core Learning Flow', () => {
       await page.click('button:has-text("Next")');
     }
     await page.click('button:has-text("Submit Quiz")');
-    await expect(page.locator('text=Quiz Summary')).toBeVisible();
+    await expect(page.locator("text=Quiz Summary")).toBeVisible();
   });
 });
 ```
@@ -6048,7 +6828,7 @@ flowchart TB
 - **Features**:
   - Multi-touch pinch-to-zoom with GPU texture caching (zero memory leaks on 500+ slide decks).
   - Skia/SVG annotation overlay supporting pen ink, highlights, and bookmarks.
-  - Text selection native action bar (*"Explain with PansGPT"*, *"Generate Flashcards from Slide"*, *"Copy Citation"*).
+  - Text selection native action bar (_"Explain with PansGPT"_, _"Generate Flashcards from Slide"_, _"Copy Citation"_).
   - Integrated `@gorhom/bottom-sheet` AI Pharmacological Copilot grounded directly in current slide context.
 
 ---
@@ -6076,7 +6856,7 @@ flowchart TB
 1. **Biometric Security (`expo-local-authentication`)**:
    - Face ID, Touch ID, and Android BiometricPrompt for app lock and sensitive exam reviews.
 2. **Push Notifications (`expo-notifications` + APNs/FCM)**:
-   - 15-minute background timetable alarms (*"PCL 401 in 15m · Pharmacy Hall A"*).
+   - 15-minute background timetable alarms (_"PCL 401 in 15m · Pharmacy Hall A"_).
    - Daily spaced-repetition study reminders based on Leitner retention intervals.
 3. **Handout Camera Scanner (`expo-camera` + ML Kit)**:
    - Snaps physical pharmacy lecture sheets, applies perspective correction, runs on-device OCR, and indexes text into AI RAG.
@@ -6105,16 +6885,3 @@ flowchart TB
 - **Testing Pyramid**:
   - Unit/Component: **Jest** + **React Native Testing Library**.
   - E2E Automation: **Maestro** cross-platform mobile automation suite.
-
-
-
-
-
-
-
-
-
-
-
-
-

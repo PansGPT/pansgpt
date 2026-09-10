@@ -27,30 +27,80 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
+      - name: Typecheck Workspaces
         run: pnpm typecheck
 
-      - name: Lint
+      - name: Lint Workspaces
         run: pnpm lint
 
   api-tests:
-    name: Backend Pytest Suite
+    name: Backend Lint & Pytest Suite
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Install API Dependencies
+      - name: Install Dependencies
         working-directory: apps/api
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+        run: uv sync --frozen --all-extras
 
-      - name: Run Pytest
+      - name: Backend Ruff Lint Check
         working-directory: apps/api
-        run: pytest -v
+        run: uv run ruff check .
+
+      - name: Run Pytest Suite
+        working-directory: apps/api
+        run: uv run pytest -v
+
+  build-web:
+    name: Web Smoke Build Check
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co"
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy"
+      API_BASE_URL: "http://localhost:8000"
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 11
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Web App
+        run: pnpm --filter=@pansgpt/web build
+
+  security-scan:
+    name: Secret & Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true

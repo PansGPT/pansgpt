@@ -85,25 +85,26 @@ pansgpt/
 
 ## 4. Canonical Workflow Commands
 
-| Operation | Command | Scope / Notes |
-|---|---|---|
-| **Install Dependencies** | `pnpm install` | Monorepo root |
-| **Full Build** | `pnpm build` | Turbo pipeline (`dependsOn: ["^build"]`) |
-| **Lint All Workspaces** | `pnpm lint` | ESLint + Ruff |
-| **Typecheck TypeScript** | `pnpm typecheck` | `tsc --noEmit` across all TS workspaces |
-| **Run API Pytest Suite** | `cd apps/api && pytest` | Unit & engine integration tests |
-| **Run Web Vitest Suite** | `pnpm test --filter=web` | UI component tests |
-| **Push DB Migrations** | `pnpm exec supabase db push` | Applies pending migrations to remote Supabase |
-| **Reset Local DB + Seed** | `pnpm exec supabase db reset` | Local Supabase Docker environment |
-| **Generate TS DB Types** | `./tooling/gen-types.sh` | Outputs to `packages/types/src/supabase.ts` |
-| **Run Web Dev Server** | `pnpm dev --filter=web` | `http://localhost:3000` |
-| **Run FastAPI Dev Server** | `cd apps/api && uvicorn app.main:app --reload` | `http://localhost:8000` (`docs` at `/docs`) |
+| Operation                  | Command                                        | Scope / Notes                                 |
+| -------------------------- | ---------------------------------------------- | --------------------------------------------- |
+| **Install Dependencies**   | `pnpm install`                                 | Monorepo root                                 |
+| **Full Build**             | `pnpm build`                                   | Turbo pipeline (`dependsOn: ["^build"]`)      |
+| **Lint All Workspaces**    | `pnpm lint`                                    | ESLint + Ruff                                 |
+| **Typecheck TypeScript**   | `pnpm typecheck`                               | `tsc --noEmit` across all TS workspaces       |
+| **Run API Pytest Suite**   | `cd apps/api && pytest`                        | Unit & engine integration tests               |
+| **Run Web Vitest Suite**   | `pnpm test --filter=web`                       | UI component tests                            |
+| **Push DB Migrations**     | `pnpm exec supabase db push`                   | Applies pending migrations to remote Supabase |
+| **Reset Local DB + Seed**  | `pnpm exec supabase db reset`                  | Local Supabase Docker environment             |
+| **Generate TS DB Types**   | `./tooling/gen-types.sh`                       | Outputs to `packages/types/src/supabase.ts`   |
+| **Run Web Dev Server**     | `pnpm dev --filter=web`                        | `http://localhost:3000`                       |
+| **Run FastAPI Dev Server** | `cd apps/api && uvicorn app.main:app --reload` | `http://localhost:8000` (`docs` at `/docs`)   |
 
 ---
 
 ## 5. Key Architectural Patterns & Guidelines
 
 ### A. Database Design
+
 - **Unified Tables**:
   - `users`: Replaces split `profiles`, `user_roles`, and `lecturer_profiles`. Scoped by `role` enum (`student`, `lecturer`, `university_admin`, `super_admin`).
   - `documents`: Single table handling admin library monographs and lecturer submissions via `document_status` enum.
@@ -112,6 +113,7 @@ pansgpt/
 - **Soft Deletes**: `deleted_at timestamptz` with automated daily 30-day purge worker (`purge_soft_deleted_records()`).
 
 ### B. Document Ingestion Engine (`apps/api/app/engines/ingestion.py`)
+
 - 8-stage pipeline:
   1. Atomic claim lock (`claim_document_ingestion`)
   2. PyMuPDF parsing & metadata extraction
@@ -123,17 +125,20 @@ pansgpt/
   8. Ingestion heartbeat (`heartbeat_document_ingestion`) & status update to `active`.
 
 ### C. AI / LLM Orchestration (`apps/api/app/engines/ai.py`)
+
 - Streaming SSE responses (`text/event-stream`) over HTTP/2.
 - Dynamic AI Skill system (`ai_skills` registry) supporting Dosage Calculator, Drug Interaction Checker, Chemical Reaction Drawer.
 - Multi-tier circuit breaker: Gemma 4 -> Groq LLaMA 3.3 -> OpenRouter.
 
 ### D. Authentication & Security
+
 - Asymmetric RS256 JWKS verification in FastAPI against Supabase Auth.
 - FastAPI dependency role guards: `require_role(["student", "lecturer", "university_admin", "super_admin"])`.
 - Per-client API identity authentication (`X-API-Key` header with SHA-256 validation).
 - Compliance: Zero Data Retention (ZDR) policy for AI prompts; automated DSAR and Right-to-be-Forgotten data deletion handlers.
 
 ### E. Frontend & UI/UX Standards
+
 - Three semantic themes: **Light**, **OLED Dark**, and **Sepia Warm Reading Mode** using OKLCH color tokens in `packages/ui`.
 - 4-layer virtualized PDF Reader with text highlights, snip-to-chat, and sticky AI sidebar.
 - Offline-First PWA via `@serwist/next` with 3 caching tiers and IndexedDB outbox sync.

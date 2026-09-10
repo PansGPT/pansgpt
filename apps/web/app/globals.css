@@ -6,13 +6,13 @@
   --primary: #0284c7;
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --background: #020617;
   --foreground: #f8fafc;
   --primary: #38bdf8;
 }
 
-[data-theme='sepia'] {
+[data-theme="sepia"] {
   --background: #fbf7ee;
   --foreground: #433422;
   --primary: #b45309;

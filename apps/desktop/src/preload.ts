@@ -1,7 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld('pansgptBridge', {
+contextBridge.exposeInMainWorld("pansgptBridge", {
   platform: process.platform,
-  version: '2.0.0',
-  ping: () => ipcRenderer.invoke('ping')
+  version: "2.0.0",
+  ping: () => ipcRenderer.invoke("ping"),
 });
