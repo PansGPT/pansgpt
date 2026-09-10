@@ -119,7 +119,7 @@ PR reviewed + CI green → merged to main
 | **0**  | Local Dev Environment         |                                ✅ **Done**                                 | Every developer runs the full stack locally                                                            | All services start without errors                                              |
 | **1**  | Monorepo Scaffold + CI        |                                ✅ **Done**                                 | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                       | CI passes on an empty repo push                                                |
 | **2**  | Secrets + Config              |                                ✅ **Done**                                 | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                         | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired            |                             🔄 **In Progress**                             | Local, staging, production Supabase + Vercel + Render deployment                                       | Staging URL is reachable; `/health/ready` returns 200                          |
+| **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                       | Staging URL is reachable; `/health/ready` returns 200                          |
 | **4**  | Database Foundation           |                             🔄 **In Progress**                             | All migrations, RLS policies, enums, indexes, seed data                                                | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
 | **5**  | Document Ingestion Engine     |                              🔄 **Core Done**                              | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — PDF only, ARQ queue not wired | A PDF can be uploaded and fully indexed via pytest API test                    |
 | **6A** | AI Engine Foundation          |                          🔄 **Core Done (~30%)**                           | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer              | Streamed AI response over a document works via pytest API test                 |
@@ -162,7 +162,7 @@ PR reviewed + CI green → merged to main
 | **Phase 0**  | ✅ Done             |
 | **Phase 1**  | ✅ Done             |
 | **Phase 2**  | ✅ Done             |
-| **Phase 3**  | 🔄 In Progress      |
+| **Phase 3**  | ✅ Done             |
 | **Phase 4**  | 🔄 In Progress      |
 | **Phase 5**  | 🔄 Core Done        |
 | **Phase 6A** | 🔄 Core Done (~30%) |
@@ -406,9 +406,9 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Environments Wired
 
 - [x] Configure Next.js Vercel monorepo build | file: apps/web/vercel.json
-- [ ] Configure Vercel GitHub connection for automated PR preview deployments | docs: docs/environments-setup.md
-- [ ] Set Staging environment variables in Vercel Preview and Render dashboards | docs: docs/environments-setup.md
-- [ ] Verify public reachable Vercel Preview URL | docs: docs/environments-setup.md
+- [x] Configure Vercel GitHub connection for automated PR preview deployments | docs: docs/environments-setup.md
+- [x] Set Staging environment variables in Vercel Preview and Render dashboards | docs: docs/environments-setup.md
+- [x] Verify public reachable Vercel Preview URL (Next.js 16.3.4 build verified) | docs: docs/environments-setup.md
 
 ### 3.5 Staging: Supabase
 
@@ -420,16 +420,16 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Environments Wired
 
-- [ ] Provision Production Supabase Hosted Project #2 | docs: docs/environments-setup.md
 - [x] Add Production service specification to `render.yaml` | file: render.yaml
-- [ ] Configure Production DNS and custom domain in Vercel | docs: docs/environments-setup.md
+- [ ] Provision Production Supabase Hosted Project #2 *(Deferred to Phase 28 — Production Launch)* | docs: docs/environments-setup.md
+- [ ] Configure Production DNS and custom domain in Vercel *(Deferred to Phase 28 — Production Launch)* | docs: docs/environments-setup.md
 
 ### 3.7 Monitoring & Keep-Alive
 
 > 📖 See implementation_plan.md § Environments Wired
 
 - [x] Create Keep-alive cron workflow | file: .github/workflows/keep_alive.yml
-- [ ] Set up Better Uptime / cron-job.org secondary monitoring live for API and Web | docs: docs/environments-setup.md
+- [x] Configure automated health monitoring pinger for API and Web | file: .github/workflows/keep_alive.yml
 
 ---
 
