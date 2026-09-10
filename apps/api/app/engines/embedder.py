@@ -90,9 +90,12 @@ class GeminiEmbeddingEngine:
                 while retries > 0:
                     try:
                         tasks = [
-                            client.aio.models.embed_content(
-                                model=self.model_name,
-                                contents=t,
+                            asyncio.wait_for(
+                                client.aio.models.embed_content(
+                                    model=self.model_name,
+                                    contents=t,
+                                ),
+                                timeout=4.0,
                             )
                             for t in batch
                         ]
@@ -112,7 +115,7 @@ class GeminiEmbeddingEngine:
                             for item in batch:
                                 all_embeddings.append(self._generate_deterministic_vector(item))
                         else:
-                            await asyncio.sleep(delay)
+                            await asyncio.sleep(0.5)
                             delay *= 2.0
 
             return all_embeddings

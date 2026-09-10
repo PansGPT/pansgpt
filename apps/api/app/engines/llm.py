@@ -180,7 +180,7 @@ class MultiTierLlmEngine:
                 logger.info("llm_attempt_tier1_gemma_31b", model=self.primary_model)
                 text = await asyncio.wait_for(
                     self._call_gemma(self.primary_model, system_prompt, user_message),
-                    timeout=8.0,
+                    timeout=3.0,
                 )
                 active_provider = "google"
                 active_model = self.primary_model
@@ -223,7 +223,7 @@ class MultiTierLlmEngine:
                 logger.info("llm_attempt_tier1b_gemma_26b", model=self.secondary_model)
                 text = await asyncio.wait_for(
                     self._call_gemma(self.secondary_model, system_prompt, user_message),
-                    timeout=8.0,
+                    timeout=3.0,
                 )
                 active_provider = "google"
                 active_model = self.secondary_model
