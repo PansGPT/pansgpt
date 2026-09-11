@@ -121,7 +121,7 @@ PR reviewed + CI green → merged to main
 | **2**  | Secrets + Config              |                                ✅ **Done**                                 | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                          | App refuses to start with missing vars                                         |
 | **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                        | Staging URL is reachable; `/health/ready` returns 200                          |
 | **4**  | Database Foundation           |                                ✅ **Done**                                 | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine     |                              🔄 **Core Done**                              | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — PDF only, ARQ queue not wired  | A PDF can be uploaded and fully indexed via pytest API test                    |
+| **5**  | Document Ingestion Engine     |                               ⏳ **Pending**                               | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — PDF only, ARQ queue not wired  | A PDF can be uploaded and fully indexed via pytest API test                    |
 | **6A** | AI Engine Foundation          |                          🔄 **Core Done (~30%)**                           | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer               | Streamed AI response over a document works via pytest API test                 |
 | **6B** | AI Engine Advanced            |                               ⏳ **Pending**                               | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                        | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend                  |                                 ⏳ Pending                                 | JWKS, JWT validation, RBAC role guards, per-client API keys                                             | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
@@ -164,7 +164,7 @@ PR reviewed + CI green → merged to main
 | **Phase 2**  | ✅ Done             |
 | **Phase 3**  | ✅ Done             |
 | **Phase 4**  | ✅ Done             |
-| **Phase 5**  | 🔄 Core Done        |
+| **Phase 5**  | ⏳ Pending          |
 | **Phase 6A** | 🔄 Core Done (~30%) |
 | **Phase 6B** | ⏳ Pending          |
 
@@ -622,12 +622,12 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement S3-Compatible Client Engine | file: apps/api/app/engines/storage.py
-- [x] Implement Canonical Storage Key Format `build_document_storage_key()`
-- [x] Implement Presigned Upload URL (PUT) `generate_presigned_put_url()`
-- [x] Implement Presigned Streaming URL (GET) `generate_presigned_get_url()`
-- [x] Implement Direct Byte Transfer Methods (`download_bytes()`, `upload_bytes()`, `object_exists()`, `delete_object()`)
-- [x] Implement Bucket Name Scoping based on environment
+- [ ] Implement S3-Compatible Client Engine | file: apps/api/app/engines/storage.py
+- [ ] Implement Canonical Storage Key Format `build_document_storage_key()`
+- [ ] Implement Presigned Upload URL (PUT) `generate_presigned_put_url()`
+- [ ] Implement Presigned Streaming URL (GET) `generate_presigned_get_url()`
+- [ ] Implement Direct Byte Transfer Methods (`download_bytes()`, `upload_bytes()`, `object_exists()`, `delete_object()`)
+- [ ] Implement Bucket Name Scoping based on environment
 - [ ] Implement Office Document Converted Path (`converted/{document_id}.pdf`) directory structure
 - [ ] Implement Direct Upload Complete Callback (`POST /api/v1/library/documents/{id}/complete`) API endpoint
 - [ ] Automate R2 CORS rules for web frontend origins
@@ -636,10 +636,10 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement `POST /api/v1/library/upload` (mounted at `/library/upload` instead of `/documents/upload`) | file: apps/api/app/routers/library.py
-- [x] Implement `GET /api/v1/library/{document_id}/pdf-url` | file: apps/api/app/routers/library.py
-- [x] Implement `GET /api/v1/library/documents` | file: apps/api/app/routers/library.py
-- [x] Implement `POST /api/v1/library/{document_id}/reembed` | file: apps/api/app/routers/library.py
+- [ ] Implement `POST /api/v1/library/upload` (mounted at `/library/upload` instead of `/documents/upload`) | file: apps/api/app/routers/library.py
+- [ ] Implement `GET /api/v1/library/{document_id}/pdf-url` | file: apps/api/app/routers/library.py
+- [ ] Implement `GET /api/v1/library/documents` | file: apps/api/app/routers/library.py
+- [ ] Implement `POST /api/v1/library/{document_id}/reembed` | file: apps/api/app/routers/library.py
 - [ ] Create `POST /api/v1/library/{id}/confirm-upload` or `process` endpoint to enqueue the background ingestion job
 - [ ] Implement `GET /api/v1/library/documents/{id}` endpoint to fetch single document metadata
 - [ ] Implement `PATCH /api/v1/library/documents/{id}` admin update endpoint
@@ -651,11 +651,11 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement Stage 1: Upload & Immutable R2 Storage
-- [x] Implement Stage 2: Per-Page Text-Layer Check (`check_page_text_layer`) | file: apps/api/app/engines/extractor.py
-- [x] Implement Stage 3a: Native Extraction + Image Scan (`extract_embedded_images()`)
-- [x] Implement Stage 3b: Scanned Canvas Render (`page.get_pixmap()`)
-- [x] Implement Stage 6: Dual-Path Table Extraction (Native Path)
+- [ ] Implement Stage 1: Upload & Immutable R2 Storage
+- [ ] Implement Stage 2: Per-Page Text-Layer Check (`check_page_text_layer`) | file: apps/api/app/engines/extractor.py
+- [ ] Implement Stage 3a: Native Extraction + Image Scan (`extract_embedded_images()`)
+- [ ] Implement Stage 3b: Scanned Canvas Render (`page.get_pixmap()`)
+- [ ] Implement Stage 6: Dual-Path Table Extraction (Native Path)
 - [ ] Implement Local OCR-First Step ($0 Cost) before falling back to Vision LLM
 
 ### 5.4 Text Extraction (Office: DOCX, PPTX, TXT, CSV, MD)
@@ -669,18 +669,18 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement Stage 4: Classify-Then-Route (`image_classifier.classify_and_process()`) | file: apps/api/app/engines/classifier.py
-- [x] Implement Stage 5: Verbatim Transcription Prompt (Gemini Vision)
-- [x] Implement Stage 6: Image table extraction via Vision Path
+- [ ] Implement Stage 4: Classify-Then-Route (`image_classifier.classify_and_process()`) | file: apps/api/app/engines/classifier.py
+- [ ] Implement Stage 5: Verbatim Transcription Prompt (Gemini Vision)
+- [ ] Implement Stage 6: Image table extraction via Vision Path
 
 ### 5.6 Chunking Strategy
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
-- [x] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
-- [x] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
-- [x] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
+- [ ] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
+- [ ] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
+- [ ] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
+- [ ] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
 - [ ] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
 - [ ] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
 
@@ -688,19 +688,19 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement Gemini 3072d Embedder | file: apps/api/app/engines/embedder.py
-- [x] Implement API Batching (up to 32 items)
-- [x] Implement Deterministic Test Fallback for offline/dev CI execution
-- [x] Implement Database Persistence (pages, segments, elements, chunks)
+- [ ] Implement Gemini 3072d Embedder | file: apps/api/app/engines/embedder.py
+- [ ] Implement API Batching (up to 32 items)
+- [ ] Implement Deterministic Test Fallback for offline/dev CI execution
+- [ ] Implement Database Persistence (pages, segments, elements, chunks)
 - [ ] Implement Batch Upsert Optimization for database writes
 
 ### 5.8 ARQ Background Worker
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Configure ARQ Worker Settings (`WorkerSettings`) | file: apps/api/workers/settings.py
-- [x] Configure Worker Concurrency Limit (`max_jobs = 3`)
-- [x] Define Worker Job (`ingest_document_job(ctx, document_id, storage_key)`) | file: apps/api/workers/tasks.py
+- [ ] Configure ARQ Worker Settings (`WorkerSettings`) | file: apps/api/workers/settings.py
+- [ ] Configure Worker Concurrency Limit (`max_jobs = 3`)
+- [ ] Define Worker Job (`ingest_document_job(ctx, document_id, storage_key)`) | file: apps/api/workers/tasks.py
 - [ ] Create `enqueue_ingestion_job(document_id, storage_key)` producer to enqueue jobs into Redis via ARQ
 - [ ] Implement Worker Concurrency Claim Call (`claim_document_ingestion`) inside the worker job
 - [ ] Implement Worker Heartbeat Loop (`heartbeat_document_ingestion`) inside the worker job
@@ -725,7 +725,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Pass all 7 tests in `apps/api/tests/test_ingestion.py` (Storage key generation, Chunker atomic rules, Text splitting, Embedder dimensions, Upload endpoints, Full 8-stage pipeline)
+- [ ] Pass all 7 tests in `apps/api/tests/test_ingestion.py` (Storage key generation, Chunker atomic rules, Text splitting, Embedder dimensions, Upload endpoints, Full 8-stage pipeline)
 - [ ] Write Worker Job Integration Test
 - [ ] Write Worker Lock & Heartbeat Tests
 - [ ] Write Worker Error & Failure State Test
