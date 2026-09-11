@@ -274,8 +274,13 @@ class DocumentExtractor:
                             slide_texts.append(text)
                 elif shape.has_table:
                     t = shape.table
-                    headers = [cell.text.strip() for cell in t.rows[0].cells]
-                    rows = [[cell.text.strip() for cell in row.cells] for row in t.rows[1:]]
+                    all_rows = list(t.rows)
+                    headers = [cell.text.strip() for cell in all_rows[0].cells] if all_rows else []
+                    rows = (
+                        [[cell.text.strip() for cell in row.cells] for row in all_rows[1:]]
+                        if len(all_rows) > 1
+                        else []
+                    )
                     header_line = "| " + " | ".join(headers) + " |"
                     separator_line = "| " + " | ".join(["---"] * len(headers)) + " |"
                     row_lines = ["| " + " | ".join(r) + " |" for r in rows]
