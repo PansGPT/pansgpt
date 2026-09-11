@@ -33,11 +33,19 @@ def build_document_storage_key(
     return f"universities/{university_id}/courses/{clean_course}/original/{document_id}.{ext}"
 
 
-def build_converted_storage_key(document_id: str) -> str:
+def build_converted_storage_key(
+    document_id: str,
+    university_id: str | None = None,
+    course_code: str | None = None,
+) -> str:
     """
     Construct canonical converted R2 key for Office documents converted to PDF:
-    converted/{document_id}.pdf
+    universities/{university_id}/courses/{course_code}/converted/{document_id}.pdf
+    with fallback to converted/{document_id}.pdf if university/course not provided.
     """
+    if university_id and course_code:
+        clean_course = sanitize_filename_part(course_code)
+        return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"
     return f"converted/{document_id}.pdf"
 
 

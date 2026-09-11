@@ -458,5 +458,38 @@ class DocumentExtractor:
         # Default fallback to PDF
         return self.process_pdf(file_bytes)
 
+    def convert_to_pdf(self, file_bytes: bytes, file_format: str = "pdf") -> bytes:
+        """
+        Converts non-PDF Office documents (DOCX, PPTX) and text files to standard PDF bytes
+        using PyMuPDF's high-fidelity conversion engine. If already PDF, returns bytes unchanged.
+        """
+        fmt = file_format.lower().lstrip(".")
+        if fmt == "pdf":
+            return file_bytes
+
+        if fmt in ("docx", "doc", "pptx", "ppt"):
+            doc = fitz.open(stream=file_bytes, filetype=fmt)
+            pdf_bytes = doc.convert_to_pdf()
+            doc.close()
+            return pdf_bytes
+
+        if fmt in ("txt", "text", "md", "markdown", "csv"):
+            doc = fitz.open()
+            text_content = file_bytes.decode("utf-8", errors="replace")
+            lines = text_content.splitlines()
+            page = doc.new_page(width=595, height=842)
+            y = 50
+            for line in lines:
+                if y > 790:
+                    page = doc.new_page(width=595, height=842)
+                    y = 50
+                page.insert_text((50, y), line[:120], fontsize=10)
+                y += 14
+            pdf_bytes = doc.tobytes()
+            doc.close()
+            return pdf_bytes
+
+        return file_bytes
+
 
 document_extractor = DocumentExtractor()
