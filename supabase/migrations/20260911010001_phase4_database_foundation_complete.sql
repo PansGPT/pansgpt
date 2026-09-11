@@ -451,6 +451,7 @@ CREATE POLICY credit_purchases_owner ON public.credit_purchases
     FOR SELECT TO authenticated
     USING (user_id = auth.uid() OR public.current_user_has_role('super_admin'));
 
+DROP POLICY IF EXISTS credit_purchases_insert ON public.credit_purchases;
 CREATE POLICY credit_purchases_insert ON public.credit_purchases
     FOR INSERT TO authenticated
     WITH CHECK (user_id = auth.uid());
@@ -499,6 +500,7 @@ CREATE POLICY ticket_replies_party ON public.support_ticket_replies
         )
     );
 
+DROP POLICY IF EXISTS ticket_replies_insert ON public.support_ticket_replies;
 CREATE POLICY ticket_replies_insert ON public.support_ticket_replies
     FOR INSERT TO authenticated
     WITH CHECK (sender_id = auth.uid());
