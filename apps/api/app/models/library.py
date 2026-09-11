@@ -69,3 +69,22 @@ class DocumentDetailResponse(BaseModel):
     semester: str | None = None
     created_at: str
     segments: list[DocumentSegmentResponse] | None = None
+
+
+class ConfirmUploadResponse(BaseModel):
+    document_id: str
+    job_id: str | None = None
+    mode: Literal["queued", "sync", "no_db"]
+    message: str
+
+
+class DocumentPatchRequest(BaseModel):
+    title: str | None = Field(None, min_length=2, max_length=255)
+    course_code: str | None = Field(None, min_length=2, max_length=20)
+    course_title: str | None = Field(None, min_length=2, max_length=255)
+    topic: str | None = Field(None, max_length=255)
+    lecturer_name: str | None = Field(None, max_length=150)
+    target_levels: list[str] | None = None
+    academic_session: str | None = None
+    semester: Literal["first", "second"] | None = None
+    status: str | None = None

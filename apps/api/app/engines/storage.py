@@ -33,6 +33,14 @@ def build_document_storage_key(
     return f"universities/{university_id}/courses/{clean_course}/original/{document_id}.{ext}"
 
 
+def build_converted_storage_key(document_id: str) -> str:
+    """
+    Construct canonical converted R2 key for Office documents converted to PDF:
+    converted/{document_id}.pdf
+    """
+    return f"converted/{document_id}.pdf"
+
+
 class R2StorageEngine:
     def __init__(self):
         self._session = aioboto3.Session()
@@ -144,6 +152,39 @@ class R2StorageEngine:
                 await s3.delete_object(
                     Bucket=settings.r2_bucket_name,
                     Key=key,
+                )
+                return True
+        except Exception:
+            return False
+
+    async def put_bucket_cors(self, allowed_origins: list[str] | None = None) -> bool:
+        """
+        Configure CORS rules on the R2 bucket to allow web frontend direct PUT/GET uploads.
+        """
+        origins = allowed_origins or [
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "https://pansgpt.com",
+            "https://app.pansgpt.com",
+            "https://staging.pansgpt.com",
+            "https://*.vercel.app",
+        ]
+        cors_configuration = {
+            "CORSRules": [
+                {
+                    "AllowedHeaders": ["*"],
+                    "AllowedMethods": ["GET", "PUT", "POST", "HEAD"],
+                    "AllowedOrigins": origins,
+                    "ExposeHeaders": ["ETag"],
+                    "MaxAgeSeconds": 3600,
+                }
+            ]
+        }
+        try:
+            async with self.get_client() as s3:
+                await s3.put_bucket_cors(
+                    Bucket=settings.r2_bucket_name,
+                    CORSConfiguration=cors_configuration,
                 )
                 return True
         except Exception:

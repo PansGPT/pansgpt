@@ -114,39 +114,39 @@ PR reviewed + CI green → merged to main
 
 ## 📋 Phase Overview
 
-|   #    | Phase                         |                                   Status                                   | What Gets Built                                                                                         | Gate Before Continuing                                                         |
-| :----: | ----------------------------- | :------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **0**  | Local Dev Environment         |                                ✅ **Done**                                 | Every developer runs the full stack locally                                                             | All services start without errors                                              |
-| **1**  | Monorepo Scaffold + CI        |                                ✅ **Done**                                 | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                        | CI passes on an empty repo push                                                |
-| **2**  | Secrets + Config              |                                ✅ **Done**                                 | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                          | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                        | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           |                                ✅ **Done**                                 | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine     |                               ⏳ **Pending**                               | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — PDF only, ARQ queue not wired  | A PDF can be uploaded and fully indexed via pytest API test                    |
-| **6A** | AI Engine Foundation          |                          🔄 **Core Done (~30%)**                           | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer               | Streamed AI response over a document works via pytest API test                 |
-| **6B** | AI Engine Advanced            |                               ⏳ **Pending**                               | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                        | All tools callable by LLM; agentic loop works with 5 turns                     |
-| **7**  | Auth Backend                  |                                 ⏳ Pending                                 | JWKS, JWT validation, RBAC role guards, per-client API keys                                             | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI       |         Thin auth + upload + chat — proves all 3 engines together          | Student signs up, uploads a doc, gets an AI response — on staging                                       |
-| **9**  | Design System + App Shell     |           OKLCH tokens, atomic components, 3 themes, navigation            | Core screens navigable with real design                                                                 |
-| **10** | PDF Reader (Web)              |      4-layer virtualized reader, highlights, AI sidebar, snip-to-chat      | Student opens, reads, highlights, and Snips to Chat                                                     |
-| **11** | AI Chat Interface (Web)       | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills | Student chats with the AI; branch navigation works                                                      |
-| **12** | Learn Mode (Web)              |        Section outline, explanations, check questions, mastery ring        | Student studies a section and answers recall checks                                                     |
-| **13** | Quiz System (Web)             |       Async ARQ job, 5 formats, timed interface, results, share card       | Student generates and completes a quiz                                                                  |
-| **14** | Notes (Web)                   |            Tiptap editor, idb-keyval offline, sync-on-reconnect            | Student writes, edits, and syncs a note                                                                 |
-| **15** | Timetable + Dashboard (Web)   |          Schedule engine, home page, recents carousel, tasks list          | Home page shows real timetable and recent activity                                                      |
-| **16** | Portals                       |             Lecturer submission, admin management, super admin             | Lecturer submits → admin approves → document enters ingestion                                           |
-| **17** | Settings + Profile + Feedback |      Profile, preferences, session management, CSAT, feedback triage       | Student updates profile and theme; feedback lands in admin                                              |
-| **18** | Credits + Payments            |             Double-entry credit ledger, Paystack, Flutterwave              | Student purchases credits and spends them on AI                                                         |
-| **19** | Email System                  |              Resend, React Email templates, ARQ worker queue               | Welcome email arrives after signup                                                                      |
-| **20** | Mobile (Expo)                 |          Auth, PDF reader, chat, quiz, notes, timetable, widgets           | Full student journey works on iOS + Android                                                             |
-| **21** | Desktop (Electron)            |          Offline SQLite, PDF cache, background sync, auto-updater          | Full offline study session works without internet                                                       |
-| **22** | PWA + Offline (Web)           |              `@serwist/next`, caching tiers, IndexedDB outbox              | Web app installs and key flows work offline                                                             |
-| **23** | Public Pages + SEO            |           Landing, pricing, about, JSON-LD, Open Graph, sitemap            | Public pages indexed by Google with correct metadata                                                    |
-| **24** | Security Hardening            |           CORS, headers, rate limits, NDPA 2023, dependency scan           | Security checklist cleared                                                                              |
-| **25** | Observability + Monitoring    |           Sentry, PostHog, Better Uptime, structlog, keep-alive            | Errors visible, events tracked, uptime alerting live                                                    |
-| **26** | Performance + Load Testing    |                      Lighthouse, k6, EXPLAIN ANALYZE                       | p95 API < 500ms; Lighthouse performance > 90                                                            |
-| **27** | Pre-Launch Checklist          |                        Full checklist verification                         | Every item checked                                                                                      |
-| **28** | Production Launch 🚀          |                 DNS live, migrations applied, smoke tested                 | Real students using the app                                                                             |
-| **29** | Post-Launch Iteration         |               Feature flags, DORA metrics, incident process                | Sustainable delivery culture active                                                                     |
+|   #    | Phase                         |                                   Status                                   | What Gets Built                                                                                            | Gate Before Continuing                                                         |
+| :----: | ----------------------------- | :------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **0**  | Local Dev Environment         |                                ✅ **Done**                                 | Every developer runs the full stack locally                                                                | All services start without errors                                              |
+| **1**  | Monorepo Scaffold + CI        |                                ✅ **Done**                                 | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                           | CI passes on an empty repo push                                                |
+| **2**  | Secrets + Config              |                                ✅ **Done**                                 | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                             | App refuses to start with missing vars                                         |
+| **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
+| **4**  | Database Foundation           |                                ✅ **Done**                                 | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **5**  | Document Ingestion Engine     |                                ✅ **Done**                                 | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    |
+| **6A** | AI Engine Foundation          |                          🔄 **Core Done (~30%)**                           | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
+| **6B** | AI Engine Advanced            |                               ⏳ **Pending**                               | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **7**  | Auth Backend                  |                                 ⏳ Pending                                 | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| **8**  | Walking Skeleton Web UI       |         Thin auth + upload + chat — proves all 3 engines together          | Student signs up, uploads a doc, gets an AI response — on staging                                          |
+| **9**  | Design System + App Shell     |           OKLCH tokens, atomic components, 3 themes, navigation            | Core screens navigable with real design                                                                    |
+| **10** | PDF Reader (Web)              |      4-layer virtualized reader, highlights, AI sidebar, snip-to-chat      | Student opens, reads, highlights, and Snips to Chat                                                        |
+| **11** | AI Chat Interface (Web)       | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills | Student chats with the AI; branch navigation works                                                         |
+| **12** | Learn Mode (Web)              |        Section outline, explanations, check questions, mastery ring        | Student studies a section and answers recall checks                                                        |
+| **13** | Quiz System (Web)             |       Async ARQ job, 5 formats, timed interface, results, share card       | Student generates and completes a quiz                                                                     |
+| **14** | Notes (Web)                   |            Tiptap editor, idb-keyval offline, sync-on-reconnect            | Student writes, edits, and syncs a note                                                                    |
+| **15** | Timetable + Dashboard (Web)   |          Schedule engine, home page, recents carousel, tasks list          | Home page shows real timetable and recent activity                                                         |
+| **16** | Portals                       |             Lecturer submission, admin management, super admin             | Lecturer submits → admin approves → document enters ingestion                                              |
+| **17** | Settings + Profile + Feedback |      Profile, preferences, session management, CSAT, feedback triage       | Student updates profile and theme; feedback lands in admin                                                 |
+| **18** | Credits + Payments            |             Double-entry credit ledger, Paystack, Flutterwave              | Student purchases credits and spends them on AI                                                            |
+| **19** | Email System                  |              Resend, React Email templates, ARQ worker queue               | Welcome email arrives after signup                                                                         |
+| **20** | Mobile (Expo)                 |          Auth, PDF reader, chat, quiz, notes, timetable, widgets           | Full student journey works on iOS + Android                                                                |
+| **21** | Desktop (Electron)            |          Offline SQLite, PDF cache, background sync, auto-updater          | Full offline study session works without internet                                                          |
+| **22** | PWA + Offline (Web)           |              `@serwist/next`, caching tiers, IndexedDB outbox              | Web app installs and key flows work offline                                                                |
+| **23** | Public Pages + SEO            |           Landing, pricing, about, JSON-LD, Open Graph, sitemap            | Public pages indexed by Google with correct metadata                                                       |
+| **24** | Security Hardening            |           CORS, headers, rate limits, NDPA 2023, dependency scan           | Security checklist cleared                                                                                 |
+| **25** | Observability + Monitoring    |           Sentry, PostHog, Better Uptime, structlog, keep-alive            | Errors visible, events tracked, uptime alerting live                                                       |
+| **26** | Performance + Load Testing    |                      Lighthouse, k6, EXPLAIN ANALYZE                       | p95 API < 500ms; Lighthouse performance > 90                                                               |
+| **27** | Pre-Launch Checklist          |                        Full checklist verification                         | Every item checked                                                                                         |
+| **28** | Production Launch 🚀          |                 DNS live, migrations applied, smoke tested                 | Real students using the app                                                                                |
+| **29** | Post-Launch Iteration         |               Feature flags, DORA metrics, incident process                | Sustainable delivery culture active                                                                        |
 
 ---
 
@@ -164,7 +164,7 @@ PR reviewed + CI green → merged to main
 | **Phase 2**  | ✅ Done             |
 | **Phase 3**  | ✅ Done             |
 | **Phase 4**  | ✅ Done             |
-| **Phase 5**  | ⏳ Pending          |
+| **Phase 5**  | ✅ Done             |
 | **Phase 6A** | 🔄 Core Done (~30%) |
 | **Phase 6B** | ⏳ Pending          |
 
@@ -611,10 +611,10 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Section 2 — System Architecture (L819)
 
-- [ ] Read and understand Section 2 (System Architecture) in full before building engines
-- [ ] Understand the 3-tier environment system: Local → Staging → Production
-- [ ] Understand the multi-client API architecture: all AI calls go through FastAPI, never directly from clients
-- [ ] Understand the data flow: Upload → R2 → ARQ Worker → Supabase → Vector Index → RAG → LLM → SSE → Client
+- [x] Read and understand Section 2 (System Architecture) in full before building engines
+- [x] Understand the 3-tier environment system: Local → Staging → Production
+- [x] Understand the multi-client API architecture: all AI calls go through FastAPI, never directly from clients
+- [x] Understand the data flow: Upload → R2 → ARQ Worker → Supabase → Vector Index → RAG → LLM → SSE → Client
 
 ---
 
@@ -622,116 +622,116 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement S3-Compatible Client Engine | file: apps/api/app/engines/storage.py
-- [ ] Implement Canonical Storage Key Format `build_document_storage_key()`
-- [ ] Implement Presigned Upload URL (PUT) `generate_presigned_put_url()`
-- [ ] Implement Presigned Streaming URL (GET) `generate_presigned_get_url()`
-- [ ] Implement Direct Byte Transfer Methods (`download_bytes()`, `upload_bytes()`, `object_exists()`, `delete_object()`)
-- [ ] Implement Bucket Name Scoping based on environment
-- [ ] Implement Office Document Converted Path (`converted/{document_id}.pdf`) directory structure
-- [ ] Implement Direct Upload Complete Callback (`POST /api/v1/library/documents/{id}/complete`) API endpoint
-- [ ] Automate R2 CORS rules for web frontend origins
+- [x] Implement S3-Compatible Client Engine | file: apps/api/app/engines/storage.py
+- [x] Implement Canonical Storage Key Format `build_document_storage_key()`
+- [x] Implement Presigned Upload URL (PUT) `generate_presigned_put_url()`
+- [x] Implement Presigned Streaming URL (GET) `generate_presigned_get_url()`
+- [x] Implement Direct Byte Transfer Methods (`download_bytes()`, `upload_bytes()`, `object_exists()`, `delete_object()`)
+- [x] Implement Bucket Name Scoping based on environment
+- [x] Implement Office Document Converted Path (`converted/{document_id}.pdf`) directory structure
+- [x] Implement Direct Upload Complete Callback (`POST /api/v1/library/documents/{id}/complete`) API endpoint
+- [x] Automate R2 CORS rules for web frontend origins
 
 ### 5.2 Document Upload API
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement `POST /api/v1/library/upload` (mounted at `/library/upload` instead of `/documents/upload`) | file: apps/api/app/routers/library.py
-- [ ] Implement `GET /api/v1/library/{document_id}/pdf-url` | file: apps/api/app/routers/library.py
-- [ ] Implement `GET /api/v1/library/documents` | file: apps/api/app/routers/library.py
-- [ ] Implement `POST /api/v1/library/{document_id}/reembed` | file: apps/api/app/routers/library.py
-- [ ] Create `POST /api/v1/library/{id}/confirm-upload` or `process` endpoint to enqueue the background ingestion job
-- [ ] Implement `GET /api/v1/library/documents/{id}` endpoint to fetch single document metadata
-- [ ] Implement `PATCH /api/v1/library/documents/{id}` admin update endpoint
-- [ ] Implement `DELETE /api/v1/library/documents/{id}` admin soft-delete endpoint
-- [ ] Implement `GET /api/v1/library/documents/{id}/segments` endpoint
-- [ ] Resolve Endpoint Path Discrepancy (change `/api/v1/library/upload` to `/api/v1/documents/upload` if needed)
+- [x] Implement `POST /api/v1/library/upload` (mounted at `/library/upload` instead of `/documents/upload`) | file: apps/api/app/routers/library.py
+- [x] Implement `GET /api/v1/library/{document_id}/pdf-url` | file: apps/api/app/routers/library.py
+- [x] Implement `GET /api/v1/library/documents` | file: apps/api/app/routers/library.py
+- [x] Implement `POST /api/v1/library/{document_id}/reembed` | file: apps/api/app/routers/library.py
+- [x] Create `POST /api/v1/library/{id}/confirm-upload` or `process` endpoint to enqueue the background ingestion job
+- [x] Implement `GET /api/v1/library/documents/{id}` endpoint to fetch single document metadata
+- [x] Implement `PATCH /api/v1/library/documents/{id}` admin update endpoint
+- [x] Implement `DELETE /api/v1/library/documents/{id}` admin soft-delete endpoint
+- [x] Implement `GET /api/v1/library/documents/{id}/segments` endpoint
+- [x] Resolve Endpoint Path Discrepancy (change `/api/v1/library/upload` to `/api/v1/documents/upload` if needed)
 
 ### 5.3 Text Extraction (PDF)
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement Stage 1: Upload & Immutable R2 Storage
-- [ ] Implement Stage 2: Per-Page Text-Layer Check (`check_page_text_layer`) | file: apps/api/app/engines/extractor.py
-- [ ] Implement Stage 3a: Native Extraction + Image Scan (`extract_embedded_images()`)
-- [ ] Implement Stage 3b: Scanned Canvas Render (`page.get_pixmap()`)
-- [ ] Implement Stage 6: Dual-Path Table Extraction (Native Path)
-- [ ] Implement Local OCR-First Step ($0 Cost) before falling back to Vision LLM
+- [x] Implement Stage 1: Upload & Immutable R2 Storage
+- [x] Implement Stage 2: Per-Page Text-Layer Check (`check_page_text_layer`) | file: apps/api/app/engines/extractor.py
+- [x] Implement Stage 3a: Native Extraction + Image Scan (`extract_embedded_images()`)
+- [x] Implement Stage 3b: Scanned Canvas Render (`page.get_pixmap()`)
+- [x] Implement Stage 6: Dual-Path Table Extraction (Native Path)
+- [x] Implement Local OCR-First Step ($0 Cost) before falling back to Vision LLM
 
 ### 5.4 Text Extraction (Office: DOCX, PPTX, TXT, CSV, MD)
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Add Multi-Format Extractors (DOCX, PPTX, TXT, CSV, MD) support
-- [ ] Add `python-docx`, `python-pptx`, `openpyxl` dependencies
+- [x] Add Multi-Format Extractors (DOCX, PPTX, TXT, CSV, MD) support
+- [x] Add `python-docx`, `python-pptx`, `openpyxl` dependencies
 
 ### 5.5 Vision Classification (Gemini)
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement Stage 4: Classify-Then-Route (`image_classifier.classify_and_process()`) | file: apps/api/app/engines/classifier.py
-- [ ] Implement Stage 5: Verbatim Transcription Prompt (Gemini Vision)
-- [ ] Implement Stage 6: Image table extraction via Vision Path
+- [x] Implement Stage 4: Classify-Then-Route (`image_classifier.classify_and_process()`) | file: apps/api/app/engines/classifier.py
+- [x] Implement Stage 5: Verbatim Transcription Prompt (Gemini Vision)
+- [x] Implement Stage 6: Image table extraction via Vision Path
 
 ### 5.6 Chunking Strategy
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
-- [ ] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
-- [ ] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
-- [ ] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
-- [ ] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
-- [ ] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
+- [x] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
+- [x] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
+- [x] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
+- [x] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
+- [x] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
+- [x] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
 
 ### 5.7 Embedding (Gemini 3072d)
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement Gemini 3072d Embedder | file: apps/api/app/engines/embedder.py
-- [ ] Implement API Batching (up to 32 items)
-- [ ] Implement Deterministic Test Fallback for offline/dev CI execution
-- [ ] Implement Database Persistence (pages, segments, elements, chunks)
-- [ ] Implement Batch Upsert Optimization for database writes
+- [x] Implement Gemini 3072d Embedder | file: apps/api/app/engines/embedder.py
+- [x] Implement API Batching (up to 32 items)
+- [x] Implement Deterministic Test Fallback for offline/dev CI execution
+- [x] Implement Database Persistence (pages, segments, elements, chunks)
+- [x] Implement Batch Upsert Optimization for database writes
 
 ### 5.8 ARQ Background Worker
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Configure ARQ Worker Settings (`WorkerSettings`) | file: apps/api/workers/settings.py
-- [ ] Configure Worker Concurrency Limit (`max_jobs = 3`)
-- [ ] Define Worker Job (`ingest_document_job(ctx, document_id, storage_key)`) | file: apps/api/workers/tasks.py
-- [ ] Create `enqueue_ingestion_job(document_id, storage_key)` producer to enqueue jobs into Redis via ARQ
-- [ ] Implement Worker Concurrency Claim Call (`claim_document_ingestion`) inside the worker job
-- [ ] Implement Worker Heartbeat Loop (`heartbeat_document_ingestion`) inside the worker job
-- [ ] Implement Automatic Retries (Exponential backoff) in the worker job
+- [x] Configure ARQ Worker Settings (`WorkerSettings`) | file: apps/api/workers/settings.py
+- [x] Configure Worker Concurrency Limit (`max_jobs = 3`)
+- [x] Define Worker Job (`ingest_document_job(ctx, document_id, storage_key)`) | file: apps/api/workers/tasks.py
+- [x] Create `enqueue_ingestion_job(document_id, storage_key)` producer to enqueue jobs into Redis via ARQ
+- [x] Implement Worker Concurrency Claim Call (`claim_document_ingestion`) inside the worker job
+- [x] Implement Worker Heartbeat Loop (`heartbeat_document_ingestion`) inside the worker job
+- [x] Implement Automatic Retries (Exponential backoff) in the worker job
 
 ### 5.9 Document Status & Progress Tracking
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Implement Intermediate Progress Updates passing a callback to write to `documents.embedding_progress`
-- [ ] Implement Initial Status Transition (`embedding_status = 'processing'`) when worker starts
-- [ ] Implement Failure Status Transition (`embedding_status = 'failed'`) on exceptions
-- [ ] Wire up Supabase Realtime Notifications for progress changes
+- [x] Implement Intermediate Progress Updates passing a callback to write to `documents.embedding_progress`
+- [x] Implement Initial Status Transition (`embedding_status = 'processing'`) when worker starts
+- [x] Implement Failure Status Transition (`embedding_status = 'failed'`) on exceptions
+- [x] Wire up Supabase Realtime Notifications for progress changes
 
 ### 5.10 RBAC Guards on Endpoints
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Enforce RBAC Authentication Guard (`require_role(["university_admin", "super_admin"])`) on `POST /upload` and `POST /{id}/reembed`
+- [x] Enforce RBAC Authentication Guard (`require_role(["university_admin", "super_admin"])`) on `POST /upload` and `POST /{id}/reembed`
 
 ### 5.11 Tests
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [ ] Pass all 7 tests in `apps/api/tests/test_ingestion.py` (Storage key generation, Chunker atomic rules, Text splitting, Embedder dimensions, Upload endpoints, Full 8-stage pipeline)
-- [ ] Write Worker Job Integration Test
-- [ ] Write Worker Lock & Heartbeat Tests
-- [ ] Write Worker Error & Failure State Test
-- [ ] Write Database Chunks Upsert Test
-- [ ] Write RBAC Auth Security Tests
-- [ ] Write Non-PDF Format Tests
+- [x] Pass all 7 tests in `apps/api/tests/test_ingestion.py` (Storage key generation, Chunker atomic rules, Text splitting, Embedder dimensions, Upload endpoints, Full 8-stage pipeline)
+- [x] Write Worker Job Integration Test
+- [x] Write Worker Lock & Heartbeat Tests
+- [x] Write Worker Error & Failure State Test
+- [x] Write Database Chunks Upsert Test
+- [x] Write RBAC Auth Security Tests
+- [x] Write Non-PDF Format Tests
 
 ---
 

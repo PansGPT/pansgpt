@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.routers.chat import router as chat_router
+from app.routers.library import documents_router
 from app.routers.library import router as library_router
 
 app = FastAPI(
@@ -30,6 +31,7 @@ app.add_middleware(
 
 # Register API v1 Routers
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
+app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
 
 
