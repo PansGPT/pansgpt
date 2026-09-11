@@ -2,6 +2,7 @@
 # PansGPT 2.0 Chat & RAG Pydantic Models (Phase 6)
 # ==============================================================================
 
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -15,8 +16,14 @@ class CitationItem(BaseModel):
     course_code: str | None = None
     page_start: int = 1
     page_end: int = 1
-    similarity: float = Field(..., ge=0.0, le=1.0)
+    similarity: float = Field(default=0.5, ge=0.0, le=1.0)
     snippet: str
+    dense_score: float | None = None
+    fts_score: float | None = None
+    trgm_score: float | None = None
+    rrf_score: float | None = None
+    confidence: str = "HIGH"  # HIGH, MEDIUM, LOW
+    bounding_box: dict[str, Any] | None = None
 
 
 class ChatSessionCreateRequest(BaseModel):
@@ -76,3 +83,44 @@ class StreamChatRequest(BaseModel):
     document_id: str | None = None
     course_code: str | None = None
     enable_rag: bool = True
+    expand_full_segment: bool = False
+    enable_tools: bool = True
+
+
+class ToolCallPayload(BaseModel):
+    """SSE payload for tool_start event."""
+
+    call_id: str
+    tool_name: str
+    arguments: dict[str, Any]
+
+
+class ToolResultPayload(BaseModel):
+    """SSE payload for tool_end event."""
+
+    call_id: str
+    tool_name: str
+    status: str  # 'success' | 'error'
+    result: Any
+    duration_ms: int = 0
+
+
+class ArtifactReadyPayload(BaseModel):
+    """SSE payload for artifact_ready event."""
+
+    skill_name: str
+    title: str
+    mime_type: str
+    file_extension: str
+    storage_key: str | None = None
+    download_url: str | None = None
+    content: Any = None
+
+
+class VoiceTranscribeResponse(BaseModel):
+    """Payload returned by POST /api/v1/ai/chat/transcribe."""
+
+    text: str
+    language: str = "en"
+    duration: float | None = None
+    provider: str = "groq-whisper"

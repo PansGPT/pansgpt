@@ -122,8 +122,8 @@ PR reviewed + CI green → merged to main
 | **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
 | **4**  | Database Foundation           |                                ✅ **Done**                                 | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
 | **5**  | Document Ingestion Engine     |                                ✅ **Done**                                 | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    |
-| **6A** | AI Engine Foundation          |                               ⏳ **Pending**                               | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
-| **6B** | AI Engine Advanced            |                               ⏳ **Pending**                               | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **6A** | AI Engine Foundation          |                                ✅ **Done**                                 | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
+| **6B** | AI Engine Advanced            |                                ✅ **Done**                                 | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend                  |                                 ⏳ Pending                                 | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8**  | Walking Skeleton Web UI       |         Thin auth + upload + chat — proves all 3 engines together          | Student signs up, uploads a doc, gets an AI response — on staging                                          |
 | **9**  | Design System + App Shell     |           OKLCH tokens, atomic components, 3 themes, navigation            | Core screens navigable with real design                                                                    |
@@ -157,16 +157,16 @@ PR reviewed + CI green → merged to main
 
 # PansGPT — Roadmap Phases 0–6
 
-| Phase        | Status     |
-| ------------ | ---------- |
-| **Phase 0**  | ✅ Done    |
-| **Phase 1**  | ✅ Done    |
-| **Phase 2**  | ✅ Done    |
-| **Phase 3**  | ✅ Done    |
-| **Phase 4**  | ✅ Done    |
-| **Phase 5**  | ✅ Done    |
-| **Phase 6A** | ⏳ Pending |
-| **Phase 6B** | ⏳ Pending |
+| Phase        | Status  |
+| ------------ | ------- |
+| **Phase 0**  | ✅ Done |
+| **Phase 1**  | ✅ Done |
+| **Phase 2**  | ✅ Done |
+| **Phase 3**  | ✅ Done |
+| **Phase 4**  | ✅ Done |
+| **Phase 5**  | ✅ Done |
+| **Phase 6A** | ✅ Done |
+| **Phase 6B** | ✅ Done |
 
 ---
 
@@ -739,11 +739,11 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Section 6 — AI & LLM Engine (L2483)
 
-- [ ] Read and understand Section 6 (AI & LLM Engine) in full before implementing LLM orchestration
-- [ ] Understand Provider Topology & Failover Cascade: Gemma 4 (31B/26B) -> Groq (OSS 120B) -> OpenRouter (Nemotron 3)
-- [ ] Understand 3-Pool Hybrid Retrieval (Dense Vector + FTS + Trigram with Reciprocal Rank Fusion k=60)
-- [ ] Understand LLM Tool Architecture (`tools.py` schemas for rag_search, read_document, web_search, vision_analyze)
-- [ ] Understand Multi-Turn Agentic Loop (max 5 turns) with live SSE event emissions
+- [x] Read and understand Section 6 (AI & LLM Engine) in full before implementing LLM orchestration
+- [x] Understand Provider Topology & Failover Cascade: Gemma 4 (31B/26B) -> Groq (OSS 120B) -> OpenRouter (Nemotron 3)
+- [x] Understand 3-Pool Hybrid Retrieval (Dense Vector + FTS + Trigram with Reciprocal Rank Fusion k=60)
+- [x] Understand LLM Tool Architecture (`tools.py` schemas for rag_search, read_document, web_search, vision_analyze)
+- [x] Understand Multi-Turn Agentic Loop (max 5 turns) with live SSE event emissions
 
 ---
 
@@ -751,93 +751,93 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Set up engine directory structure (`apps/api/app/engines/`) | file: apps/api/app/engines/
+- [x] Set up engine directory structure (`apps/api/app/engines/`) | file: apps/api/app/engines/
 
 ### 6A.2 Model Configuration (Pydantic)
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Configure primary models (`GEMINI_PRIMARY_MODEL`, `GEMINI_SECONDARY_MODEL`, `GEMINI_EMBEDDING_MODEL`) | file: apps/api/app/core/config.py
-- [ ] Configure Groq fallback model (`GROQ_FALLBACK_MODEL`) | file: apps/api/app/core/config.py
-- [ ] Correct `OPENROUTER_FALLBACK_MODEL` to match spec (Nemotron 3 Ultra/Super instead of `gemma-2-27b-it`) | file: apps/api/app/core/config.py
-- [ ] Correct `GEMINI_EMBEDDING_MODEL` to match spec (`gemini-embedding-002` instead of `gemini-embedding-2`) | file: apps/api/app/core/config.py
+- [x] Configure primary models (`GEMINI_PRIMARY_MODEL`, `GEMINI_SECONDARY_MODEL`, `GEMINI_EMBEDDING_MODEL`) | file: apps/api/app/core/config.py
+- [x] Configure Groq fallback model (`GROQ_FALLBACK_MODEL`) | file: apps/api/app/core/config.py
+- [x] Correct `OPENROUTER_FALLBACK_MODEL` to match spec (Nemotron 3 Ultra/Super instead of `gemma-2-27b-it`) | file: apps/api/app/core/config.py
+- [x] Correct `GEMINI_EMBEDDING_MODEL` to match spec (`gemini-embedding-002` instead of `gemini-embedding-2`) | file: apps/api/app/core/config.py
 
 ### 6A.3 Database Connection (asyncpg)
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement asyncpg connection with `statement_cache_size=0` | file: apps/api/app/core/database.py
-- [ ] Refactor connection pattern to use `asyncpg.create_pool()` or unified session pooling
+- [x] Implement asyncpg connection with `statement_cache_size=0` | file: apps/api/app/core/database.py
+- [x] Refactor connection pattern to use `asyncpg.create_pool()` or unified session pooling
 
 ### 6A.4 Medical Acronym Normalizer
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement Medical Acronym Normalizer (`apps/api/app/engines/guard.py`)
+- [x] Implement Medical Acronym Normalizer (`apps/api/app/engines/guard.py`)
 
 ### 6A.5 Pre/Post LLM Policy Guard
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement Credential leakage filter (Post-LLM guard) token-by-token | file: apps/api/app/engines/llm.py
-- [ ] Implement post-generation prompt-exfiltration or schema-leakage validation on the final assembled text
-- [ ] Append standardized clinical/educational disclaimer footnote to medical responses
+- [x] Implement Credential leakage filter (Post-LLM guard) token-by-token | file: apps/api/app/engines/llm.py
+- [x] Implement post-generation prompt-exfiltration or schema-leakage validation on the final assembled text
+- [x] Append standardized clinical/educational disclaimer footnote to medical responses
 
 ### 6A.6 3072d Dense Vector Search
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement Dense Vector Pool calling Supabase RPCs `match_document_chunks` and `match_documents_global` | file: apps/api/app/engines/rag.py
-- [ ] Pass `config={"output_dimensionality": 3072}` in Google GenAI SDK call instead of manual list padding | file: apps/api/app/engines/embedder.py
+- [x] Implement Dense Vector Pool calling Supabase RPCs `match_document_chunks` and `match_documents_global` | file: apps/api/app/engines/rag.py
+- [x] Pass `config={"output_dimensionality": 3072}` in Google GenAI SDK call instead of manual list padding | file: apps/api/app/engines/embedder.py
 
 ### 6A.7 Sibling Chunk Expansion
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement adaptive sibling expansion (Currently hardcoded to ±1 for the top chunk only) | file: apps/api/app/engines/rag.py
-- [ ] Support `expand_full_segment=True` for sibling expansion
-- [ ] Expand siblings for ranks 2–4
+- [x] Implement adaptive sibling expansion (Currently hardcoded to ±1 for the top chunk only) | file: apps/api/app/engines/rag.py
+- [x] Support `expand_full_segment=True` for sibling expansion
+- [x] Expand siblings for ranks 2–4
 
 ### 6A.8 Citation Formatting
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement basic citation metadata (`page_start`, `page_end`, `doc_title`, `course_code`, `snippet`)
-- [ ] Return citations as artifact or payload in `done` event instead of inline `citations` event
+- [x] Implement basic citation metadata (`page_start`, `page_end`, `doc_title`, `course_code`, `snippet`)
+- [x] Return citations as artifact or payload in `done` event instead of inline `citations` event
 
 ### 6A.9 Multi-Tier Model Failover (Gemma → Groq → OpenRouter)
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement failover cascade across Tier 1, Tier 1b, Tier 2, Tier 3, and offline deterministic mock fallback | file: apps/api/app/engines/llm.py
+- [x] Implement failover cascade across Tier 1, Tier 1b, Tier 2, Tier 3, and offline deterministic mock fallback | file: apps/api/app/engines/llm.py
 
 ### 6A.10 SSE Token Streaming (Basic)
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement SSE Streaming Endpoint (`POST /api/v1/ai/chat/sessions/{id}/stream`) with `Content-Type: text/event-stream` | file: apps/api/app/routers/chat.py
-- [ ] Emit basic SSE event types: `init`, `text_chunk`, `citations`, `error`, `done`
+- [x] Implement SSE Streaming Endpoint (`POST /api/v1/ai/chat/sessions/{id}/stream`) with `Content-Type: text/event-stream` | file: apps/api/app/routers/chat.py
+- [x] Emit basic SSE event types: `init`, `text_chunk`, `citations`, `error`, `done`
 
 ### 6A.11 Chat Session CRUD Endpoints
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Implement chat session endpoints
+- [x] Implement chat session endpoints
 
 ### 6A.12 Chat Models (Pydantic)
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Define chat input/output models
+- [x] Define chat input/output models
 
 ### 6A.13 Basic Verification Tests
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
-- [ ] Write pytest for `POST /api/v1/ai/chat/sessions/{id}/stream` token streaming
-- [ ] Write pytest for Policy guard prompt injection rejection
-- [ ] Write pytest for Medical acronym normalization
-- [ ] Write pytest for Credential leakage filter
+- [x] Write pytest for `POST /api/v1/ai/chat/sessions/{id}/stream` token streaming
+- [x] Write pytest for Policy guard prompt injection rejection
+- [x] Write pytest for Medical acronym normalization
+- [x] Write pytest for Credential leakage filter
 
 ---
 
@@ -845,177 +845,177 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Refactor Google AI Studio calls to use native token streaming (`client.aio.models.generate_content_stream`) instead of simulated word-splitting
-- [ ] Refactor OpenRouter to use true streaming instead of non-streaming `httpx.AsyncClient` post
+- [x] Refactor Google AI Studio calls to use native token streaming (`client.aio.models.generate_content_stream`) instead of simulated word-splitting
+- [x] Refactor OpenRouter to use true streaming instead of non-streaming `httpx.AsyncClient` post
 
 ### 6B.2 Zero Data Retention (ZDR) Headers
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Pass Zero Data Retention headers/parameters to all upstream AI providers
+- [x] Pass Zero Data Retention headers/parameters to all upstream AI providers
 
 ### 6B.3 FTS Retrieval Pool (websearch_to_tsquery)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement Full-Text Search Retrieval Pool (`websearch_to_tsquery`)
+- [x] Implement Full-Text Search Retrieval Pool (`websearch_to_tsquery`)
 
 ### 6B.4 Trigram Retrieval Pool (word_similarity / pg_trgm)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement Trigram Retrieval Pool (`word_similarity(query, content)`) via `pg_trgm`
+- [x] Implement Trigram Retrieval Pool (`word_similarity(query, content)`) via `pg_trgm`
 
 ### 6B.5 Reciprocal Rank Fusion (RRF k=60)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement unweighted Reciprocal Rank Fusion merging candidates from all 3 pools
+- [x] Implement unweighted Reciprocal Rank Fusion merging candidates from all 3 pools
 
 ### 6B.6 Multi-Query Expansion & HyDE
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement Multi-Query Expansion and Hypothetical Document Embedding (HyDE)
+- [x] Implement Multi-Query Expansion and Hypothetical Document Embedding (HyDE)
 
 ### 6B.7 Candidate Re-Ranking
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement candidate re-ranking (cross-encoder or secondary scoring pass)
+- [x] Implement candidate re-ranking (cross-encoder or secondary scoring pass)
 
 ### 6B.8 Verbatim PDF Page Coordinate Citations
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Extract verbatim text coordinates or bounding boxes for PDF reader deep linking
+- [x] Extract verbatim text coordinates or bounding boxes for PDF reader deep linking
 
 ### 6B.9 Absence Policy (Web Search Fallback)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement fallback to `web_search` when syllabus confidence is low/empty
+- [x] Implement fallback to `web_search` when syllabus confidence is low/empty
 
 ### 6B.10 AI Tools Schema (tools.py)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Create `apps/api/app/engines/tools.py` defining schemas for AI tools
+- [x] Create `apps/api/app/engines/tools.py` defining schemas for AI tools
 
 ### 6B.11 rag_search Tool Handler
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement `rag_search` tool handler
+- [x] Implement `rag_search` tool handler
 
 ### 6B.12 read_document Tool Handler
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement `read_document` tool handler to read PDF, DOCX, PPTX, TXT from R2
+- [x] Implement `read_document` tool handler to read PDF, DOCX, PPTX, TXT from R2
 
 ### 6B.13 web_search Tool Handler (Tavily)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement `web_search` tool handler using Tavily integration
-- [ ] Add `TAVILY_API_KEY` to config
+- [x] Implement `web_search` tool handler using Tavily integration
+- [x] Add `TAVILY_API_KEY` to config
 
 ### 6B.14 vision_analyze Tool Handler (Gemma Vision)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement `vision_analyze` tool handler callable by the chat model
+- [x] Implement `vision_analyze` tool handler callable by the chat model
 
 ### 6B.15 Multi-Turn Agentic Tool Loop (max 5 turns)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement while-loop (max 5 turns) parsing tool call deltas and invoking handlers
+- [x] Implement while-loop (max 5 turns) parsing tool call deltas and invoking handlers
 
 ### 6B.16 SSE Event Types: tool_start, tool_end, artifact_ready, thinking_chunk
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Emit `thinking_chunk` event
-- [ ] Emit `tool_start` event
-- [ ] Emit `tool_end` event
-- [ ] Emit `artifact_ready` event
+- [x] Emit `thinking_chunk` event
+- [x] Emit `tool_start` event
+- [x] Emit `tool_end` event
+- [x] Emit `artifact_ready` event
 
 ### 6B.17 SSE 15s Keep-Alive Heartbeat
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Add 15s keep-alive heartbeat background task (`: keep-alive\n\n`) to SSE stream
+- [x] Add 15s keep-alive heartbeat background task (`: keep-alive\n\n`) to SSE stream
 
 ### 6B.18 Client Disconnect Abort
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Accept `request: Request` in SSE generator and check `await request.is_disconnected()` to abort on disconnect
+- [x] Accept `request: Request` in SSE generator and check `await request.is_disconnected()` to abort on disconnect
 
 ### 6B.19 Credit Balance Check (pre-generation)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Hook into `user_credits` check before AI generation
+- [x] Hook into `user_credits` check before AI generation
 
 ### 6B.20 Intent / Complexity Classifier
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement Intent and Complexity Classifier to route queries
+- [x] Implement Intent and Complexity Classifier to route queries
 
 ### 6B.21 Fire-and-Forget: Credit Deduction
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Dispatch credit deduction via `BackgroundTasks`
+- [x] Dispatch credit deduction via `BackgroundTasks`
 
 ### 6B.22 Fire-and-Forget: Session Title Generation
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Dispatch session title generation via `BackgroundTasks` (remove inline synchronous SQL)
+- [x] Dispatch session title generation via `BackgroundTasks` (remove inline synchronous SQL)
 
 ### 6B.23 Whisper STT (Voice Input)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Add `WHISPER_MODEL` settings and configure STT endpoints in the LLM engine
+- [x] Add `WHISPER_MODEL` settings and configure STT endpoints in the LLM engine
 
 ### 6B.24 Dynamic AI Skills Handlers
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Implement handler for `create_doc`
-- [ ] Implement handler for `create_md`
-- [ ] Implement handler for `create_pdf`
-- [ ] Implement handler for `create_pptx`
-- [ ] Implement handler for `plot_graph`
-- [ ] Implement handler for `generate_flashcards`
-- [ ] Implement handler for `generate_mnemonics`
-- [ ] Implement handler for `draw_chemical_structure`
-- [ ] Dynamically query `public.ai_skills` to inject available skills into model prompts
+- [x] Implement handler for `create_doc`
+- [x] Implement handler for `create_md`
+- [x] Implement handler for `create_pdf`
+- [x] Implement handler for `create_pptx`
+- [x] Implement handler for `plot_graph`
+- [x] Implement handler for `generate_flashcards`
+- [x] Implement handler for `generate_mnemonics`
+- [x] Implement handler for `draw_chemical_structure`
+- [x] Dynamically query `public.ai_skills` to inject available skills into model prompts
 
 ### 6B.25 Connection Pool (asyncpg pool, not per-call connect)
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Refactor connection pattern to use `asyncpg.create_pool()` or unified session pooling to eliminate per-call connection handshake overhead
+- [x] Refactor connection pattern to use `asyncpg.create_pool()` or unified session pooling to eliminate per-call connection handshake overhead
 
 ### 6B.26 OpenRouter Model Config Fix
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Update OpenRouter fallback model to `nvidia/nemotron-3-ultra-550b-a55b:free` / `nvidia/nemotron-3-super-120b-a12b:free`
+- [x] Update OpenRouter fallback model to `nvidia/nemotron-3-ultra-550b-a55b:free` / `nvidia/nemotron-3-super-120b-a12b:free`
 
 ### 6B.27 Advanced Integration Tests
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [ ] Write integration test asserting cross-university RAG isolation (rejects/filters chunks belonging to other universities)
-- [ ] Write integration test mocking Google returning 429 and asserting Groq is invoked
+- [x] Write integration test asserting cross-university RAG isolation (rejects/filters chunks belonging to other universities)
+- [x] Write integration test mocking Google returning 429 and asserting Groq is invoked
 
 ---
 

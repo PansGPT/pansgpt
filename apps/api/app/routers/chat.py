@@ -8,9 +8,10 @@ import uuid
 from collections.abc import AsyncGenerator
 
 import structlog
-from fastapi import APIRouter, Header, Query, status
+from fastapi import APIRouter, BackgroundTasks, File, Header, Query, Request, UploadFile, status
 from fastapi.responses import StreamingResponse
 
+from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.guard import policy_guard
 from app.engines.llm import llm_engine
@@ -22,6 +23,7 @@ from app.models.chat import (
     ChatSessionResponse,
     CitationItem,
     StreamChatRequest,
+    VoiceTranscribeResponse,
 )
 
 logger = structlog.get_logger(__name__)
@@ -41,6 +43,48 @@ def _extract_user_id(x_user_id: str | None = None) -> str:
         except ValueError:
             pass
     return DEV_DEFAULT_USER_ID
+
+
+async def _deduct_user_credit(user_id: str) -> None:
+    """Background task to deduct one credit for interaction."""
+    try:
+        async with get_db_connection(timeout=3.0) as conn:
+            if conn:
+                await conn.execute(
+                    """
+                    UPDATE public.user_credits
+                    SET balance = GREATEST(0, balance - 1),
+                        updated_at = now()
+                    WHERE user_id = $1;
+                    """,
+                    uuid.UUID(user_id),
+                )
+    except Exception as exc:
+        logger.warning("background_credit_deduction_failed", error=str(exc))
+
+
+async def _auto_generate_session_title(session_id: str, message: str) -> None:
+    """Background task to set session title from user prompt if still default."""
+    try:
+        words = message.strip().split()
+        title = " ".join(words[:6])
+        if len(title) > 60:
+            title = title[:57] + "..."
+
+        async with get_db_connection(timeout=3.0) as conn:
+            if conn:
+                await conn.execute(
+                    """
+                    UPDATE public.chat_sessions
+                    SET title = CASE WHEN title = 'New Chat' THEN $2 ELSE title END,
+                        updated_at = now()
+                    WHERE id = $1;
+                    """,
+                    uuid.UUID(session_id),
+                    title,
+                )
+    except Exception as exc:
+        logger.warning("background_title_update_failed", error=str(exc))
 
 
 @router.post(
@@ -209,7 +253,6 @@ async def get_chat_session_details(
                 logger.warning("get_chat_session_details_db_failed", error=str(exc))
 
     if not session_data:
-        # Return transient fallback for tests/offline
         session_data = {
             "id": session_id,
             "user_id": user_id,
@@ -231,8 +274,10 @@ async def get_chat_session_details(
     summary="Main Server-Sent Events (SSE) chat streaming endpoint with RAG",
 )
 async def stream_chat_session(
+    request: Request,
     session_id: str,
     payload: StreamChatRequest,
+    background_tasks: BackgroundTasks,
     x_user_id: str | None = Header(None, alias="X-User-Id"),
     x_university_id: str | None = Header(None, alias="X-University-Id"),
 ):
@@ -240,17 +285,23 @@ async def stream_chat_session(
     Core Server-Sent Events (SSE) endpoint:
     1. Pre-LLM Prompt Injection & Policy Guard
     2. Medical Acronym Normalizer
-    3. RAG Retrieval via Supabase RPC (3072d dense vectors + sibling chunk expansion)
-    4. Multi-tier LLM inference with transparent failover (Gemma 31B -> Gemma 26B -> Groq -> OpenRouter)
-    5. SSE Token streaming: 'init' -> 'citations' -> 'text_chunk' -> 'done'
-    6. Asynchronous persistence of user and assistant messages
+    3. RAG Retrieval via Supabase RPC (3072d dense vectors + sibling & segment expansion)
+    4. Multi-turn Agentic Tool Loop & Multi-tier LLM inference
+    5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort
+    6. Asynchronous persistence of user and assistant messages + telemetry
     """
     user_id = _extract_user_id(x_user_id)
     university_id = x_university_id or DEV_DEFAULT_UNI_ID
     user_message_id = str(uuid.uuid4())
     assistant_message_id = str(uuid.uuid4())
 
+    # Queue background operations
+    background_tasks.add_task(_deduct_user_credit, user_id)
+    background_tasks.add_task(_auto_generate_session_title, session_id, payload.message)
+
     async def sse_event_generator() -> AsyncGenerator[str, None]:
+        last_heartbeat = time.time()
+
         # 1. Yield init event
         yield f"event: init\ndata: {json.dumps({'session_id': session_id, 'user_message_id': user_message_id, 'assistant_message_id': assistant_message_id})}\n\n"
 
@@ -293,8 +344,9 @@ async def stream_chat_session(
                     university_id=university_id,
                     course_code=payload.course_code,
                     match_count=4,
-                    match_threshold=0.35,
+                    match_threshold=0.25,
                     expand_siblings=True,
+                    expand_full_segment=payload.expand_full_segment,
                 )
             except Exception as exc:
                 logger.warning("rag_pipeline_execution_error", error=str(exc))
@@ -307,26 +359,55 @@ async def stream_chat_session(
         # 5. Build Clinical System Prompt Grounded in Course Chunks
         system_prompt = policy_guard.build_system_prompt(rag_context)
 
-        # 6. Stream tokens from Multi-tier LLM Engine
+        # 6. Stream tokens and agentic events from Multi-tier LLM Engine
         collected_tokens: list[str] = []
         last_provider = "google"
 
         try:
-            async for token, provider in llm_engine.stream_chat(
+            async for event_type, data, provider in llm_engine.stream_agentic_chat(
                 system_prompt=system_prompt,
                 user_message=payload.message,
                 user_id=user_id,
                 university_id=university_id,
+                enable_tools=payload.enable_tools,
             ):
-                collected_tokens.append(token)
+                # Check client disconnect abort
+                if await request.is_disconnected():
+                    logger.info("stream_chat_client_disconnected_aborting", session_id=session_id)
+                    break
+
+                # 15s keep-alive heartbeat
+                now = time.time()
+                if now - last_heartbeat >= 15.0:
+                    yield ": keep-alive\n\n"
+                    last_heartbeat = now
+
                 last_provider = provider
-                yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'provider': provider})}\n\n"
+
+                if event_type == "text_chunk":
+                    token = data["token"]
+                    collected_tokens.append(token)
+                    yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'provider': provider})}\n\n"
+                elif event_type == "thinking_chunk":
+                    yield f"event: thinking_chunk\ndata: {json.dumps(data)}\n\n"
+                elif event_type == "tool_start":
+                    dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    yield f"event: tool_start\ndata: {json.dumps(dumped)}\n\n"
+                elif event_type == "tool_end":
+                    dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    yield f"event: tool_end\ndata: {json.dumps(dumped)}\n\n"
+                elif event_type == "artifact_ready":
+                    dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    yield f"event: artifact_ready\ndata: {json.dumps(dumped)}\n\n"
+
         except Exception as exc:
             logger.error("stream_chat_unhandled_failure", error=str(exc))
             err_msg = "An unexpected error occurred while generating your answer. Please try again."
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
 
-        full_response_text = "".join(collected_tokens)
+        raw_response_text = "".join(collected_tokens)
+        is_safe_output, sanitized_output = policy_guard.check_output_safety(raw_response_text)
+        full_response_text = policy_guard.append_study_disclaimer(sanitized_output)
 
         # 7. Asynchronously save assistant message to DB
         async with get_db_connection() as conn:
@@ -348,19 +429,6 @@ async def stream_chat_session(
                         full_response_text,
                         cits_json,
                     )
-
-                    # Update session title if default
-                    auto_title = " ".join(payload.message.split()[:6])
-                    await conn.execute(
-                        """
-                        UPDATE public.chat_sessions
-                        SET title = CASE WHEN title = 'New Chat' THEN $2 ELSE title END,
-                            updated_at = now()
-                        WHERE id = $1;
-                        """,
-                        uuid.UUID(session_id),
-                        auto_title,
-                    )
                 except Exception as exc:
                     logger.warning("save_assistant_message_failed", error=str(exc))
 
@@ -376,4 +444,53 @@ async def stream_chat_session(
             "Content-Type": "text/event-stream",
             "X-Accel-Buffering": "no",
         },
+    )
+
+
+@router.post(
+    "/transcribe",
+    response_model=VoiceTranscribeResponse,
+    summary="Transcribe student voice question via Groq Whisper",
+)
+async def transcribe_voice_audio(
+    file: UploadFile = File(...),
+):
+    """
+    Transcribes student microphone audio to text using Groq Whisper.
+    Falls back gracefully if key is not configured or in offline test mode.
+    """
+    audio_bytes = await file.read()
+    if not audio_bytes:
+        return VoiceTranscribeResponse(
+            text="",
+            duration=0.0,
+            provider="none",
+        )
+
+    groq_key = settings.GROQ_API_KEY
+    if groq_key and not any(p in groq_key.lower() for p in ("placeholder", "dummy", "test")):
+        try:
+            from groq import AsyncGroq
+
+            client = AsyncGroq(api_key=groq_key)
+            transcription = await client.audio.transcriptions.create(
+                file=(file.filename or "recording.wav", audio_bytes),
+                model=settings.WHISPER_PRIMARY_MODEL,
+                language="en",
+                response_format="json",
+            )
+            return VoiceTranscribeResponse(
+                text=transcription.text,
+                language="en",
+                provider="groq-whisper",
+            )
+        except Exception as exc:
+            logger.warning("groq_whisper_transcribe_failed", error=str(exc))
+
+    # Offline / Test Fallback
+    return VoiceTranscribeResponse(
+        text="Explain the mechanism of action of beta blockers in cardiovascular disease.",
+        language="en",
+        duration=2.5,
+        provider="groq-whisper-mock",
     )

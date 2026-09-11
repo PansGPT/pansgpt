@@ -3,21 +3,34 @@
 # ==============================================================================
 
 import asyncio
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
+from app.core.database import close_db_pool, init_db_pool
 from app.routers.chat import router as chat_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: initialize database pool
+    await init_db_pool()
+    yield
+    # Shutdown: cleanly close database pool
+    await close_db_pool()
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_PREFIX}/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # Configure CORS

@@ -94,9 +94,18 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: str | None = None
     GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_SECONDARY_MODEL: str = "qwen/qwen3.6-27b"
+    WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
+    WHISPER_SECONDARY_MODEL: str = "whisper-large-v3"
 
     OPENROUTER_API_KEY: str | None = None
-    OPENROUTER_FALLBACK_MODEL: str = "google/gemma-2-27b-it"
+    OPENROUTER_FALLBACK_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    OPENROUTER_FAST_MODEL: str = "nvidia/nemotron-3-super-120b-a12b:free"
+
+    # Purpose-Driven Token Ceilings (Section 6.5.3)
+    TEXT_CHAT_MAX_TOKENS: int = 4096
+    VISION_REPLY_MAX_TOKENS: int = 2048
+    VISION_EXTRACTION_MAX_TOKENS: int = 768
 
     # Search Tool Integration
     TAVILY_API_KEY: str | None = None

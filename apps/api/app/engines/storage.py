@@ -200,3 +200,4 @@ class R2StorageEngine:
 
 
 storage_engine = R2StorageEngine()
+r2_storage = storage_engine
