@@ -175,7 +175,7 @@ class MultiTierLlmEngine:
         # ----------------------------------------------------------------------
         # TIER 1: Google AI Studio Gemma 4 31B
         # ----------------------------------------------------------------------
-        if self.gemini_key and not self.gemini_key.startswith("placeholder"):
+        if self.gemini_key and not self.gemini_key.startswith(("placeholder", "dummy", "test")):
             try:
                 logger.info("llm_attempt_tier1_gemma_31b", model=self.primary_model)
                 text = await asyncio.wait_for(
@@ -217,7 +217,7 @@ class MultiTierLlmEngine:
         if (
             not generation_successful
             and self.gemini_key
-            and not self.gemini_key.startswith("placeholder")
+            and not self.gemini_key.startswith(("placeholder", "dummy", "test"))
         ):
             try:
                 logger.info("llm_attempt_tier1b_gemma_26b", model=self.secondary_model)
@@ -259,7 +259,7 @@ class MultiTierLlmEngine:
         if (
             not generation_successful
             and self.groq_key
-            and not self.groq_key.startswith("placeholder")
+            and not self.groq_key.startswith(("placeholder", "dummy", "test"))
         ):
             try:
                 logger.info("llm_attempt_tier2_groq", model=self.groq_model)
@@ -295,7 +295,7 @@ class MultiTierLlmEngine:
         if (
             not generation_successful
             and self.openrouter_key
-            and not self.openrouter_key.startswith("placeholder")
+            and not self.openrouter_key.startswith(("placeholder", "dummy", "test"))
         ):
             try:
                 logger.info("llm_attempt_tier3_openrouter", model=self.openrouter_model)

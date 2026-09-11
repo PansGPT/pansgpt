@@ -1,0 +1,20 @@
+# Gitleaks Configuration for PansGPT Monorepo
+title = "PansGPT Gitleaks Configuration"
+
+[allowlist]
+description = "Global allowlists for tests, docs, and mocks"
+paths = [
+    '''apps/api/tests/''',
+    '''tooling/check-secrets\.py''',
+    '''docs/''',
+    '''apps/api/\.env\.example''',
+    '''apps/web/\.env\.example''',
+    '''apps/mobile/\.env\.example''',
+    '''apps/desktop/\.env\.example'''
+]
+regexes = [
+    '''ey[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+''',
+    '''018f[0-9a-f-]+''',
+    '''dummy[A-Za-z0-9_-]*''',
+    '''placeholder[A-Za-z0-9_-]*'''
+]

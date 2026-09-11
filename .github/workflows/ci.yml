@@ -36,6 +36,17 @@ jobs:
   api-tests:
     name: Backend Lint & Pytest Suite
     runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: "development"
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+      SUPABASE_URL: "https://example.supabase.co"
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy"
+      SUPABASE_SERVICE_ROLE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy"
+      GEMINI_API_KEY: "dummy_gemini_key_for_offline_ci"
+      CLOUDFLARE_R2_ACCOUNT_ID: "dummy_account"
+      CLOUDFLARE_R2_ACCESS_KEY_ID: "dummy_key"
+      CLOUDFLARE_R2_SECRET_ACCESS_KEY: "dummy_secret"
+      CLOUDFLARE_R2_BUCKET_STAGING: "pansgpt-library-staging"
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -99,8 +110,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Gitleaks Binary
+        run: |
+          wget -q https://github.com/gitleaks/gitleaks/releases/download/v8.18.4/gitleaks_8.18.4_linux_x64.tar.gz -O /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp/
+          sudo mv /tmp/gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
       - name: Run Gitleaks Secret Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
+        run: gitleaks detect --config=.gitleaks.toml --verbose --redact
+
+      - name: Run Repository Secret Scanner Gate
+        run: python tooling/check-secrets.py --all

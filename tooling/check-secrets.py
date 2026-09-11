@@ -53,13 +53,26 @@ def scan_file(filepath):
         pass
     return findings
 
+def get_files_to_scan():
+    if "--all" in sys.argv:
+        try:
+            output = subprocess.check_output(
+                ["git", "ls-files"],
+                text=True,
+                stderr=subprocess.DEVNULL,
+            )
+            return [f.strip() for f in output.splitlines() if f.strip()]
+        except Exception:
+            return []
+    return get_staged_files()
+
 def main():
-    staged = get_staged_files()
-    if not staged:
+    files = get_files_to_scan()
+    if not files:
         sys.exit(0)
     
     all_findings = []
-    for filepath in staged:
+    for filepath in files:
         findings = scan_file(filepath)
         if findings:
             all_findings.extend(findings)

@@ -296,7 +296,7 @@ async def update_document_metadata(document_id: str, payload: DocumentPatchReque
 
     if not updates:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="No valid fields provided for update.",
         )
 
