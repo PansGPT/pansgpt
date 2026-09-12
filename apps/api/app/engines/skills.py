@@ -432,7 +432,10 @@ class SkillExecutionEngine:
         )
 
     async def dispatch_skill(
-        self, skill_name: str, arguments: dict[str, Any]
+        self,
+        skill_name: str,
+        arguments: dict[str, Any],
+        user_id: str | None = None,
     ) -> ArtifactReadyPayload:
         """Dispatches dynamic skill by name."""
         logger.info("skill_dispatch_requested", skill=skill_name)

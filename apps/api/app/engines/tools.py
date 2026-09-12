@@ -317,3 +317,10 @@ class ToolExecutionEngine:
 
 
 tool_engine = ToolExecutionEngine()
+
+
+def get_all_tool_definitions() -> list[dict[str, Any]]:
+    """Returns combined registry of Core Tools and Dynamic Workspace Skills in standard function calling schema."""
+    from app.engines.skills import SKILL_TOOL_DEFINITIONS
+
+    return list(CORE_TOOL_DEFINITIONS) + list(SKILL_TOOL_DEFINITIONS)

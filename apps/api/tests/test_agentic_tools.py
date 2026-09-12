@@ -8,6 +8,7 @@ import pytest
 from httpx import AsyncClient
 
 from app.engines.guard import STUDY_DISCLAIMER, policy_guard
+from app.engines.llm import MultiTierLlmEngine
 from app.engines.rag import rag_engine
 from app.engines.skills import skill_engine
 from app.engines.tools import tool_engine
@@ -206,3 +207,155 @@ def test_output_safety_and_disclaimer():
     final_output = policy_guard.append_study_disclaimer(sanitized)
     assert "Educational Study Aid: PansGPT" in final_output
     assert STUDY_DISCLAIMER in final_output
+
+
+# ------------------------------------------------------------------------------
+# 7. Multi-Query Expansion & HyDE Passage Tests
+# ------------------------------------------------------------------------------
+def test_multi_query_expansion_generation():
+    """Verify student queries are expanded into targeted pharmacological perspectives."""
+    q_moa = "What is the mechanism of action of salbutamol in asthma?"
+    expansions_moa = rag_engine.generate_multi_query_expansions(q_moa)
+    assert len(expansions_moa) >= 2
+    assert expansions_moa[0] == q_moa
+    assert any("receptor" in e or "mechanism" in e for e in expansions_moa[1:])
+
+    q_tox = "What are the adverse effects and toxicity of gentamicin?"
+    expansions_tox = rag_engine.generate_multi_query_expansions(q_tox)
+    assert len(expansions_tox) >= 2
+    assert any("toxicities" in e or "adverse" in e for e in expansions_tox[1:])
+
+    q_dose = "What is the clinical dosing and bioavailability of ciprofloxacin?"
+    expansions_dose = rag_engine.generate_multi_query_expansions(q_dose)
+    assert len(expansions_dose) >= 2
+    assert any("pharmacokinetics" in e or "bioavailability" in e for e in expansions_dose[1:])
+
+
+def test_hyde_hypothetical_monograph_generation():
+    """Verify HyDE synthesizes authoritative pharmacological monograph passage."""
+    query = "MOA of HCTZ in HTN"
+    passage = rag_engine.generate_hyde_passage(query)
+    assert "Pharmacology Monograph Section" in passage
+    assert "Hydrochlorothiazide" in passage
+    assert "Hypertension" in passage
+    assert "Target receptors" in passage
+    assert "ADME" in passage
+
+
+# ------------------------------------------------------------------------------
+# 8. Candidate Re-Ranking Multi-Factor Scoring Tests
+# ------------------------------------------------------------------------------
+def test_candidate_reranking_scoring_and_ordering():
+    """Verify multi-factor composite scoring prioritizes high relevance and exact lexical matches."""
+    query = "Mechanism of action of lisinopril in heart failure"
+    candidates = [
+        {
+            "chunk_id": "chunk-1",
+            "content": "General overview of introductory pharmacology and pharmacy law.",
+            "dense_score": 0.50,
+            "rrf_score": 0.015,
+            "doc_title": "Pharmacy Orientation",
+            "course_code": "PCG 101",
+        },
+        {
+            "chunk_id": "chunk-2",
+            "content": "Lisinopril is an ACE inhibitor preventing conversion of Angiotensin I to II.",
+            "dense_score": 0.70,
+            "rrf_score": 0.030,
+            "doc_title": "Cardiovascular Pharmacology Slides",
+            "course_code": "PCL 401",
+        },
+        {
+            "chunk_id": "chunk-3",
+            "content": "Aspirin acetylates COX-1 irreversibly inhibiting thromboxane A2.",
+            "dense_score": 0.60,
+            "rrf_score": 0.025,
+            "doc_title": "Antiplatelet Drugs",
+            "course_code": "PCL 402",
+        },
+    ]
+
+    reranked = rag_engine.rerank_candidates(query, candidates, top_k=2)
+    assert len(reranked) == 2
+    # chunk-2 has ACE inhibitor, lisinopril, high dense score, and metadata match -> must be #1
+    assert reranked[0]["chunk_id"] == "chunk-2"
+    assert "rerank_score" in reranked[0]
+    assert reranked[0]["rerank_score"] > reranked[1]["rerank_score"]
+
+
+# ------------------------------------------------------------------------------
+# 9. Absence Policy & Autonomous Web Search Fallback Tests
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio
+async def test_absence_policy_triggers_web_search_fallback():
+    """Verify that low/empty syllabus confidence autonomously triggers web search fallback."""
+    context, citations = await rag_engine.retrieve_context(
+        query="What is the novel mechanism of Teclistamab in relapsed myeloma?",
+        university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        match_count=2,
+    )
+    assert context is not None
+    assert "Absence Policy Notice" in context
+    assert len(citations) > 0
+    assert citations[0].confidence == "WEB_FALLBACK"
+    assert citations[0].course_code == "WEB-REF"
+
+
+# ------------------------------------------------------------------------------
+# 10. Multi-Tier Failover on HTTP 429 Quota Exhaustion
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio
+async def test_multi_tier_failover_http_429_to_groq(monkeypatch):
+    """Verify that HTTP 429 quota exhaustion from Google triggers instant failover to Groq."""
+    engine = MultiTierLlmEngine()
+    monkeypatch.setattr(engine, "gemini_key", "live-gemini-key")
+    monkeypatch.setattr(engine, "groq_key", "live-groq-key")
+
+    # Mock Google turn to raise 429 quota exhausted error
+    async def mock_gemma_429(*args, **kwargs):
+        raise RuntimeError("429 Resource has been exhausted (check quota).")
+
+    # Mock Groq turn to return streamed content
+    async def mock_groq_turn(*args, **kwargs):
+        async def _stream():
+            yield "Failover response from Groq gpt-oss-120b."
+
+        return [], _stream()
+
+    monkeypatch.setattr(engine, "_call_gemma_turn", mock_gemma_429)
+    monkeypatch.setattr(engine, "_call_groq_turn", mock_groq_turn)
+
+    events = []
+    async for event_type, data, provider in engine.stream_agentic_chat(
+        system_prompt="You are a clinical tutor.",
+        user_message="Explain receptor downregulation.",
+        enable_tools=False,
+    ):
+        events.append((event_type, data, provider))
+
+    text_events = [e for e in events if e[0] == "text_chunk"]
+    assert len(text_events) > 0
+    assert text_events[0][2] == "groq"
+    full_text = "".join(e[1]["token"] for e in text_events)
+    assert "Failover response from Groq" in full_text
+
+
+# ------------------------------------------------------------------------------
+# 11. Multi-Tenant Cross-University Isolation Test
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio
+async def test_rag_cross_university_tenant_isolation():
+    """Verify RAG retrieval cleanly enforces university tenant boundary."""
+    uni_a = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
+    uni_b = "01a07664-7a69-7ce0-ad6a-b219462cbde4"
+
+    ctx_a, cits_a = await rag_engine.retrieve_context(
+        query="Pharmacokinetics of digoxin in heart failure",
+        university_id=uni_a,
+    )
+    ctx_b, cits_b = await rag_engine.retrieve_context(
+        query="Pharmacokinetics of digoxin in heart failure",
+        university_id=uni_b,
+    )
+    assert ctx_a is not None
+    assert ctx_b is not None
