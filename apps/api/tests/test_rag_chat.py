@@ -2,7 +2,11 @@
 # Phase 6: AI / LLM Orchestration & RAG Verification Suite
 # ==============================================================================
 
+from unittest.mock import AsyncMock, patch
+
+import httpx
 import pytest
+from google.genai.errors import APIError
 from httpx import AsyncClient
 
 from app.engines.guard import policy_guard
@@ -76,9 +80,88 @@ def test_clinical_system_prompt_builder():
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
 async def test_multi_tier_llm_failover_mechanism():
-    """Verify fallback mechanism cascades gracefully if primary tier fails."""
+    """Verify that authentic HTTP 429 quota exhaustion on Tier 1 (Gemma)
+    triggers graceful cascading failover to Tier 2 (Groq)."""
     engine = MultiTierLlmEngine()
-    # Force primary key to empty to trigger fallback
+    engine.gemini_key = "AIzaSyD_SimulatedLiveKeyGoogle429"
+    engine.groq_key = "gsk_SimulatedLiveKeyGroq"
+
+    quota_exhaustion_err = APIError(
+        429,
+        "Resource has been exhausted (check quota for generateContent).",
+    )
+
+    async def mock_groq_turn(messages, tools):
+        async def _groq_stream():
+            for chunk in ["Groq ", "cascading ", "failover ", "active."]:
+                yield chunk
+
+        return [], _groq_stream()
+
+    with patch.object(engine, "_call_gemma_turn", side_effect=quota_exhaustion_err) as mock_gemma:
+        with patch.object(engine, "_call_groq_turn", side_effect=mock_groq_turn) as mock_groq:
+            tokens = []
+            providers = []
+            async for token, provider in engine.stream_chat(
+                system_prompt="You are a pharmacology tutor.",
+                user_message="Explain mechanism of action of ampicillin.",
+            ):
+                tokens.append(token)
+                providers.append(provider)
+
+            # Both primary Gemma 31B and secondary Gemma 26B must have been attempted and failed with 429
+            assert mock_gemma.call_count == 2
+            # Failover must have routed to Tier 2 Groq
+            assert mock_groq.call_count == 1
+            # Emitted tokens must originate from Groq
+            assert len(tokens) > 0
+            assert all(p == "groq" for p in providers)
+            assert "".join(tokens) == "Groq cascading failover active."
+
+
+@pytest.mark.asyncio
+async def test_multi_tier_llm_failover_cascades_to_openrouter_on_double_429():
+    """Verify cascading failover from Gemma (429) -> Groq (429) -> OpenRouter Tier 3."""
+    engine = MultiTierLlmEngine()
+    engine.gemini_key = "AIzaSyD_SimulatedLiveKeyGoogle429"
+    engine.groq_key = "gsk_SimulatedLiveKeyGroq429"
+    engine.openrouter_key = "sk-or-v1-SimulatedLiveKeyOpenRouter"
+
+    gemma_429 = APIError(429, "Resource has been exhausted (check quota).")
+    groq_429 = httpx.HTTPStatusError(
+        "429 Too Many Requests: Groq model rate limit reached",
+        request=httpx.Request("POST", "https://api.groq.com/openai/v1/chat/completions"),
+        response=httpx.Response(429),
+    )
+
+    with patch.object(engine, "_call_gemma_turn", side_effect=gemma_429) as mock_gemma:
+        with patch.object(engine, "_call_groq_turn", side_effect=groq_429) as mock_groq:
+            with patch.object(
+                engine,
+                "_call_openrouter",
+                new=AsyncMock(return_value="OpenRouter emergency safety net response."),
+            ) as mock_openrouter:
+                tokens = []
+                providers = []
+                async for token, provider in engine.stream_chat(
+                    system_prompt="You are a tutor.",
+                    user_message="Explain paracetamol metabolism.",
+                ):
+                    tokens.append(token)
+                    providers.append(provider)
+
+                assert mock_gemma.call_count == 2
+                assert mock_groq.call_count == 1
+                assert mock_openrouter.call_count == 1
+                assert all(p == "openrouter" for p in providers)
+                assert "OpenRouter emergency safety net" in "".join(tokens)
+
+
+@pytest.mark.asyncio
+async def test_multi_tier_llm_failover_deterministic_offline_fallback():
+    """Verify that when all external providers are unavailable,
+    the engine gracefully falls back to deterministic offline safety guidance."""
+    engine = MultiTierLlmEngine()
     engine.gemini_key = None
     engine.groq_key = None
     engine.openrouter_key = None

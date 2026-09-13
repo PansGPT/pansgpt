@@ -164,6 +164,12 @@ class RagRetrievalEngine:
 
             c_copy = dict(c)
             c_copy["rerank_score"] = round(composite_score, 4)
+            if composite_score >= 0.60:
+                c_copy["confidence"] = "HIGH"
+            elif composite_score >= 0.38:
+                c_copy["confidence"] = "MEDIUM"
+            else:
+                c_copy["confidence"] = "LOW"
             scored_candidates.append(c_copy)
 
         scored_candidates.sort(key=lambda x: x["rerank_score"], reverse=True)
@@ -414,8 +420,10 @@ class RagRetrievalEngine:
                                         "dense_score": float(r["dense_score"]),
                                         "fts_score": float(r["fts_score"]),
                                         "trgm_score": 0.0,
-                                        "rrf_score": 0.020,
-                                        "confidence": "MEDIUM",
+                                        "rrf_score": 0.015,
+                                        "confidence": self.classify_confidence(
+                                            float(r["dense_score"]), 0.015
+                                        ),
                                         "segment_id": str(r["segment_id"])
                                         if r.get("segment_id")
                                         else None,
@@ -446,7 +454,7 @@ class RagRetrievalEngine:
             is_empty_or_low = True
         else:
             high_or_med = [m for m in reranked_matches if m["confidence"] in ("HIGH", "MEDIUM")]
-            if not high_or_med and reranked_matches[0]["dense_score"] < 0.38:
+            if not high_or_med or reranked_matches[0]["rerank_score"] < 0.38:
                 is_empty_or_low = True
 
         if is_empty_or_low:
