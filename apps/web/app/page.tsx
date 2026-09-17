@@ -12,10 +12,25 @@ export default function HomePage(): React.ReactElement {
           Intelligent Pharmacy Education Platform. High-accuracy RAG monograph engine, real-time
           chemical drawer, and curriculum mastery system.
         </p>
-        <div className="pt-4">
-          <span className="text-sm font-medium text-slate-500">
-            Engine-First Monorepo Scaffolding Complete
-          </span>
+        <div className="pt-4 flex items-center justify-center gap-4">
+          <Link
+            href="/login"
+            className="rounded-xl border border-neutral-300 bg-white px-5 py-2.5 text-sm font-semibold text-neutral-800 hover:bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-500 transition-colors"
+          >
+            Get Started
+          </Link>
+          <Link
+            href="/app"
+            className="text-sm font-medium text-emerald-600 hover:text-emerald-500 dark:text-emerald-400"
+          >
+            Enter App &rarr;
+          </Link>
         </div>
       </div>
     </main>

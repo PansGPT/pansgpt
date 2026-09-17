@@ -114,39 +114,40 @@ PR reviewed + CI green → merged to main
 
 ## 📋 Phase Overview
 
-|   #    | Phase                         |                                   Status                                   | What Gets Built                                                                                            | Gate Before Continuing                                                         |
-| :----: | ----------------------------- | :------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **0**  | Local Dev Environment         |                                ✅ **Done**                                 | Every developer runs the full stack locally                                                                | All services start without errors                                              |
-| **1**  | Monorepo Scaffold + CI        |                                ✅ **Done**                                 | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                           | CI passes on an empty repo push                                                |
-| **2**  | Secrets + Config              |                                ✅ **Done**                                 | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                             | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired            |                                ✅ **Done**                                 | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           |                                ✅ **Done**                                 | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine     |                                ✅ **Done**                                 | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    |
-| **6A** | AI Engine Foundation          |                                ✅ **Done**                                 | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
-| **6B** | AI Engine Advanced            |                                ✅ **Done**                                 | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
-| **7**  | Auth Backend                  |                                ✅ **Done**                                 | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI       |         Thin auth + upload + chat — proves all 3 engines together          | Student signs up, uploads a doc, gets an AI response — on staging                                          |
-| **9**  | Design System + App Shell     |           OKLCH tokens, atomic components, 3 themes, navigation            | Core screens navigable with real design                                                                    |
-| **10** | PDF Reader (Web)              |      4-layer virtualized reader, highlights, AI sidebar, snip-to-chat      | Student opens, reads, highlights, and Snips to Chat                                                        |
-| **11** | AI Chat Interface (Web)       | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills | Student chats with the AI; branch navigation works                                                         |
-| **12** | Learn Mode (Web)              |        Section outline, explanations, check questions, mastery ring        | Student studies a section and answers recall checks                                                        |
-| **13** | Quiz System (Web)             |       Async ARQ job, 5 formats, timed interface, results, share card       | Student generates and completes a quiz                                                                     |
-| **14** | Notes (Web)                   |            Tiptap editor, idb-keyval offline, sync-on-reconnect            | Student writes, edits, and syncs a note                                                                    |
-| **15** | Timetable + Dashboard (Web)   |          Schedule engine, home page, recents carousel, tasks list          | Home page shows real timetable and recent activity                                                         |
-| **16** | Portals                       |             Lecturer submission, admin management, super admin             | Lecturer submits → admin approves → document enters ingestion                                              |
-| **17** | Settings + Profile + Feedback |      Profile, preferences, session management, CSAT, feedback triage       | Student updates profile and theme; feedback lands in admin                                                 |
-| **18** | Credits + Payments            |             Double-entry credit ledger, Paystack, Flutterwave              | Student purchases credits and spends them on AI                                                            |
-| **19** | Email System                  |              Resend, React Email templates, ARQ worker queue               | Welcome email arrives after signup                                                                         |
-| **20** | Mobile (Expo)                 |          Auth, PDF reader, chat, quiz, notes, timetable, widgets           | Full student journey works on iOS + Android                                                                |
-| **21** | Desktop (Electron)            |          Offline SQLite, PDF cache, background sync, auto-updater          | Full offline study session works without internet                                                          |
-| **22** | PWA + Offline (Web)           |              `@serwist/next`, caching tiers, IndexedDB outbox              | Web app installs and key flows work offline                                                                |
-| **23** | Public Pages + SEO            |           Landing, pricing, about, JSON-LD, Open Graph, sitemap            | Public pages indexed by Google with correct metadata                                                       |
-| **24** | Security Hardening            |           CORS, headers, rate limits, NDPA 2023, dependency scan           | Security checklist cleared                                                                                 |
-| **25** | Observability + Monitoring    |           Sentry, PostHog, Better Uptime, structlog, keep-alive            | Errors visible, events tracked, uptime alerting live                                                       |
-| **26** | Performance + Load Testing    |                      Lighthouse, k6, EXPLAIN ANALYZE                       | p95 API < 500ms; Lighthouse performance > 90                                                               |
-| **27** | Pre-Launch Checklist          |                        Full checklist verification                         | Every item checked                                                                                         |
-| **28** | Production Launch 🚀          |                 DNS live, migrations applied, smoke tested                 | Real students using the app                                                                                |
-| **29** | Post-Launch Iteration         |               Feature flags, DORA metrics, incident process                | Sustainable delivery culture active                                                                        |
+|   #    | Phase                     |      Status      | What Gets Built                                                                                            | Gate Before Continuing                                                         |
+| :----: | ------------------------- | :--------------: | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **0**  | Local Dev Environment     |   ✅ **Done**    | Every developer runs the full stack locally                                                                | All services start without errors                                              |
+| **1**  | Monorepo Scaffold + CI    |   ✅ **Done**    | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                           | CI passes on an empty repo push                                                |
+| **2**  | Secrets + Config          |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                             | App refuses to start with missing vars                                         |
+| **3**  | Environments Wired        |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
+| **4**  | Database Foundation       |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **5**  | Document Ingestion Engine |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    |
+| **6A** | AI Engine Foundation      |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
+| **6B** | AI Engine Advanced        |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **7**  | Auth Backend              |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| **8**  | Walking Skeleton Web UI   | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                  | Student signs up, uploads a doc, gets an AI response — on staging              |
+| **9**  | Design System + App Shell |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                      | Core screens navigable with real design                                        |
+
+| **10** | PDF Reader (Web) | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat | Student opens, reads, highlights, and Snips to Chat |
+| **11** | AI Chat Interface (Web) | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills | Student chats with the AI; branch navigation works |
+| **12** | Learn Mode (Web) | Section outline, explanations, check questions, mastery ring | Student studies a section and answers recall checks |
+| **13** | Quiz System (Web) | Async ARQ job, 5 formats, timed interface, results, share card | Student generates and completes a quiz |
+| **14** | Notes (Web) | Tiptap editor, idb-keyval offline, sync-on-reconnect | Student writes, edits, and syncs a note |
+| **15** | Timetable + Dashboard (Web) | Schedule engine, home page, recents carousel, tasks list | Home page shows real timetable and recent activity |
+| **16** | Portals | Lecturer submission, admin management, super admin | Lecturer submits → admin approves → document enters ingestion |
+| **17** | Settings + Profile + Feedback | Profile, preferences, session management, CSAT, feedback triage | Student updates profile and theme; feedback lands in admin |
+| **18** | Credits + Payments | Double-entry credit ledger, Paystack, Flutterwave | Student purchases credits and spends them on AI |
+| **19** | Email System | Resend, React Email templates, ARQ worker queue | Welcome email arrives after signup |
+| **20** | Mobile (Expo) | Auth, PDF reader, chat, quiz, notes, timetable, widgets | Full student journey works on iOS + Android |
+| **21** | Desktop (Electron) | Offline SQLite, PDF cache, background sync, auto-updater | Full offline study session works without internet |
+| **22** | PWA + Offline (Web) | `@serwist/next`, caching tiers, IndexedDB outbox | Web app installs and key flows work offline |
+| **23** | Public Pages + SEO | Landing, pricing, about, JSON-LD, Open Graph, sitemap | Public pages indexed by Google with correct metadata |
+| **24** | Security Hardening | CORS, headers, rate limits, NDPA 2023, dependency scan | Security checklist cleared |
+| **25** | Observability + Monitoring | Sentry, PostHog, Better Uptime, structlog, keep-alive | Errors visible, events tracked, uptime alerting live |
+| **26** | Performance + Load Testing | Lighthouse, k6, EXPLAIN ANALYZE | p95 API < 500ms; Lighthouse performance > 90 |
+| **27** | Pre-Launch Checklist | Full checklist verification | Every item checked |
+| **28** | Production Launch 🚀 | DNS live, migrations applied, smoke tested | Real students using the app |
+| **29** | Post-Launch Iteration | Feature flags, DORA metrics, incident process | Sustainable delivery culture active |
 
 ---
 
@@ -1022,6 +1023,7 @@ PR reviewed + CI green → merged to main
 ## 🔑 PHASE 7 — Auth Backend
 
 ### 7.1 JWKS & Token Verification Engine
+
 > 📖 See implementation_plan.md § Section 3.1, 3.5, 3.6 (L1828)
 
 - [x] Configure JWKS cache TTL (`JWKS_CACHE_TTL_SECONDS = 3600`) in settings | file: apps/api/app/core/config.py
@@ -1039,6 +1041,7 @@ PR reviewed + CI green → merged to main
 - [x] Malformed or invalid JWT rejection returning HTTP 401 Unauthorized | file: apps/api/app/core/dependencies.py
 
 ### 7.2 Identity & Role Resolution
+
 > 📖 See implementation_plan.md § Section 3.2, 3.6 (L1848)
 
 - [x] Create `UserContext` structure with id, email, role, roles, university_id, client_type | file: apps/api/app/core/dependencies.py
@@ -1052,6 +1055,7 @@ PR reviewed + CI green → merged to main
 - [x] Test suite role header override (`x-user-role`) support | file: apps/api/app/core/dependencies.py
 
 ### 7.3 RBAC Role Guards
+
 > 📖 See implementation_plan.md § Section 3.2, 3.9 (L1848, L2041)
 
 - [x] `require_role(allowed_roles)` factory dependency | file: apps/api/app/core/dependencies.py
@@ -1067,6 +1071,7 @@ PR reviewed + CI green → merged to main
 - [x] Zero student mutation rule: enforce admin check on `POST /library/{id}/reembed` | file: apps/api/app/routers/library.py
 
 ### 7.4 Client Identification (`x-api-key`)
+
 > 📖 See implementation_plan.md § Section 3.1, 3.10 (L1836, L2055)
 
 - [x] Configure client secret keys in settings (`X_API_KEY_WEB`, `X_API_KEY_MOBILE`, `X_API_KEY_DESKTOP`) | file: apps/api/app/core/config.py
@@ -1075,6 +1080,7 @@ PR reviewed + CI green → merged to main
 - [x] `require_api_key` dependency enforcing valid client API key | file: apps/api/app/core/dependencies.py
 
 ### 7.5 Multi-Tenant Data Isolation
+
 > 📖 See implementation_plan.md § Section 3.2, 3.9 (L1848, L2041)
 
 - [x] Pipe `current_user.university_id` into `rag_engine.retrieve_context` in chat stream | file: apps/api/app/routers/chat.py
@@ -1082,6 +1088,7 @@ PR reviewed + CI green → merged to main
 - [x] Prevent cross-university document chunk retrieval for non-UNIJOS users | file: apps/api/app/routers/chat.py
 
 ### 7.6 Auth Endpoints & Onboarding APIs
+
 > 📖 See implementation_plan.md § Section 3.3, 3.4, 3.7 (L1873, L1884, L1997)
 
 - [x] Register `GET /api/v1/auth/me` returning verified profile, roles, and tenant ID | file: apps/api/app/routers/auth.py
@@ -1092,6 +1099,7 @@ PR reviewed + CI green → merged to main
 - [ ] Implement rate-limiting middleware on auth endpoints (`SlowAPI` 10 req/min per IP) | file: apps/api/app/core/rate_limit.py
 
 ### 7.7 Client Platform Authentication
+
 > 📖 See implementation_plan.md § Section 3.5, 3.8 (L1937, L2028)
 
 - [ ] Web: Initialize `@supabase/supabase-js` with HttpOnly cookie session storage for Next.js SSR | file: apps/web/src/lib/supabase/client.ts
@@ -1103,6 +1111,7 @@ PR reviewed + CI green → merged to main
 - [ ] Desktop: System browser redirect listener capturing OAuth completion | file: apps/desktop/src/main/oauth.ts
 
 ### 7.8 Verification & Test Suite
+
 > 📖 See implementation_plan.md § Section 26 — Testing Strategy
 
 - [x] Integration test: `GET /api/v1/auth/me` returns 401 when unauthenticated on staging | file: apps/api/tests/test_auth.py
@@ -1128,15 +1137,15 @@ PR reviewed + CI green → merged to main
 
 **This slice**: Sign up → verify email → log in → upload a document → open a chat → get a streamed AI response
 
-- [ ] Auth screens: Login, Signup (email/password), Password Reset — React Hook Form + Zod validation
-- [ ] Supabase onboarding: email confirmation → name entry → university selection → level selection → terms acceptance
-- [ ] **First-Chat Disclaimer & Academic Agreement Modal**: Mandatory clinical & academic disclaimer modal presented immediately after onboarding completion, right before the user enters chat for the first time
-- [ ] Middleware protecting all `/app/**` routes — unauthenticated → redirect to `/login`
-- [ ] `<UserInitialsAvatar />` — deterministic initial + color hash from user's first name (no image upload)
-- [ ] Bare home page skeleton (no real design — just structure)
-- [ ] Document upload modal (functional, no polish)
-- [ ] Bare chat interface: text input + streamed response rendered in a `<pre>` tag — proves SSE works
-- [ ] **Sentry wired in**: `@sentry/nextjs` on `apps/web`, `sentry_sdk` on `apps/api`
+- [x] Auth screens: Login, Signup (email/password), Password Reset — React Hook Form + Zod validation | file: apps/web/app/login/page.tsx, apps/web/app/signup/page.tsx, apps/web/app/forgot-password/page.tsx, apps/web/app/auth/callback/route.ts
+- [x] Supabase onboarding: email confirmation → name entry → university selection (dynamic, no default) → level selection → terms acceptance | file: apps/web/app/onboarding/page.tsx, apps/api/app/routers/auth.py
+- [x] **First-Chat Disclaimer & Academic Agreement Modal**: Mandatory clinical & academic disclaimer modal presented before first chat message with localStorage persistence | file: apps/web/components/FirstChatDisclaimerModal.tsx
+- [x] Middleware protecting all `/app/**` and `/onboarding` routes — unauthenticated → redirect to `/login` | file: apps/web/middleware.ts, apps/web/lib/supabase/middleware.ts
+- [x] `<UserInitialsAvatar />` — deterministic initial + color hash from user's first name (no image upload) | file: apps/web/components/UserInitialsAvatar.tsx
+- [x] Bare home page skeleton with recent documents library table and role badge | file: apps/web/app/app/page.tsx
+- [x] Document upload modal (functional, multi-stage, zero-student upload governance notice) | file: apps/web/components/DocumentUploadModal.tsx
+- [x] Bare chat interface: text input + streamed response rendered live in `<pre>` tag with collapsible reasoning block — proves SSE works | file: apps/web/app/app/chat/page.tsx
+- [x] **Sentry wired in**: `@sentry/nextjs` on `apps/web`, `sentry_sdk` on `apps/api` | file: apps/web/sentry.client.config.ts, apps/api/app/main.py
 - [ ] **Deploy to staging and verify the full slice works on a real URL**
 
 > [!IMPORTANT]

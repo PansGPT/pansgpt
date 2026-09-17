@@ -66,36 +66,40 @@ class UserContext(dict):
 
     def __init__(
         self,
-        id: uuid.UUID | str,
+        id: str | uuid.UUID,
         email: str,
-        role: str = "student",
-        roles: list[str] | None = None,
-        university_id: uuid.UUID | str | None = None,
+        role: str,
+        roles: list[str],
+        university_id: str | uuid.UUID | None = None,
         first_name: str | None = None,
         last_name: str | None = None,
+        current_level: str | None = None,
+        terms_accepted_at: str | None = None,
         client_type: str = "web",
         dev_bypass: bool = False,
         **kwargs,
     ):
-        clean_id = uuid.UUID(str(id)) if isinstance(id, (str, uuid.UUID)) else id
-        clean_uni_id = (
+        u_id = uuid.UUID(str(id)) if isinstance(id, (str, uuid.UUID)) else id
+        uni_uuid = (
             uuid.UUID(str(university_id))
             if university_id and isinstance(university_id, (str, uuid.UUID))
             else None
         )
-        clean_roles = roles if roles else [role]
-        super().__init__(
-            id=clean_id,
-            email=email,
-            role=role,
-            roles=clean_roles,
-            university_id=clean_uni_id,
-            first_name=first_name,
-            last_name=last_name,
-            client_type=client_type,
-            dev_bypass=dev_bypass,
+        data = {
+            "id": u_id,
+            "email": email,
+            "role": role,
+            "roles": roles,
+            "university_id": uni_uuid,
+            "first_name": first_name,
+            "last_name": last_name,
+            "current_level": current_level,
+            "terms_accepted_at": terms_accepted_at,
+            "client_type": client_type,
+            "dev_bypass": dev_bypass,
             **kwargs,
-        )
+        }
+        super().__init__(data)
 
     @property
     def id(self) -> uuid.UUID:
@@ -126,6 +130,18 @@ class UserContext(dict):
         return self.get("last_name")
 
     @property
+    def current_level(self) -> str | None:
+        return self.get("current_level")
+
+    @property
+    def terms_accepted_at(self) -> str | None:
+        return self.get("terms_accepted_at")
+
+    @property
+    def is_onboarded(self) -> bool:
+        return bool(self.first_name and self.university_id and self.terms_accepted_at)
+
+    @property
     def client_type(self) -> str:
         return self.get("client_type", "web")
 
@@ -138,6 +154,22 @@ class UserContext(dict):
 # 3. Role and University Lookup Caching (Redis + In-Memory Fallback)
 # ------------------------------------------------------------------------------
 _IN_MEMORY_ROLE_CACHE: dict[str, tuple[dict, float]] = {}
+
+
+async def invalidate_user_role_cache(user_id: str | uuid.UUID) -> None:
+    """Invalidates the cached role/profile for a user (e.g. after onboarding)."""
+    uid_str = str(user_id)
+    if uid_str in _IN_MEMORY_ROLE_CACHE:
+        del _IN_MEMORY_ROLE_CACHE[uid_str]
+    if settings.redis_connection_url:
+        try:
+            import redis.asyncio as aioredis
+
+            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
+            await r.delete(f"auth:role:{uid_str}")
+            await r.aclose()
+        except Exception:
+            pass
 
 
 async def _get_cached_role(user_id: str) -> dict | None:
@@ -185,12 +217,16 @@ async def _set_cached_role(user_id: str, data: dict) -> None:
             pass
 
 
+set_cached_user_profile = _set_cached_role
+
+
 async def _lookup_user_profile(
     user_id: str, claims: dict
-) -> tuple[list[str], str, uuid.UUID | None, str | None, str | None]:
+) -> tuple[list[str], str, uuid.UUID | None, str | None, str | None, str | None, str | None]:
     """
     Resolves roles and university_id for a verified JWT subject.
     Performs cached lookup (5 min TTL) against DB public.users with claims fallback.
+    Returns: (roles, role, university_id, first_name, last_name, current_level, terms_accepted_at)
     """
     cached = await _get_cached_role(user_id)
     if cached:
@@ -201,6 +237,8 @@ async def _lookup_user_profile(
             uni_id,
             cached.get("first_name"),
             cached.get("last_name"),
+            cached.get("current_level"),
+            cached.get("terms_accepted_at"),
         )
 
     # Fallback to claims metadata if DB is offline/unreachable
@@ -214,6 +252,8 @@ async def _lookup_user_profile(
     uni_id = uuid.UUID(uni_str) if uni_str else None
     first_name = metadata.get("first_name")
     last_name = metadata.get("last_name")
+    current_level = metadata.get("current_level")
+    terms_accepted_at = metadata.get("terms_accepted_at")
 
     if settings.DATABASE_URL:
         try:
@@ -221,7 +261,7 @@ async def _lookup_user_profile(
                 if conn:
                     row = await conn.fetchrow(
                         """
-                        SELECT roles, university_id, first_name, last_name, deleted_at
+                        SELECT roles, university_id, first_name, last_name, current_level, terms_accepted_at::text, deleted_at
                         FROM public.users
                         WHERE id = $1;
                         """,
@@ -242,6 +282,8 @@ async def _lookup_user_profile(
                         uni_id = row["university_id"]
                         first_name = row["first_name"]
                         last_name = row["last_name"]
+                        current_level = row["current_level"]
+                        terms_accepted_at = row["terms_accepted_at"]
         except HTTPException:
             raise
         except Exception as exc:
@@ -253,9 +295,11 @@ async def _lookup_user_profile(
         "university_id": str(uni_id) if uni_id else None,
         "first_name": first_name,
         "last_name": last_name,
+        "current_level": current_level,
+        "terms_accepted_at": terms_accepted_at,
     }
     await _set_cached_role(user_id, profile_data)
-    return roles, primary_role, uni_id, first_name, last_name
+    return roles, primary_role, uni_id, first_name, last_name, current_level, terms_accepted_at
 
 
 # ------------------------------------------------------------------------------
@@ -402,7 +446,9 @@ async def get_current_user(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Token missing subject (sub) claim.",
             )
-        roles, role, uni_id, fname, lname = await _lookup_user_profile(sub, claims)
+        roles, role, uni_id, fname, lname, clevel, terms_at = await _lookup_user_profile(
+            sub, claims
+        )
         return UserContext(
             id=sub,
             email=claims.get("email", ""),
@@ -411,6 +457,8 @@ async def get_current_user(
             university_id=uni_id,
             first_name=fname,
             last_name=lname,
+            current_level=clevel,
+            terms_accepted_at=terms_at,
             client_type=client_type or "web",
             dev_bypass=False,
         )
@@ -426,6 +474,8 @@ async def get_current_user(
             university_id=uuid.UUID("01a07664-7a69-7ce0-ad6a-b219462cbde3"),
             first_name="Test",
             last_name="User",
+            current_level="300",
+            terms_accepted_at="2026-01-01T00:00:00Z",
             client_type=client_type or "web",
             dev_bypass=True,
         )
@@ -440,6 +490,8 @@ async def get_current_user(
             university_id=uuid.UUID("01a07664-7a69-7ce0-ad6a-b219462cbde3"),
             first_name="Dev",
             last_name="SuperAdmin",
+            current_level="500",
+            terms_accepted_at="2026-01-01T00:00:00Z",
             client_type=client_type or "web",
             dev_bypass=True,
         )

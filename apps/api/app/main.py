@@ -5,6 +5,7 @@
 import asyncio
 from contextlib import asynccontextmanager
 
+import structlog
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -16,6 +17,22 @@ from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
+
+logger = structlog.get_logger(__name__)
+
+# Initialize Sentry if configured
+if settings.SENTRY_DSN:
+    try:
+        import sentry_sdk
+
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            environment=settings.ENVIRONMENT,
+            traces_sample_rate=0.1,
+        )
+        logger.info("sentry_initialized", environment=settings.ENVIRONMENT)
+    except Exception as exc:
+        logger.warning("sentry_init_failed", error=str(exc))
 
 
 @asynccontextmanager

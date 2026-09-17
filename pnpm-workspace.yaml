@@ -2,6 +2,9 @@ packages:
   - "apps/*"
   - "packages/*"
 allowBuilds:
+  "@sentry/cli": true
   electron: true
   sharp: true
   unrs-resolver: true
+overrides:
+  webpack: "5.98.0"

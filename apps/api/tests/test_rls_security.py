@@ -15,6 +15,12 @@ async def _get_live_test_connection() -> asyncpg.Connection | None:
         return None
     try:
         conn = await asyncpg.connect(url, timeout=15.0, statement_cache_size=0)
+        table_exists = await conn.fetchval(
+            "SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'universities';"
+        )
+        if not table_exists:
+            await conn.close()
+            return None
         return conn
     except Exception as e:
         print(f"Live DB connection skipped or failed: {e}")
