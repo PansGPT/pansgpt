@@ -1,67 +1,500 @@
 # ==============================================================================
-# PansGPT 2.0 Auth & RBAC Dependencies (Phase 5 & 7)
+# PansGPT 2.0 Auth & RBAC Dependencies (Phase 7 - Auth Backend)
+# Genuine JWKS RS256 token verification, Redis role cache, x-api-key validation
 # ==============================================================================
 
+import asyncio
+import hashlib
+import hmac
+import json
+import time
+import uuid
 from collections.abc import Callable
 
 import jwt
-from fastapi import Header, HTTPException, status
+import structlog
+from fastapi import Depends, Header, HTTPException, status
+from jwt import PyJWKClient
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError, PyJWKClientError
 
 from app.core.config import settings
+from app.core.database import get_db_connection
+
+logger = structlog.get_logger(__name__)
+
+# ------------------------------------------------------------------------------
+# 1. JWKS Client Singleton
+# ------------------------------------------------------------------------------
+_jwks_client: PyJWKClient | None = None
+
+
+def get_jwks_client() -> PyJWKClient | None:
+    """Lazy-initializes or returns singleton PyJWKClient with in-memory caching."""
+    global _jwks_client
+    if _jwks_client is None and settings.SUPABASE_URL:
+        jwks_url = f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/.well-known/jwks.json"
+        _jwks_client = PyJWKClient(
+            jwks_url,
+            cache_keys=True,
+            max_cached_keys=16,
+            cache_jwk_set=True,
+            lifespan=float(settings.JWKS_CACHE_TTL_SECONDS),
+        )
+    return _jwks_client
+
+
+async def prewarm_jwks_cache() -> None:
+    """Pre-warms the JWKS signing key cache on application startup."""
+    client = get_jwks_client()
+    if client:
+        try:
+            await asyncio.to_thread(client.get_jwk_set)
+            logger.info("jwks_cache_prewarmed", jwks_url=client.uri)
+        except Exception as exc:
+            logger.warning("jwks_cache_prewarm_failed", error=str(exc))
+
+
+# ------------------------------------------------------------------------------
+# 2. UserContext Data Structure
+# ------------------------------------------------------------------------------
+class UserContext(dict):
+    """
+    Resolved User Identity & Tenancy Context.
+    Subclasses dict for backward compatibility with existing auth_user['role'] usage
+    while exposing clean typed properties.
+    """
+
+    def __init__(
+        self,
+        id: uuid.UUID | str,
+        email: str,
+        role: str = "student",
+        roles: list[str] | None = None,
+        university_id: uuid.UUID | str | None = None,
+        first_name: str | None = None,
+        last_name: str | None = None,
+        client_type: str = "web",
+        dev_bypass: bool = False,
+        **kwargs,
+    ):
+        clean_id = uuid.UUID(str(id)) if isinstance(id, (str, uuid.UUID)) else id
+        clean_uni_id = (
+            uuid.UUID(str(university_id))
+            if university_id and isinstance(university_id, (str, uuid.UUID))
+            else None
+        )
+        clean_roles = roles if roles else [role]
+        super().__init__(
+            id=clean_id,
+            email=email,
+            role=role,
+            roles=clean_roles,
+            university_id=clean_uni_id,
+            first_name=first_name,
+            last_name=last_name,
+            client_type=client_type,
+            dev_bypass=dev_bypass,
+            **kwargs,
+        )
+
+    @property
+    def id(self) -> uuid.UUID:
+        return self["id"]
+
+    @property
+    def email(self) -> str:
+        return self["email"]
+
+    @property
+    def role(self) -> str:
+        return self["role"]
+
+    @property
+    def roles(self) -> list[str]:
+        return self["roles"]
+
+    @property
+    def university_id(self) -> uuid.UUID | None:
+        return self["university_id"]
+
+    @property
+    def first_name(self) -> str | None:
+        return self.get("first_name")
+
+    @property
+    def last_name(self) -> str | None:
+        return self.get("last_name")
+
+    @property
+    def client_type(self) -> str:
+        return self.get("client_type", "web")
+
+    @property
+    def dev_bypass(self) -> bool:
+        return self.get("dev_bypass", False)
+
+
+# ------------------------------------------------------------------------------
+# 3. Role and University Lookup Caching (Redis + In-Memory Fallback)
+# ------------------------------------------------------------------------------
+_IN_MEMORY_ROLE_CACHE: dict[str, tuple[dict, float]] = {}
+
+
+async def _get_cached_role(user_id: str) -> dict | None:
+    now = time.time()
+    # 1. Check in-memory cache
+    if user_id in _IN_MEMORY_ROLE_CACHE:
+        data, exp = _IN_MEMORY_ROLE_CACHE[user_id]
+        if now < exp:
+            return data
+        del _IN_MEMORY_ROLE_CACHE[user_id]
+
+    # 2. Check Redis if configured
+    if settings.redis_connection_url:
+        try:
+            import redis.asyncio as aioredis
+
+            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
+            raw = await r.get(f"auth:role:{user_id}")
+            await r.aclose()
+            if raw:
+                data = json.loads(raw)
+                _IN_MEMORY_ROLE_CACHE[user_id] = (data, now + settings.ROLE_CACHE_TTL_SECONDS)
+                return data
+        except Exception:
+            pass
+
+    return None
+
+
+async def _set_cached_role(user_id: str, data: dict) -> None:
+    now = time.time()
+    _IN_MEMORY_ROLE_CACHE[user_id] = (data, now + settings.ROLE_CACHE_TTL_SECONDS)
+    if settings.redis_connection_url:
+        try:
+            import redis.asyncio as aioredis
+
+            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
+            await r.set(
+                f"auth:role:{user_id}",
+                json.dumps(data),
+                ex=settings.ROLE_CACHE_TTL_SECONDS,
+            )
+            await r.aclose()
+        except Exception:
+            pass
+
+
+async def _lookup_user_profile(
+    user_id: str, claims: dict
+) -> tuple[list[str], str, uuid.UUID | None, str | None, str | None]:
+    """
+    Resolves roles and university_id for a verified JWT subject.
+    Performs cached lookup (5 min TTL) against DB public.users with claims fallback.
+    """
+    cached = await _get_cached_role(user_id)
+    if cached:
+        uni_id = uuid.UUID(cached["university_id"]) if cached.get("university_id") else None
+        return (
+            cached.get("roles", ["student"]),
+            cached.get("role", "student"),
+            uni_id,
+            cached.get("first_name"),
+            cached.get("last_name"),
+        )
+
+    # Fallback to claims metadata if DB is offline/unreachable
+    metadata = claims.get("user_metadata", {}) or {}
+    roles = metadata.get("roles")
+    if not roles:
+        single_role = metadata.get("role") or claims.get("role") or "student"
+        roles = [single_role]
+    primary_role = roles[0] if roles else "student"
+    uni_str = metadata.get("university_id")
+    uni_id = uuid.UUID(uni_str) if uni_str else None
+    first_name = metadata.get("first_name")
+    last_name = metadata.get("last_name")
+
+    if settings.DATABASE_URL:
+        try:
+            async with get_db_connection(timeout=3.0) as conn:
+                if conn:
+                    row = await conn.fetchrow(
+                        """
+                        SELECT roles, university_id, first_name, last_name, deleted_at
+                        FROM public.users
+                        WHERE id = $1;
+                        """,
+                        uuid.UUID(user_id),
+                    )
+                    if row:
+                        if row["deleted_at"] is not None:
+                            raise HTTPException(
+                                status_code=status.HTTP_401_UNAUTHORIZED,
+                                detail="User account has been deactivated.",
+                            )
+                        db_roles = [str(r) for r in row["roles"]] if row["roles"] else ["student"]
+                        roles = db_roles
+                        for hr in ["super_admin", "university_admin", "lecturer", "student"]:
+                            if hr in roles:
+                                primary_role = hr
+                                break
+                        uni_id = row["university_id"]
+                        first_name = row["first_name"]
+                        last_name = row["last_name"]
+        except HTTPException:
+            raise
+        except Exception as exc:
+            logger.warning("auth_db_profile_lookup_failed", error=str(exc))
+
+    profile_data = {
+        "roles": roles,
+        "role": primary_role,
+        "university_id": str(uni_id) if uni_id else None,
+        "first_name": first_name,
+        "last_name": last_name,
+    }
+    await _set_cached_role(user_id, profile_data)
+    return roles, primary_role, uni_id, first_name, last_name
+
+
+# ------------------------------------------------------------------------------
+# 4. Token & API Key Verification
+# ------------------------------------------------------------------------------
+def _verify_token(token: str) -> dict:
+    """Verifies RS256/HS256 JWT signature and claims using Supabase JWKS or secret."""
+    try:
+        header = jwt.get_unverified_header(token)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid token header: {exc}",
+        ) from exc
+
+    alg = header.get("alg", "RS256")
+
+    # HS256 verification (local development or symmetric secret)
+    if alg == "HS256":
+        if not settings.SUPABASE_JWT_SECRET:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="HS256 token received but SUPABASE_JWT_SECRET is not configured.",
+            )
+        try:
+            return jwt.decode(
+                token,
+                settings.SUPABASE_JWT_SECRET,
+                algorithms=["HS256"],
+                options={"verify_aud": False},
+            )
+        except ExpiredSignatureError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired.",
+            ) from exc
+        except InvalidTokenError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Invalid token signature: {exc}",
+            ) from exc
+
+    # RS256 verification via JWKS
+    client = get_jwks_client()
+    if not client:
+        # Fallback to SUPABASE_JWT_SECRET if URL is not configured
+        if settings.SUPABASE_JWT_SECRET:
+            try:
+                return jwt.decode(
+                    token,
+                    settings.SUPABASE_JWT_SECRET,
+                    algorithms=["HS256", "RS256"],
+                    options={"verify_aud": False},
+                )
+            except Exception as exc:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=f"Token validation failed: {exc}",
+                ) from exc
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="JWKS client is unconfigured (missing SUPABASE_URL).",
+        )
+
+    try:
+        signing_key = client.get_signing_key_from_jwt(token)
+        return jwt.decode(
+            token,
+            signing_key.key,
+            algorithms=["RS256"],
+            options={"verify_aud": False},
+        )
+    except ExpiredSignatureError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token has expired.",
+        ) from exc
+    except (InvalidTokenError, PyJWKClientError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Token verification failed: {exc}",
+        ) from exc
+
+
+def _verify_api_key(api_key: str | None) -> str | None:
+    """
+    Validates client identification key (x-api-key) against SHA-256 / plaintext configs.
+    Returns client_type ('web', 'mobile', 'desktop') or None.
+    """
+    if not api_key or not isinstance(api_key, str):
+        return None
+
+    raw_hash = hashlib.sha256(api_key.encode("utf-8")).hexdigest()
+
+    pairs = [
+        ("web", settings.X_API_KEY_WEB),
+        ("mobile", settings.X_API_KEY_MOBILE),
+        ("desktop", settings.X_API_KEY_DESKTOP),
+    ]
+
+    for client_type, configured_key in pairs:
+        if configured_key:
+            if hmac.compare_digest(api_key, configured_key) or hmac.compare_digest(
+                raw_hash, configured_key
+            ):
+                return client_type
+            conf_hash = hashlib.sha256(configured_key.encode("utf-8")).hexdigest()
+            if hmac.compare_digest(raw_hash, conf_hash):
+                return client_type
+
+    return None
+
+
+# ------------------------------------------------------------------------------
+# 5. FastAPI Authentication & Authorization Dependencies
+# ------------------------------------------------------------------------------
+async def get_current_user(
+    authorization: str | None = Header(None),
+    x_user_role: str | None = Header(None),
+    x_user_id: str | None = Header(None, alias="x-user-id"),
+    x_api_key: str | None = Header(None, alias="x-api-key"),
+) -> UserContext:
+    """
+    Resolves verified user identity:
+    1. Validates Bearer JWT with Supabase JWKS (RS256).
+    2. Queries user roles and university tenant context from Postgres.
+    3. Supports test role header overrides in test suites.
+    4. Falls back to dev bypass when ENVIRONMENT == 'development' and unauthenticated.
+    """
+    auth_str = authorization if isinstance(authorization, str) else None
+    role_str = x_user_role if isinstance(x_user_role, str) else None
+    uid_str = x_user_id if isinstance(x_user_id, str) else None
+    key_str = x_api_key if isinstance(x_api_key, str) else None
+
+    client_type = _verify_api_key(key_str) if key_str else "web"
+
+    # 1. Bearer JWT validation
+    if auth_str and auth_str.startswith("Bearer "):
+        token = auth_str.split(" ", 1)[1].strip()
+        claims = _verify_token(token)
+        sub = claims.get("sub") or claims.get("id")
+        if not sub:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token missing subject (sub) claim.",
+            )
+        roles, role, uni_id, fname, lname = await _lookup_user_profile(sub, claims)
+        return UserContext(
+            id=sub,
+            email=claims.get("email", ""),
+            role=role,
+            roles=roles,
+            university_id=uni_id,
+            first_name=fname,
+            last_name=lname,
+            client_type=client_type or "web",
+            dev_bypass=False,
+        )
+
+    # 2. Direct role header (for automated pytest test suites & internal dev mocks)
+    if role_str:
+        uid = uid_str or "018f3a10-0001-7000-8000-000000000001"
+        return UserContext(
+            id=uid,
+            email="dev-role-override@pansgpt.com",
+            role=role_str,
+            roles=[role_str],
+            university_id=uuid.UUID("01a07664-7a69-7ce0-ad6a-b219462cbde3"),
+            first_name="Test",
+            last_name="User",
+            client_type=client_type or "web",
+            dev_bypass=True,
+        )
+
+    # 3. Dev bypass for development environment without auth headers
+    if settings.ENVIRONMENT == "development" and not auth_str and not role_str:
+        return UserContext(
+            id="018f3a10-0001-7000-8000-000000000001",
+            email="dev-admin@unijos.edu.ng",
+            role="super_admin",
+            roles=["super_admin", "university_admin", "student"],
+            university_id=uuid.UUID("01a07664-7a69-7ce0-ad6a-b219462cbde3"),
+            first_name="Dev",
+            last_name="SuperAdmin",
+            client_type=client_type or "web",
+            dev_bypass=True,
+        )
+
+    # 4. In production/staging or invalid auth
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Authentication credentials were not provided or invalid.",
+    )
 
 
 def require_role(allowed_roles: list[str]) -> Callable:
-    """
-    Dependency factory enforcing RBAC role checks:
-    - Inspects `x-user-role` header (for testing and dev service calls)
-    - Inspects Bearer JWT token in `Authorization` header
-    - Rejects with HTTP 403 if role is not within allowed_roles
-    """
+    """Dependency factory enforcing RBAC role checks against verified UserContext."""
+    allowed_set = {r.lower() for r in allowed_roles}
 
     async def role_checker(
-        authorization: str | None = Header(None),
-        x_user_role: str | None = Header(None),
-    ):
-        # 1. Direct role header (useful for test suites & internal service calls)
-        if x_user_role:
-            if x_user_role.lower() in [r.lower() for r in allowed_roles]:
-                return {"role": x_user_role}
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Forbidden: Requires one of {allowed_roles}, got '{x_user_role}'.",
-            )
+        user: UserContext = Depends(get_current_user),
+    ) -> UserContext:
+        user_roles_set = {r.lower() for r in user.roles}
+        user_roles_set.add(user.role.lower())
 
-        # 2. JWT Bearer token check
-        if authorization and authorization.startswith("Bearer "):
-            token = authorization.split(" ", 1)[1].strip()
-            try:
-                # In dev mode, decode unverified or with jwt secret if available
-                payload = jwt.decode(token, options={"verify_signature": False})
-                user_role = (
-                    payload.get("user_metadata", {}).get("role") or payload.get("role") or "student"
-                )
-                if user_role.lower() in [r.lower() for r in allowed_roles]:
-                    return payload
-                raise HTTPException(
-                    status_code=status.HTTP_403_FORBIDDEN,
-                    detail=f"Forbidden: Insufficient permissions. Role '{user_role}' not permitted.",
-                )
-            except HTTPException:
-                raise
-            except Exception:
-                pass
+        if user_roles_set.intersection(allowed_set):
+            return user
 
-        # 3. In development / testing environment without headers, allow through if dev
-        if settings.ENVIRONMENT == "development" and not authorization and not x_user_role:
-            return {"role": "super_admin", "dev_bypass": True}
-
-        # If headers were provided but invalid, or in non-dev env without credentials
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication credentials were not provided or invalid.",
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Forbidden: Insufficient permissions. Requires one of {allowed_roles}, got '{user.role}'.",
         )
 
     return role_checker
 
 
+async def require_api_key(
+    x_api_key: str | None = Header(None, alias="x-api-key"),
+) -> str:
+    """Dependency enforcing a valid x-api-key header, returning client_type."""
+    if not x_api_key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing required x-api-key header.",
+        )
+    client_type = _verify_api_key(x_api_key)
+    if not client_type:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid client API key.",
+        )
+    return client_type
+
+
+# ------------------------------------------------------------------------------
+# 6. Pre-configured Role Dependencies
+# ------------------------------------------------------------------------------
+require_student = require_role(["student"])
+require_lecturer = require_role(["lecturer", "university_admin", "super_admin"])
+require_university_admin = require_role(["university_admin", "super_admin", "admin"])
+require_super_admin = require_role(["super_admin"])
 require_admin_or_super_admin = require_role(["university_admin", "super_admin", "admin"])

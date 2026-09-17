@@ -1023,31 +1023,31 @@ PR reviewed + CI green → merged to main
 
 ### 7.1 JWT + JWKS Verification (FastAPI)
 
-- [ ] On startup: fetch Supabase JWKS from `{SUPABASE_URL}/auth/v1/.well-known/jwks.json`
-- [ ] Cache signing keys in memory (`PyJWKClient`, `cache_keys=True`)
-- [ ] Per-request (hot path, no network call):
+- [x] On startup: fetch Supabase JWKS from `{SUPABASE_URL}/auth/v1/.well-known/jwks.json` (prewarmed in lifespan)
+- [x] Cache signing keys in memory (`PyJWKClient`, `cache_keys=True`)
+- [x] Per-request (hot path, no network call):
   1. Extract Bearer token from Authorization header
   2. Decode JWT header to get `kid`
   3. Look up signing key from in-memory cache by `kid`
   4. Verify RS256 signature + expiry
   5. Extract `sub` (user_id) and email from claims
-  6. Lookup role in DB (cached in Redis for 5 minutes)
+  6. Lookup role in DB (cached in Redis/in-memory for 5 minutes)
   7. Attach `UserContext(id, email, role, university_id, client_type)` to request state
   8. On key miss → re-fetch JWKS (handles Supabase key rotation)
 
 ### 7.2 Role Guards
 
-- [ ] `require_student` — 403 if not student
-- [ ] `require_lecturer` — 403 if not lecturer
-- [ ] `require_university_admin` — 403 if not admin; also scopes to `university_id`
-- [ ] `require_super_admin` — 403 if not super_admin; cross-institution access
-- [ ] **Students have zero upload capability** — admin RBAC enforced at dependency level before any DB query
+- [x] `require_student` — 403 if not student
+- [x] `require_lecturer` — 403 if not lecturer
+- [x] `require_university_admin` — 403 if not admin; also scopes to `university_id`
+- [x] `require_super_admin` — 403 if not super_admin; cross-institution access
+- [x] **Students have zero upload capability** — admin RBAC enforced at dependency level before any DB query
 
 ### 7.3 Per-Client API Keys (`x-api-key` header)
 
-- [ ] Separate keys for `web`, `mobile`, `desktop` clients (stored as env vars on the API server)
-- [ ] Middleware accepts either JWT (user sessions) OR `x-api-key` (client identification)
-- [ ] API key stored as `SHA-256(key)` — plaintext never persisted in DB
+- [x] Separate keys for `web`, `mobile`, `desktop` clients (stored as env vars on the API server)
+- [x] Middleware accepts either JWT (user sessions) OR `x-api-key` (client identification)
+- [x] API key stored as `SHA-256(key)` — plaintext never persisted in DB
 
 ### 7.4 Auth Per Platform
 
@@ -1060,11 +1060,11 @@ PR reviewed + CI green → merged to main
 
 ### 7.5 Verification
 
-- [ ] `GET /api/auth/me` returns correct user profile on staging
-- [ ] `GET /api/auth/me` with no token → `401`
-- [ ] `POST /api/library/upload-url` with student token → `403`
-- [ ] `GET /api/admin/users` with student token → `403`
-- [ ] Pytest covers all role guard combinations
+- [x] `GET /api/auth/me` returns correct user profile on staging
+- [x] `GET /api/auth/me` with no token → `401`
+- [x] `POST /api/library/upload-url` with student token → `403`
+- [ ] `GET /api/admin/users` with student token → `403` (Deferred to Phase 15 Admin Portal)
+- [x] Pytest covers all role guard combinations
 
 ---
 

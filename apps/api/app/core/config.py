@@ -41,6 +41,8 @@ class Settings(BaseSettings):
     SUPABASE_JWT_SECRET: str | None = Field(
         default=None, description="Supabase JWT Verification Secret"
     )
+    JWKS_CACHE_TTL_SECONDS: int = 3600
+    ROLE_CACHE_TTL_SECONDS: int = 300
 
     # Cloudflare R2 Document Storage (S3-Compatible)
     CLOUDFLARE_R2_ACCOUNT_ID: str | None = None

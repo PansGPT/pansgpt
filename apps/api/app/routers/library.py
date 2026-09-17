@@ -9,7 +9,7 @@ import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.core.config import settings
-from app.core.dependencies import require_admin_or_super_admin
+from app.core.dependencies import get_current_user, require_admin_or_super_admin
 from app.engines.arq_producer import enqueue_ingestion_job
 from app.engines.storage import build_document_storage_key, storage_engine
 from app.models.library import (
@@ -124,7 +124,10 @@ async def initialize_document_upload(
     status_code=status.HTTP_202_ACCEPTED,
     summary="Alias: Confirm client upload completion and dispatch worker",
 )
-async def confirm_document_upload(document_id: str):
+async def confirm_document_upload(
+    document_id: str,
+    auth_user: dict = Depends(require_admin_or_super_admin),
+):
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
     Transitions status to 'pending' and enqueues the background ingestion job via ARQ.
@@ -184,7 +187,10 @@ async def confirm_document_upload(document_id: str):
     response_model=DocumentDetailResponse,
     summary="Get detailed metadata for a single document",
 )
-async def get_single_document(document_id: str):
+async def get_single_document(
+    document_id: str,
+    auth_user: dict = Depends(get_current_user),
+):
     """Fetch metadata and embedding status for a specific document."""
     if not settings.DATABASE_URL:
         raise HTTPException(
@@ -276,7 +282,11 @@ async def get_single_document(document_id: str):
     response_model=DocumentDetailResponse,
     summary="Update document title, course code, lecturer, or status (Admin only)",
 )
-async def update_document_metadata(document_id: str, payload: DocumentPatchRequest):
+async def update_document_metadata(
+    document_id: str,
+    payload: DocumentPatchRequest,
+    auth_user: dict = Depends(require_admin_or_super_admin),
+):
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
         raise HTTPException(
@@ -336,7 +346,10 @@ async def update_document_metadata(document_id: str, payload: DocumentPatchReque
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Soft-delete document by setting deleted_at (Admin only)",
 )
-async def soft_delete_document(document_id: str):
+async def soft_delete_document(
+    document_id: str,
+    auth_user: dict = Depends(require_admin_or_super_admin),
+):
     """Marks document as deleted (deleted_at = now()). Chunks remain for audit until hard purged."""
     if not settings.DATABASE_URL:
         return None
@@ -368,7 +381,10 @@ async def soft_delete_document(document_id: str):
     response_model=list[DocumentSegmentResponse],
     summary="Get hierarchical topic segments for a document",
 )
-async def get_document_segments(document_id: str):
+async def get_document_segments(
+    document_id: str,
+    auth_user: dict = Depends(get_current_user),
+):
     """Returns the ordered hierarchical chapter and topic segments of a document."""
     if not settings.DATABASE_URL:
         return []
@@ -413,7 +429,10 @@ async def get_document_segments(document_id: str):
     response_model=PdfUrlResponse,
     summary="Get 15-minute presigned GET streaming URL for PDF reader",
 )
-async def get_document_pdf_stream_url(document_id: str):
+async def get_document_pdf_stream_url(
+    document_id: str,
+    auth_user: dict = Depends(get_current_user),
+):
     storage_key = None
     if settings.DATABASE_URL:
         try:
@@ -456,11 +475,17 @@ async def get_document_pdf_stream_url(document_id: str):
 )
 async def list_documents(
     university_id: str | None = Query(
-        default="01a07664-7a69-7ce0-ad6a-b219462cbde3",
-        description="Filter by university ID (defaults to UNIJOS)",
+        default=None,
+        description="Filter by university ID (defaults to user's university or UNIJOS)",
     ),
     course_code: str | None = Query(None, description="Optional course code filter (e.g. PCL 401)"),
+    auth_user: dict = Depends(get_current_user),
 ):
+    target_uni = university_id or (
+        str(auth_user.get("university_id"))
+        if auth_user.get("university_id")
+        else "01a07664-7a69-7ce0-ad6a-b219462cbde3"
+    )
     results: list[DocumentDetailResponse] = []
     if settings.DATABASE_URL:
         try:
@@ -474,7 +499,7 @@ async def list_documents(
                 FROM public.documents
                 WHERE university_id = $1 AND deleted_at IS NULL
             """
-            params = [uuid.UUID(university_id)]
+            params = [uuid.UUID(target_uni)]
             if course_code:
                 query += " AND course_code = $2"
                 params.append(course_code.upper().strip())

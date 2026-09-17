@@ -8,11 +8,22 @@ import uuid
 from collections.abc import AsyncGenerator
 
 import structlog
-from fastapi import APIRouter, BackgroundTasks, File, Header, Query, Request, UploadFile, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    Header,
+    Query,
+    Request,
+    UploadFile,
+    status,
+)
 from fastapi.responses import StreamingResponse
 
 from app.core.config import settings
 from app.core.database import get_db_connection
+from app.core.dependencies import UserContext, get_current_user
 from app.engines.guard import policy_guard
 from app.engines.llm import llm_engine
 from app.engines.rag import rag_engine
@@ -96,9 +107,10 @@ async def _auto_generate_session_title(session_id: str, message: str) -> None:
 async def create_chat_session(
     payload: ChatSessionCreateRequest,
     x_user_id: str | None = Header(None, alias="X-User-Id"),
+    current_user: UserContext = Depends(get_current_user),
 ):
     """Creates a new chat session thread for the authenticated student."""
-    user_id = _extract_user_id(x_user_id)
+    user_id = x_user_id or str(current_user.id)
     session_id = str(uuid.uuid4())
     doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None
     title = payload.title or "New Chat"
@@ -144,9 +156,10 @@ async def create_chat_session(
 async def list_chat_sessions(
     x_user_id: str | None = Header(None, alias="X-User-Id"),
     limit: int = Query(default=30, ge=1, le=100),
+    current_user: UserContext = Depends(get_current_user),
 ):
     """Returns a list of conversation threads for the student."""
-    user_id = _extract_user_id(x_user_id)
+    user_id = x_user_id or str(current_user.id)
     sessions: list[ChatSessionResponse] = []
 
     async with get_db_connection() as conn:
@@ -186,9 +199,10 @@ async def list_chat_sessions(
 async def get_chat_session_details(
     session_id: str,
     x_user_id: str | None = Header(None, alias="X-User-Id"),
+    current_user: UserContext = Depends(get_current_user),
 ):
     """Retrieves session details and its active message tree."""
-    user_id = _extract_user_id(x_user_id)
+    user_id = x_user_id or str(current_user.id)
     session_data: dict | None = None
     messages: list[ChatMessageResponse] = []
 
@@ -280,6 +294,7 @@ async def stream_chat_session(
     background_tasks: BackgroundTasks,
     x_user_id: str | None = Header(None, alias="X-User-Id"),
     x_university_id: str | None = Header(None, alias="X-University-Id"),
+    current_user: UserContext = Depends(get_current_user),
 ):
     """
     Core Server-Sent Events (SSE) endpoint:
@@ -290,8 +305,12 @@ async def stream_chat_session(
     5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort
     6. Asynchronous persistence of user and assistant messages + telemetry
     """
-    user_id = _extract_user_id(x_user_id)
-    university_id = x_university_id or DEV_DEFAULT_UNI_ID
+    user_id = x_user_id or str(current_user.id)
+    university_id = (
+        x_university_id
+        or (str(current_user.university_id) if current_user.university_id else None)
+        or DEV_DEFAULT_UNI_ID
+    )
     user_message_id = str(uuid.uuid4())
     assistant_message_id = str(uuid.uuid4())
 
@@ -454,6 +473,7 @@ async def stream_chat_session(
 )
 async def transcribe_voice_audio(
     file: UploadFile = File(...),
+    current_user: UserContext = Depends(get_current_user),
 ):
     """
     Transcribes student microphone audio to text using Groq Whisper.

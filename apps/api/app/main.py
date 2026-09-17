@@ -11,6 +11,8 @@ from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.core.database import close_db_pool, init_db_pool
+from app.core.dependencies import prewarm_jwks_cache
+from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
@@ -18,8 +20,9 @@ from app.routers.library import router as library_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: initialize database pool
+    # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
+    await prewarm_jwks_cache()
     yield
     # Shutdown: cleanly close database pool
     await close_db_pool()
@@ -43,6 +46,7 @@ app.add_middleware(
 )
 
 # Register API v1 Routers
+app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
