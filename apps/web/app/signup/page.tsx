@@ -2,6 +2,7 @@
 
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,12 +23,23 @@ const signupSchema = z
 type SignupFormValues = z.infer<typeof signupSchema>;
 
 function SignupFormContent() {
-  const [authError, setAuthError] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get("error");
+
+  const [authError, setAuthError] = useState<string | null>(
+    urlError ? decodeURIComponent(urlError) : null
+  );
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  React.useEffect(() => {
+    if (urlError) {
+      setAuthError(decodeURIComponent(urlError));
+    }
+  }, [urlError]);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const supabase = createClient();

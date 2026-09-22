@@ -20,11 +20,20 @@ function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nextUrl = searchParams.get("next") || "/app";
+  const urlError = searchParams.get("error");
 
-  const [authError, setAuthError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(
+    urlError ? decodeURIComponent(urlError) : null
+  );
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  React.useEffect(() => {
+    if (urlError) {
+      setAuthError(decodeURIComponent(urlError));
+    }
+  }, [urlError]);
 
   const supabase = createClient();
 
