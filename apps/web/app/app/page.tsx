@@ -78,6 +78,12 @@ export default function AppHomePage() {
     }
   }, [session, fetchDocuments]);
 
+  useEffect(() => {
+    if (!authLoading && profile && !profile.is_onboarded) {
+      router.replace("/onboarding");
+    }
+  }, [authLoading, profile, router]);
+
   const handleSignOut = async () => {
     await signOut();
     router.push("/login");

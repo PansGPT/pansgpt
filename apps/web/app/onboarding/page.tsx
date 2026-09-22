@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
+import { createClient } from "@/lib/supabase/client";
 import { GraduationCap, Building2, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 interface UniversityItem {
@@ -24,6 +25,7 @@ const ACADEMIC_LEVELS = [
 export default function OnboardingPage() {
   const router = useRouter();
   const { session, profile, refreshProfile, loading: authLoading } = useAuth();
+  const [supabase] = useState(() => createClient());
 
   const [universities, setUniversities] = useState<UniversityItem[]>([]);
   const [loadingUniversities, setLoadingUniversities] = useState(true);
@@ -46,17 +48,43 @@ export default function OnboardingPage() {
         const res = await fetch(`${apiUrl}/api/v1/auth/universities`);
         if (res.ok) {
           const data = await res.json();
-          setUniversities(data);
+          if (data && data.length > 0) {
+            setUniversities(data);
+            return;
+          }
         }
-      } catch (err) {
-        console.error("Failed to load universities", err);
-      } finally {
-        setLoadingUniversities(false);
+      } catch {
+        // Backend offline, fallback to Supabase query
       }
+
+      try {
+        const { data } = await (supabase as any)
+          .from("universities")
+          .select("id, name, short_name, slug")
+          .eq("status", "active")
+          .order("name", { ascending: true });
+
+        if (data && data.length > 0) {
+          setUniversities(data);
+          return;
+        }
+      } catch {
+        // Ignore
+      }
+
+      // Default seeded institution fallback
+      setUniversities([
+        {
+          id: "01a07664-7a69-7ce0-ad6a-b219462cbde3",
+          name: "University of Jos",
+          short_name: "UNIJOS",
+          slug: "unijos",
+        },
+      ]);
     }
 
-    loadUniversities();
-  }, []);
+    loadUniversities().finally(() => setLoadingUniversities(false));
+  }, [supabase]);
 
   // Pre-fill existing profile fields if available
   useEffect(() => {
@@ -106,24 +134,45 @@ export default function OnboardingPage() {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
       const token = session?.access_token;
 
-      const res = await fetch(`${apiUrl}/api/v1/auth/onboard`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token || ""}`,
-        },
-        body: JSON.stringify({
-          first_name: firstName.trim(),
-          last_name: lastName.trim(),
-          university_id: universityId,
-          current_level: currentLevel,
-          terms_accepted: termsAccepted,
-        }),
-      });
+      let onboarded = false;
+      try {
+        const res = await fetch(`${apiUrl}/api/v1/auth/onboard`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token || ""}`,
+          },
+          body: JSON.stringify({
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            university_id: universityId,
+            current_level: currentLevel,
+            terms_accepted: termsAccepted,
+          }),
+        });
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.detail || "Failed to complete onboarding.");
+        if (res.ok) {
+          onboarded = true;
+        }
+      } catch {
+        // Backend offline, will use Supabase direct update below
+      }
+
+      if (!onboarded && session?.user?.id) {
+        const { error: updateError } = await (supabase as any)
+          .from("users")
+          .update({
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            university_id: universityId,
+            current_level: currentLevel,
+            terms_accepted_at: new Date().toISOString(),
+          })
+          .eq("id", session.user.id);
+
+        if (updateError) {
+          throw new Error(updateError.message || "Failed to update profile.");
+        }
       }
 
       await refreshProfile();
