@@ -91,6 +91,9 @@ class MultiTierLlmEngine:
                 if db_provider not in ["google", "groq", "openrouter"]:
                     db_provider = "google"
 
+                clean_status = (
+                    status if status in ("success", "error", "timeout", "failover") else "error"
+                )
                 u_uuid = uuid.UUID(user_id) if user_id else None
                 uni_uuid = uuid.UUID(university_id) if university_id else None
 
@@ -114,7 +117,7 @@ class MultiTierLlmEngine:
                     prompt_tokens,
                     completion_tokens,
                     latency_ms,
-                    status,
+                    clean_status,
                     error_message,
                 )
         except Exception as exc:
@@ -148,7 +151,14 @@ class MultiTierLlmEngine:
             elif role == "user":
                 prompt_parts.append(f"Student Query:\n{content}")
             elif role == "assistant":
-                prompt_parts.append(f"Assistant:\n{content}")
+                if m.get("tool_calls"):
+                    calls_desc = ", ".join(
+                        f"{tc['function']['name']}({tc['function'].get('arguments', '')})"
+                        for tc in m["tool_calls"]
+                    )
+                    prompt_parts.append(f"Assistant: (Executed tools: {calls_desc})")
+                elif content:
+                    prompt_parts.append(f"Assistant:\n{content}")
             elif role == "tool":
                 prompt_parts.append(f"Tool Output ({m.get('name', 'tool')}):\n{content}")
 
@@ -161,7 +171,7 @@ class MultiTierLlmEngine:
                     model=model_name,
                     contents=full_prompt,
                 ),
-                timeout=5.0,
+                timeout=15.0,
             )
             if hasattr(resp, "function_calls") and resp.function_calls:
                 calls = []
@@ -181,6 +191,7 @@ class MultiTierLlmEngine:
             async def _text_gen():
                 for word in text.split(" "):
                     yield word + " "
+                    await asyncio.sleep(0.005)
 
             return [], _text_gen()
 
@@ -190,7 +201,7 @@ class MultiTierLlmEngine:
                 model=model_name,
                 contents=full_prompt,
             ),
-            timeout=5.0,
+            timeout=15.0,
         )
 
         async def _stream_gen():
@@ -223,15 +234,25 @@ class MultiTierLlmEngine:
         groq_msgs = []
         for m in messages:
             r = m.get("role", "user")
-            c = m.get("content", "")
-            if r in ("system", "user", "assistant"):
-                groq_msgs.append({"role": r, "content": c})
+            c = m.get("content")
+            if r in ("system", "user"):
+                groq_msgs.append({"role": r, "content": c or ""})
+            elif r == "assistant":
+                msg: dict[str, Any] = {"role": "assistant"}
+                if c:
+                    msg["content"] = c
+                if m.get("tool_calls"):
+                    msg["tool_calls"] = m["tool_calls"]
+                if "content" not in msg and "tool_calls" not in msg:
+                    msg["content"] = ""
+                groq_msgs.append(msg)
             elif r == "tool":
                 groq_msgs.append(
                     {
                         "role": "tool",
                         "tool_call_id": m.get("tool_call_id", "call_default"),
-                        "content": c,
+                        "name": m.get("name", "tool"),
+                        "content": c or "",
                     }
                 )
 
@@ -245,7 +266,7 @@ class MultiTierLlmEngine:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
-            resp = await asyncio.wait_for(client.chat.completions.create(**kwargs), timeout=5.0)
+            resp = await asyncio.wait_for(client.chat.completions.create(**kwargs), timeout=15.0)
             choice = resp.choices[0]
             if choice.message.tool_calls:
                 calls = []
@@ -269,6 +290,7 @@ class MultiTierLlmEngine:
             async def _text_gen():
                 for word in text.split(" "):
                     yield word + " "
+                    await asyncio.sleep(0.005)
 
             return [], _text_gen()
 
@@ -280,7 +302,7 @@ class MultiTierLlmEngine:
                 temperature=0.2,
                 max_tokens=settings.TEXT_CHAT_MAX_TOKENS,
             ),
-            timeout=5.0,
+            timeout=15.0,
         )
 
         async def _stream_gen():
@@ -456,6 +478,8 @@ class MultiTierLlmEngine:
             turn_handled = False
             tool_calls: list[dict[str, Any]] = []
             text_gen: AsyncGenerator[str, None] | None = None
+            # Allow up to 2 tool execution turns; from turn 2 onwards force text synthesis
+            tools_for_turn = active_tools if (turn < 2) else None
 
             # ------------------------------------------------------------------
             # TIER 1: Google AI Studio Gemma 4 31B
@@ -466,7 +490,7 @@ class MultiTierLlmEngine:
                     active_provider = "google"
                     active_model = self.primary_model
                     tool_calls, text_gen = await self._call_gemma_turn(
-                        self.primary_model, conversation_messages, active_tools
+                        self.primary_model, conversation_messages, tools_for_turn
                     )
                     turn_handled = True
                 except Exception as e1:
@@ -492,7 +516,7 @@ class MultiTierLlmEngine:
                     active_provider = "google"
                     active_model = self.secondary_model
                     tool_calls, text_gen = await self._call_gemma_turn(
-                        self.secondary_model, conversation_messages, active_tools
+                        self.secondary_model, conversation_messages, tools_for_turn
                     )
                     turn_handled = True
                 except Exception as e1b:
@@ -518,7 +542,7 @@ class MultiTierLlmEngine:
                     active_provider = "groq"
                     active_model = self.groq_model
                     tool_calls, text_gen = await self._call_groq_turn(
-                        conversation_messages, active_tools
+                        conversation_messages, tools_for_turn
                     )
                     turn_handled = True
                 except Exception as e2:
@@ -624,6 +648,27 @@ class MultiTierLlmEngine:
             # PROCESS AGENT TURN RESULTS
             # ------------------------------------------------------------------
             if tool_calls:
+                formatted_tool_calls = [
+                    {
+                        "id": tc["id"],
+                        "type": "function",
+                        "function": {
+                            "name": tc["name"],
+                            "arguments": json.dumps(tc.get("arguments", {}))
+                            if isinstance(tc.get("arguments"), dict)
+                            else str(tc.get("arguments", "{}")),
+                        },
+                    }
+                    for tc in tool_calls
+                ]
+                conversation_messages.append(
+                    {
+                        "role": "assistant",
+                        "content": None,
+                        "tool_calls": formatted_tool_calls,
+                    }
+                )
+
                 for tc in tool_calls:
                     call_id = tc["id"]
                     t_name = tc["name"]
@@ -659,16 +704,12 @@ class MultiTierLlmEngine:
 
                     conversation_messages.append(
                         {
-                            "role": "assistant",
-                            "content": f"Invoked tool {t_name} with arguments: {json.dumps(t_args)}",
-                        }
-                    )
-                    conversation_messages.append(
-                        {
                             "role": "tool",
                             "name": t_name,
                             "tool_call_id": call_id,
-                            "content": json.dumps(tool_res),
+                            "content": json.dumps(tool_res)
+                            if not isinstance(tool_res, str)
+                            else tool_res,
                         }
                     )
 
@@ -718,7 +759,7 @@ class MultiTierLlmEngine:
             latency,
             prompt_tokens,
             completion_tokens,
-            "success" if generation_successful else "empty",
+            "success" if generation_successful else "error",
             user_id,
             university_id,
         )
