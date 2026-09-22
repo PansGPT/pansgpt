@@ -305,8 +305,17 @@ async def _lookup_user_profile(
 # ------------------------------------------------------------------------------
 # 4. Token & API Key Verification
 # ------------------------------------------------------------------------------
+_VERIFIED_TOKEN_CACHE: dict[str, tuple[dict, float]] = {}
+
+
 def _verify_token(token: str) -> dict:
-    """Verifies RS256/HS256 JWT signature and claims using Supabase JWKS or secret."""
+    """Verifies RS256/HS256/ES256 JWT signature using Supabase secret, JWKS, or Auth API gateway."""
+    now = time.time()
+    if token in _VERIFIED_TOKEN_CACHE:
+        cached_claims, exp = _VERIFIED_TOKEN_CACHE[token]
+        if now < exp:
+            return cached_claims
+
     try:
         header = jwt.get_unverified_header(token)
     except Exception as exc:
@@ -315,22 +324,19 @@ def _verify_token(token: str) -> dict:
             detail=f"Invalid token header: {exc}",
         ) from exc
 
-    alg = header.get("alg", "RS256")
+    alg = header.get("alg", "HS256")
 
-    # HS256 verification (local development or symmetric secret)
-    if alg == "HS256":
-        if not settings.SUPABASE_JWT_SECRET:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="HS256 token received but SUPABASE_JWT_SECRET is not configured.",
-            )
+    # 1. HS256 local verification if SUPABASE_JWT_SECRET is configured
+    if alg == "HS256" and settings.SUPABASE_JWT_SECRET:
         try:
-            return jwt.decode(
+            claims = jwt.decode(
                 token,
                 settings.SUPABASE_JWT_SECRET,
                 algorithms=["HS256"],
                 options={"verify_aud": False},
             )
+            _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
+            return claims
         except ExpiredSignatureError as exc:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -342,46 +348,72 @@ def _verify_token(token: str) -> dict:
                 detail=f"Invalid token signature: {exc}",
             ) from exc
 
-    # RS256 verification via JWKS
+    # 2. RS256 / ES256 verification via JWKS
     client = get_jwks_client()
-    if not client:
-        # Fallback to SUPABASE_JWT_SECRET if URL is not configured
-        if settings.SUPABASE_JWT_SECRET:
-            try:
-                return jwt.decode(
-                    token,
-                    settings.SUPABASE_JWT_SECRET,
-                    algorithms=["HS256", "RS256"],
-                    options={"verify_aud": False},
+    if client and alg in ("RS256", "ES256"):
+        try:
+            signing_key = client.get_signing_key_from_jwt(token)
+            claims = jwt.decode(
+                token,
+                signing_key.key,
+                algorithms=["RS256", "ES256"],
+                options={"verify_aud": False},
+            )
+            _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
+            return claims
+        except ExpiredSignatureError as exc:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token has expired.",
+            ) from exc
+        except (InvalidTokenError, PyJWKClientError):
+            pass
+
+    # 3. Supabase Auth API Fallback (Verifies tokens with the project gateway)
+    if settings.SUPABASE_URL and settings.SUPABASE_ANON_KEY:
+        try:
+            import httpx
+
+            auth_url = f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/user"
+            with httpx.Client(timeout=4.0) as http_client:
+                resp = http_client.get(
+                    auth_url,
+                    headers={
+                        "Authorization": f"Bearer {token}",
+                        "apikey": settings.SUPABASE_ANON_KEY,
+                    },
                 )
-            except Exception as exc:
+            if resp.status_code == 200:
+                user_data = resp.json()
+                claims = {
+                    "sub": user_data["id"],
+                    "id": user_data["id"],
+                    "email": user_data.get("email", ""),
+                    "user_metadata": user_data.get("user_metadata", {}),
+                    "role": user_data.get("role", "authenticated"),
+                }
+                _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
+                return claims
+            elif resp.status_code == 401:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail=f"Token validation failed: {exc}",
-                ) from exc
+                    detail="Token rejected by Supabase Auth (expired or invalid).",
+                )
+        except HTTPException:
+            raise
+        except Exception as exc:
+            logger.warning("supabase_auth_gateway_verification_failed", error=str(exc))
+
+    if alg == "HS256" and not settings.SUPABASE_JWT_SECRET:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="JWKS client is unconfigured (missing SUPABASE_URL).",
+            detail="HS256 token verification failed. Please configure SUPABASE_JWT_SECRET in .env.",
         )
 
-    try:
-        signing_key = client.get_signing_key_from_jwt(token)
-        return jwt.decode(
-            token,
-            signing_key.key,
-            algorithms=["RS256"],
-            options={"verify_aud": False},
-        )
-    except ExpiredSignatureError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired.",
-        ) from exc
-    except (InvalidTokenError, PyJWKClientError) as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Token verification failed: {exc}",
-        ) from exc
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Token verification failed.",
+    )
 
 
 def _verify_api_key(api_key: str | None) -> str | None:
