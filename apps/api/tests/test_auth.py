@@ -216,8 +216,11 @@ async def test_upload_endpoint_with_student_role_returns_403(client, rsa_key_pai
 
 
 @pytest.mark.asyncio
-async def test_upload_endpoint_with_admin_role_succeeds(client, rsa_key_pair, mock_jwks):
+async def test_upload_endpoint_with_admin_role_succeeds(
+    client, rsa_key_pair, mock_jwks, monkeypatch
+):
     """Verify POST /api/v1/library/upload allows university_admin and super_admin."""
+    monkeypatch.setattr("app.routers.library.settings.DATABASE_URL", "")
     admin_token = make_token(
         rsa_key_pair,
         role="university_admin",

@@ -295,8 +295,9 @@ async def test_full_8stage_pipeline_execution():
 
 
 @pytest.mark.asyncio
-async def test_upload_endpoint_generates_presigned_url(client):
+async def test_upload_endpoint_generates_presigned_url(client, monkeypatch):
     """Verify POST /api/v1/library/upload and aliased /api/v1/documents/upload generate 201 Created."""
+    monkeypatch.setattr("app.routers.library.settings.DATABASE_URL", "")
     payload = {
         "title": "Adrenergic Pharmacology Lecture 1",
         "course_code": "PCL 401",
