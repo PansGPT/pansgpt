@@ -165,9 +165,17 @@ class MultiTierLlmEngine:
         """
         Executes a turn via Google AI Studio Gemma.
         Returns (tool_calls, text_stream).
+
+        Resilience note: generate_content_stream() is a lazy async generator
+        that does not contact Google's backend until the first chunk is iterated.
+        A 500 ServerError therefore surfaces during iteration — which in the
+        original code happened after turn_handled=True, bypassing all fallback
+        tiers.  Fix: eagerly consume the first chunk here so any backend error
+        fires inside our own try/except before the generator is returned.
         """
         from google import genai
         from google.genai import types
+        from google.genai.errors import ServerError as GoogleServerError
 
         client = genai.Client(
             api_key=self.gemini_key,
@@ -197,15 +205,19 @@ class MultiTierLlmEngine:
 
         full_prompt = "\n\n".join(prompt_parts)
 
-        # If tools provided, inspect with generate_content
+        # Non-streaming path: tools inspection via generate_content
         if tools:
-            resp = await asyncio.wait_for(
-                client.aio.models.generate_content(
-                    model=model_name,
-                    contents=full_prompt,
-                ),
-                timeout=15.0,
-            )
+            try:
+                resp = await asyncio.wait_for(
+                    client.aio.models.generate_content(
+                        model=model_name,
+                        contents=full_prompt,
+                    ),
+                    timeout=15.0,
+                )
+            except GoogleServerError as gse:
+                raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
+
             if hasattr(resp, "function_calls") and resp.function_calls:
                 calls = []
                 for fc in resp.function_calls:
@@ -218,7 +230,7 @@ class MultiTierLlmEngine:
                     )
                 return calls, None
 
-            # Model returned text
+            # Model returned text instead of a tool call
             text = resp.text or ""
 
             async def _text_gen():
@@ -228,19 +240,45 @@ class MultiTierLlmEngine:
 
             return [], _text_gen()
 
-        # Stream directly when no tools requested
-        response_stream = await asyncio.wait_for(
-            client.aio.models.generate_content_stream(
-                model=model_name,
-                contents=full_prompt,
-            ),
-            timeout=15.0,
-        )
+        # Streaming path (no tools)
+        # generate_content_stream() is lazy — a ServerError only fires on the
+        # first iteration, not when the coroutine is awaited.  To make it
+        # catchable by the tier try/except (before turn_handled is set), we
+        # eagerly await the first chunk here and re-raise any ServerError.
+        try:
+            response_stream = await asyncio.wait_for(
+                client.aio.models.generate_content_stream(
+                    model=model_name,
+                    contents=full_prompt,
+                ),
+                timeout=15.0,
+            )
+        except GoogleServerError as gse:
+            raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
+
+        first_chunk_text: str | None = None
+        try:
+            async for _first in response_stream:
+                first_chunk_text = _first.text if _first.text else ""
+                break  # Only the first chunk; rest stays buffered in the stream
+        except GoogleServerError as gse:
+            # 500 on first token — re-raise before turn_handled is set so the
+            # tier loop falls through to Groq.
+            raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
 
         async def _stream_gen():
-            async for chunk in response_stream:
-                if chunk.text:
-                    yield chunk.text
+            # Re-emit the first chunk we already consumed above
+            if first_chunk_text:
+                yield first_chunk_text
+            # Stream the remainder; mid-stream errors are logged and stopped
+            # gracefully (re-raising would break the open SSE connection).
+            try:
+                async for chunk in response_stream:
+                    if chunk.text:
+                        yield chunk.text
+            except GoogleServerError as gse:
+                logger.warning("gemma_stream_mid_error", error=str(gse))
+                return
 
         return [], _stream_gen()
 
