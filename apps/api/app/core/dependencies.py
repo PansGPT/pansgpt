@@ -496,7 +496,7 @@ async def get_current_user(
         )
 
     # 2. Direct role header (for automated pytest test suites & internal dev mocks)
-    if role_str:
+    if role_str and settings.ENVIRONMENT == "development":
         uid = uid_str or "018f3a10-0001-7000-8000-000000000001"
         return UserContext(
             id=uid,

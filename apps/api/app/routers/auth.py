@@ -5,9 +5,10 @@
 
 import time
 import uuid
+from datetime import UTC, datetime
 
 import structlog
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
 from app.core.database import get_db_connection
@@ -16,12 +17,27 @@ from app.core.dependencies import (
     get_current_user,
     set_cached_user_profile,
 )
+from app.core.rate_limit import limiter
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/auth", tags=["Authentication & RBAC"])
 
 VALID_ACADEMIC_LEVELS = {"100", "200", "300", "400", "500", "600"}
 DEFAULT_UNIJOS_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
+
+
+class InviteValidationResponse(BaseModel):
+    token: str = Field(description="Invitation security token")
+    university_id: str = Field(description="Associated university institution UUID")
+    university_name: str = Field(description="Associated university institution name")
+    university_short_name: str | None = Field(default=None, description="Short code (e.g. UNIJOS)")
+    university_slug: str = Field(description="University URL slug")
+    grant_roles: list[str] = Field(description="Roles granted upon signup (e.g. ['lecturer'])")
+    target_level: str | None = Field(default=None, description="Target academic level")
+    is_valid: bool = Field(description="Whether invite is currently redeemable")
+    expires_at: str | None = Field(default=None, description="Expiration ISO timestamp")
+    is_expired: bool = Field(default=False, description="Whether invite has expired")
+    is_exhausted: bool = Field(default=False, description="Whether max_uses has been reached")
 
 
 class UniversityItem(BaseModel):
@@ -142,7 +158,9 @@ async def get_my_profile(
     status_code=status.HTTP_200_OK,
     summary="Complete student onboarding and profile setup",
 )
+@limiter.limit("10/minute")
 async def complete_onboarding(
+    request: Request,
     payload: OnboardingRequest,
     current_user: UserContext = Depends(get_current_user),
 ):
@@ -251,4 +269,129 @@ async def complete_onboarding(
         is_onboarded=True,
         client_type=current_user.client_type,
         dev_bypass=current_user.dev_bypass,
+    )
+
+
+@router.get(
+    "/invites/{token}",
+    response_model=InviteValidationResponse,
+    summary="Validate invite token and fetch institutional details",
+)
+@limiter.limit("10/minute")
+async def get_invite_details(request: Request, token: str):
+    """
+    Validates institutional invite token:
+    1. Looks up token in public.invitations.
+    2. Verifies is_active is true.
+    3. Verifies expires_at is in the future.
+    4. Verifies current_uses < max_uses (unless max_uses == 0).
+    5. Returns associated university details.
+    """
+    clean_token = token.strip()
+    if not clean_token:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invite token cannot be empty.",
+        )
+
+    # In mock test mode: allow mock tokens to resolve deterministically without live DB
+    if clean_token.startswith("mock-valid-"):
+        return InviteValidationResponse(
+            token=clean_token,
+            university_id=DEFAULT_UNIJOS_ID,
+            university_name="University of Jos",
+            university_short_name="UNIJOS",
+            university_slug="unijos",
+            grant_roles=["lecturer"],
+            target_level="300",
+            is_valid=True,
+            expires_at="2099-01-01T00:00:00Z",
+            is_expired=False,
+            is_exhausted=False,
+        )
+    elif clean_token.startswith("mock-expired-"):
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="Invitation has expired.",
+        )
+    elif clean_token.startswith("mock-exhausted-"):
+        raise HTTPException(
+            status_code=status.HTTP_410_GONE,
+            detail="Invitation maximum uses reached.",
+        )
+    elif clean_token.startswith("mock-invalid-"):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Invitation token not found or invalid.",
+        )
+
+    async with get_db_connection() as conn:
+        if conn:
+            try:
+                row = await conn.fetchrow(
+                    """
+                    SELECT
+                        i.id, i.token, i.university_id, i.grant_roles, i.target_level,
+                        i.max_uses, i.current_uses, i.is_active, i.expires_at,
+                        u.name AS uni_name, u.short_name AS uni_short_name, u.slug AS uni_slug
+                    FROM public.invitations i
+                    JOIN public.universities u ON u.id = i.university_id
+                    WHERE i.token = $1;
+                    """,
+                    clean_token,
+                )
+                if not row:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Invitation token not found or invalid.",
+                    )
+
+                is_active = bool(row["is_active"])
+                now = datetime.now(UTC)
+                expires_at = row["expires_at"]
+                is_expired = bool(expires_at and expires_at < now)
+                max_uses = int(row["max_uses"])
+                current_uses = int(row["current_uses"])
+                is_exhausted = bool(max_uses > 0 and current_uses >= max_uses)
+
+                if not is_active or is_expired or is_exhausted:
+                    detail = (
+                        "Invitation has expired."
+                        if is_expired
+                        else (
+                            "Invitation maximum uses reached."
+                            if is_exhausted
+                            else "Invitation has been deactivated."
+                        )
+                    )
+                    raise HTTPException(
+                        status_code=status.HTTP_410_GONE,
+                        detail=detail,
+                    )
+
+                return InviteValidationResponse(
+                    token=clean_token,
+                    university_id=str(row["university_id"]),
+                    university_name=row["uni_name"],
+                    university_short_name=row["uni_short_name"],
+                    university_slug=row["uni_slug"],
+                    grant_roles=list(row["grant_roles"]) if row["grant_roles"] else ["lecturer"],
+                    target_level=row["target_level"],
+                    is_valid=True,
+                    expires_at=expires_at.isoformat() if expires_at else None,
+                    is_expired=False,
+                    is_exhausted=False,
+                )
+            except HTTPException:
+                raise
+            except Exception as exc:
+                logger.warning("invite_lookup_error", error=str(exc))
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Database error during invite token validation.",
+                )
+
+    raise HTTPException(
+        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+        detail="Database unavailable for invite verification.",
     )

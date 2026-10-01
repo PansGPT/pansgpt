@@ -73,6 +73,12 @@ async def test_university_scoping_invariant():
                 INSERT INTO public.users (id, email, first_name, university_id, roles)
                 VALUES ($1, $2, 'JosStudent', $3, ARRAY['student']::user_role[]),
                        ($4, $5, 'LagStudent', $6, ARRAY['student']::user_role[])
+                ON CONFLICT (id) DO UPDATE SET
+                    email = EXCLUDED.email,
+                    first_name = EXCLUDED.first_name,
+                    university_id = EXCLUDED.university_id,
+                    roles = EXCLUDED.roles,
+                    updated_at = now()
                 """,
                 jos_user_id,
                 f"jos_{jos_user_id.hex[:6]}@test.com",
@@ -204,6 +210,12 @@ async def test_document_chunks_rls_isolation():
                 INSERT INTO public.users (id, email, first_name, university_id, roles)
                 VALUES ($1, $2, 'JosStudent', $3, ARRAY['student']::user_role[]),
                        ($4, $5, 'LagStudent', $6, ARRAY['student']::user_role[])
+                ON CONFLICT (id) DO UPDATE SET
+                    email = EXCLUDED.email,
+                    first_name = EXCLUDED.first_name,
+                    university_id = EXCLUDED.university_id,
+                    roles = EXCLUDED.roles,
+                    updated_at = now()
                 """,
                 jos_user_id,
                 f"jos_{jos_user_id.hex[:6]}@test.com",
