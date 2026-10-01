@@ -16,19 +16,25 @@ import {
   Sparkles,
   AlertCircle,
   Square,
+  BookOpen,
 } from "lucide-react";
+import {
+  SSEEventStreamReader,
+  CitationItem,
+  ToolExecutionState,
+  ArtifactItem,
+} from "@/lib/sse-parser";
+import { ToolExecutionBadge } from "@/components/tools/ToolExecutionBadge";
+import { ArtifactRenderer } from "@/components/artifacts/ArtifactRenderer";
 
 interface MessageItem {
   id: string;
   role: "user" | "assistant";
   content: string;
   thinking?: string;
-  citations?: Array<{
-    title: string;
-    course_code?: string;
-    page_start?: number;
-    snippet?: string;
-  }>;
+  citations?: CitationItem[];
+  tools?: ToolExecutionState[];
+  artifacts?: ArtifactItem[];
 }
 
 export default function ChatPage() {
@@ -163,62 +169,115 @@ export default function ChatPage() {
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = "";
+      const sseParser = new SSEEventStreamReader();
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n\n");
-        buffer = lines.pop() || "";
-
-        for (const block of lines) {
-          if (!block.trim()) continue;
-
-          let currentEventType = "message";
-          let dataStr = "";
-
-          for (const line of block.split("\n")) {
-            if (line.startsWith("event:")) {
-              currentEventType = line.replace("event:", "").trim();
-            } else if (line.startsWith("data:")) {
-              dataStr = line.replace("data:", "").trim();
+        if (done) {
+          // Flush any final buffered events
+          const finalEvents = sseParser.flush();
+          for (const evt of finalEvents) {
+            const data = evt.data as any;
+            if (evt.event === "done" && data.full_text) {
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === assistantMsgId ? { ...msg, content: data.full_text } : msg
+                )
+              );
             }
           }
+          break;
+        }
 
-          if (!dataStr) continue;
+        const rawChunk = decoder.decode(value, { stream: true });
+        const events = sseParser.push(rawChunk);
 
-          try {
-            const parsed = JSON.parse(dataStr);
+        for (const evt of events) {
+          const data = evt.data as any;
 
-            if (currentEventType === "text_chunk" && parsed.token) {
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMsgId ? { ...msg, content: msg.content + parsed.token } : msg
-                )
-              );
-            } else if (currentEventType === "thinking_chunk" && parsed.token) {
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMsgId
-                    ? { ...msg, thinking: (msg.thinking || "") + parsed.token }
-                    : msg
-                )
-              );
-            } else if (currentEventType === "done") {
-              if (parsed.full_text) {
-                setMessages((prev) =>
-                  prev.map((msg) =>
-                    msg.id === assistantMsgId ? { ...msg, content: parsed.full_text } : msg
-                  )
+          if (evt.event === "text_chunk" && data.token) {
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMsgId ? { ...msg, content: msg.content + data.token } : msg
+              )
+            );
+          } else if (evt.event === "thinking_chunk" && data.token) {
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === assistantMsgId
+                  ? { ...msg, thinking: (msg.thinking || "") + data.token }
+                  : msg
+              )
+            );
+          } else if (evt.event === "citations" && Array.isArray(data)) {
+            setMessages((prev) =>
+              prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, citations: data } : msg))
+            );
+          } else if (evt.event === "tool_start" && data.call_id) {
+            const newTool: ToolExecutionState = {
+              call_id: data.call_id,
+              tool_name: data.tool_name || "tool",
+              arguments: data.arguments || {},
+              status: "running",
+            };
+            setMessages((prev) =>
+              prev.map((msg) => {
+                if (msg.id !== assistantMsgId) return msg;
+                const existing = msg.tools || [];
+                const idx = existing.findIndex((t) => t.call_id === data.call_id);
+                if (idx >= 0) {
+                  const updated = [...existing];
+                  updated[idx] = newTool;
+                  return { ...msg, tools: updated };
+                }
+                return { ...msg, tools: [...existing, newTool] };
+              })
+            );
+          } else if (evt.event === "tool_end" && data.call_id) {
+            setMessages((prev) =>
+              prev.map((msg) => {
+                if (msg.id !== assistantMsgId) return msg;
+                const existing = msg.tools || [];
+                const updated = existing.map((t) =>
+                  t.call_id === data.call_id
+                    ? {
+                        ...t,
+                        status: (data.status === "error" ? "error" : "success") as
+                          "success" | "error",
+                        result: data.result,
+                        duration_ms: data.duration_ms,
+                      }
+                    : t
                 );
-              }
-            } else if (currentEventType === "error") {
-              setStreamError(parsed.error || "Streaming error encountered.");
+                return { ...msg, tools: updated };
+              })
+            );
+          } else if (evt.event === "artifact_ready" && data.skill_name) {
+            const artifact: ArtifactItem = {
+              skill_name: data.skill_name,
+              title: data.title || "Generated Artifact",
+              file_extension: data.file_extension,
+              storage_key: data.storage_key,
+              download_url: data.download_url,
+              content: data.content,
+            };
+            setMessages((prev) =>
+              prev.map((msg) => {
+                if (msg.id !== assistantMsgId) return msg;
+                const existing = msg.artifacts || [];
+                return { ...msg, artifacts: [...existing, artifact] };
+              })
+            );
+          } else if (evt.event === "done") {
+            if (data.full_text) {
+              setMessages((prev) =>
+                prev.map((msg) =>
+                  msg.id === assistantMsgId ? { ...msg, content: data.full_text } : msg
+                )
+              );
             }
-          } catch {
-            // Ignore malformed JSON chunks
+          } else if (evt.event === "error") {
+            setStreamError(data.error || "Streaming error encountered.");
           }
         }
       }
@@ -340,6 +399,15 @@ export default function ChatPage() {
                       : "bg-white border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
                   }`}
                 >
+                  {/* Assistant Tool Execution Badges */}
+                  {msg.role === "assistant" && msg.tools && msg.tools.length > 0 && (
+                    <div className="mb-2.5 flex flex-wrap gap-1.5">
+                      {msg.tools.map((t) => (
+                        <ToolExecutionBadge key={t.call_id} tool={t} />
+                      ))}
+                    </div>
+                  )}
+
                   {/* Assistant Collapsible Reasoning Block */}
                   {msg.role === "assistant" && msg.thinking && (
                     <details className="mb-3 rounded-xl border border-neutral-200 bg-neutral-50/80 p-2.5 text-xs text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-300">
@@ -358,10 +426,48 @@ export default function ChatPage() {
                     {msg.content || (
                       <span className="flex items-center gap-1.5 text-neutral-400 italic">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        Generating response...
+                        {msg.tools && msg.tools.some((t) => t.status === "running")
+                          ? "Executing pharmacological research tools..."
+                          : "Generating response..."}
                       </span>
                     )}
                   </div>
+
+                  {/* Generated Artifacts (Documents, Slides, Flashcards, Chemical Structures, Mnemonics) */}
+                  {msg.role === "assistant" && msg.artifacts && msg.artifacts.length > 0 && (
+                    <div className="my-2.5 space-y-2">
+                      {msg.artifacts.map((art, idx) => (
+                        <ArtifactRenderer key={idx} artifact={art} />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Verified Syllabus Grounding Citations */}
+                  {msg.role === "assistant" && msg.citations && msg.citations.length > 0 && (
+                    <div className="mt-3 border-t border-neutral-100 pt-2 dark:border-neutral-800">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                        <BookOpen className="h-3 w-3" />
+                        <span>Verified Course Citations</span>
+                      </div>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {msg.citations.map((c, i) => (
+                          <span
+                            key={i}
+                            className="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                            title={c.snippet}
+                          >
+                            <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+                              {c.course_code || "REF"}
+                            </span>
+                            <span className="truncate max-w-[140px]">{c.title}</span>
+                            {c.page_start && (
+                              <span className="opacity-60">(p. {c.page_start})</span>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {msg.role === "user" && (
