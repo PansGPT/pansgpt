@@ -151,7 +151,7 @@ services:
     name: pansgpt-api-production
     env: docker
     region: frankfurt
-    plan: starter
+    plan: free
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .
@@ -240,7 +240,7 @@ services:
     name: pansgpt-worker-production
     env: docker
     region: frankfurt
-    plan: starter
+    plan: free
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .

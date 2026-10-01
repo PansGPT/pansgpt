@@ -99,6 +99,29 @@ class Settings(BaseSettings):
     GROQ_SECONDARY_MODEL: str = "qwen/qwen3.6-27b"
     WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
     WHISPER_SECONDARY_MODEL: str = "whisper-large-v3"
+    OPENAI_API_KEY: str | None = None
+    WHISPER_FALLBACK_MODEL: str = "whisper-1"
+    WHISPER_MAX_FILE_SIZE_BYTES: int = 25 * 1024 * 1024
+    WHISPER_ALLOWED_MIME_TYPES: list[str] = [
+        "audio/webm",
+        "audio/mp4",
+        "audio/m4a",
+        "audio/x-m4a",
+        "audio/wav",
+        "audio/x-wav",
+        "audio/wave",
+        "audio/mpeg",
+        "audio/mp3",
+        "audio/ogg",
+        "audio/opus",
+        "video/webm",
+    ]
+    WHISPER_PHARMACY_PROMPT: str = (
+        "Pharmacy, pharmacology, pharmacokinetics, pharmacodynamics, dosage, bioavailability, "
+        "posology, contraindications, adverse drug reactions, monograph, clinical biochemistry, "
+        "pathophysiology, medicinal chemistry, therapeutics, BNF, haloperidol, ciprofloxacin, "
+        "metformin, gentamicin, hydrochlorothiazide, amlodipine, salbutamol, omeprazole."
+    )
 
     OPENROUTER_API_KEY: str | None = None
     OPENROUTER_FALLBACK_MODEL: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
@@ -108,6 +131,35 @@ class Settings(BaseSettings):
     TEXT_CHAT_MAX_TOKENS: int = 4096
     VISION_REPLY_MAX_TOKENS: int = 2048
     VISION_EXTRACTION_MAX_TOKENS: int = 768
+
+    # Query Expansion & HyDE Configuration (Section 6B.6)
+    ENABLE_QUERY_EXPANSION: bool = True
+    QUERY_EXPANSION_TIMEOUT_SECONDS: float = 0.35
+    HYDE_TIMEOUT_SECONDS: float = 0.35
+
+    # Re-ranking Engine Configuration (Section 6B.7)
+    RERANKER_PROVIDER: Literal["flashrank", "cohere", "heuristic"] = "flashrank"
+    RERANKER_MODEL: str = "ms-marco-TinyBERT-L-2-v2"
+    COHERE_API_KEY: str | None = None
+    COHERE_RERANK_MODEL: str = "rerank-v3.5"
+    RERANKER_TIMEOUT_SECONDS: float = 0.30
+    RERANKER_MIN_SCORE_THRESHOLD: float = 0.38
+    RERANKER_DEFAULT_TOP_K: int = 6
+
+    # Multimodal Vision Settings (Roadmap 6B.14 & Section 7)
+    GEMINI_VISION_MODEL: str = "gemini-1.5-flash"
+    OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
+    GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
+    VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
+    VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
+    VISION_OVERALL_TIMEOUT_SECONDS: float = 25.0  # 25s global pipeline timeout
+
+    # Web Search Quotas & Caching (Roadmap 6B.13 & Section 8)
+    WEB_SEARCH_DAILY_LIMIT_STUDENT: int = 5
+    WEB_SEARCH_DAILY_LIMIT_PRO: int = 25
+    WEB_SEARCH_DAILY_LIMIT_STAFF: int = 50
+    WEB_SEARCH_CACHE_TTL_SECONDS: int = 3600  # 1 hour TTL
+    WEB_SEARCH_TIMEOUT_SECONDS: float = 8.0
 
     # Search Tool Integration
     TAVILY_API_KEY: str | None = None

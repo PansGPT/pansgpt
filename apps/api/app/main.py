@@ -9,10 +9,14 @@ import structlog
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 
 from app.core.config import settings
 from app.core.database import close_db_pool, init_db_pool
 from app.core.dependencies import prewarm_jwks_cache
+from app.core.rate_limit import limiter, rate_limit_exceeded_handler
+from app.routers.admin import router as admin_router
 from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
 from app.routers.library import documents_router
@@ -53,6 +57,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Configure Rate Limiting (SlowAPI)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
@@ -64,6 +73,7 @@ app.add_middleware(
 
 # Register API v1 Routers
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
+app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
