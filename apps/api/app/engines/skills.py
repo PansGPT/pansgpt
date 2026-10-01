@@ -4,7 +4,6 @@
 
 import asyncio
 import io
-import uuid
 from typing import Any
 
 import pymupdf
@@ -13,7 +12,7 @@ from docx import Document
 from pptx import Presentation
 
 from app.core.config import settings
-from app.engines.storage import r2_storage
+from app.engines.storage import build_artifact_storage_key, r2_storage
 from app.models.chat import ArtifactReadyPayload
 
 logger = structlog.get_logger(__name__)
@@ -236,7 +235,10 @@ class SkillExecutionEngine:
         return key, f"/api/v1/library/documents/download?key={key}"
 
     async def execute_create_doc(
-        self, title: str, sections: list[dict[str, Any]]
+        self,
+        title: str,
+        sections: list[dict[str, Any]],
+        university_id: str | None = None,
     ) -> ArtifactReadyPayload:
         """Generates a styled .docx document."""
         doc = Document()
@@ -255,7 +257,11 @@ class SkillExecutionEngine:
         doc.save(bio)
         data = bio.getvalue()
 
-        storage_key = f"artifacts/docs/{uuid.uuid4()}.docx"
+        storage_key = build_artifact_storage_key(
+            format_type="docs",
+            file_extension="docx",
+            university_id=university_id,
+        )
         key, url = await self._safe_r2_upload(
             storage_key,
             data,
@@ -272,7 +278,11 @@ class SkillExecutionEngine:
         )
 
     async def execute_create_pdf(
-        self, title: str, content: str, author: str = "PansGPT Academic Assistant"
+        self,
+        title: str,
+        content: str,
+        author: str = "PansGPT Academic Assistant",
+        university_id: str | None = None,
     ) -> ArtifactReadyPayload:
         """Generates a formatted PDF using PyMuPDF."""
         pdf_doc = pymupdf.open()
@@ -291,7 +301,11 @@ class SkillExecutionEngine:
         data = pdf_doc.write()
         pdf_doc.close()
 
-        storage_key = f"artifacts/pdf/{uuid.uuid4()}.pdf"
+        storage_key = build_artifact_storage_key(
+            format_type="pdf",
+            file_extension="pdf",
+            university_id=university_id,
+        )
         key, url = await self._safe_r2_upload(storage_key, data, "application/pdf")
         return ArtifactReadyPayload(
             skill_name="create_pdf",
@@ -304,7 +318,11 @@ class SkillExecutionEngine:
         )
 
     async def execute_create_pptx(
-        self, title: str, slides: list[dict[str, Any]], subtitle: str | None = None
+        self,
+        title: str,
+        slides: list[dict[str, Any]],
+        subtitle: str | None = None,
+        university_id: str | None = None,
     ) -> ArtifactReadyPayload:
         """Generates a PowerPoint presentation using python-pptx."""
         prs = Presentation()
@@ -332,7 +350,11 @@ class SkillExecutionEngine:
         prs.save(bio)
         data = bio.getvalue()
 
-        storage_key = f"artifacts/pptx/{uuid.uuid4()}.pptx"
+        storage_key = build_artifact_storage_key(
+            format_type="pptx",
+            file_extension="pptx",
+            university_id=university_id,
+        )
         key, url = await self._safe_r2_upload(
             storage_key,
             data,
@@ -348,11 +370,20 @@ class SkillExecutionEngine:
             content={"slides_count": len(slides) + 1},
         )
 
-    async def execute_create_md(self, title: str, markdown_content: str) -> ArtifactReadyPayload:
+    async def execute_create_md(
+        self,
+        title: str,
+        markdown_content: str,
+        university_id: str | None = None,
+    ) -> ArtifactReadyPayload:
         """Generates a Markdown file note."""
         full_text = f"# {title}\n\n{markdown_content}\n"
         data = full_text.encode("utf-8")
-        storage_key = f"artifacts/md/{uuid.uuid4()}.md"
+        storage_key = build_artifact_storage_key(
+            format_type="md",
+            file_extension="md",
+            university_id=university_id,
+        )
         key, url = await self._safe_r2_upload(storage_key, data, "text/markdown")
         return ArtifactReadyPayload(
             skill_name="create_md",
@@ -436,30 +467,35 @@ class SkillExecutionEngine:
         skill_name: str,
         arguments: dict[str, Any],
         user_id: str | None = None,
+        university_id: str | None = None,
     ) -> ArtifactReadyPayload:
         """Dispatches dynamic skill by name."""
-        logger.info("skill_dispatch_requested", skill=skill_name)
+        logger.info("skill_dispatch_requested", skill=skill_name, university_id=university_id)
         if skill_name == "create_doc":
             return await self.execute_create_doc(
                 title=arguments.get("title", "Clinical Summary"),
                 sections=arguments.get("sections", []),
+                university_id=university_id,
             )
         elif skill_name == "create_pdf":
             return await self.execute_create_pdf(
                 title=arguments.get("title", "Study Cheat Sheet"),
                 content=arguments.get("content", ""),
                 author=arguments.get("author", "PansGPT Academic Assistant"),
+                university_id=university_id,
             )
         elif skill_name == "create_pptx":
             return await self.execute_create_pptx(
                 title=arguments.get("title", "Lecture Slides"),
                 slides=arguments.get("slides", []),
                 subtitle=arguments.get("subtitle"),
+                university_id=university_id,
             )
         elif skill_name == "create_md":
             return await self.execute_create_md(
                 title=arguments.get("title", "Study Notes"),
                 markdown_content=arguments.get("markdown_content", ""),
+                university_id=university_id,
             )
         elif skill_name == "plot_graph":
             return await self.execute_plot_graph(

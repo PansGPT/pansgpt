@@ -4,6 +4,7 @@
 # ==============================================================================
 
 import re
+import uuid
 from contextlib import asynccontextmanager
 
 import aioboto3
@@ -47,6 +48,24 @@ def build_converted_storage_key(
         clean_course = sanitize_filename_part(course_code)
         return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"
     return f"converted/{document_id}.pdf"
+
+
+def build_artifact_storage_key(
+    format_type: str,
+    file_extension: str,
+    artifact_id: str | None = None,
+    university_id: str | None = None,
+) -> str:
+    """
+    Construct canonical artifact R2 key nested directly under university:
+    universities/{university_id}/artifacts/{format_type}/{artifact_id}.{ext}
+    Defaults university_id to 'default' if None/empty to ensure strict institutional nesting.
+    """
+    clean_uni = sanitize_filename_part(university_id) if university_id else "default"
+    clean_fmt = sanitize_filename_part(format_type)
+    ext = file_extension.lstrip(".").lower()
+    art_id = artifact_id or str(uuid.uuid4())
+    return f"universities/{clean_uni}/artifacts/{clean_fmt}/{art_id}.{ext}"
 
 
 class R2StorageEngine:

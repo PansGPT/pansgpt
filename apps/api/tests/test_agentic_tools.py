@@ -41,7 +41,7 @@ async def test_hybrid_rag_acronym_and_fallback_retrieval():
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
 async def test_skill_create_doc_generates_valid_docx():
-    """Verify Word document generation produces valid docx artifact payload."""
+    """Verify Word document generation produces valid docx artifact payload nested under university."""
     payload = await skill_engine.execute_create_doc(
         title="Hypertension Pharmacotherapy Review",
         sections=[
@@ -51,29 +51,37 @@ async def test_skill_create_doc_generates_valid_docx():
                 "bullet_points": ["Hydrochlorothiazide 25mg daily", "Amlodipine 5-10mg daily"],
             }
         ],
+        university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
     )
     assert payload.skill_name == "create_doc"
     assert payload.file_extension == "docx"
+    assert payload.storage_key.startswith(
+        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/docs/"
+    )
     assert payload.storage_key.endswith(".docx")
     assert payload.download_url is not None
 
 
 @pytest.mark.asyncio
 async def test_skill_create_pdf_generates_valid_pdf():
-    """Verify PyMuPDF generates a valid PDF cheat sheet artifact."""
+    """Verify PyMuPDF generates a valid PDF cheat sheet artifact nested under university."""
     payload = await skill_engine.execute_create_pdf(
         title="Antimicrobial Susceptibility Pocket Guide",
         content="Beta-lactams inhibit peptidoglycan transpeptidase cell wall cross-linking.",
+        university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
     )
     assert payload.skill_name == "create_pdf"
     assert payload.file_extension == "pdf"
+    assert payload.storage_key.startswith(
+        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pdf/"
+    )
     assert payload.storage_key.endswith(".pdf")
     assert payload.download_url is not None
 
 
 @pytest.mark.asyncio
 async def test_skill_create_pptx_generates_valid_presentation():
-    """Verify python-pptx generates a PowerPoint slide deck artifact."""
+    """Verify python-pptx generates a PowerPoint slide deck artifact nested under university."""
     payload = await skill_engine.execute_create_pptx(
         title="Pharmacokinetics of Chemotherapeutics",
         subtitle="Departmental Seminar",
@@ -83,10 +91,29 @@ async def test_skill_create_pptx_generates_valid_presentation():
                 "bullet_points": ["CYP3A4 oxidation pathways", "Active metabolites formation"],
             }
         ],
+        university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
     )
     assert payload.skill_name == "create_pptx"
     assert payload.file_extension == "pptx"
+    assert payload.storage_key.startswith(
+        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pptx/"
+    )
     assert payload.storage_key.endswith(".pptx")
+    assert payload.download_url is not None
+
+
+@pytest.mark.asyncio
+async def test_skill_default_fallback_university_artifacts():
+    """Verify that when no university_id is provided, storage key falls back to universities/default/artifacts/."""
+    payload = await skill_engine.execute_create_md(
+        title="Pharmacokinetics Overview",
+        markdown_content="ADME processes overview.",
+        university_id=None,
+    )
+    assert payload.skill_name == "create_md"
+    assert payload.file_extension == "md"
+    assert payload.storage_key.startswith("universities/default/artifacts/md/")
+    assert payload.storage_key.endswith(".md")
     assert payload.download_url is not None
 
 

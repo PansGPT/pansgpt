@@ -6,7 +6,8 @@
 import uuid
 
 import asyncpg
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.dependencies import get_current_user, require_admin_or_super_admin
@@ -463,6 +464,54 @@ async def get_document_pdf_stream_url(
         presigned_url=url,
         expires_in_seconds=900,
     )
+
+
+@router.get(
+    "/documents/download",
+    summary="Download artifact or document via presigned URL or direct streaming",
+)
+async def download_document_or_artifact(
+    key: str = Query(..., description="Cloudflare R2 storage key"),
+    auth_user: dict = Depends(get_current_user),
+):
+    """
+    Downloads or streams any canonical university asset or student artifact.
+    Generates an authorized 1-hour presigned URL or streams directly.
+    """
+    if ".." in key or key.startswith("/"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid storage key",
+        )
+
+    if storage_engine.is_configured:
+        try:
+            url = await storage_engine.generate_presigned_get_url(key, expires_in=3600)
+            return RedirectResponse(url=url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+        except Exception:
+            pass
+
+    try:
+        data = await storage_engine.download_bytes(key)
+        ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
+        media_types = {
+            "pdf": "application/pdf",
+            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "md": "text/markdown",
+            "json": "application/json",
+        }
+        filename = key.split("/")[-1]
+        return Response(
+            content=data,
+            media_type=media_types.get(ext, "application/octet-stream"),
+            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Storage object not found: {str(exc)}",
+        )
 
 
 # ------------------------------------------------------------------------------

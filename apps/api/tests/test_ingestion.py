@@ -15,7 +15,11 @@ from app.engines.chunker import semantic_chunker
 from app.engines.embedder import gemini_embedder
 from app.engines.extractor import document_extractor
 from app.engines.ingestion import document_ingestion_engine
-from app.engines.storage import build_converted_storage_key, build_document_storage_key
+from app.engines.storage import (
+    build_artifact_storage_key,
+    build_converted_storage_key,
+    build_document_storage_key,
+)
 from workers.tasks import _claim_document, _update_document_status, ingest_document_job
 
 
@@ -98,6 +102,28 @@ def test_converted_storage_key_format():
     doc_id = "018f3a30-0001-7000-8000-000000000002"
     key = build_converted_storage_key(doc_id)
     assert key == f"converted/{doc_id}.pdf"
+
+
+def test_artifact_storage_key_generation():
+    """Verify canonical R2 artifact path format nested under university."""
+    uni_id = "018f3a10-0001-7000-8000-000000000001"
+    art_id = "018f3a30-0001-7000-8000-000000000003"
+    key = build_artifact_storage_key(
+        format_type="pptx",
+        file_extension="pptx",
+        artifact_id=art_id,
+        university_id=uni_id,
+    )
+    assert key == f"universities/{uni_id}/artifacts/pptx/{art_id}.pptx"
+
+    # Default fallback when university_id is None
+    default_key = build_artifact_storage_key(
+        format_type="pdf",
+        file_extension="pdf",
+        artifact_id=art_id,
+        university_id=None,
+    )
+    assert default_key == f"universities/default/artifacts/pdf/{art_id}.pdf"
 
 
 # ------------------------------------------------------------------------------
@@ -412,10 +438,13 @@ async def test_worker_failure_status_transition():
     """Verify worker catches unhandled exceptions and transitions document to failed."""
     doc_id = str(uuid.uuid4())
     # Mock ingest to raise exception
-    with unittest.mock.patch.object(
-        document_ingestion_engine,
-        "ingest_document_from_r2",
-        side_effect=RuntimeError("Simulated pipeline failure"),
+    with (
+        unittest.mock.patch.object(
+            document_ingestion_engine,
+            "ingest_document_from_r2",
+            side_effect=RuntimeError("Simulated pipeline failure"),
+        ),
+        unittest.mock.patch("workers.tasks._claim_document", return_value=True),
     ):
         with pytest.raises(RuntimeError):
             await ingest_document_job(

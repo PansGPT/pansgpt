@@ -19,6 +19,7 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.guard import policy_guard
 from app.engines.skills import SKILL_TOOL_DEFINITIONS, skill_engine
+from app.engines.thinking import ThinkingStreamParser
 from app.engines.tools import CORE_TOOL_DEFINITIONS, tool_engine
 from app.models.chat import (
     ToolCallPayload,
@@ -41,6 +42,11 @@ SKILL_NAMES = {
     "draw_chemical_structure",
 }
 
+# Purpose-driven tier-specific history budgets based on provider rate limit quotas
+MAX_HISTORY_TOKENS_GOOGLE = 13000  # Optimized for Google AI Studio Gemma 16K TPM limit
+MAX_HISTORY_TOKENS_GROQ = 5000  # Strictly bounded for Groq 8K TPM quota ceiling
+MAX_HISTORY_TOKENS_OPENROUTER = 24000  # Leverages OpenRouter Nemotron 1M context window
+
 
 class MultiTierLlmEngine:
     """
@@ -50,6 +56,33 @@ class MultiTierLlmEngine:
     Tier 2:  Groq (openai/gpt-oss-120b or qwen/qwen3.6-27b)
     Tier 3:  OpenRouter (nvidia/nemotron-3-ultra-550b-a55b:free)
     """
+
+    @staticmethod
+    def _build_provider_messages(
+        system_prompt: str,
+        user_message: str,
+        history: list[dict[str, Any]] | None,
+        agent_turns: list[dict[str, Any]],
+        max_history_tokens: int,
+    ) -> list[dict[str, Any]]:
+        """Assembles prompt context dynamically trimmed to provider token quotas."""
+        msgs: list[dict[str, Any]] = [{"role": "system", "content": system_prompt}]
+        if history:
+            valid_history = []
+            for item in history:
+                role = item.get("role")
+                content = item.get("content")
+                if role in ("user", "assistant") and content and isinstance(content, str):
+                    valid_history.append({"role": role, "content": content})
+            while (
+                valid_history
+                and (sum(len(m["content"]) for m in valid_history) // 4) > max_history_tokens
+            ):
+                valid_history.pop(0)
+            msgs.extend(valid_history)
+        msgs.append({"role": "user", "content": user_message})
+        msgs.extend(agent_turns)
+        return msgs
 
     def __init__(self):
         self.gemini_key = settings.GEMINI_API_KEY
@@ -313,7 +346,7 @@ class MultiTierLlmEngine:
 
         return [], _stream_gen()
 
-    async def _call_openrouter(self, system_prompt: str, user_message: str) -> str:
+    async def _call_openrouter(self, messages: list[dict[str, Any]]) -> str:
         """Executes fallback generation via OpenRouter API with ZDR headers."""
         headers = {
             "Authorization": f"Bearer {self.openrouter_key}",
@@ -321,12 +354,18 @@ class MultiTierLlmEngine:
             "X-Title": "PansGPT 2.0",
             "X-Data-Retention": "false",
         }
+        or_messages = []
+        for m in messages:
+            r = m.get("role", "user")
+            c = m.get("content")
+            if r in ("system", "user", "assistant") and c:
+                or_messages.append({"role": r, "content": str(c)})
+        if not or_messages:
+            or_messages = [{"role": "user", "content": "Hello"}]
+
         payload = {
             "model": self.openrouter_model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message},
-            ],
+            "messages": or_messages,
             "max_tokens": 1500,
             "temperature": 0.2,
         }
@@ -447,6 +486,7 @@ class MultiTierLlmEngine:
         self,
         system_prompt: str,
         user_message: str,
+        history: list[dict[str, Any]] | None = None,
         user_id: str | None = None,
         university_id: str | None = None,
         enable_tools: bool = True,
@@ -462,16 +502,13 @@ class MultiTierLlmEngine:
         6. Streams 'text_chunk' for final synthesized response
         """
         start_time = time.time()
-        prompt_tokens = (len(system_prompt) + len(user_message)) // 4
         collected_tokens: list[str] = []
         active_provider = "google"
         active_model = self.primary_model
         generation_successful = False
 
-        conversation_messages: list[dict[str, Any]] = [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_message},
-        ]
+        agent_tool_messages: list[dict[str, Any]] = []
+        active_prompt_tokens = (len(system_prompt) + len(user_message)) // 4
         active_tools = ALL_TOOL_DEFINITIONS if enable_tools else None
 
         for turn in range(MAX_AGENT_TURNS):
@@ -482,15 +519,25 @@ class MultiTierLlmEngine:
             tools_for_turn = active_tools if (turn < 2) else None
 
             # ------------------------------------------------------------------
-            # TIER 1: Google AI Studio Gemma 4 31B
+            # TIER 1: Google AI Studio Gemma 4 31B (13K History Budget)
             # ------------------------------------------------------------------
             if self._is_live_key(self.gemini_key):
                 try:
                     logger.info("llm_agent_turn_tier1_gemma_31b", turn=turn)
                     active_provider = "google"
                     active_model = self.primary_model
+                    gemma_msgs = self._build_provider_messages(
+                        system_prompt,
+                        user_message,
+                        history,
+                        agent_tool_messages,
+                        MAX_HISTORY_TOKENS_GOOGLE,
+                    )
+                    active_prompt_tokens = (
+                        sum(len(str(m.get("content") or "")) for m in gemma_msgs) // 4
+                    )
                     tool_calls, text_gen = await self._call_gemma_turn(
-                        self.primary_model, conversation_messages, tools_for_turn
+                        self.primary_model, gemma_msgs, tools_for_turn
                     )
                     turn_handled = True
                 except Exception as e1:
@@ -499,7 +546,7 @@ class MultiTierLlmEngine:
                         "google",
                         self.primary_model,
                         int((time.time() - start_time) * 1000),
-                        prompt_tokens,
+                        active_prompt_tokens,
                         0,
                         "failover",
                         user_id,
@@ -508,15 +555,25 @@ class MultiTierLlmEngine:
                     )
 
             # ------------------------------------------------------------------
-            # TIER 1b: Google AI Studio Gemma 4 26B MoE
+            # TIER 1b: Google AI Studio Gemma 4 26B MoE (13K History Budget)
             # ------------------------------------------------------------------
             if not turn_handled and self._is_live_key(self.gemini_key):
                 try:
                     logger.info("llm_agent_turn_tier1b_gemma_26b", turn=turn)
                     active_provider = "google"
                     active_model = self.secondary_model
+                    gemma_msgs = self._build_provider_messages(
+                        system_prompt,
+                        user_message,
+                        history,
+                        agent_tool_messages,
+                        MAX_HISTORY_TOKENS_GOOGLE,
+                    )
+                    active_prompt_tokens = (
+                        sum(len(str(m.get("content") or "")) for m in gemma_msgs) // 4
+                    )
                     tool_calls, text_gen = await self._call_gemma_turn(
-                        self.secondary_model, conversation_messages, tools_for_turn
+                        self.secondary_model, gemma_msgs, tools_for_turn
                     )
                     turn_handled = True
                 except Exception as e1b:
@@ -525,7 +582,7 @@ class MultiTierLlmEngine:
                         "google",
                         self.secondary_model,
                         int((time.time() - start_time) * 1000),
-                        prompt_tokens,
+                        active_prompt_tokens,
                         0,
                         "failover",
                         user_id,
@@ -534,16 +591,24 @@ class MultiTierLlmEngine:
                     )
 
             # ------------------------------------------------------------------
-            # TIER 2: Groq Fast Fallback (openai/gpt-oss-120b)
+            # TIER 2: Groq Fast Fallback (5K History Budget - Safe for 8K TPM)
             # ------------------------------------------------------------------
             if not turn_handled and self._is_live_key(self.groq_key):
                 try:
                     logger.info("llm_agent_turn_tier2_groq", turn=turn)
                     active_provider = "groq"
                     active_model = self.groq_model
-                    tool_calls, text_gen = await self._call_groq_turn(
-                        conversation_messages, tools_for_turn
+                    groq_msgs = self._build_provider_messages(
+                        system_prompt,
+                        user_message,
+                        history,
+                        agent_tool_messages,
+                        MAX_HISTORY_TOKENS_GROQ,
                     )
+                    active_prompt_tokens = (
+                        sum(len(str(m.get("content") or "")) for m in groq_msgs) // 4
+                    )
+                    tool_calls, text_gen = await self._call_groq_turn(groq_msgs, tools_for_turn)
                     turn_handled = True
                 except Exception as e2:
                     logger.warning("tier2_groq_failed_failing_over", error=str(e2))
@@ -551,7 +616,7 @@ class MultiTierLlmEngine:
                         "groq",
                         self.groq_model,
                         int((time.time() - start_time) * 1000),
-                        prompt_tokens,
+                        active_prompt_tokens,
                         0,
                         "failover",
                         user_id,
@@ -560,15 +625,25 @@ class MultiTierLlmEngine:
                     )
 
             # ------------------------------------------------------------------
-            # TIER 3: OpenRouter Safety Net
+            # TIER 3: OpenRouter Safety Net (24K History Budget - 1M Context Window)
             # ------------------------------------------------------------------
             if not turn_handled and self._is_live_key(self.openrouter_key):
                 try:
                     logger.info("llm_agent_turn_tier3_openrouter", turn=turn)
                     active_provider = "openrouter"
                     active_model = self.openrouter_model
+                    or_msgs = self._build_provider_messages(
+                        system_prompt,
+                        user_message,
+                        history,
+                        agent_tool_messages,
+                        MAX_HISTORY_TOKENS_OPENROUTER,
+                    )
+                    active_prompt_tokens = (
+                        sum(len(str(m.get("content") or "")) for m in or_msgs) // 4
+                    )
                     full_text = await asyncio.wait_for(
-                        self._call_openrouter(system_prompt, user_message),
+                        self._call_openrouter(or_msgs),
                         timeout=10.0,
                     )
 
@@ -661,7 +736,7 @@ class MultiTierLlmEngine:
                     }
                     for tc in tool_calls
                 ]
-                conversation_messages.append(
+                agent_tool_messages.append(
                     {
                         "role": "assistant",
                         "content": None,
@@ -682,7 +757,7 @@ class MultiTierLlmEngine:
 
                     if t_name in SKILL_NAMES:
                         artifact = await skill_engine.dispatch_skill(
-                            t_name, t_args, user_id=user_id
+                            t_name, t_args, user_id=user_id, university_id=university_id
                         )
                         yield "artifact_ready", artifact, active_provider
                         tool_res = artifact.model_dump()
@@ -702,7 +777,7 @@ class MultiTierLlmEngine:
                         active_provider,
                     )
 
-                    conversation_messages.append(
+                    agent_tool_messages.append(
                         {
                             "role": "tool",
                             "name": t_name,
@@ -741,12 +816,42 @@ class MultiTierLlmEngine:
                     continue
 
             elif text_gen:
+                parser = ThinkingStreamParser()
                 async for chunk in text_gen:
                     sanitized = policy_guard.filter_credential_leaks(chunk)
-                    collected_tokens.append(sanitized)
-                    yield "text_chunk", {"token": sanitized}, active_provider
+                    visible_chunk, thinking_chunk = parser.feed(sanitized)
 
-                if collected_tokens:
+                    if thinking_chunk:
+                        yield (
+                            "thinking_chunk",
+                            {"delta": thinking_chunk, "token": thinking_chunk},
+                            active_provider,
+                        )
+                    if visible_chunk:
+                        collected_tokens.append(visible_chunk)
+                        yield (
+                            "text_chunk",
+                            {"delta": visible_chunk, "token": visible_chunk},
+                            active_provider,
+                        )
+
+                # Flush any held buffer at end of stream
+                rem_vis, rem_think = parser.flush()
+                if rem_think:
+                    yield (
+                        "thinking_chunk",
+                        {"delta": rem_think, "token": rem_think},
+                        active_provider,
+                    )
+                if rem_vis:
+                    collected_tokens.append(rem_vis)
+                    yield (
+                        "text_chunk",
+                        {"delta": rem_vis, "token": rem_vis},
+                        active_provider,
+                    )
+
+                if collected_tokens or parser.get_full_thinking():
                     generation_successful = True
                 break
 
@@ -757,7 +862,7 @@ class MultiTierLlmEngine:
             active_provider,
             active_model,
             latency,
-            prompt_tokens,
+            active_prompt_tokens,
             completion_tokens,
             "success" if generation_successful else "error",
             user_id,
@@ -768,6 +873,7 @@ class MultiTierLlmEngine:
         self,
         system_prompt: str,
         user_message: str,
+        history: list[dict[str, Any]] | None = None,
         user_id: str | None = None,
         university_id: str | None = None,
     ) -> AsyncGenerator[tuple[str, str], None]:
@@ -777,12 +883,32 @@ class MultiTierLlmEngine:
         async for event_type, payload, provider in self.stream_agentic_chat(
             system_prompt=system_prompt,
             user_message=user_message,
+            history=history,
             user_id=user_id,
             university_id=university_id,
             enable_tools=False,
         ):
             if event_type == "text_chunk":
                 yield payload["token"], provider
+
+    async def transcribe_audio(
+        self,
+        audio_bytes: bytes,
+        filename: str = "recording.webm",
+        mime_type: str = "audio/webm",
+        language: str = "en",
+    ):
+        """
+        Delegates audio transcription to AudioTranscriptionEngine (Roadmap 6B.23).
+        """
+        from app.engines.stt import stt_engine
+
+        return await stt_engine.transcribe(
+            audio_bytes=audio_bytes,
+            filename=filename,
+            mime_type=mime_type,
+            language=language,
+        )
 
 
 llm_engine = MultiTierLlmEngine()
