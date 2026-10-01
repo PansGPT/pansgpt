@@ -21,7 +21,8 @@
    - Deployments to Staging/Production must use the Supabase CLI (`pnpm exec supabase db push`).
    - Row-Level Security (RLS) must be enabled on every table at creation (`ALTER TABLE <t> ENABLE ROW LEVEL SECURITY`).
    - Primary keys must use **RFC 9562 UUIDv7** (`uuid_generate_v7()`) for time-ordered indexing and zero B-tree fragmentation.
-   - Vector columns must use `vector(3072)` with HNSW cosine indexes (`USING hnsw (embedding vector_cosine_ops)`).
+   - Vector columns must store `gemini-embedding-002` embeddings as `vector(3072)`.
+   - Because pgvector's standard `vector_cosine_ops` HNSW operator class is dimension-limited, 3072d ANN indexes must use an expression index: `USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops)`. Retrieval RPCs must use the same `halfvec(3072)` cast for indexed cosine search.
 
 4. **Zero-Budget ($0) Free-Tier Architecture**:
    - **Primary LLM**: Google AI Studio Gemma 4 (`gemma-4-31b-it`) & `gemini-embedding-002` (3072d).

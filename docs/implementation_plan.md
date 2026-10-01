@@ -263,7 +263,7 @@ It targets **students**, **lecturers**, and **university administrators** at mul
 - [x] **Section 8: Chat System**
 - [x] **Home Page (Student Dashboard)**
 - [x] **Section 9: PDF Reader**
-- [ ] **Section 10: Learn Mode**
+- [x] **Section 10: Learn Mode**
 - [x] **Section 11: Quiz System**
 - [x] **Section 12: Notes System (Postponed)**
 - [x] **Section 13: Timetable**
@@ -2077,17 +2077,17 @@ _Next: Section 4 — Database Design_
 
 ### 4.1 First Principles Design Decisions
 
-| Decision                                   | Why                                                                                                                                                                                                                                                                                |
-| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **UUIDv7 for Primary Keys**                | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables.                                                                                                |
-| **Unified `users` table**                  | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`).                                               |
-| **Unified `documents` table**              | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication.                                                                          |
-| **Dynamic Claude-Style `ai_skills` Table** | Instead of hardcoding all AI tools in code, specialized academic & clinical tools (e.g. dosage calculators, drug interaction checkers, OSCE case simulators) are stored in an `ai_skills` table with short metadata for the model router and full on-demand markdown instructions. |
-| **HNSW Indexing for `pgvector`**           | Using `gemini-embedding-002` (3072 dimensions) with `HNSW (vector_cosine_ops)`. HNSW provides superior recall, sub-linear query latency, and does not require periodic manual index rebuilds unlike IVFFlat.                                                                       |
-| **Soft Deletes with Retention Window**     | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period.                                                  |
-| **Cloudflare R2 Blob Storage**             | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2.                                                                                         |
-| **Async Background Job Architecture**      | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts.                                                  |
-| **Greenfield Clean-Slate Deployment**      | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities.                                                                                                                        |
+| Decision                                   | Why                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UUIDv7 for Primary Keys**                | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables.                                                                                                          |
+| **Unified `users` table**                  | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`).                                                         |
+| **Unified `documents` table**              | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication.                                                                                    |
+| **Dynamic Claude-Style `ai_skills` Table** | Instead of hardcoding all AI tools in code, specialized academic & clinical tools (e.g. dosage calculators, drug interaction checkers, OSCE case simulators) are stored in an `ai_skills` table with short metadata for the model router and full on-demand markdown instructions.           |
+| **HNSW Indexing for `pgvector`**           | Store `gemini-embedding-002` outputs as `vector(3072)`, then build the ANN index as `HNSW ((embedding::halfvec(3072)) halfvec_cosine_ops)`. This is an intentional pgvector compatibility decision for 3072d embeddings; retrieval RPCs use the same halfvec cast for indexed cosine search. |
+| **Soft Deletes with Retention Window**     | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period.                                                            |
+| **Cloudflare R2 Blob Storage**             | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2.                                                                                                   |
+| **Async Background Job Architecture**      | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts.                                                            |
+| **Greenfield Clean-Slate Deployment**      | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities.                                                                                                                                  |
 
 ---
 
@@ -2282,9 +2282,11 @@ CREATE TABLE public.document_chunks (
   embedding   vector(3072) NOT NULL,              -- gemini-embedding-002 dimension
   created_at  timestamptz NOT NULL DEFAULT now()
 );
--- HNSW Index for ultra-fast vector similarity search without rebuild requirements
+-- HNSW Index for ultra-fast vector similarity search without rebuild requirements.
+-- Store the original 3072d vector at full precision, but index via halfvec because
+-- pgvector's standard vector_cosine_ops HNSW operator class is dimension-limited.
 CREATE INDEX idx_document_chunks_hnsw ON public.document_chunks
-  USING hnsw (embedding vector_cosine_ops);
+  USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops);
 CREATE INDEX idx_document_chunks_doc ON public.document_chunks(document_id);
 ```
 
@@ -3198,7 +3200,7 @@ A single AI pass evaluates all extracted elements (native text, transcribed text
 
 - **Boundary Enforcement**: Text chunks never split across segment boundaries.
 - **Page Tagging**: Every chunk retains `page_start` and `page_end` for exact reader deep-linking.
-- **Embedding Generation**: `gemini-embedding-002` generates **3072-dimensional vectors** stored in `document_chunks` and indexed with PostgreSQL **HNSW (`vector_cosine_ops`)**.
+- **Embedding Generation**: `gemini-embedding-002` generates **3072-dimensional vectors** stored in `document_chunks.embedding vector(3072)`. The ANN index intentionally casts to `halfvec(3072)` and uses `halfvec_cosine_ops` so pgvector can HNSW-index the 3072d embedding space.
 
 ---
 
@@ -3257,7 +3259,7 @@ CREATE TABLE public.document_chunks (
   created_at      timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_document_chunks_hnsw ON public.document_chunks
-  USING hnsw (embedding vector_cosine_ops);
+  USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops);
 CREATE INDEX idx_document_chunks_lookup ON public.document_chunks(document_id, segment_id);
 ```
 
@@ -4087,10 +4089,168 @@ GET    /api/documents/{id}/outline              ← Get AI-generated section out
 
 ---
 
+## 🧠 SECTION 10 — LEARN MODE
+
+> **Product Stance**: **The Socratic Step-by-Step Document Mastery Engine**  
+> Learn Mode bridges the gap between passive reading and active knowledge retention. Designed specifically for information-dense university materials (medical physiology, pharmacokinetics, case law, engineering manuals), Learn Mode decomposes multi-chapter documents into structured, bite-sized study sections. For each section, the engine synthesizes Socratic explanations, administers targeted active-recall check questions, performs instantaneous AI grading with misconception identification, and dynamically schedules spaced repetition retests for weak concepts.
+
+> ⚠️ **Roadmap & Engine Scope Clarification (Option A)**:  
+> The build roadmap previously contained a placeholder note stating: _"(Engine already built in Phase 6. This phase wires the UI to it.)"_  
+> In reality, Phase 6 focused strictly on foundational conversational chat streaming, RAG vector retrieval, and LLM tool execution. The dedicated Learn Mode generation and grading engine was **never built in Phase 6**.  
+> Therefore, under **Phase 12**, we build **BOTH the end-to-end Backend Learn Mode Engine (`apps/api/app/routers/learn.py`, ARQ workers, scoring algorithms) AND the Frontend PDF Reader Tab Interface**.
+
+---
+
+### 10.1 System Architecture & Socratic Learning Loop
+
+```mermaid
+flowchart TD
+    subgraph Client["Frontend Client (PDF Reader Right Sidebar)"]
+        OutlineView["📑 Section Outline\n(Title, Page Range, Mastery Ring)"]
+        ExplView["📖 Socratic Explanation Viewer\n(Core concepts + Clinical vignettes)"]
+        RecallCard["🎯 Active Recall Check Question\n(MCQ or Open Short Answer)"]
+        RetestDrawer["🔁 Spaced Repetition Retest Queue\n(Surfaces prior weak sections)"]
+    end
+
+    subgraph API["FastAPI Gateway (apps/api/app/routers/learn.py)"]
+        StartEP["POST /api/learn/documents/{id}/start\n(Verifies/Enqueues Outline Generation)"]
+        SectionsEP["GET /api/learn/documents/{id}/sections\n(Fetches Sections + User Mastery Status)"]
+        DetailEP["GET /api/learn/documents/{id}/sections/{index}\n(Loads Cached Explanation & Recall Questions)"]
+        AnswerEP["POST /api/learn/documents/{id}/sections/{index}/answer\n(Evaluates Student Answer via LLM)"]
+        CompleteEP["POST /api/learn/documents/{id}/sections/{index}/complete\n(Marks Mastered, Updates State)"]
+    end
+
+    subgraph ARQ_Engine["Async Background Workers (ARQ / Redis)"]
+        JobExtract["generate_document_sections\n(Extracts 4-10 logical study units)"]
+        JobExplain["generate_section_explanation\n(Synthesizes structured pedagogical breakdown)"]
+        JobQuestions["generate_recall_questions\n(Creates high-yield active recall checks)"]
+    end
+
+    subgraph DB["PostgreSQL Database (Supabase)"]
+        T_Sections[("document_sections\n(title, pages, explanation, check_questions)")]
+        T_Progress[("document_learn_progress\n(status, mastery_score, last_studied_at)")]
+        T_Retests[("document_learn_pending_retests\n(due_date, retry_count, weak_concepts)")]
+    end
+
+    OutlineView -->|Open Document| StartEP
+    StartEP -->|If missing| JobExtract
+    JobExtract --> T_Sections
+    OutlineView -->|Load list| SectionsEP
+    SectionsEP --> T_Sections
+    SectionsEP --> T_Progress
+
+    ExplView -->|Select Section| DetailEP
+    DetailEP --> T_Sections
+    DetailEP -->|If explanation not cached| JobExplain
+    JobExplain --> T_Sections
+
+    RecallCard -->|Submit Answer| AnswerEP
+    AnswerEP -->|Grade Answer| DB
+    AnswerEP -->|If Incorrect| T_Retests
+    AnswerEP -->|If Correct| T_Progress
+
+    RetestDrawer --> T_Retests
+```
+
+---
+
+### 10.2 Database Schema & State Transitions
+
+#### 10.2.1 Core Tables (Migrated in Phase 4)
+
+1. **`document_sections`** (Cached per document):
+   - `id`: UUID PK
+   - `document_id`: UUID FK referencing `documents.id` (ON DELETE CASCADE)
+   - `section_index`: Integer (0-indexed sequence)
+   - `title`: String (e.g., _"Cardiac Electrophysiology & Action Potentials"_)
+   - `page_start`: Integer
+   - `page_end`: Integer
+   - `summary`: Text (concise 2-sentence synopsis)
+   - `explanation`: Text (comprehensive markdown breakdown with KaTeX math and bullet definitions)
+   - `check_questions`: JSONB array of question objects (`id`, `type`, `question`, `options`, `correct_answer`, `explanation`)
+   - `created_at`: Timestamptz
+
+2. **`document_learn_progress`** (Per-student progress):
+   - `id`: UUID PK
+   - `user_id`: UUID FK referencing `users.id`
+   - `document_id`: UUID FK referencing `documents.id`
+   - `section_index`: Integer
+   - `status`: Enum (`not_started`, `in_progress`, `needs_review`, `mastered`)
+   - `score`: Float (percentage 0.0 - 100.0)
+   - `attempts_count`: Integer
+   - `last_studied_at`: Timestamptz
+   - `updated_at`: Timestamptz
+
+3. **`document_learn_pending_retests`** (Spaced repetition queue):
+   - `id`: UUID PK
+   - `user_id`: UUID FK
+   - `document_id`: UUID FK
+   - `section_index`: Integer
+   - `question_id`: Text
+   - `due_date`: Timestamptz (SM-2 spaced repetition intervals: 1 day, 3 days, 7 days)
+   - `retry_count`: Integer (default 0)
+   - `resolved`: Boolean (default false)
+
+#### 10.2.2 State Machine
+
+- `not_started`: Student has not opened the section.
+- `in_progress`: Section explanation loaded; check questions opened.
+- `needs_review`: Check questions answered with <75% accuracy or flagged with misconception; queued in `document_learn_pending_retests`.
+- `mastered`: Check questions answered with >=75% accuracy on initial try or successful completion of scheduled retest.
+
+---
+
+### 10.3 AI Generation & Socratic Grading Pipeline
+
+1. **Document Section Chunker (`generate_document_sections`)**:
+   - Parses document outline and text chunks.
+   - AI prompt synthesizes 4 to 10 logically coherent, non-overlapping study units matching university syllabus topic hierarchies.
+   - Enforces valid `page_start` and `page_end` boundaries within the PDF.
+2. **Socratic Explanation Synthesis (`generate_section_explanation`)**:
+   - Uses structured generation: Overview, Core Principles, Clinical Vignette / Real-world Application, Key Pitfalls / High-Yield Exam Traps.
+   - Strips reasoning/thinking tags (`<think>`) cleanly before persisting to avoid leaking raw scratchpads.
+3. **AI Grading & Misconception Analysis (`POST /.../answer`)**:
+   - For Multiple Choice: Deterministic matching against `correct_answer`.
+   - For Open/Short Answer: LLM evaluates student response against ground truth. Returns:
+     - `is_correct`: Boolean
+     - `score`: Float (0.0 to 1.0)
+     - `feedback`: Clear 2-sentence explanation of what was correct and what key nuance was missed.
+     - `misconception`: Optional identified trap (e.g., _"Confused Phase 0 ventricular with Phase 0 nodal depolarisation"_).
+
+---
+
+### 10.4 API Endpoints Contract (`apps/api/app/routers/learn.py`)
+
+```
+POST   /api/learn/documents/{id}/start                        ← Verify or initialize section outline job
+GET    /api/learn/documents/{id}/sections                   ← Get all sections with user mastery status
+GET    /api/learn/documents/{id}/sections/{section_index}   ← Get explanation & active recall questions
+POST   /api/learn/documents/{id}/sections/{section_index}/answer ← Submit answer to check question
+POST   /api/learn/documents/{id}/sections/{section_index}/complete ← Mark section as finished
+GET    /api/learn/retests                                   ← List pending spaced repetition reviews
+```
+
+---
+
+### 10.5 Frontend UI Specifications (PDF Reader Learn Mode Tab)
+
+- **Layout Location**: Dedicated tab alongside "Chat" in the PDF Reader Right Sidebar (`apps/web/app/app/reader/[id]/components/LearnTab.tsx`).
+- **Mastery Circular Rings**: SVG circular progress indicator next to each section showing 0% (grey), 50% (amber `needs_review`), or 100% (emerald `mastered`).
+- **Section Accordion**: Expanding a section loads Socratic notes rendered with `ReactMarkdown` and `rehype-katex`.
+- **Interactive Check Questions**: Card UI displaying active recall question. Upon submission, animates an immediate green/amber feedback panel with clinical explanation.
+- **Next Step FAB**: Sticky button at the bottom of the section: _"Next Section →"_ or _"Review Retests (2 Due)"_.
+
+---
+
 ## ✅ SECTION 11 — QUIZ SYSTEM
 
 > **Product Stance**: **The Adaptive Clinical & Academic Examination Engine**  
 > The Quiz System is PansGPT's high-yield testing ground. It moves beyond generic multiple-choice questions by supporting **Nigerian medical & pharmacy school examination standards** (featuring two specialized 5-option MCQ formats including negative marking, standard Objective single-best-answer, and AI-graded Short Answers). It pairs an **async background generation pipeline with live SSE question streaming**, allowing students to start taking question 1 immediately while subsequent questions generate in parallel.
+
+> ⚠️ **Roadmap & Engine Scope Clarification (Option A)**:  
+> The build roadmap previously contained a placeholder note stating: _"(Engine already built in Phase 6. This phase wires the UI to it.)"_  
+> In reality, Phase 6 focused strictly on conversational chat streaming and RAG retrieval. The dedicated Quiz Generation Engine (`apps/api/app/routers/quiz.py`, ARQ generation workers, tagged XML parsing, scoring algorithms) was **never built in Phase 6**.  
+> Therefore, under **Phase 13**, we build **BOTH the end-to-end Backend Quiz Engine & Generation Workers AND the Frontend Quiz Interface (Builder Modal, Timed Taking Screen, Result Card)**.
 
 ---
 

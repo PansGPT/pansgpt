@@ -553,7 +553,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Database Foundation
 
-- [x] Create HNSW index on 3072d embeddings (`idx_document_chunks_hnsw`)
+- [x] Create HNSW index on 3072d embeddings (`idx_document_chunks_hnsw`) using `embedding::halfvec(3072)` + `halfvec_cosine_ops` while storing source embeddings as `vector(3072)`
 - [x] Create Full Text Search GIN index (`idx_document_chunks_fts`)
 - [x] Create GIN Index on user roles (`idx_users_roles`)
 - [x] Create Partial index on soft deletes (`idx_users_deleted`, `idx_documents_deleted`, `idx_chat_sessions_deleted`)
@@ -1092,23 +1092,23 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Section 3.3, 3.4, 3.7 (L1873, L1884, L1997)
 
 - [x] Register `GET /api/v1/auth/me` returning verified profile, roles, and tenant ID | file: apps/api/app/routers/auth.py
-- [ ] Implement `POST /api/v1/auth/onboard` student profile completion (university, level, terms agreement) | file: apps/api/app/routers/auth.py
-- [ ] Enforce mandatory Terms of Service & Privacy Policy agreement check before profile activation | file: apps/api/app/routers/auth.py
-- [ ] Implement `POST /api/v1/admin/lecturers/invite` generating multi-use invite links | file: apps/api/app/routers/admin.py
-- [ ] Implement `GET /api/v1/auth/invites/{token}` validating invite expiry and university association | file: apps/api/app/routers/auth.py
-- [ ] Implement rate-limiting middleware on auth endpoints (`SlowAPI` 10 req/min per IP) | file: apps/api/app/core/rate_limit.py
+- [x] Implement `POST /api/v1/auth/onboard` student profile completion (university, level, terms agreement) | file: apps/api/app/routers/auth.py
+- [x] Enforce mandatory Terms of Service & Privacy Policy agreement check before profile activation | file: apps/api/app/routers/auth.py
+- [x] Implement `POST /api/v1/admin/lecturers/invite` generating multi-use invite links | file: apps/api/app/routers/admin.py
+- [x] Implement `GET /api/v1/auth/invites/{token}` validating invite expiry and university association | file: apps/api/app/routers/auth.py
+- [x] Implement rate-limiting middleware on auth endpoints (`SlowAPI` 10 req/min per IP) | file: apps/api/app/core/rate_limit.py
 
 ### 7.7 Client Platform Authentication
 
 > 📖 See implementation_plan.md § Section 3.5, 3.8 (L1937, L2028)
 
-- [ ] Web: Initialize `@supabase/supabase-js` with HttpOnly cookie session storage for Next.js SSR | file: apps/web/src/lib/supabase/client.ts
-- [ ] Web: Auto-refresh token lifecycle via Supabase browser client | file: apps/web/src/lib/supabase/middleware.ts
-- [ ] Web: Google and Apple OAuth redirect handler | file: apps/web/app/auth/callback/route.ts
-- [ ] Mobile: Initialize `@supabase/supabase-js` with `expo-secure-store` encryption | file: apps/mobile/lib/supabase.ts
-- [ ] Mobile: Deep link OAuth redirect via `expo-auth-session` (`pansgpt://`) | file: apps/mobile/app/auth/callback.tsx
-- [ ] Desktop: Store JWT in Electron `safeStorage` encrypted OS keychain | file: apps/desktop/src/auth/keychain.ts
-- [ ] Desktop: System browser redirect listener capturing OAuth completion | file: apps/desktop/src/main/oauth.ts
+- [x] Web: Initialize `@supabase/supabase-js` with HttpOnly cookie session storage for Next.js SSR | file: apps/web/lib/supabase/client.ts
+- [x] Web: Auto-refresh token lifecycle via Supabase browser client | file: apps/web/lib/supabase/middleware.ts
+- [x] Web: Google and Apple OAuth redirect handler | file: apps/web/app/auth/callback/route.ts
+- [x] Mobile: Initialize `@supabase/supabase-js` with `expo-secure-store` encryption | file: apps/mobile/lib/supabase.ts
+- [x] Mobile: Deep link OAuth redirect via `expo-auth-session` (`pansgpt://`) | file: apps/mobile/app/auth/callback.tsx
+- [x] Desktop: Store JWT in Electron `safeStorage` encrypted OS keychain | file: apps/desktop/src/auth/keychain.ts
+- [x] Desktop: System browser redirect listener capturing OAuth completion | file: apps/desktop/src/main/oauth.ts
 
 ### 7.8 Verification & Test Suite
 
@@ -1317,7 +1317,25 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 
 ## 🧠 PHASE 12 — Learn Mode
 
-_(Engine already built in Phase 6. This phase wires the UI to it.)_
+> ⚠️ **Scope Clarification (Option A)**: Phase 12 builds **BOTH the Backend Learn Mode Engine & APIs (`apps/api/app/routers/learn.py`, ARQ generation workers) AND the Frontend PDF Reader Tab Interface**.
+
+### 12.1 Backend Learn Mode Engine & APIs (`apps/api/app/routers/learn.py`)
+
+- [ ] Document section chunker & outline generation ARQ worker (`generate_document_sections`)
+- [ ] AI prompt pipeline for Socratic explanations cached in `document_sections.explanation`
+- [ ] Active recall check question generator (persisted as JSONB in `document_sections.check_questions`)
+- [ ] Student answer evaluation endpoint with AI grading & feedback (`POST /api/learn/documents/{document_id}/sections/{section_index}/answer`)
+- [ ] Spaced repetition progress tracking (`document_learn_progress`: `not_started` → `in_progress` → `needs_review` → `mastered`)
+- [ ] Spaced repetition weak question queue (`document_learn_pending_retests`)
+- [ ] Endpoints:
+  - `POST /api/learn/documents/{document_id}/start` (initialize/verify section generation)
+  - `GET /api/learn/documents/{document_id}/sections` (list sections & user mastery)
+  - `GET /api/learn/documents/{document_id}/sections/{section_index}` (get section explanation & check questions)
+  - `POST /api/learn/documents/{document_id}/sections/{section_index}/answer` (submit check question answer)
+  - `POST /api/learn/documents/{document_id}/sections/{section_index}/complete` (mark section complete)
+  - `GET /api/learn/retests` (fetch pending spaced repetition retests)
+
+### 12.2 Frontend Learn Mode Tab (PDF Reader Right Sidebar)
 
 - [ ] Section outline displayed in PDF reader Learn Mode tab
 - [ ] Each section: title + page range + mastery ring (% from `document_learn_progress`)
@@ -1332,7 +1350,20 @@ _(Engine already built in Phase 6. This phase wires the UI to it.)_
 
 ## ❓ PHASE 13 — Quiz System
 
-_(Engine already built in Phase 6. This phase wires the UI to it.)_
+> ⚠️ **Scope Clarification (Option A)**: Phase 13 builds **BOTH the Backend Quiz Generation Engine & ARQ Workers (`apps/api/app/routers/quiz.py`, `apps/api/app/engines/quiz.py`) AND the Frontend Quiz Interface**.
+
+### 13.1 Backend Quiz Engine & Generation Pipeline (`apps/api/app/routers/quiz.py`)
+
+- [ ] Async background quiz generation ARQ worker (`generate_quiz_task`)
+- [ ] RAG-grounded topic question generation using tagged XML blocks (`<question>QUESTION: ... TYPE: ... A: ... ANSWER: ... EXPLANATION: ...</question>`)
+- [ ] Pydantic `QuizQuestionModel` validation & deduplication engine
+- [ ] Question formats: Standard MCQ, 5-option Nigerian medical negative marking MCQ, True/False, Multi-Select, Short Answer
+- [ ] Live question SSE streaming endpoint (`GET /api/quiz/{id}/events`) with signed JWT stream token (`POST /api/quiz/{id}/stream-token`)
+- [ ] Job management endpoints: `POST /api/quiz/jobs`, `GET /api/quiz/jobs/{job_id}`, `POST /api/quiz/jobs/{job_id}/cancel`
+- [ ] Quiz submission & grading engine (`POST /api/quiz/submit`) calculating penalties, raw scores, and persisting attempt in `quiz_attempts`
+- [ ] Quiz history & share endpoints (`GET /api/quiz/history`, `GET /api/quiz/{quiz_id}`, `GET /api/quiz/results/{result_id}`, `GET /api/quiz/share/{quiz_id}`)
+
+### 13.2 Frontend Quiz System Interface (`apps/web/app/app/quiz/`)
 
 - [ ] Quiz builder modal: select topics, difficulty, count, time limit, question formats
 - [ ] Enqueue `generate_quiz` ARQ job → return `quiz_generation_job_id`
@@ -1350,12 +1381,21 @@ _(Engine already built in Phase 6. This phase wires the UI to it.)_
 
 ## 📝 PHASE 14 — Notes System
 
+### 14.1 Backend Notes API (`apps/api/app/routers/notes.py`)
+
+- [ ] CRUD endpoints on `general_notes`: create, get, list, update, soft-delete (`deleted_at`)
+- [ ] Document-linked notes endpoints (`POST /api/notes/documents/{id}`)
+- [ ] Document highlights sync endpoints (`/api/documents/{id}/highlights`)
+- [ ] Full-text search via Postgres `tsvector` on `general_notes.content`
+- [ ] Note restore within 30 days & scheduled purge cron for expired notes
+
+### 14.2 Frontend Notes System (Web & Desktop)
+
 - [ ] **Tiptap** editor (web + desktop) — extensions: headings, bold/italic, bullet list, task list, code block, KaTeX math, image embed
 - [ ] **Offline-first**: every keystroke saves to IndexedDB (`idb-keyval`) — data persists without network
 - [ ] Sync-on-reconnect: `online` event → push local changes to Supabase (`general_notes`)
 - [ ] Conflict resolution: last-write-wins on `updated_at`
 - [ ] Note organization: title, optional document link
-- [ ] Full-text search via Postgres `tsvector` on `general_notes.content`
 - [ ] Soft delete (`deleted_at`) — restored within 30 days; purge cron clears after
 - [ ] Export: copy as Markdown, download `.md` file
 
@@ -1363,18 +1403,20 @@ _(Engine already built in Phase 6. This phase wires the UI to it.)_
 
 ## 🗓️ PHASE 15 — Timetable + Student Dashboard
 
-### 15.1 Timetable (`timetables` table)
+### 15.1 Backend Timetable & Dashboard APIs (`apps/api/app/routers/timetable.py` & `dashboard.py`)
+
+- [ ] Timetable CRUD endpoints: `/api/timetable` (filtered by `university_id`, `level`, `day`)
+- [ ] Single aggregator endpoint: `GET /api/home/dashboard` returns student info + recents + tasks in one call (< 150ms)
+- [ ] Student task CRUD endpoints: `GET /api/tasks`, `POST /api/tasks`, `PATCH /api/tasks/{id}/toggle`
+- [ ] Upcoming class/exam context injected into AI system prompt (via `get_timetable` tool)
+
+### 15.2 Timetable UI & Student Dashboard (`apps/web/app/app/timetable/` & `apps/web/app/app/page.tsx`)
 
 - [ ] Timetable stored by `university_id`, `level`, `day`, `time_slot`, `course_code`, `venue`
 - [ ] Admin UI to manage timetable per university
 - [ ] Student weekly timetable grid view (`/timetable`)
 - [ ] "Today's Classes" summary widget on Home
-- [ ] Upcoming class/exam context injected into AI system prompt (via `get_timetable` tool)
 - [ ] `exam_restrictions` — time-locked windows that disable AI assistance during exams
-
-### 15.2 Student Dashboard (Home Page)
-
-- [ ] **Single aggregator endpoint**: `GET /api/home/dashboard` returns student info + recents + tasks in one call (< 150ms)
 - [ ] **Omni-recent carousel** (polymorphic): Document (last read page) | Note | AI Chat | Quiz — horizontal scroll
 - [ ] **Unified tasks list**: timetable events + custom `student_tasks` + urgency badges (Today 🔴 / Tomorrow 🟠 / Upcoming ⚪)
 - [ ] Task checkbox → optimistic UI update → `PATCH /api/tasks/{id}/toggle`
@@ -1384,14 +1426,28 @@ _(Engine already built in Phase 6. This phase wires the UI to it.)_
 
 ## 🏫 PHASE 16 — Portals + Governance
 
-### 16.1 Lecturer Portal
+### 16.1 Backend Governance & Exam Restriction APIs (`apps/api/app/routers/exam.py` & `admin.py`)
+
+- [ ] Exam restriction enforcement middleware: time-locked windows that disable AI assistance during exams
+- [ ] Exam restriction management endpoints: CRUD on `exam_restrictions` per course/level
+- [ ] User management endpoints: search, invite, suspend, delete students and lecturers
+- [ ] Timetable management: CRUD on `timetables`
+- [ ] Academic context management: `course_knowledge`, `academic_terms`
+- [ ] AI usage analytics from `ai_telemetry` (per-university & cross-university)
+- [ ] `system_settings` changes with `system_settings_history` audit trail
+- [ ] Immutable `audit_logs` for all admin actions
+- [ ] Super Admin cross-university lifecycle controls (`active | suspended` on `universities.status`)
+
+### 16.2 Frontend Portals (Lecturer, University Admin, Super Admin)
+
+#### 16.2.1 Lecturer Portal
 
 - [ ] Lecturer invite flow: admin generates multi-use invite link → Resend email → lecturer sets password → profile created
 - [ ] Material submission: select course + level + semester → upload file → submit for review (`document_status = 'pending_review'`)
 - [ ] Submission status tracker: `draft → pending_review → approved / rejected`
 - [ ] On approval by admin → auto-enqueue `ingest_document` ARQ job → document enters Phase 5 pipeline
 
-### 16.2 University Admin Portal
+#### 16.2.2 University Admin Portal
 
 - [ ] User management: search, invite, suspend, delete students and lecturers
 - [ ] Exam restriction management: create time-locked AI disable windows per course/level
@@ -1401,7 +1457,7 @@ _(Engine already built in Phase 6. This phase wires the UI to it.)_
 - [ ] `system_settings` changes with `system_settings_history` audit trail
 - [ ] Immutable `audit_logs` for all admin actions
 
-### 16.3 Super Admin Portal
+#### 16.2.3 Super Admin Portal
 
 - [ ] Cross-university user management
 - [ ] University lifecycle: `active | suspended` on `universities.status`
