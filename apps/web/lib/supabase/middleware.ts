@@ -28,9 +28,14 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const { data } = await supabase.auth.getUser();
+    user = data?.user ?? null;
+  } catch {
+    // If Supabase is unreachable or DNS fails, gracefully degrade to unauthenticated
+    user = null;
+  }
 
   const pathname = request.nextUrl.pathname;
 
