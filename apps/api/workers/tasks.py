@@ -16,7 +16,7 @@ from app.engines.ingestion import document_ingestion_engine
 logger = structlog.get_logger(__name__)
 
 
-async def _claim_document(document_id: str) -> bool:
+async def _claim_document(document_id: str, worker_id: uuid.UUID | None = None) -> bool:
     """
     Attempts to atomically claim a document for ingestion using the DB RPC function.
     Returns True if successfully claimed, False if already claimed or unavailable.
@@ -24,12 +24,14 @@ async def _claim_document(document_id: str) -> bool:
     if not settings.DATABASE_URL:
         # In mock / non-DB dev environments, allow job to proceed
         return True
+    worker_id = worker_id or uuid.uuid4()
 
     try:
         conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)
         row = await conn.fetchrow(
-            "SELECT public.claim_document_ingestion($1) AS claimed;",
+            "SELECT public.claim_document_ingestion($1, $2) AS claimed;",
             uuid.UUID(document_id),
+            worker_id,
         )
         await conn.close()
         if row and row["claimed"] is True:
@@ -37,8 +39,7 @@ async def _claim_document(document_id: str) -> bool:
         return False
     except Exception as e:
         logger.warning("worker_claim_call_failed", document_id=document_id, error=str(e))
-        # If RPC does not exist or connection fails, proceed cautiously in test mode
-        return True
+        return False
 
 
 async def _update_document_status(document_id: str, status: str, progress: int | None = None):
@@ -74,7 +75,7 @@ async def _update_document_status(document_id: str, status: str, progress: int |
         logger.warning("worker_status_update_failed", document_id=document_id, error=str(e))
 
 
-async def _heartbeat_loop(document_id: str, interval: int = 30):
+async def _heartbeat_loop(document_id: str, worker_id: uuid.UUID, interval: int = 30):
     """
     Background heartbeat loop: calls `heartbeat_document_ingestion` every 30s
     to indicate the worker is actively processing and prevent stale timeout reclamation.
@@ -85,8 +86,9 @@ async def _heartbeat_loop(document_id: str, interval: int = 30):
             if settings.DATABASE_URL:
                 conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)
                 await conn.execute(
-                    "SELECT public.heartbeat_document_ingestion($1);",
+                    "SELECT public.heartbeat_document_ingestion($1, $2);",
                     uuid.UUID(document_id),
+                    worker_id,
                 )
                 await conn.close()
                 logger.debug("worker_heartbeat_ping_sent", document_id=document_id)
@@ -113,9 +115,10 @@ async def ingest_document_job(ctx: dict, document_id: str, storage_key: str) -> 
         key=storage_key,
         attempt=job_try,
     )
+    worker_id = uuid.uuid4()
 
     # 1. Concurrency Claim Check
-    claimed = await _claim_document(document_id)
+    claimed = await _claim_document(document_id, worker_id)
     if not claimed:
         logger.warning(
             "worker_document_claim_rejected",
@@ -128,7 +131,7 @@ async def ingest_document_job(ctx: dict, document_id: str, storage_key: str) -> 
     await _update_document_status(document_id, status="processing", progress=5)
 
     # 3. Start Heartbeat Loop as background task
-    heartbeat_task = asyncio.create_task(_heartbeat_loop(document_id, interval=30))
+    heartbeat_task = asyncio.create_task(_heartbeat_loop(document_id, worker_id, interval=30))
 
     try:
         # 4. Run ingestion pipeline

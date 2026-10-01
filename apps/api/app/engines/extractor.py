@@ -19,6 +19,7 @@ class ExtractedTable:
     headers: list[str]
     rows: list[list[str]]
     is_native: bool = True
+    bounding_box: dict | None = None
 
 
 @dataclass
@@ -40,6 +41,9 @@ class ExtractedPage:
     tables: list[ExtractedTable] = field(default_factory=list)
     embedded_images: list[ExtractedImage] = field(default_factory=list)
     full_page_render: bytes | None = None
+    page_width: float = 0.0
+    page_height: float = 0.0
+    bounding_box: dict | None = None
 
 
 class DocumentExtractor:
@@ -89,6 +93,8 @@ class DocumentExtractor:
         tables = []
         try:
             tab_finder = page.find_tables()
+            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0
+            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0
             for tab in tab_finder.tables:
                 extracted = tab.extract()
                 if not extracted or len(extracted) < 2:
@@ -105,6 +111,21 @@ class DocumentExtractor:
                 row_lines = ["| " + " | ".join(r) + " |" for r in rows]
                 markdown = "\n".join([header_line, separator_line] + row_lines)
 
+                t_bbox = getattr(tab, "bbox", (0, 0, 0, 0))
+                norm_bbox = [
+                    round(t_bbox[0] / p_w, 4),
+                    round(t_bbox[1] / p_h, 4),
+                    round(t_bbox[2] / p_w, 4),
+                    round(t_bbox[3] / p_h, 4),
+                ]
+                bbox_data = {
+                    "page": page_number,
+                    "page_width": p_w,
+                    "page_height": p_h,
+                    "bbox": norm_bbox,
+                    "rects": [norm_bbox],
+                }
+
                 tables.append(
                     ExtractedTable(
                         page_number=page_number,
@@ -112,6 +133,7 @@ class DocumentExtractor:
                         headers=headers,
                         rows=rows,
                         is_native=True,
+                        bounding_box=bbox_data,
                     )
                 )
         except Exception:
@@ -165,11 +187,49 @@ class DocumentExtractor:
         for page_idx in range(len(doc)):
             page_num = page_idx + 1
             page = doc[page_idx]
+            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0
+            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0
 
             has_text, method, text_content = self.check_page_text_layer(page)
             if has_text:
                 tables = self.extract_tables_from_page(page, page_num)
                 embedded_images = self.extract_embedded_images(doc, page, page_num)
+
+                line_rects = []
+                try:
+                    text_dict = page.get_text("dict")
+                    for block in text_dict.get("blocks", []):
+                        if block.get("type") == 0:  # Text block
+                            for line in block.get("lines", []):
+                                lb = line.get("bbox")
+                                if lb:
+                                    line_rects.append(
+                                        [
+                                            round(lb[0] / p_w, 4),
+                                            round(lb[1] / p_h, 4),
+                                            round(lb[2] / p_w, 4),
+                                            round(lb[3] / p_h, 4),
+                                        ]
+                                    )
+                except Exception:
+                    line_rects = []
+
+                page_bbox = [0.05, 0.05, 0.95, 0.95]
+                if line_rects:
+                    min_x = min(r[0] for r in line_rects)
+                    min_y = min(r[1] for r in line_rects)
+                    max_x = max(r[2] for r in line_rects)
+                    max_y = max(r[3] for r in line_rects)
+                    page_bbox = [min_x, min_y, max_x, max_y]
+
+                bbox_data = {
+                    "page": page_num,
+                    "page_width": p_w,
+                    "page_height": p_h,
+                    "bbox": page_bbox,
+                    "rects": line_rects[:30],
+                }
+
                 pages.append(
                     ExtractedPage(
                         page_number=page_num,
@@ -179,6 +239,9 @@ class DocumentExtractor:
                         tables=tables,
                         embedded_images=embedded_images,
                         full_page_render=None,
+                        page_width=p_w,
+                        page_height=p_h,
+                        bounding_box=bbox_data,
                     )
                 )
             else:
@@ -192,6 +255,9 @@ class DocumentExtractor:
                         tables=[],
                         embedded_images=[],
                         full_page_render=full_render,
+                        page_width=p_w,
+                        page_height=p_h,
+                        bounding_box=None,
                     )
                 )
 

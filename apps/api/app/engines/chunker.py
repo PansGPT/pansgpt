@@ -20,6 +20,7 @@ class DocumentChunkItem:
     chunk_index: int
     segment_id: str | None = None
     element_id: str | None = None
+    bounding_box: dict | None = None
 
 
 class SemanticChunker:
@@ -128,6 +129,7 @@ class SemanticChunker:
             page_num = el.get("page_number", 1)
             seg_id = el.get("segment_id")
             el_id = el.get("element_id")
+            bbox = el.get("bounding_box")
 
             if not content:
                 continue
@@ -143,6 +145,7 @@ class SemanticChunker:
                         chunk_index=chunk_idx,
                         segment_id=seg_id,
                         element_id=el_id,
+                        bounding_box=bbox,
                     )
                 )
                 chunk_idx += 1
@@ -163,6 +166,7 @@ class SemanticChunker:
                             chunk_index=chunk_idx,
                             segment_id=seg_id,
                             element_id=el_id,
+                            bounding_box=bbox,
                         )
                     )
                     chunk_idx += 1

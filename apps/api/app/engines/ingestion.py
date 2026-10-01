@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+import json
 import uuid
 from collections.abc import Callable
 
@@ -158,6 +159,7 @@ class DocumentIngestionEngine:
                         "extraction_method": page.extraction_method,
                         "raw_content": page.native_text,
                         "order_index": element_order,
+                        "bounding_box": page.bounding_box,
                     }
                 )
                 element_order += 1
@@ -176,6 +178,7 @@ class DocumentIngestionEngine:
                         "raw_content": tab.markdown,
                         "table_data": {"headers": tab.headers, "rows": tab.rows},
                         "order_index": element_order,
+                        "bounding_box": tab.bounding_box,
                     }
                 )
                 element_order += 1
@@ -253,6 +256,7 @@ class DocumentIngestionEngine:
                     "page_end": item.page_end,
                     "chunk_index": item.chunk_index,
                     "embedding": vec,
+                    "bounding_box": item.bounding_box,
                 }
             )
 
@@ -373,19 +377,20 @@ class DocumentIngestionEngine:
                                 el["extraction_method"],
                                 el["raw_content"],
                                 el["order_index"],
+                                json.dumps(el["bounding_box"]) if el.get("bounding_box") else None,
                             )
                             for el in result.elements
                         ]
                         await conn.executemany(
                             """
-                            INSERT INTO public.document_elements (id, segment_id, document_id, page_number, content_type, extraction_method, raw_content, order_index)
-                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                            INSERT INTO public.document_elements (id, segment_id, document_id, page_number, content_type, extraction_method, raw_content, order_index, bounding_box)
+                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb)
                             ON CONFLICT (id) DO NOTHING;
                             """,
                             elements_args,
                         )
 
-                    # 4. Batch Insert Chunks with vector(3072)
+                    # 4. Batch Insert Chunks with vector(3072) and bounding_box
                     if result.chunks:
                         chunks_args = [
                             (
@@ -398,13 +403,14 @@ class DocumentIngestionEngine:
                                 c["page_end"],
                                 c["chunk_index"],
                                 "[" + ",".join(str(x) for x in c["embedding"]) + "]",
+                                json.dumps(c["bounding_box"]) if c.get("bounding_box") else None,
                             )
                             for c in result.chunks
                         ]
                         await conn.executemany(
                             """
-                            INSERT INTO public.document_chunks (id, document_id, segment_id, element_id, content, page_start, page_end, chunk_index, embedding)
-                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::vector)
+                            INSERT INTO public.document_chunks (id, document_id, segment_id, element_id, content, page_start, page_end, chunk_index, embedding, bounding_box)
+                            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::vector, $10::jsonb)
                             ON CONFLICT (id) DO NOTHING;
                             """,
                             chunks_args,
