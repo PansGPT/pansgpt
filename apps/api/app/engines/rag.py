@@ -6,12 +6,16 @@
 import json
 import re
 import uuid
+from typing import Any
 
 import structlog
 
+from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.embedder import gemini_embedder
 from app.engines.guard import policy_guard
+from app.engines.query_expansion import query_expansion_engine
+from app.engines.reranker import candidate_reranker
 from app.models.chat import CitationItem
 
 logger = structlog.get_logger(__name__)
@@ -45,34 +49,7 @@ class RagRetrievalEngine:
         Decomposes student queries into 2-3 focused pharmacological sub-queries
         covering mechanisms, clinical indications, adverse effects, and kinetics.
         """
-        cleaned = query.strip()
-        expansions = [cleaned]
-        lower_q = cleaned.lower()
-
-        words = [w for w in cleaned.split() if len(w) > 2]
-        core_terms = " ".join(words[:4]) if words else cleaned
-
-        if any(t in lower_q for t in ["mechanism", "moa", "action", "work", "how"]):
-            expansions.append(f"receptor molecular pharmacology mechanism of action {core_terms}")
-            expansions.append(f"therapeutic biochemical pathways {core_terms}")
-        elif any(
-            t in lower_q for t in ["side effect", "adverse", "toxicity", "adr", "contraindication"]
-        ):
-            expansions.append(
-                f"clinical toxicities adverse drug reactions contraindications {core_terms}"
-            )
-            expansions.append(f"drug-drug interactions caution clinical monitoring {core_terms}")
-        elif any(t in lower_q for t in ["dose", "dosing", "administration", "kinetics", "adme"]):
-            expansions.append(
-                f"pharmacokinetics bioavailability half-life metabolism elimination {core_terms}"
-            )
-            expansions.append(f"clinical dosage regimens therapeutic drug monitoring {core_terms}")
-        else:
-            expansions.append(f"pharmacological mechanism indications adverse effects {core_terms}")
-            expansions.append(f"clinical pharmacology therapeutics monograph {core_terms}")
-
-        # Deduplicate preserving order
-        return list(dict.fromkeys(expansions))[:3]
+        return query_expansion_engine.generate_heuristic_expansions(query)
 
     @staticmethod
     def generate_hyde_passage(query: str) -> str:
@@ -80,100 +57,14 @@ class RagRetrievalEngine:
         Generates a domain-specific hypothetical document passage (HyDE)
         representing what an authoritative lecture monograph slide would contain.
         """
-        norm = policy_guard.normalize_medical_acronyms(query)
-        return (
-            f"Pharmacology Monograph Section: {norm}. "
-            "Drug Class & Mechanism of Action: Target receptors, enzyme inhibition or activation, intracellular signaling cascade. "
-            "Pharmacokinetics (ADME): Bioavailability, volume of distribution, hepatic CYP metabolism, renal clearance. "
-            "Clinical Indications & Efficacy: Primary indications, therapeutic guidelines, dosage adjustment in renal or hepatic impairment. "
-            "Adverse Drug Reactions & Contraindications: Common side effects, black box warnings, contraindicated drug combinations."
-        )
+        return query_expansion_engine.generate_heuristic_hyde(query)
 
     @staticmethod
     def rerank_candidates(query: str, candidates: list[dict], top_k: int = 4) -> list[dict]:
         """
-        Executes a secondary multi-factor cross-scoring pass:
-        Score = 0.40 * DenseScore + 0.30 * ScaledRRF + 0.20 * LexicalOverlap + 0.10 * MetadataBonus
-        Eliminates semantic false positives and prioritizes high-relevance chunks.
+        Executes candidate re-ranking (heuristic pass for synchronous callers).
         """
-        if not candidates:
-            return []
-
-        query_terms = set(re.findall(r"\w+", query.lower()))
-        stop_words = {
-            "the",
-            "and",
-            "for",
-            "with",
-            "what",
-            "is",
-            "are",
-            "how",
-            "does",
-            "in",
-            "of",
-            "to",
-            "a",
-            "an",
-            "on",
-            "by",
-            "at",
-            "it",
-            "from",
-            "or",
-            "as",
-            "that",
-            "this",
-        }
-        significant_query_terms = query_terms - stop_words
-
-        scored_candidates = []
-        for c in candidates:
-            content_lower = c["content"].lower()
-            content_tokens = set(re.findall(r"\w+", content_lower))
-
-            # 1. Lexical overlap on clinical/medical terms
-            if significant_query_terms:
-                matched_terms = significant_query_terms.intersection(content_tokens)
-                lexical_overlap = len(matched_terms) / len(significant_query_terms)
-            else:
-                lexical_overlap = 0.5
-
-            # 2. Metadata relevance bonus
-            metadata_bonus = 0.0
-            doc_title_lower = (c.get("doc_title") or "").lower()
-            course_code_lower = (c.get("course_code") or "").lower()
-            for term in significant_query_terms:
-                if term in doc_title_lower or term in course_code_lower:
-                    metadata_bonus += 0.25
-            metadata_bonus = min(metadata_bonus, 1.0)
-
-            dense_score = max(0.0, float(c.get("dense_score", 0.0)))
-            scaled_rrf = min(1.0, float(c.get("rrf_score", 0.0)) * 25.0)
-
-            composite_score = (
-                0.40 * dense_score
-                + 0.30 * scaled_rrf
-                + 0.20 * lexical_overlap
-                + 0.10 * metadata_bonus
-            )
-
-            # Exact phrase match boost
-            if query.lower() in content_lower:
-                composite_score += 0.15
-
-            c_copy = dict(c)
-            c_copy["rerank_score"] = round(composite_score, 4)
-            if composite_score >= 0.60:
-                c_copy["confidence"] = "HIGH"
-            elif composite_score >= 0.38:
-                c_copy["confidence"] = "MEDIUM"
-            else:
-                c_copy["confidence"] = "LOW"
-            scored_candidates.append(c_copy)
-
-        scored_candidates.sort(key=lambda x: x["rerank_score"], reverse=True)
-        return scored_candidates[:top_k]
+        return candidate_reranker.fallback_heuristic_scoring(query, candidates)[:top_k]
 
     async def retrieve_context(
         self,
@@ -185,25 +76,74 @@ class RagRetrievalEngine:
         match_threshold: float = 0.25,
         expand_siblings: bool = True,
         expand_full_segment: bool = False,
+        conversation_history: list[dict[str, Any]] | None = None,
     ) -> tuple[str | None, list[CitationItem]]:
         """
         Retrieves top relevant chunks for a user query using 3-Pool Hybrid Search (RRF k=60).
+        Supports contextual history rewriting for follow-up questions with pronouns.
         Returns: (assembled_context_markdown, list_of_citations)
         """
         # 1. Acronym Normalization (e.g., CVS -> Cardiovascular System, HCTZ -> Hydrochlorothiazide)
         normalized_query = policy_guard.normalize_medical_acronyms(query)
 
-        # 2. Multi-Query Expansion & HyDE hypothetical document generation
-        expanded_queries = self.generate_multi_query_expansions(normalized_query)
-        _ = self.generate_hyde_passage(normalized_query)
+        # 2. Contextual Query Rewriting for follow-up turns (e.g. "what are its side effects?")
+        search_query = normalized_query
+        if conversation_history:
+            referential_words = {
+                "it",
+                "its",
+                "they",
+                "them",
+                "this",
+                "that",
+                "these",
+                "those",
+                "the drug",
+                "the mechanism",
+                "the medication",
+                "same",
+                "above",
+            }
+            query_words = set(re.findall(r"\w+", normalized_query.lower()))
+            if query_words.intersection(referential_words) or len(query_words) <= 4:
+                last_user_query = None
+                for h in reversed(conversation_history):
+                    if h.get("role") == "user" and h.get("content"):
+                        last_user_query = h["content"].strip()
+                        break
+                if last_user_query and last_user_query != normalized_query:
+                    search_query = f"{last_user_query} {normalized_query}"
 
-        # 3. Compute 3072d query embedding
-        query_vector = None
+        # 3. Multi-Query Expansion & HyDE hypothetical document generation
+        expanded_queries = [search_query]
+        hyde_passage = ""
+        if settings.ENABLE_QUERY_EXPANSION:
+            try:
+                (
+                    expanded_queries,
+                    hyde_passage,
+                ) = await query_expansion_engine.expand_and_generate_hyde(search_query)
+            except Exception as exp_exc:
+                logger.warning("query_expansion_failed", error=str(exp_exc))
+                expanded_queries = self.generate_multi_query_expansions(search_query)
+                hyde_passage = self.generate_hyde_passage(search_query)
+
+        # 4. Compute 3072d dense vector embeddings in batch
+        embed_texts = [search_query]
+        for eq in expanded_queries:
+            if eq != search_query and eq not in embed_texts:
+                embed_texts.append(eq)
+        has_hyde = bool(hyde_passage and len(hyde_passage.strip()) > 30)
+        if has_hyde:
+            embed_texts.append(hyde_passage)
+
+        embeddings: list[list[float]] = []
         try:
-            query_vector = await gemini_embedder.embed_single(normalized_query)
+            embeddings = await gemini_embedder.embed_batch(embed_texts)
         except Exception as exc:
-            logger.warning("query_embedding_failed", error=str(exc))
+            logger.warning("query_batch_embedding_failed", error=str(exc))
 
+        query_vector = embeddings[0] if embeddings else None
         vector_str = f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None
 
         raw_matches: list[dict] = []
@@ -375,77 +315,81 @@ class RagRetrievalEngine:
                         }
                     )
 
-                # Execute auxiliary FTS query for secondary expanded query if matches are few
-                if len(raw_matches) < match_count and len(expanded_queries) > 1 and conn:
-                    try:
-                        sec_query = expanded_queries[1]
-                        sec_fts_sql = """
-                            SELECT
-                                c.id as chunk_id,
-                                c.document_id,
-                                c.chunk_index,
-                                c.content,
-                                c.page_start,
-                                c.page_end,
-                                c.bounding_box,
-                                c.segment_id,
-                                0.5::double precision as dense_score,
-                                ts_rank(c.content_fts, websearch_to_tsquery('english', $1)) as fts_score,
-                                0.0::double precision as trgm_score,
-                                0.020::double precision as rrf_score,
-                                d.title as doc_title,
-                                d.course_code
-                            FROM public.document_chunks c
-                            JOIN public.documents d ON d.id = c.document_id
-                            WHERE d.deleted_at IS NULL
-                              AND ($2::uuid IS NULL OR d.university_id = $2)
-                              AND c.content_fts @@ websearch_to_tsquery('english', $1)
-                            LIMIT $3;
-                        """
-                        sec_rows = await conn.fetch(
-                            sec_fts_sql, sec_query, filter_uni_uuid, match_count
-                        )
-                        for r in sec_rows:
-                            cid = str(r["chunk_id"])
-                            if cid not in seen_chunk_ids:
-                                seen_chunk_ids.add(cid)
-                                raw_matches.append(
-                                    {
-                                        "chunk_id": cid,
-                                        "document_id": str(r["document_id"]),
-                                        "content": r["content"],
-                                        "page_start": r["page_start"],
-                                        "page_end": r["page_end"],
-                                        "chunk_index": r["chunk_index"],
-                                        "dense_score": float(r["dense_score"]),
-                                        "fts_score": float(r["fts_score"]),
-                                        "trgm_score": 0.0,
-                                        "rrf_score": 0.015,
-                                        "confidence": self.classify_confidence(
-                                            float(r["dense_score"]), 0.015
-                                        ),
-                                        "segment_id": str(r["segment_id"])
-                                        if r.get("segment_id")
-                                        else None,
-                                        "bounding_box": json.loads(r["bounding_box"])
-                                        if isinstance(r.get("bounding_box"), str)
-                                        else r.get("bounding_box"),
-                                        "doc_title": r["doc_title"] or "Course Lecture Slide",
-                                        "course_code": r["course_code"] or "",
-                                    }
-                                )
-                    except Exception as sec_exc:
-                        logger.debug("auxiliary_expansion_search_skipped", error=str(sec_exc))
+                # 4b. Multi-Query & HyDE 3-Pool Retrieval
+                for idx_exp, exp_q in enumerate(embed_texts[1:], start=1):
+                    if idx_exp < len(embeddings) and len(raw_matches) < match_count * 4:
+                        exp_vec_str = f"[{','.join(str(x) for x in embeddings[idx_exp])}]"
+                        try:
+                            is_hyde = idx_exp == len(embed_texts) - 1 and has_hyde
+                            weight = 0.85 if is_hyde else 0.65
+                            exp_rows = await conn.fetch(
+                                hybrid_sql,
+                                exp_q[:120],
+                                exp_vec_str,
+                                float(match_threshold),
+                                int(match_count),
+                                filter_uni_uuid,
+                                filter_doc_uuids,
+                            )
+                            for r in exp_rows:
+                                cid = str(r["chunk_id"])
+                                if cid not in seen_chunk_ids:
+                                    seen_chunk_ids.add(cid)
+                                    d_score = (
+                                        float(r["dense_score"])
+                                        if r["dense_score"] is not None
+                                        else 0.0
+                                    )
+                                    f_score = (
+                                        float(r["fts_score"]) if r["fts_score"] is not None else 0.0
+                                    )
+                                    t_score = (
+                                        float(r["trgm_score"])
+                                        if r["trgm_score"] is not None
+                                        else 0.0
+                                    )
+                                    r_score = (
+                                        float(r["rrf_score"])
+                                        if r["rrf_score"] is not None
+                                        else 0.015
+                                    ) * weight
+                                    confidence = self.classify_confidence(d_score, r_score)
+                                    raw_matches.append(
+                                        {
+                                            "chunk_id": cid,
+                                            "document_id": str(r["document_id"]),
+                                            "content": r["content"],
+                                            "page_start": r["page_start"],
+                                            "page_end": r["page_end"],
+                                            "chunk_index": r["chunk_index"],
+                                            "dense_score": d_score,
+                                            "fts_score": f_score,
+                                            "trgm_score": t_score,
+                                            "rrf_score": r_score,
+                                            "confidence": confidence,
+                                            "segment_id": str(r["segment_id"])
+                                            if r.get("segment_id")
+                                            else None,
+                                            "bounding_box": json.loads(r["bounding_box"])
+                                            if isinstance(r.get("bounding_box"), str)
+                                            else r.get("bounding_box"),
+                                            "doc_title": r["doc_title"] or "Course Lecture Slide",
+                                            "course_code": r["course_code"] or "",
+                                        }
+                                    )
+                        except Exception as exp_err:
+                            logger.debug("expansion_retrieval_skipped", error=str(exp_err))
 
             except Exception as exc:
                 logger.warning("rag_retrieval_query_error", error=str(exc))
                 raw_matches = []
 
-        # 5. Candidate Re-Ranking & Precision Filtering
-        reranked_matches = self.rerank_candidates(
+        # 5. Neural Candidate Re-Ranking & Precision Relevance Filtering
+        reranked_matches = await candidate_reranker.rerank(
             query=normalized_query,
             candidates=raw_matches,
             top_k=match_count,
+            score_threshold=settings.RERANKER_MIN_SCORE_THRESHOLD,
         )
 
         # 6. Absence Policy Check (Trigger autonomous web_search if syllabus match is empty or low)

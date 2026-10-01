@@ -2,9 +2,59 @@
 # PansGPT 2.0 Chat & RAG Pydantic Models (Phase 6)
 # ==============================================================================
 
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+class IntentType(StrEnum):
+    """Categorized student query intent."""
+
+    GREETING_CONVERSATIONAL = "greeting_conversational"
+    DIRECT_DEFINITION = "direct_definition"
+    COURSE_RETRIEVAL = "course_retrieval"
+    SKILL_GENERATION = "skill_generation"
+    CLINICAL_REASONING = "clinical_reasoning"
+    UNCERTAIN = "uncertain"
+
+
+class ComplexityLevel(StrEnum):
+    """Execution complexity classification."""
+
+    SIMPLE = "simple"
+    COMPLEX = "complex"
+
+
+class RouteType(StrEnum):
+    """Execution pipeline routing decision."""
+
+    FAST_PATH = "fast_path"
+    COMPLEX_PATH = "complex_path"
+
+
+class QueryClassification(BaseModel):
+    """Result of intent and complexity classification."""
+
+    intent: IntentType
+    complexity: ComplexityLevel
+    route: RouteType
+    requires_rag: bool
+    requires_tools: bool
+    confidence: float = Field(ge=0.0, le=1.0, description="Classification confidence score")
+    suggested_skills: list[str] = Field(default_factory=list, description="Target skill tool names")
+    extracted_topic: str | None = None
+    bypass_reason: str | None = None
+
+
+class BoundingBoxCoordinates(BaseModel):
+    """Normalized page coordinate geometry for PDF deep linking and canvas highlighting."""
+
+    page: int
+    page_width: float | None = None
+    page_height: float | None = None
+    bbox: list[float] | None = None  # Tight union [x0, y0, x1, y1] normalized to [0.0, 1.0]
+    rects: list[list[float]] | None = None  # Array of line-level rectangles normalized
 
 
 class CitationItem(BaseModel):
@@ -23,7 +73,7 @@ class CitationItem(BaseModel):
     trgm_score: float | None = None
     rrf_score: float | None = None
     confidence: str = "HIGH"  # HIGH, MEDIUM, LOW
-    bounding_box: dict[str, Any] | None = None
+    bounding_box: BoundingBoxCoordinates | dict[str, Any] | None = None
 
 
 class ChatSessionCreateRequest(BaseModel):
@@ -85,6 +135,7 @@ class StreamChatRequest(BaseModel):
     enable_rag: bool = True
     expand_full_segment: bool = False
     enable_tools: bool = True
+    history: list[dict[str, Any]] | None = None
 
 
 class ToolCallPayload(BaseModel):
@@ -123,4 +174,8 @@ class VoiceTranscribeResponse(BaseModel):
     text: str
     language: str = "en"
     duration: float | None = None
+    latency_ms: float | None = None
+    model: str = "whisper-large-v3-turbo"
     provider: str = "groq-whisper"
+    word_count: int = 0
+    is_silent: bool = False

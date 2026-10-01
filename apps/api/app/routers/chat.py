@@ -6,6 +6,7 @@ import json
 import time
 import uuid
 from collections.abc import AsyncGenerator
+from typing import Any
 
 import structlog
 from fastapi import (
@@ -14,6 +15,7 @@ from fastapi import (
     Depends,
     File,
     Header,
+    HTTPException,
     Query,
     Request,
     UploadFile,
@@ -25,8 +27,10 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
 from app.engines.guard import policy_guard
+from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
 from app.engines.rag import rag_engine
+from app.engines.thinking import strip_thinking_tokens
 from app.models.chat import (
     ChatMessageResponse,
     ChatSessionCreateRequest,
@@ -56,22 +60,38 @@ def _extract_user_id(x_user_id: str | None = None) -> str:
     return DEV_DEFAULT_USER_ID
 
 
-async def _deduct_user_credit(user_id: str) -> None:
-    """Background task to deduct one credit for interaction."""
+async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
+    """Atomically deduct one chat credit through the database ledger RPC."""
     try:
         async with get_db_connection(timeout=3.0) as conn:
-            if conn:
-                await conn.execute(
-                    """
-                    UPDATE public.user_credits
-                    SET balance = GREATEST(0, balance - 1),
-                        updated_at = now()
-                    WHERE user_id = $1;
-                    """,
-                    uuid.UUID(user_id),
-                )
+            if not conn:
+                return None
+
+            return await conn.fetchval(
+                """
+                SELECT public.deduct_user_credits(
+                    $1::uuid,
+                    'ai_chat_turn',
+                    $2::text,
+                    $3::jsonb
+                );
+                """,
+                uuid.UUID(user_id),
+                reference_id,
+                json.dumps({"source": "chat_sse"}),
+            )
     except Exception as exc:
-        logger.warning("background_credit_deduction_failed", error=str(exc))
+        detail = str(exc)
+        logger.warning("credit_deduction_failed", error=detail)
+        if "insufficient credits" in detail.lower():
+            raise HTTPException(
+                status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                detail="Insufficient credits for this AI chat turn.",
+            ) from exc
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Unable to verify credits before starting chat stream.",
+        ) from exc
 
 
 async def _auto_generate_session_title(session_id: str, message: str) -> None:
@@ -314,8 +334,10 @@ async def stream_chat_session(
     user_message_id = str(uuid.uuid4())
     assistant_message_id = str(uuid.uuid4())
 
+    if not current_user.dev_bypass:
+        await _deduct_user_credit(user_id, assistant_message_id)
+
     # Queue background operations
-    background_tasks.add_task(_deduct_user_credit, user_id)
     background_tasks.add_task(_auto_generate_session_title, session_id, payload.message)
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
@@ -333,7 +355,33 @@ async def stream_chat_session(
             yield f"event: done\ndata: {json.dumps({'full_text': err_msg, 'citations_count': 0})}\n\n"
             return
 
-        # 3. Asynchronously record user message to DB
+        # 3. Load active conversation history from payload or database
+        history_turns: list[dict[str, Any]] = []
+        if payload.history:
+            history_turns = payload.history
+        else:
+            async with get_db_connection() as conn:
+                if conn:
+                    try:
+                        h_rows = await conn.fetch(
+                            """
+                            SELECT role, content
+                            FROM public.chat_messages
+                            WHERE session_id = $1
+                              AND is_active_branch = true
+                            ORDER BY created_at DESC
+                            LIMIT 10;
+                            """,
+                            uuid.UUID(session_id),
+                        )
+                        for hr in reversed(h_rows):
+                            history_turns.append(
+                                {"role": str(hr["role"]), "content": str(hr["content"])}
+                            )
+                    except Exception as h_err:
+                        logger.warning("fetch_chat_history_db_failed", error=str(h_err))
+
+        # Asynchronously record user message to DB
         async with get_db_connection() as conn:
             if conn:
                 try:
@@ -352,10 +400,28 @@ async def stream_chat_session(
                 except Exception as exc:
                     logger.warning("save_user_message_failed", error=str(exc))
 
-        # 4. RAG Retrieval & Context Assembly
+        # 3b. Intent & Complexity Classification (Fast Path vs. Complex Path)
+        classification = intent_classifier.classify(
+            query=payload.message,
+            history=history_turns,
+            document_id=payload.document_id,
+            course_code=payload.course_code,
+            user_enable_rag=payload.enable_rag,
+            user_enable_tools=payload.enable_tools,
+        )
+        logger.info(
+            "query_classified",
+            intent=classification.intent.value,
+            route=classification.route.value,
+            requires_rag=classification.requires_rag,
+            requires_tools=classification.requires_tools,
+            confidence=classification.confidence,
+        )
+
+        # 4. RAG Retrieval & Context Assembly (with pronoun and context history resolution)
         rag_context = None
         citations: list[CitationItem] = []
-        if payload.enable_rag:
+        if classification.requires_rag:
             try:
                 rag_context, citations = await rag_engine.retrieve_context(
                     query=payload.message,
@@ -366,6 +432,7 @@ async def stream_chat_session(
                     match_threshold=0.25,
                     expand_siblings=True,
                     expand_full_segment=payload.expand_full_segment,
+                    conversation_history=history_turns,
                 )
             except Exception as exc:
                 logger.warning("rag_pipeline_execution_error", error=str(exc))
@@ -378,17 +445,19 @@ async def stream_chat_session(
         # 5. Build Clinical System Prompt Grounded in Course Chunks
         system_prompt = policy_guard.build_system_prompt(rag_context)
 
-        # 6. Stream tokens and agentic events from Multi-tier LLM Engine
+        # 6. Stream tokens and agentic events from Multi-tier LLM Engine with full history
         collected_tokens: list[str] = []
+        collected_thinking: list[str] = []
         last_provider = "google"
 
         try:
             async for event_type, data, provider in llm_engine.stream_agentic_chat(
                 system_prompt=system_prompt,
                 user_message=payload.message,
+                history=history_turns,
                 user_id=user_id,
                 university_id=university_id,
-                enable_tools=payload.enable_tools,
+                enable_tools=classification.requires_tools,
             ):
                 # Check client disconnect abort
                 if await request.is_disconnected():
@@ -404,11 +473,13 @@ async def stream_chat_session(
                 last_provider = provider
 
                 if event_type == "text_chunk":
-                    token = data["token"]
+                    token = data.get("token") or data.get("delta", "")
                     collected_tokens.append(token)
-                    yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'provider': provider})}\n\n"
+                    yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'delta': token, 'provider': provider})}\n\n"
                 elif event_type == "thinking_chunk":
-                    yield f"event: thinking_chunk\ndata: {json.dumps(data)}\n\n"
+                    delta = data.get("delta") or data.get("token", "")
+                    collected_thinking.append(delta)
+                    yield f"event: thinking_chunk\ndata: {json.dumps({'delta': delta, 'token': delta})}\n\n"
                 elif event_type == "tool_start":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     yield f"event: tool_start\ndata: {json.dumps(dumped)}\n\n"
@@ -425,8 +496,13 @@ async def stream_chat_session(
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
 
         raw_response_text = "".join(collected_tokens)
-        is_safe_output, sanitized_output = policy_guard.check_output_safety(raw_response_text)
+        clean_visible, residual_thinking = strip_thinking_tokens(raw_response_text)
+        if residual_thinking:
+            collected_thinking.append(residual_thinking)
+
+        is_safe_output, sanitized_output = policy_guard.check_output_safety(clean_visible)
         full_response_text = policy_guard.append_study_disclaimer(sanitized_output)
+        full_thinking_text = "".join(collected_thinking).strip() or None
 
         # 7. Asynchronously save assistant message to DB
         async with get_db_connection() as conn:
@@ -438,8 +514,8 @@ async def stream_chat_session(
                     await conn.execute(
                         """
                         INSERT INTO public.chat_messages (
-                            id, session_id, parent_message_id, role, content, citations
-                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb)
+                            id, session_id, parent_message_id, role, content, citations, thinking_text
+                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
                         ON CONFLICT (id) DO NOTHING;
                         """,
                         uuid.UUID(assistant_message_id),
@@ -447,6 +523,7 @@ async def stream_chat_session(
                         uuid.UUID(user_message_id),
                         full_response_text,
                         cits_json,
+                        full_thinking_text,
                     )
                 except Exception as exc:
                     logger.warning("save_assistant_message_failed", error=str(exc))
@@ -472,45 +549,50 @@ async def stream_chat_session(
     summary="Transcribe student voice question via Groq Whisper",
 )
 async def transcribe_voice_audio(
-    file: UploadFile = File(...),
+    file: UploadFile | None = File(None),
+    audio: UploadFile | None = File(None),
     current_user: UserContext = Depends(get_current_user),
 ):
     """
     Transcribes student microphone audio to text using Groq Whisper.
-    Falls back gracefully if key is not configured or in offline test mode.
+    Supports both 'file' and 'audio' multipart form fields with full validation.
     """
-    audio_bytes = await file.read()
-    if not audio_bytes:
-        return VoiceTranscribeResponse(
-            text="",
-            duration=0.0,
-            provider="none",
+    target_file = file or audio
+    if target_file is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="An audio recording file must be provided via 'file' or 'audio' multipart field.",
         )
 
-    groq_key = settings.GROQ_API_KEY
-    if groq_key and not any(p in groq_key.lower() for p in ("placeholder", "dummy", "test")):
-        try:
-            from groq import AsyncGroq
+    audio_bytes = await target_file.read()
+    if not audio_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Uploaded audio recording file is empty.",
+        )
 
-            client = AsyncGroq(api_key=groq_key)
-            transcription = await client.audio.transcriptions.create(
-                file=(file.filename or "recording.wav", audio_bytes),
-                model=settings.WHISPER_PRIMARY_MODEL,
-                language="en",
-                response_format="json",
-            )
-            return VoiceTranscribeResponse(
-                text=transcription.text,
-                language="en",
-                provider="groq-whisper",
-            )
-        except Exception as exc:
-            logger.warning("groq_whisper_transcribe_failed", error=str(exc))
+    if len(audio_bytes) > settings.WHISPER_MAX_FILE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail=f"Audio file exceeds maximum allowed size of {settings.WHISPER_MAX_FILE_SIZE_BYTES // (1024 * 1024)}MB.",
+        )
 
-    # Offline / Test Fallback
-    return VoiceTranscribeResponse(
-        text="Explain the mechanism of action of beta blockers in cardiovascular disease.",
+    content_type = target_file.content_type or "audio/webm"
+    base_mime = content_type.split(";")[0].strip().lower()
+    if base_mime not in settings.WHISPER_ALLOWED_MIME_TYPES:
+        logger.warning(
+            "unsupported_audio_mime_type",
+            content_type=content_type,
+            allowed=settings.WHISPER_ALLOWED_MIME_TYPES,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail=f"Unsupported media type '{base_mime}'. Audio recording must be one of {settings.WHISPER_ALLOWED_MIME_TYPES}.",
+        )
+
+    return await llm_engine.transcribe_audio(
+        audio_bytes=audio_bytes,
+        filename=target_file.filename or "recording.webm",
+        mime_type=content_type,
         language="en",
-        duration=2.5,
-        provider="groq-whisper-mock",
     )

@@ -5,10 +5,8 @@
 import uuid
 from typing import Any
 
-import httpx
 import structlog
 
-from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.rag import rag_engine
 
@@ -216,65 +214,36 @@ class ToolExecutionEngine:
             }
 
     @staticmethod
-    async def execute_web_search(query: str, num_results: int = 3) -> dict[str, Any]:
-        """Queries biomedical literature via Tavily or returns curated medical facts in offline mode."""
-        api_key = settings.TAVILY_API_KEY
-        if api_key and not api_key.startswith(("placeholder", "dummy", "test")):
-            try:
-                async with httpx.AsyncClient(timeout=8.0) as client:
-                    resp = await client.post(
-                        "https://api.tavily.com/search",
-                        json={
-                            "api_key": api_key,
-                            "query": f"{query} pharmacology medical pubmed",
-                            "search_depth": "basic",
-                            "max_results": num_results,
-                        },
-                    )
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        results = [
-                            {
-                                "title": item.get("title", "Biomedical Literature"),
-                                "url": item.get("url", ""),
-                                "content": item.get("content", ""),
-                            }
-                            for item in data.get("results", [])
-                        ]
-                        return {"results": results, "source": "tavily-biomedical"}
-            except Exception as exc:
-                logger.warning("tavily_web_search_failed", error=str(exc))
+    async def execute_web_search(
+        query: str,
+        num_results: int = 3,
+        user_id: str | None = None,
+        role: str = "student",
+    ) -> dict[str, Any]:
+        """Queries biomedical literature via Tavily with user daily quotas and MD5 caching."""
+        from app.engines.web_search import web_search_engine
 
-        # Deterministic offline pharmacological knowledge summary
-        return {
-            "results": [
-                {
-                    "title": f"Biomedical Reference: {query}",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov",
-                    "content": (
-                        f"Standard pharmacology consensus for '{query}': Drug actions are mediated via specific "
-                        "macromolecular targets (receptors, enzymes, ion channels, transporters). Clinical monitoring and "
-                        "adverse event profiles must follow official pharmacopeia standards."
-                    ),
-                }
-            ],
-            "source": "curated-biomedical-fallback",
-        }
+        return await web_search_engine.search(
+            query=query,
+            num_results=num_results,
+            user_id=user_id,
+            role=role,
+        )
 
     @staticmethod
     async def execute_vision_analyze(
         image_key: str,
         prompt: str = "Analyze this image",
+        user_id: str | None = None,
     ) -> dict[str, Any]:
-        """Analyzes an image via multimodal vision."""
-        return {
-            "status": "success",
-            "image_key": image_key,
-            "analysis": (
-                f"Visual Analysis Report for {image_key}: Histological / pharmacological inspection completed. "
-                "Cellular morphology, receptor binding sites, and pharmacokinetic curve characteristics noted."
-            ),
-        }
+        """Analyzes an image via multimodal vision with multi-tier failover."""
+        from app.engines.vision import vision_engine
+
+        return await vision_engine.analyze(
+            image_input=image_key,
+            prompt=prompt,
+            user_id=user_id,
+        )
 
     async def dispatch_tool(
         self,
@@ -282,6 +251,7 @@ class ToolExecutionEngine:
         arguments: dict[str, Any],
         university_id: str | None = None,
         user_id: str | None = None,
+        role: str = "student",
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
         logger.info("tool_dispatch_requested", tool_name=tool_name, arguments=arguments)
@@ -303,11 +273,19 @@ class ToolExecutionEngine:
                 return await self.execute_web_search(
                     query=arguments.get("query", ""),
                     num_results=arguments.get("num_results", 3),
+                    user_id=user_id,
+                    role=role,
                 )
             elif tool_name == "vision_analyze":
+                image_target = (
+                    arguments.get("image_key")
+                    or arguments.get("image_url")
+                    or arguments.get("image_data", "")
+                )
                 return await self.execute_vision_analyze(
-                    image_key=arguments.get("image_key", ""),
-                    prompt=arguments.get("prompt", ""),
+                    image_key=image_target,
+                    prompt=arguments.get("prompt", "Analyze this image"),
+                    user_id=user_id,
                 )
             else:
                 return {"error": f"Unknown tool name: {tool_name}"}

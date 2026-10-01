@@ -263,3 +263,31 @@ async def test_chat_streaming_blocks_injection_sse(client: AsyncClient):
     assert (
         "Policy Guard Notice" in stream_content or "violates system safety policy" in stream_content
     )
+
+
+@pytest.mark.asyncio
+async def test_chat_streaming_with_multi_turn_history(client: AsyncClient):
+    """Verify that multi-turn conversation history is accepted and parsed in SSE streaming."""
+    session_id = "018f3a30-0001-7000-8000-000000000001"
+    payload = {
+        "message": "What are its key contraindications?",
+        "enable_rag": False,
+        "history": [
+            {"role": "user", "content": "Explain Warfarin mechanism of action."},
+            {
+                "role": "assistant",
+                "content": "Warfarin inhibits Vitamin K Epoxide Reductase Complex 1 (VKORC1).",
+            },
+        ],
+    }
+
+    response = await client.post(
+        f"/api/v1/ai/chat/sessions/{session_id}/stream",
+        json=payload,
+        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
+    )
+    assert response.status_code == 200
+    assert "text/event-stream" in response.headers.get("content-type", "")
+    stream_content = response.text
+    assert "event: init" in stream_content
+    assert "event: text_chunk" in stream_content
