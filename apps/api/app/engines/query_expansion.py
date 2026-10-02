@@ -33,7 +33,11 @@ class QueryExpansionEngine:
             settings, "GROQ_FAST_EXPANSION_MODEL", "llama-3.1-8b-instant"
         )
         self.fast_gemini_model = getattr(settings, "GEMINI_FAST_MODEL", "gemini-2.0-flash")
-        self.circuit_breaker_timeout = settings.QUERY_EXPANSION_TIMEOUT_SECONDS or 0.35
+        # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
+        # Gemini Flash needs ~800-1200ms. The old 350ms circuit breaker timed out always.
+        self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 2.0)
+        self.gemini_timeout = getattr(settings, "QUERY_EXPANSION_GEMINI_TIMEOUT_SECONDS", 2.5)
+        self.circuit_breaker_timeout = self.groq_timeout  # legacy alias kept
 
     def should_bypass_expansion(self, query: str) -> bool:
         """
@@ -144,7 +148,7 @@ class QueryExpansionEngine:
                     max_tokens=256,
                     response_format={"type": "json_object"},
                 ),
-                timeout=self.circuit_breaker_timeout,
+                timeout=self.groq_timeout,
             )
             content = response.choices[0].message.content or "{}"
             return json.loads(content)
@@ -163,16 +167,22 @@ class QueryExpansionEngine:
 
         try:
             from google import genai
+            from google.genai.errors import ServerError as GoogleServerError
 
             client = genai.Client(api_key=self.gemini_key)
 
-            response = await asyncio.wait_for(
-                client.aio.models.generate_content(
-                    model=self.fast_gemini_model,
-                    contents=prompt,
-                ),
-                timeout=self.circuit_breaker_timeout,
-            )
+            try:
+                response = await asyncio.wait_for(
+                    client.aio.models.generate_content(
+                        model=self.fast_gemini_model,
+                        contents=prompt,
+                    ),
+                    timeout=self.gemini_timeout,
+                )
+            except GoogleServerError as gse:
+                # Google backend 500 — treat as a non-fatal miss; fallback to heuristic
+                logger.debug("gemini_hyde_server_error", error=str(gse))
+                return None
             return response.text.strip() if response.text else None
         except Exception as exc:
             logger.debug("gemini_hyde_generation_failed", error=str(exc))

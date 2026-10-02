@@ -91,8 +91,9 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str | None = None
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-002"
-    GEMINI_EMBEDDING_DIMENSIONS: int = 3072
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-exp-03-07"  # 3072d, v1beta GA
+    GEMINI_EMBEDDING_DIMENSIONS: int = 3072  # [EMBED FIX]
+    EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
 
     GROQ_API_KEY: str | None = None
     GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
