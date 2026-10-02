@@ -93,6 +93,7 @@ class Settings(BaseSettings):
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
     GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-exp-03-07"  # 3072d, v1beta GA
     GEMINI_EMBEDDING_DIMENSIONS: int = 3072  # [EMBED FIX]
+    GEMINI_FAST_MODEL: str = "gemini-3.8-flash"  # HyDE passage generation (overridable via .env)
     EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
 
     GROQ_API_KEY: str | None = None

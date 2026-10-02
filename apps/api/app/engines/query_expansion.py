@@ -32,7 +32,7 @@ class QueryExpansionEngine:
         self.fast_groq_model = getattr(
             settings, "GROQ_FAST_EXPANSION_MODEL", "llama-3.1-8b-instant"
         )
-        self.fast_gemini_model = getattr(settings, "GEMINI_FAST_MODEL", "gemini-2.0-flash")
+        self.fast_gemini_model = getattr(settings, "GEMINI_FAST_MODEL", "gemini-3.8-flash")
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
         # Gemini Flash needs ~800-1200ms. The old 350ms circuit breaker timed out always.
         self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 2.0)
