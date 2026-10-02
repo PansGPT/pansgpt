@@ -29,14 +29,14 @@ class QueryExpansionEngine:
     def __init__(self):
         self.groq_key = settings.GROQ_API_KEY
         self.gemini_key = settings.GEMINI_API_KEY
-        self.fast_groq_model = getattr(
-            settings, "GROQ_FAST_EXPANSION_MODEL", "llama-3.1-8b-instant"
+        self.groq_expansion_model = getattr(
+            settings, "GROQ_EXPANSION_MODEL", "llama-3.1-8b-instant"
         )
-        self.fast_gemini_model = getattr(settings, "GEMINI_FAST_MODEL", "gemini-3.8-flash")
+        self.hyde_model = getattr(settings, "HYDE_GENERATION_MODEL", "gemma-4-31b-it")
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
-        # Gemini Flash needs ~800-1200ms. The old 350ms circuit breaker timed out always.
+        # Gemma via Google AI Studio needs ~800-1500ms.
         self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 2.0)
-        self.gemini_timeout = getattr(settings, "QUERY_EXPANSION_GEMINI_TIMEOUT_SECONDS", 2.5)
+        self.hyde_timeout = getattr(settings, "QUERY_EXPANSION_HYDE_TIMEOUT_SECONDS", 2.5)
         self.circuit_breaker_timeout = self.groq_timeout  # legacy alias kept
 
     def should_bypass_expansion(self, query: str) -> bool:
@@ -136,7 +136,7 @@ class QueryExpansionEngine:
 
             response = await asyncio.wait_for(
                 client.chat.completions.create(
-                    model=self.fast_groq_model,
+                    model=self.groq_expansion_model,
                     messages=[
                         {
                             "role": "system",
@@ -156,8 +156,8 @@ class QueryExpansionEngine:
             logger.debug("groq_expansion_json_failed", error=str(exc))
             return None
 
-    async def _call_gemini_hyde(self, prompt: str) -> str | None:
-        """Executes synthetic monograph generation on Gemini."""
+    async def _call_hyde_generation(self, prompt: str) -> str | None:
+        """Generates a synthetic monograph passage via Gemma (Google AI Studio)."""
         if (
             not self.gemini_key
             or "placeholder" in self.gemini_key.lower()
@@ -174,18 +174,18 @@ class QueryExpansionEngine:
             try:
                 response = await asyncio.wait_for(
                     client.aio.models.generate_content(
-                        model=self.fast_gemini_model,
+                        model=self.hyde_model,
                         contents=prompt,
                     ),
-                    timeout=self.gemini_timeout,
+                    timeout=self.hyde_timeout,
                 )
             except GoogleServerError as gse:
-                # Google backend 500 — treat as a non-fatal miss; fallback to heuristic
-                logger.debug("gemini_hyde_server_error", error=str(gse))
+                # Backend 500 — non-fatal, fall back to heuristic template
+                logger.debug("hyde_generation_server_error", error=str(gse))
                 return None
             return response.text.strip() if response.text else None
         except Exception as exc:
-            logger.debug("gemini_hyde_generation_failed", error=str(exc))
+            logger.debug("hyde_generation_failed", error=str(exc))
             return None
 
     async def expand_multi_query(self, query: str) -> list[str]:
@@ -235,7 +235,7 @@ Structure with exact headings:
 Keep it factual, dense, and between 100-140 words. Do NOT include conversational greetings."""
 
         try:
-            passage = await self._call_gemini_hyde(prompt)
+            passage = await self._call_hyde_generation(prompt)
             if passage and len(passage) > 80:
                 return passage
         except Exception as exc:
