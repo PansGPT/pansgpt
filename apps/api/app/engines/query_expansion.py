@@ -35,8 +35,8 @@ class QueryExpansionEngine:
         self.hyde_model = getattr(settings, "HYDE_GENERATION_MODEL", "gemma-4-31b-it")
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
         # Gemma via Google AI Studio needs ~800-1500ms.
-        self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 2.0)
-        self.hyde_timeout = getattr(settings, "QUERY_EXPANSION_HYDE_TIMEOUT_SECONDS", 2.5)
+        self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 5.0)
+        self.hyde_timeout = getattr(settings, "QUERY_EXPANSION_HYDE_TIMEOUT_SECONDS", 10.0)
         self.circuit_breaker_timeout = self.groq_timeout  # legacy alias kept
 
     def should_bypass_expansion(self, query: str) -> bool:

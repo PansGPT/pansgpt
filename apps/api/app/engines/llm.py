@@ -798,7 +798,14 @@ class MultiTierLlmEngine:
                             t_name, t_args, user_id=user_id, university_id=university_id
                         )
                         yield "artifact_ready", artifact, active_provider
-                        tool_res = artifact.model_dump()
+                        tool_res = {
+                            "status": "success",
+                            "title": artifact.title,
+                            "skill_name": artifact.skill_name,
+                            "file_extension": artifact.file_extension,
+                            "content_summary": artifact.content,
+                            "instruction": "The artifact file has been compiled and rendered directly as a downloadable card in the student UI. In your response text, provide an educational clinical summary of the content. Do NOT output raw URLs, file paths, or markdown download links in your text.",
+                        }
                     else:
                         tool_res = await tool_engine.dispatch_tool(
                             t_name, t_args, university_id=university_id, user_id=user_id

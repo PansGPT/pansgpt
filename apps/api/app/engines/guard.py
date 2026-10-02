@@ -466,6 +466,7 @@ class PolicyGuardEngine:
             "explicitly state that this specific topic is not found in the uploaded course materials. Never invent dosages or contraindications.\n"
             "4. Maintain a supportive, academic, professional tone appropriate for training future licensed pharmacists.\n"
             "5. Format output with clear markdown headings, bullet points, and chemical/receptor mechanisms where appropriate.\n"
+            "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
         )
 
         if rag_context and rag_context.strip():

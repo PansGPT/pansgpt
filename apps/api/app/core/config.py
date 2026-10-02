@@ -91,7 +91,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str | None = None
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-exp-03-07"  # 3072d, v1beta GA
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 3072d, Google AI Studio
     GEMINI_EMBEDDING_DIMENSIONS: int = 3072  # [EMBED FIX]
     HYDE_GENERATION_MODEL: str = "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
     EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
@@ -136,8 +136,10 @@ class Settings(BaseSettings):
 
     # Query Expansion & HyDE Configuration (Section 6B.6)
     ENABLE_QUERY_EXPANSION: bool = True
-    QUERY_EXPANSION_TIMEOUT_SECONDS: float = 0.35
-    HYDE_TIMEOUT_SECONDS: float = 0.35
+    QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS: float = 5.0
+    QUERY_EXPANSION_HYDE_TIMEOUT_SECONDS: float = 10.0
+    QUERY_EXPANSION_TIMEOUT_SECONDS: float = 5.0
+    HYDE_TIMEOUT_SECONDS: float = 10.0
 
     # Re-ranking Engine Configuration (Section 6B.7)
     RERANKER_PROVIDER: Literal["flashrank", "cohere", "heuristic"] = "flashrank"

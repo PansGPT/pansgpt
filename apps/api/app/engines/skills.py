@@ -223,15 +223,20 @@ class SkillExecutionEngine:
             try:
                 await asyncio.wait_for(
                     r2_storage.upload_bytes(key, data, content_type),
-                    timeout=2.0,
+                    timeout=15.0,
                 )
                 url = await asyncio.wait_for(
                     r2_storage.generate_presigned_get_url(key, expires_in=3600),
-                    timeout=2.0,
+                    timeout=10.0,
                 )
                 return key, url
             except Exception as exc:
-                logger.warning("artifact_r2_upload_failed", key=key, error=str(exc))
+                logger.warning(
+                    "artifact_r2_upload_failed",
+                    key=key,
+                    error=str(exc),
+                    error_type=type(exc).__name__,
+                )
         return key, f"/api/v1/library/documents/download?key={key}"
 
     async def execute_create_doc(

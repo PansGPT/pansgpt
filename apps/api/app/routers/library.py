@@ -486,8 +486,16 @@ async def download_document_or_artifact(
 
     if storage_engine.is_configured:
         try:
+            exists = await storage_engine.object_exists(key)
+            if not exists:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Storage object '{key}' not found in bucket.",
+                )
             url = await storage_engine.generate_presigned_get_url(key, expires_in=3600)
             return RedirectResponse(url=url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+        except HTTPException:
+            raise
         except Exception:
             pass
 
