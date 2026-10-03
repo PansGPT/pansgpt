@@ -467,6 +467,7 @@ class PolicyGuardEngine:
             "4. Maintain a supportive, academic, professional tone appropriate for training future licensed pharmacists.\n"
             "5. Format output with clear markdown headings, bullet points, and chemical/receptor mechanisms where appropriate.\n"
             "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
+            "7. Before providing your visible answer or selecting tools, formulate your step-by-step clinical reasoning and strategy inside <think>...</think> tags. Outline your clinical rationale, mechanism pathways, and pedagogical approach.\n"
         )
 
         if rag_context and rag_context.strip():

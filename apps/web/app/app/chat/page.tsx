@@ -410,12 +410,12 @@ export default function ChatPage() {
 
                   {/* Assistant Collapsible Reasoning Block */}
                   {msg.role === "assistant" && msg.thinking && (
-                    <details className="mb-3 rounded-xl border border-neutral-200 bg-neutral-50/80 p-2.5 text-xs text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-300">
+                    <details open className="mb-3 rounded-xl border border-neutral-200 bg-neutral-50/80 p-2.5 text-xs text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-300">
                       <summary className="flex cursor-pointer select-none items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
                         <ChevronDown className="h-3.5 w-3.5" />
-                        Clinical Reasoning & Retrieval Context
+                        AI Clinical Reasoning & Thought Process
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] text-neutral-600 dark:text-neutral-400 max-h-48 overflow-y-auto">
+                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] text-neutral-600 dark:text-neutral-400 max-h-60 overflow-y-auto">
                         {msg.thinking}
                       </pre>
                     </details>

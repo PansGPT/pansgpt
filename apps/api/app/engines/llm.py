@@ -58,6 +58,11 @@ class MultiTierLlmEngine:
     """
 
     @staticmethod
+    def _format_error(exc: Exception) -> str:
+        s = str(exc).strip()
+        return f"{type(exc).__name__}: {s}" if s else type(exc).__name__
+
+    @staticmethod
     def _build_provider_messages(
         system_prompt: str,
         user_message: str,
@@ -258,7 +263,8 @@ class MultiTierLlmEngine:
                     config=types.GenerateContentConfig(
                         automatic_function_calling=types.AutomaticFunctionCallingConfig(
                             disable=True
-                        )
+                        ),
+                        thinking_config=types.ThinkingConfig(include_thoughts=True),
                     ),
                 ),
                 timeout=15.0,
@@ -266,10 +272,19 @@ class MultiTierLlmEngine:
         except GoogleServerError as gse:
             raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
 
-        first_chunk_text: str | None = None
+        first_chunk_tokens: list[str] = []
         try:
             async for _first in response_stream:
-                first_chunk_text = _first.text if _first.text else ""
+                if _first.candidates and _first.candidates[0].content:
+                    for part in _first.candidates[0].content.parts or []:
+                        text = getattr(part, "text", "") or ""
+                        if text:
+                            if getattr(part, "thought", False):
+                                first_chunk_tokens.append(f"<think>{text}</think>")
+                            else:
+                                first_chunk_tokens.append(text)
+                elif _first.text:
+                    first_chunk_tokens.append(_first.text)
                 break  # Only the first chunk; rest stays buffered in the stream
         except GoogleServerError as gse:
             # 500 on first token — re-raise before turn_handled is set so the
@@ -277,15 +292,37 @@ class MultiTierLlmEngine:
             raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
 
         async def _stream_gen():
-            # Re-emit the first chunk we already consumed above
-            if first_chunk_text:
-                yield first_chunk_text
+            # Re-emit the first chunk tokens we already consumed above
+            for piece in first_chunk_tokens:
+                yield piece
             # Stream the remainder; mid-stream errors are logged and stopped
             # gracefully (re-raising would break the open SSE connection).
+            in_thought = False
             try:
                 async for chunk in response_stream:
-                    if chunk.text:
+                    if chunk.candidates and chunk.candidates[0].content:
+                        parts = chunk.candidates[0].content.parts or []
+                        for part in parts:
+                            text = getattr(part, "text", "") or ""
+                            if not text:
+                                continue
+                            if getattr(part, "thought", False):
+                                if not in_thought:
+                                    yield "<think>"
+                                    in_thought = True
+                                yield text
+                            else:
+                                if in_thought:
+                                    yield "</think>"
+                                    in_thought = False
+                                yield text
+                    elif chunk.text:
+                        if in_thought:
+                            yield "</think>"
+                            in_thought = False
                         yield chunk.text
+                if in_thought:
+                    yield "</think>"
             except GoogleServerError as gse:
                 logger.warning("gemma_stream_mid_error", error=str(gse))
                 return
@@ -367,6 +404,11 @@ class MultiTierLlmEngine:
                 return calls, None
 
             text = choice.message.content or ""
+            reasoning = getattr(choice.message, "reasoning", None) or getattr(
+                choice.message, "reasoning_content", None
+            )
+            if reasoning:
+                text = f"<think>{reasoning}</think>\n{text}"
 
             async def _text_gen():
                 for word in text.split(" "):
@@ -387,10 +429,27 @@ class MultiTierLlmEngine:
         )
 
         async def _stream_gen():
+            in_reasoning = False
             async for chunk in stream:
-                token = chunk.choices[0].delta.content
+                if not chunk.choices:
+                    continue
+                delta = chunk.choices[0].delta
+                reasoning = getattr(delta, "reasoning", None) or getattr(
+                    delta, "reasoning_content", None
+                )
+                token = getattr(delta, "content", None)
+                if reasoning:
+                    if not in_reasoning:
+                        yield "<think>"
+                        in_reasoning = True
+                    yield reasoning
                 if token:
+                    if in_reasoning:
+                        yield "</think>"
+                        in_reasoning = False
                     yield token
+            if in_reasoning:
+                yield "</think>"
 
         return [], _stream_gen()
 
@@ -589,7 +648,8 @@ class MultiTierLlmEngine:
                     )
                     turn_handled = True
                 except Exception as e1:
-                    logger.warning("tier1_gemma_failed_failing_over", error=str(e1))
+                    err_str = self._format_error(e1)
+                    logger.warning("tier1_gemma_failed_failing_over", error=err_str)
                     await self._record_telemetry(
                         "google",
                         self.primary_model,
@@ -599,7 +659,7 @@ class MultiTierLlmEngine:
                         "failover",
                         user_id,
                         university_id,
-                        str(e1),
+                        err_str,
                     )
 
             # ------------------------------------------------------------------
@@ -625,7 +685,8 @@ class MultiTierLlmEngine:
                     )
                     turn_handled = True
                 except Exception as e1b:
-                    logger.warning("tier1b_gemma_failed_failing_over", error=str(e1b))
+                    err_str = self._format_error(e1b)
+                    logger.warning("tier1b_gemma_failed_failing_over", error=err_str)
                     await self._record_telemetry(
                         "google",
                         self.secondary_model,
@@ -635,7 +696,7 @@ class MultiTierLlmEngine:
                         "failover",
                         user_id,
                         university_id,
-                        str(e1b),
+                        err_str,
                     )
 
             # ------------------------------------------------------------------
@@ -659,7 +720,8 @@ class MultiTierLlmEngine:
                     tool_calls, text_gen = await self._call_groq_turn(groq_msgs, tools_for_turn)
                     turn_handled = True
                 except Exception as e2:
-                    logger.warning("tier2_groq_failed_failing_over", error=str(e2))
+                    err_str = self._format_error(e2)
+                    logger.warning("tier2_groq_failed_failing_over", error=err_str)
                     await self._record_telemetry(
                         "groq",
                         self.groq_model,
@@ -669,7 +731,7 @@ class MultiTierLlmEngine:
                         "failover",
                         user_id,
                         university_id,
-                        str(e2),
+                        err_str,
                     )
 
             # ------------------------------------------------------------------
@@ -702,7 +764,8 @@ class MultiTierLlmEngine:
                     text_gen = _or_gen()
                     turn_handled = True
                 except Exception as e3:
-                    logger.error("tier3_openrouter_failed", error=str(e3))
+                    err_str = self._format_error(e3)
+                    logger.error("tier3_openrouter_failed", error=err_str)
 
             # ------------------------------------------------------------------
             # OFFLINE DETERMINISTIC AGENT FALLBACK
