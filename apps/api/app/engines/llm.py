@@ -212,6 +212,11 @@ class MultiTierLlmEngine:
                     client.aio.models.generate_content(
                         model=model_name,
                         contents=full_prompt,
+                        config=types.GenerateContentConfig(
+                            automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                                disable=True
+                            )
+                        ),
                     ),
                     timeout=15.0,
                 )
@@ -250,6 +255,11 @@ class MultiTierLlmEngine:
                 client.aio.models.generate_content_stream(
                     model=model_name,
                     contents=full_prompt,
+                    config=types.GenerateContentConfig(
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                            disable=True
+                        )
+                    ),
                 ),
                 timeout=15.0,
             )

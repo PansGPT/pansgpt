@@ -192,6 +192,18 @@ class Settings(BaseSettings):
     # Observability
     SENTRY_DSN: str | None = None
 
+    @field_validator("GEMINI_EMBEDDING_MODEL", mode="before")
+    @classmethod
+    def normalize_gemini_embedding_model(cls, v: str | None) -> str:
+        if not v or v in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            return "gemini-embedding-2"
+        return v
+
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v):

@@ -167,6 +167,7 @@ class QueryExpansionEngine:
 
         try:
             from google import genai
+            from google.genai import types
             from google.genai.errors import ServerError as GoogleServerError
 
             client = genai.Client(api_key=self.gemini_key)
@@ -176,6 +177,11 @@ class QueryExpansionEngine:
                     client.aio.models.generate_content(
                         model=self.hyde_model,
                         contents=prompt,
+                        config=types.GenerateContentConfig(
+                            automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                                disable=True
+                            )
+                        ),
                     ),
                     timeout=self.hyde_timeout,
                 )

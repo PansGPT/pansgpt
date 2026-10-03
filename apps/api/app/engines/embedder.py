@@ -21,7 +21,15 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
     """Generates 3072-dimensional dense vector embeddings using Google AI Studio."""  # [EMBED FIX]
 
     def __init__(self):  # [EMBED FIX]
-        self.model_name = settings.GEMINI_EMBEDDING_MODEL  # [EMBED FIX]
+        raw_model = settings.GEMINI_EMBEDDING_MODEL
+        if not raw_model or raw_model in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            raw_model = "gemini-embedding-2"
+        self.model_name = raw_model
         self.dimensions = settings.GEMINI_EMBEDDING_DIMENSIONS  # [EMBED FIX]
         self.api_key = settings.GEMINI_API_KEY  # [EMBED FIX]
 
@@ -113,6 +121,13 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
             http_options=types.HttpOptions(api_version="v1"),
         )  # [EMBED FIX]
         model_name = self.model_name or settings.GEMINI_EMBEDDING_MODEL  # [EMBED FIX]
+        if not model_name or model_name in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            model_name = "gemini-embedding-2"
         dimensions = self.dimensions or settings.GEMINI_EMBEDDING_DIMENSIONS  # [EMBED FIX]
         config = types.EmbedContentConfig(output_dimensionality=dimensions)  # [EMBED FIX]
         all_embeddings: list[list[float]] = []  # [EMBED FIX]

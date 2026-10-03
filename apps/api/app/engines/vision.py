@@ -367,6 +367,9 @@ class VisionAnalysisEngine:
                 config=types.GenerateContentConfig(
                     temperature=0.2,
                     max_output_tokens=settings.VISION_REPLY_MAX_TOKENS,
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                        disable=True
+                    ),
                 ),
             ),
             timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS,

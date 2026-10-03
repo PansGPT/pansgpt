@@ -62,6 +62,11 @@ CLASSIFICATION: <TEXT_SCAN|TABLE|DIAGRAM>
             response = await client.aio.models.generate_content(
                 model=settings.GEMINI_PRIMARY_MODEL,
                 contents=[part, prompt],
+                config=types.GenerateContentConfig(
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                        disable=True
+                    )
+                ),
             )
             raw = response.text.strip() if response.text else ""
 
