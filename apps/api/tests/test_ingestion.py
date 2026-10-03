@@ -225,7 +225,7 @@ async def test_embedder_vector_dimensions():
         "Pharmacokinetics and bioavailability of amoxicillin capsules.",
         "Mechanism of action of ACE inhibitors in essential hypertension.",
     ]
-    vectors = await gemini_embedder.embed_batch(test_texts)
+    vectors = await gemini_embedder.embed_batch(test_texts, kind="document")  # [EMBED FIX]
     assert len(vectors) == 2
     for vec in vectors:
         assert len(vec) == 3072

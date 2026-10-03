@@ -234,31 +234,33 @@ class DocumentIngestionEngine:
         if progress_callback:
             await progress_callback(60)
 
-        # Stage 8 (cont.): Batch Gemini Embeddings
-        texts_to_embed = [c.content for c in chunk_items]
-        embeddings = await gemini_embedder.embed_batch(texts_to_embed, max_batch_size=32)
+        # Stage 8 (cont.): Batch Gemini Embeddings  # [EMBED FIX]
+        texts_to_embed = [c.content for c in chunk_items]  # [EMBED FIX]
+        embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
+            texts_to_embed, kind="document", titles=None, max_batch_size=32  # [EMBED FIX]
+        )  # [EMBED FIX]
+        if len(embeddings) != len(chunk_items):  # [EMBED FIX]
+            raise ValueError(  # [EMBED FIX]
+                f"Embeddings count ({len(embeddings)}) does not match chunk count ({len(chunk_items)})"  # [EMBED FIX]
+            )  # [EMBED FIX]
 
-        chunks_records: list[dict] = []
-        for idx, item in enumerate(chunk_items):
-            vec = (
-                embeddings[idx]
-                if idx < len(embeddings)
-                else gemini_embedder._generate_deterministic_vector(item.content)
-            )
-            chunks_records.append(
-                {
-                    "id": str(uuid.uuid4()),
-                    "document_id": document_id,
-                    "segment_id": item.segment_id,
-                    "element_id": item.element_id,
-                    "content": item.content,
-                    "page_start": item.page_start,
-                    "page_end": item.page_end,
-                    "chunk_index": item.chunk_index,
-                    "embedding": vec,
-                    "bounding_box": item.bounding_box,
-                }
-            )
+        chunks_records: list[dict] = []  # [EMBED FIX]
+        for idx, item in enumerate(chunk_items):  # [EMBED FIX]
+            vec = embeddings[idx]  # [EMBED FIX]
+            chunks_records.append(  # [EMBED FIX]
+                {  # [EMBED FIX]
+                    "id": str(uuid.uuid4()),  # [EMBED FIX]
+                    "document_id": document_id,  # [EMBED FIX]
+                    "segment_id": item.segment_id,  # [EMBED FIX]
+                    "element_id": item.element_id,  # [EMBED FIX]
+                    "content": item.content,  # [EMBED FIX]
+                    "page_start": item.page_start,  # [EMBED FIX]
+                    "page_end": item.page_end,  # [EMBED FIX]
+                    "chunk_index": item.chunk_index,  # [EMBED FIX]
+                    "embedding": vec,  # [EMBED FIX]
+                    "bounding_box": item.bounding_box,  # [EMBED FIX]
+                }  # [EMBED FIX]
+            )  # [EMBED FIX]
 
         if progress_callback:
             await progress_callback(80)
