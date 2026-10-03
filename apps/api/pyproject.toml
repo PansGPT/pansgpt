@@ -49,6 +49,9 @@ ignore = ["E501"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [  # [EMBED FIX]
+    "live: marks tests that make live API calls",  # [EMBED FIX]
+]  # [EMBED FIX]
 
 [dependency-groups]
 dev = [

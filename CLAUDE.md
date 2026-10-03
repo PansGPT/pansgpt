@@ -24,7 +24,7 @@
    - Vector columns must use `vector(3072)` with HNSW cosine indexes (`USING hnsw (embedding vector_cosine_ops)`).
 
 4. **Zero-Budget ($0) Free-Tier Architecture**:
-   - **Primary LLM**: Google AI Studio Gemma 4 (`gemma-4-31b-it`) & `gemini-embedding-002` (3072d).
+   - **Primary LLM**: Google AI Studio Gemma 4 (`gemma-4-31b-it`) & `gemini-embedding-2` (3072d).  <!-- [EMBED FIX] -->
    - **Fallback LLM**: Groq (`llama-3.3-70b-versatile`) via circuit breaker.
    - **Safety-Net LLM**: OpenRouter free-tier.
    - **Document Storage**: Cloudflare R2 (PDF monographs, slide conversions, note attachments).
@@ -120,7 +120,7 @@ pansgpt/
   3. Cloudflare R2 upload (original & converted)
   4. Structure & table extraction
   5. Semantic chunking (500–1000 tokens, 10% overlap)
-  6. Batch vector embeddings via `gemini-embedding-002` (3072 dims)
+  6. Batch vector embeddings via `gemini-embedding-2` (3072 dims)  <!-- [EMBED FIX] -->
   7. Postgres transactional write to `document_chunks`
   8. Ingestion heartbeat (`heartbeat_document_ingestion`) & status update to `active`.
 

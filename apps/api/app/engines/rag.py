@@ -128,23 +128,40 @@ class RagRetrievalEngine:
                 expanded_queries = self.generate_multi_query_expansions(search_query)
                 hyde_passage = self.generate_hyde_passage(search_query)
 
-        # 4. Compute 3072d dense vector embeddings in batch
-        embed_texts = [search_query]
-        for eq in expanded_queries:
-            if eq != search_query and eq not in embed_texts:
-                embed_texts.append(eq)
-        has_hyde = bool(hyde_passage and len(hyde_passage.strip()) > 30)
-        if has_hyde:
-            embed_texts.append(hyde_passage)
+        # 4. Compute 3072d dense vector embeddings in batch  # [EMBED FIX]
+        query_texts = [search_query]  # [EMBED FIX]
+        for eq in expanded_queries:  # [EMBED FIX]
+            if eq != search_query and eq not in query_texts:  # [EMBED FIX]
+                query_texts.append(eq)  # [EMBED FIX]
+        has_hyde = bool(hyde_passage and len(hyde_passage.strip()) > 30)  # [EMBED FIX]
+        embed_texts = list(query_texts)  # [EMBED FIX]
+        if has_hyde:  # [EMBED FIX]
+            embed_texts.append(hyde_passage)  # [EMBED FIX]
 
-        embeddings: list[list[float]] = []
-        try:
-            embeddings = await gemini_embedder.embed_batch(embed_texts)
-        except Exception as exc:
-            logger.warning("query_batch_embedding_failed", error=str(exc))
+        embeddings: list[list[float]] = []  # [EMBED FIX]
+        try:  # [EMBED FIX]
+            # Embed search_query and expanded queries with kind="query"  # [EMBED FIX]
+            query_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
+                query_texts, kind="query"  # [EMBED FIX]
+            )  # [EMBED FIX]
+            embeddings.extend(query_embeddings)  # [EMBED FIX]
 
-        query_vector = embeddings[0] if embeddings else None
-        vector_str = f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None
+            if has_hyde:  # [EMBED FIX]
+                # Embed HyDE passage with kind="document" (hypothetical document passage; to be benchmarked)  # [EMBED FIX]
+                hyde_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
+                    [hyde_passage], kind="document"  # [EMBED FIX]
+                )  # [EMBED FIX]
+                embeddings.extend(hyde_embeddings)  # [EMBED FIX]
+        except Exception as exc:  # [EMBED FIX]
+            logger.error(  # [EMBED FIX]
+                "query_batch_embedding_failed_dense_retrieval_skipped",  # [EMBED FIX]
+                error=str(exc),  # [EMBED FIX]
+                msg="Dense vector retrieval skipped due to embedding failure; proceeding with FTS/trigram only",  # [EMBED FIX]
+            )  # [EMBED FIX]
+            embeddings = []  # [EMBED FIX]
+
+        query_vector = embeddings[0] if embeddings else None  # [EMBED FIX]
+        vector_str = f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None  # [EMBED FIX]
 
         raw_matches: list[dict] = []
         seen_chunk_ids: set[str] = set()

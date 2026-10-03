@@ -32,7 +32,7 @@ export const PORTS = {
 export const AI_MODELS = {
   PRIMARY: "gemma-4-31b-it",
   SECONDARY: "gemma-4-26b-a4b-it",
-  EMBEDDING: "gemini-embedding-002",
+  EMBEDDING: "gemini-embedding-2", // [EMBED FIX]
   EMBEDDING_DIMENSIONS: 3072,
   GROQ_FALLBACK: "openai/gpt-oss-120b",
   OPENROUTER_FALLBACK: "google/gemma-2-27b-it",

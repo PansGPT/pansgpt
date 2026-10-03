@@ -22,7 +22,7 @@ For PansGPT:
 2. Scaffold the monorepo + CI tooling
 3. Lock secrets and config validation
 4. Build the database foundation (schema, RLS, migrations)
-5. Build the document ingestion engine (R2, PyMuPDF, 8-stage pipeline, gemini-embedding-002, HNSW)
+5. Build the document ingestion engine (R2, PyMuPDF, 8-stage pipeline, gemini-embedding-2, HNSW) <!-- [EMBED FIX] -->
 6. Build the AI/LLM orchestration engine (Gemma 4 → Groq → OpenRouter, tools, SSE)
 7. Build the auth backend (JWKS, JWT, RBAC role guards)
 8. Verify all three engines work via pytest API tests — no UI yet
@@ -121,7 +121,7 @@ PR reviewed + CI green → merged to main
 | **2**  | Secrets + Config          |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                             | App refuses to start with missing vars                                         |
 | **3**  | Environments Wired        |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
 | **4**  | Database Foundation       |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-002` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    |
+| **5**  | Document Ingestion Engine |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [EMBED FIX] -->
 | **6A** | AI Engine Foundation      |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
 | **6B** | AI Engine Advanced        |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend              |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
@@ -331,7 +331,7 @@ PR reviewed + CI green → merged to main
 - [x] Add `PAYSTACK_WEBHOOK_SECRET` and `FLUTTERWAVE_WEBHOOK_SECRET` | file: apps/api/app/core/config.py
 - [x] Add `TAVILY_API_KEY` (needed for search tool) | file: apps/api/app/core/config.py
 - [x] Add `X_API_KEY_WEB`, `X_API_KEY_MOBILE`, `X_API_KEY_DESKTOP` (client identity headers) | file: apps/api/app/core/config.py
-- [x] Fix embedding model name mismatch (`gemini-embedding-002` instead of `gemini-embedding-2`) | file: apps/api/app/core/config.py
+- [x] Fix embedding model name mismatch (`gemini-embedding-2` instead of `gemini-embedding-002`) | file: apps/api/app/core/config.py <!-- [EMBED FIX] -->
 
 ### 2.3 Web Config (@t3-oss/env-nextjs)
 
@@ -761,7 +761,7 @@ PR reviewed + CI green → merged to main
 - [x] Configure primary models (`GEMINI_PRIMARY_MODEL`, `GEMINI_SECONDARY_MODEL`, `GEMINI_EMBEDDING_MODEL`) | file: apps/api/app/core/config.py
 - [x] Configure Groq fallback model (`GROQ_FALLBACK_MODEL`) | file: apps/api/app/core/config.py
 - [x] Correct `OPENROUTER_FALLBACK_MODEL` to match spec (Nemotron 3 Ultra/Super instead of `gemma-2-27b-it`) | file: apps/api/app/core/config.py
-- [x] Correct `GEMINI_EMBEDDING_MODEL` to match spec (`gemini-embedding-002` instead of `gemini-embedding-2`) | file: apps/api/app/core/config.py
+- [x] Correct `GEMINI_EMBEDDING_MODEL` to match spec (`gemini-embedding-2` instead of `gemini-embedding-002`) | file: apps/api/app/core/config.py <!-- [EMBED FIX] -->
 
 ### 6A.3 Database Connection (asyncpg)
 
@@ -789,7 +789,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § AI Engine Foundation
 
 - [x] Implement Dense Vector Pool calling Supabase RPCs `match_document_chunks` and `match_documents_global` | file: apps/api/app/engines/rag.py
-- [x] Pass `config={"output_dimensionality": 3072}` in Google GenAI SDK call instead of manual list padding | file: apps/api/app/engines/embedder.py
+- [ ] Pass `config={"output_dimensionality": 3072}` in Google GenAI SDK call instead of manual list padding | file: apps/api/app/engines/embedder.py <!-- [EMBED FIX] -->
 
 ### 6A.7 Sibling Chunk Expansion
 
@@ -1847,7 +1847,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Primary LLM       | `gemma-4-31b-it` + `gemma-4-26b-a4b-it` via Google AI Studio |
 | Fast Fallback LLM | `openai/gpt-oss-120b`, `qwen/qwen3.6-27b` via Groq           |
 | Safety Net LLM    | NVIDIA Nemotron models via OpenRouter (free `:free` tier)    |
-| Embeddings        | `gemini-embedding-002` (3072 dimensions, HNSW index)         |
+| Embeddings        | `gemini-embedding-2` (3072 dimensions, HNSW index)         | <!-- [EMBED FIX] -->
 | Voice STT         | `whisper-large-v3-turbo` / `whisper-large-v3` via Groq       |
 | Web Search        | Tavily (feature-flagged via PostHog)                         |
 | Database          | Supabase Postgres + pgvector, UUIDv7 PKs                     |

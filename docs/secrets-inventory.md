@@ -17,7 +17,7 @@
 | `SUPABASE_SERVICE_ROLE_KEY`   | `apps/api` only       | Staging / Prod       | Server-side admin bypass for background ingestion      | Supabase Free Tier        |
 | `SUPABASE_JWT_SECRET`         | `apps/api` only       | Staging / Prod       | RS256/HS256 JWT signature verification                 | Supabase Free Tier        |
 | `DATABASE_URL`                | `apps/api` only       | Dev / Staging / Prod | PostgreSQL connection string (pooler port 5432/6543)   | Supabase Free Tier        |
-| `GOOGLE_AI_API_KEY`           | `apps/api` only       | Staging / Prod       | Primary LLM (Gemma 4) & `gemini-embedding-002` (1536d) | Google AI Studio ($0)     |
+| `GOOGLE_AI_API_KEY`           | `apps/api` only       | Staging / Prod       | Primary LLM (Gemma 4) & `gemini-embedding-2` (3072d) | Google AI Studio ($0)     | <!-- [EMBED FIX] -->
 | `GROQ_API_KEY`                | `apps/api` only       | Staging / Prod       | Fallback LLM (`llama-3.3-70b-versatile`)               | Groq Free Tier ($0)       |
 | `OPENROUTER_API_KEY`          | `apps/api` only       | Staging / Prod       | Safety-net LLM fallback endpoint                       | OpenRouter Free Tier ($0) |
 | `R2_ACCOUNT_ID`               | `apps/api` only       | Staging / Prod       | Cloudflare account ID for R2 storage                   | Cloudflare R2 (10GB $0)   |
