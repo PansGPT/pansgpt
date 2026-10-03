@@ -30,7 +30,7 @@ class QueryExpansionEngine:
         self.groq_key = settings.GROQ_API_KEY
         self.gemini_key = settings.GEMINI_API_KEY
         self.groq_expansion_model = getattr(
-            settings, "GROQ_EXPANSION_MODEL", "llama-3.1-8b-instant"
+            settings, "GROQ_EXPANSION_MODEL", "qwen/qwen3.8-27b"
         )
         self.hyde_model = getattr(settings, "HYDE_GENERATION_MODEL", "gemma-4-31b-it")
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;

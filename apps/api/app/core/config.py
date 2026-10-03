@@ -98,7 +98,8 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: str | None = None
     GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
-    GROQ_SECONDARY_MODEL: str = "qwen/qwen3.6-27b"
+    GROQ_SECONDARY_MODEL: str = "qwen/qwen3.8-27b"
+    GROQ_EXPANSION_MODEL: str = "qwen/qwen3.8-27b"
     WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
     WHISPER_SECONDARY_MODEL: str = "whisper-large-v3"
     OPENAI_API_KEY: str | None = None
