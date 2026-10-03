@@ -410,12 +410,26 @@ export default function ChatPage() {
 
                   {/* Assistant Collapsible Reasoning Block */}
                   {msg.role === "assistant" && msg.thinking && (
-                    <details open className="mb-3 rounded-xl border border-neutral-200 bg-neutral-50/80 p-2.5 text-xs text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-300">
-                      <summary className="flex cursor-pointer select-none items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
-                        <ChevronDown className="h-3.5 w-3.5" />
-                        AI Clinical Reasoning & Thought Process
+                    <details
+                      open={!msg.content ? true : undefined}
+                      className="mb-3 rounded-xl border border-emerald-200/70 bg-emerald-50/50 p-2.5 text-xs text-neutral-700 dark:border-emerald-950/60 dark:bg-emerald-950/20 dark:text-neutral-300 transition-all"
+                    >
+                      <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
+                        <div className="flex items-center gap-1.5">
+                          <Sparkles
+                            className={`h-3.5 w-3.5 ${
+                              !msg.content ? "animate-pulse text-emerald-600" : "text-emerald-500"
+                            }`}
+                          />
+                          <span>
+                            {!msg.content
+                              ? "Reasoning in progress..."
+                              : "Thought Process & Clinical Reasoning"}
+                          </span>
+                        </div>
+                        <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] text-neutral-600 dark:text-neutral-400 max-h-60 overflow-y-auto">
+                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-neutral-600 dark:text-neutral-400 max-h-56 overflow-y-auto rounded-lg bg-white/70 dark:bg-neutral-900/60 p-2 border border-neutral-200/50 dark:border-neutral-800/50">
                         {msg.thinking}
                       </pre>
                     </details>
