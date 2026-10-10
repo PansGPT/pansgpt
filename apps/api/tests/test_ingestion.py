@@ -18,6 +18,7 @@ from app.engines.embedder import EmbeddingError, gemini_embedder  # [DIM 1536]
 from app.engines.extractor import document_extractor
 from app.engines.ingestion import document_ingestion_engine
 from app.engines.storage import (
+    DEFAULT_UNIVERSITY_ID,
     build_artifact_storage_key,
     build_converted_storage_key,
     build_document_storage_key,
@@ -125,7 +126,7 @@ def test_artifact_storage_key_generation():
         artifact_id=art_id,
         university_id=None,
     )
-    assert default_key == f"universities/default/artifacts/pdf/{art_id}.pdf"
+    assert default_key == f"universities/{DEFAULT_UNIVERSITY_ID}/artifacts/pdf/{art_id}.pdf"
 
 
 # ------------------------------------------------------------------------------
@@ -619,7 +620,7 @@ async def test_ingestion_database_write_strips_nul_characters(monkeypatch):  # [
     # [NUL FIX]
     success = await document_ingestion_engine.ingest_document_from_r2(  # [NUL FIX]
         document_id=doc_id,  # [NUL FIX]
-        storage_key="universities/default/courses/pcl_411/converted/test.pdf",  # [NUL FIX]
+        storage_key=f"universities/{DEFAULT_UNIVERSITY_ID}/courses/pcl_411/converted/test.pdf",  # [NUL FIX]
     )  # [NUL FIX]
     assert success is True  # [NUL FIX]
     assert len(executemany_calls) == 4  # [NUL FIX]

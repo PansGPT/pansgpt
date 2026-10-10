@@ -3,6 +3,7 @@
 # ==============================================================================
 
 import io
+import unittest.mock
 
 import pytest
 from httpx import AsyncClient
@@ -11,7 +12,17 @@ from app.engines.guard import STUDY_DISCLAIMER, policy_guard
 from app.engines.llm import MultiTierLlmEngine
 from app.engines.rag import rag_engine
 from app.engines.skills import skill_engine
+from app.engines.storage import DEFAULT_UNIVERSITY_ID
 from app.engines.tools import tool_engine
+
+
+@pytest.fixture(autouse=True)
+def mock_r2_artifact_upload(monkeypatch):
+    """Prevent tests from uploading dummy artifact files to live Cloudflare R2."""
+    monkeypatch.setattr(
+        "app.engines.skills.r2_storage.upload_bytes",
+        unittest.mock.AsyncMock(return_value="https://mock-r2-url/test"),
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -104,7 +115,7 @@ async def test_skill_create_pptx_generates_valid_presentation():
 
 @pytest.mark.asyncio
 async def test_skill_default_fallback_university_artifacts():
-    """Verify that when no university_id is provided, storage key falls back to universities/default/artifacts/."""
+    """Verify that when no university_id is provided, storage key falls back to UNIJOS tenant UUID."""
     payload = await skill_engine.execute_create_md(
         title="Pharmacokinetics Overview",
         markdown_content="ADME processes overview.",
@@ -112,7 +123,7 @@ async def test_skill_default_fallback_university_artifacts():
     )
     assert payload.skill_name == "create_md"
     assert payload.file_extension == "md"
-    assert payload.storage_key.startswith("universities/default/artifacts/md/")
+    assert payload.storage_key.startswith(f"universities/{DEFAULT_UNIVERSITY_ID}/artifacts/md/")
     assert payload.storage_key.endswith(".md")
     assert payload.download_url is not None
 

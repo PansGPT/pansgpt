@@ -50,6 +50,9 @@ def build_converted_storage_key(
     return f"converted/{document_id}.pdf"
 
 
+DEFAULT_UNIVERSITY_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
+
+
 def build_artifact_storage_key(
     format_type: str,
     file_extension: str,
@@ -59,9 +62,13 @@ def build_artifact_storage_key(
     """
     Construct canonical artifact R2 key nested directly under university:
     universities/{university_id}/artifacts/{format_type}/{artifact_id}.{ext}
-    Defaults university_id to 'default' if None/empty to ensure strict institutional nesting.
+    Defaults university_id to DEFAULT_UNIVERSITY_ID (UNIJOS) if None/empty.
     """
-    clean_uni = sanitize_filename_part(university_id) if university_id else "default"
+    clean_uni = (
+        sanitize_filename_part(university_id)
+        if university_id and university_id != "default"
+        else DEFAULT_UNIVERSITY_ID
+    )
     clean_fmt = sanitize_filename_part(format_type)
     ext = file_extension.lstrip(".").lower()
     art_id = artifact_id or str(uuid.uuid4())

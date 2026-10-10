@@ -11,7 +11,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from app.core.config import settings
 from app.core.dependencies import get_current_user, require_admin_or_super_admin
 from app.engines.arq_producer import enqueue_ingestion_job
-from app.engines.storage import build_document_storage_key, storage_engine
+from app.engines.storage import (
+    DEFAULT_UNIVERSITY_ID,
+    build_document_storage_key,
+    storage_engine,
+)
 from app.models.library import (
     ConfirmUploadResponse,
     DocumentDetailResponse,
@@ -166,7 +170,9 @@ async def confirm_document_upload(
             )
 
     if not storage_key:
-        storage_key = f"universities/default/courses/general/original/{document_id}.pdf"
+        storage_key = (
+            f"universities/{DEFAULT_UNIVERSITY_ID}/courses/general/original/{document_id}.pdf"
+        )
 
     job_id = await enqueue_ingestion_job(document_id, storage_key)
     mode = "queued" if job_id else ("sync" if settings.DATABASE_URL else "no_db")
@@ -521,7 +527,9 @@ async def get_document_pdf_stream_url(
             pass
 
     if not storage_key:
-        storage_key = f"universities/default/courses/general/original/{document_id}.pdf"
+        storage_key = (
+            f"universities/{DEFAULT_UNIVERSITY_ID}/courses/general/original/{document_id}.pdf"
+        )
 
     if storage_engine.is_configured:
         try:
