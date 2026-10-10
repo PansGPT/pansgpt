@@ -100,7 +100,7 @@ PR reviewed + CI green → merged to main
 - **Exactly 2 free hosted projects per org** → Project #1 = Staging, Project #2 = Production
 - **Local dev uses `supabase start` (Docker)** — never burns a hosted project slot
 - **Free projects pause after 7 days of inactivity** — unpause staging manually before test runs
-- **500MB database ceiling** — pgvector embeddings (3072d × many chunks) approach this with real course documents
+- **500MB database ceiling** — pgvector embeddings (1536d × many chunks) approach this with real course documents <!-- [DIM 1536] -->
 - **First expected paid milestone**: Supabase Pro ($25/mo) when document volume hits the limit
 
 ### Render Free Tier Constraints
@@ -114,40 +114,39 @@ PR reviewed + CI green → merged to main
 
 ## 📋 Phase Overview
 
-|   #    | Phase                     |      Status      | What Gets Built                                                                                            | Gate Before Continuing                                                         |
-| :----: | ------------------------- | :--------------: | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **0**  | Local Dev Environment     |   ✅ **Done**    | Every developer runs the full stack locally                                                                | All services start without errors                                              |
-| **1**  | Monorepo Scaffold + CI    |   ✅ **Done**    | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                           | CI passes on an empty repo push                                                |
-| **2**  | Secrets + Config          |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                             | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired        |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                           | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation       |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger    | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (3072d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [EMBED FIX] -->
-| **6A** | AI Engine Foundation      |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 3072d vector search, basic SSE, guard, acronym normalizer                  | Streamed AI response over a document works via pytest API test                 |
-| **6B** | AI Engine Advanced        |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                           | All tools callable by LLM; agentic loop works with 5 turns                     |
-| **7**  | Auth Backend              |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                                | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI   | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                  | Student signs up, uploads a doc, gets an AI response — on staging              |
-| **9**  | Design System + App Shell |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                      | Core screens navigable with real design                                        |
-
-| **10** | PDF Reader (Web) | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat | Student opens, reads, highlights, and Snips to Chat |
-| **11** | AI Chat Interface (Web) | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills | Student chats with the AI; branch navigation works |
-| **12** | Learn Mode (Web) | Section outline, explanations, check questions, mastery ring | Student studies a section and answers recall checks |
-| **13** | Quiz System (Web) | Async ARQ job, 5 formats, timed interface, results, share card | Student generates and completes a quiz |
-| **14** | Notes (Web) | Tiptap editor, idb-keyval offline, sync-on-reconnect | Student writes, edits, and syncs a note |
-| **15** | Timetable + Dashboard (Web) | Schedule engine, home page, recents carousel, tasks list | Home page shows real timetable and recent activity |
-| **16** | Portals | Lecturer submission, admin management, super admin | Lecturer submits → admin approves → document enters ingestion |
-| **17** | Settings + Profile + Feedback | Profile, preferences, session management, CSAT, feedback triage | Student updates profile and theme; feedback lands in admin |
-| **18** | Credits + Payments | Double-entry credit ledger, Paystack, Flutterwave | Student purchases credits and spends them on AI |
-| **19** | Email System | Resend, React Email templates, ARQ worker queue | Welcome email arrives after signup |
-| **20** | Mobile (Expo) | Auth, PDF reader, chat, quiz, notes, timetable, widgets | Full student journey works on iOS + Android |
-| **21** | Desktop (Electron) | Offline SQLite, PDF cache, background sync, auto-updater | Full offline study session works without internet |
-| **22** | PWA + Offline (Web) | `@serwist/next`, caching tiers, IndexedDB outbox | Web app installs and key flows work offline |
-| **23** | Public Pages + SEO | Landing, pricing, about, JSON-LD, Open Graph, sitemap | Public pages indexed by Google with correct metadata |
-| **24** | Security Hardening | CORS, headers, rate limits, NDPA 2023, dependency scan | Security checklist cleared |
-| **25** | Observability + Monitoring | Sentry, PostHog, Better Uptime, structlog, keep-alive | Errors visible, events tracked, uptime alerting live |
-| **26** | Performance + Load Testing | Lighthouse, k6, EXPLAIN ANALYZE | p95 API < 500ms; Lighthouse performance > 90 |
-| **27** | Pre-Launch Checklist | Full checklist verification | Every item checked |
-| **28** | Production Launch 🚀 | DNS live, migrations applied, smoke tested | Real students using the app |
-| **29** | Post-Launch Iteration | Feature flags, DORA metrics, incident process | Sustainable delivery culture active |
+|   #    | Phase                         |      Status      | What Gets Built                                                                                          | Gate Before Continuing                                                         |
+| :----: | ----------------------------- | :--------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **0**  | Local Dev Environment         |   ✅ **Done**    | Every developer runs the full stack locally                                                              | All services start without errors                                              |
+| **1**  | Monorepo Scaffold + CI        |   ✅ **Done**    | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
+| **2**  | Secrets + Config              |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
+| **3**  | Environments Wired            |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
+| **4**  | Database Foundation           |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **5**  | Document Ingestion Engine     |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
+| **6A** | AI Engine Foundation          |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
+| **6B** | AI Engine Advanced            |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **7**  | Auth Backend                  |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| **8**  | Walking Skeleton Web UI       | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
+| **9**  | Design System + App Shell     |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
+| **10** | PDF Reader (Web)              |    ⏳ Pending    | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
+| **11** | AI Chat Interface (Web)       |    ⏳ Pending    | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
+| **12** | Learn Mode (Web)              |    ⏳ Pending    | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
+| **13** | Quiz System (Web)             |    ⏳ Pending    | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
+| **14** | Notes (Web)                   |    ⏳ Pending    | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
+| **15** | Timetable + Dashboard (Web)   |    ⏳ Pending    | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
+| **16** | Portals                       |    ⏳ Pending    | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
+| **17** | Settings + Profile + Feedback |    ⏳ Pending    | Profile, preferences, session management, CSAT, feedback triage                                          | Student updates profile and theme; feedback lands in admin                     |
+| **18** | Credits + Payments            |    ⏳ Pending    | Double-entry credit ledger, Paystack, Flutterwave                                                        | Student purchases credits and spends them on AI                                |
+| **19** | Email System                  |    ⏳ Pending    | Resend, React Email templates, ARQ worker queue                                                          | Welcome email arrives after signup                                             |
+| **20** | Mobile (Expo)                 |    ⏳ Pending    | Auth, PDF reader, chat, quiz, notes, timetable, widgets                                                  | Full student journey works on iOS + Android                                    |
+| **21** | Desktop (Electron)            |    ⏳ Pending    | Offline SQLite, PDF cache, background sync, auto-updater                                                 | Full offline study session works without internet                              |
+| **22** | PWA + Offline (Web)           |    ⏳ Pending    | `@serwist/next`, caching tiers, IndexedDB outbox                                                         | Web app installs and key flows work offline                                    |
+| **23** | Public Pages + SEO            |    ⏳ Pending    | Landing, pricing, about, JSON-LD, Open Graph, sitemap                                                    | Public pages indexed by Google with correct metadata                           |
+| **24** | Security Hardening            |    ⏳ Pending    | CORS, headers, rate limits, NDPA 2023, dependency scan                                                   | Security checklist cleared                                                     |
+| **25** | Observability + Monitoring    |    ⏳ Pending    | Sentry, PostHog, Better Uptime, structlog, keep-alive                                                    | Errors visible, events tracked, uptime alerting live                           |
+| **26** | Performance + Load Testing    |    ⏳ Pending    | Lighthouse, k6, EXPLAIN ANALYZE                                                                          | p95 API < 500ms; Lighthouse performance > 90                                   |
+| **27** | Pre-Launch Checklist          |    ⏳ Pending    | Full checklist verification                                                                              | Every item checked                                                             |
+| **28** | Production Launch 🚀          |    ⏳ Pending    | DNS live, migrations applied, smoke tested                                                               | Real students using the app                                                    |
+| **29** | Post-Launch Iteration         |    ⏳ Pending    | Feature flags, DORA metrics, incident process                                                            | Sustainable delivery culture active                                            |
 
 ---
 
@@ -177,7 +176,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Read and understand Section 1 (Stack Decisions) in full before any setup
 - [x] Confirm chosen stack: Next.js 15, Expo SDK 52, Electron 33, FastAPI, Supabase, Cloudflare R2, Upstash Redis
-- [x] Confirm AI providers: Gemma 4 (Google AI Studio), Groq, OpenRouter, Gemini Embedding 002 (3072d)
+- [x] Confirm AI providers: Gemma 4 (Google AI Studio), Groq, OpenRouter, Gemini Embedding 2 (1536d) <!-- [DIM 1536] -->
 - [x] Confirm all third-party services have free-tier accounts created: Supabase, Render, Vercel, Cloudflare R2, Upstash Redis, Google AI Studio, Groq, OpenRouter, Tavily, Paystack, Resend, Sentry, PostHog
 
 ### 0.1 Node.js & Package Manager
@@ -461,7 +460,7 @@ PR reviewed + CI green → merged to main
 - [x] Create `users` table | file: supabase/migrations/20260906090002_core_schema.sql
 - [x] Create `invitations` table | file: supabase/migrations/20260906090002_core_schema.sql
 - [x] Create `documents` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_chunks` table (upgraded to 3072d) | file: supabase/migrations/20260906090002_core_schema.sql
+- [x] Create `document_chunks` table (migrated to 1536d) | file: supabase/migrations/20261010030000_embedding_1536.sql <!-- [DIM 1536] -->
 - [x] Create `document_sections` table | file: supabase/migrations/20260906090002_core_schema.sql
 - [x] Create `document_notes` table | file: supabase/migrations/20260906090002_core_schema.sql
 - [x] Create `document_highlights` table | file: supabase/migrations/20260906090002_core_schema.sql
@@ -553,7 +552,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Database Foundation
 
-- [x] Create HNSW index on 3072d embeddings (`idx_document_chunks_hnsw`) using `embedding::halfvec(3072)` + `halfvec_cosine_ops` while storing source embeddings as `vector(3072)`
+- [x] Create HNSW index on 1536d embeddings (`idx_document_chunks_hnsw`) using `embedding::halfvec(1536)` + `halfvec_cosine_ops` while storing source embeddings as `vector(1536)` <!-- [DIM 1536] -->
 - [x] Create Full Text Search GIN index (`idx_document_chunks_fts`)
 - [x] Create GIN Index on user roles (`idx_users_roles`)
 - [x] Create Partial index on soft deletes (`idx_users_deleted`, `idx_documents_deleted`, `idx_chat_sessions_deleted`)
@@ -571,8 +570,8 @@ PR reviewed + CI green → merged to main
 - [x] Create `uuid_generate_v7()` function
 - [x] Create `current_user_has_role()` function
 - [x] Create `current_user_university_id()` function
-- [x] Create `match_document_chunks()` function (3072d)
-- [x] Create `match_documents_global()` function (3072d)
+- [x] Create `match_document_chunks()` function (1536d) <!-- [DIM 1536] -->
+- [x] Create `match_documents_global()` function (1536d) <!-- [DIM 1536] -->
 - [x] Create `claim_document_ingestion()` function
 - [x] Create `heartbeat_document_ingestion()` function
 - [x] Create `purge_soft_deleted_records()` function
@@ -685,11 +684,11 @@ PR reviewed + CI green → merged to main
 - [x] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
 - [x] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
 
-### 5.7 Embedding (Gemini 3072d)
+### 5.7 Embedding (Gemini 1536d) <!-- [DIM 1536] -->
 
 > 📖 See implementation_plan.md § Document Ingestion Engine
 
-- [x] Implement Gemini 3072d Embedder | file: apps/api/app/engines/embedder.py
+- [x] Implement Gemini 1536d Embedder | file: apps/api/app/engines/embedder.py <!-- [DIM 1536] -->
 - [x] Implement API Batching (up to 32 items)
 - [x] Implement Deterministic Test Fallback for offline/dev CI execution
 - [x] Implement Database Persistence (pages, segments, elements, chunks)
@@ -784,12 +783,12 @@ PR reviewed + CI green → merged to main
 - [x] Implement post-generation prompt-exfiltration or schema-leakage validation on the final assembled text
 - [x] Append standardized clinical/educational disclaimer footnote to medical responses
 
-### 6A.6 3072d Dense Vector Search
+### 6A.6 1536d Dense Vector Search <!-- [DIM 1536] -->
 
 > 📖 See implementation_plan.md § AI Engine Foundation
 
 - [x] Implement Dense Vector Pool calling Supabase RPCs `match_document_chunks` and `match_documents_global` | file: apps/api/app/engines/rag.py
-- [ ] Pass `config={"output_dimensionality": 3072}` in Google GenAI SDK call instead of manual list padding | file: apps/api/app/engines/embedder.py <!-- [EMBED FIX] -->
+- [x] Pass `types.EmbedContentConfig(output_dimensionality=1536)` in Google GenAI SDK call | file: apps/api/app/engines/embedder.py <!-- [DIM 1536] -->
 
 ### 6A.7 Sibling Chunk Expansion
 
@@ -1847,7 +1846,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Primary LLM       | `gemma-4-31b-it` + `gemma-4-26b-a4b-it` via Google AI Studio |
 | Fast Fallback LLM | `openai/gpt-oss-120b`, `qwen/qwen3.6-27b` via Groq           |
 | Safety Net LLM    | NVIDIA Nemotron models via OpenRouter (free `:free` tier)    |
-| Embeddings        | `gemini-embedding-2` (3072 dimensions, HNSW index)         | <!-- [EMBED FIX] -->
+| Embeddings        | `gemini-embedding-2` (1536 dimensions, HNSW index)           | <!-- [DIM 1536] --> |
 | Voice STT         | `whisper-large-v3-turbo` / `whisper-large-v3` via Groq       |
 | Web Search        | Tavily (feature-flagged via PostHog)                         |
 | Database          | Supabase Postgres + pgvector, UUIDv7 PKs                     |

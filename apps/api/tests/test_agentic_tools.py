@@ -194,6 +194,7 @@ async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
     assert response.status_code == 200
     text = response.text
     assert "event: init" in text
+    assert "event: thinking_chunk" in text
     assert "event: tool_start" in text
     assert "event: artifact_ready" in text
     assert "event: tool_end" in text

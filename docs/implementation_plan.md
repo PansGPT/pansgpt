@@ -1133,11 +1133,11 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 
 **Google AI Studio**
 
-| Model ID             | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-| -------------------- | ------------- | ---------------- | ------------- |
-| `gemma-4-26b-a4b-it` | 30            | 16K              | 14.4K         |
-| `gemma-4-31b-it`     | 30            | 16K              | 14.4K         |
-| `gemini-embedding-2` | 1,500         | 1,000K           | 10K           | <!-- [EMBED FIX] --> |
+| Model ID             | RPM (Req/Min)                                                                         | TPM (Tokens/Min)           | RPD (Req/Day) |
+| -------------------- | ------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| `gemma-4-26b-a4b-it` | 30                                                                                    | 16K                        | 14.4K         |
+| `gemma-4-31b-it`     | 30                                                                                    | 16K                        | 14.4K         |
+| `gemini-embedding-2` | 100 requests/min (free tier, per Google 429 error on 2026-10-10); daily limit UNKNOWN | <!-- [EMBED RETRY FIX] --> |
 
 **Groq (Text & Audio)**
 
@@ -2952,11 +2952,11 @@ Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast infe
 
 **Google AI Studio**
 
-| Model ID             | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-| -------------------- | ------------- | ---------------- | ------------- |
-| `gemma-4-26b-a4b-it` | 30            | 16K              | 14.4K         |
-| `gemma-4-31b-it`     | 30            | 16K              | 14.4K         |
-| `gemini-embedding-2` | 1,500         | 1,000K           | 10K           | <!-- [EMBED FIX] --> |
+| Model ID             | RPM (Req/Min)                                                                         | TPM (Tokens/Min)           | RPD (Req/Day) |
+| -------------------- | ------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| `gemma-4-26b-a4b-it` | 30                                                                                    | 16K                        | 14.4K         |
+| `gemma-4-31b-it`     | 30                                                                                    | 16K                        | 14.4K         |
+| `gemini-embedding-2` | 100 requests/min (free tier, per Google 429 error on 2026-10-10); daily limit UNKNOWN | <!-- [EMBED RETRY FIX] --> |
 
 **Groq (Text & Audio)**
 

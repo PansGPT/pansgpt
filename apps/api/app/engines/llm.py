@@ -228,8 +228,8 @@ class MultiTierLlmEngine:
             except GoogleServerError as gse:
                 raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
 
+            calls = []
             if hasattr(resp, "function_calls") and resp.function_calls:
-                calls = []
                 for fc in resp.function_calls:
                     calls.append(
                         {
@@ -238,17 +238,40 @@ class MultiTierLlmEngine:
                             "arguments": fc.args if isinstance(fc.args, dict) else {},
                         }
                     )
-                return calls, None
 
-            # Model returned text instead of a tool call
-            text = resp.text or ""
+            # Check for thinking or preamble text in candidates
+            thought_text = ""
+            visible_text = ""
+            if hasattr(resp, "candidates") and resp.candidates:
+                for cand in resp.candidates:
+                    if cand.content and cand.content.parts:
+                        for part in cand.content.parts:
+                            if getattr(part, "thought", False) and getattr(part, "text", None):
+                                thought_text += part.text + " "
+                            elif getattr(part, "text", None) and not getattr(
+                                part, "function_call", None
+                            ):
+                                visible_text += part.text + " "
+            elif hasattr(resp, "text") and resp.text:
+                visible_text = resp.text
 
-            async def _text_gen():
-                for word in text.split(" "):
-                    yield word + " "
-                    await asyncio.sleep(0.005)
+            full_extracted = ""
+            if thought_text.strip():
+                full_extracted += f"<think>{thought_text.strip()}</think>\n"
+            if visible_text.strip():
+                full_extracted += visible_text.strip()
 
-            return [], _text_gen()
+            text_gen = None
+            if full_extracted.strip():
+
+                async def _gemma_text_gen():
+                    for word in full_extracted.split(" "):
+                        yield word + " "
+                        await asyncio.sleep(0.005)
+
+                text_gen = _gemma_text_gen()
+
+            return calls, text_gen
 
         # Streaming path (no tools)
         # generate_content_stream() is lazy — a ServerError only fires on the
@@ -352,10 +375,30 @@ class MultiTierLlmEngine:
             kwargs["tools"] = tools
             kwargs["tool_choice"] = "auto"
 
-            resp = await asyncio.wait_for(client.chat.completions.create(**kwargs), timeout=15.0)
+            try:
+                # Groq reasoning models require reasoning_format="parsed" or "hidden" when tools are enabled
+                kwargs["reasoning_format"] = "parsed"
+                resp = await asyncio.wait_for(
+                    client.chat.completions.create(**kwargs), timeout=15.0
+                )
+            except Exception as exc:
+                # Fallback if specific Groq model/client doesn't accept reasoning_format
+                err_str = str(exc).lower()
+                if (
+                    "reasoning_format" in err_str
+                    or "extra_forbidden" in err_str
+                    or "unexpected" in err_str
+                ):
+                    kwargs.pop("reasoning_format", None)
+                    resp = await asyncio.wait_for(
+                        client.chat.completions.create(**kwargs), timeout=15.0
+                    )
+                else:
+                    raise
+
             choice = resp.choices[0]
+            calls = []
             if choice.message.tool_calls:
-                calls = []
                 for tc in choice.message.tool_calls:
                     args = {}
                     try:
@@ -369,33 +412,74 @@ class MultiTierLlmEngine:
                             "arguments": args,
                         }
                     )
-                return calls, None
 
-            text = choice.message.content or ""
+            # Capture reasoning and content emitted alongside tool calls
+            thought_text = (
+                getattr(choice.message, "reasoning", None)
+                or getattr(choice.message, "reasoning_content", None)
+                or ""
+            )
+            content_text = choice.message.content or ""
 
-            async def _text_gen():
-                for word in text.split(" "):
-                    yield word + " "
-                    await asyncio.sleep(0.005)
+            full_extracted = ""
+            if thought_text.strip():
+                full_extracted += f"<think>{thought_text.strip()}</think>\n"
+            if content_text.strip():
+                full_extracted += content_text.strip()
 
-            return [], _text_gen()
+            text_gen = None
+            if full_extracted.strip():
 
-        stream = await asyncio.wait_for(
-            client.chat.completions.create(
-                model=self.groq_model,
-                messages=groq_msgs,
-                stream=True,
-                temperature=0.2,
-                max_tokens=settings.TEXT_CHAT_MAX_TOKENS,
-            ),
-            timeout=15.0,
-        )
+                async def _text_gen():
+                    for word in full_extracted.split(" "):
+                        yield word + " "
+                        await asyncio.sleep(0.005)
+
+                text_gen = _text_gen()
+
+            return calls, text_gen
+
+        stream_kwargs = {
+            "model": self.groq_model,
+            "messages": groq_msgs,
+            "stream": True,
+            "temperature": 0.2,
+            "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
+        }
+        try:
+            stream_kwargs["reasoning_format"] = "parsed"
+            stream = await asyncio.wait_for(
+                client.chat.completions.create(**stream_kwargs),
+                timeout=15.0,
+            )
+        except Exception as exc:
+            err_str = str(exc).lower()
+            if (
+                "reasoning_format" in err_str
+                or "extra_forbidden" in err_str
+                or "unexpected" in err_str
+            ):
+                stream_kwargs.pop("reasoning_format", None)
+                stream = await asyncio.wait_for(
+                    client.chat.completions.create(**stream_kwargs),
+                    timeout=15.0,
+                )
+            else:
+                raise
 
         async def _stream_gen():
             async for chunk in stream:
-                token = chunk.choices[0].delta.content
-                if token:
-                    yield token
+                delta = chunk.choices[0].delta if chunk.choices else None
+                if delta:
+                    # Stream reasoning chunks
+                    thought_chunk = getattr(delta, "reasoning", None) or getattr(
+                        delta, "reasoning_content", None
+                    )
+                    if thought_chunk:
+                        yield f"<think>{thought_chunk}</think>"
+                    token = delta.content
+                    if token:
+                        yield token
 
         return [], _stream_gen()
 
@@ -779,6 +863,63 @@ class MultiTierLlmEngine:
             # PROCESS AGENT TURN RESULTS
             # ------------------------------------------------------------------
             if tool_calls:
+                # 1. Stream any reasoning or preamble text emitted prior to tool execution
+                turn_visible_tokens: list[str] = []
+                parser = ThinkingStreamParser()
+                has_thought = False
+
+                if text_gen:
+                    async for chunk in text_gen:
+                        sanitized = policy_guard.filter_credential_leaks(chunk)
+                        visible_chunk, thinking_chunk = parser.feed(sanitized)
+                        if thinking_chunk:
+                            has_thought = True
+                            yield (
+                                "thinking_chunk",
+                                {"delta": thinking_chunk, "token": thinking_chunk},
+                                active_provider,
+                            )
+                        if visible_chunk:
+                            turn_visible_tokens.append(visible_chunk)
+                            collected_tokens.append(visible_chunk)
+                            yield (
+                                "text_chunk",
+                                {"delta": visible_chunk, "token": visible_chunk},
+                                active_provider,
+                            )
+                    rem_vis, rem_think = parser.flush()
+                    if rem_think:
+                        has_thought = True
+                        yield (
+                            "thinking_chunk",
+                            {"delta": rem_think, "token": rem_think},
+                            active_provider,
+                        )
+                    if rem_vis:
+                        turn_visible_tokens.append(rem_vis)
+                        collected_tokens.append(rem_vis)
+                        yield (
+                            "text_chunk",
+                            {"delta": rem_vis, "token": rem_vis},
+                            active_provider,
+                        )
+
+                # If the model dispatched a tool call without explicit reasoning text,
+                # provide an informative agent trace in the thinking inspector so the student always
+                # understands the clinical pedagogical intent behind the tool execution.
+                if not has_thought:
+                    tool_names_str = ", ".join(f"`{tc['name']}`" for tc in tool_calls)
+                    agent_trace = (
+                        f"Analyzing student query → Selected specialized clinical tool(s): {tool_names_str} "
+                        f"to compile structured study materials and retrieve verified syllabus evidence.\n"
+                    )
+                    yield (
+                        "thinking_chunk",
+                        {"delta": agent_trace, "token": agent_trace},
+                        active_provider,
+                    )
+
+                turn_visible_content = "".join(turn_visible_tokens).strip() or None
                 formatted_tool_calls = [
                     {
                         "id": tc["id"],
@@ -795,7 +936,7 @@ class MultiTierLlmEngine:
                 agent_tool_messages.append(
                     {
                         "role": "assistant",
-                        "content": None,
+                        "content": turn_visible_content,
                         "tool_calls": formatted_tool_calls,
                     }
                 )

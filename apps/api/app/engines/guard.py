@@ -475,6 +475,13 @@ class PolicyGuardEngine:
         else:
             base += "\n(No specific lecture monograph chunks were retrieved for this question. Answer generally based on standard pharmacology principles while reminding the student to verify with their official course slides.)\n"
 
+        base += (
+            "\nREASONING & THINKING DIRECTIVE:\n"
+            "Begin your response with your clinical and pedagogical reasoning enclosed in <think>...</think> tags. "
+            "Analyze the mechanism of action, relevant contraindications, syllabus context, and plan your explanation or tool selection. "
+            "Then provide your clear student-facing explanation or summary.\n"
+        )
+
         return base
 
 

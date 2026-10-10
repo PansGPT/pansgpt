@@ -7,7 +7,6 @@ import uuid
 
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
-from fastapi.responses import RedirectResponse
 
 from app.core.config import settings
 from app.core.dependencies import get_current_user, require_admin_or_super_admin
@@ -181,6 +180,71 @@ async def confirm_document_upload(
 
 
 # ------------------------------------------------------------------------------
+# 2B. Direct Byte Streaming Artifact & Document Download
+# Must be defined BEFORE /documents/{document_id} to prevent path collision
+# ------------------------------------------------------------------------------
+@router.get(
+    "/documents/download",
+    summary="Download artifact or document as a direct byte stream with forced attachment",
+)
+@router.get(
+    "/artifacts/download",
+    summary="Alias: Download artifact directly as an attachment",
+)
+async def download_document_or_artifact(
+    key: str = Query(..., description="Cloudflare R2 storage key"),
+    filename: str | None = Query(
+        default=None, description="Override download filename (without extension)"
+    ),
+    auth_user: dict = Depends(get_current_user),
+):
+    """
+    Streams any university asset or student artifact directly to the browser as an
+    attachment download. Never redirects to a presigned URL — this prevents browsers
+    from opening the file in Microsoft Office Online or other online viewers.
+    """
+    if ".." in key or key.startswith("/"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid storage key",
+        )
+
+    ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
+    media_types = {
+        "pdf": "application/pdf",
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "md": "text/markdown",
+        "json": "application/json",
+    }
+
+    # Build a clean, human-readable filename
+    if filename:
+        safe_name = "".join(c if c.isalnum() or c in "-_ " else "_" for c in filename).strip()
+        safe_name = safe_name.replace(" ", "_")
+        clean_filename = f"{safe_name}.{ext}"
+    else:
+        clean_filename = key.split("/")[-1]
+
+    try:
+        data = await storage_engine.download_bytes(key)
+        return Response(
+            content=data,
+            media_type=media_types.get(ext, "application/octet-stream"),
+            headers={
+                "Content-Disposition": f'attachment; filename="{clean_filename}"',
+                "Content-Length": str(len(data)),
+                "Cache-Control": "no-cache",
+            },
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Storage object not found: {str(exc)}",
+        )
+
+
+# ------------------------------------------------------------------------------
 # 3. Single Document Metadata (GET /library/documents/{id})
 # ------------------------------------------------------------------------------
 @router.get(
@@ -193,6 +257,14 @@ async def get_single_document(
     auth_user: dict = Depends(get_current_user),
 ):
     """Fetch metadata and embedding status for a specific document."""
+    try:
+        doc_uuid = uuid.UUID(document_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Document '{document_id}' not found.",
+        )
+
     if not settings.DATABASE_URL:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -211,7 +283,7 @@ async def get_single_document(
             FROM public.documents
             WHERE id = $1 AND deleted_at IS NULL;
             """,
-            uuid.UUID(document_id),
+            doc_uuid,
         )
 
         segments_rows = await conn.fetch(
@@ -464,62 +536,6 @@ async def get_document_pdf_stream_url(
         presigned_url=url,
         expires_in_seconds=900,
     )
-
-
-@router.get(
-    "/documents/download",
-    summary="Download artifact or document via presigned URL or direct streaming",
-)
-async def download_document_or_artifact(
-    key: str = Query(..., description="Cloudflare R2 storage key"),
-    auth_user: dict = Depends(get_current_user),
-):
-    """
-    Downloads or streams any canonical university asset or student artifact.
-    Generates an authorized 1-hour presigned URL or streams directly.
-    """
-    if ".." in key or key.startswith("/"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid storage key",
-        )
-
-    if storage_engine.is_configured:
-        try:
-            exists = await storage_engine.object_exists(key)
-            if not exists:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Storage object '{key}' not found in bucket.",
-                )
-            url = await storage_engine.generate_presigned_get_url(key, expires_in=3600)
-            return RedirectResponse(url=url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
-        except HTTPException:
-            raise
-        except Exception:
-            pass
-
-    try:
-        data = await storage_engine.download_bytes(key)
-        ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
-        media_types = {
-            "pdf": "application/pdf",
-            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "md": "text/markdown",
-            "json": "application/json",
-        }
-        filename = key.split("/")[-1]
-        return Response(
-            content=data,
-            media_type=media_types.get(ext, "application/octet-stream"),
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
-    except Exception as exc:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Storage object not found: {str(exc)}",
-        )
 
 
 # ------------------------------------------------------------------------------
