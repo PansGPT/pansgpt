@@ -320,7 +320,7 @@ async def stream_chat_session(
     Core Server-Sent Events (SSE) endpoint:
     1. Pre-LLM Prompt Injection & Policy Guard
     2. Medical Acronym Normalizer
-    3. RAG Retrieval via Supabase RPC (3072d dense vectors + sibling & segment expansion)
+    3. RAG Retrieval via Supabase RPC (1536d dense vectors + sibling & segment expansion)  # [DIM 1536]
     4. Multi-turn Agentic Tool Loop & Multi-tier LLM inference
     5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort
     6. Asynchronous persistence of user and assistant messages + telemetry

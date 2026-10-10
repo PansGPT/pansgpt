@@ -104,7 +104,7 @@ async def ingest_document_job(ctx: dict, document_id: str, storage_key: str) -> 
     1. Claims document concurrency lock via `claim_document_ingestion`
     2. Transitions status to 'processing'
     3. Spawns 30s heartbeat loop
-    4. Runs full 8-stage extraction, chunking, and 3072d vector pipeline
+    4. Runs full 8-stage extraction, chunking, and 1536d vector pipeline  # [DIM 1536]
     5. Retries with exponential backoff on transient errors (30s, 60s, 120s)
     6. Transitions status to 'completed' (or 'failed' if retries exhausted)
     """

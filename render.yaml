@@ -39,11 +39,11 @@ services:
       - key: GEMINI_SECONDARY_MODEL
         value: gemma-4-26b-a4b-it
       - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2  # [EMBED FIX]
+        value: gemini-embedding-2 # [EMBED FIX]
       - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "3072"
-      - key: EMBEDDER_FAKE_MODE  # [EMBED FIX]
-        value: "false"  # [EMBED FIX]
+        value: "1536" # [DIM 1536]
+      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
+        value: "false" # [EMBED FIX]
       - key: GROQ_API_KEY
         sync: false
       - key: GROQ_FALLBACK_MODEL
@@ -124,11 +124,11 @@ services:
       - key: GEMINI_SECONDARY_MODEL
         value: gemma-4-26b-a4b-it
       - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2  # [EMBED FIX]
+        value: gemini-embedding-2 # [EMBED FIX]
       - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "3072"
-      - key: EMBEDDER_FAKE_MODE  # [EMBED FIX]
-        value: "false"  # [EMBED FIX]
+        value: "1536" # [DIM 1536]
+      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
+        value: "false" # [EMBED FIX]
       - key: REDIS_URL
         sync: false
       - key: UPSTASH_REDIS_URL
@@ -183,11 +183,11 @@ services:
       - key: GEMINI_SECONDARY_MODEL
         value: gemma-4-26b-a4b-it
       - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2  # [EMBED FIX]
+        value: gemini-embedding-2 # [EMBED FIX]
       - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "3072"
-      - key: EMBEDDER_FAKE_MODE  # [EMBED FIX]
-        value: "false"  # [EMBED FIX]
+        value: "1536" # [DIM 1536]
+      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
+        value: "false" # [EMBED FIX]
       - key: GROQ_API_KEY
         sync: false
       - key: GROQ_FALLBACK_MODEL
@@ -268,11 +268,11 @@ services:
       - key: GEMINI_SECONDARY_MODEL
         value: gemma-4-26b-a4b-it
       - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2  # [EMBED FIX]
+        value: gemini-embedding-2 # [EMBED FIX]
       - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "3072"
-      - key: EMBEDDER_FAKE_MODE  # [EMBED FIX]
-        value: "false"  # [EMBED FIX]
+        value: "1536" # [DIM 1536]
+      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
+        value: "false" # [EMBED FIX]
       - key: REDIS_URL
         sync: false
       - key: UPSTASH_REDIS_URL

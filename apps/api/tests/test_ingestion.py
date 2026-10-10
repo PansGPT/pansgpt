@@ -10,9 +10,11 @@ import docx
 import fitz  # PyMuPDF
 import pptx
 import pytest
+from arq import Retry  # [DIM 1536]
 
+from app.core.config import settings  # [DIM 1536]
 from app.engines.chunker import semantic_chunker
-from app.engines.embedder import gemini_embedder
+from app.engines.embedder import EmbeddingError, gemini_embedder  # [DIM 1536]
 from app.engines.extractor import document_extractor
 from app.engines.ingestion import document_ingestion_engine
 from app.engines.storage import (
@@ -218,18 +220,18 @@ def test_chunker_text_recursive_splitting():
 # ------------------------------------------------------------------------------
 
 
-@pytest.mark.asyncio
-async def test_embedder_vector_dimensions():
-    """Verify gemini_embedder produces dense vectors with exactly 3072 dimensions."""
-    test_texts = [
-        "Pharmacokinetics and bioavailability of amoxicillin capsules.",
-        "Mechanism of action of ACE inhibitors in essential hypertension.",
-    ]
-    vectors = await gemini_embedder.embed_batch(test_texts, kind="document")  # [EMBED FIX]
-    assert len(vectors) == 2
-    for vec in vectors:
-        assert len(vec) == 3072
-        assert isinstance(vec[0], float)
+@pytest.mark.asyncio  # [DIM 1536]
+async def test_embedder_vector_dimensions():  # [DIM 1536]
+    """Verify gemini_embedder produces dense vectors with configured dimensions."""  # [DIM 1536]
+    test_texts = [  # [DIM 1536]
+        "Pharmacokinetics and bioavailability of amoxicillin capsules.",  # [DIM 1536]
+        "Mechanism of action of ACE inhibitors in essential hypertension.",  # [DIM 1536]
+    ]  # [DIM 1536]
+    vectors = await gemini_embedder.embed_batch(test_texts, kind="document")  # [DIM 1536]
+    assert len(vectors) == 2  # [DIM 1536]
+    for vec in vectors:  # [DIM 1536]
+        assert len(vec) == settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
+        assert isinstance(vec[0], float)  # [DIM 1536]
 
 
 # ------------------------------------------------------------------------------
@@ -241,7 +243,7 @@ async def test_embedder_vector_dimensions():
 async def test_full_8stage_pipeline_execution():
     """
     End-to-End Test: Run synthetic PDF through all 8 stages of DocumentIngestionEngine.
-    Confirms page layer detection, hierarchy creation, atomic chunking, and 3072d vector generation.
+    Confirms page layer detection, hierarchy creation, atomic chunking, and 1536d vector generation.  # [DIM 1536]
     """
     pdf_bytes = create_synthetic_test_pdf()
     doc_id = "018f3a30-0001-7000-8000-000000000099"
@@ -276,11 +278,11 @@ async def test_full_8stage_pipeline_execution():
         assert el["content_type"] in ("text", "table", "diagram")
         assert len(el["raw_content"]) > 0
 
-    # 4. Verify Chunks & 3072d Vector Embeddings (Stage 8)
+    # 4. Verify Chunks & 1536d Vector Embeddings (Stage 8)  # [DIM 1536]
     assert len(result.chunks) >= 2
     for chunk in result.chunks:
         assert chunk["document_id"] == doc_id
-        assert len(chunk["embedding"]) == 3072
+        assert len(chunk["embedding"]) == settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
         assert isinstance(chunk["chunk_index"], int)
 
     # 5. Verify Progress Telemetry Milestones (Roadmap 5.9)
@@ -453,3 +455,46 @@ async def test_worker_failure_status_transition():
                 document_id=doc_id,
                 storage_key="invalid/path.pdf",
             )
+
+
+# [DIM 1536]
+# [DIM 1536]
+@pytest.mark.asyncio  # [DIM 1536]
+async def test_worker_embedding_error_retry_and_failure():  # [DIM 1536]
+    """Verify EmbeddingError causes Retry(defer=30) on attempt 1 and transitions to failed on attempt 3."""  # [DIM 1536]
+    doc_id = str(uuid.uuid4())  # [DIM 1536]
+    status_updates = []  # [DIM 1536]
+
+    # [DIM 1536]
+    async def mock_status(doc_id_arg, status, progress=0):  # [DIM 1536]
+        status_updates.append((status, progress))  # [DIM 1536]
+
+    # [DIM 1536]
+    with (  # [DIM 1536]
+        unittest.mock.patch.object(  # [DIM 1536]
+            document_ingestion_engine,  # [DIM 1536]
+            "ingest_document_from_r2",  # [DIM 1536]
+            side_effect=EmbeddingError("Simulated embedding failure"),  # [DIM 1536]
+        ),  # [DIM 1536]
+        unittest.mock.patch("workers.tasks._claim_document", return_value=True),  # [DIM 1536]
+        unittest.mock.patch(
+            "workers.tasks._update_document_status", side_effect=mock_status
+        ),  # [DIM 1536]
+    ):  # [DIM 1536]
+        # Attempt 1: raises Retry(defer=30)  # [DIM 1536]
+        with pytest.raises(Retry) as retry_exc:  # [DIM 1536]
+            await ingest_document_job(  # [DIM 1536]
+                {"job_try": 1},  # [DIM 1536]
+                document_id=doc_id,  # [DIM 1536]
+                storage_key="invalid/path.pdf",  # [DIM 1536]
+            )  # [DIM 1536]
+        assert retry_exc.value.defer_score == 30 * 1000  # [DIM 1536]
+        # [DIM 1536]
+        # Attempt 3: transitions to failed and raises EmbeddingError  # [DIM 1536]
+        with pytest.raises(EmbeddingError):  # [DIM 1536]
+            await ingest_document_job(  # [DIM 1536]
+                {"job_try": 3},  # [DIM 1536]
+                document_id=doc_id,  # [DIM 1536]
+                storage_key="invalid/path.pdf",  # [DIM 1536]
+            )  # [DIM 1536]
+        assert any(s == "failed" for s, _ in status_updates)  # [DIM 1536]

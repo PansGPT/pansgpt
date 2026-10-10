@@ -1,6 +1,6 @@
 # ==============================================================================
 # PansGPT 2.0 RAG Pipeline & Context Assembler (Phase 6)
-# Model: gemini-embedding-2 (3072d Dense Vector Search) + FTS + Trigram (RRF k=60)
+# Model: gemini-embedding-2 (1536d Dense Vector Search) + FTS + Trigram (RRF k=60)  # [DIM 1536]
 # ==============================================================================
 
 import json
@@ -26,7 +26,7 @@ class RagRetrievalEngine:
     3-Pool Hybrid RAG Retrieval Engine:
     - Normalizes medical abbreviations with 200+ term clinical dictionary
     - Multi-Query decomposition & HyDE hypothetical document generation
-    - Computes 3072d dense vector embeddings via Gemini
+    - Computes 1536d dense vector embeddings via Gemini  # [DIM 1536]
     - Executes PostgreSQL 3-Pool Hybrid Search (Vector + FTS + Trigram) with RRF (k=60)
     - Multi-factor candidate re-ranking (Dense + RRF + Lexical Overlap + Metadata)
     - Absence Policy automated web search fallback for low/empty confidence
@@ -128,7 +128,7 @@ class RagRetrievalEngine:
                 expanded_queries = self.generate_multi_query_expansions(search_query)
                 hyde_passage = self.generate_hyde_passage(search_query)
 
-        # 4. Compute 3072d dense vector embeddings in batch  # [EMBED FIX]
+        # 4. Compute 1536d dense vector embeddings in batch  # [DIM 1536]
         query_texts = [search_query]  # [EMBED FIX]
         for eq in expanded_queries:  # [EMBED FIX]
             if eq != search_query and eq not in query_texts:  # [EMBED FIX]
@@ -142,14 +142,16 @@ class RagRetrievalEngine:
         try:  # [EMBED FIX]
             # Embed search_query and expanded queries with kind="query"  # [EMBED FIX]
             query_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
-                query_texts, kind="query"  # [EMBED FIX]
+                query_texts,
+                kind="query",  # [EMBED FIX]
             )  # [EMBED FIX]
             embeddings.extend(query_embeddings)  # [EMBED FIX]
 
             if has_hyde:  # [EMBED FIX]
                 # Embed HyDE passage with kind="document" (hypothetical document passage; to be benchmarked)  # [EMBED FIX]
                 hyde_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
-                    [hyde_passage], kind="document"  # [EMBED FIX]
+                    [hyde_passage],
+                    kind="document",  # [EMBED FIX]
                 )  # [EMBED FIX]
                 embeddings.extend(hyde_embeddings)  # [EMBED FIX]
         except Exception as exc:  # [EMBED FIX]
@@ -161,7 +163,9 @@ class RagRetrievalEngine:
             embeddings = []  # [EMBED FIX]
 
         query_vector = embeddings[0] if embeddings else None  # [EMBED FIX]
-        vector_str = f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None  # [EMBED FIX]
+        vector_str = (
+            f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None
+        )  # [EMBED FIX]
 
         raw_matches: list[dict] = []
         seen_chunk_ids: set[str] = set()

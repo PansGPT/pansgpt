@@ -87,13 +87,15 @@ class Settings(BaseSettings):
     X_API_KEY_MOBILE: str | None = None
     X_API_KEY_DESKTOP: str | None = None
 
-    # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 3072d embedding
+    # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 1536d embedding  # [DIM 1536]
     GEMINI_API_KEY: str | None = None
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 3072d, Google AI Studio
-    GEMINI_EMBEDDING_DIMENSIONS: int = 3072  # [EMBED FIX]
-    HYDE_GENERATION_MODEL: str = "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 1536d, Google AI Studio  # [DIM 1536]
+    GEMINI_EMBEDDING_DIMENSIONS: int = 1536  # [DIM 1536]
+    HYDE_GENERATION_MODEL: str = (
+        "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
+    )
     EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
 
     GROQ_API_KEY: str | None = None

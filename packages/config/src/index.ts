@@ -33,7 +33,7 @@ export const AI_MODELS = {
   PRIMARY: "gemma-4-31b-it",
   SECONDARY: "gemma-4-26b-a4b-it",
   EMBEDDING: "gemini-embedding-2", // [EMBED FIX]
-  EMBEDDING_DIMENSIONS: 3072,
+  EMBEDDING_DIMENSIONS: 1536, // [DIM 1536]
   GROQ_FALLBACK: "openai/gpt-oss-120b",
   OPENROUTER_FALLBACK: "google/gemma-2-27b-it",
 } as const;

@@ -21,11 +21,11 @@
    - Deployments to Staging/Production must use the Supabase CLI (`pnpm exec supabase db push`).
    - Row-Level Security (RLS) must be enabled on every table at creation (`ALTER TABLE <t> ENABLE ROW LEVEL SECURITY`).
    - Primary keys must use **RFC 9562 UUIDv7** (`uuid_generate_v7()`) for time-ordered indexing and zero B-tree fragmentation.
-   - Vector columns must store `gemini-embedding-2` embeddings as `vector(3072)`.  <!-- [EMBED FIX] -->
-   - Because pgvector's standard `vector_cosine_ops` HNSW operator class is dimension-limited, 3072d ANN indexes must use an expression index: `USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops)`. Retrieval RPCs must use the same `halfvec(3072)` cast for indexed cosine search.
+   - Vector columns store `gemini-embedding-2` embeddings as `vector(1536)`. <!-- [DIM 1536] -->
+   - ANN indexes use `USING hnsw ((embedding::halfvec(1536)) halfvec_cosine_ops)`. Retrieval RPCs use the same `halfvec(1536)` cast for indexed cosine search. <!-- [DIM 1536] -->
 
 4. **Zero-Budget ($0) Free-Tier Architecture**:
-   - **Primary LLM**: Google AI Studio Gemma 4 (`gemma-4-31b-it`) & `gemini-embedding-2` (3072d).  <!-- [EMBED FIX] -->
+   - **Primary LLM**: Google AI Studio Gemma 4 (`gemma-4-31b-it`) & `gemini-embedding-2` (1536d). <!-- [DIM 1536] -->
    - **Fallback LLM**: Groq (`llama-3.3-70b-versatile`) via circuit breaker.
    - **Safety-Net LLM**: OpenRouter free-tier.
    - **Document Storage**: Cloudflare R2 (PDF monographs, slide conversions, note attachments).
@@ -121,7 +121,7 @@ pansgpt/
   3. Cloudflare R2 upload (original & converted)
   4. Structure & table extraction
   5. Semantic chunking (500–1000 tokens, 10% overlap)
-  6. Batch vector embeddings via `gemini-embedding-2` (3072 dims)  <!-- [EMBED FIX] -->
+  6. Batch vector embeddings via `gemini-embedding-2` (1536 dims) <!-- [DIM 1536] -->
   7. Postgres transactional write to `document_chunks`
   8. Ingestion heartbeat (`heartbeat_document_ingestion`) & status update to `active`.
 

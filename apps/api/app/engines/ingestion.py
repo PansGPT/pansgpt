@@ -49,7 +49,7 @@ class DocumentIngestionEngine:
     5. Text-Image Verbatim Transcription (Clinical Safety Rule)
     6. Dual-Path Table Extraction (Structural geometry vs Vision)
     7. Hierarchy & Segmentation (Single pass with explicit/synthesized/inherited titles)
-    8. Semantic Chunking & 3072d Vector Embeddings
+    8. Semantic Chunking & 1536d Vector Embeddings  # [DIM 1536]
     """
 
     async def run_pipeline_on_bytes(
@@ -237,7 +237,10 @@ class DocumentIngestionEngine:
         # Stage 8 (cont.): Batch Gemini Embeddings  # [EMBED FIX]
         texts_to_embed = [c.content for c in chunk_items]  # [EMBED FIX]
         embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
-            texts_to_embed, kind="document", titles=None, max_batch_size=32  # [EMBED FIX]
+            texts_to_embed,
+            kind="document",
+            titles=None,
+            max_batch_size=32,  # [EMBED FIX]
         )  # [EMBED FIX]
         if len(embeddings) != len(chunk_items):  # [EMBED FIX]
             raise ValueError(  # [EMBED FIX]
@@ -392,7 +395,7 @@ class DocumentIngestionEngine:
                             elements_args,
                         )
 
-                    # 4. Batch Insert Chunks with vector(3072) and bounding_box
+                    # 4. Batch Insert Chunks with vector(1536) and bounding_box  # [DIM 1536]
                     if result.chunks:
                         chunks_args = [
                             (

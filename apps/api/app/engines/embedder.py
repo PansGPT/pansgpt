@@ -1,6 +1,6 @@
 # ==============================================================================
 # Gemini Embedding Engine (Stage 8)  # [EMBED FIX]
-# Model: gemini-embedding-2, 3072 dimensions, batch processing  # [EMBED FIX]
+# Model: gemini-embedding-2, 1536 dimensions, batch processing  # [DIM 1536]
 # ==============================================================================
 
 import asyncio  # [EMBED FIX]
@@ -18,7 +18,7 @@ class EmbeddingError(Exception):  # [EMBED FIX]
 
 
 class GeminiEmbeddingEngine:  # [EMBED FIX]
-    """Generates 3072-dimensional dense vector embeddings using Google AI Studio."""  # [EMBED FIX]
+    """Generates 1536-dimensional dense vector embeddings using Google AI Studio."""  # [DIM 1536]
 
     def __init__(self):  # [EMBED FIX]
         raw_model = settings.GEMINI_EMBEDDING_MODEL
@@ -54,7 +54,7 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
     def _generate_deterministic_vector(self, text: str) -> list[float]:
         """
         Fallback for offline unit tests:
-        Generates deterministic 3072d pseudo-random normalized vector based on SHA256 of text.
+        Generates deterministic 1536d pseudo-random normalized vector based on SHA256 of text.  # [DIM 1536]
         """
         seed = int(hashlib.sha256(text.encode("utf-8")).hexdigest(), 16)
         vec = []
@@ -78,7 +78,9 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
     ) -> list[float]:  # [EMBED FIX]
         """Embed a single text string."""  # [EMBED FIX]
         results = await self.embed_batch(  # [EMBED FIX]
-            [text], kind=kind, titles=[title] if title else None  # [EMBED FIX]
+            [text],
+            kind=kind,
+            titles=[title] if title else None,  # [EMBED FIX]
         )  # [EMBED FIX]
         return results[0]  # [EMBED FIX]
 
@@ -89,8 +91,8 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
         titles: list[str] | None = None,  # [EMBED FIX]
         max_batch_size: int = 32,  # [EMBED FIX]
     ) -> list[list[float]]:  # [EMBED FIX]
-        """  # [EMBED FIX]
-        Embed a list of text strings into 3072-dimensional vectors.  # [EMBED FIX]
+        """# [EMBED FIX]
+        Embed a list of text strings into 1536-dimensional vectors.  # [DIM 1536]
         Uses single batched API calls of wrapped Content objects capped at 32 items.  # [EMBED FIX]
         """  # [EMBED FIX]
         if not texts:  # [EMBED FIX]
@@ -185,7 +187,9 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
                         is_retryable = True  # [EMBED FIX]
 
                     if not is_retryable:  # [EMBED FIX]
-                        raise EmbeddingError(f"Non-retryable embedding failure: {exc}") from exc  # [EMBED FIX]
+                        raise EmbeddingError(
+                            f"Non-retryable embedding failure: {exc}"
+                        ) from exc  # [EMBED FIX]
 
                     retries -= 1  # [EMBED FIX]
                     if retries == 0:  # [EMBED FIX]

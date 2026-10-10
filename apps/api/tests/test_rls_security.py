@@ -238,7 +238,7 @@ async def test_document_chunks_rls_isolation():
             )
 
             chunk_lag_id = uuid.uuid4()
-            dummy_vector = [0.0] * 3072
+            dummy_vector = [0.0] * settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
             await conn.execute(
                 """
                 INSERT INTO public.document_chunks (id, document_id, content, chunk_index, embedding)
