@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import uuid
 from collections.abc import Callable
+from typing import Any  # [NUL FIX]
 
 import asyncpg
 import structlog
@@ -20,6 +21,19 @@ from app.engines.extractor import ExtractedPage, document_extractor
 from app.engines.storage import storage_engine
 
 logger = structlog.get_logger(__name__)
+
+
+def _sanitize_for_db(value: Any) -> Any:  # [NUL FIX]
+    """Recursively strip NUL (0x00) bytes and escaped \\u0000 sequences from strings and collections."""  # [NUL FIX]
+    if isinstance(value, str):  # [NUL FIX]
+        return value.replace("\x00", "").replace("\\u0000", "").replace("\\U0000", "")  # [NUL FIX]
+    elif isinstance(value, dict):  # [NUL FIX]
+        return {_sanitize_for_db(k): _sanitize_for_db(v) for k, v in value.items()}  # [NUL FIX]
+    elif isinstance(value, list):  # [NUL FIX]
+        return [_sanitize_for_db(item) for item in value]  # [NUL FIX]
+    elif isinstance(value, tuple):  # [NUL FIX]
+        return tuple(_sanitize_for_db(item) for item in value)  # [NUL FIX]
+    return value  # [NUL FIX]
 
 
 class IngestionPipelineResult:
@@ -344,7 +358,7 @@ class DocumentIngestionEngine:
                             VALUES ($1, $2, $3)
                             ON CONFLICT (document_id, page_number) DO NOTHING;
                             """,
-                            pages_args,
+                            _sanitize_for_db(pages_args),  # [NUL FIX]
                         )
 
                     # 2. Batch Insert Segments
@@ -367,7 +381,7 @@ class DocumentIngestionEngine:
                             VALUES ($1, $2, $3, $4, $5, $6, $7)
                             ON CONFLICT (id) DO NOTHING;
                             """,
-                            segments_args,
+                            _sanitize_for_db(segments_args),  # [NUL FIX]
                         )
 
                     # 3. Batch Insert Elements
@@ -382,7 +396,9 @@ class DocumentIngestionEngine:
                                 el["extraction_method"],
                                 el["raw_content"],
                                 el["order_index"],
-                                json.dumps(el["bounding_box"]) if el.get("bounding_box") else None,
+                                json.dumps(_sanitize_for_db(el["bounding_box"]))
+                                if el.get("bounding_box")
+                                else None,  # [NUL FIX]
                             )
                             for el in result.elements
                         ]
@@ -392,7 +408,7 @@ class DocumentIngestionEngine:
                             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::jsonb)
                             ON CONFLICT (id) DO NOTHING;
                             """,
-                            elements_args,
+                            _sanitize_for_db(elements_args),  # [NUL FIX]
                         )
 
                     # 4. Batch Insert Chunks with vector(1536) and bounding_box  # [DIM 1536]
@@ -408,7 +424,9 @@ class DocumentIngestionEngine:
                                 c["page_end"],
                                 c["chunk_index"],
                                 "[" + ",".join(str(x) for x in c["embedding"]) + "]",
-                                json.dumps(c["bounding_box"]) if c.get("bounding_box") else None,
+                                json.dumps(_sanitize_for_db(c["bounding_box"]))
+                                if c.get("bounding_box")
+                                else None,  # [NUL FIX]
                             )
                             for c in result.chunks
                         ]
@@ -418,7 +436,7 @@ class DocumentIngestionEngine:
                             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9::vector, $10::jsonb)
                             ON CONFLICT (id) DO NOTHING;
                             """,
-                            chunks_args,
+                            _sanitize_for_db(chunks_args),  # [NUL FIX]
                         )
 
                     # 5. Mark document as completed with 100% progress

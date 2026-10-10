@@ -498,3 +498,153 @@ async def test_worker_embedding_error_retry_and_failure():  # [DIM 1536]
                 storage_key="invalid/path.pdf",  # [DIM 1536]
             )  # [DIM 1536]
         assert any(s == "failed" for s, _ in status_updates)  # [DIM 1536]
+
+
+# [NUL FIX]
+@pytest.mark.asyncio  # [NUL FIX]
+async def test_ingestion_database_write_strips_nul_characters(monkeypatch):  # [NUL FIX]
+    """Verify write path strips NUL (0x00) and escaped \\u0000 from pages, segments, elements, and chunks [NUL FIX]."""  # [NUL FIX]
+    from app.engines.ingestion import IngestionPipelineResult, _sanitize_for_db  # [NUL FIX]
+
+    # [NUL FIX]
+    # Direct helper validation on nested structure  # [NUL FIX]
+    sample = {  # [NUL FIX]
+        "title": "Adrenergic\x00Toxicology",  # [NUL FIX]
+        "nested": ["item\x001", {"k\x00ey": "val\x00ue", "json_esc": "\\u0000bad"}],  # [NUL FIX]
+    }  # [NUL FIX]
+    cleaned = _sanitize_for_db(sample)  # [NUL FIX]
+    assert cleaned == {  # [NUL FIX]
+        "title": "AdrenergicToxicology",  # [NUL FIX]
+        "nested": ["item1", {"key": "value", "json_esc": "bad"}],  # [NUL FIX]
+    }  # [NUL FIX]
+    # [NUL FIX]
+    # Full write-path mocking  # [NUL FIX]
+    executemany_calls = []  # [NUL FIX]
+
+    # [NUL FIX]
+    class MockTransaction:  # [NUL FIX]
+        async def __aenter__(self):  # [NUL FIX]
+            return self  # [NUL FIX]
+
+        async def __aexit__(self, exc_type, exc_val, exc_tb):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+    # [NUL FIX]
+    class MockConn:  # [NUL FIX]
+        def transaction(self):  # [NUL FIX]
+            return MockTransaction()  # [NUL FIX]
+
+        async def executemany(self, query, args):  # [NUL FIX]
+            executemany_calls.append((query, args))  # [NUL FIX]
+
+        async def execute(self, query, *args):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+        async def close(self):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+    # [NUL FIX]
+    async def mock_connect(*args, **kwargs):  # [NUL FIX]
+        return MockConn()  # [NUL FIX]
+
+    # [NUL FIX]
+    monkeypatch.setattr(
+        "app.engines.ingestion.settings.DATABASE_URL", "postgresql://mock:mock@localhost:5432/mock"
+    )  # [NUL FIX]
+    monkeypatch.setattr("asyncpg.connect", mock_connect)  # [NUL FIX]
+    monkeypatch.setattr(  # [NUL FIX]
+        "app.engines.ingestion.storage_engine.download_bytes",  # [NUL FIX]
+        unittest.mock.AsyncMock(return_value=b"%PDF-mock"),  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    doc_id = str(uuid.uuid4())  # [NUL FIX]
+    seg_id = str(uuid.uuid4())  # [NUL FIX]
+    el_id = str(uuid.uuid4())  # [NUL FIX]
+    chunk_id = str(uuid.uuid4())  # [NUL FIX]
+    # [NUL FIX]
+    mock_result = IngestionPipelineResult(  # [NUL FIX]
+        document_id=doc_id,  # [NUL FIX]
+        pages=[
+            {  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "page_number": 1,  # [NUL FIX]
+                "has_text_layer": True,  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        segments=[
+            {  # [NUL FIX]
+                "id": seg_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "title": "Toxic\x00Plants\x00Overview",  # [NUL FIX]
+                "title_source": "explicit\x00source",  # [NUL FIX]
+                "start_page": 1,  # [NUL FIX]
+                "end_page": 1,  # [NUL FIX]
+                "order_index": 0,  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        elements=[
+            {  # [NUL FIX]
+                "id": el_id,  # [NUL FIX]
+                "segment_id": seg_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "page_number": 1,  # [NUL FIX]
+                "content_type": "text\x00type",  # [NUL FIX]
+                "extraction_method": "pdfplumber\x00method",  # [NUL FIX]
+                "raw_content": "Cardiac\x00glycosides\x00in\x00Digitalis",  # [NUL FIX]
+                "order_index": 0,  # [NUL FIX]
+                "bounding_box": {"label": "Box\x00Label", "escaped": "\\u0000text"},  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        chunks=[
+            {  # [NUL FIX]
+                "id": chunk_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "segment_id": seg_id,  # [NUL FIX]
+                "element_id": el_id,  # [NUL FIX]
+                "content": "Digitalis\x00purpurea\x00toxicity\x00and\x00treatment",  # [NUL FIX]
+                "page_start": 1,  # [NUL FIX]
+                "page_end": 1,  # [NUL FIX]
+                "chunk_index": 0,  # [NUL FIX]
+                "embedding": [0.05] * 1536,  # [NUL FIX]
+                "bounding_box": {"tag": "chunk\x00box", "escaped": "\\u0000chunk"},  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    monkeypatch.setattr(  # [NUL FIX]
+        document_ingestion_engine,  # [NUL FIX]
+        "run_pipeline_on_bytes",  # [NUL FIX]
+        unittest.mock.AsyncMock(return_value=mock_result),  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    success = await document_ingestion_engine.ingest_document_from_r2(  # [NUL FIX]
+        document_id=doc_id,  # [NUL FIX]
+        storage_key="universities/default/courses/pcl_411/converted/test.pdf",  # [NUL FIX]
+    )  # [NUL FIX]
+    assert success is True  # [NUL FIX]
+    assert len(executemany_calls) == 4  # [NUL FIX]
+    # [NUL FIX]
+    # Assert every value passed to executemany contains NO \x00 and NO \u0000  # [NUL FIX]
+    for _query, args in executemany_calls:  # [NUL FIX]
+        for row in args:  # [NUL FIX]
+            for item in row:  # [NUL FIX]
+                if isinstance(item, str):  # [NUL FIX]
+                    assert "\x00" not in item, (
+                        f"Found NUL character in row item: {item}"
+                    )  # [NUL FIX]
+                    assert "\\u0000" not in item, (
+                        f"Found escaped \\u0000 in row item: {item}"
+                    )  # [NUL FIX]
+    # [NUL FIX]
+    # Explicitly check that sanitized substrings are present  # [NUL FIX]
+    all_str_items = [
+        item
+        for _, args in executemany_calls
+        for row in args
+        for item in row
+        if isinstance(item, str)
+    ]  # [NUL FIX]
+    assert any("ToxicPlantsOverview" in s for s in all_str_items)  # [NUL FIX]
+    assert any("CardiacglycosidesinDigitalis" in s for s in all_str_items)  # [NUL FIX]
+    assert any("Digitalispurpureatoxicityandtreatment" in s for s in all_str_items)  # [NUL FIX]
+    assert any("BoxLabel" in s for s in all_str_items)  # [NUL FIX]
