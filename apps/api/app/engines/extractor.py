@@ -6,10 +6,24 @@
 from __future__ import annotations
 
 import csv
+import hashlib  # [IMAGE FIX]
 import io
 from dataclasses import dataclass, field
 
 import fitz  # PyMuPDF
+
+MIN_IMAGE_SIDE: int = 100  # [IMAGE FIX]
+MAX_ASPECT_RATIO: float = 5.0  # [IMAGE FIX]
+MAX_IMAGES_PER_PAGE: int = 3  # [IMAGE FIX]
+
+
+@dataclass  # [IMAGE FIX]
+class ExtractionStats:  # [IMAGE FIX]
+    images_seen_total: int = 0  # [IMAGE FIX]
+    filtered_out: int = 0  # [IMAGE FIX]
+    duplicates_skipped: int = 0  # [IMAGE FIX]
+    capped_out: int = 0  # [IMAGE FIX]
+    images_sent: int = 0  # [IMAGE FIX]
 
 
 @dataclass
@@ -55,6 +69,9 @@ class DocumentExtractor:
     - TXT / MD: Plaintext and markdown structured section parsing
     - CSV / XLSX: Structured tabular row & column extraction
     """
+
+    def __init__(self):  # [IMAGE FIX]
+        self.last_stats: ExtractionStats | None = None  # [IMAGE FIX]
 
     # --------------------------------------------------------------------------
     # 5.3 PDF Extraction & Local OCR-First Step ($0 Cost)
@@ -140,60 +157,113 @@ class DocumentExtractor:
             pass
         return tables
 
-    def extract_embedded_images(
-        self, doc: fitz.Document, page: fitz.Page, page_number: int
-    ) -> list[ExtractedImage]:
-        """Stage 3a: Scan page for embedded figures, diagrams, and scans."""
-        images = []
-        image_list = page.get_images(full=True)
-        for img_info in image_list:
-            xref = img_info[0]
-            try:
-                base_image = doc.extract_image(xref)
-                if not base_image:
-                    continue
-                image_bytes = base_image["image"]
-                img_ext = base_image.get("ext", "png")
-                width = base_image.get("width", 0)
-                height = base_image.get("height", 0)
+    def extract_embedded_images(  # [IMAGE FIX]
+        self,  # [IMAGE FIX]
+        doc: fitz.Document,  # [IMAGE FIX]
+        page: fitz.Page,  # [IMAGE FIX]
+        page_number: int,  # [IMAGE FIX]
+        seen_hashes: set[str] | None = None,  # [IMAGE FIX]
+        stats: ExtractionStats | None = None,  # [IMAGE FIX]
+    ) -> list[ExtractedImage]:  # [IMAGE FIX]
+        """Stage 3a: Scan page for embedded figures, diagrams, and scans."""  # [IMAGE FIX]
+        images: list[ExtractedImage] = []  # [IMAGE FIX]
+        image_list = page.get_image_info(xrefs=True)  # [IMAGE FIX]
+        pdf_doc = doc if doc is not None else getattr(page, "parent", None)  # [IMAGE FIX]
+        for img in image_list:  # [IMAGE FIX]
+            if stats is not None:  # [IMAGE FIX]
+                stats.images_seen_total += 1  # [IMAGE FIX]
+            xref = img.get("xref", 0)  # [IMAGE FIX]
+            if not xref or xref <= 0:  # [IMAGE FIX]
+                if stats is not None:  # [IMAGE FIX]
+                    stats.filtered_out += 1  # [IMAGE FIX]
+                continue  # [IMAGE FIX]
+            try:  # [IMAGE FIX]
+                base_image = pdf_doc.extract_image(xref) if pdf_doc else None  # [IMAGE FIX]
+                if not base_image:  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.filtered_out += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
+                image_bytes = base_image.get("image", b"")  # [IMAGE FIX]
+                if not image_bytes:  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.filtered_out += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
+                img_ext = base_image.get("ext", "png")  # [IMAGE FIX]
+                width = base_image.get("width", 0)  # [IMAGE FIX]
+                height = base_image.get("height", 0)  # [IMAGE FIX]
+                if width == 0 or height == 0:  # [IMAGE FIX]
+                    from PIL import Image  # [IMAGE FIX]
+                    pil_img = Image.open(io.BytesIO(image_bytes))  # [IMAGE FIX]
+                    width, height = pil_img.width, pil_img.height  # [IMAGE FIX]
 
-                if width < 80 or height < 80:
-                    continue
+                if width < MIN_IMAGE_SIDE or height < MIN_IMAGE_SIDE:  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.filtered_out += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
 
-                images.append(
-                    ExtractedImage(
-                        page_number=page_number,
-                        image_bytes=image_bytes,
-                        format=img_ext,
-                        width=width,
-                        height=height,
-                        xref=xref,
-                    )
-                )
-            except Exception:
-                continue
-        return images
+                aspect_ratio = width / height if height > 0 else 0.0  # [IMAGE FIX]
+                if aspect_ratio > MAX_ASPECT_RATIO or aspect_ratio < (1.0 / MAX_ASPECT_RATIO):  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.filtered_out += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
+
+                img_hash = hashlib.md5(image_bytes).hexdigest()  # [IMAGE FIX]
+                if seen_hashes is not None and img_hash in seen_hashes:  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.duplicates_skipped += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
+
+                if len(images) >= MAX_IMAGES_PER_PAGE:  # [IMAGE FIX]
+                    if stats is not None:  # [IMAGE FIX]
+                        stats.capped_out += 1  # [IMAGE FIX]
+                    continue  # [IMAGE FIX]
+
+                if seen_hashes is not None:  # [IMAGE FIX]
+                    seen_hashes.add(img_hash)  # [IMAGE FIX]
+
+                images.append(  # [IMAGE FIX]
+                    ExtractedImage(  # [IMAGE FIX]
+                        page_number=page_number,  # [IMAGE FIX]
+                        image_bytes=image_bytes,  # [IMAGE FIX]
+                        format=img_ext,  # [IMAGE FIX]
+                        width=width,  # [IMAGE FIX]
+                        height=height,  # [IMAGE FIX]
+                        xref=xref,  # [IMAGE FIX]
+                    )  # [IMAGE FIX]
+                )  # [IMAGE FIX]
+                if stats is not None:  # [IMAGE FIX]
+                    stats.images_sent += 1  # [IMAGE FIX]
+            except Exception:  # [IMAGE FIX]
+                if stats is not None:  # [IMAGE FIX]
+                    stats.filtered_out += 1  # [IMAGE FIX]
+                continue  # [IMAGE FIX]
+        return images  # [IMAGE FIX]
 
     def render_page_canvas(self, page: fitz.Page, dpi: int = 150) -> bytes:
         """Stage 3b: Render full page canvas as image for Vision fallback."""
         pix = page.get_pixmap(dpi=dpi)
         return pix.tobytes("png")
 
-    def process_pdf(self, pdf_bytes: bytes) -> list[ExtractedPage]:
-        """Process PDF document through Stages 2, 3a, 3b, and 6."""
-        doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        pages: list[ExtractedPage] = []
+    def process_pdf(self, pdf_bytes: bytes) -> list[ExtractedPage]:  # [IMAGE FIX]
+        """Process PDF document through Stages 2, 3a, 3b, and 6."""  # [IMAGE FIX]
+        doc = fitz.open(stream=pdf_bytes, filetype="pdf")  # [IMAGE FIX]
+        pages: list[ExtractedPage] = []  # [IMAGE FIX]
+        seen_hashes: set[str] = set()  # [IMAGE FIX]
+        stats = ExtractionStats()  # [IMAGE FIX]
+        self.last_stats = stats  # [IMAGE FIX]
 
-        for page_idx in range(len(doc)):
-            page_num = page_idx + 1
-            page = doc[page_idx]
-            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0
-            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0
+        for page_idx in range(len(doc)):  # [IMAGE FIX]
+            page_num = page_idx + 1  # [IMAGE FIX]
+            page = doc[page_idx]  # [IMAGE FIX]
+            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0  # [IMAGE FIX]
+            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0  # [IMAGE FIX]
 
-            has_text, method, text_content = self.check_page_text_layer(page)
-            if has_text:
-                tables = self.extract_tables_from_page(page, page_num)
-                embedded_images = self.extract_embedded_images(doc, page, page_num)
+            has_text, method, text_content = self.check_page_text_layer(page)  # [IMAGE FIX]
+            if has_text:  # [IMAGE FIX]
+                tables = self.extract_tables_from_page(page, page_num)  # [IMAGE FIX]
+                embedded_images = self.extract_embedded_images(  # [IMAGE FIX]
+                    doc, page, page_num, seen_hashes=seen_hashes, stats=stats  # [IMAGE FIX]
+                )  # [IMAGE FIX]
 
                 line_rects = []
                 try:
@@ -533,11 +603,21 @@ class DocumentExtractor:
         if fmt == "pdf":
             return file_bytes
 
-        if fmt in ("docx", "doc", "pptx", "ppt"):
-            doc = fitz.open(stream=file_bytes, filetype=fmt)
-            pdf_bytes = doc.convert_to_pdf()
-            doc.close()
-            return pdf_bytes
+        if fmt in ("docx", "doc", "pptx", "ppt"):  # [OFFICE PDF FIX]
+            # PyMuPDF convert_to_pdf is prohibited for Office documents to avoid layout collapse.  # [OFFICE PDF FIX]
+            # Delegate to LibreOffice converter or raise clear error in async loops.  # [OFFICE PDF FIX]
+            import asyncio  # [OFFICE PDF FIX]
+            from app.engines.converter import convert_office_to_pdf  # [OFFICE PDF FIX]
+            try:  # [OFFICE PDF FIX]
+                loop = asyncio.get_running_loop()  # [OFFICE PDF FIX]
+            except RuntimeError:  # [OFFICE PDF FIX]
+                loop = None  # [OFFICE PDF FIX]
+            if loop and loop.is_running():  # [OFFICE PDF FIX]
+                raise RuntimeError(  # [OFFICE PDF FIX]
+                    f"PyMuPDF conversion for Office format '{fmt}' is disabled. "  # [OFFICE PDF FIX]
+                    "Use 'await convert_office_to_pdf(file_bytes, extension)' from async contexts."  # [OFFICE PDF FIX]
+                )  # [OFFICE PDF FIX]
+            return asyncio.run(convert_office_to_pdf(file_bytes, fmt))  # [OFFICE PDF FIX]
 
         if fmt in ("txt", "text", "md", "markdown", "csv"):
             doc = fitz.open()

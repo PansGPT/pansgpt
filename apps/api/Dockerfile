@@ -17,6 +17,14 @@ FROM python:3.12-slim AS runner
 
 WORKDIR /app
 
+# Install LibreOffice runtime and fonts for Office to PDF conversion  # [OFFICE PDF FIX]
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice-writer \
+    libreoffice-impress \
+    fonts-liberation \
+    fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*  # [OFFICE PDF FIX]
+
 # Create non-root secure user
 RUN groupadd -r appgroup && useradd -r -g appgroup -d /app -s /sbin/nologin appuser
 

@@ -5,7 +5,9 @@
 
 from __future__ import annotations
 
+import asyncio  # [IMAGE FIX]
 import json
+import time  # [IMAGE FIX]
 import uuid
 from collections.abc import Callable
 from typing import Any  # [NUL FIX]
@@ -21,6 +23,8 @@ from app.engines.extractor import ExtractedPage, document_extractor
 from app.engines.storage import storage_engine
 
 logger = structlog.get_logger(__name__)
+
+VISION_REQUEST_THROTTLE_SECONDS: float = 2.1  # [IMAGE FIX]
 
 
 def _sanitize_for_db(value: Any) -> Any:  # [NUL FIX]
@@ -88,8 +92,22 @@ class DocumentIngestionEngine:
         extracted_pages: list[ExtractedPage] = document_extractor.process_document(
             file_bytes, file_format=file_format
         )
-        if progress_callback:
-            await progress_callback(20)
+        total_images = sum(  # [IMAGE FIX]
+            len(p.embedded_images) + (1 if p.full_page_render else 0)  # [IMAGE FIX]
+            for p in extracted_pages  # [IMAGE FIX]
+        )  # [IMAGE FIX]
+        if progress_callback:  # [IMAGE FIX]
+            await progress_callback(10)  # [IMAGE FIX]
+            if total_images == 0:  # [IMAGE FIX]
+                await progress_callback(20)  # [IMAGE FIX]
+
+        logger.info(  # [IMAGE FIX]
+            "vision_images_queued",  # [IMAGE FIX]
+            count=total_images,  # [IMAGE FIX]
+            document_id=document_id,  # [IMAGE FIX]
+        )  # [IMAGE FIX]
+        images_processed_count = 0  # [IMAGE FIX]
+        vision_start_time = time.monotonic()  # [IMAGE FIX]
 
         # Stage 7 Preparation: Hierarchy & Topic Segmentation
         segments: list[dict] = []
@@ -211,35 +229,77 @@ class DocumentIngestionEngine:
                 )
 
             for img in images_to_process:
-                route, processed_content = await image_classifier.classify_and_process(
-                    img.image_bytes,
-                    mime_type=f"image/{img.format}",
-                )
-                el_id = str(uuid.uuid4())
-                method_map = {
-                    "text_scan": "vision_transcription",
-                    "diagram": "vision_description",
-                    "table": "vision_table",
-                }
-                ctype = (
-                    "text" if route == "text_scan" else ("table" if route == "table" else "diagram")
-                )
-                elements_records.append(
-                    {
-                        "id": el_id,
-                        "segment_id": active_seg_id,
-                        "document_id": document_id,
-                        "page_number": img.page_number,
-                        "content_type": ctype,
-                        "extraction_method": method_map.get(route, "vision_description"),
-                        "raw_content": processed_content,
-                        "order_index": element_order,
-                    }
-                )
-                element_order += 1
+                t0 = time.monotonic()  # [IMAGE FIX]
+                route, processed_content = await image_classifier.classify_and_process(  # [IMAGE FIX]
+                    img.image_bytes,  # [IMAGE FIX]
+                    mime_type=f"image/{img.format}",  # [IMAGE FIX]
+                )  # [IMAGE FIX]
+                img_duration = round(time.monotonic() - t0, 3)  # [IMAGE FIX]
+                images_processed_count += 1  # [IMAGE FIX]
 
-        if progress_callback:
-            await progress_callback(40)
+                if route is None:  # [IMAGE FIX]
+                    logger.warning(  # [IMAGE FIX]
+                        "vision_image_skipped",  # [IMAGE FIX]
+                        page=img.page_number,  # [IMAGE FIX]
+                        duration_s=img_duration,  # [IMAGE FIX]
+                        index=images_processed_count,  # [IMAGE FIX]
+                        total=total_images,  # [IMAGE FIX]
+                    )  # [IMAGE FIX]
+                else:  # [IMAGE FIX]
+                    logger.info(  # [IMAGE FIX]
+                        "vision_image_processed",  # [IMAGE FIX]
+                        page=img.page_number,  # [IMAGE FIX]
+                        route=route,  # [IMAGE FIX]
+                        duration_s=img_duration,  # [IMAGE FIX]
+                        index=images_processed_count,  # [IMAGE FIX]
+                        total=total_images,  # [IMAGE FIX]
+                    )  # [IMAGE FIX]
+                    el_id = str(uuid.uuid4())
+                    method_map = {
+                        "text_scan": "vision_transcription",
+                        "diagram": "vision_description",
+                        "table": "vision_table",
+                    }
+                    ctype = (
+                        "text"
+                        if route == "text_scan"
+                        else ("table" if route == "table" else "diagram")
+                    )
+                    elements_records.append(
+                        {
+                            "id": el_id,
+                            "segment_id": active_seg_id,
+                            "document_id": document_id,
+                            "page_number": img.page_number,
+                            "content_type": ctype,
+                            "extraction_method": method_map.get(route, "vision_description"),
+                            "raw_content": processed_content,
+                            "order_index": element_order,
+                        }
+                    )
+                    element_order += 1
+
+                if progress_callback and total_images > 0:  # [IMAGE FIX]
+                    pct = 10 + int(30 * (images_processed_count) / total_images)  # [IMAGE FIX]
+                    await progress_callback(pct)  # [IMAGE FIX]
+
+                if VISION_REQUEST_THROTTLE_SECONDS > 0 and not settings.VISION_FAKE_MODE:  # [IMAGE FIX]
+                    await asyncio.sleep(VISION_REQUEST_THROTTLE_SECONDS)  # [IMAGE FIX]
+
+        if progress_callback:  # [IMAGE FIX]
+            await progress_callback(40)  # [IMAGE FIX]
+
+        stats = getattr(document_extractor, "last_stats", None)  # [IMAGE FIX]
+        elapsed_vision = round(time.monotonic() - vision_start_time, 2)  # [IMAGE FIX]
+        logger.info(  # [IMAGE FIX]
+            "vision_extraction_summary",  # [IMAGE FIX]
+            document_id=document_id,  # [IMAGE FIX]
+            images_seen_total=stats.images_seen_total if stats else total_images,  # [IMAGE FIX]
+            filtered_out=stats.filtered_out if stats else 0,  # [IMAGE FIX]
+            duplicates_skipped=stats.duplicates_skipped if stats else 0,  # [IMAGE FIX]
+            images_sent=stats.images_sent if stats else images_processed_count,  # [IMAGE FIX]
+            elapsed_seconds=elapsed_vision,  # [IMAGE FIX]
+        )  # [IMAGE FIX]
 
         # Stage 8: Semantic Chunking
         chunk_items: list[DocumentChunkItem] = semantic_chunker.create_chunks_for_elements(

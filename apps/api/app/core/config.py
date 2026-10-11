@@ -59,6 +59,9 @@ class Settings(BaseSettings):
     R2_SECRET_ACCESS_KEY: str | None = None
     R2_BUCKET_NAME: str = "pansgpt-library-staging"
 
+    # LibreOffice Office to PDF Conversion Path  # [OFFICE PDF FIX]
+    SOFFICE_PATH: str = ""  # [OFFICE PDF FIX]
+
     @property
     def r2_bucket_name(self) -> str:
         if self.ENVIRONMENT == "production":
@@ -97,6 +100,7 @@ class Settings(BaseSettings):
         "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
     )
     EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
+    VISION_FAKE_MODE: bool = False  # [IMAGE FIX]
 
     GROQ_API_KEY: str | None = None
     GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"

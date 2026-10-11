@@ -516,13 +516,13 @@ async def get_document_pdf_stream_url(
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
-            row = await conn.fetchrow(
-                "SELECT storage_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",
-                uuid.UUID(document_id),
-            )
-            await conn.close()
-            if row:
-                storage_key = row["storage_key"]
+            row = await conn.fetchrow(  # [OFFICE PDF FIX]
+                "SELECT storage_key, converted_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",  # [OFFICE PDF FIX]
+                uuid.UUID(document_id),  # [OFFICE PDF FIX]
+            )  # [OFFICE PDF FIX]
+            await conn.close()  # [OFFICE PDF FIX]
+            if row:  # [OFFICE PDF FIX]
+                storage_key = row["converted_key"] or row["storage_key"]  # [OFFICE PDF FIX]
         except Exception:
             pass
 
