@@ -1,0 +1,54 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/6fb231b7-3be9-426f-8b19-62ceade6afae.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: "True";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Disabled";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = "True", indeterminate = "False", size = "md", state = "Disabled", type = "Checkbox" }: CheckboxBaseProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63983">
+      <div className="absolute inset-[calc(10%-0.8px)]" data-node-id="1097:63985" data-name="check">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+      </div>
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: "True";
+  size?: "md";
+  state?: "Disabled";
+  type?: "Checkbox";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = "True", size = "md", state = "Disabled", type = "Checkbox" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border-2 border-[var(--colors\\/border\\/border-disabled_subtle,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:78939">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="3931:408830" data-name="Content">
+        <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="3931:408831" data-name="Input">
+          <CheckboxBase className="bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3931:408833" data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:409749" data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3931:409750">
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:409751">
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="3931:408835">
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

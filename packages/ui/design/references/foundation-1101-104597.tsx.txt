@@ -1,0 +1,80 @@
+const imgSymbol = "https://www.figma.com/api/mcp/asset/846a6f28-7e08-4747-a30d-3b88b5811fb1.svg";
+const imgCharacter = "https://www.figma.com/api/mcp/asset/04a215ae-7b2e-4e9f-8a88-4e1c2b75f538.svg";
+const imgCharacter1 = "https://www.figma.com/api/mcp/asset/4c6a9f88-eeff-4ecf-9e74-170a4182f0ca.svg";
+const imgCharacter2 = "https://www.figma.com/api/mcp/asset/a7172743-86ba-41da-90ee-7169164e5252.svg";
+const imgCharacter3 = "https://www.figma.com/api/mcp/asset/2cdb3fdc-7675-48c4-b8ce-07176d695b90.svg";
+const imgSymbol1 = "https://www.figma.com/api/mcp/asset/2971c010-482c-4ae7-affe-e1c4cdc57418.svg";
+const imgSymbol2 = "https://www.figma.com/api/mcp/asset/3d112fca-5844-46af-8423-7df556a80805.svg";
+const imgSymbol3 = "https://www.figma.com/api/mcp/asset/802b28ee-cfe7-41dd-a007-ad8fb95b4679.svg";
+const imgSymbol4 = "https://www.figma.com/api/mcp/asset/a0946007-0409-416e-809e-75eb28d2488f.svg";
+const imgSymbol5 = "https://www.figma.com/api/mcp/asset/bd46dbbc-4ace-4e25-adbc-4e55eaca25e6.svg";
+const imgSymbol6 = "https://www.figma.com/api/mcp/asset/b5f0d474-0add-45ee-b76a-432c4a657be9.svg";
+const imgSymbol7 = "https://www.figma.com/api/mcp/asset/4bb2bb6d-79cd-4d9d-9752-8176df1e4f02.svg";
+
+function Key({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[58px] relative rounded-[var(--radius-lg,16px)] w-[80px]"} data-node-id="1101:104589" data-name="_Key">
+      <div className="absolute contents inset-0" data-node-id="1101:104590" data-name="Key Style">
+        <div className="absolute bg-black inset-[3px_0_0_0] rounded-[5px]" data-node-id="1101:104591" data-name="Depth" />
+        <div className="absolute bg-gradient-to-b border border-[#404040] border-solid from-[#404040] from-[10.909%] inset-[0_0_3px_0] rounded-[5px] to-[#222]" data-node-id="1101:104592" data-name="Key Background" />
+      </div>
+    </div>
+  );
+}
+
+type NumericKeyProps = {
+  className?: string;
+  key?: "⌘ Command" | "⌥ Option" | "˄ Control" | "⇧ Shift" | "⌫ Delete" | "⏎ Return" | "␣ Space" | "⎋ Escape" | "⇥ Tab" | "Arrow: Left" | "Arrow: Right" | "Arrow: Up" | "Arrow: Down" | "(Template)" | "Simple";
+};
+
+export default function NumericKey({ className, key = "⌘ Command" }: NumericKeyProps) {
+  const isArrowDown = key === "Arrow: Down";
+  const isArrowLeft = key === "Arrow: Left";
+  const isArrowLeftOrArrowRightOrArrowUpOrArrowDownOrSimple = ["Arrow: Left", "Arrow: Right", "Arrow: Up", "Arrow: Down", "Simple"].includes(key);
+  const isArrowRight = key === "Arrow: Right";
+  const isArrowUp = key === "Arrow: Up";
+  const isCommand = key === "⌘ Command";
+  const isControl = key === "˄ Control";
+  const isDelete = key === "⌫ Delete";
+  const isDeleteOrCommandOrShiftOrOptionOrControlOrReturnOrEscapeOrSpace = ["⌫ Delete", "⌘ Command", "⇧ Shift", "⌥ Option", "˄ Control", "⏎ Return", "⎋ Escape", "␣ Space"].includes(key);
+  const isEscape = key === "⎋ Escape";
+  const isOption = key === "⌥ Option";
+  const isReturn = key === "⏎ Return";
+  const isShift = key === "⇧ Shift";
+  const isSimple = key === "Simple";
+  const isSpace = key === "␣ Space";
+  const isTab = key === "⇥ Tab";
+  const isTemplate = key === "(Template)";
+  return (
+    <div className={className || `content-stretch flex h-[58px] items-start relative rounded-[var(--radius-lg,16px)] ${isArrowLeftOrArrowRightOrArrowUpOrArrowDownOrSimple ? "" : "flex-col"}`} id={isTab ? "node-1101_104659" : isSpace ? "node-1101_104654" : isEscape ? "node-1101_104649" : isReturn ? "node-1101_104644" : isControl ? "node-1101_104639" : isOption ? "node-1101_104634" : isShift ? "node-1101_104629" : isCommand ? "node-1101_104624" : isSimple ? "node-1101_104797" : isArrowDown ? "node-1101_104620" : isArrowUp ? "node-1101_104616" : isArrowRight ? "node-1101_104612" : isArrowLeft ? "node-1101_104608" : isDelete ? "node-1101_104603" : "node-1101_104598"}>
+      <div className={`relative shrink-0 ${isArrowLeftOrArrowRightOrArrowUpOrArrowDownOrSimple ? "size-[58px]" : "h-[58px] w-[80px]"}`} id={isTab ? "node-1101_104660" : isSpace ? "node-1101_104655" : isEscape ? "node-1101_104650" : isReturn ? "node-1101_104645" : isControl ? "node-1101_104640" : isOption ? "node-1101_104635" : isShift ? "node-1101_104630" : isCommand ? "node-1101_104625" : isSimple ? "node-1101_104798" : isArrowDown ? "node-1101_104621" : isArrowUp ? "node-1101_104617" : isArrowRight ? "node-1101_104613" : isArrowLeft ? "node-1101_104609" : isDelete ? "node-1101_104604" : "node-1101_104599"} data-name="Wrapper">
+        <Key className={`absolute rounded-[var(--radius-lg,16px)] ${isCommand ? "-translate-x-1/2 -translate-y-1/2 h-[58px] left-1/2 top-1/2 w-[80px]" : "inset-0"}`} />
+        {isDeleteOrCommandOrShiftOrOptionOrControlOrReturnOrEscapeOrSpace && (
+          <div className={`absolute ${isSpace ? "h-[2.508px] left-[4.61px] top-[12px] w-[7.116px]" : isEscape ? "h-[9.001px] left-[4.78px] top-[3.5px] w-[8.994px]" : isReturn ? "h-[8.162px] left-[5.11px] top-[3.74px] w-[9.393px]" : isControl ? "h-[5.555px] left-[5.41px] top-[5.02px] w-[9.738px]" : isOption ? "h-[7.963px] left-[5.11px] top-[4.02px] w-[8.9px]" : isShift ? "h-[8.191px] left-[4.88px] top-[3.88px] w-[9.445px]" : isCommand ? "left-[5.11px] size-[8.256px] top-[3.87px]" : "h-[8.133px] left-[4.88px] top-[3.94px] w-[9.563px]"}`} id={isSpace ? "node-1101_104657" : isEscape ? "node-1101_104652" : isReturn ? "node-1101_104647" : isControl ? "node-1101_104642" : isOption ? "node-1101_104637" : isShift ? "node-1101_104632" : isCommand ? "node-1101_104627" : "node-1101_104606"} data-name="Symbol">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isSpace ? imgSymbol7 : isEscape ? imgSymbol6 : isReturn ? imgSymbol5 : isControl ? imgSymbol4 : isOption ? imgSymbol3 : isShift ? imgSymbol2 : isCommand ? imgSymbol1 : imgSymbol} />
+          </div>
+        )}
+        {["(Template)", "⌫ Delete", "⌘ Command", "⇧ Shift", "⌥ Option", "˄ Control", "⏎ Return", "⎋ Escape", "␣ Space", "⇥ Tab"].includes(key) && (
+          <p className={`${String.raw`[word-break:break-word] absolute font-["Plus_Jakarta_Sans:Regular"] font-normal leading-[normal] text-[12px] text-[color:var(--colors\/base\/white,white)] whitespace-nowrap `}${isTab ? "-translate-x-full bottom-[21px] left-[24px] text-right translate-y-full" : isDeleteOrCommandOrShiftOrOptionOrControlOrReturnOrEscapeOrSpace ? "bottom-[21px] left-[5px] translate-y-full" : "left-[4px] top-px"}`} id={isTab ? "node-1101_104663" : isSpace ? "node-1101_104658" : isEscape ? "node-1101_104653" : isReturn ? "node-1101_104648" : isControl ? "node-1101_104643" : isOption ? "node-1101_104638" : isShift ? "node-1101_104633" : isCommand ? "node-1101_104628" : isDelete ? "node-1101_104607" : "node-1101_104601"}>
+            {isTab ? "tab" : isSpace ? "space" : isEscape ? "esc" : isReturn ? "return" : isControl ? "control" : isOption ? "option" : isShift ? "shift" : isDelete ? "delete" : isTemplate ? "⌘" : "command"}
+          </p>
+        )}
+        {["Arrow: Left", "Arrow: Right", "Arrow: Up", "Arrow: Down"].includes(key) && (
+          <div className={`-translate-x-1/2 -translate-y-1/2 absolute top-[calc(50%-0.99px)] ${["Arrow: Up", "Arrow: Down"].includes(key) ? "h-[9.018px] left-[calc(50%-0.5px)] w-[8.783px]" : isArrowRight ? "h-[8.783px] left-[calc(50%-0.36px)] w-[9.023px]" : "h-[8.783px] left-[calc(50%-0.64px)] w-[9.018px]"}`} id={isArrowDown ? "node-1101_104623" : isArrowUp ? "node-1101_104619" : isArrowRight ? "node-1101_104615" : "node-1101_104611"} data-name="Character">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isArrowDown ? imgCharacter3 : isArrowUp ? imgCharacter2 : isArrowRight ? imgCharacter1 : imgCharacter} />
+          </div>
+        )}
+        {isTemplate && (
+          <p className="[word-break:break-word] absolute bottom-[21px] font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[normal] left-[4px] text-[12px] text-[color:var(--colors\/base\/white,white)] translate-y-full whitespace-nowrap" data-node-id="1101:104602">
+            symbol
+          </p>
+        )}
+        {isSimple && (
+          <div className="[word-break:break-word] absolute flex flex-col font-['Plus_Jakarta_Sans:Regular'] font-normal inset-[0_0_2px_0] justify-center leading-[0] text-[27px] text-[color:var(--colors\/base\/white,white)] text-center uppercase" data-node-id="1101:104804">
+            <p className="leading-[normal]">C</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

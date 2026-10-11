@@ -1,0 +1,158 @@
+const imgDot = "https://www.figma.com/api/mcp/asset/9692d514-df42-4dab-9dfc-1ea1c1bea791.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/81ce96bc-88c2-48b0-86e9-be86c1dcc0bf.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/0a18923c-600f-48f0-9e51-0570eb3459a5.svg";
+const imgDot3 = "https://www.figma.com/api/mcp/asset/787d93c3-76b4-40cd-9687-25ae3a132c51.svg";
+const imgDot4 = "https://www.figma.com/api/mcp/asset/59543a4f-3e89-4683-b126-03838455431c.svg";
+const imgDot5 = "https://www.figma.com/api/mcp/asset/362fc469-5308-44a3-a65c-8608f71920fb.svg";
+const imgColor = "https://www.figma.com/api/mcp/asset/87f0c285-c391-4f9a-bf1c-ddb659dc870f.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/df999bb7-e7b4-4391-81cb-888ff99b26af.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/0e3f1a10-e528-4ec3-b8cf-900d78f1a1e3.svg";
+const imgColor3 = "https://www.figma.com/api/mcp/asset/586233bf-2324-46a9-ae5e-010547ba923e.svg";
+const imgColor4 = "https://www.figma.com/api/mcp/asset/d25753b7-aae2-40d8-a77a-9d711dd379bc.svg";
+const imgColor5 = "https://www.figma.com/api/mcp/asset/a1edd22c-c788-4424-9fc0-ba5d0dc990c2.svg";
+
+type LegendProps = {
+  className?: string;
+  orientation?: "Vertical" | "Horizontal";
+};
+
+export default function Legend({ className, orientation = "Vertical" }: LegendProps) {
+  const isHorizontal = orientation === "Horizontal";
+  const isVertical = orientation === "Vertical";
+  return (
+    <div className={className || `content-stretch flex items-start relative ${isHorizontal ? "gap-[var(--spacing-lg,12px)]" : "flex-col gap-[var(--spacing-xs,4px)]"}`} id={isHorizontal ? "node-1062_47962" : "node-1061_47128"}>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start w-full"}`} id={isHorizontal ? "node-1067_6102" : "node-1067_4654"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50479" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:4656">
+              Series 1
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:6103" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:6104">
+              Series 1
+            </p>
+          </>
+        )}
+      </div>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start w-full"}`} id={isHorizontal ? "node-1067_6405" : "node-1067_4876"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50514" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:4878">
+              Series 2
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:6406" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:6407">
+              Series 2
+            </p>
+          </>
+        )}
+      </div>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start w-full"}`} id={isHorizontal ? "node-1067_6708" : "node-1067_4987"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50670" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:4989">
+              Series 3
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:6709" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:6710">
+              Series 3
+            </p>
+          </>
+        )}
+      </div>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start"}`} id={isHorizontal ? "node-1067_7011" : "node-1067_4765"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50770" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot3} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:4767">
+              Series 4
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:7012" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor3} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:7013">
+              Series 4
+            </p>
+          </>
+        )}
+      </div>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start w-full"}`} id={isHorizontal ? "node-1067_7314" : "node-1067_5098"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50843" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot4} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:5100">
+              Series 5
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:7315" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor4} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:7316">
+              Series 5
+            </p>
+          </>
+        )}
+      </div>
+      <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isHorizontal ? "items-center" : "items-start w-full"}`} id={isHorizontal ? "node-1067_7617" : "node-1067_4543"} data-name="Legend series">
+        {isVertical && (
+          <>
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="1079:50916" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot5} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:4545">
+              Series 6
+            </p>
+          </>
+        )}
+        {isHorizontal && (
+          <>
+            <div className="relative shrink-0 size-[8px]" data-node-id="1067:7618" data-name="Color">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor5} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1067:7619">
+              Series 6
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

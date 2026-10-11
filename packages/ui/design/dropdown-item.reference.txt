@@ -1,0 +1,115 @@
+const imgPlaceholder = "../assets/dropdown-item-imgPlaceholder.svg";
+const imgPlaceholder1 = "../assets/dropdown-item-imgPlaceholder1.svg";
+const imgIconFalseCheckboxFalseStateDefaultDividerTrue = "../assets/dropdown-item-imgIconFalseCheckboxFalseStateDefaultDividerTrue.svg";
+
+type DropdownListItemProps = {
+  className?: string;
+  checkbox?: boolean;
+  divider?: boolean;
+  icon?: boolean;
+  iconSwap?: React.ReactNode | null;
+  shortcut?: boolean;
+  state?: "Default" | "Hover/active" | "Disabled";
+};
+
+export default function DropdownListItem({ className, checkbox = false, divider = false, icon = false, iconSwap = null, shortcut = true, state = "Default" }: DropdownListItemProps) {
+  const isIconAndNotCheckboxAndDefaultAndNotDivider = icon && !checkbox && state === "Default" && !divider;
+  const isIconAndNotCheckboxAndDisabledAndNotDivider = icon && !checkbox && state === "Disabled" && !divider;
+  const isIconAndNotCheckboxAndHoverActiveAndNotDivider = icon && !checkbox && state === "Hover/active" && !divider;
+  const isIconAndNotCheckboxAndNotDividerAndIsHoverActiveOrDefault = icon && !checkbox && !divider && ["Hover/active", "Default"].includes(state);
+  const isNotIconAndCheckboxAndDefaultAndNotDivider = !icon && checkbox && state === "Default" && !divider;
+  const isNotIconAndCheckboxAndDisabledAndNotDivider = !icon && checkbox && state === "Disabled" && !divider;
+  const isNotIconAndCheckboxAndHoverActiveAndNotDivider = !icon && checkbox && state === "Hover/active" && !divider;
+  const isNotIconAndNotCheckboxAndDefaultAndDivider = !icon && !checkbox && state === "Default" && divider;
+  const isNotIconAndNotCheckboxAndDefaultAndNotDivider = !icon && !checkbox && state === "Default" && !divider;
+  const isNotIconAndNotCheckboxAndDisabledAndNotDivider = !icon && !checkbox && state === "Disabled" && !divider;
+  const isNotIconAndNotCheckboxAndHoverActiveAndNotDivider = !icon && !checkbox && state === "Hover/active" && !divider;
+  return (
+    <div className={className || `relative w-[240px] ${isNotIconAndNotCheckboxAndDefaultAndDivider ? "h-[9px]" : "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px"}`} id={isNotIconAndNotCheckboxAndDefaultAndDivider ? "node-5413_401437" : isNotIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3281_382875" : isNotIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3281_382870" : isNotIconAndNotCheckboxAndDisabledAndNotDivider ? "node-3281_382865" : isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-3281_382853" : isIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3281_382845" : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? "node-3281_382837" : isIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3281_382829" : isNotIconAndCheckboxAndDisabledAndNotDivider ? "node-3281_382821" : "node-3281_382805"}>
+      {!divider && (!checkbox || (!icon && checkbox)) && (
+        <div className={`content-stretch flex flex-[1_0_0] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${isNotIconAndNotCheckboxAndHoverActiveAndNotDivider ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : !icon && !checkbox && !divider && ["Disabled", "Default"].includes(state) ? "" : state === "Hover/active" && !divider && ((icon && !checkbox) || (!icon && checkbox)) ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-lg,12px)]` : "gap-[var(--spacing-lg,12px)]"}`} id={isNotIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3929_405480" : isNotIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3929_405481" : isNotIconAndNotCheckboxAndDisabledAndNotDivider ? "node-3929_405483" : isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-3929_405848" : isIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3929_405484" : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? "node-3929_405849" : isIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3929_405845" : isNotIconAndCheckboxAndDisabledAndNotDivider ? "node-3929_405851" : "node-3929_405847"} data-name="Content">
+          {icon && !checkbox && !divider && (
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3281_382846" : isIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3281_382830" : "node-3281_382806"} data-name="Icon and text">
+              {isIconAndNotCheckboxAndNotDividerAndIsHoverActiveOrDefault &&
+                (iconSwap || (
+                  <div className="relative shrink-0 size-[16px]" data-node-id="3473:603808" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+                  </div>
+                ))}
+              {isIconAndNotCheckboxAndNotDividerAndIsHoverActiveOrDefault && (
+                <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] `}${isIconAndNotCheckboxAndDefaultAndNotDivider ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]`}`} id={isIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3281_382848" : "node-3281_382832"}>
+                  Placeholder
+                </p>
+              )}
+              {isIconAndNotCheckboxAndDisabledAndNotDivider &&
+                (iconSwap || (
+                  <div className="relative shrink-0 size-[16px]" data-node-id="3473:603812" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+                  </div>
+                ))}
+              {isIconAndNotCheckboxAndDisabledAndNotDivider && (
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3281:382808">
+                  Placeholder
+                </p>
+              )}
+            </div>
+          )}
+          {!icon && checkbox && !divider && (
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-3281_382854" : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? "node-3281_382838" : "node-3281_382822"} data-name="Checkbox and text">
+              <div className="content-stretch flex items-center justify-center relative shrink-0" id={isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-3281_382855" : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? "node-3281_382839" : "node-3281_382823"} data-name="Checkbox">
+                {!icon && checkbox && !divider && ["Disabled", "Default"].includes(state) && <div className={`border border-solid relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px] ${isNotIconAndCheckboxAndDefaultAndNotDivider ? String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)]` : String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border-[var(--colors\/border\/border-disabled,#d5d7da)]`}`} id={isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-I3281_382855-1097_63963" : "node-I3281_382823-1097_64001"} data-name="_Checkbox base" />}
+                {isNotIconAndCheckboxAndHoverActiveAndNotDivider && <button className="block border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid cursor-pointer relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I3281:382839;1097:63965" data-name="_Checkbox base" />}
+              </div>
+              <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] `}${isNotIconAndCheckboxAndDefaultAndNotDivider ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-disabled,#717680)]`}`} id={isNotIconAndCheckboxAndDefaultAndNotDivider ? "node-3281_382856" : isNotIconAndCheckboxAndHoverActiveAndNotDivider ? "node-3281_382840" : "node-3281_382824"}>
+                Placeholder
+              </p>
+            </div>
+          )}
+          {!divider && ((icon && !checkbox && state === "Hover/active") || (!icon && checkbox && state === "Hover/active") || (icon && !checkbox && state === "Default") || (!icon && checkbox && state === "Default")) && shortcut && (
+            <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="7891:95949" data-name="Shortcut wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="3281:382833">
+                ⌘C
+              </p>
+            </div>
+          )}
+          {!icon && !checkbox && !divider && (
+            <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] `}${isNotIconAndNotCheckboxAndDefaultAndNotDivider ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : isNotIconAndNotCheckboxAndHoverActiveAndNotDivider ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-disabled,#717680)]`}`} id={isNotIconAndNotCheckboxAndDefaultAndNotDivider ? "node-3281_382876" : isNotIconAndNotCheckboxAndHoverActiveAndNotDivider ? "node-3281_382871" : "node-3281_382866"}>
+              Placeholder
+            </p>
+          )}
+          {state === "Disabled" && !divider && (!checkbox || (!icon && checkbox)) && shortcut && (
+            <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="7891:95950" data-name="Shortcut wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="3281:382809">
+                ⌘C
+              </p>
+            </div>
+          )}
+          {!icon && !checkbox && !divider && ["Hover/active", "Default"].includes(state) && shortcut && (
+            <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="7891:95952" data-name="Shortcut wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="3281:382872">
+                ⌘C
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+      {isNotIconAndNotCheckboxAndDefaultAndDivider && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconFalseCheckboxFalseStateDefaultDividerTrue} />}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

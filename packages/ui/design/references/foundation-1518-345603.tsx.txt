@@ -1,0 +1,47 @@
+const imgFavicon1 = "https://www.figma.com/api/mcp/asset/cb7c18a2-7b65-41a3-83d7-b631cb321c23.png";
+const imgArrowRight = "https://www.figma.com/api/mcp/asset/878e324f-78fb-45a4-8c0d-43052b99f58f.svg";
+
+type DesignSystemHeaderProps = {
+  className?: string;
+  resources?: boolean;
+};
+
+export default function DesignSystemHeader({ className, resources = true }: DesignSystemHeaderProps) {
+  const isNotResources = !resources;
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex flex-col items-start p-[var(--spacing-4xl,32px)] relative w-[2400px]"} id={isNotResources ? "node-1532_291632" : "node-1518_345435"}>
+      <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] content-stretch flex flex-col gap-[var(--spacing-10xl,128px)] items-start overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-6xl,48px)] px-[var(--spacing-6xl,48px)] relative rounded-[var(--radius-3xl,32px)] shrink-0 w-full" id={isNotResources ? "node-1532_291634" : "node-1518_345305"} data-name="Content">
+        <div className="content-stretch flex items-center relative shrink-0 w-full" id={isNotResources ? "node-1532_291635" : "node-1518_345306"} data-name="Header">
+          <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center relative shrink-0" id={isNotResources ? "node-1532_291636" : "node-1518_345307"} data-name="Logo and page title">
+            <div className="content-stretch flex items-start relative shrink-0" id={isNotResources ? "node-1532_291637" : "node-1518_345308"} data-name="Logomark">
+              <div className="relative shrink-0 size-[36px]" id={isNotResources ? "node-I1532_291637-18492_16258" : "node-I1518_345308-18492_16258"} data-name="favicon 1">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" id={isNotResources ? "node-1532_291638" : "node-1518_345309"} data-name="Section title and page title">
+              <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)] whitespace-nowrap" id={isNotResources ? "node-1532_291639" : "node-1518_345310"}>
+                <p className="leading-[var(--line-height\/text-xl,30px)]">Foundations</p>
+              </div>
+              <div className="relative shrink-0 size-[20px]" id={isNotResources ? "node-7674_527301" : "node-7674_526588"} data-name="arrow-right">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+              </div>
+              <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)] whitespace-nowrap" id={isNotResources ? "node-1532_291641" : "node-1518_345312"}>
+                <p className="leading-[var(--line-height\/text-xl,30px)]">Typography</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={`content-stretch flex items-start relative shrink-0 w-full ${isNotResources ? "" : "gap-[var(--spacing-4xl,32px)]"}`} id={isNotResources ? "node-1532_291643" : "node-1518_345381"} data-name="Heading and resources">
+          <div className={`[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-2xl,20px)] items-start min-w-px relative ${isNotResources ? "max-w-[1024px]" : ""}`} id={isNotResources ? "node-1532_291644" : "node-1518_345314"} data-name="Heading and supporting text">
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xl,72px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-xl,60px)] tracking-[-1.2px] w-full `}${isNotResources ? "" : "max-w-[1024px]"}`} id={isNotResources ? "node-1532_291646" : "node-1518_345316"}>
+              Typography
+            </p>
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal leading-[var(--line-height\/text-xl,30px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xl,20px)] w-full `}${isNotResources ? "" : "max-w-[1024px]"}`} id={isNotResources ? "node-1532_291648" : "node-1518_345318"}>
+              Description text dolor sit incididunt, adipisicing tempor, tempor labore dolore magna aliqua.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

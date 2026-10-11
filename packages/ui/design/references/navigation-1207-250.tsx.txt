@@ -1,0 +1,41 @@
+const imgFavicon1 = "https://www.figma.com/api/mcp/asset/edcd04cd-75ac-48c8-9ff0-1c6317fb5e57.png";
+const imgMenu02 = "https://www.figma.com/api/mcp/asset/aff975f3-a2b7-43b2-98aa-8ee7e120e771.svg";
+
+function Logo({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex items-start relative w-[139px]"} data-node-id="1019:33137" data-name="Logo">
+      <div className="h-[32px] relative shrink-0 w-[139px]" data-node-id="2924:375962" data-name="Logo wrap">
+        <div className="absolute content-stretch flex inset-[0_76.98%_0_0] items-start" data-node-id="1083:50705" data-name="Logomark">
+          <div className="relative shrink-0 size-[32px]" data-node-id="I1083:50705;18492:16258" data-name="favicon 1">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+          </div>
+        </div>
+        <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] inset-[6.25%_6.83%_6.25%_37.05%] leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)] text-black whitespace-nowrap" data-node-id="18492:510946">
+          PansGPT
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type SidebarNavigationProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  open?: boolean;
+  style?: "Slim";
+};
+
+function SidebarNavigation({ className, breakpoint = "Mobile", open = false, style = "Slim" }: SidebarNavigationProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col h-[64px] items-center relative w-[375px]"} data-node-id="1207:250">
+      <div className="content-stretch flex flex-[1_0_0] items-center justify-between min-h-px pl-[var(--container-padding-mobile,16px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] relative w-full" data-node-id="1679:561179" data-name="Content">
+        <Logo className="content-stretch flex items-start relative shrink-0 w-[139px]" />
+        <button className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch cursor-pointer flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="1679:561181" data-name="_Application nav menu button">
+          <div className="relative shrink-0 size-[24px]" data-node-id="I1679:561181;1207:354" data-name="menu-02">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMenu02} />
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,605 @@
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/b248c082-cc59-4411-bc58-f009f364840c.svg";
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/665b0c9b-7b2b-4470-83d5-fd2a6979f26d.svg";
+const imgUploadCloud02 = "https://www.figma.com/api/mcp/asset/cfbeedf3-591a-4b65-8601-f7b4cfd37943.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/47413cbc-fe97-4ac9-9490-9f7170f9b43a.svg";
+const imgPage = "https://www.figma.com/api/mcp/asset/6a92c532-4e31-458b-aeba-c41edc4d389b.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type DropdownProps = {
+  className?: string;
+  open?: boolean;
+  type?: "Icon";
+};
+
+function Dropdown({ className, open = false, type = "Icon" }: DropdownProps) {
+  return (
+    <button className={className || "content-stretch flex flex-col items-start relative"} data-node-id="3281:383087">
+      <div className="relative shrink-0 size-[20px]" data-node-id="3281:383088" data-name="dots-vertical">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+      </div>
+    </button>
+  );
+}
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = "False", indeterminate = "False", size = "md", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} data-node-id="1100:295">
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="1100:296" data-name="_Checkbox base" />
+    </div>
+  );
+}
+
+type TableCellLeadActionProps = {
+  className?: string;
+  type?: "Checkbox";
+};
+
+function TableCellLeadAction({ className, type = "Checkbox" }: TableCellLeadActionProps) {
+  return (
+    <div className={className || "content-stretch flex items-start relative"} data-node-id="9400:570194">
+      <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+    </div>
+  );
+}
+
+type TableCellProps = {
+  className?: string;
+  leadAction?: boolean;
+  leadText?: boolean;
+  size?: "md";
+  state?: "Default";
+  supportingText?: boolean;
+  type?: "Text" | "Action dropdown icon";
+};
+
+function TableCell({ className, leadAction = true, leadText = true, size = "md", state = "Default", supportingText = true, type = "Text" }: TableCellProps) {
+  const isActionDropdownIconAndMdAndDefault = type === "Action dropdown icon" && size === "md" && state === "Default";
+  const isTextAndMdAndDefault = type === "Text" && size === "md" && state === "Default";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] relative `}${isActionDropdownIconAndMdAndDefault ? "p-[var(--spacing-xl,16px)]" : "px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] w-[320px]"}`} id={isActionDropdownIconAndMdAndDefault ? "node-1224_5049" : "node-1222_107426"}>
+      {isTextAndMdAndDefault && leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+      {isTextAndMdAndDefault && (
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1222:107427" data-name="Text and supporting text">
+          {leadText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1222:107428">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+          )}
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1222:107429">
+              chioma@PansGPT.com
+            </p>
+          )}
+        </div>
+      )}
+      {isActionDropdownIconAndMdAndDefault && <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />}
+    </div>
+  );
+}
+
+type TableHeaderCellProps = {
+  className?: string;
+  checkbox?: boolean;
+  size?: "md";
+  text?: boolean;
+};
+
+function TableHeaderCell({ className, checkbox = true, size = "md", text = true }: TableHeaderCellProps) {
+  const isMdAndNotTextAndNotCheckbox = size === "md" && !text && !checkbox;
+  const isMdAndTextAndCheckbox = size === "md" && text && checkbox;
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid h-[44px] max-h-[44px] relative `}${isMdAndNotTextAndNotCheckbox ? "w-[68px]" : "content-stretch flex gap-[var(--spacing-lg,12px)] items-center px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)]"}`} id={isMdAndNotTextAndNotCheckbox ? "node-1224_4552" : "node-214_9"}>
+      {isMdAndTextAndCheckbox && (
+        <>
+          <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="1221:107056" data-name="_Table header label">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1221:107056;1221:106889">
+              Company
+            </p>
+            <div className="relative shrink-0 size-[12px]" data-node-id="I1221:107056;1221:106890" data-name="arrow-down">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+type TableProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  dividers?: "Alternating fills";
+  example?: "Files";
+};
+
+function Table({ className, breakpoint = "Desktop", dividers = "Alternating fills", example = "Files" }: TableProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col isolate items-start overflow-clip relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[1216px]"} data-node-id="1229:12241">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] isolate items-start relative shrink-0 w-full z-[2]" data-node-id="1229:12242" data-name="Card header">
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full z-[2]" data-node-id="I1229:12242;1211:74" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start justify-center min-w-px relative" data-node-id="I1229:12242;1211:75" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="I1229:12242;1213:102753" data-name="Text and badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="I1229:12242;1211:76">
+                Files uploaded
+              </p>
+              <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I1229:12242;1213:102750" data-name="Badge">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1229:12242;1213:102750;3918:405139">
+                  10/20 seats
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12242;3292:532759" data-name="Actions">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I1229:12242;3292:532762" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1229:12242;3292:532762;6421:279423" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12242;3292:532762;3287:433113">
+                  Download all
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I1229:12242;3292:532763" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1229:12242;3292:532763;3466:410053" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUploadCloud02} />
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1229:12242;3292:532763;6421:278974" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12242;3292:532763;3287:432941">
+                  Upload
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+        <div className="h-px relative shrink-0 w-full z-[1]" data-node-id="I1229:12242;3304:426693" data-name="Divider">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+        </div>
+      </div>
+      <div className="content-stretch flex items-start relative shrink-0 w-full z-[1]" data-node-id="1229:12243" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] flex-col isolate items-start min-w-px relative" data-node-id="1229:12244" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[8]" data-node-id="1229:12245" data-name="Table header cell">
+            <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:12245;1221:107056" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:12245;1221:107056;1221:106781">
+                File name
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:12247" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12247;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12247;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12247;4917:411110;4916:411371" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12247;4917:411110;4916:411374" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12247;4917:411110;4916:411375">
+                    PDF
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12247;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12247;1224:1464">
+                  Tech requirements.pdf
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12247;1224:1465">
+                  200 KB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:12249" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12249;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12249;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12249;4917:411110;4916:411431" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/brand\/600,#079455)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_33.75%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12249;4917:411110;4916:411434" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12249;4917:411110;4916:411435">
+                    JPG
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12249;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12249;1224:1464">
+                  Dashboard screenshot.jpg
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12249;1224:1465">
+                  720 KB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12251" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12251;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12251;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12251;4917:411110;4916:411497" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/blue-dark\/600,#155eef)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_26.25%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12251;4917:411110;4916:411500" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12251;4917:411110;4916:411501">
+                    MP4
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12251;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12251;1224:1464">
+                  Dashboard prototype recording.mp4
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12251;1224:1465">
+                  16 MB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:12253" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12253;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12253;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12253;4917:411110;4916:411335" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/brand\/600,#079455)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_40%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12253;4917:411110;4916:411338" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12253;4917:411110;4916:411339">
+                    FIG
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12253;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12253;1224:1464">
+                  Dashboard prototype FINAL.fig
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12253;1224:1465">
+                  4.2 MB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12255" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12255;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12255;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12255;4917:411110;4916:411341" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/blue-dark\/600,#155eef)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_6.25%_13.75%_1.25%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12255;4917:411110;4916:411344" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12255;4917:411110;4916:411345">
+                    DOCX
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12255;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12255;1224:1464">
+                  UX Design Guidelines.docx
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12255;1224:1465">
+                  400 KB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:12257" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12257;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12257;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12257;4917:411110;4916:411706" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/purple\/600,#6938ef)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_31.25%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12257;4917:411110;4916:411709" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12257;4917:411110;4916:411710">
+                    AEP
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12257;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12257;1224:1464">
+                  Dashboard interaction.aep
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12257;1224:1465">
+                  12 MB
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:12259" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="I1229:12259;9405:719868" data-name="Icon and text">
+              <div className="relative shrink-0 size-[40px]" data-node-id="I1229:12259;4917:411110" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1229:12259;4917:411110;4916:411485" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                </div>
+                <div className="absolute bg-[var(--colors\/pink\/600,#dd2590)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_26.25%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1229:12259;4917:411110;4916:411488" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1229:12259;4917:411110;4916:411489">
+                    MP3
+                  </p>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12259;1224:1463" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I1229:12259;1224:1464">
+                  Briefing call recording.mp3
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1229:12259;1224:1465">
+                  18.6 MB
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0 w-[176px]" data-node-id="1229:12260" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[8]" data-node-id="1229:12261" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:12261;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:12261;1224:4556;1221:106781">
+                File size
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:12263" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12263;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12263;1222:107429">
+                200 KB
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:12265" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12265;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12265;1222:107429">
+                720 KB
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12267" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12267;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12267;1222:107429">
+                16 MB
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:12269" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12269;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12269;1222:107429">
+                4.2 MB
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12271" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12271;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12271;1222:107429">
+                400 KB
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:12273" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12273;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12273;1222:107429">
+                12 MB
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:12275" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12275;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12275;1222:107429">
+                800 KB
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0 w-[176px]" data-node-id="1229:12276" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[8]" data-node-id="1229:12277" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:12277;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:12277;1224:4556;1221:106781">
+                Date uploaded
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:12279" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12279;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12279;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:12281" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12281;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12281;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12283" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12283;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12283;1222:107429">
+                Jan 2, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:12285" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12285;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12285;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12287" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12287;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12287;1222:107429">
+                Jan 8, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:12289" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12289;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12289;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:12291" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12291;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12291;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0 w-[176px]" data-node-id="1229:12292" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[8]" data-node-id="1229:12293" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:12293;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:12293;1224:4556;1221:106781">
+                Last updated
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:12295" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12295;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12295;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:12297" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12297;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12297;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12299" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12299;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12299;1222:107429">
+                Jan 2, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:12301" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12301;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12301;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12303" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12303;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12303;1222:107429">
+                Jan 8, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:12305" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12305;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12305;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:12307" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12307;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12307;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0 w-[176px]" data-node-id="1229:12308" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[8]" data-node-id="1229:12309" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:12309;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:12309;1224:4556;1221:106781">
+                Uploaded by
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:12311" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12311;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12311;1222:107429">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:12313" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12313;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12313;1222:107429">
+                Olúwadámilọ́lá Buhari
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12315" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12315;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12315;1222:107429">
+                Ìbùkúnọlá Abubakar
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:12317" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12317;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12317;1222:107429">
+                Ọ̀rẹ́fúnmi Àrẹ̀gbẹ́ṣọ́lá
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12319" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12319;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12319;1222:107429">
+                Ṣọ̀pẹ́ Emenike
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:12321" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12321;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12321;1222:107429">
+                Chizaram Àkànjí
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:12323" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:12323;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:12323;1222:107429">
+                Ikenna Danjuma
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0" data-node-id="1229:12372" data-name="Column">
+          <TableHeaderCell checkbox={false} className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid h-[44px] max-h-[44px] relative shrink-0 w-full z-[8]" text={false} />
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 z-[7]" data-node-id="1229:12375" data-name="Table cell">
+            <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+          </div>
+          <TableCell className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" type="Action dropdown icon" />
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:12379" data-name="Table cell">
+            <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+          </div>
+          <TableCell className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" type="Action dropdown icon" />
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:12383" data-name="Table cell">
+            <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+          </div>
+          <TableCell className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" type="Action dropdown icon" />
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative shrink-0 z-[1]" data-node-id="1229:12387" data-name="Table cell">
+            <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,36 @@
+const imgEmoji = "https://www.figma.com/api/mcp/asset/8527bf0f-ebe2-4f25-a6d9-574524a4eedb.png";
+
+type EmojiProps = {
+  className?: string;
+  emoji?: "Heart red";
+};
+
+function Emoji({ className, emoji = "Heart red" }: EmojiProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1244:280">
+      <div className="absolute left-0 size-[16px] top-0" data-node-id="1244:4" data-name="Emoji">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji} />
+      </div>
+    </div>
+  );
+}
+
+type MessageReactionProps = {
+  className?: string;
+  count?: boolean;
+  emojiSwap?: React.ReactNode | null;
+};
+
+export default function MessageReaction({ className, count = false, emojiSwap = null }: MessageReactionProps) {
+  const isCount = count;
+  return (
+    <button className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)]"} id={isCount ? "node-1244_299" : "node-1244_297"}>
+      {emojiSwap || <Emoji className="relative shrink-0 size-[16px]" />}
+      {isCount && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1244:301">
+          2
+        </p>
+      )}
+    </button>
+  );
+}

@@ -1,0 +1,16 @@
+export default function CalendarDateIcon({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-md,12px)] w-[64px]"} data-node-id="8044:126959" data-name="_Calendar date icon">
+      <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] content-stretch flex items-center justify-center pb-[var(--spacing-xxs,2px)] pt-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8044:126781" data-name="Month wrapper">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="8044:126782">
+          JAN
+        </p>
+      </div>
+      <div className="content-stretch flex flex-col items-center justify-center pb-[3px] pt-px px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8044:126783" data-name="Date wrapper">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Bold')] font-bold leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="8044:126784">
+          10
+        </p>
+      </div>
+    </div>
+  );
+}

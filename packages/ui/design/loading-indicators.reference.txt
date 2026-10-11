@@ -1,0 +1,69 @@
+const imgLoadingCircle = "https://www.figma.com/api/mcp/asset/656b186e-f202-42ed-86f8-21322cea896c.svg";
+const imgLoadingCircle1 = "https://www.figma.com/api/mcp/asset/32efccf7-14be-4bad-aeb8-1a6d343782c2.svg";
+const imgLoadingCircle2 = "https://www.figma.com/api/mcp/asset/d5f33389-7893-4050-a778-4c0890837b9b.svg";
+const imgLoadingCircle3 = "https://www.figma.com/api/mcp/asset/c0163875-9e04-42db-82d2-cb0cb0714e37.svg";
+const imgLoadingCircle4 = "https://www.figma.com/api/mcp/asset/851a3c30-8958-47ff-83e2-1ff1a92775f0.svg";
+const imgLoadingCircle5 = "https://www.figma.com/api/mcp/asset/bd793000-7410-469a-9bac-273461f0571b.svg";
+const imgLoadingCircle6 = "https://www.figma.com/api/mcp/asset/ddf174e6-bc4b-4d41-bb47-13d980b1a3a1.svg";
+const imgLoadingCircle7 = "https://www.figma.com/api/mcp/asset/0fcd2512-46f9-437c-9a33-35248e7cf4c5.svg";
+const imgLoadingCircle8 = "https://www.figma.com/api/mcp/asset/ec69d7e3-b8ee-41f3-9d45-17746690c482.svg";
+const imgLoadingCircle9 = "https://www.figma.com/api/mcp/asset/08c7f412-812b-429e-ac6b-b46ac8c42d14.svg";
+const imgLoadingCircle10 = "https://www.figma.com/api/mcp/asset/c6034874-dcf4-4051-9504-7db9eb14809f.svg";
+const imgLoadingCircle11 = "https://www.figma.com/api/mcp/asset/e0101f8e-2455-4e46-8d1d-18ae659859df.svg";
+
+type LoadingIndicatorProps = {
+  className?: string;
+  size?: "md" | "sm" | "lg" | "xl";
+  style?: "Dot circle" | "Line spinner" | "Line simple";
+  supportingText?: boolean;
+};
+
+export default function LoadingIndicator({ className, size = "sm", style = "Line simple", supportingText = true }: LoadingIndicatorProps) {
+  const isDotCircleAndLg = style === "Dot circle" && size === "lg";
+  const isDotCircleAndMd = style === "Dot circle" && size === "md";
+  const isDotCircleAndSm = style === "Dot circle" && size === "sm";
+  const isDotCircleAndXl = style === "Dot circle" && size === "xl";
+  const isLineSimpleAndLg = style === "Line simple" && size === "lg";
+  const isLineSimpleAndSm = style === "Line simple" && size === "sm";
+  const isLineSimpleAndXl = style === "Line simple" && size === "xl";
+  const isLineSpinnerAndLg = style === "Line spinner" && size === "lg";
+  const isLineSpinnerAndMd = style === "Line spinner" && size === "md";
+  const isLineSpinnerAndSm = style === "Line spinner" && size === "sm";
+  const isLineSpinnerAndXl = style === "Line spinner" && size === "xl";
+  const isMdOrSm = ["md", "sm"].includes(size);
+  const isXl = size === "xl";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative w-[512px]"} id={isDotCircleAndXl ? "node-1196_189" : isDotCircleAndLg ? "node-1196_141" : isDotCircleAndSm ? "node-1198_99432" : isDotCircleAndMd ? "node-1192_633" : isLineSpinnerAndXl ? "node-1196_264" : isLineSimpleAndXl ? "node-1196_200" : isLineSpinnerAndLg ? "node-1196_271" : isLineSimpleAndLg ? "node-1196_147" : isLineSpinnerAndSm ? "node-1198_99438" : isLineSpinnerAndMd ? "node-1196_283" : isLineSimpleAndSm ? "node-1198_99394" : "node-1192_607"}>
+      <div className={`content-stretch flex flex-col items-center relative shrink-0 ${isXl ? "gap-[var(--spacing-2xl,20px)]" : "gap-[var(--spacing-xl,16px)]"}`} id={isDotCircleAndXl ? "node-1196_190" : isDotCircleAndLg ? "node-1196_142" : isDotCircleAndSm ? "node-1198_99433" : isDotCircleAndMd ? "node-1192_634" : isLineSpinnerAndXl ? "node-1196_265" : isLineSimpleAndXl ? "node-1196_201" : isLineSpinnerAndLg ? "node-1196_272" : isLineSimpleAndLg ? "node-1196_148" : isLineSpinnerAndSm ? "node-1198_99439" : isLineSpinnerAndMd ? "node-1196_284" : isLineSimpleAndSm ? "node-1198_99395" : "node-1192_609"} data-name="Content">
+        <div className={`relative shrink-0 ${isXl ? "size-[64px]" : size === "lg" ? "size-[56px]" : size === "sm" ? "size-[32px]" : "size-[48px]"}`} id={isDotCircleAndXl ? "node-1196_215" : isDotCircleAndLg ? "node-1196_144" : isDotCircleAndSm ? "node-1198_99453" : isDotCircleAndMd ? "node-1196_162" : isLineSpinnerAndXl ? "node-1196_266" : isLineSimpleAndXl ? "node-1196_207" : isLineSpinnerAndLg ? "node-1196_273" : isLineSimpleAndLg ? "node-1196_149" : isLineSpinnerAndSm ? "node-1198_99449" : isLineSpinnerAndMd ? "node-1196_286" : isLineSimpleAndSm ? "node-1198_99445" : "node-1196_155"} data-name="Loading circle">
+          {(isMdOrSm || isLineSimpleAndLg || isLineSpinnerAndLg) && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isDotCircleAndSm ? imgLoadingCircle9 : isDotCircleAndMd ? imgLoadingCircle8 : isLineSpinnerAndLg ? imgLoadingCircle5 : isLineSimpleAndLg ? imgLoadingCircle4 : isLineSpinnerAndSm ? imgLoadingCircle3 : isLineSpinnerAndMd ? imgLoadingCircle2 : isLineSimpleAndSm ? imgLoadingCircle1 : imgLoadingCircle} />}
+          {(isXl || isDotCircleAndLg) && (
+            <div className={`absolute ${isDotCircleAndLg ? "inset-[-1.79%]" : "inset-[-1.56%]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isDotCircleAndXl ? imgLoadingCircle11 : isDotCircleAndLg ? imgLoadingCircle10 : isLineSpinnerAndXl ? imgLoadingCircle7 : imgLoadingCircle6} />
+            </div>
+          )}
+        </div>
+        {isMdOrSm && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1192:608">
+            Loading...
+          </p>
+        )}
+        {["lg", "xl"].includes(size) && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)] text-center whitespace-nowrap" data-node-id="1196:152">
+            Loading...
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text lg/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-lg, weight: 500, lineHeight: Line height/text-lg, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

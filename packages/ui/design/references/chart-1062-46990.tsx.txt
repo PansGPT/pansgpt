@@ -1,0 +1,137 @@
+const imgLabelFalse = "https://www.figma.com/api/mcp/asset/450af5fc-1448-46c1-9b77-82d7a5191492.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/27ce9d3c-435c-45a6-b1be-b1e5ed48511f.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/5e5c333b-cc7c-4cae-bd6f-65dcb81add91.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/ae3f94d4-ff10-4451-8a36-c27433cbb074.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/c81afbd0-5a92-4e1f-8ae9-6569500799dd.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/7640bb34-39d8-4c51-bf0e-c8977cc58e15.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/0a0ae9e9-a874-468c-a2ea-50565a8fe47c.svg";
+
+type YAxisLineProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxisLine({ className, label = "False" }: YAxisLineProps) {
+  return (
+    <div className={className || "h-[22px] relative w-[1216px]"} data-node-id="1062:47446">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLabelFalse} />
+    </div>
+  );
+}
+
+type YAxisProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxis({ className, label = "False" }: YAxisProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[167px] items-start justify-between relative w-[1216px]"} data-node-id="1067:823">
+      <YAxisLine className="h-[22px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+    </div>
+  );
+}
+
+type LineAndBarChartProps = {
+  className?: string;
+  axisLabels?: "False";
+  breakpoint?: "Desktop";
+  chartStyle?: "Line";
+  legend?: "Right";
+};
+
+function LineAndBarChart({ className, axisLabels = "False", breakpoint = "Desktop", chartStyle = "Line", legend = "Right" }: LineAndBarChartProps) {
+  return (
+    <div className={className || "h-[240px] relative w-[1216px]"} data-node-id="1062:46990">
+      <div className="absolute content-stretch flex gap-[var(--spacing-xl,16px)] inset-0 items-start" data-node-id="1062:46991" data-name="Axis">
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="1062:46993" data-name="Content">
+          <YAxis className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative w-full" />
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal items-center justify-between leading-[var(--line-height\/text-xs,18px)] px-[var(--spacing-3xl,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center w-full whitespace-nowrap" data-node-id="1062:47001" data-name="_X-axis">
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46486">
+              Jan
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46487">
+              Feb
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46488">
+              Mar
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1063:47030">
+              Apr
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1063:47139">
+              May
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46489">
+              Jun
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46490">
+              Jul
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46491">
+              Aug
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46492">
+              Sep
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46493">
+              Oct
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46902">
+              Nov
+            </p>
+            <p className="relative shrink-0" data-node-id="I1062:47001;1061:46903">
+              Dec
+            </p>
+          </div>
+          <div className="absolute inset-[0_0_27px_0] overflow-clip" data-node-id="1062:47004" data-name="_Chart data">
+            <div className="absolute h-[146px] left-0 right-0 top-[46px]" data-node-id="I1062:47004;1062:46535" data-name="Series 1">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSeries1} />
+            </div>
+            <div className="absolute inset-[51.56%_0_35.5%_0]" data-node-id="I1062:47004;1062:46538" data-name="Series 2">
+              <div className="absolute inset-[-3.63%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+              </div>
+            </div>
+            <div className="absolute inset-[55.73%_0_9.9%_0]" data-node-id="I1062:47004;1062:46576" data-name="Series 3">
+              <div className="absolute inset-[-1.37%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="1062:47003" data-name="_Legend">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1062:47003;1067:4654" data-name="Legend series">
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1062:47003;1079:50479" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1062:47003;1067:4656">
+              Series 1
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1062:47003;1067:4876" data-name="Legend series">
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1062:47003;1079:50514" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1062:47003;1067:4878">
+              Series 2
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1062:47003;1067:4987" data-name="Legend series">
+            <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1062:47003;1079:50670" data-name="Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1062:47003;1067:4989">
+              Series 3
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

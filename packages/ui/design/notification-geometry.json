@@ -1,0 +1,592 @@
+[
+  {
+    "id": "1135:591",
+    "name": "Type=Primary icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 234,
+    "children": [
+      {
+        "id": "1135:507",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 130,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 98
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1145:62",
+    "name": "Type=Progress indicator, Breakpoint=Desktop",
+    "width": 504,
+    "height": 268,
+    "children": [
+      {
+        "id": "1145:63",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 164,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 132
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2065",
+    "name": "Type=Gray icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 232,
+    "children": [
+      {
+        "id": "1135:2066",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 128,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 96
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2522",
+    "name": "Type=Success icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 234,
+    "children": [
+      {
+        "id": "1135:2523",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 130,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 98
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2644",
+    "name": "Type=No icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 232,
+    "children": [
+      {
+        "id": "1135:2645",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 128,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 96
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2309",
+    "name": "Type=Warning icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 234,
+    "children": [
+      {
+        "id": "1135:2310",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 130,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 98
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2167",
+    "name": "Type=Error icon, Breakpoint=Desktop",
+    "width": 504,
+    "height": 234,
+    "children": [
+      {
+        "id": "1135:2168",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 130,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 98
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:1960",
+    "name": "Type=Avatar, Breakpoint=Desktop",
+    "width": 504,
+    "height": 232,
+    "children": [
+      {
+        "id": "1135:1961",
+        "name": "Notification",
+        "x": 80,
+        "y": 24,
+        "width": 400,
+        "height": 128,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 368,
+            "height": 96
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 356,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:592",
+    "name": "Type=Image, Breakpoint=Mobile",
+    "width": 375,
+    "height": 404,
+    "children": [
+      {
+        "id": "1135:569",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 308,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 64
+          },
+          {
+            "name": "Image wrap",
+            "x": 16,
+            "y": 96,
+            "width": 327,
+            "height": 160
+          },
+          {
+            "name": "Actions",
+            "x": 16,
+            "y": 272,
+            "width": 139,
+            "height": 20
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:914",
+    "name": "Type=Primary icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 260,
+    "children": [
+      {
+        "id": "1135:915",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 164,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 132
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1145:47",
+    "name": "Type=Progress indicator, Breakpoint=Mobile",
+    "width": 375,
+    "height": 316,
+    "children": [
+      {
+        "id": "1145:48",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 220,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 188
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2050",
+    "name": "Type=Gray icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 276,
+    "children": [
+      {
+        "id": "1135:2051",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 180,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 148
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2507",
+    "name": "Type=Success icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 260,
+    "children": [
+      {
+        "id": "1135:2508",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 164,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 132
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2629",
+    "name": "Type=No icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 224,
+    "children": [
+      {
+        "id": "1135:2630",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 128,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 96
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2294",
+    "name": "Type=Warning icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 260,
+    "children": [
+      {
+        "id": "1135:2295",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 164,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 132
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:2152",
+    "name": "Type=Error icon, Breakpoint=Mobile",
+    "width": 375,
+    "height": 260,
+    "children": [
+      {
+        "id": "1135:2153",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 164,
+        "children": [
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 132
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:1945",
+    "name": "Type=Avatar, Breakpoint=Mobile",
+    "width": 375,
+    "height": 280,
+    "children": [
+      {
+        "id": "1135:1946",
+        "name": "Notification",
+        "x": 8,
+        "y": 80,
+        "width": 359,
+        "height": 184,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 327,
+            "height": 152
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 315,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1135:890",
+    "name": "Type=Image, Breakpoint=Desktop",
+    "width": 544,
+    "height": 234,
+    "children": [
+      {
+        "id": "1135:712",
+        "name": "Notification",
+        "x": 24,
+        "y": 24,
+        "width": 496,
+        "height": 130,
+        "children": [
+          {
+            "name": "Image wrap",
+            "x": 0,
+            "y": 0,
+            "width": 160,
+            "height": 130
+          },
+          {
+            "name": "Content wrapper",
+            "x": 160,
+            "y": 0,
+            "width": 336,
+            "height": 130
+          },
+          {
+            "name": "Buttons/Button close X",
+            "x": 452,
+            "y": 8,
+            "width": 36,
+            "height": 36
+          }
+        ]
+      }
+    ]
+  }
+]

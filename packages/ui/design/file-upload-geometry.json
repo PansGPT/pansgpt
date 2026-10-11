@@ -1,0 +1,498 @@
+[
+  {
+    "id": "1175:101149",
+    "name": "File upload",
+    "variants": [
+      {
+        "id": "1175:101146",
+        "name": "Files queued=True, Type=Progress bar, Breakpoint=Desktop",
+        "width": 512,
+        "height": 460,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 126
+          },
+          {
+            "name": "File queue",
+            "x": 0,
+            "y": 142,
+            "width": 512,
+            "height": 318
+          }
+        ]
+      },
+      {
+        "id": "1251:4560",
+        "name": "Files queued=True, Type=Progress fill, Breakpoint=Desktop",
+        "width": 512,
+        "height": 388,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 126
+          },
+          {
+            "name": "File queue",
+            "x": 0,
+            "y": 142,
+            "width": 512,
+            "height": 246
+          }
+        ]
+      },
+      {
+        "id": "1177:699",
+        "name": "Files queued=False, Type=Progress bar, Breakpoint=Desktop",
+        "width": 512,
+        "height": 126,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 126
+          }
+        ]
+      },
+      {
+        "id": "1251:4536",
+        "name": "Files queued=False, Type=Progress fill, Breakpoint=Desktop",
+        "width": 512,
+        "height": 126,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 126
+          }
+        ]
+      },
+      {
+        "id": "1175:101432",
+        "name": "Files queued=True, Type=Progress bar, Breakpoint=Mobile",
+        "width": 343,
+        "height": 460,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 343,
+            "height": 126
+          },
+          {
+            "name": "File queue",
+            "x": 0,
+            "y": 142,
+            "width": 343,
+            "height": 318
+          }
+        ]
+      },
+      {
+        "id": "1251:4551",
+        "name": "Files queued=True, Type=Progress fill, Breakpoint=Mobile",
+        "width": 343,
+        "height": 388,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 343,
+            "height": 126
+          },
+          {
+            "name": "File queue",
+            "x": 0,
+            "y": 142,
+            "width": 343,
+            "height": 246
+          }
+        ]
+      },
+      {
+        "id": "1177:677",
+        "name": "Files queued=False, Type=Progress bar, Breakpoint=Mobile",
+        "width": 343,
+        "height": 126,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 343,
+            "height": 126
+          }
+        ]
+      },
+      {
+        "id": "1251:4528",
+        "name": "Files queued=False, Type=Progress fill, Breakpoint=Mobile",
+        "width": 343,
+        "height": 126,
+        "children": [
+          {
+            "name": "_File upload base",
+            "x": 0,
+            "y": 0,
+            "width": 343,
+            "height": 126
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1175:100312",
+    "name": "_File upload base",
+    "variants": [
+      {
+        "id": "139:335",
+        "name": "State=Default",
+        "width": 512,
+        "height": 126,
+        "children": [
+          {
+            "name": "Content",
+            "x": 24,
+            "y": 16,
+            "width": 464,
+            "height": 94
+          }
+        ]
+      },
+      {
+        "id": "1175:100340",
+        "name": "State=Disabled",
+        "width": 512,
+        "height": 126,
+        "children": [
+          {
+            "name": "Content",
+            "x": 24,
+            "y": 16,
+            "width": 464,
+            "height": 94
+          }
+        ]
+      },
+      {
+        "id": "1175:100313",
+        "name": "State=Hover",
+        "width": 512,
+        "height": 126,
+        "children": [
+          {
+            "name": "Content",
+            "x": 24,
+            "y": 16,
+            "width": 464,
+            "height": 94
+          },
+          {
+            "name": "File",
+            "x": 448,
+            "y": 66,
+            "width": 40,
+            "height": 40
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1175:100366",
+    "name": "_File upload item base",
+    "variants": [
+      {
+        "id": "1175:100367",
+        "name": "Type=Progress bar, Icon type=File type, State=Complete",
+        "width": 512,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 66
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1175:100307",
+        "name": "Type=Progress bar, Icon type=File type, State=In progress",
+        "width": 512,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 66
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5976",
+        "name": "Type=Progress bar, Icon type=Simple, State=In progress",
+        "width": 512,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 66
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1175:100415",
+        "name": "Type=Progress bar, Icon type=File type, State=Error",
+        "width": 512,
+        "height": 100,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 68
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5956",
+        "name": "Type=Progress bar, Icon type=Simple, State=Error",
+        "width": 512,
+        "height": 100,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 68
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5947",
+        "name": "Type=Progress bar, Icon type=Simple, State=Complete",
+        "width": 512,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 66
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:3542",
+        "name": "Type=Progress fill, Icon type=File type, State=In progress",
+        "width": 512,
+        "height": 74,
+        "children": [
+          {
+            "name": "Progress fill wrapper (change right padding)",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 74
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 42
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5967",
+        "name": "Type=Progress fill, Icon type=Simple, State=In progress",
+        "width": 512,
+        "height": 74,
+        "children": [
+          {
+            "name": "Progress fill wrapper (change right padding)",
+            "x": 0,
+            "y": 0,
+            "width": 512,
+            "height": 74
+          },
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 42
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:3559",
+        "name": "Type=Progress fill, Icon type=File type, State=Complete",
+        "width": 512,
+        "height": 74,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 42
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5938",
+        "name": "Type=Progress fill, Icon type=Simple, State=Complete",
+        "width": 512,
+        "height": 74,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 42
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:3592",
+        "name": "Type=Progress fill, Icon type=File type, State=Error",
+        "width": 512,
+        "height": 100,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 68
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      },
+      {
+        "id": "1251:5926",
+        "name": "Type=Progress fill, Icon type=Simple, State=Error",
+        "width": 512,
+        "height": 100,
+        "children": [
+          {
+            "name": "Content",
+            "x": 16,
+            "y": 16,
+            "width": 480,
+            "height": 68
+          },
+          {
+            "name": "Buttons/Button utility",
+            "x": 476,
+            "y": 8,
+            "width": 28,
+            "height": 28
+          }
+        ]
+      }
+    ]
+  }
+]

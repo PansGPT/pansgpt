@@ -1,0 +1,1080 @@
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/3fb1ebe8-962b-431c-8953-4882c2da6bef.svg";
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/1c22f95c-c016-4399-b968-90f1a0634956.svg";
+const imgArrowLeft = "https://www.figma.com/api/mcp/asset/1bf5d43c-f198-4846-9456-04b2e6a5a888.svg";
+const imgArrowRight = "https://www.figma.com/api/mcp/asset/12c88b59-f4de-443e-aaea-af4f8cdb3bf3.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/18f50267-7532-4f15-9072-944c28687ec2.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/6f1d2e93-4dcb-43e5-b020-cf73b7de2c42.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/74aaf263-3593-48db-970a-ebef6b608208.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/714bcac5-732c-4841-8a99-eb67552643b1.svg";
+
+type CalendarCellDateProps = {
+  className?: string;
+  type?: "Default";
+};
+
+function CalendarCellDate({ className, type = "Default" }: CalendarCellDateProps) {
+  return (
+    <div className={className || "relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="7991:56360">
+      <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="7991:56312">
+        1
+      </p>
+    </div>
+  );
+}
+
+type CalendarColumnHeaderProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  date?: boolean;
+  type?: "Default";
+};
+
+function CalendarColumnHeader({ className, breakpoint = "Desktop", date = true, type = "Default" }: CalendarColumnHeaderProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative w-[160px]"} data-node-id="7997:8488">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="7996:12413">
+        Mon
+      </p>
+      {date && (
+        <div className="content-stretch flex flex-col h-[24px] items-center justify-center relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7997:11168" data-name="Date wrapper">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] w-full" data-node-id="7997:11169">
+            1
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type CalendarViewDropdownProps = {
+  className?: string;
+  open?: boolean;
+};
+
+function CalendarViewDropdown({ className, open = false }: CalendarViewDropdownProps) {
+  return (
+    <button className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7991:20116">
+      <div className="content-stretch flex flex-col items-start relative rounded-[9999px] shrink-0" data-node-id="7991:20108" role="button" tabIndex="0" data-name="Dropdown">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I7991:20108;3281:383096" data-name="Buttons/Button">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I7991:20108;3281:383096;6421:279423" data-name="Text padding">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7991:20108;3281:383096;3287:433113">
+              Month view
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="I7991:20108;3281:383096;3466:449084" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function CalendarDateIcon({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-md,12px)] w-[64px]"} data-node-id="8044:126959" data-name="_Calendar date icon">
+      <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] content-stretch flex items-center justify-center pb-[var(--spacing-xxs,2px)] pt-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8044:126781" data-name="Month wrapper">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="8044:126782">
+          JAN
+        </p>
+      </div>
+      <div className="content-stretch flex flex-col items-center justify-center pb-[3px] pt-px px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8044:126783" data-name="Date wrapper">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Bold')] font-bold leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="8044:126784">
+          10
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type CalendarHeaderProps = {
+  className?: string;
+  badge?: boolean;
+  breakpoint?: "Desktop";
+  supportingText?: boolean;
+  viewDropdown?: boolean;
+};
+
+function CalendarHeader({ className, badge = true, breakpoint = "Desktop", supportingText = true, viewDropdown = true }: CalendarHeaderProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] isolate items-start relative w-[1280px]"} data-node-id="7991:53134">
+      <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start px-[var(--spacing-3xl,24px)] py-[var(--spacing-2xl,20px)] relative shrink-0 w-full z-[1]" data-node-id="7988:349846" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="8044:126308" data-name="Date and text">
+          <CalendarDateIcon className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-[64px]" />
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start justify-center min-w-px relative" data-node-id="7988:349847" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="8267:77087" data-name="Text and badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="7988:349849">
+                January 2025
+              </p>
+              {badge && (
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center px-[var(--spacing-sm,6px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="8267:77024" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I8267:77024;4825:411484">
+                    Week 1
+                  </p>
+                </div>
+              )}
+            </div>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-full overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-[min-content] whitespace-nowrap" data-node-id="7988:349851">
+                Jan 1, 2025 – Jan 31, 2025
+              </p>
+            )}
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="7988:349852" data-name="Actions">
+          <div className="content-stretch flex items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="8022:24551" data-name="Buttons/Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I8022:24551;3471:599424" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+            </div>
+          </div>
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex isolate items-start overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="7991:21555" data-name="Button group">
+            <div className="border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative shrink-0 z-[9]" data-node-id="I7991:21555;1046:10352" data-name="_Button group base">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+              <div className="relative shrink-0 size-[20px]" data-node-id="I7991:21555;1046:10352;3473:602539" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowLeft} />
+              </div>
+              <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] px-[var(--spacing-xl,16px)] py-[var(--spacing-md,8px)] relative shrink-0 z-[8]" data-node-id="I7991:21555;1046:10353" data-name="_Button group base">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I7991:21555;1046:10353;1046:9414">
+                Today
+              </p>
+              <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative shrink-0 z-[1]" data-node-id="I7991:21555;1046:10366" data-name="_Button group base">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+              <div className="relative shrink-0 size-[20px]" data-node-id="I7991:21555;1046:10366;3473:602539" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+              </div>
+              <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+          {viewDropdown && <CalendarViewDropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />}
+          <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="7988:349856" data-name="Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="relative shrink-0 size-[20px]" data-node-id="I7988:349856;3466:410053" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I7988:349856;6421:278974" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I7988:349856;3287:432941">
+                Add event
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type CalendarProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "Month view";
+};
+
+function Calendar({ className, breakpoint = "Desktop", type = "Month view" }: CalendarProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col h-[912px] isolate items-start overflow-clip relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[1280px]"} data-node-id="7991:81840">
+      <CalendarHeader className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] isolate items-start relative shrink-0 w-full z-[2]" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-h-px relative w-full z-[1]" data-node-id="7991:54322" data-name="Main">
+        <div className="content-stretch flex flex-[1_0_0] items-start min-h-px relative w-full" data-node-id="8001:13721" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:15525" data-name="Column">
+            <CalendarColumnHeader className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" date={false} />
+            <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px overflow-clip p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54085" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54085;7996:11804" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54085;7996:11804;7991:56312">
+                  30
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start opacity-60 relative shrink-0 w-full" data-node-id="I7991:54085;7996:11805" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54085;7996:11806" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54085;7996:11806;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54085;7996:11806;7991:54407">
+                      Monday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54085;7996:11806;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54085;7996:11807" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54085;7996:11807;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54085;7996:11807;7991:78947">
+                      Coffee with Alina
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54085;7996:11807;7991:78948">
+                      11:30 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54085;7996:11808" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54085;7996:11808;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54085;7996:11808;7991:79804">
+                      Marketing site design
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54085;7996:11808;7991:79805">
+                      2:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start opacity-60 px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="I7991:54085;7996:11809" data-name="More events">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-500,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I7991:54085;7996:11810">
+                  2 more...
+                </p>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:100129" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:100129;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:100129;7991:56364;7991:56312">
+                  6
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:100129;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100129;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100129;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:100129;7991:56013;7991:54407">
+                      Monday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:100129;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100129;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100129;7991:56999;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:100129;7991:56999;7991:79780">
+                      Content planning
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:100129;7991:56999;7991:79781">
+                      11:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:100634" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:100634;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:100634;7991:56364;7991:56312">
+                  13
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:100634;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100634;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100634;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:100634;7991:56013;7991:54407">
+                      Monday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:100634;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100634;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100634;7991:56999;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:100634;7991:56999;7991:79667">
+                      Team lunch
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:100634;7991:56999;7991:79668">
+                      12:15 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:100817" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:100817;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:100817;7991:56364;7991:56312">
+                  20
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:100817;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100817;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100817;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:100817;7991:56013;7991:54407">
+                      Monday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:100817;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100817;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100817;7991:56999;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:100817;7991:56999;7991:79780">
+                      Deep work
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:100817;7991:56999;7991:79781">
+                      9:15 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:100980" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:100980;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:100980;7991:56364;7991:56312">
+                  27
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:100980;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:100980;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:100980;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:100980;7991:56013;7991:54407">
+                      Monday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:100980;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:16028" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20093" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20093;7996:12413">
+                Tues
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px overflow-clip p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54294" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54294;7996:11804" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54294;7996:11804;7991:56312">
+                  31
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start opacity-60 relative shrink-0 w-full" data-node-id="I7991:54294;7996:11805" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54294;7996:11806" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54294;7996:11806;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:54294;7996:11806;7991:79780">
+                      Product demo
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:54294;7996:11806;7991:79781">
+                      10:30 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54309" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54309;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54309;7991:56364;7991:56312">
+                  7
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54309;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54309;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54309;7991:56013;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:54309;7991:56013;7991:79667">
+                      One-on-one with Eva
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:54309;7991:56013;7991:79668">
+                      10:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54309;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54309;7991:56999;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54309;7991:56999;7991:78947">
+                      Catch up w/ Alex
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54309;7991:56999;7991:78948">
+                      2:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8269" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8269;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8269;7991:56364;7991:56312">
+                  14
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7996:8269;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54356" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54356;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54356;7991:56364;7991:56312">
+                  21
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54356;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54356;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54356;7991:56013;7991:79851" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-ellipsis" data-node-id="I7991:54356;7991:56013;7991:79852">
+                      Quarterly review
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/orange\/utility-orange-600,#e04f16)] text-ellipsis" data-node-id="I7991:54356;7991:56013;7991:79853">
+                      11:30 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54356;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54356;7991:56999;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54356;7991:56999;7991:78947">
+                      Lunch with Zahir
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54356;7991:56999;7991:78948">
+                      1:00 PM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54356;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:54356;7991:79877;7991:79754" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54356;7991:79877;7991:79755" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)] text-ellipsis" data-node-id="I7991:54356;7991:79877;7991:79756">
+                      Dinner with Caitlyn
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis" data-node-id="I7991:54356;7991:79877;7991:79757">
+                      7:00 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54371" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54371;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54371;7991:56364;7991:56312">
+                  28
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54371;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54371;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54371;7991:56013;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54371;7991:56013;7991:79804">
+                      Content planning
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54371;7991:56013;7991:79805">
+                      11:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54371;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54371;7991:56999;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54371;7991:56999;7991:78947">
+                      Lunch with Alina
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54371;7991:56999;7991:78948">
+                      12:45 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:16532" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20098" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20098;7996:12413">
+                Wed
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:97953" data-name="_Calendar cell/Month view">
+              <CalendarCellDate className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7991:97953;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54310" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54310;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54310;7991:56364;7991:56312">
+                  8
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54310;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54310;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54310;7991:56013;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:54310;7991:56013;7991:79780">
+                      Deep work
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:54310;7991:56013;7991:79781">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54310;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54310;7991:56999;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54310;7991:56999;7991:79804">
+                      Design sync
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54310;7991:56999;7991:79805">
+                      10:30 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54310;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54310;7991:79877;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54310;7991:79877;7991:79804">
+                      SEO planning
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54310;7991:79877;7991:79805">
+                      1:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="I7991:54310;7991:96016" data-name="More events">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-500,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I7991:54310;7991:96017">
+                  3 more...
+                </p>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54342" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54342;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54342;7991:56364;7991:56312">
+                  15
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54342;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54342;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54342;7991:56013;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:54342;7991:56013;7991:79780">
+                      Product planning
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:54342;7991:56013;7991:79781">
+                      9:30 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54357" data-name="_Calendar cell/Month view">
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54357;7991:56364" data-name="_Calendar cell date">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I7991:54357;7991:56364;7991:56359">
+                  22
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54357;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54357;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54357;7991:56013;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:54357;7991:56013;7991:79780">
+                      Deep work
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:54357;7991:56013;7991:79781">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54357;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54357;7991:56999;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54357;7991:56999;7991:79804">
+                      Design sync
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54357;7991:56999;7991:79805">
+                      2:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54372" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54372;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54372;7991:56364;7991:56312">
+                  29
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54372;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54372;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54372;7991:56013;7991:79779" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" data-node-id="I7991:54372;7991:56013;7991:79780">
+                      Product planning
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="I7991:54372;7991:56013;7991:79781">
+                      9:30 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:17037" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20103" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20103;7996:12413">
+                Thu
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54298" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54298;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54298;7991:56364;7991:56312">
+                  2
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54298;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54298;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54298;7991:56013;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:54298;7991:56013;7991:79667">
+                      One-on-one with Sienna
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:54298;7991:56013;7991:79668">
+                      10:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54298;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54298;7991:56999;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54298;7991:56999;7991:54407">
+                      All-hands meeting
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54298;7991:56999;7991:54408">
+                      4:00 PM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54298;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:54298;7991:79877;7991:79754" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54298;7991:79877;7991:79755" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)] text-ellipsis" data-node-id="I7991:54298;7991:79877;7991:79756">
+                      Dinner with Caitlyn
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis" data-node-id="I7991:54298;7991:79877;7991:79757">
+                      6:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8219" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8219;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8219;7991:56364;7991:56312">
+                  9
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7996:8219;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7996:8219;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7996:8219;7991:56013;7991:79754" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7996:8219;7991:56013;7991:79755" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)] text-ellipsis" data-node-id="I7996:8219;7991:56013;7991:79756">
+                      Lunch with Olivia
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis" data-node-id="I7996:8219;7991:56013;7991:79757">
+                      12:00 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:102047" data-name="_Calendar cell/Month view">
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:102047;7991:56364" data-name="_Calendar cell date">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I7991:102047;7991:56364;7991:56359">
+                  16
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:102047;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:102047;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:102047;7991:56013;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:102047;7991:56013;7991:79667">
+                      Amélie’s first day
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:102047;7991:56013;7991:79668">
+                      10:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:102047;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:102047;7991:56999;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:102047;7991:56999;7991:54407">
+                      All-hands meeting
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:102047;7991:56999;7991:54408">
+                      4:00 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54358" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54358;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54358;7991:56364;7991:56312">
+                  23
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54358;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54358;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54358;7991:56013;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:54358;7991:56013;7991:79667">
+                      Amélie coffee
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:54358;7991:56013;7991:79668">
+                      10:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:101152" data-name="_Calendar cell/Month view">
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:101152;7991:56364" data-name="_Calendar cell date">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I7991:101152;7991:56364;7991:56359">
+                  30
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:101152;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:101152;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:101152;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:101152;7991:56013;7991:54407">
+                      All-hands meeting
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:101152;7991:56013;7991:54408">
+                      4:00 PM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:101152;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:101152;7991:56999;7991:79666" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" data-node-id="I7991:101152;7991:56999;7991:79667">
+                      Team dinner
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="I7991:101152;7991:56999;7991:79668">
+                      5:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:17543" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20108" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20108;7996:12413">
+                Fri
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54300" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54300;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54300;7991:56364;7991:56312">
+                  3
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54300;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54300;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54300;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54300;7991:56013;7991:54407">
+                      Friday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54300;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54312" data-name="_Calendar cell/Month view">
+              <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54312;7991:56364" data-name="_Calendar cell date">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I7991:54312;7991:56364;7991:56317">
+                  10
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54312;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54312;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54312;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54312;7991:56013;7991:54407">
+                      Friday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54312;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54312;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54312;7991:56999;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54312;7991:56999;7991:78947">
+                      Olivia x Riley
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54312;7991:56999;7991:78948">
+                      10:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54312;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54312;7991:79877;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54312;7991:79877;7991:79804">
+                      Product demo
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54312;7991:79877;7991:79805">
+                      1:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54344" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54344;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54344;7991:56364;7991:56312">
+                  17
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54344;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54344;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54344;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54344;7991:56013;7991:54407">
+                      Friday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54344;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54344;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54344;7991:56999;7991:78946" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" data-node-id="I7991:54344;7991:56999;7991:78947">
+                      Coffee w/ Amélie
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="I7991:54344;7991:56999;7991:78948">
+                      9:30 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54344;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54344;7991:79877;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54344;7991:79877;7991:79804">
+                      Design feedback session
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54344;7991:79877;7991:79805">
+                      2:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="I7991:54344;7991:96016" data-name="More events">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-500,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I7991:54344;7991:96017">
+                  1 more...
+                </p>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54359" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54359;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54359;7991:56364;7991:56312">
+                  24
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:54359;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54359;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54359;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:54359;7991:56013;7991:54407">
+                      Friday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:54359;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/yellow\/utility-yellow-50,#fefbe8)] border border-[var(--component-colors\/utility\/yellow\/utility-yellow-200,#feee95)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54359;7991:56999" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54359;7991:56999;7999:31458" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-700,#a15c07)] text-ellipsis" data-node-id="I7991:54359;7991:56999;7999:31459">
+                      Accountant
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-600,#ca8504)] text-ellipsis" data-node-id="I7991:54359;7991:56999;7999:31460">
+                      1:45 PM
+                    </p>
+                  </div>
+                </div>
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54359;7991:79877" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:54359;7991:79877;7991:79803" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" data-node-id="I7991:54359;7991:79877;7991:79804">
+                      Marketing site design
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="I7991:54359;7991:79877;7991:79805">
+                      2:30 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="I7991:54359;7991:96016" data-name="More events">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-500,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I7991:54359;7991:96017">
+                  3 more...
+                </p>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:101315" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:101315;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:101315;7991:56364;7991:56312">
+                  31
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:101315;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:101315;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:101315;7991:56013;7991:54409" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" data-node-id="I7991:101315;7991:56013;7991:54407">
+                      Friday standup
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="I7991:101315;7991:56013;7991:54408">
+                      9:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:18050" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20113" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20113;7996:12413">
+                Sat
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:99886" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:99886;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:99886;7991:56364;7991:56312">
+                  5
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:99886;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:99886;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:99886;7991:56013;7991:79850" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:99886;7991:56013;7991:79851" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-ellipsis" data-node-id="I7991:99886;7991:56013;7991:79852">
+                      House inspection
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/orange\/utility-orange-600,#e04f16)] text-ellipsis" data-node-id="I7991:99886;7991:56013;7991:79853">
+                      10:30 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="8003:9382" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I8003:9382;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I8003:9382;7991:56364;7991:56312">
+                  11
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I8003:9382;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I8003:9382;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I8003:9382;7991:56013;7991:79850" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I8003:9382;7991:56013;7991:79851" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-ellipsis" data-node-id="I8003:9382;7991:56013;7991:79852">
+                      House inspection
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/orange\/utility-orange-600,#e04f16)] text-ellipsis" data-node-id="I8003:9382;7991:56013;7991:79853">
+                      11:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:102225" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:102225;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:102225;7991:56364;7991:56312">
+                  18
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:102225;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:102225;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:102225;7991:56013;7991:79754" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:102225;7991:56013;7991:79755" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)] text-ellipsis" data-node-id="I7991:102225;7991:56013;7991:79756">
+                      Half marathon 🔥
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis" data-node-id="I7991:102225;7991:56013;7991:79757">
+                      7:00 AM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8319" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8319;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8319;7991:56364;7991:56312">
+                  25
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7996:8319;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px overflow-clip p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8369" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8369;7996:11804" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8369;7996:11804;7991:56312">
+                  1
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start opacity-60 relative shrink-0 w-full" data-node-id="I7996:8369;7996:11805" data-name="Events" />
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="8001:19574" data-name="Column">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center p-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="8001:20118" data-name="_Calendar column header">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I8001:20118;7996:12413">
+                Sun
+              </p>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8194" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8194;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8194;7991:56364;7991:56312">
+                  4
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7996:8194;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:101911" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:101911;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:101911;7991:56364;7991:56312">
+                  12
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="I7991:101911;7991:56683" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/purple\/utility-purple-50,#f4f3ff)] border border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:101911;7991:56013" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:101911;7991:56013;7991:79826" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" data-node-id="I7991:101911;7991:56013;7991:79827" data-name="Text and time">
+                    <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/purple\/utility-purple-700,#5925dc)] text-ellipsis" data-node-id="I7991:101911;7991:56013;7991:79828">
+                      Ava’s engagment party
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/purple\/utility-purple-600,#6938ef)] text-ellipsis" data-node-id="I7991:101911;7991:56013;7991:79829">
+                      1:00 PM
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8294" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8294;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8294;7991:56364;7991:56312">
+                  19
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7996:8294;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px p-[var(--spacing-md,8px)] relative w-full" data-node-id="7996:8344" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7996:8344;7991:56364" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7996:8344;7991:56364;7991:56312">
+                  26
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] h-[86px] items-start relative shrink-0 w-full" data-node-id="I7996:8344;7991:56683" data-name="Events" />
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-h-px overflow-clip p-[var(--spacing-md,8px)] relative w-full" data-node-id="7991:54376" data-name="_Calendar cell/Month view">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I7991:54376;7996:11804" data-name="_Calendar cell date">
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-[4px] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] whitespace-nowrap" data-node-id="I7991:54376;7996:11804;7991:56312">
+                  2
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start opacity-60 relative shrink-0 w-full" data-node-id="I7991:54376;7996:11805" data-name="Events">
+                <div className="bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-full" data-node-id="I7991:54376;7996:11806" data-name="_Calendar event/Month view">
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I7991:54376;7996:11806;7991:79850" data-name="_Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" data-node-id="I7991:54376;7996:11806;7991:79851" data-name="Text and time">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-ellipsis whitespace-nowrap" data-node-id="I7991:54376;7996:11806;7991:79852">
+                      Drive to Sydney
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

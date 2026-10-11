@@ -1,0 +1,130 @@
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/738a8617-6fad-4dfb-84ec-2d907c302ea1.svg";
+const imgPlaceholder1 = "https://www.figma.com/api/mcp/asset/bd3cb154-b0a9-4388-82fd-c7821225d857.svg";
+const imgPlaceholder2 = "https://www.figma.com/api/mcp/asset/8b7d5376-10e9-4c9a-a40e-2d6cc5ef340e.svg";
+const imgPlaceholder3 = "https://www.figma.com/api/mcp/asset/32da8052-4d10-42a8-b05b-3eff15ddc9a2.svg";
+const imgPlaceholder4 = "https://www.figma.com/api/mcp/asset/69552ac4-e43c-4d12-8e5e-e9b1256bf664.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/a7ee2119-e3fb-471b-a39b-58bd7d026095.svg";
+const imgPlaceholder5 = "https://www.figma.com/api/mcp/asset/cbe1228a-5e50-43f1-8384-1bd190e729cf.svg";
+
+type ButtonsButtonUtilityProps = {
+  className?: string;
+  hierarchy?: "Secondary" | "Tertiary";
+  iconSwap?: React.ReactNode | null;
+  size?: "xs" | "sm";
+  state?: "Default" | "Hover" | "Focused" | "Disabled";
+};
+
+export default function ButtonsButtonUtility({ className, hierarchy = "Secondary", iconSwap = null, size = "xs", state = "Default" }: ButtonsButtonUtilityProps) {
+  const isSecondaryAndHover = hierarchy === "Secondary" && state === "Hover";
+  const isSmAndHover = size === "sm" && state === "Hover";
+  const isSmAndSecondaryAndHover = size === "sm" && hierarchy === "Secondary" && state === "Hover";
+  const isSmAndTertiaryAndFocused = size === "sm" && hierarchy === "Tertiary" && state === "Focused";
+  const isSmAndTertiaryAndHover = size === "sm" && hierarchy === "Tertiary" && state === "Hover";
+  const isXsAndHover = size === "xs" && state === "Hover";
+  const isXsAndSecondaryAndHover = size === "xs" && hierarchy === "Secondary" && state === "Hover";
+  const isXsAndTertiaryAndFocused = size === "xs" && hierarchy === "Tertiary" && state === "Focused";
+  const isXsAndTertiaryAndHover = size === "xs" && hierarchy === "Tertiary" && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] ${isXsAndTertiaryAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : isXsAndTertiaryAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] overflow-clip shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : size === "xs" && hierarchy === "Tertiary" && ["Default", "Disabled"].includes(state) ? "overflow-clip" : isSecondaryAndHover ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : isSmAndTertiaryAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] w-[32px]` : hierarchy === "Secondary" && state === "Focused" ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isSmAndTertiaryAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] overflow-clip shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[32px]` : hierarchy === "Secondary" && state === "Disabled" ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid overflow-clip shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : hierarchy === "Secondary" && state === "Default" ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : "overflow-clip size-[32px]"}`} id={isXsAndTertiaryAndHover ? "node-7932_552046" : isXsAndTertiaryAndFocused ? "node-7932_552047" : size === "xs" && hierarchy === "Tertiary" && state === "Disabled" ? "node-7932_552048" : size === "xs" && hierarchy === "Tertiary" && state === "Default" ? "node-7932_552045" : isXsAndSecondaryAndHover ? "node-8014_532026" : isSmAndSecondaryAndHover ? "node-8003_526545" : isSmAndTertiaryAndHover ? "node-8003_526513" : size === "xs" && hierarchy === "Secondary" && state === "Focused" ? "node-8014_532024" : size === "sm" && hierarchy === "Secondary" && state === "Focused" ? "node-8003_526543" : isSmAndTertiaryAndFocused ? "node-8003_526511" : size === "xs" && hierarchy === "Secondary" && state === "Disabled" ? "node-8014_532053" : size === "xs" && hierarchy === "Secondary" && state === "Default" ? "node-8014_532022" : size === "sm" && hierarchy === "Secondary" && state === "Disabled" ? "node-8014_532051" : size === "sm" && hierarchy === "Secondary" && state === "Default" ? "node-8003_526541" : size === "sm" && hierarchy === "Tertiary" && state === "Disabled" ? "node-8014_532004" : "node-8003_526509"}>
+      {hierarchy === "Secondary" && ["Default", "Focused", "Hover"].includes(state) && <div aria-hidden className={`absolute inset-0 pointer-events-none rounded-[var(--radius-sm,8px)] ${isSecondaryAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} />}
+      {size === "sm" &&
+        ["Default", "Focused"].includes(state) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="8003:526510" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+          </div>
+        ))}
+      {size === "xs" &&
+        ["Default", "Focused"].includes(state) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="8014:532023" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder2} />
+          </div>
+        ))}
+      {hierarchy === "Secondary" && ["Default", "Focused"].includes(state) && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+      {size === "sm" &&
+        state === "Disabled" &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="8014:532005" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+          </div>
+        ))}
+      {size === "xs" &&
+        state === "Disabled" &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="8014:532054" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder3} />
+          </div>
+        ))}
+      {isSmAndHover &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="8003:526514" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder4} />
+          </div>
+        ))}
+      {isSmAndHover && (
+        <>
+          <div className={`absolute size-[20px] ${isSmAndSecondaryAndHover ? "bottom-[-7px] right-[-7px]" : "bottom-[-6px] right-[-6px]"}`} id={isSmAndSecondaryAndHover ? "node-8003_526547" : "node-8003_526515"} data-name="Cursor">
+            <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+              <img alt="" className="block max-w-none size-full" src={imgCursor} />
+            </div>
+          </div>
+          <div className={`${String.raw`-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-1/2 `}${isSmAndSecondaryAndHover ? "top-[-41px]" : "top-[-40px]"}`} id={isSmAndSecondaryAndHover ? "node-8014_532037" : "node-8014_531890"} data-name="Tooltip">
+            <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" id={isSmAndSecondaryAndHover ? "node-I8014_532037-1052_588" : "node-I8014_531890-1052_588"} data-name="Content">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isSmAndSecondaryAndHover ? "node-I8014_532037-1052_589" : "node-I8014_531890-1052_589"}>
+                Tooltip
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+      {isXsAndHover &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="8014:532027" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder5} />
+          </div>
+        ))}
+      {isSmAndSecondaryAndHover && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+      {isXsAndSecondaryAndHover && (
+        <div className="absolute bottom-[-11px] right-[-11px] size-[20px]" data-node-id="8014:532028" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+      {isXsAndHover && (
+        <div className={`${String.raw`-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center `}${isXsAndTertiaryAndHover ? "left-1/2 top-[-38px]" : "left-[calc(50%+2px)] top-[-39px]"}`} id={isXsAndTertiaryAndHover ? "node-7950_134087" : "node-8014_532041"} data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" id={isXsAndTertiaryAndHover ? "node-I7950_134087-1052_588" : "node-I8014_532041-1052_588"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isXsAndTertiaryAndHover ? "node-I7950_134087-1052_589" : "node-I8014_532041-1052_589"}>
+              Tooltip
+            </p>
+          </div>
+        </div>
+      )}
+      {isXsAndSecondaryAndHover && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+      {isXsAndTertiaryAndHover && (
+        <div className="absolute bottom-[-10px] right-[-10px] size-[20px]" data-node-id="8014:531993" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Focus rings/focus-ring-shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

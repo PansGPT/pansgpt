@@ -1,0 +1,297 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/f6479fe3-4487-4615-8600-f83b4709dbb6.png";
+const imgResizeHandle = "https://www.figma.com/api/mcp/asset/b79e8b87-14be-4136-a512-f7dbbbc86cef.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/fbc4a07b-ab8c-4fc4-a957-2491508c3b2c.svg";
+const imgItalicSquare = "https://www.figma.com/api/mcp/asset/6a98bcb4-423f-41bb-9373-eee59aa6fb1d.svg";
+const imgAttachment01 = "https://www.figma.com/api/mcp/asset/830be9a5-f7ca-4e53-9b29-ed2a58857906.svg";
+const imgMicrophone02 = "https://www.figma.com/api/mcp/asset/81c12a61-150b-4f4c-9f64-d4c41a3b6e85.svg";
+const imgLogomarkWrapper = "https://www.figma.com/api/mcp/asset/92616647-5f89-45fd-a542-5ecd507267cf.svg";
+const imgReflection = "https://www.figma.com/api/mcp/asset/887731d5-c827-4404-8f8d-d72b3b93acd6.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/0d7a9058-141d-4a69-bdc8-4bf0ea99ed55.svg";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/963f1f38-9f52-45b5-89af-b0f3db77c1c1.svg";
+const imgEdit04 = "https://www.figma.com/api/mcp/asset/bdc7f162-b106-4fad-a6ec-cd4f3c9530fc.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/0f1a7068-592c-4946-8c6d-47a141b912d6.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/92dd2e09-f162-4949-9a70-9e929124e5c8.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/12934021-2e28-466b-8596-c861f2c7e861.svg";
+const imgGCalendar = "https://www.figma.com/api/mcp/asset/e1ee1844-fdca-49d1-9756-7f4f8fd0422f.svg";
+const imgPlayButton = "https://www.figma.com/api/mcp/asset/a32d3d17-ab0b-424f-bb27-99e359a8b04f.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/b9fc7a03-3409-453b-b2ad-9ff2dca42005.svg";
+const imgLoadingDot = "https://www.figma.com/api/mcp/asset/1d23f74a-68dc-420a-b3cb-ca7c249d709f.svg";
+const imgLoadingDotFrame = "https://www.figma.com/api/mcp/asset/fde464f8-85e1-405f-bb9b-ca2459589736.svg";
+const imgLoadingDotFrame1 = "https://www.figma.com/api/mcp/asset/bfef72f6-136a-40d0-906f-3fde8f46872d.svg";
+
+type MessageActionProps = {
+  className?: string;
+  type?: "Advanced";
+};
+
+function MessageAction({ className, type = "Advanced" }: MessageActionProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col h-[160px] items-center relative rounded-[var(--radius-xl,20px)] w-[360px]"} data-node-id="9206:602526">
+      <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] isolate items-start min-h-px relative w-full" data-node-id="9206:602367" data-name="Textarea input field">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="I9206:602367;3285:380525" data-name="Input with label">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="I9206:602367;3285:380527" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="I9206:602367;3285:380528">
+              Ask me anything...
+            </p>
+            <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="I9206:602367;7588:72289" data-name="Resize handle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+            </div>
+          </div>
+        </div>
+      </button>
+      <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="9206:602369" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] items-center min-w-px relative" data-node-id="9206:602370" data-name="Content left">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602537" data-name="Avatar and text">
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" data-node-id="9206:602535" data-name="Avatar">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="9206:602371" data-name="Text and icon">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602372">
+                Olivia
+              </p>
+              <div className="relative shrink-0 size-[12px]" data-node-id="9206:602395" data-name="chevron-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9206:602374" data-name="Content right">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602375" data-name="Text and icon">
+            <div className="relative shrink-0 size-[16px]" data-node-id="9206:602376" data-name="italic-square">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgItalicSquare} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602377">
+              Shortcuts
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602378" data-name="Text and icon">
+            <div className="relative shrink-0 size-[16px]" data-node-id="9206:602379" data-name="attachment-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAttachment01} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602380">
+              Attach
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="9230:133786" data-name="Buttons/Button utility">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I9230:133786;7932:552036" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMicrophone02} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type SlideOutMenuProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "A.I. assistant message";
+};
+
+function SlideOutMenu({ className, breakpoint = "Desktop", type = "A.I. assistant message" }: SlideOutMenuProps) {
+  return (
+    <div className={className || "content-stretch flex h-[960px] items-start overflow-clip pl-[var(--spacing-5xl,40px)] relative w-[440px]"} data-node-id="9222:10419">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-l border-solid content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px overflow-clip relative shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]" data-node-id="9220:48945" data-name="Panel">
+        <div className="content-stretch flex flex-[1_0_0] flex-col isolate items-start justify-end min-h-px relative w-full" data-node-id="9220:48946" data-name="Content">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] items-start pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full z-[2]" data-node-id="9220:49220" data-name="Menu header">
+            <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="9220:49221" data-name="Content">
+              <div className="bg-[var(--colors\/gray-\(light-mode\)\/950,#0a0d12)] overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] shrink-0 size-[56px]" data-node-id="9223:21982" data-name="Palantir">
+                <div className="absolute left-0 overflow-clip size-[56px] top-0" data-node-id="9223:21983" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.10000000149011612'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-1.3424e-15 4.2 -4.2 2.0385e-14 28 -1.3678e-13)'><stop stop-color='rgba(255,255,255,0)' offset='0'/><stop stop-color='rgba(255,255,255,0)' offset='0.5'/><stop stop-color='rgba(255,255,255,1)' offset='0.99'/><stop stop-color='rgba(255,255,255,0)' offset='1'/></radialGradient></defs></svg>\"), url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.05000000074505806'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(-2.5079e-15 2.45 -2.45 -2.9296e-16 28 16.1)'><stop stop-color='rgba(255,255,255,1)' offset='0'/><stop stop-color='rgba(255,255,255,0)' offset='1'/></radialGradient></defs></svg>\"), url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 56 56' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%' width='100%' fill='url(%23grad)' opacity='0.30000001192092896'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(1.7145e-16 2.8 -2.8 1.7145e-16 28 28)'><stop stop-color='rgba(255,255,255,0)' offset='0.7466'/><stop stop-color='rgba(255,255,255,1)' offset='1'/></radialGradient></defs></svg>\")" }} data-name="Content">
+                  <div className="absolute content-stretch flex gap-[12px] items-start left-[4px] top-[4px]" data-node-id="9223:21984" data-name="Company logo">
+                    <div className="overflow-clip relative rounded-[12px] shrink-0 size-[48px]" data-node-id="I9223:21984;7531:73252" data-name="Logomark">
+                      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[38px] left-1/2 top-1/2 w-[30.083px]" data-node-id="I9223:21984;7531:73254" data-name="Logomark wrapper">
+                        <div className="absolute inset-[0_-10.53%_-4.17%_-10.53%]">
+                          <img alt="" className="block max-w-none size-full" src={imgLogomarkWrapper} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute h-[11.2px] left-[11.2px] top-[5.6px] w-[33.6px]" data-node-id="9223:21985" data-name="Reflection">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgReflection} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" data-node-id="9220:49225" data-name="Buttons/Button close X">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9220:49225;2763:420385" data-name="x-close">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-4xl,32px)] isolate items-center min-h-px overflow-clip px-[var(--spacing-3xl,24px)] relative w-full z-[1]" data-node-id="9220:48948" data-name="Content">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-3xl,24px)] isolate items-start relative shrink-0 w-full z-[1]" data-node-id="9220:48949" data-name="Section">
+              <div className="content-stretch flex items-start relative shrink-0 w-full z-[5]" data-node-id="9220:48952" data-name="Row">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start max-w-[312px] min-w-px relative" data-node-id="9220:48953" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9220:48953;1244:354" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I9220:48953;1244:358" data-name="Input">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I9220:48953;1244:359">
+                        Welcome back! How can I help?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start justify-end relative shrink-0 w-full z-[4]" data-node-id="9220:49647" data-name="Row">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start justify-end max-w-[312px] min-w-px relative" data-node-id="9220:49648" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9220:49648;9206:601771" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tl-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I9220:49648;9206:601775" data-name="Input">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I9220:49648;9206:601776">
+                        I’ve got a lunch meeting with Sarah tomorrow at noon. Can you adjust my schedule to fit this in?
+                      </p>
+                    </div>
+                    <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[-20px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="I9220:49648;9206:601907" data-name="_Message action panel">
+                      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9220:49648;9206:601907;9206:591510" data-name="_Message action button">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="I9220:49648;9206:601907;9206:591510;9206:591488" data-name="placeholder">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9220:49648;9206:601907;9206:591517" data-name="_Message action button">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="I9220:49648;9206:601907;9206:591517;9206:591497" data-name="placeholder">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit04} />
+                        </div>
+                        <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9220:49648;9206:601907;9206:591517;9206:591520" data-name="Cursor">
+                          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9220:49648;9206:601907;9206:591537" data-name="_Message action button">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="I9220:49648;9206:601907;9206:591537;9206:591488" data-name="placeholder">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9220:49648;9206:601907;9206:591541" data-name="_Message action button">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="I9220:49648;9206:601907;9206:591541;9206:591488" data-name="placeholder">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full z-[3]" data-node-id="9220:49679" data-name="Row">
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[312px] relative shrink-0 w-full" data-node-id="9220:49680" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9220:49680;1244:354" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I9220:49680;1244:358" data-name="Input">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I9220:49680;1244:359">
+                        Okay! Here’s what I recommend:
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center max-w-[312px] overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-[312px]" data-node-id="9220:53442" data-name="Calendar suggestion">
+                  <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="9220:53443" data-name="Text and icon">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-center relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9220:53444" data-name="Icon wrapper">
+                      <div className="relative shrink-0 size-[24px]" data-node-id="9220:53445" data-name="g-calendar">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGCalendar} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-center justify-center min-w-px pt-[var(--spacing-xxs,2px)] relative" data-node-id="9220:53446" data-name="Text wrapper">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/regular,normal)] leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="9220:53447">
+                        <span className="[text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:SemiBold'] font-semibold leading-[20px] text-[14px] underline">Sync with Rhea</span>
+                        <span className="font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[20px] text-[#535862] text-[14px]">{` move to 1:30 PM.`}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="9220:53448" data-name="Text and icon">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-center relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9220:53449" data-name="Icon wrapper">
+                      <div className="relative shrink-0 size-[24px]" data-node-id="9220:53450" data-name="g-calendar">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgGCalendar} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-center justify-center min-w-px pt-[var(--spacing-xxs,2px)] relative" data-node-id="9220:53451" data-name="Text wrapper">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/regular,normal)] leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="9220:53452">
+                        <span className="[text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:SemiBold'] font-semibold leading-[20px] text-[14px] underline">Strategy session with Sienna</span>
+                        <span className="font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[20px] text-[#535862] text-[14px]">{` move to Thursday at 3 PM.`}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[312px] relative shrink-0 w-full" data-node-id="9220:53484" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9220:53484;1244:354" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I9220:53484;1244:358" data-name="Input">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I9220:53484;1244:359">
+                        Shall I update your calendar and notify Sienna and the team?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="9220:54042" data-name="Actions">
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9220:54043" data-name="Buttons/Button">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9220:54043;3287:433377">
+                      Cancel
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9220:54044" data-name="Buttons/Button">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9220:54044;3287:433289">
+                      Yes, update
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-end relative shrink-0 w-full z-[2]" data-node-id="9243:557671" data-name="Row">
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end max-w-[312px] relative shrink-0 w-full" data-node-id="9243:557672" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9243:557672;1247:403" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tl-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I9243:557672;1247:407" data-name="Input">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I9243:557672;1247:408">
+                        Yes, but can we do the strategy session on Friday instead?
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end max-w-[312px] relative shrink-0 w-full" data-node-id="9243:557673" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9243:557673;9242:555646" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start justify-center overflow-clip p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tl-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9243:557673;9242:555652" data-name="Input">
+                      <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="I9243:557673;9242:556238" data-name="Content">
+                        <div className="relative shrink-0 size-[32px]" data-node-id="I9243:557673;9242:556239" data-name="Play button">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlayButton} />
+                        </div>
+                        <div className="content-stretch flex flex-[1_0_0] items-center min-w-px overflow-clip px-px relative" data-node-id="I9243:557673;9242:556243" data-name="Audio waveform mask">
+                          <div className="h-[32px] relative shrink-0 w-[556px]" data-node-id="I9243:557673;9244:102778" data-name="Vector">
+                            <div className="absolute inset-[-1.56%_0]">
+                              <img alt="" className="block max-w-none size-full" src={imgVector} />
+                            </div>
+                          </div>
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I9243:557673;9242:556245">
+                          00:28
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-start relative shrink-0 w-full z-[1]" data-node-id="9222:10093" data-name="Row">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start max-w-[312px] min-w-px relative" data-node-id="9222:10094" data-name="Message">
+                  <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="I9222:10094;1244:534" data-name="Content">
+                    <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip p-[10px] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0" data-node-id="I9222:10094;1244:538" data-name="Input">
+                      <div className="flex flex-row items-center self-stretch" data-node-id="I9222:10094;1244:542">
+                        <div className="content-stretch flex h-full items-end justify-center overflow-clip relative shrink-0" data-name="Loading dot frame">
+                          <div className="relative shrink-0 size-[4px]" data-node-id="I9222:10094;1244:543" data-name="Loading dot">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDot} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="I9222:10094;1244:544" data-name="Loading dot frame">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDotFrame} />
+                      </div>
+                      <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="I9222:10094;1247:2" data-name="Loading dot frame">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDotFrame1} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="9222:10111" data-name="Footer">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-end pb-[var(--spacing-2xl,20px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="9222:10112" data-name="Content">
+            <MessageAction className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col h-[160px] items-center relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

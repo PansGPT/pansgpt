@@ -1,0 +1,55 @@
+const imgAu = "../assets/tag-country-imgAu.svg";
+
+type TagCountProps = {
+  className?: string;
+  size?: "sm";
+};
+
+function TagCount({ className, size = "sm" }: TagCountProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex flex-col items-center justify-center px-[var(--spacing-xs,4px)] relative rounded-[3px]"} data-node-id="3307:417821">
+      <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium h-[16px] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center w-[8px]" data-node-id="3307:417820">
+        <p className="leading-[var(--line-height\/text-xs,18px)]">5</p>
+      </div>
+    </div>
+  );
+}
+
+type TagCheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  size?: "sm";
+  state?: "Default";
+};
+
+function TagCheckbox({ className, checked = false, size = "sm", state = "Default" }: TagCheckboxProps) {
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406036" />;
+}
+
+type TagProps = {
+  className?: string;
+  action?: "Count";
+  checkbox?: "True";
+  flagSwap?: React.ReactNode | null;
+  icon?: "Country";
+  size?: "sm";
+};
+
+function Tag({ className, action = "Count", checkbox = "True", flagSwap = null, icon = "Country", size = "sm" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center pl-[5px] pr-[var(--spacing-xs,4px)] py-[3px] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3309:406714">
+      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="3309:406715" data-name="Content">
+        <TagCheckbox className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[14px]" />
+        {flagSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="3309:406716" data-name="AU">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAu} />
+          </div>
+        )}
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="3309:406717">
+          Label
+        </p>
+        <TagCount className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex flex-col items-center justify-center px-[var(--spacing-xs,4px)] relative rounded-[3px] shrink-0" />
+      </div>
+    </div>
+  );
+}

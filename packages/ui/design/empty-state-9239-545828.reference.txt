@@ -1,0 +1,330 @@
+const imgFrontNoise = "https://www.figma.com/api/mcp/asset/c0169e3c-1e5c-4bb5-adac-e9df74e68271.png";
+const imgBackMain = "https://www.figma.com/api/mcp/asset/dee77e48-7b2c-4ee8-96aa-a30770c1f6b5.svg";
+const imgFrontMain = "https://www.figma.com/api/mcp/asset/0216ad4d-d7bb-4177-b622-8c269a4a70fb.svg";
+const imgContent = "https://www.figma.com/api/mcp/asset/1701b2ac-c60d-4d46-96d7-f1b191c58f41.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/43352e1f-fa8d-425e-bb9f-00270ec3d686.svg";
+
+type FolderIconProps = {
+  className?: string;
+  open?: "True";
+  paper?: boolean;
+  type?: "Noise";
+};
+
+function FolderIcon({ className, open = "True", paper = true, type = "Noise" }: FolderIconProps) {
+  return (
+    <div className={className || "h-[48px] relative w-[54px]"} data-node-id="9239:17578">
+      <div className="absolute inset-[6.25%_11.11%_6.25%_0]" data-node-id="9239:17471" data-name="Back main">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackMain} />
+      </div>
+      {paper && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[10px_9px_6px_3px] rounded-[var(--radius-xs,6px)]" data-node-id="9239:17476" data-name="Paper" />}
+      <div className="absolute inset-[27.08%_-6.48%_6.25%_-6.48%]" data-node-id="9239:17474" data-name="Front main">
+        <div className="absolute inset-[0_6.02%]">
+          <img alt="" className="block max-w-none size-full" src={imgFrontMain} />
+        </div>
+      </div>
+      <div className="absolute inset-[27.08%_-6.48%_6.25%_-6.48%] mix-blend-overlay opacity-20" data-node-id="9239:17475" data-name="Front noise">
+        <div className="absolute inset-[0_6.02%]">
+          <img alt="" className="block max-w-none size-full" height="32" src={imgFrontNoise} width="53.651" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type EmptyStateProps = {
+  className?: string;
+  icon?: "Folder icon";
+  size?: "lg";
+};
+
+function EmptyState({ className, icon = "Folder icon", size = "lg" }: EmptyStateProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative w-[512px]"} data-node-id="9239:545828">
+      <div className="-translate-x-1/2 absolute left-1/2 size-[640px] top-[-276px]" data-node-id="9239:547381" data-name="Background pattern">
+        <div className="-translate-x-1/2 absolute left-1/2 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[960px_960px] size-[640px] top-0" data-node-id="I9239:547381;4939:377788" style={{ maskImage: `url("${imgContent}")` }} data-name="Content">
+          <div className="-translate-x-1/2 absolute border-[0.667px] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-start flex flex-wrap gap-0 items-start left-1/2 overflow-clip top-0 w-[640px]" data-node-id="I9239:547381;4939:377789" data-name="Blocks">
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378746" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378740" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378732" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378733" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378736" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378734" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378739" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378738" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378741" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378742" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378743" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378744" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378735" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378737" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378745" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378824" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378825" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378826" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378829" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378827" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378833" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378835" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378823" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378828" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378830" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378831" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378832" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378834" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378836" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378822" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378703" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378704" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378705" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378706" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378707" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378708" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378709" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378710" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378711" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378712" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378713" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378714" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378702" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378715" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378716" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378852" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378853" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378856" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378857" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378858" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378859" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378854" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378855" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378860" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378861" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378862" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378863" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378864" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378865" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378866" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378896" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378893" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378895" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378884" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378883" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378887" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378890" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378891" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378882" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378886" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378888" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378894" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378885" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378889" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378892" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378747" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378748" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378749" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378750" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378751" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378752" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378753" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378754" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378755" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378756" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378757" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378758" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378759" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378760" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378761" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378687" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378688" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378689" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378690" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378691" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378692" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378693" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378694" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378695" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378696" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378697" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378698" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378699" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378700" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378701" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378904" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378909" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378905" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378906" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378907" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378908" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378901" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378898" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378900" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378902" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378910" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378903" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378897" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378899" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378911" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378837" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378842" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378851" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378838" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378839" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378840" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378841" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378843" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378848" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378850" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378844" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378845" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378846" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378847" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378849" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378817" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378818" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378819" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378809" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378820" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378810" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378812" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378813" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378821" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378807" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378808" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378814" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378811" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378815" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378816" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378783" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378787" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378785" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378790" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378788" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378779" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378789" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378784" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378782" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378781" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378786" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378777" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378778" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378791" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378780" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378873" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378874" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378867" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378871" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378875" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378876" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378868" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378870" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378872" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378869" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378877" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378878" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378879" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378880" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378881" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378724" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378729" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378726" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378719" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378720" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378721" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378717" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378727" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378728" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378725" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378718" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378723" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378730" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378731" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378722" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378770" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378771" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378765" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378766" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378769" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378772" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378773" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378774" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378762" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378763" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378767" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378768" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378775" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378776" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378764" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378799" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378793" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378800" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378794" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378792" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378798" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378801" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378802" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378803" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378804" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378795" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378796" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378797" data-name="Block" />
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378805" data-name="Block" />
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b-[0.667px] border-r-[0.667px] border-solid relative shrink-0 size-[42.667px]" data-node-id="I9239:547381;4940:378806" data-name="Block" />
+          </div>
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute left-1/2 size-[480px] top-[-188px]" data-node-id="9239:545829" data-name="Background pattern decorative" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-4xl,32px)] items-center min-w-px relative" data-node-id="9239:545830" data-name="Empty state">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-center relative shrink-0 w-full" data-node-id="9239:545831" data-name="Content">
+          <FolderIcon className="h-[48px] relative shrink-0 w-[54px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center max-w-[352px] relative shrink-0 text-center w-full" data-node-id="9239:545834" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)] w-full" data-node-id="9239:545835">
+              No projects found
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="9239:545836">
+              Your search “Landing page design” did not match any projects. Please try again.
+            </p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="9239:545837" data-name="Actions">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="9239:545838" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I9239:545838;6421:274451" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I9239:545838;3287:433081">
+                Clear search
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="9239:545839" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9239:545839;3466:411727" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I9239:545839;6421:273911" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I9239:545839;3287:432949">
+                New project
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Gradient/skeuemorphic-gradient-border: , Text xl/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xl, weight: 600, lineHeight: Line height/text-xl, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,83 @@
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  type?: "Checkbox" | "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "md", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isFalseAndFalseAndMdAndRadioAndDefault = !checked && indeterminate === "False" && size === "md" && type === "Radio" && state === "Default";
+  return <div className={className || `${String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative size-[20px] `}${isFalseAndFalseAndMdAndRadioAndDefault ? "rounded-[var(--radius-full,9999px)]" : "rounded-[var(--radius-sm,8px)]"}`} id={isFalseAndFalseAndMdAndRadioAndDefault ? "node-1100_544" : "node-1097_63887"} />;
+}
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox" | "Radio";
+};
+
+function Checkbox({ className, checked = "False", indeterminate = "False", size = "md", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  const isFalseAndFalseAndMdAndRadioAndFalseAndDefault = checked === "False" && indeterminate === "False" && size === "md" && type === "Radio" && text === "False" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} id={isFalseAndFalseAndMdAndRadioAndFalseAndDefault ? "node-1100_880" : "node-1100_295"}>
+      {checked === "False" && indeterminate === "False" && size === "md" && type === "Checkbox" && text === "False" && state === "Default" && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="1100:296" data-name="_Checkbox base" />}
+      {isFalseAndFalseAndMdAndRadioAndFalseAndDefault && <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[20px]" type="Radio" />}
+    </div>
+  );
+}
+
+type ToggleBaseProps = {
+  className?: string;
+  pressed?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Default";
+};
+
+function ToggleBase({ className, pressed = false, size = "sm", state = "Default", type = "Default" }: ToggleBaseProps) {
+  const isDefaultAndNotPressedAndSmAndDefault = type === "Default" && !pressed && size === "sm" && state === "Default";
+  return (
+    <div className={className || `content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px] ${isDefaultAndNotPressedAndSmAndDefault ? String.raw`bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] justify-end`}`} id={isDefaultAndNotPressedAndSmAndDefault ? "node-1102_4084" : "node-1102_4096"}>
+      <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" id={isDefaultAndNotPressedAndSmAndDefault ? "node-6305_238901" : "node-6305_239173"} data-name="Button" />
+    </div>
+  );
+}
+
+type ToggleProps = {
+  className?: string;
+  pressed?: "True";
+  size?: "sm";
+  state?: "Default";
+  text?: "False";
+  type?: "Default";
+};
+
+function Toggle({ className, pressed = "True", size = "sm", state = "Default", text = "False", type = "Default" }: ToggleProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4185">
+      <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed />
+    </div>
+  );
+}
+
+type TableCellLeadActionProps = {
+  className?: string;
+  type?: "Checkbox" | "Radio" | "Toggle";
+};
+
+export default function TableCellLeadAction({ className, type = "Checkbox" }: TableCellLeadActionProps) {
+  const isRadio = type === "Radio";
+  const isRadioOrCheckbox = ["Radio", "Checkbox"].includes(type);
+  return (
+    <div className={className || `content-stretch flex items-start relative ${isRadioOrCheckbox ? "" : "flex-col"}`} id={type === "Checkbox" ? "node-9400_570194" : isRadio ? "node-9400_570195" : "node-9400_570196"}>
+      {isRadioOrCheckbox && <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" type={isRadio ? "Radio" : undefined} />}
+      {type === "Toggle" && <Toggle className="content-stretch flex flex-col items-start relative shrink-0" />}
+    </div>
+  );
+}

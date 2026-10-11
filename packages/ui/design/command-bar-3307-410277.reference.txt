@@ -1,0 +1,412 @@
+const imgSearchLg = "https://www.figma.com/api/mcp/asset/114564a7-5492-4782-997e-a61ac9c34a9f.svg";
+const imgFolder = "https://www.figma.com/api/mcp/asset/d5b01591-afa9-4500-bfb2-d028a0eac546.svg";
+const imgFilePlus03 = "https://www.figma.com/api/mcp/asset/fbf544ec-3285-4cff-bf00-7812af2aa5bb.svg";
+const imgUserPlus01 = "https://www.figma.com/api/mcp/asset/f1133b29-c467-4cc4-b60a-982752a8f942.svg";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/5f44f976-e5d3-4f31-9679-8ee28e1933f4.svg";
+const imgArrowRight = "https://www.figma.com/api/mcp/asset/43b9580c-f0ab-4af4-9867-ca4d56a5a05d.svg";
+const imgUsers01 = "https://www.figma.com/api/mcp/asset/2c514756-ec12-4404-ae2a-7c0350ccff5f.svg";
+const imgFolderPlus = "https://www.figma.com/api/mcp/asset/1ad9f13c-ed56-4480-99e6-5851e3579bb1.svg";
+const imgHelpCircle = "https://www.figma.com/api/mcp/asset/f3352b5e-995f-4a52-8a4e-f73f7881431b.svg";
+const imgLayersTwo02 = "https://www.figma.com/api/mcp/asset/1c3e88f7-de38-4423-8bad-345012cdf087.svg";
+const imgZapFast = "https://www.figma.com/api/mcp/asset/775b5185-d542-4e73-a7cd-a88feb5c351d.svg";
+
+type CommandShortcutProps = {
+  className?: string;
+  dual?: boolean;
+};
+
+function CommandShortcut({ className, dual = false }: CommandShortcutProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative"} data-node-id="3307:405244">
+      <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="3307:405241" data-name="Key">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405242">
+          ⌘C
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type CommandBarProps = {
+  className?: string;
+  text?: "Stacked";
+  type?: "Actions";
+};
+
+function CommandBar({ className, text = "Stacked", type = "Actions" }: CommandBarProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[960px] items-center pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-11xl,160px)] px-[var(--container-padding-desktop,32px)] relative w-[1440px]"} data-node-id="3307:410277">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411555" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411555;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-start max-w-[640px] overflow-clip relative rounded-[var(--radius-xl,20px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="3307:410278" data-name="Command bar">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip p-[var(--spacing-xl,16px)] relative rounded-tl-[var(--radius-xl,20px)] rounded-tr-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="3307:410279" data-name="_Command input">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3307:410279;3307:404878" data-name="search-lg">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSearchLg} />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-placeholder,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I3307:410279;3307:404879">
+            Search
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410279;3307:405277" data-name="_Command shortcut">
+            <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410279;3307:405277;3307:405241" data-name="Key">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410279;3307:405277;3307:405242">
+                ⌘/
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="3307:410280" data-name="_Command bar menu section">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center pt-[var(--spacing-md,8px)] px-[18px] relative shrink-0 w-full" data-node-id="I3307:410280;3307:405442" data-name="_Command menu header">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410280;3307:405442;3307:404986">
+              Recent
+            </p>
+          </div>
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I3307:410280;3307:405392" data-name="Menu items">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410280;3307:405430" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410280;3307:405430;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410280;3307:405430;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410280;3307:405430;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFolder} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-w-px relative" data-node-id="I3307:410280;3307:405430;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I3307:410280;3307:405430;3307:406237">
+                    Marketing site redesign
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410280;3307:405430;3307:406238">
+                    <span className="leading-[20px] text-[14px]">{`Project by Diepreye Ọ̀rẹ̀kọ́yà in `}</span>
+                    <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:Regular'] leading-[20px] text-[14px] underline">Notion migration</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410280;3307:405444" data-name="_Command dropdown menu item">
+              <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410280;3307:405444;3307:406437" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410280;3307:405444;4896:412218" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410280;3307:405444;4896:412218;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFilePlus03} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410280;3307:405444;3307:406439" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410280;3307:405444;3307:406440">
+                    New document
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410280;3307:405444;3307:406441">
+                    Create a new blank document
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410280;3307:405444;3307:406442" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410280;3307:405444;3307:406442;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410280;3307:405444;3307:406442;3307:405242">
+                      ⌘N
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410280;3307:405456" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410280;3307:405456;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410280;3307:405456;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410280;3307:405456;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUserPlus01} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410280;3307:405456;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410280;3307:405456;3307:406237">
+                    Invite colleagues
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410280;3307:405456;3307:406238">
+                    Collaborate with your team on projects
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410280;3307:405456;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410280;3307:405456;3307:406100;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410280;3307:405456;3307:406100;3307:405242">
+                      ⌘I
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] h-[288px] items-start overflow-clip py-[var(--spacing-md,8px)] relative shrink-0" data-node-id="3307:410281" data-name="_Command bar menu section">
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-[640px]" data-node-id="I3307:410281;3307:406819" data-name="Menu items">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406820" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406820;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406820;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406820;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406820;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406820;3307:406237">
+                    My profile
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406820;3307:406238">
+                    View and edit your personal profile
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I3307:410281;3307:406820;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406820;3307:406100;3307:405263" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3307:410281;3307:406820;3307:406100;3307:405264">
+                      ⌘K
+                    </p>
+                  </div>
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I3307:410281;3307:406820;3307:406100;3307:408381" data-name="arrow-right">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 w-[24px]" data-node-id="I3307:410281;3307:406820;3307:406100;3307:405265" data-name="Key">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center" data-node-id="I3307:410281;3307:406820;3307:406100;3307:405266">
+                      P
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406821" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406821;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406821;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406821;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUsers01} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406821;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406821;3307:406237">
+                    Team profile
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406821;3307:406238">
+                    View and edit your team profile
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I3307:410281;3307:406821;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406821;3307:406100;3307:405263" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3307:410281;3307:406821;3307:406100;3307:405264">
+                      ⌘K
+                    </p>
+                  </div>
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I3307:410281;3307:406821;3307:406100;3307:408381" data-name="arrow-right">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 w-[24px]" data-node-id="I3307:410281;3307:406821;3307:406100;3307:405265" data-name="Key">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center" data-node-id="I3307:410281;3307:406821;3307:406100;3307:405266">
+                      T
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406822" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406822;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406822;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406822;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUserPlus01} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406822;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406822;3307:406237">
+                    Invite colleagues
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406822;3307:406238">
+                    Collaborate with your team on projects
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410281;3307:406822;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406822;3307:406100;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410281;3307:406822;3307:406100;3307:405242">
+                      ⌘I
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406823" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406823;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406823;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406823;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFolderPlus} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406823;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406823;3307:406237">
+                    Create new project
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406823;3307:406238">
+                    Create a new blank project
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410281;3307:406823;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406823;3307:406100;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410281;3307:406823;3307:406100;3307:405242">
+                      ⌘N
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406824" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406824;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406824;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406824;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHelpCircle} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406824;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406824;3307:406237">
+                    Support
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406824;3307:406238">
+                    Our team are here to help if you get stuck
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410281;3307:406824;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406824;3307:406100;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410281;3307:406824;3307:406100;3307:405242">
+                      ⌘H
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406825" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406825;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406825;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406825;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo02} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406825;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406825;3307:406237">
+                    Changelog
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406825;3307:406238">
+                    Learn about our latest releases and updates
+                  </p>
+                </div>
+                <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:410281;3307:406826" data-name="_Command dropdown menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:410281;3307:406826;3307:406094" data-name="Content">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I3307:410281;3307:406826;4896:412216" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I3307:410281;3307:406826;4896:412216;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZapFast} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:410281;3307:406826;3307:406236" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="I3307:410281;3307:406826;3307:406237">
+                    Keyboard shortcuts
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I3307:410281;3307:406826;3307:406238">
+                    Speed up your workflow with shortcuts
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:410281;3307:406826;3307:406100" data-name="_Command shortcut">
+                  <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:410281;3307:406826;3307:406100;3307:405241" data-name="Key">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:410281;3307:406826;3307:406100;3307:405242">
+                      ⌘?
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 content-stretch flex flex-col items-start pb-[120px] pt-[var(--spacing-md,8px)] px-[var(--spacing-sm,6px)] right-0 top-0" data-node-id="I3307:410281;3307:405574" data-name="_Scroll bar (control fill with bottom padding)">
+            <div className="bg-[var(--component-colors\/alpha\/alpha-black-100,black)] border border-[var(--component-colors\/alpha\/alpha-white-100,white)] border-solid flex-[1_0_0] min-h-px opacity-15 relative rounded-[var(--radius-full,9999px)] w-[6px]" data-node-id="I3307:410281;3307:405574;8003:32900" data-name="Bar" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Backdrop blurs/backdrop-blur-md: Effect(type: BACKGROUND_BLUR, radius: 16), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xl: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_03, offset: (0, 3), radius: 3, spread: -1.5); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_02, offset: (0, 8), radius: 8, spread: -4); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_01, offset: (0, 20), radius: 24, spread: -4).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## search-lg
+**Node ID:** 3463:405300
+
+search, search bar, searchbar, magnify, magnifying glass, filter
+
+## folder
+**Node ID:** 3463:406860
+
+folder, file, project, attachment
+
+## file-plus-03
+**Node ID:** 3463:406830
+
+file, plus, add, attachment, text, paper, pdf, report
+
+## user-plus-01
+**Node ID:** 3463:405702
+
+user, plus, add, persona, account, person
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+
+## arrow-right
+**Node ID:** 3463:404482
+
+arrow, right
+
+## users-01
+**Node ID:** 3463:405729
+
+users, persona, account, people, team
+
+## folder-plus
+**Node ID:** 3463:406875
+
+folder, plus, add, check, file, project, attachment
+
+## help-circle
+**Node ID:** 3463:405411
+
+help, info, information, documentation, question, circle
+
+## layers-two-02
+**Node ID:** 3463:403777
+
+layers, two, layer, stack, isometic
+
+## zap-fast
+**Node ID:** 3463:405180
+
+zap, lightning, weather, speed, bolt
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

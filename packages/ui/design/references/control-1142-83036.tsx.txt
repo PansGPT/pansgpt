@@ -1,0 +1,70 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/fb2858c7-808b-4ef8-b637-5b1ce37b8ac2.svg";
+const imgPaymentMethodIcon = "https://www.figma.com/api/mcp/asset/6c54feb7-e6df-44ad-bde7-e9dbe74b9e02.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndCheckboxAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px] ${isCheckedAndFalseAndSmAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndCheckboxAndDefault ? "node-1097_63895" : "node-1097_63885"}>
+      {isCheckedAndFalseAndSmAndCheckboxAndDefault && (
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Payment icon";
+};
+
+function RadioGroupItem({ className, breakpoint = "Mobile", selected = false, size = "sm", state = "Default", type = "Payment icon" }: RadioGroupItemProps) {
+  const isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile = !selected && size === "sm" && type === "Payment icon" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]` : String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]`}`} id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_82987" : "node-1142_83036"}>
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_82988" : "node-1142_83037"} data-name="Content">
+        <div className="h-[32px] relative shrink-0 w-[46px]" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_86943" : "node-1142_86950"} data-name="Payment method icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPaymentMethodIcon} />
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px relative" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_82990" : "node-1142_83039"} data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_86594" : "node-1142_86602"} data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_82991" : "node-1142_83040"}>
+              Visa ending in 1234
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_82992" : "node-1142_83041"}>
+              Expiry 06/2025
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_86747" : "node-1142_86775"} data-name="Actions">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_86748" : "node-1142_86776"} data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-I1142_86748-3287_433377" : "node-I1142_86776-3287_433377"}>
+                Set as default
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-1142_86749" : "node-1142_86777"} data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile ? "node-I1142_86749-3287_433289" : "node-I1142_86777-3287_433289"}>
+                Edit
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {selected && size === "sm" && type === "Payment icon" && state === "Default" && breakpoint === "Mobile" && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />}
+      {isNotSelectedAndSmAndPaymentIconAndDefaultAndMobile && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" data-node-id="5373:388575" data-name="_Checkbox base" />}
+    </div>
+  );
+}

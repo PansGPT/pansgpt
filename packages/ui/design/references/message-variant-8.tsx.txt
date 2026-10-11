@@ -1,0 +1,52 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/48bfc1df-b5e9-4c16-ab4f-7befdd844474.png";
+const imgLoadingDot = "https://www.figma.com/api/mcp/asset/d8a57c66-7f92-4671-8b54-4d5781bd63f2.svg";
+const imgLoadingDotFrame = "https://www.figma.com/api/mcp/asset/1e91208a-bb87-40d9-8317-e56c6b3cfd9a.svg";
+const imgLoadingDotFrame1 = "https://www.figma.com/api/mcp/asset/80f861ac-946c-4db4-a787-430aaaf7e83c.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "False";
+  sent?: "False";
+  type?: "Writing";
+};
+
+function Message({ className, actionsPanel = "False", sent = "False", type = "Writing" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[360px]"} data-node-id="1244:532">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="1244:533" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="1244:534" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-full overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-[min-content] whitespace-nowrap" data-node-id="1244:536">
+          Olúwadámilọ́lá Buhari
+        </p>
+        <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center overflow-clip p-[10px] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tr-[var(--radius-md,12px)] shrink-0" data-node-id="1244:538" data-name="Input">
+          <div className="flex flex-row items-center self-stretch" data-node-id="1244:542">
+            <div className="content-stretch flex h-full items-end justify-center overflow-clip relative shrink-0" data-name="Loading dot frame">
+              <div className="relative shrink-0 size-[4px]" data-node-id="1244:543" data-name="Loading dot">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDot} />
+              </div>
+            </div>
+          </div>
+          <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="1244:544" data-name="Loading dot frame">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDotFrame} />
+          </div>
+          <div className="h-[8px] relative shrink-0 w-[4px]" data-node-id="1247:2" data-name="Loading dot frame">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLoadingDotFrame1} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

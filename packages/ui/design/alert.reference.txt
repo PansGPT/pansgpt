@@ -1,0 +1,404 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/827cbc42-d667-4e91-a9b6-26a17235b9ae.svg";
+const imgXClose1 = "https://www.figma.com/api/mcp/asset/e3305995-bcaa-4ea4-acfc-682121755a3c.svg";
+const imgInfoCircle = "https://www.figma.com/api/mcp/asset/8c215547-d69f-4c1d-b7d6-790b8f158ec7.svg";
+const imgInfoCircle1 = "https://www.figma.com/api/mcp/asset/88f6b9f6-4c87-45d8-9a5a-864dd2770d5d.svg";
+const imgInfoCircle2 = "https://www.figma.com/api/mcp/asset/1768bebf-e3df-464f-88b2-9ec25b4cf5ba.svg";
+const imgAlertCircle = "https://www.figma.com/api/mcp/asset/9c0bb21f-8d32-417e-94b7-19bae91b0b52.svg";
+const imgAlertCircle1 = "https://www.figma.com/api/mcp/asset/21b28389-cdc1-4838-8d17-86610f290744.svg";
+const imgCheckCircle = "https://www.figma.com/api/mcp/asset/84f59348-fef0-4270-bc00-8968dcf570b4.svg";
+const imgAlertCircle2 = "https://www.figma.com/api/mcp/asset/b0fb388b-c80e-401e-ac17-0a7e494225d7.svg";
+const imgCheckCircle1 = "https://www.figma.com/api/mcp/asset/972657d7-349b-4371-b6ec-4faed259632c.svg";
+
+type ButtonsButtonCloseXProps = {
+  className?: string;
+  darkBackground?: "False";
+  size?: "sm";
+  state?: "Default";
+};
+
+function ButtonsButtonCloseX({ className, darkBackground = "False", size = "sm", state = "Default" }: ButtonsButtonCloseXProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] size-[36px]"} data-node-id="2763:420456">
+      <div className="relative shrink-0 size-[20px]" data-node-id="2763:420457" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+
+type AlertProps = {
+  className?: string;
+  actions?: boolean;
+  breakpoint?: "Desktop" | "Mobile";
+  color?: "Default" | "Gray" | "Error" | "Warning" | "Success" | "Brand";
+  size?: "Floating" | "Full-width";
+  supportingText?: boolean;
+  xCloseButton?: boolean;
+};
+
+export default function Alert({ className, actions = true, breakpoint = "Desktop", color = "Default", size = "Floating", supportingText = true, xCloseButton = true }: AlertProps) {
+  const isBrandAndFloatingAndMobile = color === "Brand" && size === "Floating" && breakpoint === "Mobile";
+  const isBrandAndFullWidthAndDesktop = color === "Brand" && size === "Full-width" && breakpoint === "Desktop";
+  const isBrandAndFullWidthAndMobile = color === "Brand" && size === "Full-width" && breakpoint === "Mobile";
+  const isDefaultAndFloating = color === "Default" && size === "Floating";
+  const isDefaultAndFloatingAndDesktop = color === "Default" && size === "Floating" && breakpoint === "Desktop";
+  const isDefaultAndFloatingAndMobile = color === "Default" && size === "Floating" && breakpoint === "Mobile";
+  const isDefaultAndFullWidthAndDesktop = color === "Default" && size === "Full-width" && breakpoint === "Desktop";
+  const isDefaultAndFullWidthAndMobile = color === "Default" && size === "Full-width" && breakpoint === "Mobile";
+  const isErrorAndFloating = color === "Error" && size === "Floating";
+  const isErrorAndFloatingAndDesktop = color === "Error" && size === "Floating" && breakpoint === "Desktop";
+  const isErrorAndFloatingAndMobile = color === "Error" && size === "Floating" && breakpoint === "Mobile";
+  const isErrorAndFullWidthAndDesktop = color === "Error" && size === "Full-width" && breakpoint === "Desktop";
+  const isErrorAndFullWidthAndMobile = color === "Error" && size === "Full-width" && breakpoint === "Mobile";
+  const isFloatingAndDesktopAndIsBrandOrGrayOrErrorOrWarningOrSuccess = size === "Floating" && breakpoint === "Desktop" && ["Brand", "Gray", "Error", "Warning", "Success"].includes(color);
+  const isFloatingAndIsBrandOrGrayOrErrorOrWarningOrSuccess = size === "Floating" && ["Brand", "Gray", "Error", "Warning", "Success"].includes(color);
+  const isFloatingAndMobileAndIsBrandOrGrayOrErrorOrWarningOrSuccess = size === "Floating" && breakpoint === "Mobile" && ["Brand", "Gray", "Error", "Warning", "Success"].includes(color);
+  const isFullWidthAndDesktop = size === "Full-width" && breakpoint === "Desktop";
+  const isFullWidthAndDesktopAndIsBrandOrErrorOrWarningOrSuccessOrGray = size === "Full-width" && breakpoint === "Desktop" && ["Brand", "Error", "Warning", "Success", "Gray"].includes(color);
+  const isFullWidthAndDesktopAndIsDefaultOrBrandOrGray = size === "Full-width" && breakpoint === "Desktop" && ["Default", "Brand", "Gray"].includes(color);
+  const isFullWidthAndDesktopAndIsErrorOrWarningOrSuccess = size === "Full-width" && breakpoint === "Desktop" && ["Error", "Warning", "Success"].includes(color);
+  const isFullWidthAndMobile = size === "Full-width" && breakpoint === "Mobile";
+  const isFullWidthAndMobileAndIsDefaultOrBrandOrGray = size === "Full-width" && breakpoint === "Mobile" && ["Default", "Brand", "Gray"].includes(color);
+  const isGrayAndFloating = color === "Gray" && size === "Floating";
+  const isGrayAndFloatingAndDesktop = color === "Gray" && size === "Floating" && breakpoint === "Desktop";
+  const isGrayAndFloatingAndMobile = color === "Gray" && size === "Floating" && breakpoint === "Mobile";
+  const isGrayAndFullWidthAndDesktop = color === "Gray" && size === "Full-width" && breakpoint === "Desktop";
+  const isGrayAndFullWidthAndMobile = color === "Gray" && size === "Full-width" && breakpoint === "Mobile";
+  const isSuccessAndFloating = color === "Success" && size === "Floating";
+  const isSuccessAndFloatingAndDesktop = color === "Success" && size === "Floating" && breakpoint === "Desktop";
+  const isSuccessAndFloatingAndMobile = color === "Success" && size === "Floating" && breakpoint === "Mobile";
+  const isSuccessAndFullWidthAndDesktop = color === "Success" && size === "Full-width" && breakpoint === "Desktop";
+  const isSuccessAndFullWidthAndMobile = color === "Success" && size === "Full-width" && breakpoint === "Mobile";
+  const isWarningAndFloating = color === "Warning" && size === "Floating";
+  const isWarningAndFloatingAndDesktop = color === "Warning" && size === "Floating" && breakpoint === "Desktop";
+  const isWarningAndFloatingAndMobile = color === "Warning" && size === "Floating" && breakpoint === "Mobile";
+  const isWarningAndFullWidthAndDesktop = color === "Warning" && size === "Full-width" && breakpoint === "Desktop";
+  const isWarningAndFullWidthAndMobile = color === "Warning" && size === "Full-width" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex relative `}${isFullWidthAndMobile ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-t flex-col items-start overflow-clip w-[375px]` : isFullWidthAndDesktop ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-b flex-col items-center w-[1440px]` : size === "Floating" && breakpoint === "Mobile" ? String.raw`bg-[var(--colors\/background\/bg-primary_alt,white)] border drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] rounded-[var(--radius-xl,20px)] w-[343px]` : String.raw`bg-[var(--colors\/background\/bg-primary_alt,white)] border drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] rounded-[var(--radius-xl,20px)] w-[1216px]`}`} id={isGrayAndFullWidthAndMobile ? "node-4893_412117" : isSuccessAndFullWidthAndMobile ? "node-4893_412629" : isWarningAndFullWidthAndMobile ? "node-4893_412529" : isErrorAndFullWidthAndMobile ? "node-4893_412343" : isBrandAndFullWidthAndMobile ? "node-4893_411968" : isDefaultAndFullWidthAndMobile ? "node-4893_411092" : isGrayAndFullWidthAndDesktop ? "node-4893_412104" : isSuccessAndFullWidthAndDesktop ? "node-4893_412616" : isWarningAndFullWidthAndDesktop ? "node-4893_412516" : isErrorAndFullWidthAndDesktop ? "node-4893_412330" : isBrandAndFullWidthAndDesktop ? "node-4893_411955" : isDefaultAndFullWidthAndDesktop ? "node-4893_410873" : isSuccessAndFloatingAndMobile ? "node-1130_82737" : isSuccessAndFloatingAndDesktop ? "node-1130_82910" : isWarningAndFloatingAndMobile ? "node-1130_82749" : isErrorAndFloatingAndMobile ? "node-1130_82761" : isDefaultAndFloatingAndMobile ? "node-4050_412610" : isGrayAndFloatingAndMobile ? "node-1130_82773" : isBrandAndFloatingAndMobile ? "node-1130_82796" : isWarningAndFloatingAndDesktop ? "node-1130_82860" : isErrorAndFloatingAndDesktop ? "node-1130_82871" : isDefaultAndFloatingAndDesktop ? "node-4050_412599" : isGrayAndFloatingAndDesktop ? "node-1130_82882" : "node-1130_82785"}>
+      {size === "Full-width" && (
+        <div className={`content-stretch flex relative shrink-0 w-full ${isFullWidthAndMobile ? "flex-col gap-[var(--spacing-xl,16px)] items-start px-[var(--container-padding-mobile,16px)] py-[var(--spacing-xl,16px)]" : "items-center max-w-[1280px] overflow-clip px-[var(--container-padding-desktop,32px)] py-[var(--spacing-lg,12px)]"}`} id={isGrayAndFullWidthAndMobile ? "node-4893_412118" : isSuccessAndFullWidthAndMobile ? "node-4893_412630" : isWarningAndFullWidthAndMobile ? "node-4893_412530" : isErrorAndFullWidthAndMobile ? "node-4893_412344" : isBrandAndFullWidthAndMobile ? "node-4893_411969" : isDefaultAndFullWidthAndMobile ? "node-4893_411093" : isGrayAndFullWidthAndDesktop ? "node-4893_412105" : isSuccessAndFullWidthAndDesktop ? "node-4893_412617" : isWarningAndFullWidthAndDesktop ? "node-4893_412517" : isErrorAndFullWidthAndDesktop ? "node-4893_412331" : isBrandAndFullWidthAndDesktop ? "node-4893_411956" : "node-4893_410874"} data-name="Container">
+          <div className={`content-stretch flex relative ${isFullWidthAndMobile ? "gap-[var(--spacing-xl,16px)] items-start shrink-0 w-full" : "flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px"}`} id={isGrayAndFullWidthAndMobile ? "node-4893_412119" : isSuccessAndFullWidthAndMobile ? "node-4893_412631" : isWarningAndFullWidthAndMobile ? "node-4893_412531" : isErrorAndFullWidthAndMobile ? "node-4893_412345" : isBrandAndFullWidthAndMobile ? "node-4893_411970" : isDefaultAndFullWidthAndMobile ? "node-4893_411094" : isGrayAndFullWidthAndDesktop ? "node-4893_412106" : isSuccessAndFullWidthAndDesktop ? "node-4893_412618" : isWarningAndFullWidthAndDesktop ? "node-4893_412518" : isErrorAndFullWidthAndDesktop ? "node-4893_412332" : isBrandAndFullWidthAndDesktop ? "node-4893_411957" : "node-4893_410875"} data-name="Content">
+            {isFullWidthAndDesktop && (
+              <>
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-center min-w-px relative" id={isGrayAndFullWidthAndDesktop ? "node-4893_412107" : isSuccessAndFullWidthAndDesktop ? "node-4893_412619" : isWarningAndFullWidthAndDesktop ? "node-4893_412519" : isErrorAndFullWidthAndDesktop ? "node-4893_412333" : isBrandAndFullWidthAndDesktop ? "node-4893_411958" : "node-4893_410876"} data-name="Content">
+                  {isFullWidthAndDesktopAndIsBrandOrErrorOrWarningOrSuccessOrGray && (
+                    <>
+                      <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[20px]" id={isGrayAndFullWidthAndDesktop ? "node-4893_412108" : isSuccessAndFullWidthAndDesktop ? "node-4893_412620" : isWarningAndFullWidthAndDesktop ? "node-4893_412520" : isErrorAndFullWidthAndDesktop ? "node-4893_412334" : "node-4893_412055"} data-name="Featured icon outline">
+                        <div className={`absolute border-2 border-solid inset-[-20%] opacity-30 rounded-[var(--spacing-3xl,24px)] ${isGrayAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-tertiary-\(600\),#535862)]` : isSuccessAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-success-primary,#079455)]` : isWarningAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-warning-primary,#dc6803)]` : isErrorAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-error-primary,#d92d20)]` : String.raw`border-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)]`}`} id={isGrayAndFullWidthAndDesktop ? "node-I4893_412108-4890_415055" : isSuccessAndFullWidthAndDesktop ? "node-I4893_412620-4890_415061" : isWarningAndFullWidthAndDesktop ? "node-I4893_412520-4890_415059" : isErrorAndFullWidthAndDesktop ? "node-I4893_412334-4890_415057" : "node-I4893_412055-4890_415053"} data-name="Outline inner" />
+                        <div className={`absolute border-2 border-solid inset-[-45%] opacity-10 rounded-[var(--spacing-3xl,24px)] ${isGrayAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-tertiary-\(600\),#535862)]` : isSuccessAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-success-primary,#079455)]` : isWarningAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-warning-primary,#dc6803)]` : isErrorAndFullWidthAndDesktop ? String.raw`border-[var(--colors\/foreground\/fg-error-primary,#d92d20)]` : String.raw`border-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)]`}`} id={isGrayAndFullWidthAndDesktop ? "node-I4893_412108-4890_415056" : isSuccessAndFullWidthAndDesktop ? "node-I4893_412620-4890_415062" : isWarningAndFullWidthAndDesktop ? "node-I4893_412520-4890_415060" : isErrorAndFullWidthAndDesktop ? "node-I4893_412334-4890_415058" : "node-I4893_412055-4890_415054"} data-name="Outline outer" />
+                        <div className="absolute inset-0" id={isGrayAndFullWidthAndDesktop ? "node-I4893_412108-4843_411065" : isSuccessAndFullWidthAndDesktop ? "node-I4893_412620-4843_411095" : isWarningAndFullWidthAndDesktop ? "node-I4893_412520-4843_411089" : isErrorAndFullWidthAndDesktop ? "node-I4893_412334-4843_411083" : "node-I4893_412055-4843_411063"} data-name="check-circle">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isGrayAndFullWidthAndDesktop ? imgInfoCircle1 : isSuccessAndFullWidthAndDesktop ? imgCheckCircle1 : isWarningAndFullWidthAndDesktop ? imgAlertCircle2 : isErrorAndFullWidthAndDesktop ? imgAlertCircle : imgInfoCircle} />
+                        </div>
+                      </div>
+                      <div className="[word-break:break-word] content-start flex flex-[1_0_0] flex-wrap gap-[var(--spacing-sm,2px_6px)] items-start min-w-px relative whitespace-nowrap" id={isGrayAndFullWidthAndDesktop ? "node-4893_412109" : isSuccessAndFullWidthAndDesktop ? "node-4893_412621" : isWarningAndFullWidthAndDesktop ? "node-4893_412521" : isErrorAndFullWidthAndDesktop ? "node-4893_412335" : "node-4893_411960"} data-name="Text and supporting text">
+                        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" id={isGrayAndFullWidthAndDesktop ? "node-4893_412110" : isSuccessAndFullWidthAndDesktop ? "node-4893_412622" : isWarningAndFullWidthAndDesktop ? "node-4893_412522" : isErrorAndFullWidthAndDesktop ? "node-4893_412336" : "node-4893_411961"}>
+                          {isSuccessAndFullWidthAndDesktop ? "Successfully updated profile" : isWarningAndFullWidthAndDesktop ? "Just to let you know this might be a problem" : isErrorAndFullWidthAndDesktop ? "There was a problem with that action" : size === "Full-width" && breakpoint === "Desktop" && ["Brand", "Gray"].includes(color) ? "We’ve just released a new feature" : ""}
+                        </p>
+                        {supportingText && (
+                          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="8950:551347">
+                            <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">{`Lorem ipsum dolor sit amet `}</span>
+                            <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:Regular'] leading-[20px] text-[14px] underline">consectetur</span>
+                            <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">.</span>
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                  {isDefaultAndFullWidthAndDesktop && (
+                    <>
+                      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4893:410877" data-name="Featured icon">
+                        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                        <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4893:410877;4041:412675" data-name="check-circle">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgInfoCircle2} />
+                        </div>
+                        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                      </div>
+                      <div className="[word-break:break-word] content-start flex flex-[1_0_0] flex-wrap gap-[var(--spacing-sm,2px_6px)] items-start min-w-px relative whitespace-nowrap" data-node-id="4893:410878" data-name="Text and supporting text">
+                        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="4893:410879">
+                          We’ve just released a new feature
+                        </p>
+                        {supportingText && (
+                          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="4893:410880">
+                            <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">{`Lorem ipsum dolor sit amet `}</span>
+                            <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:Regular'] leading-[20px] text-[14px] underline">consectetur</span>
+                            <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">.</span>
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" id={isGrayAndFullWidthAndDesktop ? "node-4893_412112" : isSuccessAndFullWidthAndDesktop ? "node-4893_412624" : isWarningAndFullWidthAndDesktop ? "node-4893_412524" : isErrorAndFullWidthAndDesktop ? "node-4893_412338" : isBrandAndFullWidthAndDesktop ? "node-4893_411963" : "node-4893_410881"} data-name="Actions">
+                  {isFullWidthAndDesktopAndIsDefaultOrBrandOrGray && actions && (
+                    <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative rounded-[9999px] shrink-0" data-node-id="4893:411834" data-name="Buttons">
+                      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4893:410882" data-name="Buttons/Button">
+                        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                        <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4893:410882;6421:279423" data-name="Text padding">
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:410882;3287:433113">
+                            Dismiss
+                          </p>
+                        </div>
+                        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                      </div>
+                      <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4893:410883" data-name="Buttons/Button">
+                        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                        <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4893:410883;6421:278974" data-name="Text padding">
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:410883;3287:432941">
+                            View changes
+                          </p>
+                        </div>
+                        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                      </div>
+                    </div>
+                  )}
+                  {isFullWidthAndDesktopAndIsDefaultOrBrandOrGray && xCloseButton && <ButtonsButtonCloseX className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 size-[36px]" />}
+                  {isFullWidthAndDesktopAndIsErrorOrWarningOrSuccess && actions && (
+                    <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="4893:412446" data-name="Buttons">
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4893:412447" data-name="Buttons/Button">
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:412447;3287:433377">
+                          Dismiss
+                        </p>
+                      </div>
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4893:412448" data-name="Buttons/Button">
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:412448;3287:433289">
+                          Learn more
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {isFullWidthAndDesktopAndIsErrorOrWarningOrSuccess && xCloseButton && <ButtonsButtonCloseX className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 size-[36px]" />}
+                </div>
+              </>
+            )}
+            {isFullWidthAndMobile && (
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" id={isGrayAndFullWidthAndMobile ? "node-4893_412120" : isSuccessAndFullWidthAndMobile ? "node-4893_412632" : isWarningAndFullWidthAndMobile ? "node-4893_412532" : isErrorAndFullWidthAndMobile ? "node-4893_412346" : isBrandAndFullWidthAndMobile ? "node-4893_411971" : "node-4893_411095"} data-name="Text and supporting text">
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start pr-[var(--spacing-4xl,32px)] relative shrink-0 w-full" id={isGrayAndFullWidthAndMobile ? "node-4893_412121" : isSuccessAndFullWidthAndMobile ? "node-4893_412633" : isWarningAndFullWidthAndMobile ? "node-4893_412533" : isErrorAndFullWidthAndMobile ? "node-4893_412347" : isBrandAndFullWidthAndMobile ? "node-4893_411972" : "node-4893_411096"} data-name="Text wrap">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] w-[311px]" id={isGrayAndFullWidthAndMobile ? "node-4893_412122" : isSuccessAndFullWidthAndMobile ? "node-4893_412634" : isWarningAndFullWidthAndMobile ? "node-4893_412534" : isErrorAndFullWidthAndMobile ? "node-4893_412348" : isBrandAndFullWidthAndMobile ? "node-4893_411973" : "node-4893_411097"}>
+                    {isSuccessAndFullWidthAndMobile ? "Successfully updated profile" : isWarningAndFullWidthAndMobile ? "Just to let you know this might be a problem" : isErrorAndFullWidthAndMobile ? "There was a problem with that action" : isFullWidthAndMobileAndIsDefaultOrBrandOrGray ? "We’ve just released a new feature" : ""}
+                  </p>
+                </div>
+                {supportingText && (
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="8950:551357">
+                    <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">{`Lorem ipsum dolor sit amet `}</span>
+                    <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:Regular'] leading-[20px] text-[14px] underline">consectetur</span>
+                    <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">.</span>
+                  </p>
+                )}
+              </div>
+            )}
+            {isFullWidthAndMobile && xCloseButton && (
+              <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[-8px] rounded-[var(--radius-md,12px)] size-[36px] top-[-8px]" data-node-id="4893:411099" data-name="Buttons/Button close X">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I4893:411099;2763:420457" data-name="x-close">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+                </div>
+              </div>
+            )}
+          </div>
+          {isFullWidthAndMobileAndIsDefaultOrBrandOrGray && actions && (
+            <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4893:411100" data-name="Actions">
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="4893:411101" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4893:411101;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:411101;3287:432941">
+                    View changes
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="4893:411102" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4893:411102;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4893:411102;3287:433113">
+                    Dismiss
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          )}
+          {size === "Full-width" && breakpoint === "Mobile" && ["Error", "Warning", "Success"].includes(color) && actions && (
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="5503:401889" data-name="Buttons">
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401890" data-name="Buttons/Button">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401890;3287:433377">
+                  Dismiss
+                </p>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401891" data-name="Buttons/Button">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401891;3287:433289">
+                  Learn more
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {size === "Floating" && ((color === "Brand" && breakpoint === "Desktop") || (color === "Gray" && breakpoint === "Desktop") || (color === "Error" && breakpoint === "Desktop") || (color === "Warning" && breakpoint === "Desktop") || breakpoint === "Mobile" || (color === "Success" && breakpoint === "Desktop")) && xCloseButton && (
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[7px] rounded-[var(--radius-md,12px)] size-[36px] top-[7px]" data-node-id="1130:82795" data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I1130:82795;2763:420457" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+          </div>
+        </div>
+      )}
+      {isFloatingAndIsBrandOrGrayOrErrorOrWarningOrSuccess && (
+        <>
+          <div className={`relative shrink-0 size-[20px] ${size === "Floating" && ["Warning", "Success"].includes(color) ? "rounded-[var(--radius-full,8332.5px)]" : "rounded-[var(--radius-full,9999px)]"}`} id={isSuccessAndFloatingAndMobile ? "node-1130_82739" : isSuccessAndFloatingAndDesktop ? "node-1130_82911" : isWarningAndFloatingAndMobile ? "node-1130_82751" : isErrorAndFloatingAndMobile ? "node-4890_415172" : isGrayAndFloatingAndMobile ? "node-1130_82775" : isBrandAndFloatingAndMobile ? "node-1130_82798" : isWarningAndFloatingAndDesktop ? "node-1130_82861" : isErrorAndFloatingAndDesktop ? "node-4890_415163" : isGrayAndFloatingAndDesktop ? "node-1130_82883" : "node-1130_82786"} data-name="Featured icon outline">
+            <div className={`absolute border-solid opacity-30 ${isSuccessAndFloating ? String.raw`border-[1.667px] border-[var(--colors\/foreground\/fg-success-primary,#079455)] inset-[-16.67%] rounded-[var(--spacing-2xl,16.667px)]` : isWarningAndFloating ? String.raw`border-[1.667px] border-[var(--colors\/foreground\/fg-warning-primary,#dc6803)] inset-[-16.67%] rounded-[var(--spacing-2xl,16.667px)]` : isErrorAndFloating ? String.raw`border-2 border-[var(--colors\/foreground\/fg-error-primary,#d92d20)] inset-[-20%] rounded-[var(--spacing-3xl,24px)]` : isGrayAndFloating ? String.raw`border-2 border-[var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] inset-[-20%] rounded-[var(--spacing-3xl,24px)]` : String.raw`border-2 border-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] inset-[-20%] rounded-[var(--spacing-3xl,24px)]`}`} id={isSuccessAndFloatingAndMobile ? "node-I1130_82739-4890_415027" : isSuccessAndFloatingAndDesktop ? "node-I1130_82911-4890_415027" : isWarningAndFloatingAndMobile ? "node-I1130_82751-4890_415025" : isErrorAndFloatingAndMobile ? "node-I4890_415172-4890_415057" : isGrayAndFloatingAndMobile ? "node-I1130_82775-4890_415055" : isBrandAndFloatingAndMobile ? "node-I1130_82798-4890_415053" : isWarningAndFloatingAndDesktop ? "node-I1130_82861-4890_415025" : isErrorAndFloatingAndDesktop ? "node-I4890_415163-4890_415057" : isGrayAndFloatingAndDesktop ? "node-I1130_82883-4890_415055" : "node-I1130_82786-4890_415053"} data-name="Outline inner" />
+            <div className={`absolute border-solid opacity-10 ${isSuccessAndFloating ? String.raw`border-[1.667px] border-[var(--colors\/foreground\/fg-success-primary,#079455)] inset-[-37.5%] rounded-[var(--spacing-2xl,16.667px)]` : isWarningAndFloating ? String.raw`border-[1.667px] border-[var(--colors\/foreground\/fg-warning-primary,#dc6803)] inset-[-37.5%] rounded-[var(--spacing-2xl,16.667px)]` : isErrorAndFloating ? String.raw`border-2 border-[var(--colors\/foreground\/fg-error-primary,#d92d20)] inset-[-45%] rounded-[var(--spacing-3xl,24px)]` : isGrayAndFloating ? String.raw`border-2 border-[var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] inset-[-45%] rounded-[var(--spacing-3xl,24px)]` : String.raw`border-2 border-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] inset-[-45%] rounded-[var(--spacing-3xl,24px)]`}`} id={isSuccessAndFloatingAndMobile ? "node-I1130_82739-4890_415028" : isSuccessAndFloatingAndDesktop ? "node-I1130_82911-4890_415028" : isWarningAndFloatingAndMobile ? "node-I1130_82751-4890_415026" : isErrorAndFloatingAndMobile ? "node-I4890_415172-4890_415058" : isGrayAndFloatingAndMobile ? "node-I1130_82775-4890_415056" : isBrandAndFloatingAndMobile ? "node-I1130_82798-4890_415054" : isWarningAndFloatingAndDesktop ? "node-I1130_82861-4890_415026" : isErrorAndFloatingAndDesktop ? "node-I4890_415163-4890_415058" : isGrayAndFloatingAndDesktop ? "node-I1130_82883-4890_415056" : "node-I1130_82786-4890_415054"} data-name="Outline outer" />
+            <div className="absolute inset-0" id={isSuccessAndFloatingAndMobile ? "node-I1130_82739-4843_411057" : isSuccessAndFloatingAndDesktop ? "node-I1130_82911-4843_411057" : isWarningAndFloatingAndMobile ? "node-I1130_82751-4843_411051" : isErrorAndFloatingAndMobile ? "node-I4890_415172-4843_411083" : isGrayAndFloatingAndMobile ? "node-I1130_82775-4843_411065" : isBrandAndFloatingAndMobile ? "node-I1130_82798-4843_411063" : isWarningAndFloatingAndDesktop ? "node-I1130_82861-4843_411051" : isErrorAndFloatingAndDesktop ? "node-I4890_415163-4843_411083" : isGrayAndFloatingAndDesktop ? "node-I1130_82883-4843_411065" : "node-I1130_82786-4843_411063"} data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={isSuccessAndFloating ? imgCheckCircle : isWarningAndFloating ? imgAlertCircle1 : isErrorAndFloating ? imgAlertCircle : isGrayAndFloating ? imgInfoCircle1 : imgInfoCircle} />
+            </div>
+          </div>
+          <div className={`content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative ${isFloatingAndMobileAndIsBrandOrGrayOrErrorOrWarningOrSuccess ? "shrink-0 w-full" : "flex-[1_0_0] min-w-px"}`} id={isSuccessAndFloatingAndMobile ? "node-1130_82742" : isSuccessAndFloatingAndDesktop ? "node-1130_82912" : isWarningAndFloatingAndMobile ? "node-1130_82754" : isErrorAndFloatingAndMobile ? "node-1130_82766" : isGrayAndFloatingAndMobile ? "node-1130_82778" : isBrandAndFloatingAndMobile ? "node-1130_82801" : isWarningAndFloatingAndDesktop ? "node-1130_82862" : isErrorAndFloatingAndDesktop ? "node-1130_82873" : isGrayAndFloatingAndDesktop ? "node-1130_82884" : "node-1130_82787"} data-name="Content">
+            <div className={`content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full ${isFloatingAndMobileAndIsBrandOrGrayOrErrorOrWarningOrSuccess ? String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : ""}`} id={isSuccessAndFloatingAndMobile ? "node-1130_82743" : isSuccessAndFloatingAndDesktop ? "node-1130_82913" : isWarningAndFloatingAndMobile ? "node-1130_82755" : isErrorAndFloatingAndMobile ? "node-1130_82767" : isGrayAndFloatingAndMobile ? "node-1130_82779" : isBrandAndFloatingAndMobile ? "node-1130_82802" : isWarningAndFloatingAndDesktop ? "node-1130_82863" : isErrorAndFloatingAndDesktop ? "node-1130_82874" : isGrayAndFloatingAndDesktop ? "node-1130_82885" : "node-1130_82788"} data-name="Text and supporting text">
+              {isFloatingAndDesktopAndIsBrandOrGrayOrErrorOrWarningOrSuccess && (
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start pr-[var(--spacing-4xl,32px)] relative shrink-0 w-full" id={isSuccessAndFloatingAndDesktop ? "node-4893_411908" : isWarningAndFloatingAndDesktop ? "node-4893_411907" : isErrorAndFloatingAndDesktop ? "node-4893_411906" : isGrayAndFloatingAndDesktop ? "node-4893_411909" : "node-4893_411910"} data-name="Text wrap">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" id={isSuccessAndFloatingAndDesktop ? "node-1130_82914" : isWarningAndFloatingAndDesktop ? "node-1130_82864" : isErrorAndFloatingAndDesktop ? "node-1130_82875" : isGrayAndFloatingAndDesktop ? "node-1130_82886" : "node-1130_82789"}>
+                    {isSuccessAndFloatingAndDesktop ? "Successfully updated profile" : isWarningAndFloatingAndDesktop ? "Just to let you know this might be a problem" : isErrorAndFloatingAndDesktop ? "There was a problem with that action" : size === "Floating" && breakpoint === "Desktop" && ["Brand", "Gray"].includes(color) ? "We’ve just released a new feature" : ""}
+                  </p>
+                </div>
+              )}
+              {isFloatingAndDesktopAndIsBrandOrGrayOrErrorOrWarningOrSuccess && supportingText && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1130:82790">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.
+                </p>
+              )}
+              {isFloatingAndMobileAndIsBrandOrGrayOrErrorOrWarningOrSuccess && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" id={isSuccessAndFloatingAndMobile ? "node-1130_82744" : isWarningAndFloatingAndMobile ? "node-1130_82756" : isErrorAndFloatingAndMobile ? "node-1130_82768" : isGrayAndFloatingAndMobile ? "node-1130_82780" : "node-1130_82803"}>
+                  {isSuccessAndFloatingAndMobile ? "Successfully updated profile" : isWarningAndFloatingAndMobile ? "Just to let you know this might be a problem" : isErrorAndFloatingAndMobile ? "There was a problem with that action" : size === "Floating" && breakpoint === "Mobile" && ["Brand", "Gray"].includes(color) ? "We’ve just released a new feature" : ""}
+                </p>
+              )}
+              {isFloatingAndMobileAndIsBrandOrGrayOrErrorOrWarningOrSuccess && supportingText && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1130:82804">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.
+                </p>
+              )}
+            </div>
+            {size === "Floating" && ["Brand", "Gray", "Success"].includes(color) && actions && (
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="5503:401104" data-name="Actions">
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401105" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401105;3287:433377">
+                    Dismiss
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401106" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401106;3287:433289">
+                    View changes
+                  </p>
+                </div>
+              </div>
+            )}
+            {size === "Floating" && ["Error", "Warning"].includes(color) && actions && (
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="5503:401200" data-name="Actions">
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401201" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401201;3287:433377">
+                    Dismiss
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="5503:401202" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I5503:401202;3287:433289">
+                    Learn more
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      {isDefaultAndFloating && (
+        <>
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" id={isDefaultAndFloatingAndMobile ? "node-4050_412654" : "node-4050_412646"} data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" id={isDefaultAndFloatingAndMobile ? "node-I4050_412654-4041_412675" : "node-I4050_412646-4041_412675"} data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgInfoCircle2} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className={`content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative ${isDefaultAndFloatingAndMobile ? "shrink-0 w-full" : "flex-[1_0_0] min-w-px"}`} id={isDefaultAndFloatingAndMobile ? "node-4050_412612" : "node-4050_412601"} data-name="Content">
+            <div className={`content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full ${isDefaultAndFloatingAndMobile ? String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : ""}`} id={isDefaultAndFloatingAndMobile ? "node-4050_412613" : "node-4050_412602"} data-name="Text and supporting text">
+              {isDefaultAndFloatingAndDesktop && (
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start pr-[var(--spacing-4xl,32px)] relative shrink-0 w-full" data-node-id="4893:411911" data-name="Text wrap">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="4050:412603">
+                    We’ve just released a new feature
+                  </p>
+                </div>
+              )}
+              {isDefaultAndFloatingAndDesktop && supportingText && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="4050:412604">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.
+                </p>
+              )}
+              {isDefaultAndFloatingAndMobile && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="4050:412614">
+                  We’ve just released a new feature
+                </p>
+              )}
+              {isDefaultAndFloatingAndMobile && supportingText && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="4050:412615">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid pariatur, ipsum dolor.
+                </p>
+              )}
+            </div>
+            {actions && (
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="4050:412605" data-name="Actions">
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4050:412606" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4050:412606;3287:433377">
+                    Dismiss
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4050:412607" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4050:412607;3287:433289">
+                    View changes
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      {isDefaultAndFloatingAndDesktop && xCloseButton && (
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[7px] rounded-[var(--radius-md,12px)] size-[36px] top-[7px]" data-node-id="4050:412609" data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I4050:412609;2763:420457" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Gradient/skeuemorphic-gradient-border: .
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+
+## info-circle
+**Node ID:** 3463:405444
+
+info, information, help, documentation, question, circle
+
+## alert-circle
+**Node ID:** 3463:405479
+
+alert, circle, warning, error
+
+## check-circle
+**Node ID:** 3463:404967
+
+check, tick, confirm, checkbox, circle
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

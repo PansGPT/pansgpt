@@ -1,0 +1,28 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="dots-vertical" filter="url(#filter0_dd_0_332)">
+<path d="M4 10C4 6.68629 6.68629 4 10 4H18C21.3137 4 24 6.68629 24 10V18C24 21.3137 21.3137 24 18 24H10C6.68629 24 4 21.3137 4 18V10Z" fill="white"/>
+<g id="Icon">
+<path d="M14 14.8333C14.4602 14.8333 14.8333 14.4602 14.8333 14C14.8333 13.5398 14.4602 13.1667 14 13.1667C13.5398 13.1667 13.1667 13.5398 13.1667 14C13.1667 14.4602 13.5398 14.8333 14 14.8333Z" stroke="#717680" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14 9C14.4602 9 14.8333 8.6269 14.8333 8.16667C14.8333 7.70643 14.4602 7.33333 14 7.33333C13.5398 7.33333 13.1667 7.70643 13.1667 8.16667C13.1667 8.6269 13.5398 9 14 9Z" stroke="#717680" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M14 20.6667C14.4602 20.6667 14.8333 20.2936 14.8333 19.8333C14.8333 19.3731 14.4602 19 14 19C13.5398 19 13.1667 19.3731 13.1667 19.8333C13.1667 20.2936 13.5398 20.6667 14 20.6667Z" stroke="#717680" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_dd_0_332" x="0" y="0" width="28" height="28" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="4" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_0_332"/>
+<feOffset/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.090647 0 0 0 0 0.697588 0 0 0 0 0.414349 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_332"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="2" operator="dilate" in="SourceAlpha" result="effect2_dropShadow_0_332"/>
+<feOffset/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_0_332" result="effect2_dropShadow_0_332"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_0_332" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -1,0 +1,158 @@
+const imgCheck = "../assets/tag-checkbox-imgCheck.svg";
+const imgCheck1 = "../assets/tag-checkbox-imgCheck1.svg";
+const imgCheck2 = "../assets/tag-checkbox-imgCheck2.svg";
+const imgCheck3 = "../assets/tag-checkbox-imgCheck3.svg";
+const imgCheck4 = "../assets/tag-checkbox-imgCheck4.svg";
+const imgCheck5 = "../assets/tag-checkbox-imgCheck5.svg";
+
+type TagCheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  size?: "sm" | "md" | "lg";
+  state?: "Default" | "Hover" | "Focused" | "Disbaled";
+};
+
+export default function TagCheckbox({ className, checked = false, size = "sm", state = "Default" }: TagCheckboxProps) {
+  if (!checked && size === "sm" && state === "Disbaled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406039" data-name="Checked=False, Size=sm, State=Disbaled" />;
+  }
+  if (!checked && size === "sm" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[14px]"} data-node-id="3308:406042" data-name="Checked=False, Size=sm, State=Focused" />;
+  }
+  if (!checked && size === "sm" && state === "Hover") {
+    return <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406045" data-name="Checked=False, Size=sm, State=Hover" />;
+  }
+  if (checked && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406052" data-name="Checked=True, Size=sm, State=Default">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[10px] top-1/2" data-node-id="3308:406784" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "sm" && state === "Disbaled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406060" data-name="Checked=True, Size=sm, State=Disbaled">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[10px] top-1/2" data-node-id="3308:406790" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "sm" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[14px]"} data-node-id="3308:406068" data-name="Checked=True, Size=sm, State=Focused">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[10px] top-1/2" data-node-id="3308:406788" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] block border border-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406076" data-name="Checked=True, Size=sm, State=Hover">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[10px] top-1/2" data-node-id="3308:406786" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </button>
+    );
+  }
+  if (!checked && size === "md" && state === "Default") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406080" data-name="Checked=False, Size=md, State=Default" />;
+  }
+  if (!checked && size === "lg" && state === "Default") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406768" data-name="Checked=False, Size=lg, State=Default" />;
+  }
+  if (!checked && size === "md" && state === "Disbaled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406083" data-name="Checked=False, Size=md, State=Disbaled" />;
+  }
+  if (!checked && size === "lg" && state === "Disbaled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406769" data-name="Checked=False, Size=lg, State=Disbaled" />;
+  }
+  if (!checked && size === "md" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="3308:406086" data-name="Checked=False, Size=md, State=Focused" />;
+  }
+  if (!checked && size === "lg" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[18px]"} data-node-id="3308:406770" data-name="Checked=False, Size=lg, State=Focused" />;
+  }
+  if (!checked && size === "md" && state === "Hover") {
+    return <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406089" data-name="Checked=False, Size=md, State=Hover" />;
+  }
+  if (!checked && size === "lg" && state === "Hover") {
+    return <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406771" data-name="Checked=False, Size=lg, State=Hover" />;
+  }
+  if (checked && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406096" data-name="Checked=True, Size=md, State=Default">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[12px] top-1/2" data-node-id="3308:406794" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "lg" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406772" data-name="Checked=True, Size=lg, State=Default">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[14px] top-1/2" data-node-id="3308:406773" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "md" && state === "Disbaled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406104" data-name="Checked=True, Size=md, State=Disbaled">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[12px] top-1/2" data-node-id="3308:406800" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck4} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "lg" && state === "Disbaled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406774" data-name="Checked=True, Size=lg, State=Disbaled">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[14px] top-1/2" data-node-id="3308:406775" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck5} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "md" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="3308:406112" data-name="Checked=True, Size=md, State=Focused">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[12px] top-1/2" data-node-id="3308:406798" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "lg" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] border border-[var(--colors\\/background\\/bg-brand-solid,#079455)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[18px]"} data-node-id="3308:406776" data-name="Checked=True, Size=lg, State=Focused">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[14px] top-1/2" data-node-id="3308:406777" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] block border border-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="3308:406120" data-name="Checked=True, Size=md, State=Hover">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[12px] top-1/2" data-node-id="3308:406796" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </button>
+    );
+  }
+  if (checked && size === "lg" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] block border border-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406778" data-name="Checked=True, Size=lg, State=Hover">
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-1/2 size-[14px] top-1/2" data-node-id="3308:406779" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+        </div>
+      </button>
+    );
+  }
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[14px]"} data-node-id="3308:406036" data-name="Checked=False, Size=sm, State=Default" />;
+}

@@ -1,0 +1,85 @@
+.p-carousel-arrow.p-button {
+  height: 36px;
+  width: 36px;
+  flex: none;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--figma-radius-full);
+  background: var(--alpha-white-90);
+  backdrop-filter: blur(4px);
+  box-shadow: none;
+}
+.p-carousel-arrow.p-button[data-carousel-size="lg"] {
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+}
+.p-carousel-arrow.p-button::after {
+  display: none;
+}
+.p-carousel-arrow.p-button:hover:not(:disabled) {
+  background: var(--bg-primary-alt);
+}
+.p-carousel-arrow.p-button:focus-visible {
+  outline: none;
+  box-shadow: var(--effect-focus-ring);
+}
+.p-carousel-arrow.p-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.p-carousel {
+  position: relative;
+  width: 640px;
+  max-width: 100%;
+  aspect-ratio: 8 / 5;
+  border-radius: var(--figma-radius-xl);
+}
+.p-carousel-slide {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.p-carousel-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.p-carousel > .p-carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.p-carousel > .p-carousel-arrow[data-direction="previous"] {
+  left: 16px;
+}
+.p-carousel > .p-carousel-arrow[data-direction="next"] {
+  right: 16px;
+}
+.p-carousel[data-carousel-size="lg"] > .p-carousel-arrow[data-direction="previous"] {
+  left: 20px;
+}
+.p-carousel[data-carousel-size="lg"] > .p-carousel-arrow[data-direction="next"] {
+  right: 20px;
+}
+.p-carousel-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  flex-wrap: wrap;
+}
+.p-carousel-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

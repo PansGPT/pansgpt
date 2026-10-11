@@ -1,0 +1,157 @@
+.p-button-group {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  isolation: isolate;
+  border-radius: var(--figma-radius-md);
+  box-shadow: var(--effect-shadow-xs);
+  font-family: var(--font-body);
+}
+.p-button-group::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--border-primary);
+}
+.p-group-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  flex: none;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 0;
+  background: var(--bg-primary);
+  color: var(--text-secondary-700);
+  box-shadow:
+    inset -1px 0 var(--border-primary),
+    inset 0 -2px var(--figma-colors-effects-shadows-shadow-skeumorphic-inner);
+  font: 600 14px/20px var(--font-body);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.p-button-group .p-group-button:first-child {
+  border-radius: var(--figma-radius-md) 0 0 var(--figma-radius-md);
+}
+.p-button-group .p-group-button:last-child {
+  border-radius: 0 var(--figma-radius-md) var(--figma-radius-md) 0;
+  box-shadow: inset 0 -2px var(--figma-colors-effects-shadows-shadow-skeumorphic-inner);
+}
+.p-button-group .p-group-button:only-child {
+  border-radius: var(--figma-radius-md);
+}
+.p-group-button[data-kind="leading"] {
+  padding-inline: 14px 16px;
+}
+.p-group-button[data-kind="icon"] {
+  padding-inline: 12px;
+}
+.p-group-button[data-kind="dot"] {
+  gap: 8px;
+}
+.p-group-button[data-current] {
+  background: var(--bg-active);
+  color: var(--text-secondary-hover);
+}
+.p-group-button:hover:not(:disabled) {
+  background: var(--bg-primary-hover);
+  color: var(--text-secondary-hover);
+}
+.p-group-button:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+.p-group-button:disabled[data-current] {
+  background: var(--bg-disabled-subtle);
+}
+.p-group-button:focus-visible,
+.p-button-group .p-group-button:focus-visible {
+  outline: none;
+  box-shadow: var(--effect-focus-ring);
+  z-index: 1;
+}
+.p-button-group img {
+  display: block;
+  max-width: none;
+  flex: none;
+}
+.p-group-icon {
+  display: inline-flex;
+  flex: none;
+}
+.p-group-placeholder-current,
+.p-group-placeholder-disabled {
+  display: none;
+}
+.p-group-button[data-current] .p-group-placeholder-default,
+.p-group-button:hover:not(:disabled) .p-group-placeholder-default {
+  display: none;
+}
+.p-group-button[data-current] .p-group-placeholder-current,
+.p-group-button:hover:not(:disabled) .p-group-placeholder-current {
+  display: block;
+}
+.p-group-button:disabled .p-group-placeholder-default,
+.p-group-button:disabled .p-group-placeholder-current {
+  display: none;
+}
+.p-group-button:disabled .p-group-placeholder-disabled {
+  display: block;
+}
+.p-content-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  font-family: var(--font-body);
+}
+.p-content-divider-line {
+  height: 1px;
+  min-width: 1px;
+  flex: 1;
+  background: var(--border-secondary);
+}
+.p-content-divider-heading {
+  margin: 0;
+  flex: none;
+  color: var(--text-primary-900);
+  font: 600 18px/28px var(--font-body);
+}
+.p-content-divider-text {
+  color: var(--text-tertiary-600);
+  font: 500 14px/20px var(--font-body);
+}
+.p-content-divider[data-kind="action"] {
+  border-radius: var(--figma-radius-full);
+}
+.p-content-divider[data-compact] {
+  gap: 4px;
+}
+.p-content-divider[data-variant="dual"] {
+  box-shadow:
+    inset 0 1px var(--border-secondary),
+    inset 0 -1px var(--border-secondary);
+  padding-block: 12px;
+}
+.p-content-divider[data-variant="dual"][data-compact] {
+  padding-block: 10px;
+}
+.p-content-divider[data-variant="filled"] {
+  padding-block: 8px;
+  background: var(--bg-secondary);
+  border-radius: var(--figma-radius-md);
+}
+.p-content-divider[data-variant="filled"][data-kind="action"] {
+  border-radius: var(--figma-radius-full);
+}
+.p-content-divider .p-button[data-size="md"][data-variant="secondary"]::after {
+  box-shadow:
+    inset 0 0 0 1px var(--border-primary),
+    inset 0 -2px var(--figma-colors-effects-shadows-shadow-skeumorphic-inner);
+}

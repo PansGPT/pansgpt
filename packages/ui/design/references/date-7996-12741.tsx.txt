@@ -1,0 +1,57 @@
+const imgPlus = "https://www.figma.com/api/mcp/asset/67861abe-2a94-4ade-aa17-c4c09ed42696.svg";
+
+type CalendarCellDayAndWeekViewProps = {
+  className?: string;
+  state?: "Default" | "Hover";
+  type?: "Empty" | "30 min" | "60 min" | "90 min" | "120 min";
+};
+
+export default function CalendarCellDayAndWeekView({ className, state = "Default", type = "Empty" }: CalendarCellDayAndWeekViewProps) {
+  const is120Min = type === "120 min";
+  const is120MinAndDefault = type === "120 min" && state === "Default";
+  const is120MinAndHover = type === "120 min" && state === "Hover";
+  const is30MinAndDefault = type === "30 min" && state === "Default";
+  const is30MinAndHover = type === "30 min" && state === "Hover";
+  const is60MinAndHover = type === "60 min" && state === "Hover";
+  const is60MinOr90MinOr120Min = ["60 min", "90 min", "120 min"].includes(type);
+  const is90Min = type === "90 min";
+  const is90MinAndDefault = type === "90 min" && state === "Default";
+  const is90MinAndHover = type === "90 min" && state === "Hover";
+  const isEmptyAndDefault = type === "Empty" && state === "Default";
+  const isEmptyAndHover = type === "Empty" && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex flex-col isolate items-start relative w-[160px] ${isEmptyAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} id={is120MinAndHover ? "node-8005_529767" : is120MinAndDefault ? "node-7996_12740" : is90MinAndHover ? "node-8005_529744" : is90MinAndDefault ? "node-7996_12738" : isEmptyAndHover ? "node-8005_529551" : isEmptyAndDefault ? "node-7996_12733" : is30MinAndHover ? "node-8005_529585" : is30MinAndDefault ? "node-7996_12734" : is60MinAndHover ? "node-8005_529723" : "node-7996_12736"}>
+      {state === "Hover" && (
+        <div className={`${String.raw`absolute border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid bottom-[6px] content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[6px] rounded-[var(--radius-sm,8px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${is120MinAndHover ? "z-[6]" : is90MinAndHover ? "z-[5]" : isEmptyAndHover ? "z-[2]" : is30MinAndHover ? "z-[3]" : "z-[4]"}`} id={is120MinAndHover ? "node-8005_529791" : is90MinAndHover ? "node-8005_529787" : isEmptyAndHover ? "node-8005_529783" : is30MinAndHover ? "node-8005_529709" : "node-8005_529779"} data-name="Buttons/Button utility">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-sm,8px)]" />
+          <div className="relative shrink-0 size-[16px]" id={is120MinAndHover ? "node-I8005_529791-8014_532023" : is90MinAndHover ? "node-I8005_529787-8014_532023" : isEmptyAndHover ? "node-I8005_529783-8014_532023" : is30MinAndHover ? "node-I8005_529709-8014_532023" : "node-I8005_529779-8014_532023"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+      )}
+      {["60 min", "30 min", "90 min", "120 min"].includes(type) && (
+        <div className={`absolute content-stretch flex flex-col inset-0 items-start p-[var(--spacing-sm,6px)] ${is120Min ? "justify-center z-[5]" : is90Min ? "z-[4]" : type === "30 min" ? "z-[2]" : "z-[3]"}`} id={is120MinAndHover ? "node-8265_76721" : is120MinAndDefault ? "node-8265_76552" : is90MinAndHover ? "node-8265_76551" : is90MinAndDefault ? "node-8265_76397" : is30MinAndHover ? "node-8265_75972" : is30MinAndDefault ? "node-8265_75762" : is60MinAndHover ? "node-8265_75973" : "node-8265_75974"} data-name="Event wrapper">
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-xs,4px)] items-start min-h-px px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] w-full" id={is120MinAndHover ? "node-8005_529768" : is120MinAndDefault ? "node-7996_12725" : is90MinAndHover ? "node-8005_529745" : is90MinAndDefault ? "node-7996_12717" : is30MinAndHover ? "node-8005_529586" : is30MinAndDefault ? "node-7996_12701" : is60MinAndHover ? "node-8005_529724" : "node-7996_12709"} data-name="_Calendar event/Day and week view">
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" id={is120MinAndHover ? "node-I8005_529768-7996_12542" : is120MinAndDefault ? "node-I7996_12725-7996_12542" : is90MinAndHover ? "node-I8005_529745-7996_12542" : is90MinAndDefault ? "node-I7996_12717-7996_12542" : is30MinAndHover ? "node-I8005_529586-7996_12542" : is30MinAndDefault ? "node-I7996_12701-7996_12542" : is60MinAndHover ? "node-I8005_529724-7996_12542" : "node-I7996_12709-7996_12542"} data-name="Text and time">
+              <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" id={is120MinAndHover ? "node-I8005_529768-7996_12543" : is120MinAndDefault ? "node-I7996_12725-7996_12543" : is90MinAndHover ? "node-I8005_529745-7996_12543" : is90MinAndDefault ? "node-I7996_12717-7996_12543" : is30MinAndHover ? "node-I8005_529586-7996_12543" : is30MinAndDefault ? "node-I7996_12701-7996_12543" : is60MinAndHover ? "node-I8005_529724-7996_12543" : "node-I7996_12709-7996_12543"} data-name="Text and dot">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis whitespace-nowrap" id={is120MinAndHover ? "node-I8005_529768-7996_12544" : is120MinAndDefault ? "node-I7996_12725-7996_12544" : is90MinAndHover ? "node-I8005_529745-7996_12544" : is90MinAndDefault ? "node-I7996_12717-7996_12544" : is30MinAndHover ? "node-I8005_529586-7996_12544" : is30MinAndDefault ? "node-I7996_12701-7996_12544" : is60MinAndHover ? "node-I8005_529724-7996_12544" : "node-I7996_12709-7996_12544"}>
+                  Monday standup
+                </p>
+              </div>
+              {is60MinOr90MinOr120Min && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis w-full whitespace-nowrap" id={is120MinAndHover ? "node-I8005_529768-7996_12546" : is120MinAndDefault ? "node-I7996_12725-7996_12546" : is90MinAndHover ? "node-I8005_529745-7996_12546" : is90MinAndDefault ? "node-I7996_12717-7996_12546" : is60MinAndHover ? "node-I8005_529724-7996_12546" : "node-I7996_12709-7996_12546"}>
+                  9:00 AM
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      <div className={`${String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid h-[48px] relative shrink-0 w-full `}${is120Min ? "z-[4]" : is90Min ? "z-[3]" : ["30 min", "Empty"].includes(type) ? "z-[1]" : "z-[2]"}`} id={is120MinAndHover ? "node-8005_529769" : is120MinAndDefault ? "node-7996_12493" : is90MinAndHover ? "node-8005_529746" : is90MinAndDefault ? "node-7996_12433" : isEmptyAndHover ? "node-8005_529552" : isEmptyAndDefault ? "node-7996_12513" : is30MinAndHover ? "node-8005_529587" : is30MinAndDefault ? "node-7996_12457" : is60MinAndHover ? "node-8005_529725" : "node-7996_12364"} data-name="Cell" />
+      {is60MinOr90MinOr120Min && <div className={`${String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid h-[48px] relative shrink-0 w-full `}${is120Min ? "z-[3]" : is90Min ? "z-[2]" : "z-[1]"}`} id={is120MinAndHover ? "node-8005_529770" : is120MinAndDefault ? "node-7996_12494" : is90MinAndHover ? "node-8005_529747" : is90MinAndDefault ? "node-7996_12439" : is60MinAndHover ? "node-8005_529726" : "node-7996_12417"} data-name="Cell" />}
+      {["90 min", "120 min"].includes(type) && <div className={`${String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid h-[48px] relative shrink-0 w-full `}${is120Min ? "z-[2]" : "z-[1]"}`} id={is120MinAndHover ? "node-8005_529771" : is120MinAndDefault ? "node-7996_12495" : is90MinAndHover ? "node-8005_529748" : "node-7996_12445"} data-name="Cell" />}
+      {is120Min && <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid h-[48px] relative shrink-0 w-full z-[1]" id={is120MinAndHover ? "node-8005_529772" : "node-7996_12498"} data-name="Cell" />}
+    </div>
+  );
+}

@@ -1,0 +1,9 @@
+export default function ShadowCard({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex h-[240px] items-start max-w-[256px] overflow-clip p-[var(--spacing-3xl,24px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[256px]"} data-node-id="5253:373419" data-name="_Shadow card">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="5440:401524">
+        shadow-xs
+      </p>
+    </div>
+  );
+}

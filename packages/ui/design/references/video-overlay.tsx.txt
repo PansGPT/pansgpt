@@ -1,0 +1,39 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/9b997987-fa6e-41b7-826f-ebe54511e735.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/4d5bda55-d285-4950-b798-0c4d8dd6c7c2.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/345aeb2b-3b42-4f4e-9918-35dbee2f59a0.svg";
+
+type VideoOverlayActionProps = {
+  className?: string;
+  paused?: boolean;
+  state?: "Default" | "Hover";
+};
+
+export default function VideoOverlayAction({ className, paused = false, state = "Default" }: VideoOverlayActionProps) {
+  const isHover = state === "Hover";
+  const isNotPausedAndHover = !paused && state === "Hover";
+  const isPausedAndDefault = paused && state === "Default";
+  const isPausedAndHover = paused && state === "Hover";
+  return (
+    <div className={className || "bg-[rgba(0,0,0,0.1)] content-stretch flex items-center justify-center relative size-[128px]"} id={isPausedAndHover ? "node-9264_577246" : isNotPausedAndHover ? "node-9264_577245" : isPausedAndDefault ? "node-9264_577244" : "node-9264_577243"}>
+      <div className={`backdrop-blur-[8px] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px] ${isHover ? String.raw`bg-[var(--component-colors\/alpha\/alpha-white-40,rgba(255,255,255,0.4))]` : String.raw`bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))]`}`} id={isPausedAndHover ? "node-9264_577191" : isNotPausedAndHover ? "node-9264_577197" : isPausedAndDefault ? "node-9264_577194" : "node-9264_577188"} data-name="Button">
+        {!paused && (
+          <div className="relative shrink-0 size-[20px]" id={isNotPausedAndHover ? "node-9264_577198" : "node-9264_577189"} data-name="play">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+          </div>
+        )}
+        {paused && (
+          <div className="relative shrink-0 size-[20px]" id={isPausedAndHover ? "node-9264_577192" : "node-9264_577195"} data-name="pause">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+          </div>
+        )}
+        {isHover && (
+          <div className="absolute bottom-0 right-0 size-[20px]" id={isPausedAndHover ? "node-9264_579105" : "node-9264_579092"} data-name="Cursor">
+            <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+              <img alt="" className="block max-w-none size-full" src={imgCursor} />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,493 @@
+const imgChartBar = "https://www.figma.com/api/mcp/asset/901e3079-073b-4e49-a642-57c5ba04fe19.svg";
+const imgChartBar1 = "https://www.figma.com/api/mcp/asset/a95ae602-3d2b-4b2f-be06-f015816dacae.svg";
+const imgChartBar2 = "https://www.figma.com/api/mcp/asset/547f91da-7280-4058-9e39-274658aa824c.svg";
+const imgChartBar3 = "https://www.figma.com/api/mcp/asset/68915426-8da3-4007-9e13-a67e9f66ec2c.svg";
+const imgChartBar4 = "https://www.figma.com/api/mcp/asset/bd43cf7b-088d-47f7-a2f1-0e6b32e76bff.svg";
+const imgChartBar5 = "https://www.figma.com/api/mcp/asset/4623dacc-b5b8-4438-9be5-0448058479af.svg";
+const imgChartBar6 = "https://www.figma.com/api/mcp/asset/5f56767b-9a38-4695-addb-6437940cbfb2.svg";
+const imgChartBar7 = "https://www.figma.com/api/mcp/asset/f7224f5b-64e2-4b84-b14f-1ab99e80c277.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/5e963729-a832-43df-840c-e0c23c4c9f20.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/94fe43bc-e88c-4c6e-9847-9920d6a73cab.svg";
+const imgChartBar8 = "https://www.figma.com/api/mcp/asset/256f563f-aa05-4f0c-b3ec-9924b0f45d73.svg";
+const imgChartBar9 = "https://www.figma.com/api/mcp/asset/0507c880-f2f5-4a51-9723-2b55ae2c13a6.svg";
+const imgChartBar10 = "https://www.figma.com/api/mcp/asset/9dc027b8-817d-4f59-9d7c-b075548d3e62.svg";
+const imgChartBar11 = "https://www.figma.com/api/mcp/asset/c66c7100-da64-4aa4-b793-c82fbfaa8717.svg";
+const imgChartBar12 = "https://www.figma.com/api/mcp/asset/7db19b3c-4900-4ac6-97ab-f64860a1f725.svg";
+const imgChartBar13 = "https://www.figma.com/api/mcp/asset/43e37fb1-35b2-46b0-b2a1-632434d6bb57.svg";
+const imgChartBar14 = "https://www.figma.com/api/mcp/asset/175bcf3f-3eab-4379-887c-45d734bae1f5.svg";
+const imgSeries4 = "https://www.figma.com/api/mcp/asset/2d13fdcf-a4b8-44f8-a468-febc82b93184.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/92ff965c-5f1f-4355-ab55-39d3fb3a644c.svg";
+const imgSeries5 = "https://www.figma.com/api/mcp/asset/b6957568-9415-48fe-a785-72be390c3f93.svg";
+const imgSeries6 = "https://www.figma.com/api/mcp/asset/19c6253c-7b67-4868-bac4-d94c71686d44.svg";
+const imgSeries7 = "https://www.figma.com/api/mcp/asset/9440e542-1bc2-45b7-875a-500b03b08940.svg";
+const imgSeries8 = "https://www.figma.com/api/mcp/asset/c1465848-48a7-4aa8-87c0-c4bcc0a101ee.svg";
+const imgSeries9 = "https://www.figma.com/api/mcp/asset/eca90865-7bf8-4050-ac0c-3e58366a2691.svg";
+const imgSeries10 = "https://www.figma.com/api/mcp/asset/a7fe3701-31af-49c4-95d1-3d1cf5c12f6b.svg";
+const imgSeries11 = "https://www.figma.com/api/mcp/asset/d11b38b3-e358-4484-84cb-e4063651e22b.svg";
+const imgSeries12 = "https://www.figma.com/api/mcp/asset/903bcb2e-e783-4658-a63e-6c99e53be96b.svg";
+const imgSeries13 = "https://www.figma.com/api/mcp/asset/c78f9b00-16d0-442f-82fb-2658b655bd5b.svg";
+const imgSeries14 = "https://www.figma.com/api/mcp/asset/a18699a3-526c-48f6-bff9-c3dda2cabbd7.svg";
+const imgSeries15 = "https://www.figma.com/api/mcp/asset/32108faa-4f3a-432d-9b64-d3df36fdec73.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/15ad8234-f116-47c6-a285-3ccb0cc747b9.svg";
+const imgColor = "https://www.figma.com/api/mcp/asset/10be8991-9260-4f47-87f3-4cd0aad9b0de.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/defd8072-9ef2-4c21-bfad-7a6ee0e85332.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/9467f14b-5bf1-4af9-b95e-f59f154274b0.svg";
+const imgSeries16 = "https://www.figma.com/api/mcp/asset/eb90ad4b-b394-41cc-9b72-21b2588d11f6.svg";
+const imgSeries17 = "https://www.figma.com/api/mcp/asset/bea402fc-2228-44df-bd1b-6aeb9fd087b0.svg";
+const imgSeries18 = "https://www.figma.com/api/mcp/asset/31fa33c7-c07a-4989-94a1-1cc937f87ad8.svg";
+const imgSeries19 = "https://www.figma.com/api/mcp/asset/9a64e7f4-868c-4411-8e8d-cc3b524a0e1d.svg";
+const imgSeries20 = "https://www.figma.com/api/mcp/asset/7c442e36-1139-4d61-b4f2-deee79a72605.svg";
+const imgSeries21 = "https://www.figma.com/api/mcp/asset/c0ca0fcd-ffbc-44a6-bb90-8514aafd8310.svg";
+const imgSeries22 = "https://www.figma.com/api/mcp/asset/deea538e-0456-4173-a46a-106bdba3ed75.svg";
+const imgSeries23 = "https://www.figma.com/api/mcp/asset/8867bb76-34dc-459b-971a-deec9aa1327f.svg";
+const imgBackground1 = "https://www.figma.com/api/mcp/asset/8bfabce0-94b5-4d34-abe9-f7ec02162d58.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/533a08ea-4122-4d9b-bd97-3a9b0de901fe.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/18540ec2-cebd-4365-8b11-8734ac9d17e6.svg";
+const imgSeries24 = "https://www.figma.com/api/mcp/asset/38e392b5-e539-4db3-b9c7-34480158ce00.svg";
+const imgSeries25 = "https://www.figma.com/api/mcp/asset/02e475d6-e4a6-403c-bc7f-cca01e540b33.svg";
+const imgSeries26 = "https://www.figma.com/api/mcp/asset/2ad4ab52-a738-48ac-b878-2290093f9549.svg";
+const imgSeries27 = "https://www.figma.com/api/mcp/asset/1ec83793-b488-4ce8-a5ad-f79732504b3d.svg";
+const imgSeries28 = "https://www.figma.com/api/mcp/asset/28ccc5b7-aca9-434e-bd0d-e254dea3c6db.svg";
+const imgSeries29 = "https://www.figma.com/api/mcp/asset/9ed95711-7603-46d2-a007-8fc767e46eda.svg";
+const imgSeries30 = "https://www.figma.com/api/mcp/asset/79906feb-7b2d-4220-ae9a-5970ed9ace98.svg";
+const imgBackground2 = "https://www.figma.com/api/mcp/asset/d98f7cb7-a26a-45be-9f11-d97a629d7586.svg";
+const imgColor3 = "https://www.figma.com/api/mcp/asset/985bb86c-2a63-4187-83b3-901a7f64de18.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/b50d3f88-ec79-4044-88e9-0443b68d3f63.svg";
+const imgSeries31 = "https://www.figma.com/api/mcp/asset/61407cd6-7f95-4c03-ae5a-bb63a13788df.svg";
+const imgSeries32 = "https://www.figma.com/api/mcp/asset/b8eca2b2-5efe-4af0-b6ee-859c3a576340.svg";
+const imgSeries33 = "https://www.figma.com/api/mcp/asset/dc48daa6-f063-45d1-9160-2beb99d3ac40.svg";
+const imgSeries34 = "https://www.figma.com/api/mcp/asset/05705b8c-cca8-4c17-b165-9f613e4b7be1.svg";
+const imgSeries35 = "https://www.figma.com/api/mcp/asset/dc959540-f730-4264-885c-21e44058515c.svg";
+
+type ChartDataProps = {
+  className?: string;
+  chartType?: "Line gradual 01" | "Line gradual 02" | "Line gradual 03" | "Line gradual 04" | "Line wavy 01" | "Line wavy 02" | "Line wavy 03" | "Line wavy 04" | "Line volatile 01" | "Line volatile 02" | "Line volatile 03" | "Line volatile 04" | "Bar 01 desktop" | "Bar 01 mobile" | "Bar 02 desktop" | "Bar 02 mobile" | "Bar 03 desktop" | "Bar 03 mobile";
+  gradientBackground?: boolean;
+  linesBackground?: boolean;
+  series2?: boolean;
+  series3?: boolean;
+};
+
+export default function ChartData({ className, chartType = "Line gradual 01", gradientBackground = true, linesBackground = true, series2 = true, series3 = true }: ChartDataProps) {
+  const isBar01DesktopOrBar01Mobile = ["Bar 01 desktop", "Bar 01 mobile"].includes(chartType);
+  const isBar01Mobile = chartType === "Bar 01 mobile";
+  const isBar02Desktop = chartType === "Bar 02 desktop";
+  const isBar02DesktopOrBar03Desktop = ["Bar 02 desktop", "Bar 03 desktop"].includes(chartType);
+  const isBar02DesktopOrBar03DesktopOrBar02MobileOrBar03Mobile = ["Bar 02 desktop", "Bar 03 desktop", "Bar 02 mobile", "Bar 03 mobile"].includes(chartType);
+  const isBar02Mobile = chartType === "Bar 02 mobile";
+  const isBar02MobileOrBar03Mobile = ["Bar 02 mobile", "Bar 03 mobile"].includes(chartType);
+  const isBar03Desktop = chartType === "Bar 03 desktop";
+  const isBar03Mobile = chartType === "Bar 03 mobile";
+  const isLineGradual01 = chartType === "Line gradual 01";
+  const isLineGradual02 = chartType === "Line gradual 02";
+  const isLineGradual03 = chartType === "Line gradual 03";
+  const isLineGradual04 = chartType === "Line gradual 04";
+  const isLineVolatile01 = chartType === "Line volatile 01";
+  const isLineVolatile02 = chartType === "Line volatile 02";
+  const isLineVolatile03 = chartType === "Line volatile 03";
+  const isLineVolatile04 = chartType === "Line volatile 04";
+  const isLineWavy01 = chartType === "Line wavy 01";
+  const isLineWavy01OrLineGradual04 = ["Line wavy 01", "Line gradual 04"].includes(chartType);
+  const isLineWavy02 = chartType === "Line wavy 02";
+  const isLineWavy03 = chartType === "Line wavy 03";
+  const isLineWavy04 = chartType === "Line wavy 04";
+  const isLineWavy04OrLineVolatile04OrLineVolatile02 = ["Line wavy 04", "Line volatile 04", "Line volatile 02"].includes(chartType);
+  return (
+    <div className={className || `h-[192px] relative ${isBar02MobileOrBar03Mobile ? "w-[343px]" : isBar01Mobile ? "overflow-clip w-[343px]" : isBar02DesktopOrBar03Desktop ? "w-[1100px]" : "overflow-clip w-[1100px]"}`} id={isBar03Mobile ? "node-8085_184180" : isLineVolatile02 ? "node-8058_190821" : isLineVolatile03 ? "node-8058_190822" : isLineVolatile04 ? "node-8058_190823" : isLineWavy02 ? "node-8058_190818" : isLineWavy03 ? "node-8058_190819" : isLineWavy04 ? "node-8058_190820" : isLineGradual04 ? "node-8058_190817" : isLineGradual03 ? "node-8058_190816" : isLineGradual02 ? "node-8058_190815" : isLineGradual01 ? "node-1062_46534" : isLineWavy01 ? "node-1062_46568" : isLineVolatile01 ? "node-1062_46617" : isBar02Mobile ? "node-8085_183415" : isBar01Mobile ? "node-1063_73707" : isBar03Desktop ? "node-8085_184126" : isBar02Desktop ? "node-8085_183353" : "node-1063_72833"}>
+      {["Line volatile 01", "Line wavy 01", "Line gradual 01", "Line gradual 02", "Line gradual 03", "Line gradual 04", "Line wavy 04", "Line wavy 03", "Line wavy 02", "Line volatile 04", "Line volatile 03", "Line volatile 02"].includes(chartType) && (
+        <div className={`absolute ${isLineWavy02 ? "h-[178px] left-0 right-0 top-[14px]" : isLineWavy04OrLineVolatile04OrLineVolatile02 ? "h-[192px] left-0 right-0 top-0" : ["Line gradual 03", "Line wavy 03", "Line volatile 03"].includes(chartType) ? "contents left-[-250px] top-0" : isLineGradual02 ? "h-[161px] left-0 right-0 top-[31px]" : isLineGradual01 ? "h-[146px] left-0 right-0 top-[46px]" : isLineWavy01OrLineGradual04 ? "h-[167px] left-0 right-0 top-[25px]" : "h-[181px] left-0 right-0 top-[11px]"}`} id={isLineVolatile02 ? "node-8057_189767" : isLineVolatile03 ? "node-8057_189793" : isLineVolatile04 ? "node-8057_189819" : isLineWavy02 ? "node-8057_189679" : isLineWavy03 ? "node-8057_189705" : isLineWavy04 ? "node-8057_189731" : isLineGradual04 ? "node-8057_189585" : isLineGradual03 ? "node-8057_189601" : isLineGradual02 ? "node-8057_189617" : isLineGradual01 ? "node-1062_46535" : isLineWavy01 ? "node-1062_46569" : "node-1062_46618"} data-name="Series 1">
+          {["Line volatile 01", "Line wavy 01", "Line gradual 01", "Line gradual 02", "Line gradual 04", "Line wavy 04", "Line wavy 02", "Line volatile 04", "Line volatile 02"].includes(chartType) && (
+            <div className={`absolute ${isLineWavy02 ? "inset-[-0.56%_0_0_0]" : isLineWavy04OrLineVolatile04OrLineVolatile02 ? "inset-[-0.52%_0_0_0]" : isLineGradual02 ? "inset-[-0.62%_0_0_0]" : isLineGradual01 ? "inset-[-0.69%_0_0_0]" : isLineWavy01OrLineGradual04 ? "inset-[-0.6%_0_0_0]" : "inset-[-0.55%_0_0_0]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isLineVolatile02 ? imgSeries33 : isLineVolatile04 ? imgSeries28 : isLineWavy02 ? imgSeries26 : isLineWavy04 ? imgSeries21 : isLineGradual04 ? imgSeries18 : isLineGradual02 ? imgSeries13 : isLineGradual01 ? imgSeries10 : isLineWavy01 ? imgSeries7 : imgSeries1} />
+            </div>
+          )}
+          {isLineGradual03 && gradientBackground && (
+            <div className="absolute bottom-0 h-[167px] left-0 right-0" data-node-id="8058:190795" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+            </div>
+          )}
+          {isLineGradual03 && linesBackground && (
+            <div className="absolute contents left-[-250px] top-0" data-node-id="8057:190188" data-name="Lines background">
+              <div className="absolute inset-[25.53%_0_0_0] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-250.5px_-49.014px] mask-size-[1601px_192px]" data-node-id="8065:78350" style={{ maskImage: `url("${imgColor}")` }} data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+              </div>
+            </div>
+          )}
+          {isLineGradual03 && (
+            <div className="absolute inset-[22.4%_0_54.69%_0]" data-node-id="8058:190799" data-name="Line">
+              <div className="absolute inset-[-2.27%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            </div>
+          )}
+          {isLineWavy03 && gradientBackground && (
+            <div className="absolute h-[143px] left-0 right-0 top-[49px]" data-node-id="8057:189706" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground1} />
+            </div>
+          )}
+          {isLineWavy03 && linesBackground && (
+            <div className="absolute contents left-[-250px] top-0" data-node-id="8058:190801" data-name="Lines background">
+              <div className="absolute inset-[28.84%_0_0_0] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-250.5px_-55.374px] mask-size-[1601px_192px]" data-node-id="8065:78870" style={{ maskImage: `url("${imgColor}")` }} data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+              </div>
+            </div>
+          )}
+          {isLineWavy03 && (
+            <div className="absolute inset-[25.52%_0_40.1%_0]" data-node-id="8058:190813" data-name="Line">
+              <div className="absolute inset-[-1.52%_0_-1.51%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine1} />
+              </div>
+            </div>
+          )}
+          {isLineVolatile03 && gradientBackground && (
+            <div className="absolute h-[171px] left-0 right-0 top-[21px]" data-node-id="8057:189794" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground2} />
+            </div>
+          )}
+          {isLineVolatile03 && linesBackground && (
+            <div className="-translate-x-1/2 absolute contents left-1/2 top-0" data-node-id="8058:190805" data-name="Lines background">
+              <div className="absolute inset-[14.37%_0_0_0] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-250.5px_-27.59px] mask-size-[1601px_192px]" data-node-id="8065:79091" style={{ maskImage: `url("${imgColor}")` }} data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor3} />
+              </div>
+            </div>
+          )}
+          {isLineVolatile03 && (
+            <div className="absolute inset-[10.94%_0_41.15%_0]" data-node-id="8058:190814" data-name="Line">
+              <div className="absolute inset-[-1.09%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine2} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {["Bar 01 desktop", "Bar 02 desktop", "Bar 03 desktop", "Bar 01 mobile", "Bar 02 mobile", "Bar 03 mobile"].includes(chartType) && (
+        <div className={`absolute content-stretch flex inset-0 items-end justify-between ${isBar02MobileOrBar03Mobile ? "" : isBar01Mobile ? "overflow-clip px-[var(--spacing-lg,12px)]" : isBar02DesktopOrBar03Desktop ? "px-[var(--spacing-xs,4px)]" : "overflow-clip px-[var(--spacing-2xl,20px)]"}`} id={isBar03Mobile ? "node-8085_184181" : isBar02Mobile ? "node-8085_183698" : isBar01Mobile ? "node-1063_73708" : isBar03Desktop ? "node-8085_184127" : isBar02Desktop ? "node-8085_183477" : "node-1063_72834"} data-name="Chart">
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[82px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[82px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184340" : isBar02Mobile ? "node-8085_183699" : isBar01Mobile ? "node-1063_73709" : isBar03Desktop ? "node-8085_184234" : isBar02Desktop ? "node-8085_183478" : "node-1063_72835"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[48px_0_0_0]" id={isBar01Mobile ? "node-3292_573725" : "node-3292_572453"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar8 : imgChartBar} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[57px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[46px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[57px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[46px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184341" : isBar02Mobile ? "node-8085_183700" : isBar01Mobile ? "node-1063_73711" : isBar03Desktop ? "node-8085_184235" : isBar02Desktop ? "node-8085_183479" : "node-1063_72837"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[16px_0_0_0]" id={isBar01Mobile ? "node-3292_574077" : "node-3292_573149"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar9 : imgChartBar1} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[13px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[143px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[13px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[143px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184342" : isBar02Mobile ? "node-8085_183701" : isBar01Mobile ? "node-1063_73713" : isBar03Desktop ? "node-8085_184236" : isBar02Desktop ? "node-8085_183480" : "node-1063_72839"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[80px_0_0_0]" id={isBar01Mobile ? "node-3292_573813" : "node-3292_573213"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar10 : imgChartBar2} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[82px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[65px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[82px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[65px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184343" : isBar02Mobile ? "node-8085_183702" : isBar01Mobile ? "node-1063_73715" : isBar03Desktop ? "node-8085_184237" : isBar02Desktop ? "node-8085_183481" : "node-1063_72841"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[40px_0_0_0]" id={isBar01Mobile ? "node-3292_574253" : "node-3292_572829"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar11 : imgChartBar3} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[94px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[117px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[94px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[117px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184344" : isBar02Mobile ? "node-8085_183703" : isBar01Mobile ? "node-1063_73717" : isBar03Desktop ? "node-8085_184238" : isBar02Desktop ? "node-8085_183482" : "node-1063_72843"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[80px_0_0_0]" id={isBar01Mobile ? "node-3292_573901" : "node-3292_573021"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar10 : imgChartBar4} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[50px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[50px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184345" : isBar02Mobile ? "node-8085_183704" : isBar01Mobile ? "node-1063_73719" : isBar03Desktop ? "node-8085_184239" : isBar02Desktop ? "node-8085_183483" : "node-1063_72845"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[24px_0_0_0]" id={isBar01Mobile ? "node-3292_574165" : "node-3292_572957"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar12 : imgChartBar5} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[63px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[163px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[63px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[163px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184346" : isBar02Mobile ? "node-8085_183705" : isBar01Mobile ? "node-1063_73721" : isBar03Desktop ? "node-8085_184240" : isBar02Desktop ? "node-8085_183484" : "node-1063_72847"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[48px_0_0_0]" id={isBar01Mobile ? "node-3292_573989" : "node-3292_573085"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar8 : imgChartBar} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[75px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[163px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[75px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[163px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184347" : isBar02Mobile ? "node-8085_183706" : isBar01Mobile ? "node-1063_73723" : isBar03Desktop ? "node-8085_184241" : isBar02Desktop ? "node-8085_183485" : "node-1063_72849"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[40px_0_0_0]" id={isBar01Mobile ? "node-3292_573637" : "node-3292_572893"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar11 : imgChartBar3} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[113px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[92px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[113px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[92px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184348" : isBar02Mobile ? "node-8085_183707" : isBar01Mobile ? "node-1063_73725" : isBar03Desktop ? "node-8085_184242" : isBar02Desktop ? "node-8085_183486" : "node-1063_72851"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[48px_0_0_0]" id={isBar01Mobile ? "node-3292_573549" : "node-3292_572765"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar8 : imgChartBar} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[138px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[84px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[138px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[84px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184349" : isBar02Mobile ? "node-8085_183708" : isBar01Mobile ? "node-1063_73727" : isBar03Desktop ? "node-8085_184243" : isBar02Desktop ? "node-8085_183487" : "node-1063_72853"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[32px_0_0_0]" id={isBar01Mobile ? "node-3292_574341" : "node-3292_572701"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar13 : imgChartBar6} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[11px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[92px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[11px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[92px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184350" : isBar02Mobile ? "node-8085_183709" : isBar01Mobile ? "node-1063_73729" : isBar03Desktop ? "node-8085_184244" : isBar02Desktop ? "node-8085_183488" : "node-1063_72855"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[16px_0_0_0]" id={isBar01Mobile ? "node-3292_574429" : "node-3292_573397"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar9 : imgChartBar1} />
+              </div>
+            )}
+          </div>
+          <div className={`relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[8px] max-w-[4px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[5px] min-w-px rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar01Mobile ? "h-full shrink-0 w-[16px]" : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] flex-[1_0_0] h-[8px] max-w-[8px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : isBar02Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] flex-[1_0_0] h-[78px] max-w-[12px] min-w-px rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : "h-full shrink-0 w-[32px]"}`} id={isBar03Mobile ? "node-8085_184351" : isBar02Mobile ? "node-8085_183710" : isBar01Mobile ? "node-1063_73731" : isBar03Desktop ? "node-8085_184245" : isBar02Desktop ? "node-8085_183489" : "node-1063_72857"} data-name="Bar">
+            {isBar01DesktopOrBar01Mobile && (
+              <div className="absolute inset-[56px_0_0_0]" id={isBar01Mobile ? "node-3292_573461" : "node-3292_572637"} data-name="Chart bar">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={isBar01Mobile ? imgChartBar14 : imgChartBar7} />
+              </div>
+            )}
+          </div>
+          {isBar02DesktopOrBar03DesktopOrBar02MobileOrBar03Mobile && (
+            <>
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184352" : isBar02Mobile ? "node-8085_183711" : isBar03Desktop ? "node-8085_184246" : "node-8085_183490"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[130px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[130px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184353" : isBar02Mobile ? "node-8085_183712" : isBar03Desktop ? "node-8085_184247" : "node-8085_183491"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[16px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[16px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184354" : isBar02Mobile ? "node-8085_183713" : isBar03Desktop ? "node-8085_184248" : "node-8085_183492"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184355" : isBar02Mobile ? "node-8085_183714" : isBar03Desktop ? "node-8085_184249" : "node-8085_183493"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[11px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[26px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[11px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[26px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184356" : isBar02Mobile ? "node-8085_183715" : isBar03Desktop ? "node-8085_184250" : "node-8085_183494"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[176px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[176px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184357" : isBar02Mobile ? "node-8085_183716" : isBar03Desktop ? "node-8085_184251" : "node-8085_183495"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[11px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[11px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184358" : isBar02Mobile ? "node-8085_183717" : isBar03Desktop ? "node-8085_184252" : "node-8085_183496"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[88px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[163px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[88px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[163px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184359" : isBar02Mobile ? "node-8085_183718" : isBar03Desktop ? "node-8085_184253" : "node-8085_183497"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[52px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[52px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184360" : isBar02Mobile ? "node-8085_183719" : isBar03Desktop ? "node-8085_184254" : "node-8085_183498"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[31px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[31px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184361" : isBar02Mobile ? "node-8085_183720" : isBar03Desktop ? "node-8085_184255" : "node-8085_183499"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[151px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[6px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[151px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[6px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184362" : isBar02Mobile ? "node-8085_183721" : isBar03Desktop ? "node-8085_184256" : "node-8085_183500"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[57px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[33px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[57px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[33px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184363" : isBar02Mobile ? "node-8085_183722" : isBar03Desktop ? "node-8085_184257" : "node-8085_183501"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[57px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[57px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184364" : isBar02Mobile ? "node-8085_183723" : isBar03Desktop ? "node-8085_184258" : "node-8085_183502"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[132px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[150px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[132px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[150px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184365" : isBar02Mobile ? "node-8085_183724" : isBar03Desktop ? "node-8085_184259" : "node-8085_183503"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[20px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[26px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[20px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[26px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184366" : isBar02Mobile ? "node-8085_183725" : isBar03Desktop ? "node-8085_184260" : "node-8085_183504"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[94px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[94px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184367" : isBar02Mobile ? "node-8085_183726" : isBar03Desktop ? "node-8085_184261" : "node-8085_183505"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[113px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[59px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[113px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[59px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184368" : isBar02Mobile ? "node-8085_183727" : isBar03Desktop ? "node-8085_184262" : "node-8085_183506"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[50px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[19px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[50px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[19px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184369" : isBar02Mobile ? "node-8085_183728" : isBar03Desktop ? "node-8085_184263" : "node-8085_183507"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[82px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[13px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[82px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[13px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184370" : isBar02Mobile ? "node-8085_183729" : isBar03Desktop ? "node-8085_184264" : "node-8085_183508"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[113px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[143px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[113px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[143px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184371" : isBar02Mobile ? "node-8085_183730" : isBar03Desktop ? "node-8085_184265" : "node-8085_183509"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[119px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[119px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184372" : isBar02Mobile ? "node-8085_183731" : isBar03Desktop ? "node-8085_184266" : "node-8085_183510"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[75px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[75px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[137px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184373" : isBar02Mobile ? "node-8085_183732" : isBar03Desktop ? "node-8085_184267" : "node-8085_183511"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[119px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[119px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184374" : isBar02Mobile ? "node-8085_183733" : isBar03Desktop ? "node-8085_184268" : "node-8085_183512"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[126px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[33px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[126px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[33px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184375" : isBar02Mobile ? "node-8085_183734" : isBar03Desktop ? "node-8085_184269" : "node-8085_183513"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[19px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[19px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184376" : isBar02Mobile ? "node-8085_183735" : isBar03Desktop ? "node-8085_184270" : "node-8085_183514"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[38px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[46px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[38px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[46px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184377" : isBar02Mobile ? "node-8085_183736" : isBar03Desktop ? "node-8085_184271" : "node-8085_183515"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[38px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[38px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184378" : isBar02Mobile ? "node-8085_183737" : isBar03Desktop ? "node-8085_184272" : "node-8085_183516"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[157px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[157px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184379" : isBar02Mobile ? "node-8085_183738" : isBar03Desktop ? "node-8085_184273" : "node-8085_183517"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[170px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[170px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184380" : isBar02Mobile ? "node-8085_183739" : isBar03Desktop ? "node-8085_184274" : "node-8085_183518"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[150px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[150px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184381" : isBar02Mobile ? "node-8085_183740" : isBar03Desktop ? "node-8085_184275" : "node-8085_183519"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[170px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[170px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184382" : isBar02Mobile ? "node-8085_183741" : isBar03Desktop ? "node-8085_184276" : "node-8085_183520"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[20px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[20px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184383" : isBar02Mobile ? "node-8085_183742" : isBar03Desktop ? "node-8085_184277" : "node-8085_183521"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[63px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[63px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[92px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184384" : isBar02Mobile ? "node-8085_183743" : isBar03Desktop ? "node-8085_184278" : "node-8085_183522"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[151px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[170px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[151px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[170px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184385" : isBar02Mobile ? "node-8085_183744" : isBar03Desktop ? "node-8085_184279" : "node-8085_183523"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[69px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[78px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184386" : isBar02Mobile ? "node-8085_183745" : isBar03Desktop ? "node-8085_184280" : "node-8085_183524"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[44px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[44px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[176px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184387" : isBar02Mobile ? "node-8085_183746" : isBar03Desktop ? "node-8085_184281" : "node-8085_183525"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[104px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[138px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[104px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184388" : isBar02Mobile ? "node-8085_183747" : isBar03Desktop ? "node-8085_184282" : "node-8085_183526"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[31px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[111px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[31px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[111px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184389" : isBar02Mobile ? "node-8085_183748" : isBar03Desktop ? "node-8085_184283" : "node-8085_183527"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[13px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[71px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[13px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[71px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184390" : isBar02Mobile ? "node-8085_183749" : isBar03Desktop ? "node-8085_184284" : "node-8085_183528"} data-name="Bar" />
+              <div className={`flex-[1_0_0] min-w-px relative ${isBar03Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[4px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar02Mobile ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[5px] rounded-tl-[var(--radius-xxs,2px)] rounded-tr-[var(--radius-xxs,2px)]` : isBar03Desktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600_alt,#079455)] h-[25px] max-w-[8px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]` : String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] h-[117px] max-w-[12px] rounded-tl-[var(--radius-xs,6px)] rounded-tr-[var(--radius-xs,6px)]`}`} id={isBar03Mobile ? "node-8085_184391" : isBar02Mobile ? "node-8085_183750" : isBar03Desktop ? "node-8085_184285" : "node-8085_183529"} data-name="Bar" />
+            </>
+          )}
+        </div>
+      )}
+      {isBar02Desktop && series2 && (
+        <div className="absolute inset-[15.63%_0_8.33%_0]" data-node-id="8086:6219" data-name="Series 2">
+          <div className="absolute inset-[-0.69%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+          </div>
+        </div>
+      )}
+      {isBar03Desktop && series2 && (
+        <div className="absolute inset-[35.42%_0_20.83%_0]" data-node-id="8085:184551" data-name="Series 2">
+          <div className="absolute inset-[-1.19%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+          </div>
+        </div>
+      )}
+      {isBar02Mobile && series2 && (
+        <div className="absolute inset-[15.63%_0_8.33%_0]" data-node-id="8085:184630" data-name="Series 2">
+          <div className="absolute inset-[-0.68%_-0.29%]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries4} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile01 && series2 && (
+        <div className="absolute inset-[46.12%_0_13.8%_0]" data-node-id="1062:46621" data-name="Series 2">
+          <div className="absolute inset-[-1.3%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries5} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile01 && series3 && (
+        <div className="absolute inset-[74.48%_0_10.94%_0]" data-node-id="1062:46623" data-name="Series 3">
+          <div className="absolute inset-[-3.57%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries6} />
+          </div>
+        </div>
+      )}
+      {isLineWavy01 && series2 && (
+        <div className="absolute inset-[48.96%_0_26.56%_0]" data-node-id="1062:46572" data-name="Series 2">
+          <div className="absolute inset-[-2.13%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries8} />
+          </div>
+        </div>
+      )}
+      {isLineWavy01 && series3 && (
+        <div className="absolute inset-[69.27%_0_9.9%_0]" data-node-id="1062:46575" data-name="Series 3">
+          <div className="absolute inset-[-2.5%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries9} />
+          </div>
+        </div>
+      )}
+      {isLineGradual01 && series2 && (
+        <div className="absolute inset-[51.56%_0_35.5%_0]" data-node-id="1062:46538" data-name="Series 2">
+          <div className="absolute inset-[-4.03%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries11} />
+          </div>
+        </div>
+      )}
+      {isLineGradual01 && series3 && (
+        <div className="absolute inset-[55.73%_0_9.9%_0]" data-node-id="1062:46576" data-name="Series 3">
+          <div className="absolute inset-[-1.52%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries12} />
+          </div>
+        </div>
+      )}
+      {isLineGradual02 && series2 && (
+        <div className="absolute inset-[35.94%_0_20.31%_0]" data-node-id="8057:189622" data-name="Series 2">
+          <div className="absolute inset-[-1.19%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries14} />
+          </div>
+        </div>
+      )}
+      {isLineGradual02 && series3 && (
+        <div className="absolute bottom-[4.17%] left-0 right-0 top-1/2" data-node-id="8057:189624" data-name="Series 3">
+          <div className="absolute inset-[-1.14%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries15} />
+          </div>
+        </div>
+      )}
+      {isLineGradual03 && series2 && (
+        <div className="absolute inset-[46.35%_0_30.73%_0]" data-node-id="8057:189606" data-name="Series 2">
+          <div className="absolute inset-[-2.27%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries16} />
+          </div>
+        </div>
+      )}
+      {isLineGradual03 && series3 && (
+        <div className="absolute inset-[56.25%_0_19.79%_0]" data-node-id="8057:189608" data-name="Series 3">
+          <div className="absolute inset-[-2.17%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries17} />
+          </div>
+        </div>
+      )}
+      {isLineGradual04 && series2 && (
+        <div className="absolute inset-[36.4%_0_19.85%_0]" data-node-id="8057:189590" data-name="Series 2">
+          <div className="absolute inset-[-1.19%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries19} />
+          </div>
+        </div>
+      )}
+      {isLineGradual04 && series3 && (
+        <div className="absolute inset-[49.8%_0_4.37%_0]" data-node-id="8057:189592" data-name="Series 3">
+          <div className="absolute inset-[-1.14%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries20} />
+          </div>
+        </div>
+      )}
+      {isLineWavy04 && series2 && (
+        <div className="absolute inset-[47.92%_0_15.1%_0]" data-node-id="8057:189736" data-name="Series 2">
+          <div className="absolute inset-[-1.41%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries22} />
+          </div>
+        </div>
+      )}
+      {isLineWavy04 && series3 && (
+        <div className="absolute inset-[58.33%_0_2.08%_0]" data-node-id="8057:189738" data-name="Series 3">
+          <div className="absolute inset-[-1.32%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries23} />
+          </div>
+        </div>
+      )}
+      {isLineWavy03 && series2 && (
+        <div className="absolute inset-[44.27%_0_22.4%_0]" data-node-id="8057:189710" data-name="Series 2">
+          <div className="absolute inset-[-1.56%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries24} />
+          </div>
+        </div>
+      )}
+      {isLineWavy03 && series3 && (
+        <div className="absolute inset-[54.17%_0_11.46%_0]" data-node-id="8057:189712" data-name="Series 3">
+          <div className="absolute inset-[-1.52%_0_-1.51%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries25} />
+          </div>
+        </div>
+      )}
+      {isLineWavy02 && series2 && (
+        <div className="absolute inset-[34.9%_0_21.35%_0]" data-node-id="8057:189684" data-name="Series 2">
+          <div className="absolute inset-[-1.19%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+          </div>
+        </div>
+      )}
+      {isLineWavy02 && series3 && (
+        <div className="absolute inset-[65.1%_0_5.73%_0]" data-node-id="8057:189686" data-name="Series 3">
+          <div className="absolute inset-[-1.77%_0_-1.7%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries27} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile04 && series2 && (
+        <div className="absolute inset-[47.4%_0_23.44%_0]" data-node-id="8057:189824" data-name="Series 2">
+          <div className="absolute inset-[-1.79%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries29} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile04 && series3 && (
+        <div className="absolute inset-[60.94%_0_5.73%_0]" data-node-id="8057:189826" data-name="Series 3">
+          <div className="absolute inset-[-1.56%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries30} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile03 && series2 && (
+        <div className="absolute inset-[20.31%_0_29.17%_0]" data-node-id="8057:189798" data-name="Series 2">
+          <div className="absolute inset-[-1.03%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries31} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile03 && series3 && (
+        <div className="absolute inset-[55.73%_0_9.38%_0]" data-node-id="8057:189800" data-name="Series 3">
+          <div className="absolute inset-[-1.49%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries32} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile02 && series2 && (
+        <div className="absolute inset-[12.5%_0_11.46%_0]" data-node-id="8057:189772" data-name="Series 2">
+          <div className="absolute inset-[-0.69%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+          </div>
+        </div>
+      )}
+      {isLineVolatile02 && series3 && (
+        <div className="absolute inset-[32.29%_0_5.21%_0]" data-node-id="8057:189774" data-name="Series 3">
+          <div className="absolute inset-[-0.83%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries34} />
+          </div>
+        </div>
+      )}
+      {isBar03Mobile && series2 && (
+        <div className="absolute inset-[35.42%_0_20.83%_0]" data-node-id="8085:184608" data-name="Series 2">
+          <div className="absolute inset-[-1.19%_-0.29%_-1.13%_-0.29%]">
+            <img alt="" className="block max-w-none size-full" src={imgSeries35} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,32 @@
+export default function TypeScaleBase({ className }: { className?: string }) {
+  return (
+    <div className={className || "[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-4xl,32px)] items-start relative w-[2240px]"} data-node-id="1019:35537" data-name="_Type scale base">
+      <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex items-start justify-between leading-[var(--line-height\/text-md,24px)] pb-[var(--spacing-xl,16px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="1023:36984" data-name="Header">
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0" data-node-id="1019:35512">
+          Text 6xl
+        </p>
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0" data-node-id="1019:35526">
+          Font size: 72px / 4.5rem | Line height: 90px / 5.625rem | Letter spacing: -2%
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-4xl,32px)] items-start leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-xl,60px)] tracking-[-1.2px] w-full" data-node-id="1021:31607" data-name="Row">
+        <div className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Regular')] font-normal min-w-px relative" data-node-id="1019:35514">
+          <p className="leading-[var(--line-height\/display-xl,72px)] mb-[var(--font-size\/display-xl,60px)]">Display 2xl</p>
+          <p className="leading-[var(--line-height\/display-xl,72px)]">Regular</p>
+        </div>
+        <div className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium min-w-px relative" data-node-id="1021:31606">
+          <p className="leading-[var(--line-height\/display-xl,72px)] mb-[var(--font-size\/display-xl,60px)]">Display 2xl</p>
+          <p className="leading-[var(--line-height\/display-xl,72px)]">Medium</p>
+        </div>
+        <div className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px relative" data-node-id="1021:31608">
+          <p className="leading-[var(--line-height\/display-xl,72px)] mb-[var(--font-size\/display-xl,60px)]">Display 2xl</p>
+          <p className="leading-[var(--line-height\/display-xl,72px)]">Semibold</p>
+        </div>
+        <div className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Bold')] font-bold min-w-px relative" data-node-id="1021:31610">
+          <p className="leading-[var(--line-height\/display-xl,72px)] mb-[var(--font-size\/display-xl,60px)]">Display 2xl</p>
+          <p className="leading-[var(--line-height\/display-xl,72px)]">Bold</p>
+        </div>
+      </div>
+    </div>
+  );
+}

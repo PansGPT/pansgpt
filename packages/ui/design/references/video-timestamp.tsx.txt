@@ -1,0 +1,46 @@
+const imgVideoPreview169 = "https://www.figma.com/api/mcp/asset/848d3a82-601a-465d-a4d1-05b8ccd6ad2e.png";
+const imgDivider = "https://www.figma.com/api/mcp/asset/9d23febc-1b6b-4cb0-8568-c040c913d453.svg";
+const imgIndicatorLine = "https://www.figma.com/api/mcp/asset/c556ce15-7b6f-4b75-812b-94dcee71b1f1.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/5c24aec5-15ad-4011-a4ad-642d2b3599cd.svg";
+
+type VideoTimestampIndicatorProps = {
+  className?: string;
+  videoPreview?: boolean;
+};
+
+export default function VideoTimestampIndicator({ className, videoPreview = true }: VideoTimestampIndicatorProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center relative w-[128px]"} data-node-id="9264:578567" data-name="_Video timestamp indicator">
+      {videoPreview && (
+        <div className="border-2 border-[var(--colors\/foreground\/fg-white,white)] border-solid content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9264:578873" data-name="Video preview wrapper">
+          <div className="aspect-[560/315] border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9264:578538" data-name="Video preview 16:9">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPreview169} />
+          </div>
+        </div>
+      )}
+      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9264:578510" data-name="Timestamp indicator">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="9264:578511">
+          06:48
+        </p>
+        <div className="h-[12px] relative shrink-0 w-0" data-node-id="9264:578512" data-name="Divider">
+          <div className="absolute inset-[-4.17%_-0.5px]">
+            <img alt="" className="block max-w-none size-full" src={imgDivider} />
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] h-[18px] leading-[var(--line-height\/text-xs,18px)] opacity-70 relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="9264:578513">
+          08:24
+        </p>
+      </div>
+      <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-node-id="9264:578556" data-name="Timestamp indicator">
+        <div className="h-[32px] relative shrink-0 w-0" data-node-id="9264:578560" data-name="Indicator line">
+          <div className="absolute inset-[-1.56%_-0.5px]">
+            <img alt="" className="block max-w-none size-full" src={imgIndicatorLine} />
+          </div>
+        </div>
+        <div className="-translate-x-1/2 -translate-y-1/2 absolute left-[calc(50%+2px)] size-[20px] top-1/2" data-node-id="9264:578561" data-name="Cursor">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,125 @@
+const imgSizeMdOutlineFalse = "../assets/button-group-base-imgSizeMdOutlineFalse.svg";
+const imgPlaceholder = "../assets/button-group-base-imgPlaceholder.svg";
+const imgPlaceholder1 = "../assets/button-group-base-imgPlaceholder1.svg";
+const imgPlaceholder2 = "../assets/button-group-base-imgPlaceholder2.svg";
+const imgDot = "../assets/button-group-base-imgDot.svg";
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "md";
+};
+
+function Dot({ className, outline = "False", size = "md" }: DotProps) {
+  return (
+    <div className={className || "relative size-[10px]"} data-node-id="1046:10693">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeMdOutlineFalse} />
+    </div>
+  );
+}
+
+type ButtonGroupBaseProps = {
+  className?: string;
+  current?: boolean;
+  icon?: "False" | "Leading" | "Only" | "Dot";
+  iconSwap?: React.ReactNode | null;
+  state?: "Default" | "Hover" | "Focused" | "Disabled";
+};
+
+export default function ButtonGroupBase({ className, current = false, icon = "False", iconSwap = null, state = "Default" }: ButtonGroupBaseProps) {
+  const isCurrentAndDotAndDefault = current && icon === "Dot" && state === "Default";
+  const isCurrentAndDotAndDisabled = current && icon === "Dot" && state === "Disabled";
+  const isCurrentAndDotAndFocused = current && icon === "Dot" && state === "Focused";
+  const isCurrentAndDotAndHover = current && icon === "Dot" && state === "Hover";
+  const isCurrentAndFalseAndDefault = current && icon === "False" && state === "Default";
+  const isCurrentAndFalseAndDisabled = current && icon === "False" && state === "Disabled";
+  const isCurrentAndFalseAndFocused = current && icon === "False" && state === "Focused";
+  const isCurrentAndFalseAndHover = current && icon === "False" && state === "Hover";
+  const isCurrentAndLeadingAndDefault = current && icon === "Leading" && state === "Default";
+  const isCurrentAndLeadingAndDisabled = current && icon === "Leading" && state === "Disabled";
+  const isCurrentAndLeadingAndFocused = current && icon === "Leading" && state === "Focused";
+  const isCurrentAndLeadingAndHover = current && icon === "Leading" && state === "Hover";
+  const isCurrentAndOnlyAndDefault = current && icon === "Only" && state === "Default";
+  const isCurrentAndOnlyAndDisabled = current && icon === "Only" && state === "Disabled";
+  const isCurrentAndOnlyAndFocused = current && icon === "Only" && state === "Focused";
+  const isDotAndDisabled = icon === "Dot" && state === "Disabled";
+  const isDotAndHover = icon === "Dot" && state === "Hover";
+  const isLeadingAndHover = icon === "Leading" && state === "Hover";
+  const isNotCurrentAndDotAndDefault = !current && icon === "Dot" && state === "Default";
+  const isNotCurrentAndDotAndFocused = !current && icon === "Dot" && state === "Focused";
+  const isNotCurrentAndDotAndHover = !current && icon === "Dot" && state === "Hover";
+  const isNotCurrentAndFalseAndDisabled = !current && icon === "False" && state === "Disabled";
+  const isNotCurrentAndFalseAndFocused = !current && icon === "False" && state === "Focused";
+  const isNotCurrentAndFalseAndHover = !current && icon === "False" && state === "Hover";
+  const isNotCurrentAndLeadingAndDisabled = !current && icon === "Leading" && state === "Disabled";
+  const isNotCurrentAndLeadingAndFocused = !current && icon === "Leading" && state === "Focused";
+  const isNotCurrentAndLeadingAndHover = !current && icon === "Leading" && state === "Hover";
+  const isNotCurrentAndOnlyAndFocused = !current && icon === "Only" && state === "Focused";
+  const isOnlyAndHover = icon === "Only" && state === "Hover";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative `}${isDotAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-md,8px)] px-[var(--spacing-xl,16px)]` : isLeadingAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)]` : isOnlyAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)]` : icon === "False" && state === "Hover" ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-xl,16px)]` : isCurrentAndDotAndDisabled ? String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] gap-[var(--spacing-md,8px)] px-[var(--spacing-xl,16px)]` : isCurrentAndLeadingAndDisabled ? String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)]` : isCurrentAndOnlyAndDisabled ? String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)]` : isCurrentAndFalseAndDisabled ? String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-xl,16px)]` : isCurrentAndDotAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-md,8px)] overflow-clip px-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isNotCurrentAndDotAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-md,8px)] overflow-clip px-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isCurrentAndLeadingAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] overflow-clip pl-[14px] pr-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isNotCurrentAndLeadingAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] overflow-clip pl-[14px] pr-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isCurrentAndOnlyAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] overflow-clip px-[var(--spacing-lg,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isNotCurrentAndOnlyAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] overflow-clip px-[var(--spacing-lg,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isCurrentAndFalseAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] overflow-clip px-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isNotCurrentAndFalseAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] overflow-clip px-[var(--spacing-xl,16px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isCurrentAndDotAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-md,8px)] px-[var(--spacing-xl,16px)]` : !current && icon === "Dot" && ["Default", "Disabled"].includes(state) ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-md,8px)] px-[var(--spacing-xl,16px)]` : isCurrentAndLeadingAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)]` : !current && icon === "Leading" && ["Default", "Disabled"].includes(state) ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)]` : isCurrentAndOnlyAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)]` : !current && icon === "Only" && ["Default", "Disabled"].includes(state) ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)]` : isCurrentAndFalseAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-xl,16px)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] px-[var(--spacing-xl,16px)]`}`} id={isCurrentAndDotAndHover ? "node-1241_125502" : isNotCurrentAndDotAndHover ? "node-1046_10640" : isCurrentAndLeadingAndHover ? "node-1241_125510" : isNotCurrentAndLeadingAndHover ? "node-1046_9717" : current && icon === "Only" && state === "Hover" ? "node-1241_125518" : !current && icon === "Only" && state === "Hover" ? "node-1046_10016" : isCurrentAndFalseAndHover ? "node-1241_125526" : isNotCurrentAndFalseAndHover ? "node-1046_9550" : isCurrentAndDotAndDisabled ? "node-1241_125534" : !current && icon === "Dot" && state === "Disabled" ? "node-1046_10649" : isCurrentAndLeadingAndDisabled ? "node-1241_125542" : isNotCurrentAndLeadingAndDisabled ? "node-1046_9724" : isCurrentAndOnlyAndDisabled ? "node-1241_125548" : !current && icon === "Only" && state === "Disabled" ? "node-1046_10021" : isCurrentAndFalseAndDisabled ? "node-1241_125556" : isNotCurrentAndFalseAndDisabled ? "node-1046_9580" : isCurrentAndDotAndFocused ? "node-1241_125564" : isNotCurrentAndDotAndFocused ? "node-1046_10655" : isCurrentAndLeadingAndFocused ? "node-1241_125626" : isNotCurrentAndLeadingAndFocused ? "node-1046_9729" : isCurrentAndOnlyAndFocused ? "node-1241_125611" : isNotCurrentAndOnlyAndFocused ? "node-1046_10026" : isCurrentAndFalseAndFocused ? "node-1241_125570" : isNotCurrentAndFalseAndFocused ? "node-1046_9570" : isCurrentAndDotAndDefault ? "node-1241_125577" : isNotCurrentAndDotAndDefault ? "node-1046_10661" : isCurrentAndLeadingAndDefault ? "node-1241_125642" : !current && icon === "Leading" && state === "Default" ? "node-1046_9734" : isCurrentAndOnlyAndDefault ? "node-1241_125586" : !current && icon === "Only" && state === "Default" ? "node-1046_10031" : isCurrentAndFalseAndDefault ? "node-1241_125606" : "node-1046_9413"}>
+      {icon === "False" && (
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${icon === "False" && state === "Disabled" ? String.raw`text-[color:var(--colors\/text\/text-disabled,#717680)]` : icon === "False" && ((current && state === "Default") || (current && state === "Focused") || state === "Hover") ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isCurrentAndFalseAndHover ? "node-1241_125529" : isNotCurrentAndFalseAndHover ? "node-1046_9553" : isCurrentAndFalseAndDisabled ? "node-1241_125559" : isNotCurrentAndFalseAndDisabled ? "node-1046_9583" : isCurrentAndFalseAndFocused ? "node-1241_125573" : isNotCurrentAndFalseAndFocused ? "node-1046_9573" : isCurrentAndFalseAndDefault ? "node-1241_125609" : "node-1046_9414"}>
+          Text
+        </p>
+      )}
+      {(isCurrentAndOnlyAndDefault || isCurrentAndLeadingAndDefault || isCurrentAndOnlyAndFocused || isCurrentAndLeadingAndFocused || isOnlyAndHover || isLeadingAndHover) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3473:602761" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+          </div>
+        ))}
+      {icon === "Dot" && ["Default", "Focused", "Hover"].includes(state) && <Dot className="relative shrink-0 size-[10px]" />}
+      {(isCurrentAndLeadingAndDefault || (icon === "Dot" && state === "Default") || isCurrentAndLeadingAndFocused || (icon === "Dot" && state === "Focused") || isLeadingAndHover || isDotAndHover) && (
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${!current && icon === "Dot" && ["Default", "Focused"].includes(state) ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]`}`} id={isCurrentAndDotAndHover ? "node-1241_125506" : isNotCurrentAndDotAndHover ? "node-1046_10644" : isCurrentAndLeadingAndHover ? "node-1241_125514" : isNotCurrentAndLeadingAndHover ? "node-1046_9720" : isCurrentAndDotAndFocused ? "node-1241_125568" : isNotCurrentAndDotAndFocused ? "node-1046_10659" : isCurrentAndLeadingAndFocused ? "node-1241_125630" : isCurrentAndDotAndDefault ? "node-1241_125581" : isNotCurrentAndDotAndDefault ? "node-1046_10665" : "node-1241_125646"}>
+          Text
+        </p>
+      )}
+      {!current &&
+        ((icon === "Only" && state === "Default") || (icon === "Leading" && state === "Default") || (icon === "Only" && state === "Focused") || (icon === "Leading" && state === "Focused")) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3473:602539" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+          </div>
+        ))}
+      {state === "Disabled" &&
+        ["Only", "Leading"].includes(icon) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3473:602753" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder2} />
+          </div>
+        ))}
+      {icon === "Leading" && ((!current && state === "Default") || (!current && state === "Focused") || state === "Disabled") && (
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${icon === "Leading" && state === "Disabled" ? String.raw`text-[color:var(--colors\/text\/text-disabled,#717680)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isCurrentAndLeadingAndDisabled ? "node-1241_125546" : isNotCurrentAndLeadingAndDisabled ? "node-1046_9727" : isNotCurrentAndLeadingAndFocused ? "node-1046_9732" : "node-1046_9737"}>
+          Text
+        </p>
+      )}
+      {isDotAndDisabled && (
+        <>
+          <div className="relative shrink-0 size-[10px]" id={isCurrentAndDotAndDisabled ? "node-1241_125537" : "node-1051_601"} data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isCurrentAndDotAndDisabled ? "node-1241_125538" : "node-1046_10653"}>
+            Text
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

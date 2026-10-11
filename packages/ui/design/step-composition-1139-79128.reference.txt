@@ -1,0 +1,163 @@
+const imgTypeCheckStatusIncompleteSizeSm = "https://www.figma.com/api/mcp/asset/80e184c7-e1a0-41bd-9dfa-537e3cee4e69.svg";
+const imgTypeCheckStatusIncompleteSizeMd = "https://www.figma.com/api/mcp/asset/0f7e1059-fe4d-44fb-9738-3cbeac3ec66c.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/7f5ab5f3-ccb2-4612-bd25-dc16567c52c7.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/657a723b-40a7-4785-afd9-2229ad63618a.svg";
+const imgTypeCheckStatusCurrentSizeSm = "https://www.figma.com/api/mcp/asset/1f3f7888-fdf5-4414-b01a-2e531c085459.svg";
+const imgTypeCheckStatusCurrentSizeMd = "https://www.figma.com/api/mcp/asset/bd748f46-1e3f-4ec8-825a-24d1766f22d5.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/d4bbd94e-0f8e-49c8-b8b4-986b2670777a.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/b1443b46-93c0-48ea-a0d2-0b208108d114.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/2b4e22a3-fd83-4fe9-944d-ad21a654b467.svg";
+const imgLine3 = "https://www.figma.com/api/mcp/asset/bb81ef35-65d5-4166-b1b1-d8e936828c28.svg";
+const imgLine4 = "https://www.figma.com/api/mcp/asset/da0cac59-df23-40d7-987d-13064389678c.svg";
+const imgLine5 = "https://www.figma.com/api/mcp/asset/f7ba8bbc-184e-41b3-978c-fbff99531a3a.svg";
+const imgLine6 = "https://www.figma.com/api/mcp/asset/ed5fe00c-a879-4682-ac21-9771ea25cb46.svg";
+const imgLine7 = "https://www.figma.com/api/mcp/asset/b04bd044-d9d8-410b-8411-1df5f6eb5681.svg";
+const imgLine8 = "https://www.figma.com/api/mcp/asset/3a4a8a4b-65c0-4f71-ae0f-7364a0d1c783.svg";
+const imgLine9 = "https://www.figma.com/api/mcp/asset/110291e8-d0d6-436f-a4ae-2671a3a8b1a1.svg";
+const imgLine10 = "https://www.figma.com/api/mcp/asset/eac897e1-c940-43fa-8269-4db13fb32930.svg";
+const imgLine11 = "https://www.figma.com/api/mcp/asset/df9bc5c9-9215-47e1-ae58-67a82cd0256e.svg";
+const imgLine12 = "https://www.figma.com/api/mcp/asset/a174f4bd-1eca-47d2-9b3c-cdd030075b70.svg";
+const imgLine13 = "https://www.figma.com/api/mcp/asset/3d431ab8-65fc-45f6-b920-27f149760e11.svg";
+const imgLine14 = "https://www.figma.com/api/mcp/asset/e60f5397-bb94-41a3-8da7-5be7c224b943.svg";
+const imgLine15 = "https://www.figma.com/api/mcp/asset/cd33451b-8630-4576-8d81-0ceb3719620c.svg";
+
+type StepIconBaseProps = {
+  className?: string;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Current" | "Complete";
+  type?: "Check" | "Number";
+};
+
+function StepIconBase({ className, size = "sm", status = "Incomplete", type = "Check" }: StepIconBaseProps) {
+  const isCheckAndCompleteAndMd = type === "Check" && status === "Complete" && size === "md";
+  const isCheckAndCompleteAndSm = type === "Check" && status === "Complete" && size === "sm";
+  const isCheckAndCurrentAndMd = type === "Check" && status === "Current" && size === "md";
+  const isCheckAndIncompleteAndMd = type === "Check" && status === "Incomplete" && size === "md";
+  const isCompleteAndMd = status === "Complete" && size === "md";
+  const isNumberAndCompleteAndMd = type === "Number" && status === "Complete" && size === "md";
+  const isNumberAndCompleteAndSm = type === "Number" && status === "Complete" && size === "sm";
+  return (
+    <div className={className || `relative ${isNumberAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[32px]` : isCheckAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[24px]` : isCheckAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : type === "Check" && size === "md" && ["Incomplete", "Current"].includes(status) ? "size-[32px]" : "size-[24px]"}`} id={isCheckAndCurrentAndMd ? "node-1139_79863" : type === "Check" && status === "Current" && size === "sm" ? "node-1139_79866" : isNumberAndCompleteAndMd ? "node-9354_551777" : isCheckAndCompleteAndMd ? "node-1139_80061" : isNumberAndCompleteAndSm ? "node-9354_551774" : isCheckAndCompleteAndSm ? "node-1139_80037" : isCheckAndIncompleteAndMd ? "node-1139_80082" : "node-1139_80097"}>
+      {status === "Complete" && (
+        <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isCompleteAndMd ? "size-[16px]" : "size-[12px]"}`} id={isNumberAndCompleteAndMd ? "node-9354_551779" : isCheckAndCompleteAndMd ? "node-9354_551627" : isNumberAndCompleteAndSm ? "node-9354_551776" : "node-9354_551453"} data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCompleteAndMd ? imgCheck1 : imgCheck} />
+        </div>
+      )}
+      {type === "Check" && status === "Incomplete" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCheckAndIncompleteAndMd ? imgTypeCheckStatusIncompleteSizeMd : imgTypeCheckStatusIncompleteSizeSm} />}
+      {type === "Check" && status === "Current" && (
+        <div className={`absolute ${isCheckAndCurrentAndMd ? "inset-[-12.5%]" : "inset-[-16.67%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isCheckAndCurrentAndMd ? imgTypeCheckStatusCurrentSizeMd : imgTypeCheckStatusCurrentSizeSm} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type ProgressStepsProgressMinimalIconsConnectedProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  size?: "sm" | "md";
+  type?: "Check" | "Number";
+};
+
+export default function ProgressStepsProgressMinimalIconsConnected({ className, breakpoint = "Desktop", size = "sm", type = "Check" }: ProgressStepsProgressMinimalIconsConnectedProps) {
+  const isCheck = type === "Check";
+  const isMd = size === "md";
+  const isMdAndCheck = size === "md" && type === "Check";
+  const isMdAndCheckAndMobile = size === "md" && type === "Check" && breakpoint === "Mobile";
+  const isMdAndNumber = size === "md" && type === "Number";
+  const isMdAndNumberAndDesktop = size === "md" && type === "Number" && breakpoint === "Desktop";
+  const isMdAndNumberAndMobile = size === "md" && type === "Number" && breakpoint === "Mobile";
+  const isNumber = type === "Number";
+  const isSmAndCheck = size === "sm" && type === "Check";
+  const isSmAndCheckAndDesktop = size === "sm" && type === "Check" && breakpoint === "Desktop";
+  const isSmAndCheckAndMobile = size === "sm" && type === "Check" && breakpoint === "Mobile";
+  const isSmAndNumber = size === "sm" && type === "Number";
+  const isSmAndNumberAndDesktop = size === "sm" && type === "Number" && breakpoint === "Desktop";
+  const isSmAndNumberAndMobile = size === "sm" && type === "Number" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center relative ${breakpoint === "Mobile" ? "isolate w-[343px]" : "w-[1280px]"}`} id={isSmAndNumberAndMobile ? "node-9369_557331" : isSmAndCheckAndMobile ? "node-1140_74858" : isMdAndNumberAndMobile ? "node-9369_557322" : isMdAndCheckAndMobile ? "node-1139_81165" : isSmAndNumberAndDesktop ? "node-9369_557313" : isSmAndCheckAndDesktop ? "node-1140_74866" : isMdAndNumberAndDesktop ? "node-9369_557304" : "node-1139_81173"}>
+      <div className={`content-stretch flex flex-[1_0_0] isolate items-center justify-center min-w-px relative ${isSmAndNumberAndMobile ? "gap-[var(--spacing-sm,6px)] max-w-[240px] z-[1]" : isSmAndCheckAndMobile ? "max-w-[240px] z-[1]" : isMdAndNumberAndMobile ? "gap-[var(--spacing-sm,6px)] max-w-[320px] z-[1]" : isMdAndCheckAndMobile ? "max-w-[320px] z-[1]" : isSmAndNumberAndDesktop ? "gap-[var(--spacing-sm,6px)] max-w-[320px]" : isSmAndCheckAndDesktop ? "max-w-[320px]" : isMdAndNumberAndDesktop ? "gap-[var(--spacing-sm,6px)] max-w-[360px]" : "max-w-[360px]"}`} id={isSmAndNumberAndMobile ? "node-9369_557332" : isSmAndCheckAndMobile ? "node-9368_557200" : isMdAndNumberAndMobile ? "node-9369_557323" : isMdAndCheckAndMobile ? "node-9368_557229" : isSmAndNumberAndDesktop ? "node-9369_557314" : isSmAndCheckAndDesktop ? "node-1140_74867" : isMdAndNumberAndDesktop ? "node-9369_557305" : "node-1139_81174"} data-name="Progress">
+        <StepIconBase className={`overflow-clip relative shrink-0 z-[7] ${isSmAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[24px]` : isSmAndCheck ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[24px]` : isMdAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[32px]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[32px]`}`} size={isMd ? "md" : undefined} status="Complete" type={isNumber ? "Number" : undefined} />
+        <div className="flex flex-[1_0_0] items-center justify-center min-w-px relative z-[6]" id={isSmAndNumberAndMobile ? "node-9369_557334" : isSmAndCheckAndMobile ? "node-9368_557202" : isMdAndNumberAndMobile ? "node-9369_557325" : isMdAndCheckAndMobile ? "node-9368_557231" : isSmAndNumberAndDesktop ? "node-9369_557316" : isSmAndCheckAndDesktop ? "node-9367_556846" : isMdAndNumberAndDesktop ? "node-9369_557307" : "node-9367_556876"}>
+          <div className="-scale-y-100 flex-none rotate-180 w-full">
+            <div className="h-0 relative w-full" data-name="Line">
+              <div className={`absolute ${isSmAndNumberAndMobile ? "inset-[-1px_-2.78%]" : isSmAndCheckAndMobile ? "inset-[-1px_-2.08%]" : isMdAndNumberAndMobile ? "inset-[-1px_-1.92%]" : isMdAndCheckAndMobile ? "inset-[-1px_-1.56%]" : isSmAndNumberAndDesktop ? "inset-[-1px_-1.6%]" : isSmAndCheckAndDesktop ? "inset-[-1px_-1.34%]" : isMdAndNumberAndDesktop ? "inset-[-1px_-1.53%]" : "inset-[-1px_-1.29%]"}`}>
+                <img alt="" className="block max-w-none size-full" src={isSmAndNumberAndMobile ? imgLine15 : isSmAndCheckAndMobile ? imgLine13 : isMdAndNumberAndMobile ? imgLine12 : isMdAndCheckAndMobile ? imgLine10 : isSmAndNumberAndDesktop ? imgLine8 : isSmAndCheckAndDesktop ? imgLine5 : isMdAndNumberAndDesktop ? imgLine3 : imgLine} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <StepIconBase className={`overflow-clip relative shrink-0 z-[5] ${isSmAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[24px]` : isSmAndCheck ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[24px]` : isMdAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[32px]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[32px]`}`} size={isMd ? "md" : undefined} status="Complete" type={isNumber ? "Number" : undefined} />
+        <div className="flex flex-[1_0_0] items-center justify-center min-w-px relative z-[4]" id={isSmAndNumberAndMobile ? "node-9369_557336" : isSmAndCheckAndMobile ? "node-9368_557204" : isMdAndNumberAndMobile ? "node-9369_557327" : isMdAndCheckAndMobile ? "node-9368_557233" : isSmAndNumberAndDesktop ? "node-9369_557318" : isSmAndCheckAndDesktop ? "node-9367_556861" : isMdAndNumberAndDesktop ? "node-9369_557309" : "node-9367_556878"}>
+          <div className="-scale-y-100 flex-none rotate-180 w-full">
+            <div className="h-0 relative w-full" data-name="Line">
+              <div className={`absolute ${isSmAndNumberAndMobile ? "inset-[-1px_-2.78%]" : isSmAndCheckAndMobile ? "inset-[-1px_-2.08%]" : isMdAndNumberAndMobile ? "inset-[-1px_-1.92%]" : isMdAndCheckAndMobile ? "inset-[-1px_-1.56%]" : isSmAndNumberAndDesktop ? "inset-[-1px_-1.6%]" : isSmAndCheckAndDesktop ? "inset-[-1px_-1.34%]" : isMdAndNumberAndDesktop ? "inset-[-1px_-1.53%]" : "inset-[-1px_-1.29%]"}`}>
+                <img alt="" className="block max-w-none size-full" src={isSmAndNumberAndMobile ? imgLine15 : isSmAndCheckAndMobile ? imgLine13 : isMdAndNumberAndMobile ? imgLine12 : isMdAndCheckAndMobile ? imgLine10 : isSmAndNumberAndDesktop ? imgLine9 : isSmAndCheckAndDesktop ? imgLine6 : isMdAndNumberAndDesktop ? imgLine4 : imgLine1} />
+              </div>
+            </div>
+          </div>
+        </div>
+        {isCheck && (
+          <>
+            <StepIconBase className={`relative shrink-0 z-[3] ${isSmAndCheck ? "size-[24px]" : "size-[32px]"}`} size={isMdAndCheck ? "md" : undefined} status="Current" />
+            <div className="flex flex-[1_0_0] items-center justify-center min-w-px relative z-[2]" id={isSmAndCheckAndMobile ? "node-9368_557206" : isMdAndCheckAndMobile ? "node-9368_557235" : isSmAndCheckAndDesktop ? "node-9367_556880" : "node-9367_556895"}>
+              <div className="-scale-y-100 flex-none rotate-180 w-full">
+                <div className="h-0 relative w-full" data-name="Line">
+                  <div className={`absolute ${isSmAndCheckAndMobile ? "inset-[-1px_-2.08%]" : isMdAndCheckAndMobile ? "inset-[-1px_-1.56%]" : isSmAndCheckAndDesktop ? "inset-[-1px_-1.34%]" : "inset-[-1px_-1.29%]"}`}>
+                    <img alt="" className="block max-w-none size-full" src={isSmAndCheckAndMobile ? imgLine14 : isMdAndCheckAndMobile ? imgLine11 : isSmAndCheckAndDesktop ? imgLine7 : imgLine2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <StepIconBase className={`relative shrink-0 z-[1] ${isSmAndCheck ? "size-[24px]" : "size-[32px]"}`} size={isMdAndCheck ? "md" : undefined} />
+          </>
+        )}
+        {isNumber && (
+          <>
+            <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 z-[3] `}${isSmAndNumber ? "size-[24px]" : "size-[32px]"}`} id={isSmAndNumberAndMobile ? "node-9369_557337" : isMdAndNumberAndMobile ? "node-9369_557328" : isSmAndNumberAndDesktop ? "node-9369_557319" : "node-9369_557310"} data-name="_Step icon base">
+              <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-center whitespace-nowrap `}${isSmAndNumber ? String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]` : String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]`}`} id={isSmAndNumberAndMobile ? "node-I9369_557337-9354_551817" : isMdAndNumberAndMobile ? "node-I9369_557328-9354_552136" : isSmAndNumberAndDesktop ? "node-I9369_557319-9354_551817" : "node-I9369_557310-9354_552136"}>
+                3
+              </p>
+            </div>
+            <div className="flex flex-[1_0_0] items-center justify-center min-w-px relative z-[2]" id={isSmAndNumberAndMobile ? "node-9369_557338" : isMdAndNumberAndMobile ? "node-9369_557329" : isSmAndNumberAndDesktop ? "node-9369_557320" : "node-9369_557311"}>
+              <div className="-scale-y-100 flex-none rotate-180 w-full">
+                <div className="h-0 relative w-full" data-name="Line">
+                  <div className={`absolute ${isSmAndNumberAndMobile ? "inset-[-1px_-2.78%]" : isMdAndNumberAndMobile ? "inset-[-1px_-1.92%]" : isSmAndNumberAndDesktop ? "inset-[-1px_-1.6%]" : "inset-[-1px_-1.53%]"}`}>
+                    <img alt="" className="block max-w-none size-full" src={isSmAndNumberAndMobile ? imgLine15 : isMdAndNumberAndMobile ? imgLine12 : isSmAndNumberAndDesktop ? imgLine9 : imgLine4} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 z-[1] `}${isSmAndNumber ? "size-[24px]" : "size-[32px]"}`} id={isSmAndNumberAndMobile ? "node-9369_557339" : isMdAndNumberAndMobile ? "node-9369_557330" : isSmAndNumberAndDesktop ? "node-9369_557321" : "node-9369_557312"} data-name="_Step icon base">
+              <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-center whitespace-nowrap `}${isSmAndNumber ? String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]` : String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]`}`} id={isSmAndNumberAndMobile ? "node-I9369_557339-9354_551823" : isMdAndNumberAndMobile ? "node-I9369_557330-9354_552130" : isSmAndNumberAndDesktop ? "node-I9369_557321-9354_551823" : "node-I9369_557312-9354_552130"}>
+                4
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

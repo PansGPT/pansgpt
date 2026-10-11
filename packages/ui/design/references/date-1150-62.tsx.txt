@@ -1,0 +1,20 @@
+type DatePickerListItemProps = {
+  className?: string;
+  selected?: boolean;
+  state?: "Default" | "Hover" | "Focused";
+};
+
+export default function DatePickerListItem({ className, selected = false, state = "Default" }: DatePickerListItemProps) {
+  const isNotSelectedAndDefault = !selected && state === "Default";
+  const isNotSelectedAndHover = !selected && state === "Hover";
+  const isSelectedAndDefault = selected && state === "Default";
+  const isSelectedAndFocused = selected && state === "Focused";
+  const isSelectedAndHover = selected && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] w-[160px] ${isSelectedAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : isNotSelectedAndDefault ? "" : isSelectedAndHover ? String.raw`bg-[var(--colors\/background\/bg-secondary_hover,#f5f5f5)]` : isNotSelectedAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : isSelectedAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]`}`} id={isSelectedAndDefault ? "node-1150_4665" : isNotSelectedAndDefault ? "node-1150_142" : isSelectedAndHover ? "node-1150_4667" : isNotSelectedAndHover ? "node-1150_137" : isSelectedAndFocused ? "node-1150_4671" : "node-1150_127"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isSelectedAndFocused || state === "Hover" || isSelectedAndDefault ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isSelectedAndDefault ? "node-1150_4666" : isNotSelectedAndDefault ? "node-1150_143" : isSelectedAndHover ? "node-1150_4668" : isNotSelectedAndHover ? "node-1150_138" : isSelectedAndFocused ? "node-1150_4672" : "node-1150_128"}>
+        List item
+      </p>
+    </div>
+  );
+}

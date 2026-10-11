@@ -1,0 +1,19 @@
+type TagProps = {
+  className?: string;
+  action?: "Text only";
+  checkbox?: "False";
+  icon?: "False";
+  size?: "md";
+};
+
+function Tag({ className, action = "Text only", checkbox = "False", icon = "False", size = "md" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center px-[9px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3307:417768">
+      <div className="content-stretch flex items-center relative shrink-0" data-node-id="3309:406974" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3307:417769">
+          Label
+        </p>
+      </div>
+    </div>
+  );
+}

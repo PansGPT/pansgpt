@@ -1,0 +1,74 @@
+.p-inline-cta { width: 768px; max-width: 100%; background: var(--bg-primary); border-radius: var(--figma-radius-xl); box-shadow: inset 0 0 0 1px var(--border-secondary), var(--effect-shadow-xs); overflow: hidden; }
+.p-inline-cta-content { display: flex; flex-direction: column; align-items: stretch; padding: 24px; gap: 20px; min-width: 0; }
+.p-inline-cta-heading { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.p-inline-cta-heading :is(h2,h3,h4,h5,h6) { margin: 0; color: var(--text-primary-900); font: 600 16px/24px var(--font-body); overflow-wrap: anywhere; }
+.p-inline-cta-heading p { margin: 0; color: var(--text-tertiary-600); font: 400 14px/20px var(--font-body); }
+.p-inline-cta-actions { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.p-inline-cta-actions > * { flex: none; }
+.p-inline-cta[data-cta-type="image"] { display: flex; }
+.p-inline-cta-image { width: 239px; flex: none; position: relative; overflow: hidden; box-shadow: inset 0 0 0 1px rgb(0 0 0 / 8%); }
+.p-inline-cta-image > img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
+.p-inline-cta[data-cta-type="image"] .p-inline-cta-content { flex: 1; }
+.p-inline-cta-email { display: flex; align-items: flex-end; gap: 16px; width: 400px; max-width: 100%; }
+.p-inline-cta-email > .p-field { flex: 1; min-width: 0; }
+.p-inline-cta-email > .p-button { flex: none; }
+.p-inline-cta-email .p-required { display: none; }
+.p-inline-cta-plan { border-radius: 8px; box-shadow: inset 0 0 0 1px var(--border-secondary); background: var(--bg-primary-alt); overflow: hidden; }
+.p-inline-cta-plan-header { display: flex; align-items: center; gap: 12px; padding: 12px 20px 12px 16px; box-shadow: inset 0 -1px var(--border-secondary); color: var(--text-secondary-700); font: 600 16px/24px var(--font-body); }
+.p-inline-cta-plan-icon { display: flex; width: 32px; height: 32px; align-items: center; justify-content: center; flex: none; background: var(--bg-brand-secondary); border-radius: 9999px; }
+[data-theme="dark"] .p-inline-cta-plan-icon { background: color-mix(in srgb, var(--bg-brand-solid) 12%, var(--bg-primary)); }
+.p-inline-cta-plan-body { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 16px; }
+.p-inline-cta-plan-body > div { width: 100%; }
+.p-inline-cta-price { display: flex; gap: 4px; align-items: flex-end; }
+.p-inline-cta-price strong { font: 600 30px/38px var(--font-display); color: var(--text-secondary-700); }
+.p-inline-cta-price span { padding-bottom: 3px; color: var(--text-tertiary-600); font: 400 14px/20px var(--font-body); }
+.p-inline-cta-plan-body p { margin: 4px 0 0; color: var(--text-tertiary-600); font: 400 14px/20px var(--font-body); }
+.p-inline-cta-features { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px; }
+.p-inline-cta-features li { display: flex; align-items: flex-start; gap: 12px; }
+.p-inline-cta-features li > span { display: flex; flex: none; }
+.p-inline-cta-features li > div { flex: 1; min-width: 0; }
+.p-inline-cta-features strong { display: block; font: 500 16px/24px var(--font-body); color: var(--text-secondary-700); }
+.p-inline-cta-features p { margin: 2px 0 0; font: 400 16px/24px var(--font-body); color: var(--text-tertiary-600); }
+.p-inline-cta-payment { display: flex; gap: 16px; align-items: flex-start; border-radius: var(--figma-radius-md); padding: 16px; box-shadow: inset 0 0 0 1px var(--border-secondary); }
+.p-inline-cta-payment-icon { flex: none; display: flex; }
+.p-inline-cta-payment-icon-mobile { display: none; }
+.p-inline-cta-payment-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.p-inline-cta-payment-row { display: flex; gap: 8px; align-items: flex-start; }
+.p-inline-cta-payment-row > div { flex: 1; min-width: 0; }
+.p-inline-cta-payment strong,.p-inline-cta-receipt strong { display: block; color: var(--text-secondary-700); font: 500 14px/20px var(--font-body); overflow-wrap: anywhere; }
+.p-inline-cta-payment p,.p-inline-cta-receipt p { margin: 0; color: var(--text-tertiary-600); font: 400 14px/20px var(--font-body); }
+.p-inline-cta-billing-email { display: flex; gap: 6px; align-items: center; overflow-wrap: anywhere; }
+.p-inline-cta-billing-email img { flex: none; }
+.p-inline-cta-receipt { display: flex; gap: 16px; align-items: flex-start; padding: 16px; border-radius: var(--figma-radius-md); box-shadow: inset 0 0 0 1px var(--border-secondary); }
+.p-inline-cta-receipt-file { display: flex; gap: 12px; flex: 1; align-items: flex-start; min-width: 0; }
+.p-inline-cta-receipt-file > span { display: flex; flex: none; }
+.p-inline-cta :is(.p-inline-cta-plan-icon,.p-inline-cta-features,.p-inline-cta-payment) img { display: block; max-width: none; }
+
+.p-inline-cta[data-cta-breakpoint="mobile"] { width: 343px; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-content { padding: 20px 16px; }
+.p-inline-cta[data-cta-breakpoint="mobile"][data-cta-type="actions"] .p-inline-cta-content { padding: 16px; }
+.p-inline-cta[data-cta-breakpoint="mobile"]:is([data-cta-type="change-plan"],[data-cta-type="payment"]) .p-inline-cta-content { padding-bottom: 16px; }
+.p-inline-cta[data-cta-breakpoint="mobile"][data-cta-type="receipt"] .p-inline-cta-content { padding: 24px; }
+.p-inline-cta[data-cta-breakpoint="mobile"][data-cta-type="image"] { flex-direction: column; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-image { width: 100%; height: 200px; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-content > .p-inline-cta-actions,.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-receipt > .p-inline-cta-actions { flex-direction: column-reverse; align-items: stretch; width: 100%; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-email { flex-direction: column; align-items: stretch; gap: 12px; width: 100%; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-payment { gap: 8px; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-payment-icon { display: none; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-payment-icon-mobile { display: flex; flex: none; }
+.p-inline-cta[data-cta-breakpoint="mobile"] .p-inline-cta-receipt { padding: 0; box-shadow: none; flex-direction: column; gap: 20px; }
+
+@media (max-width: 767px) {
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-content { padding: 20px 16px; }
+  .p-inline-cta[data-cta-breakpoint="auto"][data-cta-type="actions"] .p-inline-cta-content { padding: 16px; }
+  .p-inline-cta[data-cta-breakpoint="auto"]:is([data-cta-type="change-plan"],[data-cta-type="payment"]) .p-inline-cta-content { padding-bottom: 16px; }
+  .p-inline-cta[data-cta-breakpoint="auto"][data-cta-type="receipt"] .p-inline-cta-content { padding: 24px; }
+  .p-inline-cta[data-cta-breakpoint="auto"][data-cta-type="image"] { flex-direction: column; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-image { width: 100%; height: 200px; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-content > .p-inline-cta-actions,.p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-receipt > .p-inline-cta-actions { flex-direction: column-reverse; align-items: stretch; width: 100%; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-email { flex-direction: column; align-items: stretch; gap: 12px; width: 100%; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-payment { gap: 8px; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-payment-icon { display: none; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-payment-icon-mobile { display: flex; flex: none; }
+  .p-inline-cta[data-cta-breakpoint="auto"] .p-inline-cta-receipt { padding: 0; box-shadow: none; flex-direction: column; gap: 20px; }
+}

@@ -1,0 +1,98 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/5cfbe21e-1904-4610-b3b4-317563753eac.svg";
+const imgSizeSmPlaceholderFalseTextFalseStatusIconFalse = "https://www.figma.com/api/mcp/asset/dd0c6233-8ff7-4638-8afb-c1b4c11913bf.png";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default" | "Hover";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  if (checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] block cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63929" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Checkbox, State=Hover">
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63931" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </button>
+    );
+  }
+  return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63885" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Checkbox, State=Default" />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "sm";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "sm", statusIcon = "False", text = "False" }: AvatarProps) {
+  return (
+    <div className={className || "border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="19:1015">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeSmPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default" | "Hover";
+  type?: "Avatar";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = false, size = "sm", state = "Default", type = "Avatar" }: RadioGroupItemProps) {
+  if (selected && size === "sm" && type === "Avatar" && state === "Hover" && breakpoint === "Desktop") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:81576" data-name="Selected=True, Size=sm, Type=Avatar, State=Hover, Breakpoint=Desktop">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1142:81757" data-name="Content">
+          <Avatar className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="1142:81759" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:407830" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="1142:81760">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:407831">
+                @olivia
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="1142:81761">
+              Product Manager, Integrations
+            </p>
+          </div>
+        </div>
+        <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" state="Hover" />
+      </button>
+    );
+  }
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:81450" data-name="Selected=False, Size=sm, Type=Avatar, State=Default, Breakpoint=Desktop">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1142:81451" data-name="Content">
+        <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="1142:81675" data-name="Avatar">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeSmPlaceholderFalseTextFalseStatusIconFalse} />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1142:81454" data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:407798" data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="1142:81455">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:407785">
+              @olivia
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="1142:81456">
+            Product Manager, Integrations
+          </p>
+        </div>
+      </div>
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" data-node-id="5373:385082" data-name="_Checkbox base" />
+    </div>
+  );
+}

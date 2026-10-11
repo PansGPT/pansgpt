@@ -1,0 +1,57 @@
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/269a7843-592e-404d-b10d-ed634b9cb4b8.svg";
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/6b0fd298-ae03-4207-b4f1-c5e2cb7dca50.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/b68350a3-fc7d-4b6c-b515-9ca33dac3a78.svg";
+const imgChartMini = "https://www.figma.com/api/mcp/asset/a544aedd-fc1a-45f4-ab94-179b2be2d747.svg";
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  type?: "Chart 03";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Desktop", dropdownIcon = true, type = "Chart 03" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="5002:371238">
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="5002:371240" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I5002:371240;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+      <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="5002:371241" data-name="Heading and number">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="5002:371242">
+          Views 24 hours
+        </p>
+        <div className="content-center flex flex-wrap gap-y-[12px] items-center justify-between relative shrink-0 w-full" data-node-id="5002:371243" data-name="Number and badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="5002:371244">
+            2,000
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="5002:371245" data-name="Change and text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center relative shrink-0" data-node-id="5002:371246" data-name="_Change">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I5002:371246;4988:370935" data-name="trend-up-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5002:371246;4988:370936">
+                100%
+              </p>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5002:371247">
+              vs last month
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="h-[72px] relative shrink-0 w-full" data-node-id="5002:371330" data-name="_Chart mini">
+        <div className="absolute inset-0" data-node-id="I5002:371330;4990:373155" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+        </div>
+        <div className="absolute inset-[-1.39%_-0.29%]">
+          <img alt="" className="block max-w-none size-full" src={imgChartMini} />
+        </div>
+      </div>
+    </div>
+  );
+}

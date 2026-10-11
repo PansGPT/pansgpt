@@ -1,0 +1,36 @@
+.p-native-radio { display: inline-flex; position: relative; flex: none; width: 16px; height: 16px; }
+.p-native-radio > input { position: absolute; inset: 0; margin: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 1; }
+.p-native-radio-marker { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 100%; border: 1px solid var(--border-primary); border-radius: var(--figma-radius-full); background: var(--bg-primary); }
+.p-native-radio-marker > span { display: none; width: 6px; height: 6px; border-radius: var(--figma-radius-full); background: var(--fg-white); }
+.p-native-radio > input:checked + .p-native-radio-marker { border-color: transparent; background: var(--bg-brand-solid); }
+.p-native-radio > input:checked + .p-native-radio-marker > span { display: block; }
+.p-native-radio > input:checked:hover:not(:disabled) + .p-native-radio-marker, .p-choice[data-reference-state="hover"] .p-native-radio > input:checked + .p-native-radio-marker { background: var(--bg-brand-solid-hover); }
+.p-native-radio > input:disabled { cursor: not-allowed; }
+.p-native-radio > input:disabled + .p-native-radio-marker { border-color: var(--border-disabled); background: var(--bg-disabled-subtle); }
+.p-native-radio > input:disabled + .p-native-radio-marker > span { background: var(--fg-disabled-subtle); }
+.p-native-radio > input:focus-visible + .p-native-radio-marker, .p-choice[data-reference-state="focused"] .p-native-radio-marker { box-shadow: var(--effect-focus-ring); }
+.p-choice[data-kind="radio"][data-labelled] .p-native-radio { margin-top: 2px; }
+.p-choice[data-size="md"] .p-native-radio { width: 20px; height: 20px; }
+.p-choice[data-size="md"] .p-native-radio-marker > span { width: 8px; height: 8px; }
+.p-choice[data-reference-state="focused"] .p-checkbox, .p-choice[data-reference-state="focused"] .p-toggle { box-shadow: var(--effect-focus-ring); }
+.p-choice[data-reference-state="hover"] .p-toggle[data-state="checked"]:not(:disabled) { background: var(--bg-brand-solid-hover); }
+.p-choice[data-reference-state="hover"][data-variant="slim"] .p-toggle[data-state="checked"]:not(:disabled) .p-toggle-thumb { box-shadow: inset 0 0 0 1px var(--toggle-slim-border-pressed-hover), var(--effect-shadow-xs); }
+.p-choice[data-reference-state="focused"][data-variant="slim"] .p-toggle[data-state="unchecked"] { box-shadow: inset 0 0 0 1px var(--border-secondary), var(--effect-focus-ring); }
+.p-field[data-layout="leading-text"] > .p-field-control { box-shadow: none; background: transparent; }
+.p-field[data-layout="trailing-button"] .p-button::after { box-shadow: none; }
+.p-select-trigger:not([data-placeholder]) .p-select-value > span:first-child { font-weight: 500; }
+.p-select-row { padding: 1px 6px; width: 100%; }
+.p-select-row > .p-select-item { margin: 0; border: 0; background: transparent; color: var(--text-primary-900); width: 100%; font-family: var(--font-body); text-align: start; }
+.p-select-row[data-size="md"] > .p-select-item { padding-block: 10px; }
+.p-select-row > .p-select-item[data-state="checked"], .p-select-row[data-reference-state="hover"] > .p-select-item, .p-select-row > .p-select-item:hover:not(:disabled) { background: var(--bg-active); }
+.p-select-row > .p-select-item:disabled, .p-select-row > .p-select-item:disabled .p-select-supporting { color: var(--text-disabled); }
+.p-select-row > .p-select-item:focus-visible { box-shadow: var(--effect-focus-ring); }
+.p-select-row .p-select-indicator { display: inline-flex; align-items: center; flex: none; }
+.p-tag-textarea .p-field[data-layout="tags"] .p-field-control { position: relative; height: auto; min-height: 128px; padding: 12px; align-items: start; align-content: start; overflow: auto; }
+.p-tag-textarea[data-resizable="true"] .p-field-control { resize: vertical; }
+.p-tag-textarea .p-field-control::-webkit-resizer { background: transparent; }
+.p-tag-textarea .p-field-control .p-field-input-area { display: contents; }
+.p-tag-textarea .p-field-control .p-input { height: 24px; flex: 1; min-width: 40px; }
+.p-textarea-field[data-error] .p-textarea { box-shadow: inset 0 0 0 1px var(--border-error-subtle), var(--effect-shadow-xs); }
+.p-textarea-field[data-reference-state="focused"] .p-textarea { box-shadow: inset 0 0 0 2px var(--border-brand), var(--effect-shadow-xs); }
+.p-textarea-field[data-error][data-reference-state="focused"] .p-textarea { box-shadow: inset 0 0 0 2px var(--border-error), var(--effect-shadow-xs); }

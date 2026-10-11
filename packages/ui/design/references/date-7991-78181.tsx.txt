@@ -1,0 +1,227 @@
+const imgDot = "https://www.figma.com/api/mcp/asset/2a2108fd-5cbd-4706-abfa-d066cf39582e.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/329d97a2-bdf0-49ac-8208-fbc3b46970b3.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/8de243d1-eb67-489b-b4a3-07f336616ccf.svg";
+const imgDot3 = "https://www.figma.com/api/mcp/asset/a5a8c2c6-6db6-416c-85fa-da0a88516df3.svg";
+const imgDot4 = "https://www.figma.com/api/mcp/asset/0a380f20-0666-48ee-92e6-b02a8fe497f3.svg";
+const imgDot5 = "https://www.figma.com/api/mcp/asset/aefee673-c5a0-4ab8-8aad-a8020e7a6570.svg";
+const imgDot6 = "https://www.figma.com/api/mcp/asset/98926568-bfbb-462f-9423-eb8e5933c750.svg";
+const imgDot7 = "https://www.figma.com/api/mcp/asset/a4d1f593-33d4-4cd2-a908-5f4e45ce11f4.svg";
+const imgDot8 = "https://www.figma.com/api/mcp/asset/d361e77b-9152-4bda-a103-ee244c22d76c.svg";
+const imgDot9 = "https://www.figma.com/api/mcp/asset/a4abc574-1778-48d6-ad9f-6dcd0d5231be.svg";
+const imgDot10 = "https://www.figma.com/api/mcp/asset/b092c6c6-a235-4c9e-9673-1bd0093eff0b.svg";
+const imgDot11 = "https://www.figma.com/api/mcp/asset/119c0460-275b-4a7f-b057-33c3fea88bb5.svg";
+const imgDot12 = "https://www.figma.com/api/mcp/asset/9f1b0b92-1003-46ad-835f-5ada3ad6751b.svg";
+const imgDot13 = "https://www.figma.com/api/mcp/asset/da0b601d-015d-4166-b6e9-81cdef4f8c9e.svg";
+const imgDot14 = "https://www.figma.com/api/mcp/asset/31a42e24-aeb4-4a0a-8a57-e4dd505d2deb.svg";
+const imgDot15 = "https://www.figma.com/api/mcp/asset/554fc4eb-b7c7-4b7e-870b-6281055aaead.svg";
+const imgDot16 = "https://www.figma.com/api/mcp/asset/104be1aa-744b-43e5-a384-d8c5b2c59678.svg";
+const imgDot17 = "https://www.figma.com/api/mcp/asset/4b8b2a2e-d232-4b37-b8ac-c6a74f0f51f4.svg";
+
+type CalendarEventMonthViewProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  color?: "Gray" | "Brand" | "Green" | "Blue" | "Indigo" | "Purple" | "Pink" | "Orange" | "Yellow";
+  dot?: boolean;
+  state?: "Default" | "Hover";
+  supportingText?: boolean;
+};
+
+export default function CalendarEventMonthView({ className, breakpoint = "Desktop", color = "Gray", dot = true, state = "Default", supportingText = true }: CalendarEventMonthViewProps) {
+  const isBlueAndDesktop = color === "Blue" && breakpoint === "Desktop";
+  const isBrandAndDesktop = color === "Brand" && breakpoint === "Desktop";
+  const isDefaultAndBlueAndDesktop = state === "Default" && color === "Blue" && breakpoint === "Desktop";
+  const isDefaultAndBlueAndMobile = state === "Default" && color === "Blue" && breakpoint === "Mobile";
+  const isDefaultAndBrandAndDesktop = state === "Default" && color === "Brand" && breakpoint === "Desktop";
+  const isDefaultAndGrayAndMobile = state === "Default" && color === "Gray" && breakpoint === "Mobile";
+  const isDefaultAndGreenAndDesktop = state === "Default" && color === "Green" && breakpoint === "Desktop";
+  const isDefaultAndGreenAndMobile = state === "Default" && color === "Green" && breakpoint === "Mobile";
+  const isDefaultAndIndigoAndDesktop = state === "Default" && color === "Indigo" && breakpoint === "Desktop";
+  const isDefaultAndIndigoAndMobile = state === "Default" && color === "Indigo" && breakpoint === "Mobile";
+  const isDefaultAndMobile = state === "Default" && breakpoint === "Mobile";
+  const isDefaultAndOrangeAndDesktop = state === "Default" && color === "Orange" && breakpoint === "Desktop";
+  const isDefaultAndOrangeAndMobile = state === "Default" && color === "Orange" && breakpoint === "Mobile";
+  const isDefaultAndPinkAndDesktop = state === "Default" && color === "Pink" && breakpoint === "Desktop";
+  const isDefaultAndPinkAndMobile = state === "Default" && color === "Pink" && breakpoint === "Mobile";
+  const isDefaultAndPurpleAndDesktop = state === "Default" && color === "Purple" && breakpoint === "Desktop";
+  const isDefaultAndPurpleAndMobile = state === "Default" && color === "Purple" && breakpoint === "Mobile";
+  const isDefaultAndYellowAndDesktop = state === "Default" && color === "Yellow" && breakpoint === "Desktop";
+  const isDefaultAndYellowAndMobile = state === "Default" && color === "Yellow" && breakpoint === "Mobile";
+  const isGrayAndDesktop = color === "Gray" && breakpoint === "Desktop";
+  const isGreenAndDesktop = color === "Green" && breakpoint === "Desktop";
+  const isHoverAndBlueAndDesktop = state === "Hover" && color === "Blue" && breakpoint === "Desktop";
+  const isHoverAndBrandAndDesktop = state === "Hover" && color === "Brand" && breakpoint === "Desktop";
+  const isHoverAndGrayAndDesktop = state === "Hover" && color === "Gray" && breakpoint === "Desktop";
+  const isHoverAndGreenAndDesktop = state === "Hover" && color === "Green" && breakpoint === "Desktop";
+  const isHoverAndIndigoAndDesktop = state === "Hover" && color === "Indigo" && breakpoint === "Desktop";
+  const isHoverAndOrangeAndDesktop = state === "Hover" && color === "Orange" && breakpoint === "Desktop";
+  const isHoverAndPinkAndDesktop = state === "Hover" && color === "Pink" && breakpoint === "Desktop";
+  const isHoverAndPurpleAndDesktop = state === "Hover" && color === "Purple" && breakpoint === "Desktop";
+  const isHoverAndYellowAndDesktop = state === "Hover" && color === "Yellow" && breakpoint === "Desktop";
+  const isIndigoAndDesktop = color === "Indigo" && breakpoint === "Desktop";
+  const isOrangeAndDesktop = color === "Orange" && breakpoint === "Desktop";
+  const isPinkAndDesktop = color === "Pink" && breakpoint === "Desktop";
+  const isPurpleAndDesktop = color === "Purple" && breakpoint === "Desktop";
+  const isYellowAndDesktop = color === "Yellow" && breakpoint === "Desktop";
+  return (
+    <div className={className || `content-stretch flex items-center relative ${isHoverAndYellowAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/yellow\/utility-yellow-100,#fef7c3)] border border-[var(--component-colors\/utility\/yellow\/utility-yellow-200,#feee95)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndOrangeAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/orange\/utility-orange-100,#fdead7)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndPurpleAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/purple\/utility-purple-100,#ebe9fe)] border border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndIndigoAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/indigo\/utility-indigo-100,#e0eaff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndBlueAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/blue\/utility-blue-100,#d1e9ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndGreenAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/green\/utility-green-100,#d3f8df)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndPinkAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/pink\/utility-pink-100,#fce7f6)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndBrandAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-100,#dcfae6)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isHoverAndGrayAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndYellowAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/yellow\/utility-yellow-50,#fefbe8)] border border-[var(--component-colors\/utility\/yellow\/utility-yellow-200,#feee95)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndOrangeAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndPurpleAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/purple\/utility-purple-50,#f4f3ff)] border border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndIndigoAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndBlueAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndGreenAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndPinkAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : isDefaultAndMobile ? "" : isDefaultAndBrandAndDesktop ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]` : String.raw`bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid gap-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)] w-[161px]`}`} id={isHoverAndYellowAndDesktop ? "node-7999_31461" : isHoverAndOrangeAndDesktop ? "node-7991_79854" : isHoverAndPurpleAndDesktop ? "node-7991_79830" : isHoverAndIndigoAndDesktop ? "node-7991_79806" : isHoverAndBlueAndDesktop ? "node-7991_79782" : isHoverAndGreenAndDesktop ? "node-7991_79758" : isHoverAndPinkAndDesktop ? "node-7991_79669" : isHoverAndBrandAndDesktop ? "node-7991_78949" : isHoverAndGrayAndDesktop ? "node-7991_58080" : isDefaultAndYellowAndDesktop ? "node-7999_31456" : isDefaultAndOrangeAndDesktop ? "node-7991_79849" : isDefaultAndPurpleAndDesktop ? "node-7991_79825" : isDefaultAndIndigoAndDesktop ? "node-7991_79801" : isDefaultAndBlueAndDesktop ? "node-7991_79777" : isDefaultAndGreenAndDesktop ? "node-7991_79753" : isDefaultAndPinkAndDesktop ? "node-7991_79664" : isDefaultAndGrayAndMobile ? "node-7994_7450" : isDefaultAndYellowAndMobile ? "node-7999_31454" : isDefaultAndOrangeAndMobile ? "node-7994_8846" : isDefaultAndPurpleAndMobile ? "node-7994_8840" : isDefaultAndIndigoAndMobile ? "node-7994_8834" : isDefaultAndBlueAndMobile ? "node-7994_8828" : isDefaultAndGreenAndMobile ? "node-7994_8822" : isDefaultAndPinkAndMobile ? "node-7994_8807" : state === "Default" && color === "Brand" && breakpoint === "Mobile" ? "node-7991_109181" : isDefaultAndBrandAndDesktop ? "node-7991_78944" : "node-7991_56012"}>
+      {isDefaultAndMobile && (
+        <div className="relative shrink-0 size-[8px]" id={isDefaultAndGrayAndMobile ? "node-7994_7451" : isDefaultAndYellowAndMobile ? "node-7999_31455" : isDefaultAndOrangeAndMobile ? "node-7994_8847" : isDefaultAndPurpleAndMobile ? "node-7994_8841" : isDefaultAndIndigoAndMobile ? "node-7994_8835" : isDefaultAndBlueAndMobile ? "node-7994_8829" : isDefaultAndGreenAndMobile ? "node-7994_8823" : isDefaultAndPinkAndMobile ? "node-7994_8808" : "node-7991_109182"} data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isDefaultAndGrayAndMobile ? imgDot10 : isDefaultAndYellowAndMobile ? imgDot9 : isDefaultAndOrangeAndMobile ? imgDot8 : isDefaultAndPurpleAndMobile ? imgDot7 : isDefaultAndIndigoAndMobile ? imgDot6 : isDefaultAndBlueAndMobile ? imgDot5 : isDefaultAndGreenAndMobile ? imgDot4 : isDefaultAndPinkAndMobile ? imgDot3 : imgDot2} />
+        </div>
+      )}
+      {isGrayAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:78186" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+        </div>
+      )}
+      {isGrayAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndGrayAndDesktop ? "node-7991_58077" : "node-7991_54409"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-ellipsis" id={isHoverAndGrayAndDesktop ? "node-7991_58078" : "node-7991_54407"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis" data-node-id="7991:54408">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isBrandAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:78945" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+        </div>
+      )}
+      {isBrandAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndBrandAndDesktop ? "node-7991_78951" : "node-7991_78946"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-ellipsis" id={isHoverAndBrandAndDesktop ? "node-7991_78952" : "node-7991_78947"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis" data-node-id="7991:78948">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isPinkAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79665" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot11} />
+        </div>
+      )}
+      {isPinkAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndPinkAndDesktop ? "node-7991_79671" : "node-7991_79666"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-ellipsis" id={isHoverAndPinkAndDesktop ? "node-7991_79672" : "node-7991_79667"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis" data-node-id="7991:79668">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isGreenAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79754" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot12} />
+        </div>
+      )}
+      {isGreenAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndGreenAndDesktop ? "node-7991_79760" : "node-7991_79755"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)] text-ellipsis" id={isHoverAndGreenAndDesktop ? "node-7991_79761" : "node-7991_79756"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis" data-node-id="7991:79757">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isBlueAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79778" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot13} />
+        </div>
+      )}
+      {isBlueAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndBlueAndDesktop ? "node-7991_79784" : "node-7991_79779"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-ellipsis" id={isHoverAndBlueAndDesktop ? "node-7991_79785" : "node-7991_79780"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis" data-node-id="7991:79781">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isIndigoAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79802" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot14} />
+        </div>
+      )}
+      {isIndigoAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndIndigoAndDesktop ? "node-7991_79808" : "node-7991_79803"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-ellipsis" id={isHoverAndIndigoAndDesktop ? "node-7991_79809" : "node-7991_79804"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis" data-node-id="7991:79805">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isPurpleAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79826" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot15} />
+        </div>
+      )}
+      {isPurpleAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndPurpleAndDesktop ? "node-7991_79832" : "node-7991_79827"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/purple\/utility-purple-700,#5925dc)] text-ellipsis" id={isHoverAndPurpleAndDesktop ? "node-7991_79833" : "node-7991_79828"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/purple\/utility-purple-600,#6938ef)] text-ellipsis" data-node-id="7991:79829">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isOrangeAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7991:79850" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot16} />
+        </div>
+      )}
+      {isOrangeAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndOrangeAndDesktop ? "node-7991_79856" : "node-7991_79851"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-ellipsis" id={isHoverAndOrangeAndDesktop ? "node-7991_79857" : "node-7991_79852"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/orange\/utility-orange-600,#e04f16)] text-ellipsis" data-node-id="7991:79853">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+      {isYellowAndDesktop && dot && (
+        <div className="relative shrink-0 size-[8px]" data-node-id="7999:31457" data-name="_Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot17} />
+        </div>
+      )}
+      {isYellowAndDesktop && (
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[12px] whitespace-nowrap" id={isHoverAndYellowAndDesktop ? "node-7999_31463" : "node-7999_31458"} data-name="Text and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-px overflow-hidden relative text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-700,#a15c07)] text-ellipsis" id={isHoverAndYellowAndDesktop ? "node-7999_31464" : "node-7999_31459"}>
+            Event name
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-600,#ca8504)] text-ellipsis" data-node-id="7999:31460">
+              9:00 AM
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

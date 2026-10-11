@@ -1,0 +1,24 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/42966c95-6d35-416a-bc35-de51278d44e8.png";
+
+type TagProps = {
+  className?: string;
+  action?: "Text only";
+  checkbox?: "False";
+  icon?: "Avatar";
+  size?: "lg";
+};
+
+function Tag({ className, action = "Text only", checkbox = "False", icon = "Avatar", size = "lg" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center pl-[7px] pr-[10px] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3307:417941">
+      <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:406294" data-name="Content">
+        <div className="border-[0.667px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[6666px] shrink-0 size-[16px]" data-node-id="3307:417942" data-name="Avatar">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[6666px] size-full" src={imgAvatar} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3307:417943">
+          Label
+        </p>
+      </div>
+    </div>
+  );
+}

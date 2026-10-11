@@ -1,0 +1,74 @@
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/0e4c6672-ed6f-4ba2-8bf6-5adf19774e33.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/732809cf-e1e0-4d4f-8792-e3d77285442b.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Disabled";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = "False", indeterminate = "False", size = "sm", state = "Disabled", type = "Checkbox" }: CheckboxBaseProps) {
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63991" />;
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  badge?: boolean;
+  breakpoint?: "Desktop";
+  selected?: "False";
+  size?: "sm";
+  state?: "Disabled";
+  type?: "Icon card";
+};
+
+function RadioGroupItem({ className, badge = true, breakpoint = "Desktop", selected = "False", size = "sm", state = "Disabled", type = "Icon card" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:93836">
+      <div className="border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="1142:93837" data-name="Header">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="1142:93838" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[32px]" data-node-id="5373:443414" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-sm,8px)]" />
+            <div className="absolute left-[7px] size-[16px] top-[7px]" data-node-id="I5373:443414;4041:412677" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)]" data-node-id="1142:93841">
+            Basic plan
+          </p>
+        </div>
+        <CheckboxBase className="bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1142:93843" data-name="Body">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-w-px relative" data-node-id="1142:93844" data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="1142:93845" data-name="Price">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="1142:93846">
+              $10
+            </p>
+            <div className="content-stretch flex items-start pb-[3px] relative shrink-0" data-node-id="1142:93847" data-name="Time period">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1142:93848">
+                per month
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1142:93849">
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+        {badge && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-sm,6px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="1142:93850" data-name="Badge">
+            <div className="relative shrink-0 size-[8px]" data-node-id="I1142:93850;4825:411492" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1142:93850;4825:411493">
+              Limited time only
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

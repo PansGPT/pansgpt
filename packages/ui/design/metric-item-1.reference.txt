@@ -1,0 +1,63 @@
+const imgArrowUpRight = "https://www.figma.com/api/mcp/asset/9aa5512c-40af-46ce-b5fb-bc9f502132a1.svg";
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/7a63fe83-ff29-47fd-988d-f775f017b1fa.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/b49fb9a7-9384-487f-b0a6-c58622d4c609.svg";
+
+type ChangeProps = {
+  className?: string;
+  trend?: "Positive";
+  type?: "03";
+};
+
+function Change({ className, trend = "Positive", type = "03" }: ChangeProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,6px)]"} data-node-id="8083:164432">
+      <div className="relative shrink-0 size-[12px]" data-node-id="8083:164429" data-name="arrow-up-right">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUpRight} />
+      </div>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="8083:164430">
+        100%
+      </p>
+    </div>
+  );
+}
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  featuredIcon?: boolean;
+  type?: "Icon 01";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Desktop", dropdownIcon = true, featuredIcon = true, type = "Icon 01" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="1561:261551">
+      {featuredIcon && (
+        <div className="bg-[var(--colors\/background\/bg-success-secondary,#dcfae6)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="1561:262031" data-name="Featured icon">
+          <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="I1561:262031;3465:403919" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+          </div>
+        </div>
+      )}
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="1561:262028" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I1561:262028;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+      <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1561:261565" data-name="Heading and number">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1561:261552">
+          Views 24 hours
+        </p>
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-end relative shrink-0 w-full" data-node-id="1561:261553" data-name="Number and badge">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)]" data-node-id="1561:261554">
+            2,000
+          </p>
+          <Change className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,6px)] shrink-0" />
+        </div>
+      </div>
+    </div>
+  );
+}

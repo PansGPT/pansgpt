@@ -1,0 +1,62 @@
+const imgCheckCircle = "https://www.figma.com/api/mcp/asset/4691a1b4-c377-4d2d-a99a-ed5e17feeeba.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/f3a1c108-1b71-46ce-8ad4-bca28c06a653.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/013c99ee-c080-4f1a-b1cd-a1e8eba537d1.svg";
+
+type ModalHeaderProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  divider?: boolean;
+  featuredIcon?: boolean;
+  paddingBottom?: boolean;
+  type?: "Left aligned" | "Center aligned" | "Horizontal left aligned";
+  xCloseButton?: boolean;
+};
+
+export default function ModalHeader({ className, breakpoint = "Desktop", divider = true, featuredIcon = true, paddingBottom = true, type = "Left aligned", xCloseButton = true }: ModalHeaderProps) {
+  const isCenterAlignedAndDesktop = type === "Center aligned" && breakpoint === "Desktop";
+  const isCenterAlignedAndMobile = type === "Center aligned" && breakpoint === "Mobile";
+  const isHorizontalLeftAlignedAndMobile = type === "Horizontal left aligned" && breakpoint === "Mobile";
+  const isLeftAlignedAndDesktop = type === "Left aligned" && breakpoint === "Desktop";
+  const isLeftAlignedAndMobile = type === "Left aligned" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex flex-col relative w-[400px] ${isHorizontalLeftAlignedAndMobile ? "items-start" : "items-center"}`} id={isLeftAlignedAndMobile ? "node-4055_413654" : isLeftAlignedAndDesktop ? "node-4055_413619" : isCenterAlignedAndMobile ? "node-4055_413668" : isCenterAlignedAndDesktop ? "node-4055_413618" : isHorizontalLeftAlignedAndMobile ? "node-4055_413661" : "node-4055_413617"}>
+      <div className={`content-stretch flex gap-[var(--spacing-xl,16px)] relative shrink-0 w-full ${isLeftAlignedAndDesktop ? "flex-col items-start pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)]" : isCenterAlignedAndMobile ? "flex-col items-center pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)]" : isCenterAlignedAndDesktop ? "flex-col items-center pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)]" : breakpoint === "Mobile" && ["Horizontal left aligned", "Left aligned"].includes(type) ? "flex-col items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)]" : "items-start pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)]"}`} id={isLeftAlignedAndMobile ? "node-4055_413655" : isLeftAlignedAndDesktop ? "node-4055_413573" : isCenterAlignedAndMobile ? "node-4055_413669" : isCenterAlignedAndDesktop ? "node-4055_413596" : isHorizontalLeftAlignedAndMobile ? "node-4057_414525" : "node-4055_413607"} data-name="Content">
+        {featuredIcon && (
+          <div className="bg-[var(--colors\/background\/bg-success-secondary,#dcfae6)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="4055:413608" data-name="Featured icon">
+            <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="I4055:413608;3465:403919" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle} />
+            </div>
+          </div>
+        )}
+        <div className={`[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] relative ${type === "Center aligned" ? "items-center shrink-0 text-center w-full" : isHorizontalLeftAlignedAndMobile || type === "Left aligned" ? "items-start shrink-0 w-full" : "flex-[1_0_0] items-start min-w-px"}`} id={isLeftAlignedAndMobile ? "node-4055_413657" : isLeftAlignedAndDesktop ? "node-4055_413575" : isCenterAlignedAndMobile ? "node-4055_413671" : isCenterAlignedAndDesktop ? "node-4055_413598" : isHorizontalLeftAlignedAndMobile ? "node-4057_414527" : "node-4055_413609"} data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" id={isLeftAlignedAndMobile ? "node-4055_413658" : isLeftAlignedAndDesktop ? "node-4055_413576" : isCenterAlignedAndMobile ? "node-4055_413672" : isCenterAlignedAndDesktop ? "node-4055_413599" : isHorizontalLeftAlignedAndMobile ? "node-4057_414528" : "node-4055_413610"}>
+            Blog post published
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" id={isLeftAlignedAndMobile ? "node-4055_413659" : isLeftAlignedAndDesktop ? "node-4055_413577" : isCenterAlignedAndMobile ? "node-4055_413673" : isCenterAlignedAndDesktop ? "node-4055_413600" : isHorizontalLeftAlignedAndMobile ? "node-4057_414529" : "node-4055_413611"}>
+            This blog post has been published. Team members will be able to edit this post and republish changes.
+          </p>
+        </div>
+      </div>
+      {(breakpoint === "Desktop" || isCenterAlignedAndMobile || isLeftAlignedAndMobile) && xCloseButton && (
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="4055:413612" data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[24px]" data-node-id="I4055:413612;2763:420143" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+          </div>
+        </div>
+      )}
+      {paddingBottom && <div className="h-[20px] relative shrink-0 w-full" data-node-id="4059:420275" data-name="Padding bottom" />}
+      {divider && (
+        <div className="h-px relative shrink-0 w-full" data-node-id="4059:422184" data-name="Divider">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+        </div>
+      )}
+      {isHorizontalLeftAlignedAndMobile && xCloseButton && (
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="4055:413667" data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[24px]" data-node-id="I4055:413667;2763:420143" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

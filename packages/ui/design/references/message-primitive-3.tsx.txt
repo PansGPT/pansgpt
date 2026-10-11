@@ -1,0 +1,36 @@
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/1173fc96-beb8-42e7-8e4d-a611f4d89e62.svg";
+const imgPlaceholder1 = "https://www.figma.com/api/mcp/asset/598e1375-f672-40cd-9809-697a7c8b0361.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/0107f169-c88f-405b-80f2-ff7dda1fe8e1.svg";
+
+type MessageActionButtonProps = {
+  className?: string;
+  iconSwap?: React.ReactNode | null;
+  state?: "Default" | "Hover";
+};
+
+export default function MessageActionButton({ className, iconSwap = null, state = "Default" }: MessageActionButtonProps) {
+  const isHover = state === "Hover";
+  return (
+    <div className={className || "content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)]"} id={isHover ? "node-9206_591499" : "node-9206_591492"}>
+      {state === "Default" &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="9206:591488" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+          </div>
+        ))}
+      {isHover &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="9206:591497" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+          </div>
+        ))}
+      {isHover && (
+        <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="9206:591520" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

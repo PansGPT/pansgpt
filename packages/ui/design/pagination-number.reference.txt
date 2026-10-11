@@ -1,0 +1,32 @@
+type PaginationNumberBaseProps = {
+  className?: string;
+  shape?: "Circle" | "Square";
+  state?: "Default" | "Hover/active" | "Focused";
+};
+
+export default function PaginationNumberBase({ className, shape = "Square", state = "Default" }: PaginationNumberBaseProps) {
+  const isCircleAndDefault = shape === "Circle" && state === "Default";
+  const isCircleAndFocused = shape === "Circle" && state === "Focused";
+  const isCircleAndHoverActive = shape === "Circle" && state === "Hover/active";
+  const isSquareAndFocused = shape === "Square" && state === "Focused";
+  const isSquareAndHoverActive = shape === "Square" && state === "Hover/active";
+  return (
+    <div className={className || `overflow-clip relative ${isCircleAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isSquareAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isCircleAndHoverActive ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] rounded-[var(--radius-full,9999px)] size-[40px]` : isSquareAndHoverActive ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] rounded-[var(--radius-md,12px)] size-[40px]` : isCircleAndDefault ? "content-stretch flex gap-[var(--spacing-md,8px)] items-start rounded-[var(--radius-full,9999px)]" : "rounded-[var(--radius-md,12px)] size-[40px]"}`} id={isCircleAndFocused ? "node-1114_68765" : isSquareAndFocused ? "node-1114_68181" : isCircleAndHoverActive ? "node-1114_68768" : isSquareAndHoverActive ? "node-1114_68175" : isCircleAndDefault ? "node-1114_68771" : "node-1114_68173"}>
+      <div className={`content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] size-[40px] ${shape === "Circle" && ["Hover/active", "Focused"].includes(state) ? "absolute left-0 rounded-[var(--spacing-2xl,20px)] top-0" : isCircleAndDefault ? "relative rounded-[var(--spacing-2xl,20px)] shrink-0" : "absolute left-0 rounded-[var(--spacing-md,8px)] top-0"}`} id={isCircleAndFocused ? "node-1114_68766" : isSquareAndFocused ? "node-1114_68182" : isCircleAndHoverActive ? "node-1114_68769" : isSquareAndHoverActive ? "node-1114_68176" : isCircleAndDefault ? "node-1114_68772" : "node-1114_68170"} data-name="Content">
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap `}${state === "Hover/active" ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]`}`} id={isCircleAndFocused ? "node-1114_68767" : isSquareAndFocused ? "node-1114_68183" : isCircleAndHoverActive ? "node-1114_68770" : isSquareAndHoverActive ? "node-1114_68177" : isCircleAndDefault ? "node-1114_68773" : "node-1114_68171"}>
+          1
+        </p>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

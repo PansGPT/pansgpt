@@ -1,0 +1,267 @@
+.p-file-dropzone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: var(--figma-radius-xl);
+  background: var(--bg-primary);
+  box-shadow: inset 0 0 0 1px var(--border-secondary);
+  font: 400 14px/20px var(--font-body);
+  color: var(--text-tertiary-600);
+}
+.p-file-dropzone[data-state="hover"],
+.p-file-dropzone:hover:not([data-state="disabled"]) {
+  box-shadow: inset 0 0 0 2px var(--border-brand);
+}
+.p-file-dropzone[data-state="disabled"] {
+  background: var(--bg-disabled-subtle);
+  box-shadow: inset 0 0 0 1px var(--border-disabled-subtle);
+}
+.p-file-dropzone-featured {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  background: var(--bg-primary);
+  border-radius: var(--figma-radius-md);
+  box-shadow: var(--effect-shadow-xs-skeuomorphic);
+}
+.p-file-dropzone-text {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+}
+.p-file-dropzone-hint {
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+.p-file-dropzone-error {
+  color: var(--text-error-primary-600);
+  font-size: 12px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
+}
+.p-file-drag-example {
+  position: absolute;
+  right: 24px;
+  top: 66px;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+}
+.p-file-drag-example > .p-file-type-icon {
+  filter: drop-shadow(0 24px 24px var(--shadow-2xl-01)) drop-shadow(0 4px 2px var(--shadow-2xl-02));
+}
+.p-file-drag-cursor {
+  position: absolute;
+  left: 26px;
+  top: 26px;
+}
+.p-file-type-icon {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  --file-label-color: var(--figma-colors-error-600);
+}
+.p-file-type-icon[data-file-type="jpg"] {
+  --file-label-color: var(--figma-colors-brand-600);
+}
+.p-file-type-icon[data-file-type="mp4"] {
+  --file-label-color: var(--figma-colors-blue-dark-600);
+}
+.p-file-type-icon[data-file-type="fig"] {
+  --file-label-color: var(--figma-colors-brand-600);
+}
+.p-file-type-page {
+  position: absolute;
+  top: 0;
+  left: 7px;
+}
+.p-file-type-label {
+  position: absolute;
+  left: 1px;
+  top: 17.5px;
+  padding: 2px 3px;
+  border-radius: 2px;
+  background: var(--file-label-color);
+  color: var(--fg-white);
+  font: 700 10px/normal var(--font-body);
+  text-align: center;
+}
+.p-file-type-icon[data-file-type="jpg"] .p-file-type-label,
+.p-file-type-icon[data-file-type="mp4"] .p-file-type-label,
+.p-file-type-icon[data-file-type="fig"] .p-file-type-label {
+  left: 1.5px;
+}
+.p-file-type-icon[data-solid] .p-file-type-page {
+  left: 4px;
+}
+.p-file-type-icon[data-solid] .p-file-type-label {
+  left: 4px;
+  right: 4px;
+  top: 23px;
+  padding: 0;
+  background: transparent;
+  font-size: 9px;
+}
+.p-file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+.p-file-upload-queue {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.p-file-upload-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--figma-radius-xl);
+  background: var(--bg-primary);
+  box-shadow: inset 0 0 0 1px var(--border-secondary);
+  font: 400 14px/20px var(--font-body);
+  color: var(--text-secondary-700);
+}
+.p-file-upload-item[data-icon-type="simple"] {
+  gap: 8px;
+}
+.p-file-upload-item[data-variant="fill"] {
+  border-radius: 12px;
+  overflow: hidden;
+}
+.p-file-upload-item[data-status="error"] {
+  box-shadow: inset 0 0 0 2px var(--border-error);
+}
+.p-file-upload-body {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.p-file-upload-body .p-progress-label {
+  font-weight: 500;
+}
+.p-file-upload-item[data-status="error"] .p-file-upload-body {
+  gap: 6px;
+}
+.p-file-upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  min-width: 0;
+}
+.p-file-upload-name {
+  font-weight: 500;
+  padding-right: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.p-file-upload-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--text-tertiary-600);
+}
+.p-file-upload-meta > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.p-file-upload-divider {
+  position: relative;
+  flex: none;
+  width: 0;
+  height: 12px;
+}
+.p-file-upload-divider img {
+  position: absolute;
+  top: -0.5px;
+  left: -0.5px;
+}
+.p-file-upload-status {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  color: var(--text-quaternary-500);
+  white-space: nowrap;
+}
+.p-file-upload-item[data-status="complete"] .p-file-upload-status {
+  color: var(--text-success-primary-600);
+}
+.p-file-upload-item[data-status="error"] .p-file-upload-status {
+  color: var(--text-error-primary-600);
+}
+.p-file-upload-description {
+  color: var(--text-tertiary-600);
+  overflow-wrap: anywhere;
+}
+.p-file-upload-retry.p-button {
+  align-self: flex-start;
+  color: var(--text-error-primary-600);
+}
+.p-file-upload-retry.p-button:hover:not(:disabled) {
+  color: var(--text-error-primary-hover);
+}
+.p-file-upload-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--figma-radius-sm);
+  cursor: pointer;
+}
+.p-file-upload-remove:hover {
+  background: var(--bg-primary-hover);
+}
+.p-file-upload-remove:focus-visible {
+  outline: none;
+  box-shadow: var(--effect-focus-ring-shadow-xs);
+}
+.p-file-upload-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--upload-progress);
+  background: var(--bg-secondary);
+}
+.p-file-simple-icon {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+}

@@ -1,0 +1,72 @@
+const imgArrowRight = "../assets/pagination-group-imgArrowRight.svg";
+const imgArrowLeft = "../assets/pagination-group-imgArrowLeft.svg";
+
+type PaginationButtonGroupBaseProps = {
+  className?: string;
+  icon?: "False" | "Only" | "Trailing" | "Leading";
+  iconLeading?: React.ReactNode | null;
+  iconTrailing?: React.ReactNode | null;
+  state?: "Default" | "Active/hover" | "Focused";
+};
+
+export default function PaginationButtonGroupBase({ className, icon = "False", iconLeading = null, iconTrailing = null, state = "Default" }: PaginationButtonGroupBaseProps) {
+  const isFalseAndActiveHover = icon === "False" && state === "Active/hover";
+  const isFalseAndDefault = icon === "False" && state === "Default";
+  const isFalseAndFocused = icon === "False" && state === "Focused";
+  const isLeading = icon === "Leading";
+  const isLeadingAndActiveHover = icon === "Leading" && state === "Active/hover";
+  const isLeadingAndDefault = icon === "Leading" && state === "Default";
+  const isLeadingAndFocused = icon === "Leading" && state === "Focused";
+  const isOnlyAndDefault = icon === "Only" && state === "Default";
+  const isOnlyAndFocused = icon === "Only" && state === "Focused";
+  const isTrailingAndActiveHover = icon === "Trailing" && state === "Active/hover";
+  const isTrailingAndDefault = icon === "Trailing" && state === "Default";
+  const isTrailingAndFocused = icon === "Trailing" && state === "Focused";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex items-center justify-center min-h-[40px] relative `}${isLeadingAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] overflow-clip pl-[14px] pr-[var(--spacing-xl,16px)] py-[var(--spacing-md,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isLeadingAndDefault ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)] py-[var(--spacing-md,8px)]` : isLeadingAndActiveHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] pl-[14px] pr-[var(--spacing-xl,16px)] py-[var(--spacing-md,8px)]` : isFalseAndActiveHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-md,8px)] min-w-[40px] p-[var(--spacing-md,8px)]` : isFalseAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-md,8px)] min-w-[40px] overflow-clip p-[var(--spacing-md,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isFalseAndDefault ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-md,8px)] min-w-[40px] p-[var(--spacing-md,8px)]` : isTrailingAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] overflow-clip pl-[var(--spacing-xl,16px)] pr-[14px] py-[var(--spacing-md,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isOnlyAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] overflow-clip px-[10px] py-[var(--spacing-md,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] w-[40px]` : isTrailingAndDefault ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-sm,6px)] pl-[var(--spacing-xl,16px)] pr-[14px] py-[var(--spacing-md,8px)]` : isOnlyAndDefault ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] px-[10px] py-[var(--spacing-md,8px)] w-[40px]` : isTrailingAndActiveHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] gap-[var(--spacing-sm,6px)] pl-[var(--spacing-xl,16px)] pr-[14px] py-[var(--spacing-md,8px)]` : String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] px-[10px] py-[var(--spacing-md,8px)] w-[40px]`}`} id={isLeadingAndFocused ? "node-1114_69367" : isLeadingAndDefault ? "node-1114_69371" : isLeadingAndActiveHover ? "node-1114_69375" : isFalseAndActiveHover ? "node-1114_68964" : isFalseAndFocused ? "node-1114_68920" : isFalseAndDefault ? "node-1114_68898" : isTrailingAndFocused ? "node-1114_69369" : isOnlyAndFocused ? "node-1114_69100" : isTrailingAndDefault ? "node-1114_69373" : isOnlyAndDefault ? "node-1114_69102" : isTrailingAndActiveHover ? "node-1114_69377" : "node-1114_69114"}>
+      {["Trailing", "False"].includes(icon) && (
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${icon === "False" && ["Default", "Focused"].includes(state) ? String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]` : icon === "Trailing" && ["Default", "Focused"].includes(state) ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]`}`} id={isFalseAndActiveHover ? "node-1114_68967" : isFalseAndFocused ? "node-1114_68923" : isFalseAndDefault ? "node-1114_68901" : isTrailingAndFocused ? "node-1114_69390" : isTrailingAndDefault ? "node-1114_69388" : "node-1114_69389"}>
+          {icon === "False" && ["Focused", "Active/hover"].includes(state) ? "1" : icon === "Trailing" ? "Next" : "1"}
+        </p>
+      )}
+      {["Only", "Trailing"].includes(icon) &&
+        (iconTrailing || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3473:608432" data-name="arrow-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+          </div>
+        ))}
+      {isLeading &&
+        (iconLeading || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3473:608377" data-name="arrow-left">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowLeft} />
+          </div>
+        ))}
+      {isLeading && (
+        <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${icon === "Leading" && ["Default", "Focused"].includes(state) ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]`}`} id={isLeadingAndFocused ? "node-1114_69387" : isLeadingAndDefault ? "node-1114_69385" : "node-1114_69386"}>
+          Previous
+        </p>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## arrow-right
+**Node ID:** 3463:404482
+
+arrow, right
+
+## arrow-left
+**Node ID:** 3463:404455
+
+arrow, left
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

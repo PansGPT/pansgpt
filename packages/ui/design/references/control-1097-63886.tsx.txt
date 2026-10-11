@@ -1,0 +1,287 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/3bce45f6-4f0f-4cf0-a617-39e8fb23fa85.svg";
+const imgMinus = "https://www.figma.com/api/mcp/asset/8ebc26d7-58fa-4c86-bc2a-644af9f054aa.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/19489229-f44b-4a55-866e-f4c6f2cc5be1.svg";
+const imgMinus1 = "https://www.figma.com/api/mcp/asset/8717a348-4f22-4354-9c5f-8cfcbd4a7485.svg";
+const imgCheck2 = "https://www.figma.com/api/mcp/asset/b193ea82-6b3c-4692-a4dc-3bd8f8573920.svg";
+const imgMinus2 = "https://www.figma.com/api/mcp/asset/0b33947e-11c9-4796-8960-f3dc5a865b34.svg";
+const imgCheck3 = "https://www.figma.com/api/mcp/asset/62739c46-a171-4b54-bb97-16bac7e21559.svg";
+const imgMinus3 = "https://www.figma.com/api/mcp/asset/569461ce-90e3-422a-a0ad-d859c6d0af86.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focused" | "Disabled";
+  type?: "Checkbox" | "Radio";
+};
+
+export default function CheckboxBase({ className, checked = false, indeterminate = false, size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  if (!checked && !indeterminate && size === "sm" && type === "Radio" && state === "Default") {
+    return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:569" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Radio, State=Default" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Disabled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63991" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Checkbox, State=Disabled" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Radio" && state === "Disabled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:562" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Radio, State=Disabled" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="1097:63959" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Checkbox, State=Focused" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Radio" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="1100:555" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Radio, State=Focused" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Hover") {
+    return <button className={className || "block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63932" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Checkbox, State=Hover" />;
+  }
+  if (!checked && !indeterminate && size === "sm" && type === "Radio" && state === "Hover") {
+    return <button className={className || "block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:557" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Radio, State=Hover" />;
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63895" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Checkbox, State=Default">
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "sm" && type === "Checkbox" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1224:6780" data-name="Checked=True, Indeterminate=True, Size=sm, Type=Checkbox, State=Default">
+        <div className="absolute inset-[12.5%]" data-node-id="1224:6781" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Radio" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:552" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Radio, State=Default">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63988" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Checkbox, State=Disabled">
+        <div className="absolute inset-[calc(12.5%-0.75px)]" data-node-id="1097:63990" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "sm" && type === "Checkbox" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1224:6776" data-name="Checked=True, Indeterminate=True, Size=sm, Type=Checkbox, State=Disabled">
+        <div className="absolute inset-[calc(12.5%-0.75px)]" data-node-id="1224:6777" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus1} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Radio" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:549" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Radio, State=Disabled">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] inset-[calc(31.25%-0.38px)] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247872" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="1097:63956" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Checkbox, State=Focused">
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63958" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "sm" && type === "Checkbox" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="1224:6774" data-name="Checked=True, Indeterminate=True, Size=sm, Type=Checkbox, State=Focused">
+        <div className="absolute inset-[12.5%]" data-node-id="1224:6775" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Radio" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[16px]"} data-node-id="1100:559" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Radio, State=Focused">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247863" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Checkbox" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] block cursor-pointer overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63929" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Checkbox, State=Hover">
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63931" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </button>
+    );
+  }
+  if (checked && indeterminate && size === "sm" && type === "Checkbox" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1224:6778" data-name="Checked=True, Indeterminate=True, Size=sm, Type=Checkbox, State=Hover">
+        <div className="absolute inset-[12.5%]" data-node-id="1224:6779" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "sm" && type === "Radio" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] block cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px]"} data-node-id="1100:546" data-name="Checked=True, Indeterminate=False, Size=sm, Type=Radio, State=Hover">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247862" data-name="Check" />
+      </button>
+    );
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Default") {
+    return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63887" data-name="Checked=False, Indeterminate=False, Size=md, Type=Checkbox, State=Default" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Radio" && state === "Default") {
+    return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:544" data-name="Checked=False, Indeterminate=False, Size=md, Type=Radio, State=Default" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Disabled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63986" data-name="Checked=False, Indeterminate=False, Size=md, Type=Checkbox, State=Disabled" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Radio" && state === "Disabled") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:564" data-name="Checked=False, Indeterminate=False, Size=md, Type=Radio, State=Disabled" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1097:63954" data-name="Checked=False, Indeterminate=False, Size=md, Type=Checkbox, State=Focused" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Radio" && state === "Focused") {
+    return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1100:542" data-name="Checked=False, Indeterminate=False, Size=md, Type=Radio, State=Focused" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Hover") {
+    return <button className={className || "block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63926" data-name="Checked=False, Indeterminate=False, Size=md, Type=Checkbox, State=Hover" />;
+  }
+  if (!checked && !indeterminate && size === "md" && type === "Radio" && state === "Hover") {
+    return <button className={className || "block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:540" data-name="Checked=False, Indeterminate=False, Size=md, Type=Radio, State=Hover" />;
+  }
+  if (checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1190:580" data-name="Checked=True, Indeterminate=False, Size=md, Type=Checkbox, State=Default">
+        <div className="absolute inset-[15%]" data-node-id="1190:582" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "md" && type === "Checkbox" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1224:6805" data-name="Checked=True, Indeterminate=True, Size=md, Type=Checkbox, State=Default">
+        <div className="absolute inset-[15%]" data-node-id="1224:6806" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Radio" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:537" data-name="Checked=True, Indeterminate=False, Size=md, Type=Radio, State=Default">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[30%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247877" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63983" data-name="Checked=True, Indeterminate=False, Size=md, Type=Checkbox, State=Disabled">
+        <div className="absolute inset-[calc(10%-0.8px)]" data-node-id="1097:63985" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "md" && type === "Checkbox" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1224:6803" data-name="Checked=True, Indeterminate=True, Size=md, Type=Checkbox, State=Disabled">
+        <div className="absolute inset-[calc(10%-0.8px)]" data-node-id="1224:6804" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus3} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Radio" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:566" data-name="Checked=True, Indeterminate=False, Size=md, Type=Radio, State=Disabled">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] inset-[calc(30%-0.4px)] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247894" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1097:63951" data-name="Checked=True, Indeterminate=False, Size=md, Type=Checkbox, State=Focused">
+        <div className="absolute inset-[15%]" data-node-id="1097:63953" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && indeterminate && size === "md" && type === "Checkbox" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1224:6807" data-name="Checked=True, Indeterminate=True, Size=md, Type=Checkbox, State=Focused">
+        <div className="absolute inset-[15%]" data-node-id="1224:6808" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Radio" && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1100:534" data-name="Checked=True, Indeterminate=False, Size=md, Type=Radio, State=Focused">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[30%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247885" data-name="Check" />
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Checkbox" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] block cursor-pointer overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63923" data-name="Checked=True, Indeterminate=False, Size=md, Type=Checkbox, State=Hover">
+        <div className="absolute inset-[15%]" data-node-id="1097:63925" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+        </div>
+      </button>
+    );
+  }
+  if (checked && indeterminate && size === "md" && type === "Checkbox" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1224:6801" data-name="Checked=True, Indeterminate=True, Size=md, Type=Checkbox, State=Hover">
+        <div className="absolute inset-[15%]" data-node-id="1224:6802" data-name="minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinus2} />
+        </div>
+      </div>
+    );
+  }
+  if (checked && !indeterminate && size === "md" && type === "Radio" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] block cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:531" data-name="Checked=True, Indeterminate=False, Size=md, Type=Radio, State=Hover">
+        <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[30%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247884" data-name="Check" />
+      </button>
+    );
+  }
+  return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63885" data-name="Checked=False, Indeterminate=False, Size=sm, Type=Checkbox, State=Default" />;
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+## minus
+**Node ID:** 3463:405258
+
+minus, subtract, subtraction, mathematics, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

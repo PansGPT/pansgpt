@@ -1,0 +1,1171 @@
+type TabButtonBaseProps = {
+  className?: string;
+  badge?: boolean;
+  current?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focus";
+  type?: "Button brand" | "Button gray" | "Underline" | "Line (vertical tabs)" | "Button white" | "Button minimal";
+};
+
+export default function TabButtonBase({ className, badge = true, current = false, size = "sm", state = "Default", type = "Button brand" }: TabButtonBaseProps) {
+  if (current && size === "sm" && type === "Button gray" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-active,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="43:2572" data-name="Current=True, Size=sm, Type=Button gray, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2573">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:376" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:376;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button white" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="2640:401520" data-name="Current=True, Size=sm, Type=Button white, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401521">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401522" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401522;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button minimal" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="7248:8783" data-name="Current=True, Size=sm, Type=Button minimal, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8784">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8785" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8785;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button gray" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-active,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1319:9185" data-name="Current=True, Size=md, Type=Button gray, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9186">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9187" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9187;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button white" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="2640:401523" data-name="Current=True, Size=md, Type=Button white, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401524">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401525" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401525;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button minimal" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="7248:8786" data-name="Current=True, Size=md, Type=Button minimal, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8787">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8788" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8788;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button brand" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1117:186" data-name="Current=True, Size=sm, Type=Button brand, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:187">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:200" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:200;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button brand" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1319:9157" data-name="Current=True, Size=md, Type=Button brand, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9158">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9159" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9159;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="43:2570" data-name="Current=True, Size=sm, Type=Button gray, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2571">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:373" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:373;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button white" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401532" data-name="Current=True, Size=sm, Type=Button white, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401533">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401534" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401534;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button minimal" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="7248:8789" data-name="Current=True, Size=sm, Type=Button minimal, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8790">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8791" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8791;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:9113" data-name="Current=True, Size=md, Type=Button gray, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9114">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9115" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9115;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button white" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401535" data-name="Current=True, Size=md, Type=Button white, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401536">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401537" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401537;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button minimal" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="7248:8792" data-name="Current=True, Size=md, Type=Button minimal, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8793">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8794" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8794;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button brand" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1117:178" data-name="Current=True, Size=sm, Type=Button brand, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:179">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:197" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:197;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button brand" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:9084" data-name="Current=True, Size=md, Type=Button brand, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9085">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9086" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9086;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button gray" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-active,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="43:2568" data-name="Current=True, Size=sm, Type=Button gray, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2569">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:358" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:358;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button white" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401544" data-name="Current=True, Size=sm, Type=Button white, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401545">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401546" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401546;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button minimal" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="7248:8795" data-name="Current=True, Size=sm, Type=Button minimal, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8796">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8797" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8797;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button gray" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-active,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:8994" data-name="Current=True, Size=md, Type=Button gray, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8995">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8996" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8996;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button white" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401547" data-name="Current=True, Size=md, Type=Button white, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401548">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401549" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401549;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button minimal" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="7248:8798" data-name="Current=True, Size=md, Type=Button minimal, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8799">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8800" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8800;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Button brand" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1117:180" data-name="Current=True, Size=sm, Type=Button brand, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:181">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:194" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:194;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Button brand" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:9116" data-name="Current=True, Size=md, Type=Button brand, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9117">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9118" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9118;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button gray" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="43:2564" data-name="Current=False, Size=sm, Type=Button gray, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2565">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:352" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:352;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button white" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="2640:401556" data-name="Current=False, Size=sm, Type=Button white, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401557">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401558" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401558;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button minimal" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="7248:8801" data-name="Current=False, Size=sm, Type=Button minimal, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8802">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8803" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8803;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button gray" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1319:9048" data-name="Current=False, Size=md, Type=Button gray, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9049">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9050" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9050;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button white" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="2640:401559" data-name="Current=False, Size=md, Type=Button white, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401560">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401561" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401561;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button minimal" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="7248:8804" data-name="Current=False, Size=md, Type=Button minimal, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8805">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8806" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8806;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button brand" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1117:184" data-name="Current=False, Size=sm, Type=Button brand, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:185">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:208" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:208;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button brand" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1319:8997" data-name="Current=False, Size=md, Type=Button brand, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8998">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8999" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8999;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="43:2560" data-name="Current=False, Size=sm, Type=Button gray, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2561">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:349" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:349;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button white" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401568" data-name="Current=False, Size=sm, Type=Button white, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401569">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401570" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401570;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button minimal" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="7248:8807" data-name="Current=False, Size=sm, Type=Button minimal, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8808">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8809" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8809;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:8915" data-name="Current=False, Size=md, Type=Button gray, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8916">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8917" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8917;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button white" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\\/effects\\/shadows\\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\\/effects\\/shadows\\/shadow-sm_02,rgba(10,13,18,0.1))]"} data-node-id="2640:401571" data-name="Current=False, Size=md, Type=Button white, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401572">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401573" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401573;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button minimal" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="7248:8810" data-name="Current=False, Size=md, Type=Button minimal, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8811">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8812" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8812;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button brand" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1117:176" data-name="Current=False, Size=sm, Type=Button brand, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:177">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:214" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:214;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button brand" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-primary_alt,#ecfdf3)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:8887" data-name="Current=False, Size=md, Type=Button brand, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8888">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8889" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8889;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button gray" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="43:2554" data-name="Current=False, Size=sm, Type=Button gray, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2556">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:238" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:238;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button white" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="2640:401580" data-name="Current=False, Size=sm, Type=Button white, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="2640:401581">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401582" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2640:401582;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Button minimal" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="7248:8813" data-name="Current=False, Size=sm, Type=Button minimal, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7248:8814">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8815" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8815;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button gray" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:9119" data-name="Current=False, Size=md, Type=Button gray, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9120">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9121" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9121;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button white" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="2640:401583" data-name="Current=False, Size=md, Type=Button white, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="2640:401584">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2640:401585" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2640:401585;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button minimal" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="7248:8816" data-name="Current=False, Size=md, Type=Button minimal, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7248:8817">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8818" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7248:8818;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Button brand" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1319:9089" data-name="Current=False, Size=md, Type=Button brand, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9090">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9091" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9091;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Underline" && state === "Focus") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2433" data-name="Current=True, Size=sm, Type=Underline, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2435">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1118:69246" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1118:69246;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Line (vertical tabs)" && state === "Focus") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374446" data-name="Current=True, Size=sm, Type=Line (vertical tabs), State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374447">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374448" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374448;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Underline" && state === "Focus") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative shadow-[0px_0px_0px_0px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_0px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1319:8918" data-name="Current=True, Size=md, Type=Underline, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8920">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8921" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8921;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Line (vertical tabs)" && state === "Focus") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374449" data-name="Current=True, Size=md, Type=Line (vertical tabs), State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374450">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374451" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374451;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Underline" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2429" data-name="Current=True, Size=sm, Type=Underline, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2431">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1118:69243" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1118:69243;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Line (vertical tabs)" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374452" data-name="Current=True, Size=sm, Type=Line (vertical tabs), State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374453">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374454" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374454;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Underline" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="1319:8890" data-name="Current=True, Size=md, Type=Underline, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8892">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8893" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8893;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Line (vertical tabs)" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374455" data-name="Current=True, Size=md, Type=Line (vertical tabs), State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374456">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374457" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374457;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Underline" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2425" data-name="Current=True, Size=sm, Type=Underline, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2427">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1118:69212" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1118:69212;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "sm" && type === "Line (vertical tabs)" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374458" data-name="Current=True, Size=sm, Type=Line (vertical tabs), State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374459">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374460" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374460;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Underline" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="1319:8862" data-name="Current=True, Size=md, Type=Underline, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8864">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8865" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8865;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (current && size === "md" && type === "Line (vertical tabs)" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374461" data-name="Current=True, Size=md, Type=Line (vertical tabs), State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374462">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374463" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374463;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Underline" && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2459" data-name="Current=False, Size=sm, Type=Underline, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2461">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:1137" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:1137;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Line (vertical tabs)" && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374464" data-name="Current=False, Size=sm, Type=Line (vertical tabs), State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374465">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374466" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374466;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Underline" && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="1319:8810" data-name="Current=False, Size=md, Type=Underline, State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8812">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8813" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8813;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Line (vertical tabs)" && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374467" data-name="Current=False, Size=md, Type=Line (vertical tabs), State=Focus">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374468">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374469" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374469;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Underline" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2413" data-name="Current=False, Size=sm, Type=Underline, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2415">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1118:69249" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1118:69249;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Line (vertical tabs)" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374470" data-name="Current=False, Size=sm, Type=Line (vertical tabs), State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374471">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374472" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374472;3918:405139">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Underline" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-b-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="1319:8792" data-name="Current=False, Size=md, Type=Underline, State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:8794">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:8795" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:8795;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Line (vertical tabs)" && state === "Hover") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-l-2 border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374473" data-name="Current=False, Size=md, Type=Line (vertical tabs), State=Hover">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374474">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374475" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374475;3918:406640">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Underline" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="43:2411" data-name="Current=False, Size=sm, Type=Underline, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="43:2406">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:907" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:907;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "sm" && type === "Line (vertical tabs)" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[24px] items-center justify-center px-[var(--spacing-lg,12px)] py-[var(--spacing-xxs,2px)] relative"} data-node-id="5011:374476" data-name="Current=False, Size=sm, Type=Line (vertical tabs), State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="5011:374477">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374478" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I5011:374478;3918:407462">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Underline" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center pb-[var(--spacing-lg,12px)] px-[var(--spacing-xs,4px)] relative"} data-node-id="1319:9160" data-name="Current=False, Size=md, Type=Underline, State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1319:9162">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1319:9163" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:9163;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  if (!current && size === "md" && type === "Line (vertical tabs)" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[32px] items-center justify-center px-[14px] py-[var(--spacing-xs,4px)] relative"} data-node-id="5011:374479" data-name="Current=False, Size=md, Type=Line (vertical tabs), State=Default">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="5011:374480">
+          My details
+        </p>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="5011:374481" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I5011:374481;3918:406278">
+              2
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]"} data-node-id="1117:164" data-name="Current=False, Size=sm, Type=Button brand, State=Default">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1117:165">
+        My details
+      </p>
+      {badge && (
+        <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:191" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:191;3918:407462">
+            2
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Focus rings/focus-ring-shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: 0); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Focus rings/focus-ring-shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

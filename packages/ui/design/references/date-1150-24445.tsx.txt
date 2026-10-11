@@ -1,0 +1,28 @@
+const imgCalendar = "https://www.figma.com/api/mcp/asset/7699feb6-7243-4f18-891c-8ad4ac295e36.svg";
+
+type DatePickerDropdownProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  opened?: boolean;
+  state?: "Placeholder";
+  type?: "Single date";
+};
+
+function DatePickerDropdown({ className, breakpoint = "Desktop", opened = false, state = "Placeholder", type = "Single date" }: DatePickerDropdownProps) {
+  return (
+    <button className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1150:24445">
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="1150:24447" data-name="Buttons/Button">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[20px]" data-node-id="I1150:24447;3466:438983" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCalendar} />
+        </div>
+        <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1150:24447;6421:279423" data-name="Text padding">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I1150:24447;3287:433113">
+            Select date
+          </p>
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    </button>
+  );
+}

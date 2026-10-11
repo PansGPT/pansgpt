@@ -1,0 +1,50 @@
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: "True";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Disabled";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = "True", indeterminate = "False", size = "md", state = "Disabled", type = "Radio" }: CheckboxBaseProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[20px]"} data-node-id="1100:566">
+      <div className="absolute bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] inset-[calc(30%-0.4px)] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247894" data-name="Check" />
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: "True";
+  size?: "md";
+  state?: "Disabled";
+  type?: "Radio button";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = "True", size = "md", state = "Disabled", type = "Radio button" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border-2 border-[var(--colors\\/border\\/border-disabled_subtle,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:78363">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="3931:408852" data-name="Content">
+        <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="3931:408853" data-name="Input">
+          <CheckboxBase className="bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3931:408855" data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:409647" data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3931:409648">
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:409649">
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="3931:408857">
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

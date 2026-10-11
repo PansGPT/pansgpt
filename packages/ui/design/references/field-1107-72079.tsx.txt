@@ -1,0 +1,71 @@
+const imgMastercard = "https://www.figma.com/api/mcp/asset/3fda22bd-6bee-4ca8-82df-941e9bcb21db.svg";
+const imgAlertCircle = "https://www.figma.com/api/mcp/asset/defdcee7-9978-430e-a565-6d017e2a44ed.svg";
+
+type InputFieldProps = {
+  className?: string;
+  destructive?: "True";
+  hintText?: boolean;
+  label?: boolean;
+  required?: boolean;
+  size?: "md";
+  state?: "Placeholder" | "Focused";
+  type?: "Payment input";
+};
+
+function InputField({ className, destructive = "True", hintText = true, label = true, required = true, size = "md", state = "Placeholder", type = "Payment input" }: InputFieldProps) {
+  const isMdAndPaymentInputAndTrueAndFocused = size === "md" && type === "Payment input" && destructive === "True" && state === "Focused";
+  return (
+    <button className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative w-[320px]"} id={isMdAndPaymentInputAndTrueAndFocused ? "node-1107_72079" : "node-1107_72109"}>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380349" : "node-3285_380257"} data-name="Input with label">
+        {label && (
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7486:523662" data-name="Label wrapper">
+            <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3285:380258">
+              Card number
+            </p>
+            {required && (
+              <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="7487:535323">
+                *
+              </p>
+            )}
+          </div>
+        )}
+        <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center pl-[10px] pr-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full `}${isMdAndPaymentInputAndTrueAndFocused ? String.raw`border-2 border-[var(--colors\/border\/border-error,#f04438)] overflow-clip shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : String.raw`border border-[var(--colors\/border\/border-error_subtle,#fda29b)] drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]`}`} id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380351" : "node-3285_380259"} data-name="Input">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380352" : "node-3285_380260"} data-name="Content">
+            <div className="bg-[var(--colors\/base\/white,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid h-[24px] relative rounded-[var(--spacing-xs,4px)] shrink-0 w-[34px]" id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380353" : "node-3285_380261"} data-name="Payment method icon">
+              <div className="absolute inset-[calc(20.96%-0.58px)_calc(16.59%-0.67px)_calc(23.21%-0.54px)_calc(17.65%-0.65px)]" id={isMdAndPaymentInputAndTrueAndFocused ? "node-I3285_380353-1107_67069" : "node-I3285_380261-1107_67069"} data-name="Mastercard">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMastercard} />
+              </div>
+            </div>
+            <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-ellipsis text-left whitespace-nowrap `}${isMdAndPaymentInputAndTrueAndFocused ? String.raw`text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]` : String.raw`text-[color:var(--colors\/text\/text-placeholder,#717680)]`}`} id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380354" : "node-3285_380262"}>
+              Card number
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isMdAndPaymentInputAndTrueAndFocused ? "node-3285_380355" : "node-3285_380263"} data-name="alert-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAlertCircle} />
+          </div>
+        </div>
+      </div>
+      {hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full" data-node-id="3285:380264">
+          This is an error message.
+        </p>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## alert-circle
+**Node ID:** 3463:405479
+
+alert, circle, warning, error
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,75 @@
+type XAxisProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  data?: "12 months" | "30 days" | "7 days";
+};
+
+export default function XAxis({ className, breakpoint = "Desktop", data = "7 days" }: XAxisProps) {
+  const is12MonthsAndDesktop = data === "12 months" && breakpoint === "Desktop";
+  const is12MonthsAndMobile = data === "12 months" && breakpoint === "Mobile";
+  const is30Days = data === "30 days";
+  const is30DaysAndDesktop = data === "30 days" && breakpoint === "Desktop";
+  const is30DaysAndMobile = data === "30 days" && breakpoint === "Mobile";
+  const is7DaysAndDesktop = data === "7 days" && breakpoint === "Desktop";
+  const is7DaysAndMobile = data === "7 days" && breakpoint === "Mobile";
+  const isDesktopAndIs12MonthsOr30Days = breakpoint === "Desktop" && ["12 months", "30 days"].includes(data);
+  return (
+    <div className={className || `content-stretch flex items-center justify-between relative ${breakpoint === "Desktop" && ["30 days", "7 days"].includes(data) ? "px-[var(--spacing-3xl,24px)] text-center w-[1216px]" : breakpoint === "Mobile" ? "px-[var(--spacing-md,8px)] text-right w-[342px] whitespace-nowrap" : "px-[var(--spacing-3xl,24px)] text-center w-[1216px] whitespace-nowrap"}`} id={is7DaysAndMobile ? "node-1061_47529" : is7DaysAndDesktop ? "node-1061_47477" : is30DaysAndMobile ? "node-1061_47537" : is30DaysAndDesktop ? "node-1061_47442" : is12MonthsAndMobile ? "node-1061_47553" : "node-1061_47349"}>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47530" : is7DaysAndDesktop ? "node-1061_47478" : is30DaysAndMobile ? "node-1061_47538" : is30DaysAndDesktop ? "node-1061_47443" : is12MonthsAndMobile ? "node-1061_47554" : "node-1061_46486"}>
+        {is7DaysAndMobile ? "Mon" : is30Days ? "2" : data === "12 months" ? "Jan" : "Mon"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47531" : is7DaysAndDesktop ? "node-1061_47479" : is30DaysAndMobile ? "node-1061_47540" : is30DaysAndDesktop ? "node-1061_47444" : is12MonthsAndMobile ? "node-1061_47556" : "node-1061_46487"}>
+        {is7DaysAndMobile ? "Tue" : is30DaysAndMobile ? "6" : is30DaysAndDesktop ? "4" : is12MonthsAndMobile ? "Mar" : is12MonthsAndDesktop ? "Feb" : "Tue"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47532" : is7DaysAndDesktop ? "node-1061_47480" : is30DaysAndMobile ? "node-1061_47542" : is30DaysAndDesktop ? "node-1061_47445" : is12MonthsAndMobile ? "node-1063_47258" : "node-1061_46488"}>
+        {is7DaysAndMobile ? "Wed" : is30DaysAndMobile ? "10" : is30DaysAndDesktop ? "6" : is12MonthsAndMobile ? "May" : is12MonthsAndDesktop ? "Mar" : "Wed"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47533" : is7DaysAndDesktop ? "node-1061_47481" : is30DaysAndMobile ? "node-1061_47544" : is30DaysAndDesktop ? "node-1061_47446" : is12MonthsAndMobile ? "node-1061_47558" : "node-1063_47030"}>
+        {is7DaysAndMobile ? "Thu" : is30DaysAndMobile ? "14" : is30DaysAndDesktop ? "8" : is12MonthsAndMobile ? "Jul" : is12MonthsAndDesktop ? "Apr" : "Thu"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47534" : is7DaysAndDesktop ? "node-1061_47482" : is30DaysAndMobile ? "node-1061_47546" : is30DaysAndDesktop ? "node-1061_47447" : is12MonthsAndMobile ? "node-1061_47560" : "node-1063_47139"}>
+        {is7DaysAndMobile ? "Fri" : is30DaysAndMobile ? "18" : is30DaysAndDesktop ? "10" : is12MonthsAndMobile ? "Sep" : is12MonthsAndDesktop ? "May" : "Fri"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47535" : is7DaysAndDesktop ? "node-1061_47483" : is30DaysAndMobile ? "node-1061_47548" : is30DaysAndDesktop ? "node-1061_47448" : is12MonthsAndMobile ? "node-1061_47562" : "node-1061_46489"}>
+        {is7DaysAndMobile ? "Sat" : is30DaysAndMobile ? "22" : is30DaysAndDesktop ? "12" : is12MonthsAndMobile ? "Nov" : is12MonthsAndDesktop ? "Jun" : "Sat"}
+      </p>
+      <p className={`relative shrink-0 ${is7DaysAndDesktop ? "w-[56px]" : is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is7DaysAndMobile ? "node-1061_47536" : is7DaysAndDesktop ? "node-1061_47484" : is30DaysAndMobile ? "node-1061_47550" : is30DaysAndDesktop ? "node-1061_47449" : is12MonthsAndMobile ? "node-1061_47564" : "node-1061_46490"}>
+        {is7DaysAndMobile ? "Sun" : is30DaysAndMobile ? "26" : is30DaysAndDesktop ? "14" : is12MonthsAndMobile ? "Dec" : is12MonthsAndDesktop ? "Jul" : "Sun"}
+      </p>
+      {(is12MonthsAndDesktop || is30Days) && (
+        <p className={`relative shrink-0 ${is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is30DaysAndMobile ? "node-1061_47552" : is30DaysAndDesktop ? "node-1061_47450" : "node-1061_46491"}>
+          {is30DaysAndMobile ? "30" : is30DaysAndDesktop ? "16" : is12MonthsAndDesktop ? "Aug" : ""}
+        </p>
+      )}
+      {isDesktopAndIs12MonthsOr30Days && (
+        <>
+          <p className={`relative shrink-0 ${is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is30DaysAndDesktop ? "node-1061_47451" : "node-1061_46492"}>
+            {is30DaysAndDesktop ? "18" : is12MonthsAndDesktop ? "Sep" : ""}
+          </p>
+          <p className={`relative shrink-0 ${is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is30DaysAndDesktop ? "node-1061_47452" : "node-1061_46493"}>
+            {is30DaysAndDesktop ? "20" : is12MonthsAndDesktop ? "Oct" : ""}
+          </p>
+          <p className={`relative shrink-0 ${is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is30DaysAndDesktop ? "node-1061_47453" : "node-1061_46902"}>
+            {is30DaysAndDesktop ? "22" : is12MonthsAndDesktop ? "Nov" : ""}
+          </p>
+          <p className={`relative shrink-0 ${is30DaysAndDesktop ? "w-[16px]" : ""}`} id={is30DaysAndDesktop ? "node-1061_47454" : "node-1061_46903"}>
+            {is30DaysAndDesktop ? "24" : is12MonthsAndDesktop ? "Dec" : ""}
+          </p>
+        </>
+      )}
+      {is30DaysAndDesktop && (
+        <>
+          <p className="relative shrink-0 w-[16px]" data-node-id="1061:47455">
+            26
+          </p>
+          <p className="relative shrink-0 w-[16px]" data-node-id="1061:47456">
+            28
+          </p>
+          <p className="relative shrink-0 whitespace-nowrap" data-node-id="1061:47457">
+            30
+          </p>
+        </>
+      )}
+    </div>
+  );
+}

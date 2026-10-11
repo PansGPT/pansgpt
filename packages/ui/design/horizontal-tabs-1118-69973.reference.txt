@@ -1,0 +1,102 @@
+type TabButtonBaseProps = {
+  className?: string;
+  badge?: boolean;
+  current?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Button gray";
+};
+
+function TabButtonBase({ className, badge = true, current = false, size = "sm", state = "Default", type = "Button gray" }: TabButtonBaseProps) {
+  const isNotCurrentAndSmAndButtonGrayAndDefault = !current && size === "sm" && type === "Button gray" && state === "Default";
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] ${isNotCurrentAndSmAndButtonGrayAndDefault ? "" : String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]`}`} id={isNotCurrentAndSmAndButtonGrayAndDefault ? "node-43_2554" : "node-43_2568"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isNotCurrentAndSmAndButtonGrayAndDefault ? String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isNotCurrentAndSmAndButtonGrayAndDefault ? "node-43_2556" : "node-43_2569"}>
+        My details
+      </p>
+      {badge && (
+        <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1117:358" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1117:358;3918:407462">
+            2
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type HorizontalTabsProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  fullWidth?: "False";
+  size?: "sm";
+  type?: "Button gray";
+};
+
+function HorizontalTabs({ className, breakpoint = "Desktop", fullWidth = "False", size = "sm", type = "Button gray" }: HorizontalTabsProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative rounded-[9999px] w-[1280px]"} data-node-id="1118:69973">
+      <TabButtonBase badge={false} className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" current />
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69975" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69975;43:2556">
+          Profile
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69976" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69976;43:2556">
+          Password
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69977" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69977;43:2556">
+          Team
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69978" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69978;43:2556">
+          Plan
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69979" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69979;43:2556">
+          Billing
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69980" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69980;43:2556">
+          Email
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69981" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69981;43:2556">
+          Notifications
+        </p>
+        <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I1118:69981;1117:238" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1118:69981;1117:238;3918:407462">
+            2
+          </p>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69982" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69982;43:2556">
+          Integrations
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1118:69983" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1118:69983;43:2556">
+          API
+        </p>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

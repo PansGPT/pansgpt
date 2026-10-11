@@ -1,0 +1,112 @@
+const imgCursor = "https://www.figma.com/api/mcp/asset/d263e047-d1cd-4919-9c87-aab21ef198c2.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/2a50b10e-a6cc-4dc3-88be-c69b37516f90.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/662fae82-1620-4fad-b7c6-f32c7d9b4e64.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/b2093e42-2f2b-444c-b2fb-391f783cf4b5.svg";
+
+type ChartMarkerProps = {
+  className?: string;
+  cursor?: boolean;
+  tooltip?: boolean;
+  type?: "Line" | "Dash" | "Minimal";
+};
+
+export default function ChartMarker({ className, cursor = true, tooltip = true, type = "Line" }: ChartMarkerProps) {
+  const isDash = type === "Dash";
+  const isLine = type === "Line";
+  const isMinimal = type === "Minimal";
+  return (
+    <div className={className || "content-stretch flex flex-col h-[200px] isolate items-center relative w-[12px]"} id={isDash ? "node-8099_193258" : isMinimal ? "node-8101_195716" : "node-8099_193212"}>
+      {isLine && tooltip && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-1/2 top-[-60px] z-[4]" data-node-id="8099:193191" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="I8099:193191;1052:578" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[2px] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I8099:193191;1052:579" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="I8099:193191;1052:580">
+                1,218
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] whitespace-nowrap" data-node-id="I8099:193191;1052:581">
+                Jan 10, 2025
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {isLine && cursor && (
+        <div className="absolute left-[-1px] size-[20px] top-[28px] z-[3]" data-node-id="8099:193201" data-name="Cursor">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+        </div>
+      )}
+      {isLine && (
+        <>
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] border-solid mb-[-6px] relative rounded-[200px] shrink-0 size-[12px] z-[2]" data-node-id="8099:193199" data-name="Marker" />
+          <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="8099:192826" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="relative size-full" data-name="Line">
+                <div className="absolute inset-[-1px_-0.52%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLine} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {isMinimal && tooltip && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-1/2 top-[-40px] z-[3]" data-node-id="8101:195731" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I8101:195731;1052:588" data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I8101:195731;1052:589">
+              1,218
+            </p>
+          </div>
+        </div>
+      )}
+      {isMinimal && cursor && (
+        <div className="absolute left-[-1px] size-[20px] top-[28px] z-[2]" data-node-id="8101:195717" data-name="Cursor">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+        </div>
+      )}
+      {isMinimal && (
+        <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="8101:195720" style={{ containerType: "size" }}>
+          <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-1px_-0.5%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine1} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDash && tooltip && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%+2px)] top-[-60px] z-[4]" data-node-id="8099:193245" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="I8099:193245;1052:578" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[2px] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I8099:193245;1052:579" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="I8099:193245;1052:580">
+                1,218
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] whitespace-nowrap" data-node-id="I8099:193245;1052:581">
+                Jan 10, 2025
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {isDash && cursor && (
+        <div className="absolute left-[-1px] size-[20px] top-[28px] z-[3]" data-node-id="8099:193244" data-name="Cursor">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+        </div>
+      )}
+      {isDash && (
+        <>
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] border-2 border-[var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] border-solid mb-[-2px] relative rounded-[200px] shrink-0 size-[6px] z-[2]" data-node-id="8099:193246" data-name="Marker" />
+          <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="8099:193247" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="relative size-full" data-name="Line">
+                <div className="absolute inset-[-1px_-0.51%]">
+                  <img alt="" className="block max-w-none size-full" src={imgLine2} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

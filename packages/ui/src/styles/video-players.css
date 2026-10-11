@@ -1,0 +1,81 @@
+.p-video-surface { --video-white: var(--figma-colors-base-white); --video-white-10: var(--figma-component-colors-alpha-alpha-white-10); --video-white-20: var(--figma-component-colors-alpha-alpha-white-20); --video-white-30: var(--figma-component-colors-alpha-alpha-white-30); --video-white-40: var(--figma-component-colors-alpha-alpha-white-40); position: relative; width: 320px; max-width: 100%; aspect-ratio: 16 / 9; background: var(--figma-colors-base-black); border-radius: var(--figma-radius-md); overflow: hidden; box-shadow: inset 0 0 0 .5px rgb(0 0 0 / .1); }
+.p-video-surface[data-size="md"] { width: 560px; }
+.p-video-surface[data-size="lg"] { width: 720px; border-radius: var(--figma-radius-xl); }
+.p-video-surface > video,.p-video-poster { position: absolute; width: 100%; height: 100%; inset: 0; object-fit: cover; border-radius: inherit; }
+.p-video-surface > .p-video-overlay-action { position: absolute; inset: 0; width: 100%; height: 100%; }
+.p-video-action { position: relative; display: inline-flex; align-items: center; justify-content: center; padding: 8px; width: 32px; height: 32px; border: 0; border-radius: var(--figma-radius-sm); background: transparent; color: var(--figma-colors-base-white); flex: none; font: 600 12px/18px var(--font-body); cursor: pointer; }
+.p-video-action img,.p-video-timestamp img,.p-video-overlay-action img { display: block; max-width: none; flex: none; }
+.p-video-action:is(:hover,:focus-visible),.p-video-action[data-reference-state="hover"],.p-video-volume:is(:hover,:focus-within),.p-video-volume[data-reference-state="hover"] { background: var(--figma-component-colors-alpha-alpha-white-20); backdrop-filter: blur(4px); }
+.p-video-action:focus-visible,.p-video-overlay-action:focus-visible { outline: 2px solid var(--figma-colors-base-white); outline-offset: -2px; }
+.p-video-action:disabled,.p-video-overlay-action:disabled { cursor: default; }
+.p-video-action[aria-pressed="true"] { box-shadow: inset 0 -2px var(--figma-colors-base-white); }
+.p-video-action-reference { display: inline-flex; position: relative; }
+.p-video-reference-tooltip { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); }
+.p-video-tooltip-positioner { z-index: 100; }
+.p-video-tooltip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: var(--figma-radius-md); color: var(--figma-colors-base-white); background: var(--figma-component-colors-alpha-alpha-white-20); backdrop-filter: blur(4px); box-shadow: inset 0 0 0 1px var(--figma-component-colors-alpha-alpha-white-10), var(--effect-shadow-lg); font: 600 14px/20px var(--font-body); white-space: nowrap; }
+.p-video-tooltip[data-badge="true"] { padding-right: 4px; }
+.p-video-tooltip-key { display: inline-flex; padding: 1px 3px; border-radius: var(--figma-radius-xs); box-shadow: inset 0 0 0 1px var(--figma-component-colors-alpha-alpha-white-10), var(--effect-shadow-xs); background: var(--figma-component-colors-alpha-alpha-white-30); font: 600 12px/18px var(--font-body); }
+.p-video-volume { display: inline-flex; align-items: center; width: 84px; height: 32px; padding-right: 8px; border-radius: var(--figma-radius-sm); flex: none; }
+.p-video-volume-reference { --video-volume-fill: 36px; position: relative; display: block; width: 44px; height: 4px; background: var(--figma-component-colors-alpha-alpha-white-30); border-radius: 9999px; }
+.p-video-volume-reference > span { display: block; position: relative; width: var(--video-volume-fill); height: 4px; background: var(--figma-colors-base-white); border-radius: 9999px; }
+.p-video-volume-reference > span > span { position: absolute; right: 0; top: -4px; width: 12px; height: 12px; background: var(--figma-colors-base-white); border-radius: 9999px; }
+.p-video-volume-range { position: relative; display: flex; align-items: center; width: 44px; height: 32px; touch-action: none; }
+.p-video-volume-track { position: relative; width: 44px; height: 4px; border-radius: 9999px; background: var(--figma-component-colors-alpha-alpha-white-30); }
+.p-video-volume-fill { display: block; position: absolute; left: 0; height: 4px; border-radius: inherit; background: var(--figma-colors-base-white); }
+.p-video-volume-thumb { display: block; width: 12px; height: 12px; border-radius: 9999px; background: var(--figma-colors-base-white); }
+.p-video-volume-thumb:focus-visible,.p-video-seek-thumb:focus-visible { outline: 2px solid var(--figma-colors-base-white); outline-offset: 3px; }
+.p-video-overlay-action { display: flex; align-items: center; justify-content: center; width: 128px; height: 128px; padding: 0; border: 0; background: rgb(0 0 0 / .1); cursor: pointer; }
+.p-video-overlay-circle { display: flex; position: relative; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 9999px; backdrop-filter: blur(8px); background: var(--figma-component-colors-alpha-alpha-white-30); }
+.p-video-overlay-action[data-small="true"] .p-video-overlay-circle { background: transparent; }
+.p-video-overlay-action:is(:hover,:focus-visible) .p-video-overlay-circle,.p-video-overlay-action[data-reference-state="hover"] .p-video-overlay-circle { background: var(--figma-component-colors-alpha-alpha-white-40); }
+.p-video-overlay-cursor { position: absolute; right: 0; bottom: -1.12px; }
+.p-video-timestamp { display: flex; flex-direction: column; gap: 8px; align-items: center; flex: none; color: var(--figma-colors-base-white); font: 600 12px/18px var(--font-body); }
+.p-video-preview-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--figma-radius-md); box-shadow: inset 0 0 0 2px var(--figma-colors-base-white), var(--effect-shadow-xl); overflow: hidden; }
+.p-video-preview-wrapper > img { width: 100%; height: 100%; object-fit: cover; max-width: 100%; border-radius: inherit; position: relative; z-index: -1; }
+.p-video-preview-wrapper { isolation: isolate; }
+.p-video-timestamp-times { display: flex; gap: 4px; align-items: center; height: 18px; }
+.p-video-timestamp-times > span { width: 36px; white-space: nowrap; }
+.p-video-timestamp-times > span:last-child { opacity: .7; }
+.p-video-timestamp-line { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 32px; }
+.p-video-timestamp-line > img:first-child { position: absolute; top: -.5px; }
+.p-video-timestamp-cursor { position: absolute; left: calc(50% - 8px); top: 6px; }
+.p-video-actions-bar { width: 240px; max-width: 100%; padding: 24px 4px 4px; color: var(--figma-colors-base-white); background: linear-gradient(to bottom, rgb(0 0 0 / 0), rgb(0 0 0 / .3)); }
+.p-video-actions-bar[data-size="md"] { width: 560px; padding: 40px 20px 16px; }
+.p-video-actions-bar[data-size="lg"] { width: 720px; padding: 48px 32px 24px; }
+.p-video-surface > .p-video-actions-bar { position: absolute; left: 0; bottom: 0; width: 100%; }
+.p-video-actions-content { position: relative; display: flex; gap: 2px; align-items: center; width: 100%; min-height: 32px; }
+.p-video-actions-bar:not([data-size="sm"]) .p-video-actions-content { min-height: 36px; }
+.p-video-actions-bar[data-size="lg"] .p-video-actions-content { gap: 4px; }
+.p-video-volume-lg { display: none; }
+.p-video-volume-compact { display: flex; }
+.p-video-actions-bar[data-size="lg"] .p-video-volume-lg { display: flex; }
+.p-video-actions-bar[data-size="lg"] .p-video-volume-compact { display: none; }
+.p-video-progress { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; padding-inline: 4px; font: 600 12px/18px var(--font-body); }
+.p-video-actions-bar[data-size="lg"] .p-video-progress { padding-inline: 8px; }
+.p-video-elapsed { width: 36px; flex: none; white-space: nowrap; }
+.p-video-remaining { width: 42px; flex: none; white-space: nowrap; }
+.p-video-seek-wrapper { position: relative; flex: 1; min-width: 0; }
+.p-video-seek { position: relative; display: flex; align-items: center; height: 32px; touch-action: none; }
+.p-video-seek-track { position: relative; display: block; width: 100%; height: 8px; border-radius: 9999px; background: var(--figma-component-colors-alpha-alpha-white-30); backdrop-filter: blur(4px); overflow: hidden; }
+.p-video-buffer,.p-video-seek-fill { position: absolute; height: 8px; left: 0; border-radius: inherit; background: var(--figma-colors-base-white); }
+.p-video-buffer { opacity: .3; }
+.p-video-seek-thumb { width: 12px; height: 12px; background: var(--figma-colors-base-white); border-radius: 9999px; display: block; opacity: 0; }
+.p-video-seek:is(:hover,:focus-within) .p-video-seek-thumb { opacity: 1; }
+.p-video-advanced { display: none; gap: 4px; flex: none; }
+.p-video-actions-bar[data-size="lg"] .p-video-advanced { display: flex; }
+.p-video-actions-bar[data-size="sm"] .p-video-progress { visibility: hidden; padding: 0; }
+.p-video-actions-bar[data-size="sm"] .p-video-progress > * { display: none; }
+.p-video-reference-timestamp { position: absolute; bottom: -9px; right: 55px; pointer-events: none; }
+.p-video-actions-bar[data-size="lg"] .p-video-reference-timestamp { right: 45px; }
+.p-video-live-preview { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); pointer-events: none; visibility: hidden; }
+.p-video-seek-wrapper:is(:hover,:focus-within) .p-video-live-preview { visibility: visible; }
+.p-video-error { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgb(0 0 0 / .75); color: var(--figma-colors-base-white); font: 500 14px/20px var(--font-body); }
+.p-video-surface:fullscreen { width: 100%; height: 100%; max-width: none; border-radius: 0; aspect-ratio: auto; }
+.p-video-surface:fullscreen > video { object-fit: contain; }
+@media (max-width: 480px) {
+  .p-video-surface[data-responsive="true"] .p-video-actions-bar { padding: 24px 4px 4px; }
+  .p-video-surface[data-responsive="true"] .p-video-advanced,.p-video-surface[data-responsive="true"] .p-video-volume-lg { display: none; }
+  .p-video-surface[data-responsive="true"] .p-video-volume-compact { display: flex; }
+  .p-video-surface[data-responsive="true"] .p-video-elapsed,.p-video-surface[data-responsive="true"] .p-video-remaining { display: none; }
+  .p-video-surface[data-responsive="true"] .p-video-actions-content { min-height: 32px; }
+}

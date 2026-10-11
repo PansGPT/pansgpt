@@ -1,0 +1,78 @@
+const imgPage = "https://www.figma.com/api/mcp/asset/c2001f86-44da-4e1e-9bc8-1ba861f29979.svg";
+const imgIconWrap = "https://www.figma.com/api/mcp/asset/6ce5f3ce-e2ba-4f0e-a154-87b74d42c207.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/49e55e4c-ace1-44f0-89e1-236c5635b1a4.svg";
+
+type EmptyStateProps = {
+  className?: string;
+  icon?: "File type icon";
+  size?: "md";
+};
+
+function EmptyState({ className, icon = "File type icon", size = "md" }: EmptyStateProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative w-[512px]"} data-node-id="4980:382754">
+      <div className="-translate-x-1/2 absolute left-1/2 size-[480px] top-[-188px]" data-node-id="4981:383034" data-name="Background pattern decorative" />
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-4xl,32px)] items-center min-w-px relative" data-node-id="4980:382756" data-name="Empty state">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-center relative shrink-0 w-full" data-node-id="4980:382757" data-name="Content">
+          <div className="bg-gradient-to-b content-stretch flex from-[var(--colors\/gray-\(light-mode\)\/50,#fafafa)] items-start p-[var(--spacing-4xl,32px)] relative rounded-[200px] shrink-0 to-[var(--colors\/gray-\(light-mode\)\/200,#e9eaeb)]" data-node-id="4981:383020" data-name="Icon wrap">
+            <div className="drop-shadow-[0px_1px_1.5px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] relative shrink-0 size-[40px]" data-node-id="4981:383021" data-name="File type icon">
+              <div className="absolute inset-[0_10%]" data-node-id="I4981:383021;4981:382948" data-name="Page">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+              </div>
+              <div className="absolute inset-[40%_30%_20%_30%]" data-node-id="I4981:383021;4981:382959" data-name="Icon wrap">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIconWrap} />
+              </div>
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center max-w-[352px] relative shrink-0 text-center w-full" data-node-id="4980:382759" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="4980:382760">
+              No projects found
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="4980:382761">
+              Your search “Landing page design” did not match any projects. Please try again.
+            </p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="4980:382762" data-name="Actions">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4980:382763" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4980:382763;6421:279423" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4980:382763;3287:433113">
+                Clear search
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4980:382764" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="relative shrink-0 size-[20px]" data-node-id="I4980:382764;3466:410053" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4980:382764;6421:278974" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4980:382764;3287:432941">
+                New project
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Shadows/shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Gradient/Gray/200 -> 50 (180deg): , Text lg/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-lg, weight: 600, lineHeight: Line height/text-lg, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

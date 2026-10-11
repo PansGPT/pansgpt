@@ -1,0 +1,37 @@
+@font-face { font-family: "Roboto Mono"; font-style: normal; font-weight: 100 700; font-display: swap; src: url("../../assets/fonts/roboto-mono-latin-wght-normal.woff2") format("woff2"); }
+.p-code-snippet { position: relative; width: 720px; max-width: 100%; border-radius: var(--figma-radius-xl); background: var(--bg-primary); box-shadow: inset 0 0 0 1px var(--border-secondary); overflow: clip; }
+.p-code-snippet[data-code-variant="tabs"] { background: var(--bg-secondary-alt); box-shadow: var(--effect-shadow-xs),inset 0 0 0 1px var(--border-secondary); }
+.p-code-header { display: flex; align-items: start; gap: var(--figma-spacing-lg); padding: var(--figma-spacing-md) var(--figma-spacing-md) var(--figma-spacing-md) var(--figma-spacing-lg); height: 44px; position: relative; z-index: 3; }
+.p-code-tabs { display: flex; flex: 1; min-width: 0; overflow: auto; gap: 0; padding: 0; }
+.p-code-tab.p-button { height: 28px; border: 0; padding: 4px 8px; border-radius: var(--figma-radius-sm); color: var(--text-quaternary-500); background: transparent; box-shadow: none; font: 600 14px/20px var(--font-body); flex: none; overflow: visible; }
+.p-code-tab > .p-button-text { display: contents; }
+.p-code-tab.p-button::after { display: none; }
+.p-code-tab.p-button[data-code-current="true"], .p-code-tab.p-button:hover:not(:disabled), .p-code-tab.p-button[data-code-state="hover"] { color: var(--text-primary-900); background: transparent; }
+.p-code-tab.p-button:focus-visible,.p-code-tab.p-button[data-code-state="focus"] { box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px #9e77ed; outline: none; background: transparent; }
+.p-code-tab.p-button:disabled { opacity: 0.5; cursor: not-allowed; }
+.p-code-panel { position: relative; outline: none; }
+.p-code-content { display: flex; align-items: stretch; position: relative; }
+.p-code-snippet[data-code-variant="tabs"] .p-code-content { background: var(--bg-primary-alt); box-shadow: inset 0 0 0 1px var(--border-secondary); border-radius: var(--figma-radius-xl); }
+.p-code-sidebar { display: flex; flex-direction: column; flex: none; padding: 20px 16px; color: var(--text-quaternary-500); background: var(--bg-secondary); box-shadow: inset -1px 0 var(--border-secondary); text-align: right; font: 700 14px/20px "Roboto Mono",monospace; }
+.p-code-sidebar span { display: block; margin-bottom: 1px; }
+.p-code-sidebar span:last-child { margin-bottom: 0; }
+.p-code-sidebar[data-source-numbers] span:nth-child(-n+2) { margin-bottom: 0; }
+.p-code-pre { margin: 0; padding: 20px; min-width: 0; flex: 1; align-self: flex-start; color: var(--text-primary-900); font: 400 14px/20px "Roboto Mono",monospace; white-space: pre; overflow: auto; tab-size: 2; }
+.p-code-pre code { font: inherit; display: block; }
+.p-code-line { display: block; min-height: 20px; margin-bottom: 1px; }
+.p-code-line:last-child { margin-bottom: 0; }
+.p-code-content[data-code-collapsed] .p-code-pre { mask-image: linear-gradient(to bottom,black 55%,transparent 95%); }
+.p-code-content[data-source-mask] .p-code-pre code { mask-image: url("../../assets/code-snippet-imgCode.svg"); mask-size: 720px 522px; mask-position: -20px -20px; mask-repeat: no-repeat; mask-mode: alpha; }
+.p-code-content[data-source-mask] .p-code-pre { mask-image: none; }
+.p-code-expand { position: absolute; bottom: 0; left: 0; right: 0; display: flex; justify-content: center; padding: 0 20px 24px; }
+.p-code-expand-open { position: relative; padding-top: 12px; }
+.p-code-simple-copy { position: absolute; right: 8px; top: 8px; z-index: 2; }
+.p-code-token[data-tone="comment"] { color: var(--figma-colors-success-600); }
+.p-code-token[data-tone="keyword"] { color: var(--figma-colors-pink-600); }
+.p-code-token[data-tone="identifier"] { color: var(--figma-colors-blue-600); }
+.p-code-token[data-tone="operator"] { color: var(--figma-colors-error-600); }
+.p-code-token[data-tone="muted"] { color: var(--text-quaternary-500); }
+[data-theme="dark"] .p-code-token[data-tone="comment"] { color: var(--figma-colors-success-400); }
+[data-theme="dark"] .p-code-token[data-tone="keyword"] { color: var(--figma-colors-pink-400); }
+[data-theme="dark"] .p-code-token[data-tone="identifier"] { color: var(--figma-colors-blue-400); }
+[data-theme="dark"] .p-code-token[data-tone="operator"] { color: var(--figma-colors-error-400); }

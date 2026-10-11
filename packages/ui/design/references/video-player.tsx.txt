@@ -1,0 +1,280 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/b600811e-1e5f-476e-8a0f-372f50cc8535.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/a7b7cd4e-5bf8-49b2-82b2-0281e61ccecd.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/d41bb010-cce9-4c03-9f07-223dddebfe52.svg";
+const imgAirplay = "https://www.figma.com/api/mcp/asset/32bcfa57-fe04-4508-bf95-451b2acdadcc.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/a7b2508f-5915-4ee4-a548-d2d22849ea5d.svg";
+const imgPlaybackX = "https://www.figma.com/api/mcp/asset/0c217142-b18d-497d-b366-718704833f5f.svg";
+const imgVideoPreview169 = "https://www.figma.com/api/mcp/asset/fab8faea-7787-4e29-94c5-9b17b1221a9c.png";
+const imgDivider = "https://www.figma.com/api/mcp/asset/3542f4d1-c5c7-4d41-bb0e-9ac3e351fdc4.svg";
+const imgIndicatorLine = "https://www.figma.com/api/mcp/asset/52fb8d6e-2463-4b27-8ee5-4404bb481cc3.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/57c94b0e-d3c6-4821-b716-26460505feed.svg";
+const imgSizeLgPlayingFalse = "https://www.figma.com/api/mcp/asset/c14a2691-2ac8-4e9a-9b04-9d85612ef890.png";
+const imgPlay1 = "https://www.figma.com/api/mcp/asset/cf26b245-3a9b-4da5-bfd2-93bdc959bb19.svg";
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Play" | "Pause" | "Volume max" | "AirPlay" | "Maximize 01" | "Playback speed";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isAirPlayAndDefault = type === "AirPlay" && state === "Default";
+  const isMaximize01AndDefault = type === "Maximize 01" && state === "Default";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isPlaybackSpeedAndDefault = type === "Playback speed" && state === "Default";
+  const isVolumeMaxAndDefault = type === "Volume max" && state === "Default";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${isPlaybackSpeedAndDefault ? "size-[32px]" : ""}`} id={isPlaybackSpeedAndDefault ? "node-9264_576094" : isMaximize01AndDefault ? "node-9264_575711" : isAirPlayAndDefault ? "node-9264_575710" : isVolumeMaxAndDefault ? "node-9264_575704" : isPauseAndDefault ? "node-9264_575967" : "node-9264_575952"}>
+      {type === "Play" && state === "Default" && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575950" data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {isPauseAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575968" data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {isVolumeMaxAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {isAirPlayAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575673" data-name="airplay">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAirplay} />
+        </div>
+      )}
+      {isMaximize01AndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575675" data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+      {isPlaybackSpeedAndDefault && (
+        <>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9264:576100">
+            1
+          </p>
+          <div className="relative shrink-0 size-[8px]" data-node-id="9264:576111" data-name="playback-x">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaybackX} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+type VideoVolumeSliderHandleProps = {
+  className?: string;
+  volume?: "75%";
+};
+
+function VideoVolumeSliderHandle({ className, volume = "75%" }: VideoVolumeSliderHandleProps) {
+  return (
+    <div className={className || "bg-[var(--component-colors\\/alpha\\/alpha-white-30,rgba(255,255,255,0.3))] h-[4px] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="9264:575518">
+      <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[4px] left-0 right-[8px] rounded-[var(--radius-full,9999px)] top-0" data-node-id="9264:575510" data-name="Progress">
+        <div className="-translate-y-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] right-0 rounded-[var(--radius-full,9999px)] size-[12px] top-1/2" data-node-id="9264:575512" data-name="Control handle" />
+      </div>
+    </div>
+  );
+}
+
+type VideoVolumeSliderProps = {
+  className?: string;
+  state?: "Default";
+};
+
+function VideoVolumeSlider({ className, state = "Default" }: VideoVolumeSliderProps) {
+  return (
+    <div className={className || "content-stretch flex items-center pr-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] w-[84px]"} data-node-id="9264:575621">
+      <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+      <VideoVolumeSliderHandle className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] flex-[1_0_0] h-[4px] min-w-px relative rounded-[var(--radius-full,9999px)]" />
+    </div>
+  );
+}
+
+type VideoActionsBarProps = {
+  className?: string;
+  playing?: boolean;
+  size?: "sm" | "md" | "lg";
+  timestampIndicator?: boolean;
+};
+
+function VideoActionsBar({ className, playing = false, size = "sm", timestampIndicator = true }: VideoActionsBarProps) {
+  const isLg = size === "lg";
+  const isLgOrMd = ["lg", "md"].includes(size);
+  const isMd = size === "md";
+  const isNotPlayingAndLg = !playing && size === "lg";
+  const isNotPlayingAndMd = !playing && size === "md";
+  const isNotPlayingAndSm = !playing && size === "sm";
+  const isPlayingAndLg = playing && size === "lg";
+  const isPlayingAndMd = playing && size === "md";
+  const isPlayingAndSm = playing && size === "sm";
+  const isSm = size === "sm";
+  return (
+    <div className={className || `bg-gradient-to-b content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start relative to-[rgba(0,0,0,0.3)] ${isSm ? "pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] w-[240px]" : isMd ? "pb-[var(--spacing-xl,16px)] pt-[var(--spacing-5xl,40px)] px-[var(--spacing-2xl,20px)] w-[560px]" : "pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-6xl,48px)] px-[var(--spacing-4xl,32px)] w-[720px]"}`} id={isPlayingAndSm ? "node-9264_576599" : isPlayingAndMd ? "node-9264_576499" : isPlayingAndLg ? "node-9264_576128" : isNotPlayingAndSm ? "node-9264_576588" : isNotPlayingAndMd ? "node-9264_576486" : "node-9264_576127"}>
+      <div className={`content-stretch flex items-center relative shrink-0 w-full ${["md", "sm"].includes(size) ? "gap-[var(--spacing-xxs,2px)]" : "gap-[var(--spacing-xs,4px)]"}`} id={isPlayingAndSm ? "node-9264_576631" : isPlayingAndMd ? "node-9264_576500" : isPlayingAndLg ? "node-9264_575912" : isNotPlayingAndSm ? "node-9264_576589" : isNotPlayingAndMd ? "node-9264_576487" : "node-9264_575879"} data-name="Content">
+        {isLgOrMd && <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type={playing && ["lg", "md"].includes(size) ? "Pause" : undefined} />}
+        {isLg && (
+          <>
+            <VideoVolumeSlider className="content-stretch flex items-center pr-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 w-[84px]" />
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px px-[var(--spacing-md,8px)] relative" id={isPlayingAndLg ? "node-9264_575915" : "node-9264_575894"} data-name="Video progress">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" id={isPlayingAndLg ? "node-9264_575916" : "node-9264_575892"}>
+                {isPlayingAndLg ? "02:08" : isNotPlayingAndLg ? "00:00" : ""}
+              </p>
+              <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--radius-full,9999px)]" id={isPlayingAndLg ? "node-9264_575939" : "node-9264_575859"} data-name="Progress slider">
+                <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-white,white)] opacity-30 rounded-[var(--radius-full,9999px)] `}${isPlayingAndLg ? "inset-[0_32.48%_0_0]" : "inset-[0_82.17%_0_0]"}`} id={isPlayingAndLg ? "node-9264_575940" : "node-9269_12883"} data-name="Buffering progress" />
+                <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-white,white)] rounded-[var(--radius-full,9999px)] `}${isPlayingAndLg ? "inset-[0_74.52%_0_0]" : "bottom-0 left-0 top-0 w-[8px]"}`} id={isPlayingAndLg ? "node-9264_575941" : "node-9264_575871"} data-name="Progress line" />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[42px]" id={isPlayingAndLg ? "node-9264_575920" : "node-9264_575895"}>
+                {isPlayingAndLg ? "-06:18" : isNotPlayingAndLg ? "-08:24" : ""}
+              </p>
+              {isPlayingAndLg && timestampIndicator && (
+                <div className="absolute bottom-[-9px] content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center right-[45px] w-[160px]" data-node-id="9272:55784" data-name="_Video timestamp indicator">
+                  <div className="border-2 border-[var(--colors\/foreground\/fg-white,white)] border-solid content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9272:55784;9264:578873" data-name="Video preview wrapper">
+                    <div className="aspect-[560/315] border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9272:55784;9264:578538" data-name="Video preview 16:9">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPreview169} />
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I9272:55784;9264:578510" data-name="Timestamp indicator">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9272:55784;9264:578511">
+                      06:48
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" data-node-id="I9272:55784;9264:578512" data-name="Divider">
+                      <div className="absolute inset-[-4.17%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                      </div>
+                    </div>
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] h-[18px] leading-[var(--line-height\/text-xs,18px)] opacity-70 relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9272:55784;9264:578513">
+                      08:24
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-node-id="I9272:55784;9264:578556" data-name="Timestamp indicator">
+                    <div className="h-[32px] relative shrink-0 w-0" data-node-id="I9272:55784;9264:578560" data-name="Indicator line">
+                      <div className="absolute inset-[-1.56%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgIndicatorLine} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 -translate-y-1/2 absolute left-[calc(50%+2px)] size-[20px] top-1/2" data-node-id="I9272:55784;9264:578561" data-name="Cursor">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+        {isLgOrMd && <VideoActionButton className={`content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 ${isMd ? "" : "size-[32px]"}`} type={isMd ? "Volume max" : "Playback speed"} />}
+        {isLg && (
+          <>
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="AirPlay" />
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+          </>
+        )}
+        {isMd && (
+          <>
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px px-[var(--spacing-xs,4px)] relative" id={isPlayingAndMd ? "node-9264_577119" : "node-9264_576490"} data-name="Video progress">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" id={isPlayingAndMd ? "node-9264_577120" : "node-9264_576491"}>
+                {isPlayingAndMd ? "02:08" : isNotPlayingAndMd ? "00:00" : ""}
+              </p>
+              <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--radius-full,9999px)]" id={isPlayingAndMd ? "node-9264_577121" : "node-9264_576492"} data-name="Progress slider">
+                <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-white,white)] opacity-30 rounded-[var(--radius-full,9999px)] `}${isPlayingAndMd ? "inset-[0_40.51%_0_0]" : "inset-[0_84.81%_0_0]"}`} id={isPlayingAndMd ? "node-9269_12806" : "node-9269_12748"} data-name="Buffering progress" />
+                <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-white,white)] rounded-[var(--radius-full,9999px)] `}${isPlayingAndMd ? "inset-[0_74.68%_0_0]" : "bottom-0 left-0 top-0 w-[8px]"}`} id={isPlayingAndMd ? "node-9264_577123" : "node-9264_576494"} data-name="Progress line" />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[42px]" id={isPlayingAndMd ? "node-9264_577124" : "node-9264_576495"}>
+                {isPlayingAndMd ? "-06:18" : isNotPlayingAndMd ? "-08:24" : ""}
+              </p>
+              {isPlayingAndMd && timestampIndicator && (
+                <div className="absolute bottom-[-9px] content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center right-[55px] w-[128px]" data-node-id="9264:578996" data-name="_Video timestamp indicator">
+                  <div className="border-2 border-[var(--colors\/foreground\/fg-white,white)] border-solid content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9264:578996;9264:578873" data-name="Video preview wrapper">
+                    <div className="aspect-[560/315] border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9264:578996;9264:578538" data-name="Video preview 16:9">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPreview169} />
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I9264:578996;9264:578510" data-name="Timestamp indicator">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9264:578996;9264:578511">
+                      06:48
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" data-node-id="I9264:578996;9264:578512" data-name="Divider">
+                      <div className="absolute inset-[-4.17%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                      </div>
+                    </div>
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] h-[18px] leading-[var(--line-height\/text-xs,18px)] opacity-70 relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9264:578996;9264:578513">
+                      08:24
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-node-id="I9264:578996;9264:578556" data-name="Timestamp indicator">
+                    <div className="h-[32px] relative shrink-0 w-0" data-node-id="I9264:578996;9264:578560" data-name="Indicator line">
+                      <div className="absolute inset-[-1.56%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgIndicatorLine} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 -translate-y-1/2 absolute left-[calc(50%+2px)] size-[20px] top-1/2" data-node-id="I9264:578996;9264:578561" data-name="Cursor">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+          </>
+        )}
+        {isSm && (
+          <>
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" id={isPlayingAndSm ? "node-9264_576632" : "node-9264_576630"} data-name="Actions">
+              <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type={isPlayingAndSm ? "Pause" : undefined} />
+              <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+            </div>
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type VideoPlayer169Props = {
+  className?: string;
+  actionsBar?: boolean;
+  overlayAction?: boolean;
+  playing?: boolean;
+  size?: "sm" | "md" | "lg";
+};
+
+export default function VideoPlayer169({ className, actionsBar = true, overlayAction = true, playing = false, size = "sm" }: VideoPlayer169Props) {
+  const isLgAndPlaying = size === "lg" && playing;
+  const isMdAndNotPlaying = size === "md" && !playing;
+  const isMdAndPlaying = size === "md" && playing;
+  const isSmAndNotPlaying = size === "sm" && !playing;
+  const isSmAndPlaying = size === "sm" && playing;
+  return (
+    <button className={className || `block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid overflow-clip relative ${size === "sm" ? "h-[180px] rounded-[var(--radius-md,12px)] w-[320px]" : size === "md" ? "h-[315px] rounded-[var(--radius-md,12px)] w-[560px]" : "h-[405px] rounded-[var(--radius-xl,20px)] w-[720px]"}`} id={isSmAndPlaying ? "node-9264_576963" : isSmAndNotPlaying ? "node-9264_576756" : isMdAndPlaying ? "node-9264_576959" : isMdAndNotPlaying ? "node-9264_576755" : isLgAndPlaying ? "node-9264_576955" : "node-9264_576265"}>
+      <img alt="" className={`absolute inset-0 max-w-none object-cover pointer-events-none size-full ${["md", "sm"].includes(size) ? "rounded-[var(--radius-md,12px)]" : "rounded-[var(--radius-xl,20px)]"}`} src={imgSizeLgPlayingFalse} />
+      {!playing && ["lg", "md"].includes(size) && overlayAction && (
+        <div className="absolute bg-[rgba(0,0,0,0.1)] content-stretch flex inset-[-0.5px] items-center justify-center" data-node-id="9264:577278" data-name="_Video overlay action">
+          <div className="backdrop-blur-[8px] bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px]" data-node-id="I9264:577278;9264:577188" data-name="Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9264:577278;9264:577189" data-name="play">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay1} />
+            </div>
+          </div>
+        </div>
+      )}
+      {size === "lg" && !playing && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-6xl,48px)] px-[var(--spacing-4xl,32px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" size="lg" />}
+      {isLgAndPlaying && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-6xl,48px)] px-[var(--spacing-4xl,32px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" playing size="lg" />}
+      {isMdAndNotPlaying && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xl,16px)] pt-[var(--spacing-5xl,40px)] px-[var(--spacing-2xl,20px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" size="md" />}
+      {isMdAndPlaying && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xl,16px)] pt-[var(--spacing-5xl,40px)] px-[var(--spacing-2xl,20px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" playing size="md" />}
+      {isSmAndNotPlaying && overlayAction && (
+        <div className="absolute bg-[rgba(0,0,0,0.1)] content-stretch flex inset-[-0.5px] items-center justify-center" data-node-id="9264:577356" data-name="_Video overlay action">
+          <div className="backdrop-blur-[8px] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px]" data-node-id="I9264:577356;9264:577188" data-name="Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9264:577356;9264:577189" data-name="play">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay1} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isSmAndNotPlaying && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" />}
+      {isSmAndPlaying && actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" playing />}
+    </button>
+  );
+}

@@ -1,0 +1,156 @@
+const imgArrowLeft = "../assets/content-divider-imgArrowLeft.svg";
+const imgPlus = "../assets/content-divider-imgPlus.svg";
+const imgArrowRight = "../assets/content-divider-imgArrowRight.svg";
+const imgPlus1 = "../assets/content-divider-imgPlus1.svg";
+
+type ContentDividerProps = {
+  className?: string;
+  style?: "Single line" | "Dual line" | "Background fill";
+  type?: "Heading" | "Text" | "Button" | "Button group icon" | "Button group" | "Button icon";
+};
+
+export default function ContentDivider({ className, style = "Single line", type = "Heading" }: ContentDividerProps) {
+  const isButton = type === "Button";
+  const isButtonAndBackgroundFill = type === "Button" && style === "Background fill";
+  const isButtonAndDualLine = type === "Button" && style === "Dual line";
+  const isButtonGroup = type === "Button group";
+  const isButtonGroupAndBackgroundFill = type === "Button group" && style === "Background fill";
+  const isButtonGroupAndDualLine = type === "Button group" && style === "Dual line";
+  const isButtonGroupAndSingleLine = type === "Button group" && style === "Single line";
+  const isButtonGroupIcon = type === "Button group icon";
+  const isButtonGroupIconAndBackgroundFill = type === "Button group icon" && style === "Background fill";
+  const isButtonGroupIconAndDualLine = type === "Button group icon" && style === "Dual line";
+  const isButtonGroupIconAndSingleLine = type === "Button group icon" && style === "Single line";
+  const isButtonIcon = type === "Button icon";
+  const isButtonIconAndBackgroundFill = type === "Button icon" && style === "Background fill";
+  const isButtonIconAndDualLine = type === "Button icon" && style === "Dual line";
+  const isButtonIconAndSingleLine = type === "Button icon" && style === "Single line";
+  const isHeadingAndBackgroundFill = type === "Heading" && style === "Background fill";
+  const isHeadingAndDualLine = type === "Heading" && style === "Dual line";
+  const isHeadingAndSingleLine = type === "Heading" && style === "Single line";
+  const isSingleLine = style === "Single line";
+  const isTextAndBackgroundFill = type === "Text" && style === "Background fill";
+  const isTextAndDualLine = type === "Text" && style === "Dual line";
+  const isTextAndSingleLine = type === "Text" && style === "Single line";
+  return (
+    <div className={className || `content-stretch flex items-center relative w-[1216px] ${isButtonIconAndSingleLine ? "gap-[var(--spacing-xs,4px)] rounded-[9999px]" : isButtonIconAndDualLine ? String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid border-t flex-col gap-[var(--spacing-xs,4px)] py-[10px] rounded-[9999px]` : style === "Dual line" && ["Button", "Button group icon", "Button group"].includes(type) ? String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid border-t flex-col gap-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[9999px]` : style === "Background fill" && ["Button", "Button group icon", "Button group", "Button icon"].includes(type) ? String.raw`bg-[var(--colors\/background\/bg-secondary,#fafafa)] flex-col gap-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] rounded-[9999px]` : style === "Background fill" && ["Heading", "Text"].includes(type) ? String.raw`bg-[var(--colors\/background\/bg-secondary,#fafafa)] flex-col gap-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] rounded-[var(--radius-md,12px)]` : style === "Dual line" && ["Heading", "Text"].includes(type) ? String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid border-t flex-col gap-[var(--spacing-md,8px)] py-[12px]` : style === "Single line" && ["Text", "Heading"].includes(type) ? "gap-[var(--spacing-md,8px)]" : "gap-[var(--spacing-md,8px)] rounded-[9999px]"}`} id={isButtonIconAndSingleLine ? "node-1252_126875" : isButtonIconAndDualLine ? "node-1252_127672" : isButtonGroupAndDualLine ? "node-1252_127543" : isButtonGroupIconAndDualLine ? "node-1252_127452" : isButtonAndDualLine ? "node-1252_127435" : isTextAndDualLine ? "node-1252_127426" : isButtonIconAndBackgroundFill ? "node-1252_127755" : isButtonGroupAndBackgroundFill ? "node-1252_127751" : isButtonGroupIconAndBackgroundFill ? "node-1252_127747" : isButtonAndBackgroundFill ? "node-1252_127741" : isTextAndBackgroundFill ? "node-1252_127736" : isHeadingAndBackgroundFill ? "node-1252_127730" : isHeadingAndDualLine ? "node-1252_127296" : isHeadingAndSingleLine ? "node-1252_126908" : isTextAndSingleLine ? "node-1252_126895" : isButtonGroupAndSingleLine ? "node-1252_127012" : isButtonGroupIconAndSingleLine ? "node-1252_126921" : "node-1252_126873"}>
+      {isSingleLine && <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] flex-[1_0_0] h-px min-w-px relative" id={isButtonIconAndSingleLine ? "node-1252_126876" : isHeadingAndSingleLine ? "node-1252_126909" : isTextAndSingleLine ? "node-1252_126896" : isButtonGroupAndSingleLine ? "node-1252_127013" : isButtonGroupIconAndSingleLine ? "node-1252_126922" : "node-1252_126860"} data-name="Divider" />}
+      {["Button", "Button icon"].includes(type) && (
+        <div className={`${String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isButtonIcon ? "p-[10px]" : "gap-[var(--spacing-xs,4px)] px-[14px] py-[10px]"}`} id={isButtonIconAndSingleLine ? "node-3293_435870" : isButtonIconAndDualLine ? "node-3293_435867" : isButtonAndDualLine ? "node-1252_127439" : isButtonIconAndBackgroundFill ? "node-3293_435858" : isButtonAndBackgroundFill ? "node-1252_127757" : "node-1252_126866"} data-name="Buttons/Button">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          {isButton && (
+            <>
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isButtonAndDualLine ? "node-I1252_127439-6421_279423" : isButtonAndBackgroundFill ? "node-I1252_127757-6421_279423" : "node-I1252_126866-6421_279423"} data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isButtonAndDualLine ? "node-I1252_127439-3287_433113" : isButtonAndBackgroundFill ? "node-I1252_127757-3287_433113" : "node-I1252_126866-3287_433113"}>
+                  Add
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </>
+          )}
+          {isButtonIcon && (
+            <>
+              <div className="relative shrink-0 size-[20px]" id={isButtonIconAndSingleLine ? "node-I3293_435870-3471_597738" : isButtonIconAndDualLine ? "node-I3293_435867-3471_597738" : "node-I3293_435858-3471_597738"} data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus1} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </>
+          )}
+        </div>
+      )}
+      {["Button group icon", "Button group"].includes(type) && (
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex isolate items-start overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0" id={isButtonGroupAndDualLine ? "node-1252_127601" : isButtonGroupIconAndDualLine ? "node-1252_127460" : isButtonGroupAndBackgroundFill ? "node-1252_127817" : isButtonGroupIconAndBackgroundFill ? "node-1252_127762" : isButtonGroupAndSingleLine ? "node-1252_127014" : "node-1252_126929"} data-name="Button group">
+          <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[9] `}${isButtonGroup ? "px-[var(--spacing-xl,16px)]" : "px-[var(--spacing-lg,12px)]"}`} id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10121" : isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10352" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10121" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10352" : isButtonGroupAndSingleLine ? "node-I1252_127014-1046_10121" : "node-I1252_126929-1046_10352"} data-name="_Button group base">
+            <div aria-hidden className={`absolute inset-0 pointer-events-none ${isButtonGroup ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} />
+            {isButtonGroupIcon && (
+              <>
+                <div className="relative shrink-0 size-[20px]" id={isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10352-3473_602539" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10352-3473_602539" : "node-I1252_126929-1046_10352-3473_602539"} data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowLeft} />
+                </div>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+            {isButtonGroup && (
+              <>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10121-1241_125609" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10121-1241_125609" : "node-I1252_127014-1046_10121-1241_125609"}>
+                  View all
+                </p>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+          </div>
+          <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[8] `}${isButtonGroup ? "px-[var(--spacing-xl,16px)]" : "px-[var(--spacing-lg,12px)]"}`} id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10120" : isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10353" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10120" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10353" : isButtonGroupAndSingleLine ? "node-I1252_127014-1046_10120" : "node-I1252_126929-1046_10353"} data-name="_Button group base">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+            {isButtonGroupIcon && (
+              <>
+                <div className="relative shrink-0 size-[20px]" id={isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10353-3473_602539" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10353-3473_602539" : "node-I1252_126929-1046_10353-3473_602539"} data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+                </div>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+            {isButtonGroup && (
+              <>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10120-1046_9414" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10120-1046_9414" : "node-I1252_127014-1046_10120-1046_9414"}>
+                  Active
+                </p>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+          </div>
+          <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[1] `}${isButtonGroup ? "px-[var(--spacing-xl,16px)]" : "px-[var(--spacing-lg,12px)]"}`} id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10119" : isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10366" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10119" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10366" : isButtonGroupAndSingleLine ? "node-I1252_127014-1046_10119" : "node-I1252_126929-1046_10366"} data-name="_Button group base">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+            {isButtonGroupIcon && (
+              <>
+                <div className="relative shrink-0 size-[20px]" id={isButtonGroupIconAndDualLine ? "node-I1252_127460-1046_10366-3473_602539" : isButtonGroupIconAndBackgroundFill ? "node-I1252_127762-1046_10366-3473_602539" : "node-I1252_126929-1046_10366-3473_602539"} data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+                </div>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+            {isButtonGroup && (
+              <>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isButtonGroupAndDualLine ? "node-I1252_127601-1046_10119-1046_9414" : isButtonGroupAndBackgroundFill ? "node-I1252_127817-1046_10119-1046_9414" : "node-I1252_127014-1046_10119-1046_9414"}>
+                  Inactive
+                </p>
+                <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {["Text", "Heading"].includes(type) && (
+        <p className={`[word-break:break-word] relative shrink-0 text-center whitespace-nowrap ${type === "Heading" ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)]` : String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium leading-[var(--line-height\/text-sm,20px)] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)]`}`} id={isTextAndDualLine ? "node-1252_127430" : isTextAndBackgroundFill ? "node-1252_127738" : isHeadingAndBackgroundFill ? "node-1252_127732" : isHeadingAndDualLine ? "node-1252_127298" : isHeadingAndSingleLine ? "node-1252_126912" : "node-1252_126903"}>
+          {type === "Heading" && ["Dual line", "Background fill"].includes(style) ? "Notifications" : type === "Text" ? "Today" : "Notifications"}
+        </p>
+      )}
+      {isSingleLine && <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] flex-[1_0_0] h-px min-w-px relative" id={isButtonIconAndSingleLine ? "node-1252_126878" : isHeadingAndSingleLine ? "node-1252_126911" : isTextAndSingleLine ? "node-1252_126898" : isButtonGroupAndSingleLine ? "node-1252_127015" : isButtonGroupIconAndSingleLine ? "node-1252_126924" : "node-1252_126872"} data-name="Divider" />}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text lg/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-lg, weight: 600, lineHeight: Line height/text-lg, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## arrow-left
+**Node ID:** 3463:404455
+
+arrow, left
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+
+## arrow-right
+**Node ID:** 3463:404482
+
+arrow, right
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

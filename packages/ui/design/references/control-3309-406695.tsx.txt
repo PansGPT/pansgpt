@@ -1,0 +1,82 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/cf7c8c2d-b119-4c72-b031-f15eb1b9f2f0.svg";
+const imgSizeSmOutlineFalse = "https://www.figma.com/api/mcp/asset/21894dd3-469f-4fcb-a6fc-e1933edf97cc.svg";
+
+type TagCloseXProps = {
+  className?: string;
+  size?: "lg";
+  state?: "Default";
+};
+
+function TagCloseX({ className, size = "lg", state = "Default" }: TagCloseXProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[3px] relative rounded-[3px]"} data-node-id="3307:417859">
+      <div className="relative shrink-0 size-[14px]" data-node-id="3307:417860" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "sm";
+};
+
+function Dot({ className, outline = "False", size = "sm" }: DotProps) {
+  return (
+    <div className={className || "relative size-[8px]"} data-node-id="1046:12311">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeSmOutlineFalse} />
+    </div>
+  );
+}
+
+type TagCheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  size?: "lg";
+  state?: "Default";
+};
+
+function TagCheckbox({ className, checked = false, size = "lg", state = "Default" }: TagCheckboxProps) {
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406768" />;
+}
+
+type TagProps = {
+  className?: string;
+  action?: "X close";
+  checkbox?: "True";
+  icon?: "Dot";
+  size?: "lg";
+};
+
+function Tag({ className, action = "X close", checkbox = "True", icon = "Dot", size = "lg" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[5px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3309:406695">
+      <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:406696" data-name="Content">
+        <TagCheckbox className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[18px]" />
+        <Dot className="relative shrink-0 size-[8px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3309:406698">
+          Label
+        </p>
+      </div>
+      <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[3px] relative rounded-[3px] shrink-0" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

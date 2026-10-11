@@ -1,0 +1,10 @@
+export default function Key({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[58px] relative rounded-[var(--radius-lg,16px)] w-[80px]"} data-node-id="1101:104589" data-name="_Key">
+      <div className="absolute contents inset-0" data-node-id="1101:104590" data-name="Key Style">
+        <div className="absolute bg-black inset-[3px_0_0_0] rounded-[5px]" data-node-id="1101:104591" data-name="Depth" />
+        <div className="absolute bg-gradient-to-b border border-[#404040] border-solid from-[#404040] from-[10.909%] inset-[0_0_3px_0] rounded-[5px] to-[#222]" data-node-id="1101:104592" data-name="Key Background" />
+      </div>
+    </div>
+  );
+}

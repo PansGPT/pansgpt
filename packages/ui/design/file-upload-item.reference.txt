@@ -1,0 +1,454 @@
+const imgPage = "https://www.figma.com/api/mcp/asset/76b39be9-0e2f-438a-a7a4-4d57c362dec7.svg";
+const imgPage1 = "https://www.figma.com/api/mcp/asset/b9c0ddec-d1eb-410a-a140-122f74a2c7c0.svg";
+const imgPage2 = "https://www.figma.com/api/mcp/asset/ff0a03d2-b749-45d0-8324-c1626119d33a.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/694efd37-dae0-42cd-8a99-090367c9b065.svg";
+const imgCheckCircle = "https://www.figma.com/api/mcp/asset/a0e18305-d4cb-40b4-8778-e6e12a6c4095.svg";
+const imgTrash01 = "https://www.figma.com/api/mcp/asset/4b88d49d-cc3d-491c-a639-e60904b56bbb.svg";
+const imgUploadCloud02 = "https://www.figma.com/api/mcp/asset/9cab55da-f4bd-4ecd-9e60-ab75743da2d8.svg";
+const imgFile04 = "https://www.figma.com/api/mcp/asset/4f8da0fe-e019-4d44-a8a6-86ff52f17fba.svg";
+const imgXCircle = "https://www.figma.com/api/mcp/asset/1cb95695-c035-44d5-9dee-53ecde648a88.svg";
+const imgFile5 = "https://www.figma.com/api/mcp/asset/14dd3dc8-6824-4d61-a28f-8685dbbd7f40.svg";
+const imgDivider1 = "https://www.figma.com/api/mcp/asset/46d58157-8e1f-40f5-8eaf-bfa3af4074f2.svg";
+
+type FileTypeIconProps = {
+  className?: string;
+  fileType?: "Document / PDF";
+  type?: "Default" | "Solid";
+};
+
+function FileTypeIcon({ className, fileType = "Document / PDF", type = "Default" }: FileTypeIconProps) {
+  const isDocumentPdfAndSolid = fileType === "Document / PDF" && type === "Solid";
+  return (
+    <div className={className || "relative size-[40px]"} id={isDocumentPdfAndSolid ? "node-4916_414677" : "node-4916_411649"}>
+      <div className={`absolute ${isDocumentPdfAndSolid ? "inset-[0_10%]" : "inset-[0_2.5%_0_17.5%]"}`} id={isDocumentPdfAndSolid ? "node-4916_414678" : "node-4916_411371"} data-name="Page">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={isDocumentPdfAndSolid ? imgPage1 : imgPage} />
+      </div>
+      {fileType === "Document / PDF" && type === "Default" && (
+        <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[2px] rounded-[2px]" data-node-id="4916:411374" data-name="File type wrap">
+          <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="4916:411375">
+            PDF
+          </p>
+        </div>
+      )}
+      {isDocumentPdfAndSolid && (
+        <p className="[word-break:break-word] absolute font-['Plus_Jakarta_Sans:Bold'] font-bold inset-[57.5%_10%_15%_10%] leading-[normal] text-[9px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center" data-node-id="4916:414681">
+          PDF
+        </p>
+      )}
+    </div>
+  );
+}
+
+type FileUploadItemBaseProps = {
+  className?: string;
+  icon?: boolean;
+  iconType?: "File type" | "Simple";
+  state?: "In progress" | "Complete" | "Error";
+  type?: "Progress bar" | "Progress fill";
+};
+
+export default function FileUploadItemBase({ className, icon = true, iconType = "File type", state = "In progress", type = "Progress bar" }: FileUploadItemBaseProps) {
+  const isComplete = state === "Complete";
+  const isError = state === "Error";
+  const isProgressBarAndFileType = type === "Progress bar" && iconType === "File type";
+  const isProgressBarAndFileTypeAndComplete = type === "Progress bar" && iconType === "File type" && state === "Complete";
+  const isProgressBarAndFileTypeAndError = type === "Progress bar" && iconType === "File type" && state === "Error";
+  const isProgressBarAndFileTypeAndInProgress = type === "Progress bar" && iconType === "File type" && state === "In progress";
+  const isProgressBarAndInProgress = type === "Progress bar" && state === "In progress";
+  const isProgressBarAndSimpleAndComplete = type === "Progress bar" && iconType === "Simple" && state === "Complete";
+  const isProgressBarAndSimpleAndError = type === "Progress bar" && iconType === "Simple" && state === "Error";
+  const isProgressBarAndSimpleAndInProgress = type === "Progress bar" && iconType === "Simple" && state === "In progress";
+  const isProgressBarAndSimpleAndIsInProgressOrComplete = type === "Progress bar" && iconType === "Simple" && ["In progress", "Complete"].includes(state);
+  const isProgressFillAndFileTypeAndComplete = type === "Progress fill" && iconType === "File type" && state === "Complete";
+  const isProgressFillAndFileTypeAndError = type === "Progress fill" && iconType === "File type" && state === "Error";
+  const isProgressFillAndFileTypeAndInProgress = type === "Progress fill" && iconType === "File type" && state === "In progress";
+  const isProgressFillAndFileTypeAndIsCompleteOrError = type === "Progress fill" && iconType === "File type" && ["Complete", "Error"].includes(state);
+  const isProgressFillAndInProgress = type === "Progress fill" && state === "In progress";
+  const isProgressFillAndSimpleAndComplete = type === "Progress fill" && iconType === "Simple" && state === "Complete";
+  const isProgressFillAndSimpleAndError = type === "Progress fill" && iconType === "Simple" && state === "Error";
+  const isProgressFillAndSimpleAndInProgress = type === "Progress fill" && iconType === "Simple" && state === "In progress";
+  const isSimpleAndError = iconType === "Simple" && state === "Error";
+  const isSimpleAndIsProgressBarAndInProgressOrComplete = iconType === "Simple" && ((type === "Progress bar" && state === "In progress") || state === "Complete");
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative w-[512px] `}${type === "Progress fill" && state === "Error" ? String.raw`border-2 border-[var(--colors\/border\/border-error,#f04438)] overflow-clip rounded-[12px]` : type === "Progress fill" && ["In progress", "Complete"].includes(state) ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)] overflow-clip rounded-[12px]` : type === "Progress bar" && state === "Error" ? String.raw`border-2 border-[var(--colors\/border\/border-error,#f04438)] rounded-[var(--radius-xl,20px)]` : String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)] rounded-[var(--radius-xl,20px)]`}`} id={isProgressFillAndSimpleAndError ? "node-1251_5926" : isProgressFillAndFileTypeAndError ? "node-1251_3592" : isProgressFillAndSimpleAndComplete ? "node-1251_5938" : isProgressFillAndFileTypeAndComplete ? "node-1251_3559" : isProgressFillAndSimpleAndInProgress ? "node-1251_5967" : isProgressFillAndFileTypeAndInProgress ? "node-1251_3542" : isProgressBarAndSimpleAndComplete ? "node-1251_5947" : isProgressBarAndSimpleAndError ? "node-1251_5956" : isProgressBarAndFileTypeAndError ? "node-1175_100415" : isProgressBarAndSimpleAndInProgress ? "node-1251_5976" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100307" : "node-1175_100367"}>
+      {(isComplete || isProgressBarAndInProgress || isError) && (
+        <>
+          <div className={`content-stretch flex flex-[1_0_0] items-start min-w-px relative ${iconType === "Simple" && ((type === "Progress bar" && state === "In progress") || state === "Error" || state === "Complete") ? "gap-[var(--spacing-md,8px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isProgressFillAndSimpleAndError ? "node-1251_5928" : isProgressFillAndFileTypeAndError ? "node-1251_3594" : isProgressFillAndSimpleAndComplete ? "node-1251_5940" : isProgressFillAndFileTypeAndComplete ? "node-1251_3561" : isProgressBarAndSimpleAndComplete ? "node-1251_5948" : isProgressBarAndSimpleAndError ? "node-1251_5957" : isProgressBarAndFileTypeAndError ? "node-1175_100416" : isProgressBarAndSimpleAndInProgress ? "node-1251_5977" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100094" : "node-1175_100368"} data-name="Content">
+            {isProgressBarAndFileType && icon && (
+              <div className="relative shrink-0 size-[40px]" data-node-id="4922:416240" data-name="File type icon">
+                <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I4922:416240;4916:411371" data-name="Page">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage2} />
+                </div>
+                <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I4922:416240;4916:411374" data-name="File type wrap">
+                  <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I4922:416240;4916:411375">
+                    PDF
+                  </p>
+                </div>
+              </div>
+            )}
+            {isProgressBarAndFileType && (
+              <div className={`content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative ${isProgressBarAndFileTypeAndError ? "gap-[var(--spacing-sm,6px)]" : "gap-[var(--spacing-xs,4px)]"}`} id={isProgressBarAndFileTypeAndError ? "node-1175_100418" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100128" : "node-1175_100370"} data-name="Content">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" id={isProgressBarAndFileTypeAndError ? "node-1175_100419" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100167" : "node-1175_100371"} data-name="Text and supporting text">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full whitespace-nowrap" id={isProgressBarAndFileTypeAndError ? "node-1175_100421" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100129" : "node-1175_100372"}>
+                    Tech design requirements.pdf
+                  </p>
+                  <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isProgressBarAndFileTypeAndError ? "node-9250_564271" : isProgressBarAndFileTypeAndInProgress ? "node-9250_557917" : "node-9250_559503"} data-name="Supporting text and status">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" id={isProgressBarAndFileTypeAndError ? "node-9250_564272" : isProgressBarAndFileTypeAndInProgress ? "node-1175_100130" : "node-9250_559504"}>
+                      {isProgressBarAndFileTypeAndError ? "0 KB of 200 KB" : isProgressBarAndFileTypeAndComplete ? "200 KB of 200 KB" : "20 KB of 200 KB"}
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" id={isProgressBarAndFileTypeAndError ? "node-9250_564273" : isProgressBarAndFileTypeAndInProgress ? "node-9250_557919" : "node-9250_559505"} data-name="Divider">
+                      <div className="absolute inset-[-4.17%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" id={isProgressBarAndFileTypeAndError ? "node-9250_564274" : isProgressBarAndFileTypeAndInProgress ? "node-9250_557920" : "node-9250_559506"} data-name="Icon and status">
+                      {isProgressBarAndFileTypeAndComplete && (
+                        <>
+                          <div className="relative shrink-0 size-[16px]" data-node-id="9250:559507" data-name="check-circle">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle} />
+                          </div>
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:559508">
+                            Complete
+                          </p>
+                        </>
+                      )}
+                      {isProgressBarAndFileTypeAndInProgress && (
+                        <>
+                          <div className="relative shrink-0 size-[16px]" data-node-id="9250:557921" data-name="upload-cloud-02">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUploadCloud02} />
+                          </div>
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:557922">
+                            Uploading...
+                          </p>
+                        </>
+                      )}
+                      {isProgressBarAndFileTypeAndError && (
+                        <>
+                          <div className="relative shrink-0 size-[16px]" data-node-id="9250:564275" data-name="x-circle">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXCircle} />
+                          </div>
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:564276">
+                            Failed
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {type === "Progress bar" && iconType === "File type" && ["Complete", "In progress"].includes(state) && (
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" id={isProgressBarAndFileTypeAndInProgress ? "node-1175_100162" : "node-1175_100374"} data-name="Progress bar">
+                    <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" id={isProgressBarAndFileTypeAndInProgress ? "node-I1175_100162-1085_57384" : "node-I1175_100374-1085_57434"} data-name="Progress bar">
+                      <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" id={isProgressBarAndFileTypeAndInProgress ? "node-I1175_100162-1085_57385" : "node-I1175_100374-1085_57435"} data-name="Background" />
+                      <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 rounded-[var(--radius-full,9999px)] top-0 `}${isProgressBarAndFileTypeAndInProgress ? "right-[89.93%]" : "right-0"}`} id={isProgressBarAndFileTypeAndInProgress ? "node-I1175_100162-1085_57386" : "node-I1175_100374-1085_57436"} data-name="Progress" />
+                    </div>
+                    <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isProgressBarAndFileTypeAndInProgress ? "node-I1175_100162-1085_57387" : "node-I1175_100374-1085_57437"}>
+                      <p className="leading-[var(--line-height\/text-sm,20px)]">{isProgressBarAndFileTypeAndComplete ? "100%" : "10%"}</p>
+                    </div>
+                  </div>
+                )}
+                {isProgressBarAndFileTypeAndError && (
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1175:100459" data-name="Actions">
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1175:100460" data-name="Buttons/Button destructive">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1175:100460;3287:433881">
+                        Try again
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {isSimpleAndIsProgressBarAndInProgressOrComplete && icon && (
+              <div className="relative shrink-0 size-[20px]" data-node-id="4924:412935" data-name="file-04">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFile04} />
+              </div>
+            )}
+            {isSimpleAndIsProgressBarAndInProgressOrComplete && (
+              <div className={`content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative ${isProgressFillAndSimpleAndComplete ? "gap-[var(--spacing-sm,6px)]" : "gap-[var(--spacing-xs,4px)]"}`} id={isProgressFillAndSimpleAndComplete ? "node-1251_5942" : isProgressBarAndSimpleAndComplete ? "node-1251_5950" : "node-1251_5979"} data-name="Content">
+                <div className={`content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full ${isProgressFillAndSimpleAndComplete ? "" : "pr-[var(--spacing-4xl,32px)]"}`} id={isProgressFillAndSimpleAndComplete ? "node-1251_5943" : isProgressBarAndSimpleAndComplete ? "node-1251_5951" : "node-1251_5980"} data-name="Text and supporting text">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full whitespace-nowrap" id={isProgressFillAndSimpleAndComplete ? "node-1251_5944" : isProgressBarAndSimpleAndComplete ? "node-1251_5952" : "node-1251_5981"}>
+                    Tech design requirements.pdf
+                  </p>
+                  {isProgressBarAndSimpleAndIsInProgressOrComplete && (
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isProgressBarAndSimpleAndComplete ? "node-9250_569329" : "node-9250_563182"} data-name="Supporting text and status">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" id={isProgressBarAndSimpleAndComplete ? "node-9250_569330" : "node-9250_563183"}>
+                        {isProgressBarAndSimpleAndComplete ? "200 KB of 200 KB" : isProgressBarAndSimpleAndInProgress ? "160 KB of 200 KB" : ""}
+                      </p>
+                      <div className="h-[12px] relative shrink-0 w-0" id={isProgressBarAndSimpleAndComplete ? "node-9250_569331" : "node-9250_563184"} data-name="Divider">
+                        <div className="absolute inset-[-4.17%_-0.5px]">
+                          <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" id={isProgressBarAndSimpleAndComplete ? "node-9250_569332" : "node-9250_563185"} data-name="Icon and status">
+                        {isProgressBarAndSimpleAndInProgress && (
+                          <>
+                            <div className="relative shrink-0 size-[16px]" data-node-id="9250:563186" data-name="upload-cloud-02">
+                              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUploadCloud02} />
+                            </div>
+                            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:563187">
+                              Uploading...
+                            </p>
+                          </>
+                        )}
+                        {isProgressBarAndSimpleAndComplete && (
+                          <>
+                            <div className="relative shrink-0 size-[16px]" data-node-id="9250:569333" data-name="check-circle">
+                              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle} />
+                            </div>
+                            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:569334">
+                              Complete
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {isProgressFillAndSimpleAndComplete && (
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9250:569549" data-name="Supporting text and percentage">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:569550">
+                        200 KB
+                      </p>
+                      <div className="h-[12px] relative shrink-0 w-0" data-node-id="9250:569551" data-name="Divider">
+                        <div className="absolute inset-[-4.17%_-0.5px]">
+                          <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9252:574746" data-name="Icon and percentage">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="9252:574747" data-name="check-circle">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:569552">
+                          100%
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {isProgressBarAndSimpleAndIsInProgressOrComplete && (
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" id={isProgressBarAndSimpleAndComplete ? "node-1251_5954" : "node-1251_5983"} data-name="Progress bar">
+                    <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" id={isProgressBarAndSimpleAndComplete ? "node-I1251_5954-1085_57434" : "node-I1251_5983-1085_57424"} data-name="Progress bar">
+                      <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" id={isProgressBarAndSimpleAndComplete ? "node-I1251_5954-1085_57435" : "node-I1251_5983-1085_57425"} data-name="Background" />
+                      <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 rounded-[var(--radius-full,9999px)] top-0 `}${isProgressBarAndSimpleAndComplete ? "right-0" : "right-[19.42%]"}`} id={isProgressBarAndSimpleAndComplete ? "node-I1251_5954-1085_57436" : "node-I1251_5983-1085_57426"} data-name="Progress" />
+                    </div>
+                    <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isProgressBarAndSimpleAndComplete ? "node-I1251_5954-1085_57437" : "node-I1251_5983-1085_57427"}>
+                      <p className="leading-[var(--line-height\/text-sm,20px)]">{isProgressBarAndSimpleAndComplete ? "100%" : isProgressBarAndSimpleAndInProgress ? "80%" : ""}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {isSimpleAndError && icon && (
+              <div className="relative shrink-0 size-[20px]" data-node-id="4924:412945" data-name="file-04">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFile5} />
+              </div>
+            )}
+            {isSimpleAndError && (
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" id={isProgressFillAndSimpleAndError ? "node-1251_5930" : "node-1251_5959"} data-name="Content">
+                <div className={`content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full ${isProgressFillAndSimpleAndError ? String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[14px] whitespace-nowrap` : "pr-[var(--spacing-4xl,32px)]"}`} id={isProgressFillAndSimpleAndError ? "node-1251_5931" : "node-1251_5960"} data-name="Text and supporting text">
+                  <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full `}${isProgressFillAndSimpleAndError ? "" : String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[14px] whitespace-nowrap`}`} id={isProgressFillAndSimpleAndError ? "node-1251_5932" : "node-1251_5961"}>
+                    Tech design requirements.pdf
+                  </p>
+                  {isProgressBarAndSimpleAndError && (
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9250:569337" data-name="Supporting text and status">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:569338">
+                        0 KB of 200 KB
+                      </p>
+                      <div className="h-[12px] relative shrink-0 w-0" data-node-id="9250:569339" data-name="Divider">
+                        <div className="absolute inset-[-4.17%_-0.5px]">
+                          <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9250:569340" data-name="Icon and status">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="9250:569341" data-name="x-circle">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXCircle} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9250:569342">
+                          Failed
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {isProgressFillAndSimpleAndError && (
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full" data-node-id="1251:5933">
+                      Upload failed, please try again.
+                    </p>
+                  )}
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" id={isProgressFillAndSimpleAndError ? "node-9250_567614" : "node-9250_567606"} data-name="Actions">
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" id={isProgressFillAndSimpleAndError ? "node-9250_567615" : "node-9250_567607"} data-name="Buttons/Button destructive">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isProgressFillAndSimpleAndError ? "node-I9250_567615-3287_433881" : "node-I9250_567607-3287_433881"}>
+                      Try again
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            {isProgressFillAndFileTypeAndIsCompleteOrError && icon && <FileTypeIcon className="relative shrink-0 size-[40px]" type="Solid" />}
+            {isProgressFillAndFileTypeAndIsCompleteOrError && (
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" id={isProgressFillAndFileTypeAndError ? "node-1251_3596" : "node-1251_3563"} data-name="Content">
+                <div className={`content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full ${isProgressFillAndFileTypeAndError ? String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[14px] whitespace-nowrap` : ""}`} id={isProgressFillAndFileTypeAndError ? "node-1251_3597" : "node-1251_3564"} data-name="Text and supporting text">
+                  <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full `}${isProgressFillAndFileTypeAndError ? "" : String.raw`[word-break:break-word] leading-[var(--line-height\/text-sm,20px)] text-[14px] whitespace-nowrap`}`} id={isProgressFillAndFileTypeAndError ? "node-1251_3598" : "node-1251_3565"}>
+                    Tech design requirements.pdf
+                  </p>
+                  {isProgressFillAndFileTypeAndComplete && (
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9250:563862" data-name="Supporting text and percentage">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:563863">
+                        200 KB
+                      </p>
+                      <div className="h-[12px] relative shrink-0 w-0" data-node-id="9250:563864" data-name="Divider">
+                        <div className="absolute inset-[-4.17%_-0.5px]">
+                          <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                        </div>
+                      </div>
+                      <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9252:574573" data-name="Icon and percentage">
+                        <div className="relative shrink-0 size-[16px]" data-node-id="9252:574714" data-name="check-circle">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckCircle} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:568755">
+                          100%
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  {isProgressFillAndFileTypeAndError && (
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full" data-node-id="9250:569370">
+                      Upload failed, please try again.
+                    </p>
+                  )}
+                </div>
+                {isProgressFillAndFileTypeAndError && (
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="9250:569372" data-name="Actions">
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9250:569373" data-name="Buttons/Button destructive">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9250:569373;3287:433881">
+                        Try again
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          <div className={`absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] rounded-[var(--radius-sm,8px)] ${isError ? "right-[6px] top-[6px]" : "right-[7px] top-[7px]"}`} id={isProgressFillAndSimpleAndError ? "node-8332_82894" : isProgressFillAndFileTypeAndError ? "node-8332_82882" : isProgressFillAndSimpleAndComplete ? "node-9250_566620" : isProgressFillAndFileTypeAndComplete ? "node-9250_565938" : isProgressBarAndSimpleAndComplete ? "node-9250_566624" : isProgressBarAndSimpleAndError ? "node-8332_82890" : isProgressBarAndFileTypeAndError ? "node-8332_82878" : isProgressBarAndSimpleAndInProgress ? "node-8332_82886" : isProgressBarAndFileTypeAndInProgress ? "node-8332_81836" : "node-9250_565059"} data-name="Buttons/Button utility">
+            <div className="relative shrink-0 size-[16px]" id={isProgressFillAndSimpleAndError ? "node-I8332_82894-7932_552036" : isProgressFillAndFileTypeAndError ? "node-I8332_82882-7932_552036" : isProgressFillAndSimpleAndComplete ? "node-I9250_566620-7932_552036" : isProgressFillAndFileTypeAndComplete ? "node-I9250_565938-7932_552036" : isProgressBarAndSimpleAndComplete ? "node-I9250_566624-7932_552036" : isProgressBarAndSimpleAndError ? "node-I8332_82890-7932_552036" : isProgressBarAndFileTypeAndError ? "node-I8332_82878-7932_552036" : isProgressBarAndSimpleAndInProgress ? "node-I8332_82886-7932_552036" : isProgressBarAndFileTypeAndInProgress ? "node-I8332_81836-7932_552036" : "node-I9250_565059-7932_552036"} data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+            </div>
+          </div>
+        </>
+      )}
+      {isProgressFillAndInProgress && (
+        <>
+          <div className="absolute content-stretch flex inset-[-1px] items-start pr-[154px]" id={isProgressFillAndSimpleAndInProgress ? "node-9250_569383" : "node-9250_567623"} data-name="Progress fill wrapper (change right padding)">
+            <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] flex-[1_0_0] h-full min-w-px relative" id={isProgressFillAndSimpleAndInProgress ? "node-9250_569384" : "node-9250_567624"} data-name="Progress fill" />
+          </div>
+          <div className={`content-stretch flex flex-[1_0_0] items-start min-w-px relative ${isProgressFillAndSimpleAndInProgress ? "gap-[var(--spacing-md,8px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isProgressFillAndSimpleAndInProgress ? "node-1251_5969" : "node-1251_3528"} data-name="Content">
+            {isProgressFillAndFileTypeAndInProgress && icon && <FileTypeIcon className="relative shrink-0 size-[40px]" type="Solid" />}
+            {isProgressFillAndFileTypeAndInProgress && (
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="1251:3530" data-name="Content">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="1251:3531" data-name="Text and supporting text">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full whitespace-nowrap" data-node-id="1251:3532">
+                    Tech design requirements.pdf
+                  </p>
+                  <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9250:563198" data-name="Supporting text and percentage">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:563199">
+                      200 KB
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" data-node-id="9250:563200" data-name="Divider">
+                      <div className="absolute inset-[-4.17%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9252:574296" data-name="Icon and percentage">
+                      <div className="relative shrink-0 size-[16px]" data-node-id="9252:574297" data-name="upload-cloud-02">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUploadCloud02} />
+                      </div>
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:568511">
+                        70%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {isProgressFillAndSimpleAndInProgress && icon && (
+              <div className="relative shrink-0 size-[20px]" data-node-id="4924:412941" data-name="file-04">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFile04} />
+              </div>
+            )}
+            {isProgressFillAndSimpleAndInProgress && (
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="1251:5971" data-name="Supporting text and percentage">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="1251:5972" data-name="Text and supporting text">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full whitespace-nowrap" data-node-id="1251:5973">
+                    Tech design requirements.pdf
+                  </p>
+                  <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9250:569350" data-name="Supporting text and percentage">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:569351">
+                      200 KB
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" data-node-id="9250:569352" data-name="Divider">
+                      <div className="absolute inset-[0_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider1} />
+                      </div>
+                    </div>
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9252:574741" data-name="Icon and percentage">
+                      <div className="relative shrink-0 size-[16px]" data-node-id="9252:574742" data-name="upload-cloud-02">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUploadCloud02} />
+                      </div>
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="9250:569353">
+                        70%
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" id={isProgressFillAndSimpleAndInProgress ? "node-9250_566616" : "node-9250_566170"} data-name="Buttons/Button utility">
+            <div className="relative shrink-0 size-[16px]" id={isProgressFillAndSimpleAndInProgress ? "node-I9250_566616-7932_552036" : "node-I9250_566170-7932_552036"} data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check-circle
+**Node ID:** 3463:404967
+
+check, tick, confirm, checkbox, circle
+
+## trash-01
+**Node ID:** 3463:405129
+
+trash, delete, trashcan, bin, remove
+
+## upload-cloud-02
+**Node ID:** 3463:405156
+
+upload, share, import, up, cloud
+
+## file-04
+**Node ID:** 3463:406761
+
+file, attachment, text, paper, pdf, report
+
+## x-circle
+**Node ID:** 3463:405162
+
+x, close, exit, remove, cross, delete, circle
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,116 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/50c64add-e64b-46c2-a03f-aa4e0651bd05.svg";
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/5e093602-cb51-4c53-9002-eb1b987a215b.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/653ccac4-dab5-4f5a-93e0-db54963cf139.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndCheckboxAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px] ${isCheckedAndFalseAndSmAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndCheckboxAndDefault ? "node-1097_63895" : "node-1097_63885"}>
+      {isCheckedAndFalseAndSmAndCheckboxAndDefault && (
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  badge?: boolean;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Icon card";
+};
+
+function RadioGroupItem({ className, badge = true, breakpoint = "Mobile", selected = false, size = "sm", state = "Default", type = "Icon card" }: RadioGroupItemProps) {
+  const isNotSelectedAndSmAndIconCardAndDefaultAndMobile = !selected && size === "sm" && type === "Icon card" && state === "Default" && breakpoint === "Mobile";
+  const isSelectedAndSmAndIconCardAndDefaultAndMobile = selected && size === "sm" && type === "Icon card" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isSelectedAndSmAndIconCardAndDefaultAndMobile ? String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]` : String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]`}`} id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94170" : "node-1142_93577"}>
+      <div className={`border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full ${isSelectedAndSmAndIconCardAndDefaultAndMobile ? String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]` : String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]`}`} id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94171" : "node-1142_93578"} data-name="Header">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94172" : "node-1142_93579"} data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[32px]" id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94174" : "node-1142_93581"} data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-sm,8px)]" />
+            <div className="absolute left-[7px] size-[16px] top-[7px]" id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-I1142_94174-4041_412677" : "node-I1142_93581-4041_412677"} data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)]" id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94175" : "node-1142_93582"}>
+            Basic plan
+          </p>
+        </div>
+        {isNotSelectedAndSmAndIconCardAndDefaultAndMobile && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" data-node-id="5373:387986" data-name="_Checkbox base" />}
+        {isSelectedAndSmAndIconCardAndDefaultAndMobile && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />}
+      </div>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" id={isSelectedAndSmAndIconCardAndDefaultAndMobile ? "node-1142_94177" : "node-1142_93584"} data-name="Body">
+        {isNotSelectedAndSmAndIconCardAndDefaultAndMobile && badge && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-sm,6px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="1142:93591" data-name="Badge">
+            <div className="relative shrink-0 size-[8px]" data-node-id="I1142:93591;4825:411492" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1142:93591;4825:411493">
+              Limited time only
+            </p>
+          </div>
+        )}
+        {isNotSelectedAndSmAndIconCardAndDefaultAndMobile && (
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="1142:93585" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="1142:93586" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="1142:93587">
+                $10
+              </p>
+              <div className="content-stretch flex items-start pb-[3px] relative shrink-0" data-node-id="1142:93588" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1142:93589">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1142:93590">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        )}
+        {isSelectedAndSmAndIconCardAndDefaultAndMobile && badge && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-sm,6px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="1142:94184" data-name="Badge">
+            <div className="relative shrink-0 size-[8px]" data-node-id="I1142:94184;4825:411756" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1142:94184;4825:411757">
+              Limited time only
+            </p>
+          </div>
+        )}
+        {isSelectedAndSmAndIconCardAndDefaultAndMobile && (
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start relative shrink-0 w-full" data-node-id="1142:94178" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="1142:94179" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="1142:94180">
+                $10
+              </p>
+              <div className="content-stretch flex items-start pb-[3px] relative shrink-0" data-node-id="1142:94181" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1142:94182">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1142:94183">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

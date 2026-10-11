@@ -1,0 +1,53 @@
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Radio" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : "node-1100_569"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio button";
+};
+
+function RadioGroupItem({ className, breakpoint = "Mobile", selected = false, size = "sm", state = "Default", type = "Radio button" }: RadioGroupItemProps) {
+  const isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile = !selected && size === "sm" && type === "Radio button" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]` : String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]`}`} id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-124_2837" : "node-124_2857"}>
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409211" : "node-3931_408895"} data-name="Content">
+        <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409212" : "node-3931_408896"} data-name="Input">
+          {selected && size === "sm" && type === "Radio button" && state === "Default" && breakpoint === "Mobile" && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />}
+          {isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" data-node-id="3931:409213" data-name="_Checkbox base" />}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409214" : "node-3931_408898"} data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409416" : "node-3931_409473"} data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409417" : "node-3931_409474"}>
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409418" : "node-3931_409475"}>
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" id={isNotSelectedAndSmAndRadioButtonAndDefaultAndMobile ? "node-3931_409216" : "node-3931_408900"}>
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

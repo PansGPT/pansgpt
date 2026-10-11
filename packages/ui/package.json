@@ -4,19 +4,45 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles/index.css",
+    "./tokens.css": "./src/styles/tokens.css",
+    "./tailwind.css": "./src/styles/tailwind.css"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "echo UI lint passed"
+    "preview:dev": "vite",
+    "preview:build": "vite build",
+    "preview:serve": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
+    "test": "playwright test",
+    "lint": "eslint src preview tests --ext .ts,.tsx && node scripts/generate-tokens.mjs --check && node scripts/generate-typography.mjs --check && node scripts/generate-coverage.mjs --check && node scripts/check-css-references.mjs && node scripts/check-paint-styles.mjs && node scripts/generate-icons.mjs --check && node scripts/check-section-assets.mjs",
+    "icons:generate": "node scripts/generate-icons.mjs",
+    "coverage:generate": "node scripts/generate-coverage.mjs",
+    "typography:generate": "node scripts/generate-typography.mjs",
+    "tokens:generate": "node scripts/generate-tokens.mjs",
+    "tokens:check": "node scripts/generate-tokens.mjs --check"
   },
   "dependencies": {
+    "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
+    "radix-ui": "^1.6.7",
     "tailwind-merge": "^3.0.1"
   },
   "devDependencies": {
+    "@pansgpt/eslint-config": "workspace:*",
     "@pansgpt/typescript-config": "workspace:*",
+    "@playwright/test": "^1.63.0",
     "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.2.7",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "8.57.1",
     "react": "^19.0.0",
-    "typescript": "^5.7.3"
+    "react-dom": "19.2.8",
+    "typescript": "^5.7.3",
+    "vite": "^8.3.2"
   }
 }

@@ -1,0 +1,115 @@
+const imgSizeMdPlaceholderFalseTextFalseStatusIconOnlineIndicator = "https://www.figma.com/api/mcp/asset/c3f8c40a-77cd-468b-af05-910feff4afbb.png";
+const imgFavicon1 = "https://www.figma.com/api/mcp/asset/5106491b-6ca1-4d79-aa97-acfd76e6c6f0.png";
+const imgHomeLine = "https://www.figma.com/api/mcp/asset/cbb6c94f-45d3-4110-b195-9b5c5387be93.svg";
+const imgBarChartSquare02 = "https://www.figma.com/api/mcp/asset/331b38c0-227d-47e2-8a3f-956c47a72ce4.svg";
+const imgRows01 = "https://www.figma.com/api/mcp/asset/ccdb811d-8a24-4714-aba9-0b73979c0691.svg";
+const imgCheckDone01 = "https://www.figma.com/api/mcp/asset/ecabbab5-8838-43d3-a7ce-d4018c1d664c.svg";
+const imgPieChart03 = "https://www.figma.com/api/mcp/asset/d8964064-951e-424b-87da-c222eebaf3ba.svg";
+const imgUsers01 = "https://www.figma.com/api/mcp/asset/fa98431d-27a7-4f7d-a815-5ce8a6135179.svg";
+const imgLifeBuoy01 = "https://www.figma.com/api/mcp/asset/9a9b08f3-f4a9-46d2-8d94-ac59bd499876.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/3f9c8545-c2b3-44be-b6a2-0e2c68b99a47.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "md";
+  statusIcon?: "Online indicator";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "md", statusIcon = "Online indicator", text = "False" }: AvatarProps) {
+  return (
+    <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1084">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+    </div>
+  );
+}
+
+function Logomark({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex items-start relative"} data-node-id="1083:50505" data-name="Logomark">
+      <div className="relative shrink-0 size-[32px]" data-node-id="18492:16258" data-name="favicon 1">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+      </div>
+    </div>
+  );
+}
+
+type SidebarNavigationProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  open?: boolean;
+  style?: "Slim";
+};
+
+function SidebarNavigation({ className, breakpoint = "Desktop", open = false, style = "Slim" }: SidebarNavigationProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex h-[960px] items-start pl-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative w-[68px]"} data-node-id="1165:2049">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex flex-[1_0_0] flex-col h-full items-start justify-between min-w-px relative rounded-[var(--radius-xl,20px)]" data-node-id="1165:2050" data-name="Content">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] isolate items-start pt-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="1165:2051" data-name="Navigation">
+          <div className="content-stretch flex flex-col items-center px-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[2]" data-node-id="1165:2052" data-name="Header">
+            <Logomark className="content-stretch flex items-start relative shrink-0" />
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center px-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[1]" data-node-id="1165:2054" data-name="Navigation">
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2461" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2461;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHomeLine} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2462" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2462;3479:471027" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBarChartSquare02} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2057" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2057;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRows01} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2058" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2058;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheckDone01} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2059" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2059;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPieChart03} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2060" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2060;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUsers01} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center pb-[var(--spacing-2xl,20px)] px-[var(--spacing-lg,12px)] relative shrink-0 w-full" data-node-id="1165:2061" data-name="Footer">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0" data-node-id="1165:2062" data-name="Navigation">
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2063" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2063;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLifeBuoy01} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[40px]" data-node-id="1165:2064" data-name="_Nav item button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1165:2064;3479:471025" data-name="bell-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+              </div>
+            </div>
+          </div>
+          <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" />
+        </div>
+      </div>
+    </div>
+  );
+}

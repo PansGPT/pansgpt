@@ -1,0 +1,195 @@
+const imgDivider = "https://www.figma.com/api/mcp/asset/49bb117a-457a-4dd7-9df2-81b21e8b69fa.svg";
+const imgColor = "https://www.figma.com/api/mcp/asset/71423de9-94ab-4e3f-8cbc-f6cbb290e0dd.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/85df6137-c742-4f01-a680-ab27a74d5375.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/5c98dea6-5ecc-4528-b910-8ccd7f742d4c.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/cd5a4cb2-0ad7-4827-b6b6-79fc5e5dc9df.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/eb41ff6f-59da-454a-ba6e-e85c9e6f4724.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/5fc4b2cc-8437-41b7-81da-3a768e42191f.svg";
+
+function XAxisLabel({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex items-start justify-center pt-[var(--spacing-md,8px)] relative w-[1133px]"} data-node-id="1061:47348" data-name="_X-axis label">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1061:47226">
+        Month
+      </p>
+    </div>
+  );
+}
+
+type YAxisProps = {
+  className?: string;
+  label?: "True";
+};
+
+function YAxis({ className, label = "True" }: YAxisProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[167px] items-start justify-between relative w-[1216px]"} data-node-id="1067:825">
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[22px] items-center relative shrink-0 w-full" data-node-id="1067:826" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:826;1061:46470">
+          1,000
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:826;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:826;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="1067:827" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:827;1061:46470">
+          800
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:827;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:827;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="1067:828" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:828;1061:46470">
+          600
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:828;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:828;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="1067:829" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:829;1061:46470">
+          400
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:829;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:829;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="1067:830" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:830;1061:46470">
+          200
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:830;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:830;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="1067:831" data-name="_Y-axis line">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:831;1061:46470">
+          0
+        </p>
+        <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:831;1076:3243" data-name="Divider">
+          <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:831;1076:1987" data-name="Divider">
+            <div className="absolute inset-[-1px_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgDivider} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type LineAndBarChartProps = {
+  className?: string;
+  axisLabels?: "True";
+  breakpoint?: "Mobile";
+  chartStyle?: "Line";
+  legend?: "Right";
+};
+
+function LineAndBarChart({ className, axisLabels = "True", breakpoint = "Mobile", chartStyle = "Line", legend = "Right" }: LineAndBarChartProps) {
+  return (
+    <div className={className || "h-[240px] relative w-[343px]"} data-node-id="1063:74475">
+      <div className="absolute content-stretch flex gap-[var(--spacing-xs,4px)] inset-0 items-start" data-node-id="1063:74476" data-name="Axis">
+        <div className="content-stretch flex flex-col h-full items-start justify-center pb-[var(--spacing-3xl,24px)] relative shrink-0" data-node-id="1063:74477" data-name="_Y-axis label">
+          <div className="flex h-[70px] items-center justify-center relative shrink-0 w-[18px]" data-node-id="I1063:74477;1061:46580">
+            <div className="-rotate-90 flex-none">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap">Active users</p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-end min-w-px relative" data-node-id="1063:74478" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1063:74479" data-name="_Legend">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:74479;1067:6102" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:74479;1067:6103" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:74479;1067:6104">
+                Series 1
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:74479;1067:6405" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:74479;1067:6406" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:74479;1067:6407">
+                Series 2
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:74479;1067:6708" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:74479;1067:6709" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:74479;1067:6710">
+                Series 3
+              </p>
+            </div>
+          </div>
+          <YAxis className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative w-full" />
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal items-center justify-between leading-[var(--line-height\/text-xs,18px)] pl-[var(--spacing-6xl,48px)] pr-[var(--spacing-md,8px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-full whitespace-nowrap" data-node-id="6437:277409" data-name="_X-axis">
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47554">
+              Jan
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47556">
+              Mar
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1063:47258">
+              May
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47558">
+              Jul
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47560">
+              Sep
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47562">
+              Nov
+            </p>
+            <p className="relative shrink-0" data-node-id="I6437:277409;1061:47564">
+              Dec
+            </p>
+          </div>
+          <XAxisLabel className="content-stretch flex items-start justify-center pt-[var(--spacing-md,8px)] relative shrink-0 w-full" />
+          <div className="absolute inset-[20px_0_52px_48px] overflow-clip" data-node-id="1063:74490" data-name="_Chart data">
+            <div className="absolute h-[146px] left-0 right-0 top-[46px]" data-node-id="I1063:74490;1062:46535" data-name="Series 1">
+              <div className="absolute inset-[-0.78%_-0.37%_0_-0.37%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries1} />
+              </div>
+            </div>
+            <div className="absolute inset-[51.56%_0_35.5%_0]" data-node-id="I1063:74490;1062:46538" data-name="Series 2">
+              <div className="absolute inset-[-4.6%_-0.37%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+              </div>
+            </div>
+            <div className="absolute inset-[55.73%_0_9.9%_0]" data-node-id="I1063:74490;1062:46576" data-name="Series 3">
+              <div className="absolute inset-[-1.73%_-0.37%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

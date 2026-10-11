@@ -1,0 +1,114 @@
+const imgPlatformFacebookStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/2ba34b9e-a25c-44fd-a3ad-629d48c78eb0.svg";
+const imgPlatformGoogleStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/751eb922-9ad6-4b5b-a580-b66135e09711.svg";
+const imgPlatformAppleStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/514f516b-4655-41c9-b219-1990cd30a717.svg";
+const imgPlatformFacebookStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/0ddc13b6-5eb1-4f30-a0b6-24ec8f343fb2.svg";
+const imgPlatformGoogleStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/263af194-cc4c-44a0-9551-68a4d764532b.svg";
+const imgPlatformAppleStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/557fa027-db46-4a2f-a1a4-9f1761eaf670.svg";
+const imgSocialIcon = "https://www.figma.com/api/mcp/asset/1b5e1c67-6aea-450b-8c3a-e56366712549.svg";
+const imgSocialIcon1 = "https://www.figma.com/api/mcp/asset/987c7b46-10c6-42d8-9478-b968611af1b3.svg";
+
+type SocialIconProps = {
+  className?: string;
+  platform?: "Apple" | "Facebook" | "Google";
+  state?: "Default";
+  style?: "Brand" | "Gray";
+};
+
+function SocialIcon({ className, platform = "Apple", state = "Default", style = "Brand" }: SocialIconProps) {
+  const isAppleAndBrandAndDefault = platform === "Apple" && style === "Brand" && state === "Default";
+  const isAppleAndGrayAndDefault = platform === "Apple" && style === "Gray" && state === "Default";
+  const isFacebookAndGrayAndDefault = platform === "Facebook" && style === "Gray" && state === "Default";
+  const isGoogleAndBrandAndDefault = platform === "Google" && style === "Brand" && state === "Default";
+  const isGoogleAndGrayAndDefault = platform === "Google" && style === "Gray" && state === "Default";
+  return (
+    <div className={className || "relative size-[24px]"} id={isAppleAndGrayAndDefault ? "node-1422_1149" : isGoogleAndGrayAndDefault ? "node-1422_1145" : isFacebookAndGrayAndDefault ? "node-1422_1140" : isAppleAndBrandAndDefault ? "node-1027_1536" : isGoogleAndBrandAndDefault ? "node-1027_1528" : "node-1027_1516"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isAppleAndGrayAndDefault ? imgPlatformAppleStyleGrayStateDefault : isGoogleAndGrayAndDefault ? imgPlatformGoogleStyleGrayStateDefault : isFacebookAndGrayAndDefault ? imgPlatformFacebookStyleGrayStateDefault : isAppleAndBrandAndDefault ? imgPlatformAppleStyleBrandStateDefault : isGoogleAndBrandAndDefault ? imgPlatformGoogleStyleBrandStateDefault : imgPlatformFacebookStyleBrandStateDefault} />
+    </div>
+  );
+}
+
+type SocialButtonGroupsProps = {
+  className?: string;
+  style?: "Buttons" | "Icons";
+  theme?: "Brand" | "Color" | "Gray";
+};
+
+export default function SocialButtonGroups({ className, style = "Buttons", theme = "Brand" }: SocialButtonGroupsProps) {
+  const isBrand = theme === "Brand";
+  const isButtonsAndBrand = style === "Buttons" && theme === "Brand";
+  const isButtonsAndGray = style === "Buttons" && theme === "Gray";
+  const isButtonsAndIsColorOrGray = style === "Buttons" && ["Color", "Gray"].includes(theme);
+  const isColorOrGray = ["Color", "Gray"].includes(theme);
+  const isGray = theme === "Gray";
+  const isIcons = style === "Icons";
+  const isIconsAndBrand = style === "Icons" && theme === "Brand";
+  const isIconsAndColor = style === "Icons" && theme === "Color";
+  const isIconsAndGray = style === "Icons" && theme === "Gray";
+  const isIconsAndIsColorOrGray = style === "Icons" && ["Color", "Gray"].includes(theme);
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center relative w-[360px] ${isIcons ? "" : "flex-col"}`} id={isIconsAndBrand ? "node-1256_132753" : isIconsAndGray ? "node-1256_132982" : isIconsAndColor ? "node-1256_132636" : isButtonsAndBrand ? "node-1256_132758" : isButtonsAndGray ? "node-1256_132987" : "node-1256_132637"}>
+      <div className={`${String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isIcons ? "flex-[1_0_0] min-w-px p-[10px]" : "px-[var(--spacing-xl,16px)] py-[10px] shrink-0 w-full"}`} id={isIconsAndBrand ? "node-1256_132754" : isIconsAndGray ? "node-1256_132983" : isIconsAndColor ? "node-1256_132599" : isButtonsAndBrand ? "node-1256_132759" : isButtonsAndGray ? "node-1256_132988" : "node-1256_132203"} data-name="Social button">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" style={isGray ? "Gray" : undefined} />
+        {style === "Buttons" && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isButtonsAndBrand ? "node-I1256_132759-1256_130791" : isButtonsAndGray ? "node-I1256_132988-1256_132900" : "node-I1256_132203-1256_131976"}>
+            Sign in with Google
+          </p>
+        )}
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+      <div className={`${String.raw`border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isIconsAndBrand ? "border-2 border-[rgba(255,255,255,0.12)] flex-[1_0_0] min-w-px p-[10px]" : isIconsAndIsColorOrGray ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] flex-[1_0_0] min-w-px p-[10px]` : isButtonsAndBrand ? "border-2 border-[rgba(255,255,255,0.12)] px-[var(--spacing-xl,16px)] py-[10px] shrink-0 w-full" : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] px-[var(--spacing-xl,16px)] py-[10px] shrink-0 w-full`}`} id={isIconsAndBrand ? "node-1256_132755" : isIconsAndGray ? "node-1256_132984" : isIconsAndColor ? "node-1256_132598" : isButtonsAndBrand ? "node-1256_132760" : isButtonsAndGray ? "node-1256_132989" : "node-1256_132202"} data-name="Social button">
+        <div aria-hidden className={`absolute inset-0 pointer-events-none rounded-[var(--radius-md,12px)] ${isBrand ? "bg-[#1877f2]" : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} />
+        {isColorOrGray && <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" style={isGray ? "Gray" : undefined} />}
+        {isButtonsAndIsColorOrGray && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isButtonsAndGray ? "node-I1256_132989-1256_132910" : "node-I1256_132202-1256_131983"}>
+            Sign in with Facebook
+          </p>
+        )}
+        {isColorOrGray && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+        {isBrand && (
+          <div className="relative shrink-0 size-[24px]" id={isIconsAndBrand ? "node-I1256_132755-1256_130933" : "node-I1256_132760-1256_130925"} data-name="Social icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+          </div>
+        )}
+        {isButtonsAndBrand && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1256:132760;1256:130771">
+            Sign in with Facebook
+          </p>
+        )}
+        {isBrand && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+      </div>
+      <div className={`${String.raw`border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isIconsAndBrand ? "border-2 border-[rgba(255,255,255,0.12)] flex-[1_0_0] min-w-px p-[10px]" : isIconsAndIsColorOrGray ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] flex-[1_0_0] min-w-px p-[10px]` : isButtonsAndBrand ? "border-2 border-[rgba(255,255,255,0.12)] px-[var(--spacing-xl,16px)] py-[10px] shrink-0 w-full" : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] px-[var(--spacing-xl,16px)] py-[10px] shrink-0 w-full`}`} id={isIconsAndBrand ? "node-1256_132756" : isIconsAndGray ? "node-1256_132985" : isIconsAndColor ? "node-1256_132600" : isButtonsAndBrand ? "node-1256_132761" : isButtonsAndGray ? "node-1256_132990" : "node-1256_132204"} data-name="Social button">
+        <div aria-hidden className={`absolute inset-0 pointer-events-none rounded-[var(--radius-md,12px)] ${isBrand ? String.raw`bg-[var(--colors\/base\/black,black)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} />
+        {isColorOrGray && <SocialIcon className="relative shrink-0 size-[24px]" style={isGray ? "Gray" : undefined} />}
+        {isButtonsAndIsColorOrGray && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isButtonsAndGray ? "node-I1256_132990-1256_132889" : "node-I1256_132204-1256_131973"}>
+            Sign in with Apple
+          </p>
+        )}
+        {isColorOrGray && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+        {isBrand && (
+          <div className="relative shrink-0 size-[24px]" id={isIconsAndBrand ? "node-I1256_132756-1256_130931" : "node-I1256_132761-1256_130929"} data-name="Social icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon1} />
+          </div>
+        )}
+        {isButtonsAndBrand && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1256:132761;1256:130811">
+            Sign in with Apple
+          </p>
+        )}
+        {isBrand && <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />}
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Gradient/skeuemorphic-gradient-border: .
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

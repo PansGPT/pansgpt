@@ -1,0 +1,124 @@
+/* Inside strokes preserve Figma's 22/24/28px outer geometry. */
+.p-badge {
+  border: 0;
+  padding: 2px 8px;
+  height: 22px;
+  box-shadow: inset 0 0 0 1px var(--utility-gray-200);
+}
+.p-badge[data-size="md"] {
+  height: 24px;
+  padding-inline: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  gap: 6px;
+}
+.p-badge[data-size="lg"] {
+  height: 28px;
+  padding: 4px 12px;
+  font-size: 14px;
+  line-height: 20px;
+  gap: 6px;
+}
+.p-badge[data-color="brand"] {
+  background: var(--utility-brand-50);
+  color: var(--utility-brand-700);
+  box-shadow: inset 0 0 0 1px var(--utility-brand-200);
+}
+.p-badge[data-color="warning"] {
+  background: var(--utility-warning-50);
+  color: var(--utility-warning-700);
+  box-shadow: inset 0 0 0 1px var(--utility-warning-200);
+}
+.p-badge[data-color="success"] {
+  background: var(--utility-success-50);
+  color: var(--utility-success-700);
+  box-shadow: inset 0 0 0 1px var(--utility-success-200);
+}
+.p-badge[data-color="gray-blue"] {
+  background: var(--utility-gray-blue-50);
+  color: var(--utility-gray-blue-700);
+  box-shadow: inset 0 0 0 1px var(--utility-gray-blue-200);
+}
+.p-badge[data-color="blue-light"] {
+  background: var(--utility-blue-light-50);
+  color: var(--utility-blue-light-700);
+  box-shadow: inset 0 0 0 1px var(--utility-blue-light-200);
+}
+.p-badge[data-color="indigo"] {
+  background: var(--utility-indigo-50);
+  color: var(--utility-indigo-700);
+  box-shadow: inset 0 0 0 1px var(--utility-indigo-200);
+}
+.p-badge[data-color="purple"] {
+  background: var(--utility-purple-50);
+  color: var(--utility-purple-700);
+  box-shadow: inset 0 0 0 1px var(--utility-purple-200);
+}
+.p-badge[data-color="blue"] {
+  background: var(--utility-blue-50);
+  color: var(--utility-blue-700);
+  box-shadow: inset 0 0 0 1px var(--utility-blue-200);
+}
+.p-badge[data-color="pink"] {
+  background: var(--utility-pink-50);
+  color: var(--utility-pink-700);
+  box-shadow: inset 0 0 0 1px var(--utility-pink-200);
+}
+.p-badge[data-color="orange"] {
+  background: var(--utility-orange-50);
+  color: var(--utility-orange-700);
+  box-shadow: inset 0 0 0 1px var(--utility-orange-200);
+}
+.p-badge[data-color="error"] {
+  background: var(--utility-error-50);
+  color: var(--utility-error-700);
+  box-shadow: inset 0 0 0 1px var(--utility-error-200);
+}
+.p-badge[data-color="gray"] {
+  background: var(--utility-gray-50);
+  color: var(--utility-gray-700);
+  box-shadow: inset 0 0 0 1px var(--utility-gray-200);
+}
+.p-badge[data-variant="color"],
+.p-badge[data-variant="modern"] {
+  padding-inline: 6px;
+  border-radius: var(--figma-radius-sm);
+}
+.p-badge[data-variant="color"][data-size="md"],
+.p-badge[data-variant="modern"][data-size="md"] {
+  padding-inline: 8px;
+}
+.p-badge[data-variant="color"][data-size="lg"],
+.p-badge[data-variant="modern"][data-size="lg"] {
+  padding-inline: 10px;
+  border-radius: var(--figma-radius-md);
+}
+.p-badge[data-variant="modern"] {
+  background: var(--bg-primary);
+  color: var(--text-secondary-700);
+  box-shadow:
+    inset 0 0 0 1px var(--border-primary),
+    var(--effect-shadow-xs);
+}
+.p-badge[data-variant="pill"][data-dot] {
+  padding-left: 6px;
+}
+.p-badge[data-variant="pill"][data-dot][data-size="md"] {
+  padding-left: 8px;
+}
+.p-badge[data-variant="pill"][data-dot][data-size="lg"] {
+  padding-left: 10px;
+}
+.p-badge-dot {
+  display: block;
+  flex: none;
+}
+.p-badge[data-decoration="only"] { width: 22px; }
+.p-badge[data-decoration="only"][data-size="md"] { width: 24px; }
+.p-badge[data-decoration="only"][data-size="lg"] { width: 28px; }
+.p-badge-decoration { display: inline-flex; align-items: center; flex: none; }
+.p-badge-decoration > img { display: block; max-width: none; }
+.p-badge-decoration[data-kind="avatar"] { width: 16px; height: 16px; border-radius: 50%; overflow: hidden; box-shadow: inset 0 0 0 .333px rgb(0 0 0 / .08); position: relative; }
+.p-badge-decoration[data-kind="avatar"] > img { width: 16px; height: 16px; object-fit: cover; border-radius: inherit; }
+.badge-library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 16px; }
+.badge-library-grid > div { display: flex; align-items: flex-start; }

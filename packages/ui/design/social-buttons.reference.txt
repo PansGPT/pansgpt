@@ -1,0 +1,1273 @@
+const imgPlatformFacebookStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/10580fe3-01c0-4d77-a76e-dd9b05cf9896.svg";
+const imgPlatformXTwitterStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/ff9c8bc3-9309-489e-b284-91ee284ae7d3.svg";
+const imgPlatformGoogleStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/738d701f-ba7d-42ef-b692-661376f74d70.svg";
+const imgPlatformAppleStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/23aabfd6-3f26-481a-a154-bb99f1dbf8b3.svg";
+const imgPlatformFigmaStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/7b207ed0-6969-4b3b-a730-b0c0653fe992.svg";
+const imgPlatformDribbbleStyleBrandStateDefault = "https://www.figma.com/api/mcp/asset/543671fe-8093-4428-9e00-432a910e49a7.svg";
+const imgPlatformFacebookStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/f6f8f218-e7d4-4e21-a834-585c9242934b.svg";
+const imgPlatformXTwitterStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/7e37f49a-e230-4da2-bfd7-3cf79eb12c96.svg";
+const imgPlatformGoogleStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/40435ced-d8af-45fa-a622-e69e3d22834a.svg";
+const imgPlatformAppleStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/2b346f38-61df-4ee2-97ab-c342cd88849b.svg";
+const imgPlatformFigmaStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/f2e2d693-cf8c-4fee-8028-29f203ae6ecb.svg";
+const imgPlatformDribbbleStyleGrayStateDefault = "https://www.figma.com/api/mcp/asset/fd76af0a-d9cc-43cc-978b-a58a999ad47d.svg";
+const imgSocialIcon = "https://www.figma.com/api/mcp/asset/874f1ddf-9eeb-4158-a6eb-9ab72cbff24e.svg";
+const imgSocialIcon1 = "https://www.figma.com/api/mcp/asset/35a41fb9-9220-4e7f-a8a6-0fe0680ad96f.svg";
+const imgSocialIcon2 = "https://www.figma.com/api/mcp/asset/f9df0958-4adb-4968-a809-b127b577d3da.svg";
+const imgSocialIcon3 = "https://www.figma.com/api/mcp/asset/cd521b18-439c-4518-8c0c-967741f59dc4.svg";
+const imgSocialIcon4 = "https://www.figma.com/api/mcp/asset/2b15c367-9a18-46e5-a265-0b422e0d0237.svg";
+const imgSocialIcon5 = "https://www.figma.com/api/mcp/asset/7e99e395-ec88-47f2-bc3c-e8e1fe717426.svg";
+const imgSocialIcon6 = "https://www.figma.com/api/mcp/asset/47e43d4d-68e3-42f7-96b2-a9de5d84dcb5.svg";
+const imgSocialIcon7 = "https://www.figma.com/api/mcp/asset/996876a2-6954-4d57-8267-609092f21397.svg";
+const imgSocialIcon8 = "https://www.figma.com/api/mcp/asset/a14a1989-cdc3-4483-81d0-4e48d44cfd5e.svg";
+const imgSocialIcon9 = "https://www.figma.com/api/mcp/asset/18d26829-d9e7-4d8d-859c-04e332abca56.svg";
+
+type SocialIconProps = {
+  className?: string;
+  platform?: "Apple" | "Dribbble" | "Facebook" | "Figma" | "Google" | "X (Twitter)";
+  state?: "Default";
+  style?: "Brand" | "Gray";
+};
+
+function SocialIcon({ className, platform = "Apple", state = "Default", style = "Brand" }: SocialIconProps) {
+  const isAppleAndBrandAndDefault = platform === "Apple" && style === "Brand" && state === "Default";
+  const isAppleAndGrayAndDefault = platform === "Apple" && style === "Gray" && state === "Default";
+  const isDribbbleAndBrandAndDefault = platform === "Dribbble" && style === "Brand" && state === "Default";
+  const isDribbbleAndGrayAndDefault = platform === "Dribbble" && style === "Gray" && state === "Default";
+  const isFacebookAndGrayAndDefault = platform === "Facebook" && style === "Gray" && state === "Default";
+  const isFigmaAndBrandAndDefault = platform === "Figma" && style === "Brand" && state === "Default";
+  const isFigmaAndGrayAndDefault = platform === "Figma" && style === "Gray" && state === "Default";
+  const isGoogleAndBrandAndDefault = platform === "Google" && style === "Brand" && state === "Default";
+  const isGoogleAndGrayAndDefault = platform === "Google" && style === "Gray" && state === "Default";
+  const isXTwitterAndBrandAndDefault = platform === "X (Twitter)" && style === "Brand" && state === "Default";
+  const isXTwitterAndGrayAndDefault = platform === "X (Twitter)" && style === "Gray" && state === "Default";
+  return (
+    <div className={className || "relative size-[24px]"} id={isDribbbleAndGrayAndDefault ? "node-1422_1148" : isFigmaAndGrayAndDefault ? "node-1422_1146" : isAppleAndGrayAndDefault ? "node-1422_1149" : isGoogleAndGrayAndDefault ? "node-1422_1145" : isXTwitterAndGrayAndDefault ? "node-6071_473715" : isFacebookAndGrayAndDefault ? "node-1422_1140" : isDribbbleAndBrandAndDefault ? "node-1027_1550" : isFigmaAndBrandAndDefault ? "node-1027_1544" : isAppleAndBrandAndDefault ? "node-1027_1536" : isGoogleAndBrandAndDefault ? "node-1027_1528" : isXTwitterAndBrandAndDefault ? "node-6071_473713" : "node-1027_1516"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isDribbbleAndGrayAndDefault ? imgPlatformDribbbleStyleGrayStateDefault : isFigmaAndGrayAndDefault ? imgPlatformFigmaStyleGrayStateDefault : isAppleAndGrayAndDefault ? imgPlatformAppleStyleGrayStateDefault : isGoogleAndGrayAndDefault ? imgPlatformGoogleStyleGrayStateDefault : isXTwitterAndGrayAndDefault ? imgPlatformXTwitterStyleGrayStateDefault : isFacebookAndGrayAndDefault ? imgPlatformFacebookStyleGrayStateDefault : isDribbbleAndBrandAndDefault ? imgPlatformDribbbleStyleBrandStateDefault : isFigmaAndBrandAndDefault ? imgPlatformFigmaStyleBrandStateDefault : isAppleAndBrandAndDefault ? imgPlatformAppleStyleBrandStateDefault : isGoogleAndBrandAndDefault ? imgPlatformGoogleStyleBrandStateDefault : isXTwitterAndBrandAndDefault ? imgPlatformXTwitterStyleBrandStateDefault : imgPlatformFacebookStyleBrandStateDefault} />
+    </div>
+  );
+}
+
+type SocialButtonProps = {
+  className?: string;
+  social?: "Google" | "Facebook" | "Apple" | "Twitter" | "Figma" | "Dribbble";
+  state?: "Default" | "Hover" | "Focused";
+  supportingText?: boolean;
+  theme?: "Brand" | "Gray" | "Color";
+};
+
+export default function SocialButton({ className, social = "Google", state = "Default", supportingText = true, theme = "Brand" }: SocialButtonProps) {
+  if (social === "Facebook" && supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130787" data-name="Social=Facebook, Supporting text=True, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[#1877f2] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:130925" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:130771">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:421" data-name="Social=Facebook, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[#0c63d4] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:422" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:423">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:777" data-name="Social=Facebook, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[#1877f2] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:778" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:779">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131981" data-name="Social=Facebook, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:131983">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:418" data-name="Social=Facebook, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:420">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:774" data-name="Social=Facebook, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:776">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132908" data-name="Social=Facebook, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132910">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:406" data-name="Social=Facebook, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:407" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon1} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:408">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:761" data-name="Social=Facebook, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:763">
+          Sign in with Facebook
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130881" data-name="Social=Facebook, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[#1877f2] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:130933" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:404" data-name="Social=Facebook, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[#0c63d4] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:405" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:754" data-name="Social=Facebook, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[#1877f2] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:755" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131977" data-name="Social=Facebook, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:409" data-name="Social=Facebook, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:767" data-name="Social=Facebook, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132906" data-name="Social=Facebook, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:402" data-name="Social=Facebook, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:403" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon1} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Facebook" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:752" data-name="Social=Facebook, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Facebook" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:399" data-name="Social=Google, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:401">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:746" data-name="Social=Google, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:748">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131974" data-name="Social=Google, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:131976">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:393" data-name="Social=Google, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:395">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:740" data-name="Social=Google, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:742">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132898" data-name="Social=Google, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132900">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:390" data-name="Social=Google, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:391" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon2} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:392">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:734" data-name="Social=Google, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:736">
+          Sign in with Google
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130878" data-name="Social=Google, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:383" data-name="Social=Google, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:729" data-name="Social=Google, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131979" data-name="Social=Google, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:416" data-name="Social=Google, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:772" data-name="Social=Google, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132896" data-name="Social=Google, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:376" data-name="Social=Google, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:377" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon2} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Google" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:724" data-name="Social=Google, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130809" data-name="Social=Apple, Supporting text=True, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:130929" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:130811">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:368" data-name="Social=Apple, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:369" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:370">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:749" data-name="Social=Apple, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:750" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:751">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132051" data-name="Social=Figma, Supporting text=True, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132053">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:365" data-name="Social=Figma, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:367">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:758" data-name="Social=Figma, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:760">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132143" data-name="Social=Figma, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132145">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:359" data-name="Social=Figma, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:361">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:737" data-name="Social=Figma, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:739">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132901" data-name="Social=Figma, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132903">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:356" data-name="Social=Figma, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:357" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon4} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:358">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:764" data-name="Social=Figma, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:766">
+          Sign in with Figma
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132085" data-name="Social=Dribbble, Supporting text=True, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[#ea4c89] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:132098" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132087">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:380" data-name="Social=Dribbble, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[#e62872] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:381" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:382">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:726" data-name="Social=Dribbble, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[#ea4c89] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:727" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:728">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132138" data-name="Social=Dribbble, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132140">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:396" data-name="Social=Dribbble, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:398">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:743" data-name="Social=Dribbble, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:745">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132893" data-name="Social=Dribbble, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132895">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:373" data-name="Social=Dribbble, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:374" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon6} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:375">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:721" data-name="Social=Dribbble, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:723">
+          Sign in with Dribbble
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132033" data-name="Social=Twitter, Supporting text=True, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:132038" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132035">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:387" data-name="Social=Twitter, Supporting text=True, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:388" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:389">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:731" data-name="Social=Twitter, Supporting text=True, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:732" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:733">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132135" data-name="Social=Twitter, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132137">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:362" data-name="Social=Twitter, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:364">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:718" data-name="Social=Twitter, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:720">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132890" data-name="Social=Twitter, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132892">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:413" data-name="Social=Twitter, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:414" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon8} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:415">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:769" data-name="Social=Twitter, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:771">
+          Sign in with X
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131971" data-name="Social=Apple, Supporting text=True, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:131973">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:353" data-name="Social=Apple, Supporting text=True, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:355">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:715" data-name="Social=Apple, Supporting text=True, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:717">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132887" data-name="Social=Apple, Supporting text=True, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:132889">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:350" data-name="Social=Apple, Supporting text=True, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:351" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon9} />
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:352">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:712" data-name="Social=Apple, Supporting text=True, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" style="Gray" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1269:714">
+          Sign in with Apple
+        </p>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130875" data-name="Social=Apple, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:130931" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:348" data-name="Social=Apple, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:349" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:710" data-name="Social=Apple, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:711" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon3} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132049" data-name="Social=Figma, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:346" data-name="Social=Figma, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:708" data-name="Social=Figma, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132141" data-name="Social=Figma, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:344" data-name="Social=Figma, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:706" data-name="Social=Figma, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132885" data-name="Social=Figma, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:342" data-name="Social=Figma, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:343" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon4} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Figma" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:704" data-name="Social=Figma, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Figma" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132083" data-name="Social=Dribbble, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[#ea4c89] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:132100" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:340" data-name="Social=Dribbble, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[#e62872] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:341" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:702" data-name="Social=Dribbble, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[#ea4c89] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:703" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon5} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132133" data-name="Social=Dribbble, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:338" data-name="Social=Dribbble, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:700" data-name="Social=Dribbble, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132883" data-name="Social=Dribbble, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:336" data-name="Social=Dribbble, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:337" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon6} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Dribbble" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:698" data-name="Social=Dribbble, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="Dribbble" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Brand" && state === "Default") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132031" data-name="Social=Twitter, Supporting text=False, Theme=Brand, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1256:132040" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Brand" && state === "Hover") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:334" data-name="Social=Twitter, Supporting text=False, Theme=Brand, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:335" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Brand" && state === "Focused") {
+    return (
+      <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:696" data-name="Social=Twitter, Supporting text=False, Theme=Brand, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/base\/black,black)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:697" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon7} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132131" data-name="Social=Twitter, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:385" data-name="Social=Twitter, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:694" data-name="Social=Twitter, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132904" data-name="Social=Twitter, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:378" data-name="Social=Twitter, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:379" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon8} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Twitter" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:692" data-name="Social=Twitter, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" platform="X (Twitter)" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Color" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:131969" data-name="Social=Apple, Supporting text=False, Theme=Color, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Color" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:411" data-name="Social=Apple, Supporting text=False, Theme=Color, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Color" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:756" data-name="Social=Apple, Supporting text=False, Theme=Color, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Gray" && state === "Default") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:132881" data-name="Social=Apple, Supporting text=False, Theme=Gray, State=Default">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1269:371" data-name="Social=Apple, Supporting text=False, Theme=Gray, State=Hover">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <div className="relative shrink-0 size-[24px]" data-node-id="1269:372" data-name="Social icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon9} />
+        </div>
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  if (social === "Apple" && !supportingText && theme === "Gray" && state === "Focused") {
+    return (
+      <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip p-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1269:690" data-name="Social=Apple, Supporting text=False, Theme=Gray, State=Focused">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+        <SocialIcon className="relative shrink-0 size-[24px]" style="Gray" />
+        <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    );
+  }
+  return (
+    <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="1256:130789" data-name="Social=Google, Supporting text=True, Theme=Brand, State=Default">
+      <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+      <SocialIcon className="relative shrink-0 size-[24px]" platform="Google" />
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1256:130791">
+        Sign in with Google
+      </p>
+      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Gradient/skeuemorphic-gradient-border: , Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Focus rings/focus-ring-shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

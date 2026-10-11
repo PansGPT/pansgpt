@@ -1,0 +1,71 @@
+const imgTypeLayersTrendPositive = "https://www.figma.com/api/mcp/asset/4f1a3369-fb53-4b95-8d3d-0fe04a6a1c7e.svg";
+const imgEye = "https://www.figma.com/api/mcp/asset/c928eeb0-29e4-47e4-adf7-dd49d10a7cbd.svg";
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/830f371b-f0eb-41e5-a52a-959dbdbff232.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/c4403bd7-066d-4d3c-8c0b-ebd067b0e0c9.svg";
+
+type ChartMiniProps = {
+  className?: string;
+  trend?: "Positive";
+  type?: "Layers";
+};
+
+function ChartMini({ className, trend = "Positive", type = "Layers" }: ChartMiniProps) {
+  return (
+    <div className={className || "h-[56px] relative w-[128px]"} data-node-id="4992:376494">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeLayersTrendPositive} />
+    </div>
+  );
+}
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Mobile";
+  dropdownIcon?: boolean;
+  featuredIcon?: boolean;
+  type?: "Chart 02";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Mobile", dropdownIcon = true, featuredIcon = true, type = "Chart 02" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-xl,16px)] items-start px-[var(--spacing-xl,16px)] py-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] w-[343px]"} data-node-id="4993:376916">
+      <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" data-node-id="4993:376917" data-name="Heading and icon">
+        {featuredIcon && (
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="4993:376997" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4993:376997;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEye} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        )}
+        <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)]" data-node-id="4993:376919">
+          Views 24 hours
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-end relative shrink-0 w-full" data-node-id="4993:377044" data-name="Number and chart">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="4993:377045" data-name="Number and badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="4993:377046">
+            2,000
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center relative shrink-0" data-node-id="4993:377047" data-name="_Change">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I4993:377047;4988:370935" data-name="trend-up-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I4993:377047;4988:370936">
+              100%
+            </p>
+          </div>
+        </div>
+        <ChartMini className="h-[56px] relative shrink-0 w-[128px]" />
+      </div>
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[15px] top-[15px]" data-node-id="4993:376925" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I4993:376925;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

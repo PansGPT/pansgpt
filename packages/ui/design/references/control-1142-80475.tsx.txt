@@ -1,0 +1,65 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/c360ca7c-f1dc-4fc0-90ea-b32c43c5e124.svg";
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/8dc11949-89b2-4942-8cc6-deb023b4076d.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "md", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndMdAndCheckboxAndDefault = checked && indeterminate === "False" && size === "md" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px] ${isCheckedAndFalseAndMdAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndMdAndCheckboxAndDefault ? "node-1190_580" : "node-1097_63887"}>
+      {isCheckedAndFalseAndMdAndCheckboxAndDefault && (
+        <div className="absolute inset-[15%]" data-node-id="1190:582" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "md";
+  state?: "Default";
+  type?: "Icon simple";
+};
+
+function RadioGroupItem({ className, breakpoint = "Mobile", selected = false, size = "md", state = "Default", type = "Icon simple" }: RadioGroupItemProps) {
+  const isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile = !selected && size === "md" && type === "Icon simple" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]` : String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]`}`} id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-1142_80487" : "node-1142_80475"}>
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-1142_81051" : "node-1142_81075"} data-name="Content">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-1142_81053" : "node-1142_81077"} data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="absolute left-[9px] size-[20px] top-[9px]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-I1142_81053-4041_412675" : "node-I1142_81077-4041_412675"} data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-1142_81054" : "node-1142_81078"} data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-3931_408539" : "node-3931_408587"} data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-3931_408540" : "node-3931_408588"}>
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-3931_408541" : "node-3931_408589"}>
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" id={isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile ? "node-1142_81056" : "node-1142_81080"}>
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+      {selected && size === "md" && type === "Icon simple" && state === "Default" && breakpoint === "Mobile" && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />}
+      {isNotSelectedAndMdAndIconSimpleAndDefaultAndMobile && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" data-node-id="5373:387902" data-name="_Checkbox base" />}
+    </div>
+  );
+}

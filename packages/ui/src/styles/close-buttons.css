@@ -1,0 +1,32 @@
+.p-close-button.p-button {
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: var(--figma-radius-md);
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+.p-close-button.p-button[data-size="md"] { width: 40px; height: 40px; }
+.p-close-button.p-button[data-size="lg"] { width: 44px; height: 44px; }
+.p-close-button img { display: block; }
+.p-close-button .p-close-button-hover { display: none; }
+.p-close-button.p-button:hover:not(:disabled):not([data-reference-state]),
+.p-close-button.p-button[data-reference-state="hover"] { background: var(--bg-primary-hover); }
+.p-close-button:hover:not(:disabled):not([data-reference-state]) .p-close-button-normal,
+.p-close-button[data-reference-state="hover"] .p-close-button-normal { display: none; }
+.p-close-button:hover:not(:disabled):not([data-reference-state]) .p-close-button-hover,
+.p-close-button[data-reference-state="hover"] .p-close-button-hover { display: block; }
+.p-close-button.p-button:focus-visible:not([data-reference-state]),
+.p-close-button.p-button[data-reference-state="focused"] {
+  outline: none;
+  background: var(--bg-primary);
+  box-shadow: var(--effect-focus-ring);
+}
+.p-close-button.p-button[data-dark-background]:hover:not(:disabled):not([data-reference-state]),
+.p-close-button.p-button[data-dark-background]:focus-visible:not([data-reference-state]),
+.p-close-button.p-button[data-dark-background][data-reference-state="hover"],
+.p-close-button.p-button[data-dark-background][data-reference-state="focused"] { background: rgb(255 255 255 / 20%); }
+.p-close-button.p-button:disabled { cursor: not-allowed; opacity: 0.5; }

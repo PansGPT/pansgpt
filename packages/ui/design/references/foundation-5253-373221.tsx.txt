@@ -1,0 +1,21 @@
+const imgVariablesIcon = "https://www.figma.com/api/mcp/asset/c024639d-59fc-4c21-b842-70d185623d13.svg";
+
+export default function BlurCard({ className }: { className?: string }) {
+  return (
+    <div className={className || "backdrop-blur-[4px] bg-[rgba(255,255,255,0.6)] content-stretch flex h-[320px] items-start justify-between min-w-[800px] overflow-clip p-[var(--spacing-4xl,32px)] relative rounded-[var(--radius-xl,20px)] w-[1008px]"} data-node-id="5253:373221" data-name="_Blur card">
+      <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] text-center whitespace-nowrap" data-node-id="5239:371516">
+        <p className="leading-[var(--line-height\/display-sm,38px)]">backdrop-blur-sm</p>
+      </div>
+      <div className="relative shrink-0" data-node-id="5253:373333" data-name="Icon and text">
+        <div className="bg-clip-padding border-0 border-[transparent] border-solid content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative size-full">
+          <div className="relative shrink-0 size-[40px]" data-node-id="5253:373253" data-name="_Variables icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVariablesIcon} />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] text-center whitespace-nowrap" data-node-id="5253:373276">
+            <p className="leading-[var(--line-height\/display-sm,38px)]">light</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

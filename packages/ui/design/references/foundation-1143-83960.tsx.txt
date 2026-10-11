@@ -1,0 +1,71 @@
+const imgEndpoint = "https://www.figma.com/api/mcp/asset/3a2c170c-b310-42ac-81eb-26ed4071ebb2.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/bceebfcb-39d5-4327-8b75-e4f66d00679f.svg";
+const imgEndpoint1 = "https://www.figma.com/api/mcp/asset/e7a033dd-8601-40a8-8ec5-1f6ce9bb76cb.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/b084a30a-47c5-43a0-8ef1-b8c10d6f85b1.svg";
+
+type MeasureLineBaseProps = {
+  className?: string;
+  type?: "Solid" | "Spacer";
+};
+
+function MeasureLineBase({ className, type = "Solid" }: MeasureLineBaseProps) {
+  const isSpacer = type === "Spacer";
+  return (
+    <div className={className || "content-stretch flex flex-col h-[80px] items-center relative w-[16px]"} id={isSpacer ? "node-1143_83662" : "node-1143_83631"}>
+      <div className={`flex h-0 items-center justify-center relative shrink-0 ${isSpacer ? "w-full" : "w-[16px]"}`} id={isSpacer ? "node-1143_83663" : "node-1143_83652"} style={isSpacer ? { containerType: "size" } : undefined}>
+        <div className={`-rotate-90 flex-none ${isSpacer ? "h-[100cqw]" : ""}`}>
+          <div className={`relative w-0 ${isSpacer ? "h-full" : "h-[16px]"}`} data-name="Endpoint">
+            <div className={`absolute ${isSpacer ? "inset-[-3.13%_-0.5px]" : "inset-[0_-0.5px]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isSpacer ? imgEndpoint1 : imgEndpoint} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-0" id={isSpacer ? "node-1143_83664" : "node-1143_83627"} style={{ containerType: "size" }}>
+        <div className="-rotate-90 flex-none w-[100cqh]">
+          <div className="h-0 relative w-full" data-name="Line">
+            {type === "Solid" && (
+              <div className="absolute inset-[-0.5px_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            )}
+            {isSpacer && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLine1} />}
+          </div>
+        </div>
+      </div>
+      <div className={`flex h-0 items-center justify-center relative shrink-0 ${isSpacer ? "w-full" : "w-[16px]"}`} id={isSpacer ? "node-1143_83665" : "node-1143_83650"} style={isSpacer ? { containerType: "size" } : undefined}>
+        <div className={`-rotate-90 flex-none ${isSpacer ? "h-[100cqw]" : ""}`}>
+          <div className={`relative w-0 ${isSpacer ? "h-full" : "h-[16px]"}`} data-name="Endpoint">
+            <div className={`absolute ${isSpacer ? "inset-[-3.13%_-0.5px]" : "inset-[0_-0.5px]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isSpacer ? imgEndpoint1 : imgEndpoint} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type MeasureSpacingGuideProps = {
+  className?: string;
+  measureLines?: boolean;
+  numberPosition?: "Left" | "Right" | "Top" | "Bottom";
+};
+
+export default function MeasureSpacingGuide({ className, measureLines = true, numberPosition = "Left" }: MeasureSpacingGuideProps) {
+  const isBottom = numberPosition === "Bottom";
+  const isRight = numberPosition === "Right";
+  const isTop = numberPosition === "Top";
+  return (
+    <div className={className || `relative ${["Top", "Bottom"].includes(numberPosition) ? "h-[160px] w-[80px]" : "h-[80px] w-[160px]"}`} id={isRight ? "node-1143_83983" : isBottom ? "node-1143_84038" : isTop ? "node-1143_84005" : "node-1143_83959"}>
+      <div className={`${String.raw`[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium justify-center leading-[0] text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap `}${isRight ? "-translate-y-1/2 right-[-4px] top-1/2 translate-x-full" : isBottom ? "-translate-x-1/2 bottom-[-13px] left-[calc(50%-0.5px)] text-center translate-y-1/2" : isTop ? "-translate-x-1/2 -translate-y-1/2 left-[calc(50%-0.5px)] text-center top-[-13px]" : "-translate-x-full -translate-y-1/2 left-[-4px] text-right top-1/2"}`} id={isRight ? "node-1143_83984" : isBottom ? "node-1143_84039" : isTop ? "node-1143_84006" : "node-1143_83949"}>
+        <p className="leading-[var(--line-height\/text-xs,18px)]">80px</p>
+      </div>
+      <MeasureLineBase className={`absolute flex items-center ${isRight ? "bottom-0 content-stretch flex-col right-0 top-0 w-[16px]" : isBottom ? "bottom-0 h-[16px] justify-center left-0 right-0" : isTop ? "h-[16px] justify-center left-0 right-0 top-0" : "bottom-0 content-stretch flex-col left-0 top-0 w-[16px]"}`} />
+      {numberPosition === "Left" && measureLines && <MeasureLineBase className="absolute content-stretch flex flex-col inset-[0_0_0_20px] items-center" type="Spacer" />}
+      {isTop && measureLines && <MeasureLineBase className="absolute flex inset-[20px_0_0_0] items-center justify-center" type="Spacer" />}
+      {isBottom && measureLines && <MeasureLineBase className="absolute flex inset-[0_0_20px_0] items-center justify-center" type="Spacer" />}
+      {isRight && measureLines && <MeasureLineBase className="absolute content-stretch flex flex-col inset-[0_20px_0_0] items-center" type="Spacer" />}
+    </div>
+  );
+}

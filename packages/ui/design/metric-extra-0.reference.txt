@@ -1,0 +1,79 @@
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/64cb22c0-bd9d-4ad6-9322-055dcb120845.svg";
+const imgTrendUp2 = "https://www.figma.com/api/mcp/asset/b3be26af-4428-4e76-9ebb-a671d7e81a68.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/7ed5b9c8-b087-44dc-95a8-0584127d846b.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/56a667b8-b147-4424-9344-ec6fe034d8a0.svg";
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "True";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  featuredIcon?: boolean;
+  type?: "Icon 03";
+};
+
+function MetricItem({ className, actions = "True", breakpoint = "Desktop", dropdownIcon = true, featuredIcon = true, type = "Icon 03" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col items-start relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="4988:370805">
+      <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="4988:370806" data-name="Content">
+        {featuredIcon && (
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="4988:370807" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4988:370807;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        )}
+        <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="4988:370971" data-name="Heading and number">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="4988:370972">
+            Views 24 hours
+          </p>
+          <div className="content-center flex flex-wrap gap-y-[12px] items-center justify-between relative shrink-0 w-full" data-node-id="4988:370973" data-name="Number and badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="4988:370974">
+              2,000
+            </p>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4988:370975" data-name="Change and text">
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center relative shrink-0" data-node-id="4988:370976" data-name="_Change">
+                <div className="relative shrink-0 size-[16px]" data-node-id="I4988:370976;4988:370935" data-name="trend-up-01">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp2} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I4988:370976;4988:370936">
+                  100%
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="4988:370977">
+                vs last month
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4988:370814" data-name="Action">
+        <div className="content-stretch flex items-center justify-between pl-[var(--spacing-xl,16px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="4988:370815" data-name="Content">
+          <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4993:376782" data-name="Buttons/Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I4993:376782;3471:598450" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+            </div>
+          </div>
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4988:370816" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4988:370816;6421:271250" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4988:370816;3287:433057">
+                View report
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      </div>
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="4988:370817" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I4988:370817;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

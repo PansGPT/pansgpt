@@ -1,0 +1,101 @@
+const imgBold01 = "https://www.figma.com/api/mcp/asset/adaec6c6-0438-4002-a0c9-3f6f2f770edb.svg";
+const imgItalic01 = "https://www.figma.com/api/mcp/asset/b79e30a9-3641-4d30-96b7-09fc5b35c59e.svg";
+const imgUnderline01 = "https://www.figma.com/api/mcp/asset/f8eb8bd7-2db5-42a8-872a-c3e172fab1e7.svg";
+const imgAlignLeft = "https://www.figma.com/api/mcp/asset/7c7148cc-c4e8-43b2-946e-9a5a06d45418.svg";
+const imgAlignCenter = "https://www.figma.com/api/mcp/asset/de2c9426-1afe-4032-9139-4ca75e32fd00.svg";
+const imgLink01 = "https://www.figma.com/api/mcp/asset/fc529e54-5a64-4f52-afe7-72ca151fa578.svg";
+
+type TextHighlightProps = {
+  className?: string;
+  tooltip?: boolean;
+};
+
+export default function TextHighlight({ className, tooltip = true }: TextHighlightProps) {
+  return (
+    <div className={className || "border-[var(--colors\\/border\\/border-brand,#17b26a)] border-l-[1.5px] border-r-[1.5px] border-solid content-stretch flex h-[24px] items-center relative w-[400px]"} data-node-id="9291:558536" data-name="Text highlight">
+      <div className="bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] flex-[1_0_0] h-full min-w-px opacity-10 relative" data-node-id="9291:558490" data-name="Highlight" />
+      {tooltip && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-1/2 rounded-[var(--radius-xl,20px)] top-[-52px]" data-node-id="9291:558515" data-name="Text editor tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary,#0c0e12)] border border-[var(--colors\/border\/border-secondary,#22262f)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-xl,20px)] shrink-0" data-node-id="I9291:558515;9291:558444" data-name="Content">
+            <button className="bg-[var(--colors\/background\/bg-primary_hover,#22262f)] content-stretch cursor-pointer flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558445" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558445;9291:551786" data-name="bold-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBold01} />
+              </div>
+            </button>
+            <div className="content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558446" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558446;9291:551483" data-name="italic-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgItalic01} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558447" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558447;9291:551485" data-name="underline-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUnderline01} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558448" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558448;9291:551491" data-name="align-left">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAlignLeft} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558449" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558449;9291:551493" data-name="align-center">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAlignCenter} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I9291:558515;9291:558450" data-name="_Text editor icon">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I9291:558515;9291:558450;9291:551499" data-name="link-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLink01} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## bold-01
+**Node ID:** 3463:406379
+
+bold, text, editor, rich text
+
+## italic-01
+**Node ID:** 3463:406493
+
+italic, italics, text, editor, rich text
+
+## underline-01
+**Node ID:** 3463:406649
+
+underline, text, editor, rich text
+
+## align-left
+**Node ID:** 3463:406358
+
+align, left, text, paragraph, editor
+
+## align-center
+**Node ID:** 3463:406352
+
+align, center, centre, text, paragraph, editor
+
+## link-01
+**Node ID:** 3463:405462
+
+link, hyperlink, website, connection, chain
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,107 @@
+const imgLine = "https://www.figma.com/api/mcp/asset/7b25baaf-2f9c-4348-997c-c6fd0907e579.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/cc59e82c-b6ad-403a-a22e-9299c942f752.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/a39c50ae-0d3e-4bfd-96b9-90cb66a6b4a9.svg";
+const imgLine3 = "https://www.figma.com/api/mcp/asset/f29c9b52-9180-4bc7-a864-a67cd7016760.svg";
+const imgLine4 = "https://www.figma.com/api/mcp/asset/054ecc8c-f36c-4aaf-92f4-b3d36a8223a8.svg";
+const imgRays = "https://www.figma.com/api/mcp/asset/37601cc7-b5f9-464a-92f8-71f38f89cf00.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/9ab1b6cb-0665-4b4d-888e-b8b05ded3fdf.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/755241a9-fb25-42a3-b8ac-76d701c12187.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/886c0635-b0ce-486c-b4e3-c3aa457b57c5.svg";
+
+export default function RadarChart({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] h-[372px] relative w-[392px]"} data-node-id="1084:7152" data-name="_Radar chart">
+      <div className="absolute inset-[169px_164px_139px_164px]" data-node-id="1084:7195" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine} />
+        </div>
+      </div>
+      <div className="absolute inset-[137px_132px_107px_132px]" data-node-id="1084:7196" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine1} />
+        </div>
+      </div>
+      <div className="absolute inset-[105px_100px_75px_100px]" data-node-id="1084:7197" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine2} />
+        </div>
+      </div>
+      <div className="absolute inset-[73px_68px_43px_68px]" data-node-id="1084:7198" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine3} />
+        </div>
+      </div>
+      <div className="absolute inset-[41px_36px_11px_36px]" data-node-id="1084:7199" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine4} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[303px] left-1/2 top-[calc(50%+7px)] w-[312px]" data-node-id="1084:7200" data-name="Rays">
+        <div className="absolute inset-[-0.17%_-0.16%]">
+          <img alt="" className="block max-w-none size-full" src={imgRays} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[32px]" data-node-id="1084:7201" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7201;3918:407462">
+          1,000
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[64px]" data-node-id="1084:7202" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7202;3918:407462">
+          800
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[96px]" data-node-id="1084:7203" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7203;3918:407462">
+          600
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[128px]" data-node-id="1084:7204" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7204;3918:407462">
+          400
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[160px]" data-node-id="1084:7205" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7205;3918:407462">
+          200
+        </p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[0_46.17%_94.62%_46.17%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7206">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Mon</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_9.95%_73.92%_83.93%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7207">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Tue</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_0.77%_30.11%_91.07%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7208">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Wed</p>
+      </div>
+      <div className="[word-break:break-word] absolute bottom-[-0.27%] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] left-[68.88%] right-1/4 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[94.89%] whitespace-nowrap" data-node-id="1084:7209">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Thu</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[94.89%_69.13%_-0.27%_26.79%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7210">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Fri</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_91.84%_30.11%_2.3%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7211">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Sat</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_83.93%_73.92%_9.44%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7212">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Sun</p>
+      </div>
+      <div className="absolute h-[208px] left-[96px] top-[107.5px] w-[199.781px]" data-node-id="1084:7154" data-name="Series 3">
+        <div className="absolute inset-[-0.48%_-0.5%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+        </div>
+      </div>
+      <div className="absolute h-[185px] left-[71px] top-[101.5px] w-[249.5px]" data-node-id="1084:7153" data-name="Series 2">
+        <div className="absolute inset-[-0.54%_-0.6%_-0.54%_-0.4%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+        </div>
+      </div>
+      <div className="absolute inset-[20.3%_26.4%_30.65%_34.31%]" data-node-id="1084:6792" data-name="Series 1">
+        <div className="absolute inset-[-0.55%_-0.65%_-0.55%_-61.36%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries1} />
+        </div>
+      </div>
+    </div>
+  );
+}

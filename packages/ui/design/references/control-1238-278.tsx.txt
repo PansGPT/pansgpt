@@ -1,0 +1,692 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/aeb22004-e218-4d8a-9d70-9b3f965b9896.svg";
+const imgOpenFalseSupportingTextFalseTooltipTopNoArrow = "https://www.figma.com/api/mcp/asset/9fc975ed-1739-4815-82e4-bb7826737646.svg";
+const imgResizeHandle = "https://www.figma.com/api/mcp/asset/c7ea21a7-c4d5-49e3-badb-1f6185dd369b.svg";
+const imgResizeHandle1 = "https://www.figma.com/api/mcp/asset/fd6349ff-520a-4ae3-9f2b-516e134de8a8.svg";
+
+type TagCloseXProps = {
+  className?: string;
+  size?: "md";
+  state?: "Default";
+};
+
+function TagCloseX({ className, size = "md", state = "Default" }: TagCloseXProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="3307:417720">
+      <div className="relative shrink-0 size-[12px]" data-node-id="3307:417721" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+
+type TooltipProps = {
+  className?: string;
+  arrow?: "None";
+  supportingText?: "False";
+  text?: string;
+};
+
+function Tooltip({ className, arrow = "None", supportingText = "False", text = "This is a tooltip" }: TooltipProps) {
+  return (
+    <div className={className || "content-stretch drop-shadow-[0px_12px_8px_var(--colors\\/effects\\/shadows\\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\\/effects\\/shadows\\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\\/effects\\/shadows\\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center relative"} data-node-id="1052:587">
+      <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="1052:588" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:589">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type HelpIconProps = {
+  className?: string;
+  open?: boolean;
+  supportingText?: "False";
+  tooltip?: "Top no arrow";
+};
+
+function HelpIcon({ className, open = false, supportingText = "False", tooltip = "Top no arrow" }: HelpIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1054:7">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOpenFalseSupportingTextFalseTooltipTopNoArrow} />
+    </div>
+  );
+}
+
+type TextareaInputFieldProps = {
+  className?: string;
+  destructive?: boolean;
+  helpIcon?: boolean;
+  hintText?: boolean;
+  label?: boolean;
+  required?: boolean;
+  resizeHandle?: boolean;
+  state?: "Placeholder" | "Default" | "Focused" | "Disabled";
+  type?: "Default" | "Tags";
+};
+
+export default function TextareaInputField({ className, destructive = false, helpIcon = true, hintText = true, label = true, required = true, resizeHandle = true, state = "Placeholder", type = "Default" }: TextareaInputFieldProps) {
+  if (type === "Tags" && !destructive && state === "Placeholder") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407945" data-name="Type=Tags, Destructive=False, State=Placeholder">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407946" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534735" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407947">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538859">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:407948" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-h-px min-w-full relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left w-[min-content]" data-node-id="3309:409058">
+              Add tags...
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72894" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407950">
+            This is a hint text to help user.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Default" && destructive && state === "Placeholder") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:888" data-name="Type=Default, Destructive=True, State=Placeholder">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380465" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534739" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380466">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538863">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-error_subtle,#fda29b)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380467" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380468">
+              Enter a description...
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72882" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380469">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Tags" && destructive && state === "Placeholder") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407951" data-name="Type=Tags, Destructive=True, State=Placeholder">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407952" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534738" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407953">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538862">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-error_subtle,#fda29b)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:409059" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-h-px min-w-full relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left w-[min-content]" data-node-id="3309:409060">
+              Add tags...
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72897" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle1} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407956">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Default" && !destructive && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:360" data-name="Type=Default, Destructive=False, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380519" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534727" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3285:380520">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7487:538853">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380521" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)]" data-node-id="3285:380522">
+              Enter a description...
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72891" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full z-[1]" data-node-id="3285:380523">
+            This is a hint text to help user.
+          </p>
+        )}
+      </div>
+    );
+  }
+  if (type === "Tags" && !destructive && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407957" data-name="Type=Tags, Destructive=False, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407958" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534731" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3309:407959">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7487:538861">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\/border\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:409042" data-name="Input">
+            <div className="content-start flex flex-wrap gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3309:409043" data-name="Content">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:409044" data-name="Tags">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409045" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409045;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409045;3307:418116">
+                      Design
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409046" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409046;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409046;3307:418116">
+                      Software
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3309:409047">
+                Add tags...
+              </p>
+            </div>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72912" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full z-[1]" data-node-id="3309:407962">
+            This is a hint text to help user.
+          </p>
+        )}
+      </div>
+    );
+  }
+  if (type === "Default" && !destructive && state === "Default") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:358" data-name="Type=Default, Destructive=False, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380477" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534728" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380478">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538865">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380479" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380480">
+              A little about the company and the team that you’ll be working with.
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72876" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380481">
+            This is a hint text to help user.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Tags" && !destructive && state === "Default") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407963" data-name="Type=Tags, Destructive=False, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407964" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534730" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407965">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538855">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:408025" data-name="Input">
+            <div className="content-start flex flex-wrap gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3309:408027" data-name="Content">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:408029" data-name="Tags">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:408030" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:408030;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:408030;3307:418116">
+                      Design
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:408031" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:408031;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:408031;3307:418116">
+                      Software
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3309:408032">
+                Add tags...
+              </p>
+            </div>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72903" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407968">
+            This is a hint text to help user.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Default" && destructive && state === "Default") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:862" data-name="Type=Default, Destructive=True, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380471" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534736" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380472">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538860">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-error_subtle,#fda29b)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380473" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380474">
+              A little about the company and the team that you’ll be working with.
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72879" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380475">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Tags" && destructive && state === "Default") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407969" data-name="Type=Tags, Destructive=True, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407970" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534733" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407971">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538858">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-error_subtle,#fda29b)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:409061" data-name="Input">
+            <div className="content-start flex flex-wrap gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3309:409062" data-name="Content">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:409063" data-name="Tags">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409064" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409064;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409064;3307:418116">
+                      Design
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409065" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409065;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409065;3307:418116">
+                      Software
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3309:409066">
+                Add tags...
+              </p>
+            </div>
+            {resizeHandle && (
+              <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72900" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle1} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407974">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Default" && !destructive && state === "Focused") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:356" data-name="Type=Default, Destructive=False, State=Focused">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380459" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534732" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380460">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538864">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380461" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380462">
+              A little about the company and the team that you’ll be working with.
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[4px] right-[4px] size-[12px]" data-node-id="7588:72885" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380463">
+            This is a hint text to help user.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Tags" && !destructive && state === "Focused") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407975" data-name="Type=Tags, Destructive=False, State=Focused">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407976" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534729" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407977">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538856">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:408979" data-name="Input">
+            <div className="content-start flex flex-wrap gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3309:408980" data-name="Content">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:408981" data-name="Tags">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:408982" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:408982;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:408982;3307:418116">
+                      Design
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:408983" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:408983;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:408983;3307:418116">
+                      Software
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3309:408984">
+                Add tags...
+              </p>
+            </div>
+            {resizeHandle && (
+              <div className="absolute bottom-[4px] right-[4px] size-[12px]" data-node-id="7588:72909" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407980">
+            This is a hint text to help user.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Default" && destructive && state === "Focused") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:876" data-name="Type=Default, Destructive=True, State=Focused">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380453" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534734" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380454">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538857">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-error,#f04438)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380455" data-name="Input">
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380456">
+              A little about the company and the team that you’ll be working with.
+            </p>
+            {resizeHandle && (
+              <div className="absolute bottom-[4px] right-[4px] size-[12px]" data-node-id="7588:72888" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380457">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  if (type === "Tags" && destructive && state === "Focused") {
+    return (
+      <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="3309:407981" data-name="Type=Tags, Destructive=True, State=Focused">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3309:407982" data-name="Input with label">
+          {label && (
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534737" data-name="Label wrapper">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3309:407983">
+                Description
+              </p>
+              {required && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538854">
+                  *
+                </p>
+              )}
+              {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+            </div>
+          )}
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-error,#f04438)] border-solid content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3309:409077" data-name="Input">
+            <div className="content-start flex flex-wrap gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3309:409078" data-name="Content">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:409079" data-name="Tags">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409080" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409080;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409080;3307:418116">
+                      Design
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[9px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="3309:409081" data-name="Tag">
+                  <div className="content-stretch flex items-center relative shrink-0" data-node-id="I3309:409081;3309:406971" data-name="Content">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I3309:409081;3307:418116">
+                      Software
+                    </p>
+                  </div>
+                  <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3309:409082">
+                Add tags...
+              </p>
+            </div>
+            {resizeHandle && (
+              <div className="absolute bottom-[4px] right-[4px] size-[12px]" data-node-id="7588:72906" data-name="Resize handle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle1} />
+              </div>
+            )}
+          </div>
+        </div>
+        {hintText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3309:407986">
+            This is an error message.
+          </p>
+        )}
+      </button>
+    );
+  }
+  return (
+    <button className={className || "content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] h-[180px] isolate items-start relative w-[320px]"} data-node-id="1238:362" data-name="Type=Default, Destructive=False, State=Placeholder">
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" data-node-id="3285:380525" data-name="Input with label">
+        {label && (
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7487:534740" data-name="Label wrapper">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3285:380526">
+              Description
+            </p>
+            {required && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7487:538324">
+                *
+              </p>
+            )}
+            {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+          </div>
+        )}
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full" data-node-id="3285:380527" data-name="Input">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left" data-node-id="3285:380528">
+            Enter a description...
+          </p>
+          {resizeHandle && (
+            <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="7588:72289" data-name="Resize handle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+            </div>
+          )}
+        </div>
+      </div>
+      {hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full z-[1]" data-node-id="3285:380529">
+          This is a hint text to help user.
+        </p>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## help-circle
+**Node ID:** 3463:405411
+
+help, info, information, documentation, question, circle
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

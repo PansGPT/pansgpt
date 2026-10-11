@@ -1,0 +1,11 @@
+export default function YAxisLabel({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[18px] items-start justify-center pb-[var(--spacing-3xl,24px)] relative w-[240px]"} data-node-id="1061:47350" data-name="_Y-axis label">
+      <div className="flex h-[70px] items-center justify-center relative shrink-0 w-[18px]" data-node-id="1061:46580">
+        <div className="-rotate-90 flex-none">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap">Active users</p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,1063 @@
+type ToggleBaseProps = {
+  className?: string;
+  pressed?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focus" | "Disabled";
+  type?: "Default" | "Slim";
+};
+
+function ToggleBase({ className, pressed = false, size = "sm", state = "Default", type = "Default" }: ToggleBaseProps) {
+  if (type === "Default" && pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[44px]"} data-node-id="122:3305" data-name="Type=Default, Pressed=True, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239541" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[40px]"} data-node-id="7923:539305" data-name="Type=Slim, Pressed=True, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539306" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[36px]"} data-node-id="1102:4110" data-name="Type=Default, Pressed=True, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239172" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[32px]"} data-node-id="7923:539307" data-name="Type=Slim, Pressed=True, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539308" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3303" data-name="Type=Default, Pressed=True, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239539" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539309" data-name="Type=Slim, Pressed=True, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed-hover,#067647)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539310" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4104" data-name="Type=Default, Pressed=True, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239171" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539311" data-name="Type=Slim, Pressed=True, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed-hover,#067647)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539312" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3301" data-name="Type=Default, Pressed=True, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239542" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539313" data-name="Type=Slim, Pressed=True, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539314" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4096" data-name="Type=Default, Pressed=True, Size=sm, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239173" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539315" data-name="Type=Slim, Pressed=True, Size=sm, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539316" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="1101:105294" data-name="Type=Default, Pressed=True, Size=md, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239588" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539317" data-name="Type=Slim, Pressed=True, Size=md, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539429" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539318" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4106" data-name="Type=Default, Pressed=True, Size=sm, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239168" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539319" data-name="Type=Slim, Pressed=True, Size=sm, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539383" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539320" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[44px]"} data-node-id="122:3297" data-name="Type=Default, Pressed=False, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239537" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[40px]"} data-node-id="7923:539321" data-name="Type=Slim, Pressed=False, Size=md, State=Focus">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539417" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539322" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[36px]"} data-node-id="1102:4098" data-name="Type=Default, Pressed=False, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239162" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[32px]"} data-node-id="7923:539323" data-name="Type=Slim, Pressed=False, Size=sm, State=Focus">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539338" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539324" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3295" data-name="Type=Default, Pressed=False, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239540" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539325" data-name="Type=Slim, Pressed=False, Size=md, State=Hover">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539411" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539326" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4088" data-name="Type=Default, Pressed=False, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239159" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539327" data-name="Type=Slim, Pressed=False, Size=sm, State=Hover">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539340" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539328" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3293" data-name="Type=Default, Pressed=False, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239538" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539329" data-name="Type=Slim, Pressed=False, Size=md, State=Default">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539398" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539330" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539331" data-name="Type=Slim, Pressed=False, Size=sm, State=Default">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539341" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539332" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="1101:105292" data-name="Type=Default, Pressed=False, Size=md, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239583" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539333" data-name="Type=Slim, Pressed=False, Size=md, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539423" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539334" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4090" data-name="Type=Default, Pressed=False, Size=sm, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239165" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539335" data-name="Type=Slim, Pressed=False, Size=sm, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539342" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539336" data-name="Button" />
+      </div>
+    );
+  }
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4084" data-name="Type=Default, Pressed=False, Size=sm, State=Default">
+      <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:238901" data-name="Button" />
+    </div>
+  );
+}
+
+type ToggleProps = {
+  className?: string;
+  pressed?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focus" | "Disabled";
+  supportingText?: boolean;
+  text?: boolean;
+  type?: "Default" | "Slim";
+};
+
+export default function Toggle({ className, pressed = false, size = "sm", state = "Default", supportingText = true, text = false, type = "Default" }: ToggleProps) {
+  if (type === "Default" && pressed && size === "md" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4176" data-name="Type=Default, Pressed=True, Size=md, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[44px]" pressed size="md" state="Focus" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539655" data-name="Type=Slim, Pressed=True, Size=md, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[40px]" pressed size="md" state="Focus" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4430" data-name="Type=Default, Pressed=True, Size=md, Text=True, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[44px]" pressed size="md" state="Focus" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4491" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4492">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4493">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539657" data-name="Type=Slim, Pressed=True, Size=md, Text=True, State=Focus">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539862" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-full" pressed size="md" state="Focus" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539659" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539660">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539661">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4177" data-name="Type=Default, Pressed=True, Size=sm, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[36px]" pressed state="Focus" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539662" data-name="Type=Slim, Pressed=True, Size=sm, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[32px]" pressed state="Focus" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4424" data-name="Type=Default, Pressed=True, Size=sm, Text=True, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[36px]" pressed state="Focus" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4464" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4465">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4466">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539664" data-name="Type=Slim, Pressed=True, Size=sm, Text=True, State=Focus">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539859" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-full" pressed state="Focus" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539666" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539667">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539668">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4180" data-name="Type=Default, Pressed=True, Size=md, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" state="Hover" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539669" data-name="Type=Slim, Pressed=True, Size=md, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" pressed size="md" state="Hover" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4418" data-name="Type=Default, Pressed=True, Size=md, Text=True, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" state="Hover" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4482" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4483">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4484">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539671" data-name="Type=Slim, Pressed=True, Size=md, Text=True, State=Hover">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539864" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed size="md" state="Hover" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539673" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539674">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539675">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4181" data-name="Type=Default, Pressed=True, Size=sm, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed state="Hover" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539676" data-name="Type=Slim, Pressed=True, Size=sm, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" pressed state="Hover" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4412" data-name="Type=Default, Pressed=True, Size=sm, Text=True, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed state="Hover" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4458" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4459">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4460">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539678" data-name="Type=Slim, Pressed=True, Size=sm, Text=True, State=Hover">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539858" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed state="Hover" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539680" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539681">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539682">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4184" data-name="Type=Default, Pressed=True, Size=md, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539683" data-name="Type=Slim, Pressed=True, Size=md, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" pressed size="md" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4406" data-name="Type=Default, Pressed=True, Size=md, Text=True, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4476" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4477">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4478">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539685" data-name="Type=Slim, Pressed=True, Size=md, Text=True, State=Default">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539851" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed size="md" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539687" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539688">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539689">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4185" data-name="Type=Default, Pressed=True, Size=sm, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539690" data-name="Type=Slim, Pressed=True, Size=sm, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" pressed type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4427" data-name="Type=Default, Pressed=True, Size=sm, Text=True, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4452" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4453">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4454">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539692" data-name="Type=Slim, Pressed=True, Size=sm, Text=True, State=Default">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539854" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539694" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539695">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539696">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4188" data-name="Type=Default, Pressed=True, Size=md, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" state="Disabled" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539697" data-name="Type=Slim, Pressed=True, Size=md, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" pressed size="md" state="Disabled" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4421" data-name="Type=Default, Pressed=True, Size=md, Text=True, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" pressed size="md" state="Disabled" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4497" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4498">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4499">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539699" data-name="Type=Slim, Pressed=True, Size=md, Text=True, State=Disabled">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539856" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed size="md" state="Disabled" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539701" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539702">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539703">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4189" data-name="Type=Default, Pressed=True, Size=sm, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed state="Disabled" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539704" data-name="Type=Slim, Pressed=True, Size=sm, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" pressed state="Disabled" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4415" data-name="Type=Default, Pressed=True, Size=sm, Text=True, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" pressed state="Disabled" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4470" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4471">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4472">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539706" data-name="Type=Slim, Pressed=True, Size=sm, Text=True, State=Disabled">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539861" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" pressed state="Disabled" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539708" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539709">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539710">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4192" data-name="Type=Default, Pressed=False, Size=md, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[44px]" size="md" state="Focus" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539711" data-name="Type=Slim, Pressed=False, Size=md, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[40px]" size="md" state="Focus" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4409" data-name="Type=Default, Pressed=False, Size=md, Text=True, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[44px]" size="md" state="Focus" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4485" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4486">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4487">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539713" data-name="Type=Slim, Pressed=False, Size=md, Text=True, State=Focus">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539860" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-full" size="md" state="Focus" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539715" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539716">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539717">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4193" data-name="Type=Default, Pressed=False, Size=sm, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[36px]" state="Focus" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && !text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539718" data-name="Type=Slim, Pressed=False, Size=sm, Text=False, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[32px]" state="Focus" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4400" data-name="Type=Default, Pressed=False, Size=sm, Text=True, State=Focus">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-[36px]" state="Focus" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4461" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4462">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4463">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && text && state === "Focus") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539720" data-name="Type=Slim, Pressed=False, Size=sm, Text=True, State=Focus">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539857" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 w-full" state="Focus" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539722" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539723">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539724">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4196" data-name="Type=Default, Pressed=False, Size=md, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" state="Hover" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539725" data-name="Type=Slim, Pressed=False, Size=md, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" size="md" state="Hover" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4397" data-name="Type=Default, Pressed=False, Size=md, Text=True, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" state="Hover" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4479" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4480">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4481">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539727" data-name="Type=Slim, Pressed=False, Size=md, Text=True, State=Hover">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539855" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" size="md" state="Hover" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539729" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539730">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539731">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4197" data-name="Type=Default, Pressed=False, Size=sm, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" state="Hover" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && !text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539732" data-name="Type=Slim, Pressed=False, Size=sm, Text=False, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" state="Hover" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4394" data-name="Type=Default, Pressed=False, Size=sm, Text=True, State=Hover">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" state="Hover" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4455" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4456">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4457">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && text && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539734" data-name="Type=Slim, Pressed=False, Size=sm, Text=True, State=Hover">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539853" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" state="Hover" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539736" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539737">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539738">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4200" data-name="Type=Default, Pressed=False, Size=md, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539739" data-name="Type=Slim, Pressed=False, Size=md, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" size="md" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4391" data-name="Type=Default, Pressed=False, Size=md, Text=True, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4473" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4474">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4475">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539741" data-name="Type=Slim, Pressed=False, Size=md, Text=True, State=Default">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539852" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" size="md" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539743" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539744">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539745">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && !text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539746" data-name="Type=Slim, Pressed=False, Size=sm, Text=False, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4403" data-name="Type=Default, Pressed=False, Size=sm, Text=True, State=Default">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4449" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4450">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4451">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && text && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539748" data-name="Type=Slim, Pressed=False, Size=sm, Text=True, State=Default">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539866" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539750" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539751">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539752">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4204" data-name="Type=Default, Pressed=False, Size=md, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" state="Disabled" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539753" data-name="Type=Slim, Pressed=False, Size=md, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-[40px]" size="md" state="Disabled" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1102:4388" data-name="Type=Default, Pressed=False, Size=md, Text=True, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[44px]" size="md" state="Disabled" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1102:4494" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4495">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4496">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="7923:539755" data-name="Type=Slim, Pressed=False, Size=md, Text=True, State=Disabled">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[40px]" data-node-id="7923:539863" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" size="md" state="Disabled" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="7923:539757" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539758">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539759">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4205" data-name="Type=Default, Pressed=False, Size=sm, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" state="Disabled" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && !text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="7923:539760" data-name="Type=Slim, Pressed=False, Size=sm, Text=False, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-[32px]" state="Disabled" type="Slim" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="1102:4385" data-name="Type=Default, Pressed=False, Size=sm, Text=True, State=Disabled">
+        <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" state="Disabled" />
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1102:4467" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1102:4468">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1102:4469">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && text && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-start relative w-[344px]"} data-node-id="7923:539762" data-name="Type=Slim, Pressed=False, Size=sm, Text=True, State=Disabled">
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-xxs,2px)] relative shrink-0 w-[32px]" data-node-id="7923:539865" data-name="Toggle wrapper">
+          <ToggleBase className="bg-[var(--colors\/background\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] shrink-0 w-full" state="Disabled" type="Slim" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7923:539764" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="7923:539765">
+            Remember me
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="7923:539766">
+              Save my login details for next time.
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex flex-col items-start relative"} data-node-id="1102:4201" data-name="Type=Default, Pressed=False, Size=sm, Text=False, State=Default">
+      <ToggleBase className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0 w-[36px]" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Shadows/shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text md/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-md, weight: 500, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

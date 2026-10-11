@@ -1,0 +1,305 @@
+[
+  {
+    "id": "1217:108476",
+    "name": "Placeholder=False, Text=False, Size=lg",
+    "width": 160,
+    "height": 160,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        160,
+        160
+      ],
+      [
+        "Content",
+        6,
+        6,
+        148,
+        148
+      ],
+      [
+        "Verified tick",
+        120,
+        120,
+        32,
+        32
+      ]
+    ]
+  },
+  {
+    "id": "1218:1076",
+    "name": "Placeholder=False, Text=False, Size=md",
+    "width": 96,
+    "height": 96,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        96,
+        96
+      ],
+      [
+        "Content",
+        4,
+        4,
+        88,
+        88
+      ],
+      [
+        "Verified tick",
+        68,
+        68,
+        24,
+        24
+      ]
+    ]
+  },
+  {
+    "id": "3307:408887",
+    "name": "Placeholder=False, Text=False, Size=sm",
+    "width": 72,
+    "height": 72,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        72,
+        72
+      ],
+      [
+        "Content",
+        3,
+        3,
+        66,
+        66
+      ],
+      [
+        "Verified tick",
+        50,
+        50,
+        20,
+        20
+      ]
+    ]
+  },
+  {
+    "id": "1217:108478",
+    "name": "Placeholder=True, Text=False, Size=lg",
+    "width": 160,
+    "height": 160,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        160,
+        160
+      ],
+      [
+        "Content",
+        7,
+        7,
+        146,
+        146
+      ],
+      [
+        "user-01",
+        44,
+        44,
+        72,
+        72
+      ],
+      [
+        "Verified tick",
+        120,
+        120,
+        32,
+        32
+      ]
+    ]
+  },
+  {
+    "id": "1218:1074",
+    "name": "Placeholder=True, Text=False, Size=md",
+    "width": 96,
+    "height": 96,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        96,
+        96
+      ],
+      [
+        "Content",
+        5,
+        5,
+        86,
+        86
+      ],
+      [
+        "user-01",
+        24,
+        24,
+        47.99999237060547,
+        47.99999237060547
+      ],
+      [
+        "Verified tick",
+        68,
+        68,
+        24,
+        24
+      ]
+    ]
+  },
+  {
+    "id": "3307:408890",
+    "name": "Placeholder=True, Text=False, Size=sm",
+    "width": 72,
+    "height": 72,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        72,
+        72
+      ],
+      [
+        "Content",
+        4,
+        4,
+        64,
+        64
+      ],
+      [
+        "user-01",
+        18,
+        18,
+        36.00000762939453,
+        36.00000762939453
+      ],
+      [
+        "Verified tick",
+        50,
+        50,
+        20,
+        20
+      ]
+    ]
+  },
+  {
+    "id": "1217:108484",
+    "name": "Placeholder=True, Text=True, Size=lg",
+    "width": 160,
+    "height": 160,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        160,
+        160
+      ],
+      [
+        "Content",
+        7,
+        7,
+        146,
+        146
+      ],
+      [
+        "Text",
+        0,
+        44,
+        160,
+        72
+      ],
+      [
+        "Verified tick",
+        120,
+        120,
+        32,
+        32
+      ]
+    ]
+  },
+  {
+    "id": "1218:1072",
+    "name": "Placeholder=True, Text=True, Size=md",
+    "width": 96,
+    "height": 96,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        96,
+        96
+      ],
+      [
+        "Content",
+        5,
+        5,
+        86,
+        86
+      ],
+      [
+        "Text",
+        0,
+        26,
+        96,
+        44
+      ],
+      [
+        "Verified tick",
+        68,
+        68,
+        24,
+        24
+      ]
+    ]
+  },
+  {
+    "id": "3307:408894",
+    "name": "Placeholder=True, Text=True, Size=sm",
+    "width": 72,
+    "height": 72,
+    "layers": [
+      [
+        "Wrapper",
+        0,
+        0,
+        72,
+        72
+      ],
+      [
+        "Content",
+        4,
+        4,
+        64,
+        64
+      ],
+      [
+        "Text",
+        0,
+        17,
+        72,
+        38
+      ],
+      [
+        "Verified tick",
+        50,
+        50,
+        20,
+        20
+      ]
+    ]
+  }
+]

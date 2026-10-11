@@ -1,0 +1,164 @@
+const imgEmoji = "https://www.figma.com/api/mcp/asset/8e614c29-165c-4952-bcf9-1e91e74f3ade.png";
+const imgPlay = "https://www.figma.com/api/mcp/asset/5f14c716-6d76-42de-a740-8dd6a342904b.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/a3610605-90db-43cd-a2a7-c30d660fe2b3.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/9b40f229-c145-4f87-a6ed-b0ef5c4bee94.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/a2222aac-54c9-48c9-9cdf-87e546db9999.svg";
+const imgSizeSmPlayingFalse = "https://www.figma.com/api/mcp/asset/608ca91b-b9d0-4daa-904a-22fb37f881c3.png";
+const imgPlay1 = "https://www.figma.com/api/mcp/asset/9136cf6d-e9e8-4296-a9dc-dcc412ce0b07.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/f254d2a8-5926-4aad-9fcf-3a5d0c77e2e8.png";
+const imgEmoji1 = "https://www.figma.com/api/mcp/asset/922dd08e-05f3-40bb-9e18-d7008a461028.png";
+
+type EmojiProps = {
+  className?: string;
+  emoji?: "Heart red";
+};
+
+function Emoji({ className, emoji = "Heart red" }: EmojiProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1244:280">
+      <div className="absolute left-0 size-[16px] top-0" data-node-id="1244:4" data-name="Emoji">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji} />
+      </div>
+    </div>
+  );
+}
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Play" | "Pause" | "Volume max" | "Maximize 01";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isMaximize01AndDefault = type === "Maximize 01" && state === "Default";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isVolumeMaxAndDefault = type === "Volume max" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]"} id={isMaximize01AndDefault ? "node-9264_575711" : isVolumeMaxAndDefault ? "node-9264_575704" : isPauseAndDefault ? "node-9264_575967" : "node-9264_575952"}>
+      {type === "Play" && state === "Default" && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575950" data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {isPauseAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575968" data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {isVolumeMaxAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {isMaximize01AndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575675" data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type VideoActionsBarProps = {
+  className?: string;
+  playing?: boolean;
+  size?: "sm";
+};
+
+function VideoActionsBar({ className, playing = false, size = "sm" }: VideoActionsBarProps) {
+  const isPlayingAndSm = playing && size === "sm";
+  return (
+    <div className={className || "bg-gradient-to-b content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] relative to-[rgba(0,0,0,0.3)] w-[240px]"} id={isPlayingAndSm ? "node-9264_576599" : "node-9264_576588"}>
+      <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 w-full" id={isPlayingAndSm ? "node-9264_576631" : "node-9264_576589"} data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" id={isPlayingAndSm ? "node-9264_576632" : "node-9264_576630"} data-name="Actions">
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type={isPlayingAndSm ? "Pause" : undefined} />
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+        </div>
+        <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+      </div>
+    </div>
+  );
+}
+
+type VideoPlayer169Props = {
+  className?: string;
+  actionsBar?: boolean;
+  overlayAction?: boolean;
+  playing?: boolean;
+  size?: "sm";
+};
+
+function VideoPlayer169({ className, actionsBar = true, overlayAction = true, playing = false, size = "sm" }: VideoPlayer169Props) {
+  return (
+    <button className={className || "block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid h-[180px] overflow-clip relative rounded-[var(--radius-md,12px)] w-[320px]"} data-node-id="9264:576756">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgSizeSmPlayingFalse} />
+      {overlayAction && (
+        <div className="absolute bg-[rgba(0,0,0,0.1)] content-stretch flex inset-[-0.5px] items-center justify-center" data-node-id="9264:577356" data-name="_Video overlay action">
+          <div className="backdrop-blur-[8px] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px]" data-node-id="I9264:577356;9264:577188" data-name="Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9264:577356;9264:577189" data-name="play">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay1} />
+            </div>
+          </div>
+        </div>
+      )}
+      {actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" />}
+    </button>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "False";
+  reactions?: boolean;
+  sent?: "False";
+  type?: "Video";
+};
+
+function Message({ className, actionsPanel = "False", reactions = true, sent = "False", type = "Video" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[360px] relative w-[360px]"} data-node-id="9242:556385">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="9242:556386" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9242:556387" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="9242:556388" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9242:556389">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="9242:556390">
+            Friday 2:20pm
+          </p>
+        </div>
+        <VideoPlayer169 className="aspect-[560/315] block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" />
+        {reactions && (
+          <div className="content-stretch cursor-pointer flex gap-[var(--spacing-xs,4px)] items-center justify-end relative shrink-0 w-full" data-node-id="9242:556400" data-name="Row">
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9242:556401" data-name="_Message reaction">
+              <Emoji className="relative shrink-0 size-[16px]" />
+            </button>
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9242:556402" data-name="_Message reaction">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9242:556402;1244:377" data-name="Emoji=Okay">
+                <div className="absolute left-0 size-[16px] top-0" data-node-id="I9242:556402;1244:377;1244:7" data-name="Emoji">
+                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji1} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I9242:556402;1244:301">
+                2
+              </p>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

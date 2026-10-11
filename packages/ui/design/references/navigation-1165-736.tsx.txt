@@ -1,0 +1,60 @@
+const imgBell01 = "https://www.figma.com/api/mcp/asset/749609b0-62d8-4456-ae8d-93ffcd0903a6.svg";
+const imgBell2 = "https://www.figma.com/api/mcp/asset/5f7ec64b-85cc-4b7b-b159-703a6b70fa91.svg";
+const imgBell3 = "https://www.figma.com/api/mcp/asset/d222afb4-b6df-47cd-afc9-db96386b1840.svg";
+const imgBell4 = "https://www.figma.com/api/mcp/asset/7d987bb7-de84-446a-bbd2-ef516c48d548.svg";
+
+type NavItemButtonProps = {
+  className?: string;
+  current?: boolean;
+  iconSwap?: React.ReactNode | null;
+  size?: "md" | "lg";
+  state?: "Default" | "Hover" | "Focused";
+};
+
+export default function NavItemButton({ className, current = false, iconSwap = null, size = "md", state = "Default" }: NavItemButtonProps) {
+  const isCurrentAndLgAndDefault = current && size === "lg" && state === "Default";
+  const isCurrentAndLgAndFocused = current && size === "lg" && state === "Focused";
+  const isCurrentAndLgAndHover = current && size === "lg" && state === "Hover";
+  const isCurrentAndMdAndDefault = current && size === "md" && state === "Default";
+  const isCurrentAndMdAndFocused = current && size === "md" && state === "Focused";
+  const isCurrentAndMdAndHover = current && size === "md" && state === "Hover";
+  const isNotCurrentAndLgAndFocused = !current && size === "lg" && state === "Focused";
+  const isNotCurrentAndLgAndHover = !current && size === "lg" && state === "Hover";
+  const isNotCurrentAndMdAndDefault = !current && size === "md" && state === "Default";
+  const isNotCurrentAndMdAndFocused = !current && size === "md" && state === "Focused";
+  const isNotCurrentAndMdAndHover = !current && size === "md" && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${isCurrentAndMdAndHover ? String.raw`bg-[var(--colors\/background\/bg-secondary_hover,#f5f5f5)] size-[40px]` : isCurrentAndLgAndHover ? String.raw`bg-[var(--colors\/background\/bg-secondary_hover,#f5f5f5)] size-[48px]` : isNotCurrentAndMdAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] size-[40px]` : isNotCurrentAndLgAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] size-[48px]` : isCurrentAndMdAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isCurrentAndLgAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[48px]` : isNotCurrentAndMdAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isNotCurrentAndLgAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[48px]` : isCurrentAndMdAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] size-[40px]` : isCurrentAndLgAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] size-[48px]` : isNotCurrentAndMdAndDefault ? "size-[40px]" : "size-[48px]"}`} id={isCurrentAndMdAndHover ? "node-1200_229" : isCurrentAndLgAndHover ? "node-1165_735" : isNotCurrentAndMdAndHover ? "node-1200_227" : isNotCurrentAndLgAndHover ? "node-1165_734" : isCurrentAndMdAndFocused ? "node-1200_241" : isCurrentAndLgAndFocused ? "node-1165_717" : isNotCurrentAndMdAndFocused ? "node-1200_243" : isNotCurrentAndLgAndFocused ? "node-1165_727" : isCurrentAndMdAndDefault ? "node-1200_259" : isCurrentAndLgAndDefault ? "node-1165_724" : isNotCurrentAndMdAndDefault ? "node-1200_247" : "node-1165_723"}>
+      {size === "lg" &&
+        ((current && state === "Default") || (current && state === "Focused") || state === "Hover") &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[24px]" data-node-id="3479:471026" data-name="bell-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBell3} />
+          </div>
+        ))}
+      {size === "md" &&
+        ((current && state === "Default") || (current && state === "Focused") || state === "Hover") &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3479:471027" data-name="bell-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBell4} />
+          </div>
+        ))}
+      {!current &&
+        size === "lg" &&
+        ["Default", "Focused"].includes(state) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[24px]" data-node-id="3479:471024" data-name="bell-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBell01} />
+          </div>
+        ))}
+      {!current &&
+        size === "md" &&
+        ["Default", "Focused"].includes(state) &&
+        (iconSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3479:471025" data-name="bell-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBell2} />
+          </div>
+        ))}
+    </div>
+  );
+}

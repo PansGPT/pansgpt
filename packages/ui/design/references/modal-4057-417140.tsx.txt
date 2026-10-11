@@ -1,0 +1,146 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/75912ce1-7b36-43d0-af9b-39236aff16c8.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/6299c794-b574-45dc-9210-ed5a8baf90ee.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/0e53f855-62fd-412b-96a5-e053b4b6bfc4.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/64b5b14b-92cb-4cd0-a0e8-314ad6483f64.svg";
+const imgVideoPlayer169 = "https://www.figma.com/api/mcp/asset/3c244fdc-fff5-4ac6-b465-9b06d8b0fd80.png";
+const imgPlay1 = "https://www.figma.com/api/mcp/asset/809c35e7-b290-4a6e-8fea-37426ab53fe0.svg";
+
+type PaginationDotIndicatorProps = {
+  className?: string;
+  current?: boolean;
+  size?: "lg";
+  style?: "Dot";
+};
+
+function PaginationDotIndicator({ className, current = false, size = "lg", style = "Dot" }: PaginationDotIndicatorProps) {
+  const isCurrentAndDotAndLg = current && style === "Dot" && size === "lg";
+  return <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px] ${isCurrentAndDotAndLg ? String.raw`bg-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)]` : String.raw`bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)]`}`} id={isCurrentAndDotAndLg ? "node-1253_506" : "node-1253_507"} />;
+}
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Play" | "Pause" | "Volume max" | "Maximize 01";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isMaximize01AndDefault = type === "Maximize 01" && state === "Default";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isVolumeMaxAndDefault = type === "Volume max" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]"} id={isMaximize01AndDefault ? "node-9264_575711" : isVolumeMaxAndDefault ? "node-9264_575704" : isPauseAndDefault ? "node-9264_575967" : "node-9264_575952"}>
+      {type === "Play" && state === "Default" && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575950" data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {isPauseAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575968" data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {isVolumeMaxAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {isMaximize01AndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575675" data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type VideoActionsBarProps = {
+  className?: string;
+  playing?: boolean;
+  size?: "sm";
+};
+
+function VideoActionsBar({ className, playing = false, size = "sm" }: VideoActionsBarProps) {
+  return (
+    <div className={className || "bg-gradient-to-b content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] relative to-[rgba(0,0,0,0.3)] w-[240px]"} data-node-id="9264:576588">
+      <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 w-full" data-node-id="9264:576589" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" data-node-id="9264:576630" data-name="Actions">
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" />
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+        </div>
+        <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+      </div>
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Centered video carousel";
+};
+
+function Modal({ className, breakpoint = "Mobile", type = "Centered video carousel" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[812px] items-center justify-end overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-xl,16px)] px-[var(--container-padding-mobile,16px)] relative w-[375px]"} data-node-id="4057:417140">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411415" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411415;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:429579" data-name="Modal">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-center pt-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="4057:429580" data-name="Content">
+          <button className="aspect-[560/315] block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="4943:373391" data-name="Video player 16:9">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPlayer169} />
+            <div className="absolute bg-[rgba(0,0,0,0.1)] content-stretch flex inset-[-0.5px] items-center justify-center" data-node-id="I4943:373391;9264:577356" data-name="_Video overlay action">
+              <div className="backdrop-blur-[8px] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px]" data-node-id="I4943:373391;9264:577356;9264:577188" data-name="Button">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I4943:373391;9264:577356;9264:577189" data-name="play">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay1} />
+                </div>
+              </div>
+            </div>
+            <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" />
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4057:432387" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I4057:432387;4055:413669" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 text-center w-full" data-node-id="I4057:432387;4055:413671" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:432387;4055:413672">
+                Welcome to your dashboard
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:432387;4055:413673">
+                Here are some tips to get you up and running.
+              </p>
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I4057:432387;4059:420622" data-name="Padding bottom" />
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-center relative shrink-0" data-node-id="4057:429586" data-name="Pagination dot group">
+          <PaginationDotIndicator className="bg-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" current />
+          <PaginationDotIndicator className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" />
+          <PaginationDotIndicator className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" />
+          <div className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" data-node-id="I4057:429586;1111:231" data-name="_Pagination dot indicator" />
+        </div>
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="4057:429587" data-name="_Modal actions">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I4057:429587;4057:414907" data-name="Content">
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I4057:429587;4057:414908" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:429587;4057:414908;6421:273911" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:429587;4057:414908;3287:432949">
+                  Continue
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I4057:429587;4057:414909" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:429587;4057:414909;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:429587;4057:414909;3287:433081">
+                  Skip
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

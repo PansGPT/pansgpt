@@ -1,0 +1,227 @@
+const imgDividerWrap = "https://www.figma.com/api/mcp/asset/4ace28fc-fd38-4905-8c67-b802c3d31336.svg";
+const imgDividerWrap1 = "https://www.figma.com/api/mcp/asset/a80b85d4-b477-4919-9378-d569d86b9cde.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/2b389a88-36bb-4e72-ab7e-23e379c0c54b.svg";
+
+type ModalActionsProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  checkbox?: boolean;
+  destructive?: boolean;
+  divider?: boolean;
+  tertiaryButton?: boolean;
+  type?: "Vertical fill container" | "Horizontal fill container" | "Horizontal right aligned (checkbox)";
+};
+
+export default function ModalActions({ className, breakpoint = "Desktop", checkbox = true, destructive = false, divider = true, tertiaryButton = true, type = "Horizontal fill container" }: ModalActionsProps) {
+  const isDesktop = breakpoint === "Desktop";
+  const isDestructiveAndMobile = destructive && breakpoint === "Mobile";
+  const isHorizontalFillContainerAndDesktop = type === "Horizontal fill container" && breakpoint === "Desktop";
+  const isHorizontalFillContainerAndDestructiveAndDesktop = type === "Horizontal fill container" && destructive && breakpoint === "Desktop";
+  const isHorizontalFillContainerAndDestructiveAndMobile = type === "Horizontal fill container" && destructive && breakpoint === "Mobile";
+  const isHorizontalFillContainerAndNotDestructiveAndDesktop = type === "Horizontal fill container" && !destructive && breakpoint === "Desktop";
+  const isHorizontalFillContainerAndNotDestructiveAndMobile = type === "Horizontal fill container" && !destructive && breakpoint === "Mobile";
+  const isHorizontalRightAlignedCheckboxAndDesktop = type === "Horizontal right aligned (checkbox)" && breakpoint === "Desktop";
+  const isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop = type === "Horizontal right aligned (checkbox)" && destructive && breakpoint === "Desktop";
+  const isHorizontalRightAlignedCheckboxAndDestructiveAndMobile = type === "Horizontal right aligned (checkbox)" && destructive && breakpoint === "Mobile";
+  const isHorizontalRightAlignedCheckboxAndMobile = type === "Horizontal right aligned (checkbox)" && breakpoint === "Mobile";
+  const isHorizontalRightAlignedCheckboxAndNotDestructiveAndDesktop = type === "Horizontal right aligned (checkbox)" && !destructive && breakpoint === "Desktop";
+  const isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile = type === "Horizontal right aligned (checkbox)" && !destructive && breakpoint === "Mobile";
+  const isMobile = breakpoint === "Mobile";
+  const isNotDestructiveAndMobile = !destructive && breakpoint === "Mobile";
+  const isVerticalFillContainerAndDestructiveAndDesktop = type === "Vertical fill container" && destructive && breakpoint === "Desktop";
+  const isVerticalFillContainerAndDestructiveAndMobile = type === "Vertical fill container" && destructive && breakpoint === "Mobile";
+  const isVerticalFillContainerAndNotDestructiveAndDesktop = type === "Vertical fill container" && !destructive && breakpoint === "Desktop";
+  return (
+    <div className={className || `content-stretch flex flex-col items-start relative ${isHorizontalRightAlignedCheckboxAndMobile ? "justify-center pt-[var(--spacing-3xl,24px)] w-[343px]" : isHorizontalRightAlignedCheckboxAndDesktop ? "justify-center pt-[var(--spacing-4xl,32px)] w-[560px]" : breakpoint === "Mobile" && ["Vertical fill container", "Horizontal fill container"].includes(type) ? "pt-[var(--spacing-3xl,24px)] w-[343px]" : "pt-[var(--spacing-4xl,32px)] w-[560px]"}`} id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-4057_414665" : isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-4057_414379" : isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-4057_414657" : isHorizontalRightAlignedCheckboxAndNotDestructiveAndDesktop ? "node-4057_414373" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-4057_414652" : isHorizontalFillContainerAndDestructiveAndDesktop ? "node-4057_414366" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-4057_414647" : isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-4057_414363" : isVerticalFillContainerAndDestructiveAndMobile ? "node-4057_414642" : isVerticalFillContainerAndDestructiveAndDesktop ? "node-4057_414356" : type === "Vertical fill container" && !destructive && breakpoint === "Mobile" ? "node-4057_414637" : "node-4057_414353"}>
+      {isDesktop && divider && (
+        <div className="h-[25px] relative shrink-0 w-full" data-node-id="4057:415131" data-name="Divider-wrap">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap} />
+        </div>
+      )}
+      {isDesktop && (
+        <div className={`content-stretch flex gap-[var(--spacing-lg,12px)] pb-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full ${isHorizontalRightAlignedCheckboxAndDesktop ? "items-center" : isHorizontalFillContainerAndDesktop ? "items-start" : "flex-col items-start"}`} id={isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-4057_414537" : isHorizontalRightAlignedCheckboxAndNotDestructiveAndDesktop ? "node-4057_414534" : isHorizontalFillContainerAndDestructiveAndDesktop ? "node-4057_414535" : isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-4057_414532" : isVerticalFillContainerAndDestructiveAndDesktop ? "node-4057_414536" : "node-4057_414533"} data-name="Content">
+          {breakpoint === "Desktop" && ((type === "Vertical fill container" && !destructive) || type === "Horizontal fill container") && (
+            <div className={`${String.raw`border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isHorizontalFillContainerAndDesktop ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] flex-[1_0_0] min-w-px` : "border-2 border-[rgba(255,255,255,0.12)] shrink-0 w-full"}`} id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-4057_414367" : isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-4057_414364" : "node-4057_414354"} data-name="Buttons/Button">
+              <div aria-hidden className={`absolute inset-0 pointer-events-none rounded-[var(--radius-md,12px)] ${isHorizontalFillContainerAndDesktop ? String.raw`bg-[var(--colors\/background\/bg-primary,white)]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]`}`} />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-I4057_414367-6421_274451" : isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-I4057_414364-6421_274451" : "node-I4057_414354-6421_273911"} data-name="Text padding">
+                <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap `}${isHorizontalFillContainerAndDesktop ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-white,white)]`}`} id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-I4057_414367-3287_433081" : isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-I4057_414364-3287_433081" : "node-I4057_414354-3287_432949"}>
+                  {isHorizontalFillContainerAndDestructiveAndDesktop ? "Cancel" : isVerticalFillContainerAndNotDestructiveAndDesktop ? "Confirm" : "Cancel"}
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          )}
+          {!destructive && breakpoint === "Desktop" && ["Vertical fill container", "Horizontal fill container"].includes(type) && (
+            <div className={`${String.raw`border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isHorizontalFillContainerAndNotDestructiveAndDesktop ? "border-2 border-[rgba(255,255,255,0.12)] flex-[1_0_0] min-w-px" : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] shrink-0 w-full`}`} id={isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-4057_414365" : "node-4057_414355"} data-name="Buttons/Button">
+              <div aria-hidden className={`absolute inset-0 pointer-events-none rounded-[var(--radius-md,12px)] ${isHorizontalFillContainerAndNotDestructiveAndDesktop ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-I4057_414365-6421_273911" : "node-I4057_414355-6421_274451"} data-name="Text padding">
+                <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap `}${isHorizontalFillContainerAndNotDestructiveAndDesktop ? String.raw`text-[color:var(--colors\/text\/text-white,white)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isHorizontalFillContainerAndNotDestructiveAndDesktop ? "node-I4057_414365-3287_432949" : "node-I4057_414355-3287_433081"}>
+                  {isVerticalFillContainerAndNotDestructiveAndDesktop ? "Cancel" : "Confirm"}
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          )}
+          {destructive && breakpoint === "Desktop" && ["Vertical fill container", "Horizontal fill container"].includes(type) && (
+            <div className={`${String.raw`border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isHorizontalFillContainerAndDestructiveAndDesktop ? "flex-[1_0_0] min-w-px" : "shrink-0 w-full"}`} id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-4057_414368" : "node-4057_414357"} data-name="Buttons/Button destructive">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-error-solid,#d92d20)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-I4057_414368-6421_296619" : "node-I4057_414357-6421_296619"} data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalFillContainerAndDestructiveAndDesktop ? "node-I4057_414368-3287_433493" : "node-I4057_414357-3287_433493"}>
+                  Delete
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          )}
+          {isHorizontalRightAlignedCheckboxAndDesktop && checkbox && (
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="4057:414374" data-name="Checkbox">
+              <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414374;1097:63684" data-name="Input">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I4057:414374;3281:386459" data-name="_Checkbox base" />
+              </div>
+              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I4057:414374;1097:63686" data-name="Text and supporting text">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:414374;1097:63687">
+                  Don’t show again
+                </p>
+              </div>
+            </div>
+          )}
+          {isHorizontalRightAlignedCheckboxAndDesktop && tertiaryButton && (
+            <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4057:414375" data-name="Buttons/Button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I4057:414375;3468:423435" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414375;3287:433397">
+                Settings
+              </p>
+            </div>
+          )}
+          {isHorizontalRightAlignedCheckboxAndDesktop && (
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center justify-end min-w-px relative" id={isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-4057_414382" : "node-4057_414376"} data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" id={isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-4057_414383" : "node-4057_414377"} data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-I4057_414383-6421_274451" : "node-I4057_414377-6421_274451"} data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop ? "node-I4057_414383-3287_433081" : "node-I4057_414377-3287_433081"}>
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              {isHorizontalRightAlignedCheckboxAndNotDestructiveAndDesktop && (
+                <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4057:414378" data-name="Buttons/Button">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414378;6421:273911" data-name="Text padding">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414378;3287:432949">
+                      Confirm
+                    </p>
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+              )}
+              {isHorizontalRightAlignedCheckboxAndDestructiveAndDesktop && (
+                <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="4057:414384" data-name="Buttons/Button destructive">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-error-solid,#d92d20)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414384;6421:296619" data-name="Text padding">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414384;3287:433493">
+                      Delete
+                    </p>
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+              )}
+            </div>
+          )}
+          {isVerticalFillContainerAndDestructiveAndDesktop && (
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="4057:414358" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414358;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414358;3287:433081">
+                  Cancel
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          )}
+        </div>
+      )}
+      {isMobile && divider && (
+        <div className="h-[17px] relative shrink-0 w-full" data-node-id="4057:415159" data-name="Divider-wrap">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap1} />
+        </div>
+      )}
+      {isMobile && (
+        <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-4057_414783" : isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-4057_414920" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-4057_414894" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-4057_414907" : isVerticalFillContainerAndDestructiveAndMobile ? "node-4057_414644" : "node-4057_414639"} data-name="Content">
+          {isNotDestructiveAndMobile && (
+            <>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-4057_414921" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-4057_414908" : "node-4057_414640"} data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-I4057_414921-6421_273911" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-I4057_414908-6421_273911" : "node-I4057_414640-6421_273911"} data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-I4057_414921-3287_432949" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-I4057_414908-3287_432949" : "node-I4057_414640-3287_432949"}>
+                    Confirm
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-4057_414922" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-4057_414909" : "node-4057_414641"} data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-I4057_414922-6421_274451" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-I4057_414909-6421_274451" : "node-I4057_414641-6421_274451"} data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalRightAlignedCheckboxAndNotDestructiveAndMobile ? "node-I4057_414922-3287_433081" : isHorizontalFillContainerAndNotDestructiveAndMobile ? "node-I4057_414909-3287_433081" : "node-I4057_414641-3287_433081"}>
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </>
+          )}
+          {isDestructiveAndMobile && (
+            <>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-4057_414784" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-4057_414895" : "node-4057_414645"} data-name="Buttons/Button destructive">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-error-solid,#d92d20)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-I4057_414784-6421_296619" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-I4057_414895-6421_296619" : "node-I4057_414645-6421_296619"} data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-I4057_414784-3287_433493" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-I4057_414895-3287_433493" : "node-I4057_414645-3287_433493"}>
+                    Delete
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-4057_414785" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-4057_414896" : "node-4057_414646"} data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-I4057_414785-6421_274451" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-I4057_414896-6421_274451" : "node-I4057_414646-6421_274451"} data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-I4057_414785-3287_433081" : isHorizontalFillContainerAndDestructiveAndMobile ? "node-I4057_414896-3287_433081" : "node-I4057_414646-3287_433081"}>
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </>
+          )}
+          {isHorizontalRightAlignedCheckboxAndMobile && (
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" id={isHorizontalRightAlignedCheckboxAndDestructiveAndMobile ? "node-4057_415029" : "node-4057_415003"} data-name="Checkbox and button">
+              {checkbox && (
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="4057:415004" data-name="Checkbox">
+                  <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:415004;1097:63684" data-name="Input">
+                    <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I4057:415004;3281:386459" data-name="_Checkbox base" />
+                  </div>
+                  <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I4057:415004;1097:63686" data-name="Text and supporting text">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:415004;1097:63687">
+                      Don’t show again
+                    </p>
+                  </div>
+                </div>
+              )}
+              {tertiaryButton && (
+                <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4057:415005" data-name="Buttons/Button">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I4057:415005;3468:423435" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:415005;3287:433397">
+                    Settings
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,65 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/f80f8fe4-e952-4060-b90a-5e2bb50ed11a.svg";
+const imgPaymentMethodIcon = "https://www.figma.com/api/mcp/asset/93744b55-4728-46b2-a5ba-200f08681d7f.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: "True";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Focused";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = "True", indeterminate = "False", size = "md", state = "Focused", type = "Checkbox" }: CheckboxBaseProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1097:63951">
+      <div className="absolute inset-[15%]" data-node-id="1097:63953" data-name="check">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+      </div>
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: "True";
+  size?: "md";
+  state?: "Focused";
+  type?: "Payment icon";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = "True", size = "md", state = "Focused", type = "Payment icon" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start overflow-clip p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[768px]"} data-node-id="1142:83183">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px relative" data-node-id="1142:83184" data-name="Content">
+        <div className="h-[32px] relative shrink-0 w-[46px]" data-node-id="1142:87072" data-name="Payment method icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPaymentMethodIcon} />
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1142:83186" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1142:86592" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1142:83187">
+              Visa ending in 1234
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1142:83188">
+              Expiry 06/2025
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1142:86845" data-name="Actions">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1142:86846" data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1142:86846;3287:433393">
+                Set as default
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1142:86847" data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1142:86847;3287:433309">
+                Edit
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <CheckboxBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 size-[20px]" />
+    </div>
+  );
+}

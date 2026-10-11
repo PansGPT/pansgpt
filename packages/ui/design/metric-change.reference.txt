@@ -1,0 +1,85 @@
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/50a9388d-bbfe-4e63-922c-5bf44110b8cb.svg";
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/586bb494-ee38-47b2-ab1a-d7d45eb01731.svg";
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/c193adc1-4b5a-48ae-a155-c9274f0c6a55.svg";
+const imgTrendDown01 = "https://www.figma.com/api/mcp/asset/58df809b-3f0e-4f27-9f64-45d6c29077e3.svg";
+const imgArrowUpRight = "https://www.figma.com/api/mcp/asset/e97788a2-65d5-440e-8822-4e62954b22fe.svg";
+const imgArrowDownRight = "https://www.figma.com/api/mcp/asset/6754f0ba-9305-48ac-9cbd-1b90d92188db.svg";
+
+type ChangeProps = {
+  className?: string;
+  trend?: "Positive" | "Negative";
+  type?: "01" | "02" | "03";
+};
+
+export default function Change({ className, trend = "Positive", type = "01" }: ChangeProps) {
+  const is01AndNegative = type === "01" && trend === "Negative";
+  const is01AndPositive = type === "01" && trend === "Positive";
+  const is02AndNegative = type === "02" && trend === "Negative";
+  const is02AndPositive = type === "02" && trend === "Positive";
+  const is03AndNegative = type === "03" && trend === "Negative";
+  const is03AndPositive = type === "03" && trend === "Positive";
+  return (
+    <div className={className || `content-stretch flex items-center relative ${type === "03" ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] gap-[var(--spacing-xs,4px)] pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-sm,6px)]` : type === "02" ? "gap-[var(--spacing-xs,4px)] justify-center" : "gap-[var(--spacing-xxs,2px)] justify-center"}`} id={is03AndNegative ? "node-8083_164437" : is03AndPositive ? "node-8083_164432" : is02AndNegative ? "node-4988_370937" : is01AndNegative ? "node-1563_260320" : is02AndPositive ? "node-4988_370934" : "node-1563_260318"}>
+      {is01AndPositive && (
+        <>
+          <div className="relative shrink-0 size-[16px]" data-node-id="1563:260315" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1563:260316">
+            100%
+          </p>
+        </>
+      )}
+      {is02AndPositive && (
+        <>
+          <div className="relative shrink-0 size-[16px]" data-node-id="4988:370935" data-name="trend-up-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="4988:370936">
+            100%
+          </p>
+        </>
+      )}
+      {is01AndNegative && (
+        <>
+          <div className="relative shrink-0 size-[16px]" data-node-id="1563:260321" data-name="arrow-down">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1563:260322">
+            100%
+          </p>
+        </>
+      )}
+      {is02AndNegative && (
+        <>
+          <div className="relative shrink-0 size-[16px]" data-node-id="4988:370938" data-name="trend-down-01">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendDown01} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="4988:370939">
+            100%
+          </p>
+        </>
+      )}
+      {is03AndPositive && (
+        <>
+          <div className="relative shrink-0 size-[12px]" data-node-id="8083:164429" data-name="arrow-up-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUpRight} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="8083:164430">
+            100%
+          </p>
+        </>
+      )}
+      {is03AndNegative && (
+        <>
+          <div className="relative shrink-0 size-[12px]" data-node-id="8083:164438" data-name="arrow-down-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDownRight} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="8083:164439">
+            100%
+          </p>
+        </>
+      )}
+    </div>
+  );
+}

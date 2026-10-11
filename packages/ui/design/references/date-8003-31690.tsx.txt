@@ -1,0 +1,40 @@
+const imgDot = "https://www.figma.com/api/mcp/asset/8e3d415e-acb6-4fdf-8cc2-aee527ce6812.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/3581ef30-b769-4138-b7d5-dfcbb65afd80.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/55a7dc07-3e31-4df6-a716-dbda80dd058b.svg";
+const imgMarker = "https://www.figma.com/api/mcp/asset/5f087a56-2825-413b-91e5-a41d776c9bc5.svg";
+
+type CalendarTimeMarkerProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+};
+
+export default function CalendarTimeMarker({ className, breakpoint = "Desktop" }: CalendarTimeMarkerProps) {
+  const isMobile = breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex items-center relative ${isMobile ? "gap-[var(--spacing-sm,6px)] w-[375px]" : "gap-[var(--spacing-xs,4px)] w-[400px]"}`} id={isMobile ? "node-8003_31676" : "node-8003_31640"}>
+      {breakpoint === "Desktop" && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[64px]" data-node-id="8003:31635">
+          2:20 PM
+        </p>
+      )}
+      <div className="content-stretch flex flex-[1_0_0] items-center min-w-px relative" id={isMobile ? "node-8003_31669" : "node-8003_31636"} data-name="Marker">
+        <div className="mr-[-2px] relative shrink-0 size-[8px]" id={isMobile ? "node-8003_31670" : "node-8003_31637"} data-name="Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+        </div>
+        <div className="flex-[1_0_0] h-px min-w-px relative" id={isMobile ? "node-8003_31671" : "node-8003_31638"} data-name="Line">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isMobile ? imgLine1 : imgLine} />
+        </div>
+      </div>
+      {isMobile && (
+        <>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/text-xs,12px)] text-right whitespace-nowrap" data-node-id="8003:31672">
+            2:20 PM
+          </p>
+          <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="8003:31673" data-name="Marker">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMarker} />
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

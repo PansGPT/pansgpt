@@ -1,0 +1,40 @@
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/5df8cdff-fdd3-46b0-82be-ee384a121dc4.svg";
+
+type ButtonsButtonProps = {
+  className?: string;
+  hierarchy?: "Primary";
+  iconLeadingSwap?: React.ReactNode | null;
+  iconOnly?: "True";
+  size?: "xl";
+  state?: "Default";
+};
+
+function ButtonsButton({ className, hierarchy = "Primary", iconLeadingSwap = null, iconOnly = "True", size = "xl", state = "Default" }: ButtonsButtonProps) {
+  return (
+    <div className={className || "border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex items-center justify-center overflow-clip p-[14px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))]"} data-node-id="3287:428811">
+      <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+      {iconLeadingSwap || (
+        <div className="relative shrink-0 size-[20px]" data-node-id="3471:597214" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+        </div>
+      )}
+      <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Gradient/skeuemorphic-gradient-border: , Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

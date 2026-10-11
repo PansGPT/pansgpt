@@ -1,0 +1,631 @@
+const imgSizeSm = "../assets/avatar-imgSizeSm.svg";
+const imgSizeXs = "../assets/avatar-imgSizeXs.svg";
+const imgSizeMd = "../assets/avatar-imgSizeMd.svg";
+const imgSizeLg = "../assets/avatar-imgSizeLg.svg";
+const imgSizeXl = "../assets/avatar-imgSizeXl.svg";
+const imgSize2Xl = "../assets/avatar-imgSize2Xl.svg";
+const imgSizeXs1 = "../assets/avatar-imgSizeXs1.png";
+const imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator = "../assets/avatar-imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator.png";
+const imgUser01 = "../assets/avatar-imgUser01.svg";
+const imgUser2 = "../assets/avatar-imgUser2.svg";
+const imgUser3 = "../assets/avatar-imgUser3.svg";
+const imgUser4 = "../assets/avatar-imgUser4.svg";
+const imgUser5 = "../assets/avatar-imgUser5.svg";
+
+type VerifiedTickProps = {
+  className?: string;
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+};
+
+function VerifiedTick({ className, size = "xs" }: VerifiedTickProps) {
+  const is2Xl = size === "2xl";
+  const isLg = size === "lg";
+  const isMd = size === "md";
+  const isXl = size === "xl";
+  const isXs = size === "xs";
+  return (
+    <div className={className || `relative ${is2Xl ? "size-[20px]" : isXl ? "size-[18px]" : isLg ? "size-[16px]" : isMd ? "size-[14px]" : isXs ? "size-[10px]" : "size-[12px]"}`} id={is2Xl ? "node-3302_420334" : isXl ? "node-3302_420328" : isLg ? "node-3302_418813" : isMd ? "node-3302_418810" : isXs ? "node-3302_418807" : "node-3302_418804"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={is2Xl ? imgSize2Xl : isXl ? imgSizeXl : isLg ? imgSizeLg : isMd ? imgSizeMd : isXs ? imgSizeXs : imgSizeSm} />
+    </div>
+  );
+}
+
+type AvatarCompanyIconProps = {
+  className?: string;
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+};
+
+function AvatarCompanyIcon({ className, size = "xs" }: AvatarCompanyIconProps) {
+  const is2Xl = size === "2xl";
+  const isLg = size === "lg";
+  const isMd = size === "md";
+  const isSm = size === "sm";
+  const isXl = size === "xl";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/background\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] `}${is2Xl ? "border-[1.667px] size-[20px]" : isXl ? "border-[1.5px] size-[18px]" : isLg ? "border-[1.5px] size-[16px]" : isMd ? "border-[1.5px] size-[14px]" : isSm ? "border-[1.5px] size-[12px]" : "border-[1.5px] size-[10px]"}`} id={is2Xl ? "node-1216_2799" : isXl ? "node-1036_45" : isLg ? "node-1036_35" : isMd ? "node-1036_25" : isSm ? "node-1036_15" : "node-1036_5"}>
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "xs" }: AvatarOnlineIndicatorProps) {
+  const is2XlAndTrue = size === "2xl" && online === "True";
+  const isLgAndTrue = size === "lg" && online === "True";
+  const isMdAndTrue = size === "md" && online === "True";
+  const isSmAndTrue = size === "sm" && online === "True";
+  const isXlAndTrue = size === "xl" && online === "True";
+  return <div className={className || `${String.raw`bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] `}${is2XlAndTrue ? "size-[16px]" : isXlAndTrue ? "size-[14px]" : isLgAndTrue ? "size-[12px]" : isMdAndTrue ? "size-[10px]" : isSmAndTrue ? "size-[8px]" : "size-[6px]"}`} id={is2XlAndTrue ? "node-1216_2775" : isXlAndTrue ? "node-1034_364" : isLgAndTrue ? "node-1034_367" : isMdAndTrue ? "node-1034_365" : isSmAndTrue ? "node-1034_366" : "node-1034_369"} />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: boolean;
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  statusIcon?: "False" | "Online indicator" | "Company" | "Verified";
+  text?: boolean;
+};
+
+export default function Avatar({ className, placeholder = false, size = "xs", statusIcon = "False", text = false }: AvatarProps) {
+  if (size === "xl" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="19:1252" data-name="Size=xl, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xl,20px)] text-center top-[calc(50%-15px)] w-[56px]" data-node-id="19:1253">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104710" data-name="Size=2xl, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xs,32px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/display-xs,24px)] text-center top-[calc(50%-16px)] w-[64px]" data-node-id="1217:104711">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="1036:203" data-name="Size=xl, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xl,20px)] text-center top-[calc(50%-15px)] w-[56px]" data-node-id="1036:204">
+          OR
+        </p>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[18px]" data-node-id="1036:250" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104695" data-name="Size=2xl, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xs,32px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/display-xs,24px)] text-center top-[calc(50%-16px)] w-[64px]" data-node-id="1217:104696">
+          OR
+        </p>
+        <div className="absolute border-[1.667px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[20px]" data-node-id="1217:104697" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="1034:564" data-name="Size=xl, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xl,20px)] text-center top-[calc(50%-15px)] w-[56px]" data-node-id="1034:565">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[14px]" size="xl" />
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104703" data-name="Size=2xl, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xs,32px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/display-xs,24px)] text-center top-[calc(50%-16px)] w-[64px]" data-node-id="1217:104704">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[16px]" size="2xl" />
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="19:1254" data-name="Size=lg, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-lg,18px)] text-center top-[calc(50%-14px)] w-[48px]" data-node-id="19:1255">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="1036:201" data-name="Size=lg, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-lg,18px)] text-center top-[calc(50%-14px)] w-[48px]" data-node-id="1036:202">
+          OR
+        </p>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[16px]" data-node-id="1036:240" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="1034:560" data-name="Size=lg, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-lg,18px)] text-center top-[calc(50%-14px)] w-[48px]" data-node-id="1034:561">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" size="lg" />
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1256" data-name="Size=md, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] text-center top-[calc(50%-12px)] w-[40px]" data-node-id="19:1257">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1036:199" data-name="Size=md, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] text-center top-[calc(50%-12px)] w-[40px]" data-node-id="1036:200">
+          OR
+        </p>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[14px]" data-node-id="1036:230" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1034:558" data-name="Size=md, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] text-center top-[calc(50%-12px)] w-[40px]" data-node-id="1034:559">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" size="md" />
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="19:1258" data-name="Size=sm, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[32px]" data-node-id="19:1259">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1036:197" data-name="Size=sm, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[32px]" data-node-id="1036:198">
+          OR
+        </p>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.75px] right-[-2.75px] rounded-[var(--radius-full,9999px)] size-[12px]" data-node-id="1036:220" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1034:562" data-name="Size=sm, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[32px]" data-node-id="1034:563">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.75px] right-[-0.75px] rounded-[var(--radius-full,9999px)] size-[8px]" size="sm" />
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="19:1260" data-name="Size=xs, Placeholder=False, Text=True, Status icon=False">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="19:1261">
+          OR
+        </p>
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1036:195" data-name="Size=xs, Placeholder=False, Text=True, Status icon=Company">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="1036:196">
+          OR
+        </p>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.5px] right-[-2.5px] rounded-[var(--radius-full,9999px)] size-[10px]" data-node-id="1036:210" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1034:556" data-name="Size=xs, Placeholder=False, Text=True, Status icon=Online indicator">
+        <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="1034:557">
+          OR
+        </p>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.5px] right-[-0.5px] rounded-[var(--radius-full,9999px)] size-[6px]" />
+      </div>
+    );
+  }
+  if (size === "xl" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="19:1129" data-name="Size=xl, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(21.43%-0.57px)]" data-node-id="1034:492" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "2xl" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104681" data-name="Size=2xl, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(25%-0.5px)]" data-node-id="1217:104682" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xl" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="1036:173" data-name="Size=xl, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(21.43%-0.57px)]" data-node-id="1036:174" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[18px]" data-node-id="1036:245" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "2xl" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104674" data-name="Size=2xl, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(25%-0.5px)]" data-node-id="1217:104675" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+        <div className="absolute border-[1.667px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[20px]" data-node-id="1217:104676" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xl" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="1034:528" data-name="Size=xl, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(21.43%-0.57px)]" data-node-id="1034:529" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[14px]" size="xl" />
+      </div>
+    );
+  }
+  if (size === "2xl" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104698" data-name="Size=2xl, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(25%-0.5px)]" data-node-id="1217:104699" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[16px]" size="2xl" />
+      </div>
+    );
+  }
+  if (size === "lg" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="19:1125" data-name="Size=lg, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(20.83%-0.58px)]" data-node-id="1034:414" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "lg" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="1036:171" data-name="Size=lg, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(20.83%-0.58px)]" data-node-id="1036:172" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+        </div>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[16px]" data-node-id="1036:235" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "lg" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="1034:524" data-name="Size=lg, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(20.83%-0.58px)]" data-node-id="1034:525" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" size="lg" />
+      </div>
+    );
+  }
+  if (size === "md" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1121" data-name="Size=md, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(20%-0.6px)]" data-node-id="1034:405" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1036:169" data-name="Size=md, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(20%-0.6px)]" data-node-id="1036:170" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+        </div>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[14px]" data-node-id="1036:225" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1034:520" data-name="Size=md, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(20%-0.6px)]" data-node-id="1034:521" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" size="md" />
+      </div>
+    );
+  }
+  if (size === "sm" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="19:1119" data-name="Size=sm, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(18.75%-0.47px)]" data-node-id="1034:397" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser4} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1036:167" data-name="Size=sm, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(18.75%-0.47px)]" data-node-id="1036:168" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser4} />
+        </div>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.75px] right-[-2.75px] rounded-[var(--radius-full,9999px)] size-[12px]" data-node-id="1036:215" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "aspect-[32/32] bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.75px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="1034:526" data-name="Size=sm, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(18.75%-0.47px)]" data-node-id="1034:527" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser4} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.75px] right-[-0.75px] rounded-[var(--radius-full,9999px)] size-[8px]" size="sm" />
+      </div>
+    );
+  }
+  if (size === "xs" && placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="19:1108" data-name="Size=xs, Placeholder=True, Text=False, Status icon=False">
+        <div className="absolute inset-[calc(16.67%-0.33px)]" data-node-id="1034:394" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser5} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xs" && placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1036:165" data-name="Size=xs, Placeholder=True, Text=False, Status icon=Company">
+        <div className="absolute inset-[calc(16.67%-0.33px)]" data-node-id="1036:166" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser5} />
+        </div>
+        <div className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.5px] right-[-2.5px] rounded-[var(--radius-full,9999px)] size-[10px]" data-node-id="1036:205" data-name="_Avatar company icon">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXs1} />
+        </div>
+      </div>
+    );
+  }
+  if (size === "xs" && placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1034:522" data-name="Size=xs, Placeholder=True, Text=False, Status icon=Online indicator">
+        <div className="absolute inset-[calc(16.67%-0.33px)]" data-node-id="1034:523" data-name="user-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser5} />
+        </div>
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.5px] right-[-0.5px] rounded-[var(--radius-full,9999px)] size-[6px]" />
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="19:1080" data-name="Size=xl, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[14px]" size="xl" />
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_0px_rgba(231,0,0,0.14)] size-[64px]"} data-node-id="1217:104660" data-name="Size=2xl, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[16px]" size="2xl" />
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="1036:68" data-name="Size=xl, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[18px]" size="xl" />
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="3302:419180" data-name="Size=xl, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-1px] right-[-1px] size-[18px]" size="xl" />
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104708" data-name="Size=2xl, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.667px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[20px]" size="2xl" />
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="3302:419182" data-name="Size=2xl, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-1px] right-[-1px] size-[20px]" size="2xl" />
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="19:1082" data-name="Size=lg, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" size="lg" />
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="1036:66" data-name="Size=lg, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[16px]" size="lg" />
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="3302:419192" data-name="Size=lg, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-1px] right-[-1px] size-[16px]" size="lg" />
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1084" data-name="Size=md, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" size="md" />
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1036:64" data-name="Size=md, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-3px] right-[-3px] rounded-[var(--radius-full,9999px)] size-[14px]" size="md" />
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="3302:419198" data-name="Size=md, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-1px] right-[-1px] size-[14px]" size="md" />
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="19:1086" data-name="Size=sm, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.75px] right-[-0.75px] rounded-[var(--radius-full,9999px)] size-[8px]" size="sm" />
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1036:60" data-name="Size=sm, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.75px] right-[-2.75px] rounded-[var(--radius-full,9999px)] size-[12px]" size="sm" />
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="3302:419204" data-name="Size=sm, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-0.75px] right-[-0.75px] size-[12px]" size="sm" />
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && !text && statusIcon === "Online indicator") {
+    return (
+      <div className={className || "border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="19:1088" data-name="Size=xs, Placeholder=False, Text=False, Status icon=Online indicator">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-0.5px] right-[-0.5px] rounded-[var(--radius-full,9999px)] size-[6px]" />
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && !text && statusIcon === "Company") {
+    return (
+      <div className={className || "border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1036:62" data-name="Size=xs, Placeholder=False, Text=False, Status icon=Company">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <AvatarCompanyIcon className="absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-2.5px] right-[-2.5px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+    );
+  }
+  if (size === "xs" && !placeholder && !text && statusIcon === "Verified") {
+    return (
+      <div className={className || "border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="3302:419210" data-name="Size=xs, Placeholder=False, Text=False, Status icon=Verified">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+        <VerifiedTick className="absolute bottom-[-1.5px] right-[-1.5px] size-[10px]" />
+      </div>
+    );
+  }
+  if (size === "xl" && !placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[56px]"} data-node-id="19:1018" data-name="Size=xl, Placeholder=False, Text=False, Status icon=False">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      </div>
+    );
+  }
+  if (size === "2xl" && !placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[64px]"} data-node-id="1217:104651" data-name="Size=2xl, Placeholder=False, Text=False, Status icon=False">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      </div>
+    );
+  }
+  if (size === "lg" && !placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[48px]"} data-node-id="19:1017" data-name="Size=lg, Placeholder=False, Text=False, Status icon=False">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      </div>
+    );
+  }
+  if (size === "md" && !placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1016" data-name="Size=md, Placeholder=False, Text=False, Status icon=False">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      </div>
+    );
+  }
+  if (size === "sm" && !placeholder && !text && statusIcon === "False") {
+    return (
+      <div className={className || "border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="19:1015" data-name="Size=sm, Placeholder=False, Text=False, Status icon=False">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+      </div>
+    );
+  }
+  return (
+    <div className={className || "border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="19:1011" data-name="Size=xs, Placeholder=False, Text=False, Status icon=False">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconOnlineIndicator} />
+    </div>
+  );
+}

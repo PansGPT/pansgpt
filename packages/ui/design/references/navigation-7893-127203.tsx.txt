@@ -1,0 +1,275 @@
+const imgFavicon1 = "https://www.figma.com/api/mcp/asset/1bd273c7-58a2-4c21-89cc-70f6c4324951.png";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/f3ceb823-0f0d-4237-b635-0921ef78fa5b.png";
+const imgSearchLg = "https://www.figma.com/api/mcp/asset/c6e10240-36e2-44c6-8636-c6bbcd01ce63.svg";
+const imgHomeLine = "https://www.figma.com/api/mcp/asset/dd33d428-f316-4950-a8c8-21987898dc24.svg";
+const imgBarChartSquare02 = "https://www.figma.com/api/mcp/asset/eee616a8-5233-405b-82aa-b58f4b9aacc5.svg";
+const imgRows01 = "https://www.figma.com/api/mcp/asset/f11c87f9-2cf6-4a81-925d-5e465d3bcf34.svg";
+const imgDividerWrapper = "https://www.figma.com/api/mcp/asset/150a79e9-1361-40b5-bbb7-8a4353c55efe.svg";
+const imgFolder = "https://www.figma.com/api/mcp/asset/1e185b04-09bd-4b06-81ff-81fc85792e4f.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/45c5e28c-35df-4282-91dc-fb33e4f5b3f7.svg";
+const imgPieChart03 = "https://www.figma.com/api/mcp/asset/bb46b867-7ed8-480c-baba-098ddfc61459.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/1572b18d-966f-46b9-8ab9-8d6150373742.svg";
+const imgMessageChatCircle = "https://www.figma.com/api/mcp/asset/23ad3e50-b066-4e1c-8fe6-ffda546c1ec2.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/bc75aa24-b31f-405a-8fc3-f37ca3d6d4ef.svg";
+const imgLayoutAlt01 = "https://www.figma.com/api/mcp/asset/48d8299f-6601-4c29-a5b6-9e1f624f3898.svg";
+const imgShare04 = "https://www.figma.com/api/mcp/asset/e39158ac-455b-4f7d-b199-fe414d7381a0.svg";
+const imgChevronSelectorVertical = "https://www.figma.com/api/mcp/asset/9fff6d90-9573-4f87-b833-8fb7523392cb.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/819821dd-c6ea-499f-8bf8-4faf65e08c30.svg";
+const imgMenu02 = "https://www.figma.com/api/mcp/asset/7c96aa65-cdd2-4f01-9f01-8ac0f7ab26cf.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+function Logo({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex items-start relative w-[139px]"} data-node-id="1019:33137" data-name="Logo">
+      <div className="h-[32px] relative shrink-0 w-[139px]" data-node-id="2924:375962" data-name="Logo wrap">
+        <div className="absolute content-stretch flex inset-[0_76.98%_0_0] items-start" data-node-id="1083:50705" data-name="Logomark">
+          <div className="relative shrink-0 size-[32px]" data-node-id="I1083:50705;18492:16258" data-name="favicon 1">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+          </div>
+        </div>
+        <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] inset-[6.25%_6.83%_6.25%_37.05%] leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)] text-black whitespace-nowrap" data-node-id="18492:510946">
+          PansGPT
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type SidebarNavigationProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  open?: boolean;
+  style?: "Sections dividers";
+};
+
+function SidebarNavigation({ className, breakpoint = "Mobile", open = false, style = "Sections dividers" }: SidebarNavigationProps) {
+  const isNotOpenAndSectionsDividersAndMobile = !open && style === "Sections dividers" && breakpoint === "Mobile";
+  const isOpenAndSectionsDividersAndMobile = open && style === "Sections dividers" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex relative w-[375px] ${isNotOpenAndSectionsDividersAndMobile ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid flex-col h-[64px] items-center` : "h-[812px] items-start overflow-clip pr-[var(--spacing-7xl,64px)]"}`} id={isNotOpenAndSectionsDividersAndMobile ? "node-7893_127270" : "node-7893_127203"}>
+      {isOpenAndSectionsDividersAndMobile && (
+        <div className="absolute backdrop-blur-[8px] inset-[0_0_-148px_0] overflow-clip" data-node-id="7893:127204" data-name="Background overlay">
+          <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I7893:127204;4896:411044" data-name="Background overlay" />
+        </div>
+      )}
+      <div className={`content-stretch flex flex-[1_0_0] justify-between relative ${isNotOpenAndSectionsDividersAndMobile ? "items-center min-h-px pl-[var(--container-padding-mobile,16px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] w-full" : String.raw`bg-[var(--colors\/background\/bg-primary,white)] drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] flex-col h-full items-start min-w-px`}`} id={isNotOpenAndSectionsDividersAndMobile ? "node-7893_127271" : "node-7893_127205"} data-name="Content">
+        {isOpenAndSectionsDividersAndMobile && (
+          <>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] isolate items-start pt-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="7893:127206" data-name="Navigation">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start px-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="7893:127207" data-name="Header">
+                <Logo className="content-stretch flex items-start relative shrink-0 w-[139px]" />
+                <button className="content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="7954:161905" data-name="Select">
+                  <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I7954:161905;7953:158174" data-name="Input with label">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I7954:161905;7953:158179" data-name="Input">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7954:161905;7953:158180" data-name="Content">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7954:161905;7953:158181" data-name="search-lg">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSearchLg} />
+                        </div>
+                        <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-placeholder,#717680)] text-ellipsis text-left whitespace-nowrap" data-node-id="I7954:161905;7953:158182">
+                          Search
+                        </p>
+                      </div>
+                      <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7954:161905;7953:158183" data-name="Shortcut wrapper">
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7954:161905;7953:158184">
+                          ⌘K
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full z-[1]" data-node-id="7901:150626" data-name="Navigation">
+                <div className="content-stretch flex flex-col items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="7901:150627" data-name="Section">
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:150628" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150628;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150628;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150628;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHomeLine} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:150628;1152:89354">
+                          Home
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:150629" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150629;7879:445583" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150629;1153:90755" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150629;3479:466757" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBarChartSquare02} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:150629;1153:90757">
+                          Dashboard
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:150630" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150630;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150630;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150630;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRows01} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:150630;1152:89354">
+                          Projects
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="h-[16px] relative shrink-0 w-full" data-node-id="7901:150631" data-name="Divider wrapper">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrapper} />
+                </div>
+                <div className="content-stretch flex flex-col items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="7901:150633" data-name="Section">
+                  <button className="content-stretch cursor-pointer flex items-start relative shrink-0 w-full" data-node-id="7901:150634" data-name="_Nav item dropdown base">
+                    <div className="content-stretch flex flex-[1_0_0] items-center min-w-px overflow-clip py-[var(--spacing-xxs,2px)] relative" data-node-id="I7901:150634;1153:89416" data-name="_Nav item base">
+                      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150634;1153:89416;7879:434781" data-name="Content">
+                        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150634;1153:89416;1152:89352" data-name="Text and icon">
+                          <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150634;1153:89416;3479:464410" data-name="bar-chart-square-02">
+                            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFolder} />
+                          </div>
+                          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="I7901:150634;1153:89416;1152:89354">
+                            Folders
+                          </p>
+                        </div>
+                        <div className="relative shrink-0 size-[16px]" data-node-id="I7901:150634;1153:89416;1152:89357" data-name="chevron-down">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+                <div className="h-[16px] relative shrink-0 w-full" data-node-id="7901:150635" data-name="Divider wrapper">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrapper} />
+                </div>
+                <div className="content-stretch flex flex-col items-start px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="7901:150637" data-name="Section">
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:150638" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150638;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150638;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150638;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPieChart03} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:150638;1152:89354">
+                          Reporting
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7915:521859" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7915:521859;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7915:521859;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7915:521859;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7915:521859;1152:89354">
+                          Settings
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:150640" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:150640;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:150640;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:150640;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMessageChatCircle} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:150640;1152:89354">
+                          Support
+                        </p>
+                      </div>
+                      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center px-[var(--spacing-sm,6px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I7901:150640;1152:89356" data-name="Badge">
+                        <div className="relative shrink-0 size-[8px]" data-node-id="I7901:150640;1152:89356;4825:411492" data-name="_Dot">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7901:150640;1152:89356;4825:411493">
+                          Online
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="7901:414359" data-name="_Nav item base">
+                    <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7901:414359;7879:434781" data-name="Content">
+                      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7901:414359;1152:89352" data-name="Text and icon">
+                        <div className="relative shrink-0 size-[20px]" data-node-id="I7901:414359;3479:464410" data-name="bar-chart-square-02">
+                          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayoutAlt01} />
+                        </div>
+                        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I7901:414359;1152:89354">
+                          Open in browser
+                        </p>
+                      </div>
+                      <div className="relative shrink-0 size-[16px]" data-node-id="I7901:414359;1152:89357" data-name="chevron-down">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgShare04} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="7893:127217" data-name="Footer">
+              <div className="content-stretch flex flex-col items-start px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="7893:127221" data-name="Nav account card wrapper">
+                <button className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xl,16px)] h-[64px] items-start p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="7893:127222" data-name="_Nav account card">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:127222;7893:122793" data-name="Avatar label group">
+                    <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:127222;7893:122793;1034:778" data-name="Avatar">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:127222;7893:122793;82:2790" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:127222;7893:122793;82:2788">
+                        Diepreye Ọ̀rẹ̀kọ́yà
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:127222;7893:122793;82:2789">
+                        chioma@PansGPT.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="I7893:127222;8003:528604" data-name="Buttons/Button utility">
+                    <div className="relative shrink-0 size-[16px]" data-node-id="I7893:127222;8003:528604;7932:552036" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronSelectorVertical} />
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+        {isNotOpenAndSectionsDividersAndMobile && (
+          <>
+            <div className="content-stretch flex items-start relative shrink-0 w-[139px]" data-node-id="7893:127272" data-name="Logo">
+              <div className="h-[32px] relative shrink-0 w-[139px]" data-node-id="I7893:127272;2924:375962" data-name="Logo wrap">
+                <div className="absolute content-stretch flex inset-[0_76.98%_0_0] items-start" data-node-id="I7893:127272;1083:50705" data-name="Logomark">
+                  <div className="relative shrink-0 size-[32px]" data-node-id="I7893:127272;1083:50705;18492:16258" data-name="favicon 1">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] inset-[6.25%_6.83%_6.25%_37.05%] leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)] text-black whitespace-nowrap" data-node-id="I7893:127272;18492:510946">
+                  PansGPT
+                </p>
+              </div>
+            </div>
+            <button className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch cursor-pointer flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="7893:127273" data-name="_Application nav menu button">
+              <div className="relative shrink-0 size-[24px]" data-node-id="I7893:127273;1207:354" data-name="menu-02">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMenu02} />
+              </div>
+            </button>
+          </>
+        )}
+      </div>
+      {isOpenAndSectionsDividersAndMobile && (
+        <button className="absolute content-stretch cursor-pointer flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[8px] rounded-[var(--radius-md,12px)] top-[12px]" data-node-id="7893:127223" data-name="_Application nav menu button">
+          <div className="relative shrink-0 size-[24px]" data-node-id="I7893:127223;1207:352" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

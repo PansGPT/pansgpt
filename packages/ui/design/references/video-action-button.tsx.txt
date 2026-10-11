@@ -1,0 +1,269 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/4d89ab56-d525-402a-a36f-11d6f276ffc2.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/10c9d7a5-9387-4045-a99d-e994fd76cc5c.svg";
+const imgVolumeX = "https://www.figma.com/api/mcp/asset/4ed37dae-4e22-4744-9317-d199118fef42.svg";
+const imgVolumeMin = "https://www.figma.com/api/mcp/asset/44213fbb-c248-45b6-9a12-da8405a9a252.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/f75201b1-25f1-40bc-a349-0042ed33df40.svg";
+const imgAirplay = "https://www.figma.com/api/mcp/asset/96ed8955-9b5f-4074-a58e-5abfdc692436.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/e4aedeae-55f7-4c81-8b58-477d89ba2f8e.svg";
+const imgMinimize01 = "https://www.figma.com/api/mcp/asset/0b2c8685-a92a-4bfa-a599-d696045ec601.svg";
+const imgFastBackward = "https://www.figma.com/api/mcp/asset/28ec4fb1-eb67-4f6b-a378-fba5dc318230.svg";
+const imgFastForward = "https://www.figma.com/api/mcp/asset/04ea8114-e31d-45be-bd7c-e55aaa06b4ac.svg";
+const imgSkipBack = "https://www.figma.com/api/mcp/asset/b41bafac-11de-4175-ae0d-b72b32aab043.svg";
+const imgSkipForward = "https://www.figma.com/api/mcp/asset/8e919832-e68b-441f-a9f9-d1d6e80135dc.svg";
+const imgVolumeMinus = "https://www.figma.com/api/mcp/asset/c72a097d-52b8-4f5b-a2ff-cfa0d6b367fc.svg";
+const imgVolumePlus = "https://www.figma.com/api/mcp/asset/4322b992-5b7c-4cd6-8b9f-ba25a60bd342.svg";
+const imgMaximize02 = "https://www.figma.com/api/mcp/asset/b3149da5-efc7-49a5-adbe-1d5ad3c3b733.svg";
+const imgMinimize02 = "https://www.figma.com/api/mcp/asset/2765a72a-19ad-42be-a66c-a14107ceea00.svg";
+const imgPlaybackX = "https://www.figma.com/api/mcp/asset/c430c261-fe55-4023-965c-6d4946a7acdd.svg";
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default" | "Hover";
+  type?: "Play" | "Pause" | "Fast backward" | "Fast forward" | "Skip backward" | "Skip forward" | "Volume none" | "Volume min" | "Volume max" | "Video minus" | "Video plus" | "AirPlay" | "Minimize 01" | "Maximize 01" | "Maximize 02" | "Minimize 02" | "Playback speed" | "Subtitles/CC";
+};
+
+export default function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isAirPlayAndHover = type === "AirPlay" && state === "Hover";
+  const isFastBackwardAndHover = type === "Fast backward" && state === "Hover";
+  const isFastForwardAndHover = type === "Fast forward" && state === "Hover";
+  const isMaximize01AndHover = type === "Maximize 01" && state === "Hover";
+  const isMaximize02AndHover = type === "Maximize 02" && state === "Hover";
+  const isMinimize01AndHover = type === "Minimize 01" && state === "Hover";
+  const isMinimize02AndHover = type === "Minimize 02" && state === "Hover";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isPauseAndHover = type === "Pause" && state === "Hover";
+  const isPlayAndDefault = type === "Play" && state === "Default";
+  const isPlayAndHover = type === "Play" && state === "Hover";
+  const isPlaybackSpeed = type === "Playback speed";
+  const isPlaybackSpeedAndDefault = type === "Playback speed" && state === "Default";
+  const isPlaybackSpeedAndHover = type === "Playback speed" && state === "Hover";
+  const isSkipBackwardAndHover = type === "Skip backward" && state === "Hover";
+  const isSkipForwardAndHover = type === "Skip forward" && state === "Hover";
+  const isSubtitlesCcAndDefault = type === "Subtitles/CC" && state === "Default";
+  const isSubtitlesCcAndHover = type === "Subtitles/CC" && state === "Hover";
+  const isVideoMinusAndHover = type === "Video minus" && state === "Hover";
+  const isVideoPlusAndHover = type === "Video plus" && state === "Hover";
+  const isVolumeMaxAndHover = type === "Volume max" && state === "Hover";
+  const isVolumeMinAndHover = type === "Volume min" && state === "Hover";
+  const isVolumeNoneAndHover = type === "Volume none" && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${state === "Default" && ["Playback speed", "Subtitles/CC"].includes(type) ? "size-[32px]" : state === "Hover" && ["Playback speed", "Subtitles/CC"].includes(type) ? String.raw`backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] size-[32px]` : state === "Default" && ["Play", "Pause", "Volume none", "Volume min", "Volume max", "AirPlay", "Maximize 01", "Minimize 01", "Fast backward", "Fast forward", "Skip backward", "Skip forward", "Video minus", "Video plus", "Maximize 02", "Minimize 02"].includes(type) ? "" : String.raw`backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))]`}`} id={isSubtitlesCcAndDefault ? "node-9354_550521" : isPlaybackSpeedAndDefault ? "node-9264_576094" : isSubtitlesCcAndHover ? "node-9354_550516" : isPlaybackSpeedAndHover ? "node-9264_576097" : isMinimize02AndHover ? "node-9264_576073" : type === "Minimize 02" && state === "Default" ? "node-9264_575714" : isMaximize02AndHover ? "node-9264_576070" : type === "Maximize 02" && state === "Default" ? "node-9264_575712" : isVideoPlusAndHover ? "node-9264_576061" : type === "Video plus" && state === "Default" ? "node-9264_575707" : isVideoMinusAndHover ? "node-9264_576058" : type === "Video minus" && state === "Default" ? "node-9264_575706" : isSkipForwardAndHover ? "node-9264_576049" : type === "Skip forward" && state === "Default" ? "node-9264_575709" : isSkipBackwardAndHover ? "node-9264_576046" : type === "Skip backward" && state === "Default" ? "node-9264_575708" : isFastForwardAndHover ? "node-9264_576037" : type === "Fast forward" && state === "Default" ? "node-9264_575703" : isFastBackwardAndHover ? "node-9264_576034" : type === "Fast backward" && state === "Default" ? "node-9264_575702" : isMinimize01AndHover ? "node-9264_576025" : type === "Minimize 01" && state === "Default" ? "node-9264_575713" : isMaximize01AndHover ? "node-9264_576022" : type === "Maximize 01" && state === "Default" ? "node-9264_575711" : isAirPlayAndHover ? "node-9264_576019" : type === "AirPlay" && state === "Default" ? "node-9264_575710" : isVolumeMaxAndHover ? "node-9264_576007" : type === "Volume max" && state === "Default" ? "node-9264_575704" : isVolumeMinAndHover ? "node-9264_576004" : type === "Volume min" && state === "Default" ? "node-9264_575705" : isVolumeNoneAndHover ? "node-9264_576001" : type === "Volume none" && state === "Default" ? "node-9264_575700" : isPauseAndDefault ? "node-9264_575967" : isPlayAndDefault ? "node-9264_575952" : isPauseAndHover ? "node-9264_575964" : "node-9264_575701"}>
+      {["Playback speed", "Subtitles/CC"].includes(type) && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" id={isSubtitlesCcAndDefault ? "node-9354_550522" : isPlaybackSpeedAndDefault ? "node-9264_576100" : isSubtitlesCcAndHover ? "node-9354_550517" : "node-9264_576102"}>
+          {type === "Subtitles/CC" ? "CC" : isPlaybackSpeed ? "1" : ""}
+        </p>
+      )}
+      {type === "Play" && (
+        <div className="relative shrink-0 size-[16px]" id={isPlayAndDefault ? "node-9264_575950" : "node-9264_575653"} data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {state === "Hover" && ["Play", "Subtitles/CC"].includes(type) && (
+        <div className={`${String.raw`absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isSubtitlesCcAndHover ? "-translate-x-1/2 left-1/2" : "left-[-16px]"}`} id={isSubtitlesCcAndHover ? "node-9354_550520" : "node-9264_577652"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isSubtitlesCcAndHover ? "node-I9354_550520-9264_577637" : "node-I9264_577652-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isSubtitlesCcAndHover ? "node-I9354_550520-9264_577639" : "node-I9264_577652-9264_577639"}>
+              {isSubtitlesCcAndHover ? "Subtitles/CC" : isPlayAndHover ? "Play" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isSubtitlesCcAndHover ? "node-I9354_550520-9264_577640" : "node-I9264_577652-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isSubtitlesCcAndHover ? "node-I9354_550520-9264_577642" : "node-I9264_577652-9264_577642"}>
+                {isSubtitlesCcAndHover ? "C" : isPlayAndHover ? "Space" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Pause" && (
+        <div className="relative shrink-0 size-[16px]" id={isPauseAndDefault ? "node-9264_575968" : "node-9264_575985"} data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {type === "Volume none" && (
+        <div className="relative shrink-0 size-[16px]" id={isVolumeNoneAndHover ? "node-9264_576002" : "node-9264_575655"} data-name="volume-x">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeX} />
+        </div>
+      )}
+      {state === "Hover" && ["Pause", "Volume none"].includes(type) && (
+        <div className={`${String.raw`absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isVolumeNoneAndHover ? "-translate-x-1/2 left-1/2" : "left-[-16px]"}`} id={isVolumeNoneAndHover ? "node-9264_577710" : "node-9264_577675"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isVolumeNoneAndHover ? "node-I9264_577710-9264_577637" : "node-I9264_577675-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isVolumeNoneAndHover ? "node-I9264_577710-9264_577639" : "node-I9264_577675-9264_577639"}>
+              {isVolumeNoneAndHover ? "Unmute" : isPauseAndHover ? "Pause" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isVolumeNoneAndHover ? "node-I9264_577710-9264_577640" : "node-I9264_577675-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isVolumeNoneAndHover ? "node-I9264_577710-9264_577642" : "node-I9264_577675-9264_577642"}>
+                {isVolumeNoneAndHover ? "M" : isPauseAndHover ? "Space" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Volume min" && (
+        <div className="relative shrink-0 size-[16px]" id={isVolumeMinAndHover ? "node-9264_576005" : "node-9264_575659"} data-name="volume-min">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMin} />
+        </div>
+      )}
+      {type === "Volume max" && (
+        <div className="relative shrink-0 size-[16px]" id={isVolumeMaxAndHover ? "node-9264_576008" : "node-9264_575665"} data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {state === "Hover" && ["Volume min", "Volume max"].includes(type) && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start left-1/2 rounded-[var(--radius-md,12px)] top-[-36px]" id={isVolumeMaxAndHover ? "node-9264_577724" : "node-9264_577717"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isVolumeMaxAndHover ? "node-I9264_577724-9264_577637" : "node-I9264_577717-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isVolumeMaxAndHover ? "node-I9264_577724-9264_577639" : "node-I9264_577717-9264_577639"}>
+              Mute
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isVolumeMaxAndHover ? "node-I9264_577724-9264_577640" : "node-I9264_577717-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isVolumeMaxAndHover ? "node-I9264_577724-9264_577642" : "node-I9264_577717-9264_577642"}>
+                M
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "AirPlay" && (
+        <div className="relative shrink-0 size-[16px]" id={isAirPlayAndHover ? "node-9264_576020" : "node-9264_575673"} data-name="airplay">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAirplay} />
+        </div>
+      )}
+      {type === "Maximize 01" && (
+        <div className="relative shrink-0 size-[16px]" id={isMaximize01AndHover ? "node-9264_576023" : "node-9264_575675"} data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+      {state === "Hover" && ["AirPlay", "Maximize 01"].includes(type) && (
+        <div className={`${String.raw`absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isMaximize01AndHover ? "right-[-16px]" : "-translate-x-1/2 left-1/2"}`} id={isMaximize01AndHover ? "node-9264_577765" : "node-9264_577759"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isMaximize01AndHover ? "node-I9264_577765-9264_577637" : "node-I9264_577759-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isMaximize01AndHover ? "node-I9264_577765-9264_577639" : "node-I9264_577759-9264_577639"}>
+              {isMaximize01AndHover ? "Fullscreen" : isAirPlayAndHover ? "AirPlay" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isMaximize01AndHover ? "node-I9264_577765-9264_577640" : "node-I9264_577759-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isMaximize01AndHover ? "node-I9264_577765-9264_577642" : "node-I9264_577759-9264_577642"}>
+                {isMaximize01AndHover ? "F" : isAirPlayAndHover ? "A" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Minimize 01" && (
+        <div className="relative shrink-0 size-[16px]" id={isMinimize01AndHover ? "node-9264_576026" : "node-9264_575679"} data-name="minimize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinimize01} />
+        </div>
+      )}
+      {type === "Fast backward" && (
+        <div className="relative shrink-0 size-[16px]" id={isFastBackwardAndHover ? "node-9264_576035" : "node-9264_575657"} data-name="fast-backward">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFastBackward} />
+        </div>
+      )}
+      {state === "Hover" && ["Minimize 01", "Fast backward"].includes(type) && (
+        <div className={`${String.raw`absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isFastBackwardAndHover ? "-translate-x-1/2 left-1/2" : "right-[-18px]"}`} id={isFastBackwardAndHover ? "node-9264_577682" : "node-9264_577771"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isFastBackwardAndHover ? "node-I9264_577682-9264_577637" : "node-I9264_577771-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isFastBackwardAndHover ? "node-I9264_577682-9264_577639" : "node-I9264_577771-9264_577639"}>
+              {isFastBackwardAndHover ? "Rewind" : isMinimize01AndHover ? "Minimize" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isFastBackwardAndHover ? "node-I9264_577682-9264_577640" : "node-I9264_577771-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isFastBackwardAndHover ? "node-I9264_577682-9264_577642" : "node-I9264_577771-9264_577642"}>
+                {isFastBackwardAndHover ? "Shift+R" : isMinimize01AndHover ? "esc" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Fast forward" && (
+        <div className="relative shrink-0 size-[16px]" id={isFastForwardAndHover ? "node-9264_576038" : "node-9264_575661"} data-name="fast-forward">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFastForward} />
+        </div>
+      )}
+      {type === "Skip backward" && (
+        <div className="relative shrink-0 size-[16px]" id={isSkipBackwardAndHover ? "node-9264_576047" : "node-9264_575671"} data-name="skip-back">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSkipBack} />
+        </div>
+      )}
+      {state === "Hover" && ["Fast forward", "Skip backward"].includes(type) && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start left-1/2 rounded-[var(--radius-md,12px)] top-[-36px]" id={isSkipBackwardAndHover ? "node-9264_577696" : "node-9264_577689"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isSkipBackwardAndHover ? "node-I9264_577696-9264_577637" : "node-I9264_577689-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isSkipBackwardAndHover ? "node-I9264_577696-9264_577639" : "node-I9264_577689-9264_577639"}>
+              {isSkipBackwardAndHover ? "Previous" : isFastForwardAndHover ? "Forward" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isSkipBackwardAndHover ? "node-I9264_577696-9264_577640" : "node-I9264_577689-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isSkipBackwardAndHover ? "node-I9264_577696-9264_577642" : "node-I9264_577689-9264_577642"}>
+                {isSkipBackwardAndHover ? "Shift+P" : isFastForwardAndHover ? "Shift+F" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Skip forward" && (
+        <div className="relative shrink-0 size-[16px]" id={isSkipForwardAndHover ? "node-9264_576050" : "node-9264_575663"} data-name="skip-forward">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSkipForward} />
+        </div>
+      )}
+      {type === "Video minus" && (
+        <div className="relative shrink-0 size-[16px]" id={isVideoMinusAndHover ? "node-9264_576059" : "node-9264_575669"} data-name="volume-minus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMinus} />
+        </div>
+      )}
+      {state === "Hover" && ["Skip forward", "Video minus"].includes(type) && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start left-1/2 rounded-[var(--radius-md,12px)] top-[-36px]" id={isVideoMinusAndHover ? "node-9264_577731" : "node-9264_577703"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isVideoMinusAndHover ? "node-I9264_577731-9264_577637" : "node-I9264_577703-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isVideoMinusAndHover ? "node-I9264_577731-9264_577639" : "node-I9264_577703-9264_577639"}>
+              {isVideoMinusAndHover ? "Volume down" : isSkipForwardAndHover ? "Next" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isVideoMinusAndHover ? "node-I9264_577731-9264_577640" : "node-I9264_577703-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isVideoMinusAndHover ? "node-I9264_577731-9264_577642" : "node-I9264_577703-9264_577642"}>
+                {isVideoMinusAndHover ? "↓" : isSkipForwardAndHover ? "Shift+N" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Video plus" && (
+        <div className="relative shrink-0 size-[16px]" id={isVideoPlusAndHover ? "node-9264_576062" : "node-9264_575667"} data-name="volume-plus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumePlus} />
+        </div>
+      )}
+      {type === "Maximize 02" && (
+        <div className="relative shrink-0 size-[16px]" id={isMaximize02AndHover ? "node-9264_576071" : "node-9264_575677"} data-name="maximize-02">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize02} />
+        </div>
+      )}
+      {state === "Hover" && ["Video plus", "Maximize 02"].includes(type) && (
+        <div className={`${String.raw`-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isMaximize02AndHover ? "left-[calc(50%-19px)]" : "left-1/2"}`} id={isMaximize02AndHover ? "node-9264_577777" : "node-9264_577755"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isMaximize02AndHover ? "node-I9264_577777-9264_577637" : "node-I9264_577755-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isMaximize02AndHover ? "node-I9264_577777-9264_577639" : "node-I9264_577755-9264_577639"}>
+              {isMaximize02AndHover ? "Fullscreen" : isVideoPlusAndHover ? "Volume up" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isMaximize02AndHover ? "node-I9264_577777-9264_577640" : "node-I9264_577755-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isMaximize02AndHover ? "node-I9264_577777-9264_577642" : "node-I9264_577755-9264_577642"}>
+                {isMaximize02AndHover ? "F" : isVideoPlusAndHover ? "↑" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Minimize 02" && (
+        <div className="relative shrink-0 size-[16px]" id={isMinimize02AndHover ? "node-9264_576074" : "node-9264_575681"} data-name="minimize-02">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMinimize02} />
+        </div>
+      )}
+      {isPlaybackSpeed && (
+        <div className="relative shrink-0 size-[8px]" id={isPlaybackSpeedAndDefault ? "node-9264_576111" : "node-9264_576112"} data-name="playback-x">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaybackX} />
+        </div>
+      )}
+      {state === "Hover" && ["Minimize 02", "Playback speed"].includes(type) && (
+        <div className={`${String.raw`-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-start rounded-[var(--radius-md,12px)] top-[-36px] `}${isPlaybackSpeedAndHover ? "left-1/2" : "left-[calc(50%-21px)]"}`} id={isPlaybackSpeedAndHover ? "node-9264_577789" : "node-9264_577783"} data-name="_Video action tooltip">
+          <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center pl-[var(--spacing-md,8px)] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" id={isPlaybackSpeedAndHover ? "node-I9264_577789-9264_577637" : "node-I9264_577783-9264_577637"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isPlaybackSpeedAndHover ? "node-I9264_577789-9264_577639" : "node-I9264_577783-9264_577639"}>
+              {isPlaybackSpeedAndHover ? "Playback speed" : isMinimize02AndHover ? "Minimize" : ""}
+            </p>
+            <div className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] border border-[var(--component-colors\/alpha\/alpha-white-10,rgba(255,255,255,0.1))] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex items-center justify-center px-[3px] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isPlaybackSpeedAndHover ? "node-I9264_577789-9264_577640" : "node-I9264_577783-9264_577640"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isPlaybackSpeedAndHover ? "node-I9264_577789-9264_577642" : "node-I9264_577783-9264_577642"}>
+                {isPlaybackSpeedAndHover ? "← →" : isMinimize02AndHover ? "esc" : ""}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,76 @@
+const imgBarChartSquare02 = "https://www.figma.com/api/mcp/asset/5eaf358b-b9d6-434a-9c57-4d1468032718.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/d0befe21-f567-403c-95d0-cfb2342808ba.svg";
+const imgChevronUp = "https://www.figma.com/api/mcp/asset/e96f29c7-8d18-4fca-8c4a-f4792bd68353.svg";
+
+type NavItemDropdownBaseProps = {
+  className?: string;
+  current?: boolean;
+  open?: boolean;
+};
+
+export default function NavItemDropdownBase({ className, current = false, open = false }: NavItemDropdownBaseProps) {
+  const isCurrent = current;
+  const isNotOpenAndCurrent = !open && current;
+  const isOpen = open;
+  const isOpenAndCurrent = open && current;
+  const isOpenAndNotCurrent = open && !current;
+  return (
+    <button className={className || `content-stretch flex items-start relative w-[272px] ${isOpen ? "flex-col" : ""}`} id={isOpenAndCurrent ? "node-1153_91434" : isOpenAndNotCurrent ? "node-1153_89406" : isNotOpenAndCurrent ? "node-1153_91463" : "node-1153_89415"}>
+      <div className={`content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative ${isOpen ? "shrink-0 w-full" : "flex-[1_0_0] min-w-px"}`} id={isOpenAndCurrent ? "node-1153_91435" : isOpenAndNotCurrent ? "node-1153_89407" : isNotOpenAndCurrent ? "node-1153_91464" : "node-1153_89416"} data-name="_Nav item base">
+        <div className={`content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${isCurrent ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} id={isOpenAndCurrent ? "node-I1153_91435-7879_445583" : isOpenAndNotCurrent ? "node-I1153_89407-7879_434781" : isNotOpenAndCurrent ? "node-I1153_91464-7879_445583" : "node-I1153_89416-7879_434781"} data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isOpenAndCurrent ? "node-I1153_91435-1153_90755" : isOpenAndNotCurrent ? "node-I1153_89407-1152_89352" : isNotOpenAndCurrent ? "node-I1153_91464-1153_90755" : "node-I1153_89416-1152_89352"} data-name="Text and icon">
+            <div className="relative shrink-0 size-[20px]" id={isOpenAndCurrent ? "node-I1153_91435-3479_466757" : isOpenAndNotCurrent ? "node-I1153_89407-3479_464410" : isNotOpenAndCurrent ? "node-I1153_91464-3479_466757" : "node-I1153_89416-3479_464410"} data-name="bar-chart-square-02">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBarChartSquare02} />
+            </div>
+            <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap `}${isCurrent ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isOpenAndCurrent ? "node-I1153_91435-1153_90757" : isOpenAndNotCurrent ? "node-I1153_89407-1152_89354" : isNotOpenAndCurrent ? "node-I1153_91464-1153_90757" : "node-I1153_89416-1152_89354"}>
+              Dashboard
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isOpenAndCurrent ? "node-I1153_91435-1153_90760" : isOpenAndNotCurrent ? "node-I1153_89407-1152_89357" : isNotOpenAndCurrent ? "node-I1153_91464-1153_90760" : "node-I1153_89416-1152_89357"} data-name="chevron-down">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isOpen ? imgChevronUp : imgChevronDown} />
+          </div>
+        </div>
+      </div>
+      {isOpen && (
+        <div className="content-stretch flex flex-col items-start pb-[var(--spacing-xs,4px)] relative shrink-0 w-full" id={isOpenAndCurrent ? "node-7879_446997" : "node-1153_89408"} data-name="Menu">
+          <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" id={isOpenAndCurrent ? "node-7879_446998" : "node-1153_89409"} data-name="_Nav item base">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px pl-[var(--spacing-5xl,40px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isOpenAndCurrent ? "node-I7879_446998-7879_434781" : "node-I1153_89409-7879_434781"} data-name="Content">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isOpenAndCurrent ? "node-I7879_446998-1152_89352" : "node-I1153_89409-1152_89352"} data-name="Text and icon">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" id={isOpenAndCurrent ? "node-I7879_446998-1152_89354" : "node-I1153_89409-1152_89354"}>
+                  Overview
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" id={isOpenAndCurrent ? "node-7879_446999" : "node-1153_89410"} data-name="_Nav item base">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px pl-[var(--spacing-5xl,40px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isOpenAndCurrent ? "node-I7879_446999-7879_434781" : "node-I1153_89410-7879_434781"} data-name="Content">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isOpenAndCurrent ? "node-I7879_446999-1152_89352" : "node-I1153_89410-1152_89352"} data-name="Text and icon">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" id={isOpenAndCurrent ? "node-I7879_446999-1152_89354" : "node-I1153_89410-1152_89354"}>
+                  Notifications
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" id={isOpenAndCurrent ? "node-7879_447000" : "node-1153_89411"} data-name="_Nav item base">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px pl-[var(--spacing-5xl,40px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isOpenAndCurrent ? "node-I7879_447000-7879_434781" : "node-I1153_89411-7879_434781"} data-name="Content">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isOpenAndCurrent ? "node-I7879_447000-1152_89352" : "node-I1153_89411-1152_89352"} data-name="Text and icon">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" id={isOpenAndCurrent ? "node-I7879_447000-1152_89354" : "node-I1153_89411-1152_89354"}>
+                  Analytics
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" id={isOpenAndCurrent ? "node-7879_447001" : "node-1153_89412"} data-name="_Nav item base">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px pl-[var(--spacing-5xl,40px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isOpenAndCurrent ? "node-I7879_447001-7879_434781" : "node-I1153_89412-7879_434781"} data-name="Content">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isOpenAndCurrent ? "node-I7879_447001-1152_89352" : "node-I1153_89412-1152_89352"} data-name="Text and icon">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" id={isOpenAndCurrent ? "node-I7879_447001-1152_89354" : "node-I1153_89412-1152_89354"}>
+                  Reports
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </button>
+  );
+}

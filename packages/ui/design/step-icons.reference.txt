@@ -1,0 +1,68 @@
+const imgTypeCheckStatusIncompleteSizeSm = "https://www.figma.com/api/mcp/asset/43f8768d-85da-456e-9e75-8c3b58bfc39a.svg";
+const imgTypeCheckStatusIncompleteSizeMd = "https://www.figma.com/api/mcp/asset/6164ba9b-1711-4ecc-841e-42b89998b4e3.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/b06b652a-6ed3-4df6-8766-4e9db160d972.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/9c316efb-273b-4dc2-9660-aff5cf6fbc0f.svg";
+const imgTypeCheckStatusCurrentSizeSm = "https://www.figma.com/api/mcp/asset/8490cf12-b716-4c07-9f97-67c839e14e74.svg";
+const imgTypeCheckStatusCurrentSizeMd = "https://www.figma.com/api/mcp/asset/06dafadf-e263-44bf-8480-57751f4e4154.svg";
+
+type StepIconBaseProps = {
+  className?: string;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Current" | "Complete";
+  type?: "Check" | "Number";
+};
+
+export default function StepIconBase({ className, size = "sm", status = "Incomplete", type = "Check" }: StepIconBaseProps) {
+  const isCheckAndCompleteAndMd = type === "Check" && status === "Complete" && size === "md";
+  const isCheckAndCompleteAndSm = type === "Check" && status === "Complete" && size === "sm";
+  const isCheckAndCurrentAndMd = type === "Check" && status === "Current" && size === "md";
+  const isCheckAndIncompleteAndMd = type === "Check" && status === "Incomplete" && size === "md";
+  const isCompleteAndMd = status === "Complete" && size === "md";
+  const isNumberAndCompleteAndMd = type === "Number" && status === "Complete" && size === "md";
+  const isNumberAndCompleteAndSm = type === "Number" && status === "Complete" && size === "sm";
+  const isNumberAndCurrentAndMd = type === "Number" && status === "Current" && size === "md";
+  const isNumberAndCurrentAndSm = type === "Number" && status === "Current" && size === "sm";
+  const isNumberAndIncompleteAndMd = type === "Number" && status === "Incomplete" && size === "md";
+  const isNumberAndIncompleteAndSm = type === "Number" && status === "Incomplete" && size === "sm";
+  return (
+    <div className={className || `relative ${isNumberAndCurrentAndMd ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCurrentAndSm ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : isNumberAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[32px]` : isCheckAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[24px]` : isCheckAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : isNumberAndIncompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[9999px] size-[32px]` : type === "Check" && size === "md" && ["Incomplete", "Current"].includes(status) ? "size-[32px]" : isNumberAndIncompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[9999px] size-[24px]` : "size-[24px]"}`} id={isNumberAndCurrentAndMd ? "node-9354_551795" : isCheckAndCurrentAndMd ? "node-1139_79863" : isNumberAndCurrentAndSm ? "node-9354_551792" : type === "Check" && status === "Current" && size === "sm" ? "node-1139_79866" : isNumberAndCompleteAndMd ? "node-9354_551777" : isCheckAndCompleteAndMd ? "node-1139_80061" : isNumberAndCompleteAndSm ? "node-9354_551774" : isCheckAndCompleteAndSm ? "node-1139_80037" : isNumberAndIncompleteAndMd ? "node-9354_551759" : isCheckAndIncompleteAndMd ? "node-1139_80082" : isNumberAndIncompleteAndSm ? "node-9354_551756" : "node-1139_80097"}>
+      {type === "Number" && ["Incomplete", "Current"].includes(status) && (
+        <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-center whitespace-nowrap `}${isNumberAndCurrentAndMd ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : isNumberAndCurrentAndSm ? String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]` : isNumberAndIncompleteAndMd ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]`}`} id={isNumberAndCurrentAndMd ? "node-9354_552136" : isNumberAndCurrentAndSm ? "node-9354_551817" : isNumberAndIncompleteAndMd ? "node-9354_552130" : "node-9354_551823"}>
+          1
+        </p>
+      )}
+      {status === "Complete" && (
+        <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isCompleteAndMd ? "size-[16px]" : "size-[12px]"}`} id={isNumberAndCompleteAndMd ? "node-9354_551779" : isCheckAndCompleteAndMd ? "node-9354_551627" : isNumberAndCompleteAndSm ? "node-9354_551776" : "node-9354_551453"} data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCompleteAndMd ? imgCheck1 : imgCheck} />
+        </div>
+      )}
+      {type === "Check" && status === "Incomplete" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCheckAndIncompleteAndMd ? imgTypeCheckStatusIncompleteSizeMd : imgTypeCheckStatusIncompleteSizeSm} />}
+      {type === "Check" && status === "Current" && (
+        <div className={`absolute ${isCheckAndCurrentAndMd ? "inset-[-12.5%]" : "inset-[-16.67%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isCheckAndCurrentAndMd ? imgTypeCheckStatusCurrentSizeMd : imgTypeCheckStatusCurrentSizeSm} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

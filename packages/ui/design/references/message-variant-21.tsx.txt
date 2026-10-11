@@ -1,0 +1,87 @@
+const imgStatusReadStateDefault = "https://www.figma.com/api/mcp/asset/a3165d19-77f1-4a13-80db-a51ea12cf398.svg";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/12a7dc1d-5a08-4299-9fc2-53a7006cfbf1.svg";
+const imgEdit04 = "https://www.figma.com/api/mcp/asset/019b6a5d-66e8-474b-a6f7-98caf251ef24.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/19ce796e-8b7d-426b-8428-cb11f52f646c.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/20c0347b-ed4c-456e-ba6c-647c87eb148d.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/a4ecbc0e-32ed-4157-912d-1bb9f2cab4ed.svg";
+
+type MessageStatusIconProps = {
+  className?: string;
+  state?: "Default";
+  status?: "Read";
+};
+
+function MessageStatusIcon({ className, state = "Default", status = "Read" }: MessageStatusIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="9241:548209">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusReadStateDefault} />
+    </div>
+  );
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "True";
+  sent?: "True";
+  statusIcon?: boolean;
+  type?: "Message reply";
+};
+
+function Message({ className, actionsPanel = "True", sent = "True", statusIcon = true, type = "Message reply" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end relative w-[360px]"} data-node-id="9241:555396">
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9241:555397" data-name="Content">
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9241:555398" data-name="Name and time">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis whitespace-nowrap" data-node-id="9241:555399">
+            You
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative shrink-0" data-node-id="9241:555400" data-name="Time and status icon">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9241:555401">
+              Friday 2:20pm
+            </p>
+            {statusIcon && <MessageStatusIcon className="relative shrink-0 size-[16px]" />}
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tl-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9241:555403" data-name="Input">
+          <div className="border-[var(--colors\/border\/border-brand,#17b26a)] border-l-3 border-solid content-stretch flex items-start overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9241:555404" data-name="Reply input wrapper">
+            <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="9241:555405" data-name="Reply input">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full whitespace-nowrap" data-node-id="9241:555406">
+                Hey Olivia, can you please review the latest design?
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="9241:555407">
+            Sure thing, I’ll have a look today.
+          </p>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[-20px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="9241:555443" data-name="_Message action panel">
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9241:555443;9206:591510" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9241:555443;9206:591510;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9241:555443;9206:591517" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9241:555443;9206:591517;9206:591497" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit04} />
+            </div>
+            <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9241:555443;9206:591517;9206:591520" data-name="Cursor">
+              <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgCursor} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9241:555443;9206:591537" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9241:555443;9206:591537;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9241:555443;9206:591541" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9241:555443;9206:591541;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
