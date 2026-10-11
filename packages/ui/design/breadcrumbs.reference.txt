@@ -1,0 +1,171 @@
+const imgHomeLine = "../assets/breadcrumbs-imgHomeLine.svg";
+const imgSlashDivider = "../assets/breadcrumbs-imgSlashDivider.svg";
+const imgChevronRight = "../assets/breadcrumbs-imgChevronRight.svg";
+
+type BreadcrumbButtonBaseProps = {
+  className?: string;
+  current?: boolean;
+  icon?: boolean;
+  state?: "Default";
+  type?: "Button" | "Text";
+};
+
+function BreadcrumbButtonBase({ className, current = false, icon = true, state = "Default", type = "Text" }: BreadcrumbButtonBaseProps) {
+  const isFalseAndButtonAndTrueAndDefault = !current && type === "Button" && icon && state === "Default";
+  return (
+    <div className={className || `content-stretch flex items-start relative ${isFalseAndButtonAndTrueAndDefault ? "p-[var(--spacing-xs,4px)] rounded-[var(--spacing-sm,6px)]" : ""}`} id={isFalseAndButtonAndTrueAndDefault ? "node-1122_2555" : "node-43_3220"}>
+      <div className="relative shrink-0 size-[20px]" id={isFalseAndButtonAndTrueAndDefault ? "node-1122_2556" : "node-43_3218"} data-name="home-line">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHomeLine} />
+      </div>
+    </div>
+  );
+}
+
+type BreadcrumbsProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  divider?: "Chevron" | "Slash";
+  type?: "Text" | "Text with line" | "Button";
+};
+
+export default function Breadcrumbs({ className, breakpoint = "Desktop", divider = "Chevron", type = "Text" }: BreadcrumbsProps) {
+  const isButton = type === "Button";
+  const isChevronAndButton = divider === "Chevron" && type === "Button";
+  const isChevronAndButtonAndDesktop = divider === "Chevron" && type === "Button" && breakpoint === "Desktop";
+  const isChevronAndButtonAndMobile = divider === "Chevron" && type === "Button" && breakpoint === "Mobile";
+  const isChevronAndIsTextWithLineOrButton = divider === "Chevron" && ["Text with line", "Button"].includes(type);
+  const isChevronAndText = divider === "Chevron" && type === "Text";
+  const isChevronAndTextAndMobile = divider === "Chevron" && type === "Text" && breakpoint === "Mobile";
+  const isChevronAndTextWithLineAndDesktop = divider === "Chevron" && type === "Text with line" && breakpoint === "Desktop";
+  const isChevronAndTextWithLineAndMobile = divider === "Chevron" && type === "Text with line" && breakpoint === "Mobile";
+  const isSlashAndButton = divider === "Slash" && type === "Button";
+  const isSlashAndButtonAndDesktop = divider === "Slash" && type === "Button" && breakpoint === "Desktop";
+  const isSlashAndButtonAndMobile = divider === "Slash" && type === "Button" && breakpoint === "Mobile";
+  const isSlashAndIsTextWithLineOrButton = divider === "Slash" && ["Text with line", "Button"].includes(type);
+  const isSlashAndText = divider === "Slash" && type === "Text";
+  const isSlashAndTextAndMobile = divider === "Slash" && type === "Text" && breakpoint === "Mobile";
+  const isSlashAndTextWithLineAndMobile = divider === "Slash" && type === "Text with line" && breakpoint === "Mobile";
+  const isTextWithLineAndMobile = type === "Text with line" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex relative ${isTextWithLineAndMobile ? String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid border-t flex-col gap-[var(--spacing-md,8px)] items-start justify-center py-[var(--spacing-md,8px)] w-[320px]` : type === "Text" && breakpoint === "Mobile" ? "gap-[var(--spacing-sm,6px)] items-center" : isButton ? "items-center" : type === "Text with line" && breakpoint === "Desktop" ? String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid border-t flex-col gap-[var(--spacing-md,8px)] items-start justify-center py-[var(--spacing-md,8px)] w-[480px]` : "gap-[var(--spacing-md,8px)] items-center"}`} id={isChevronAndButtonAndMobile ? "node-1122_3084" : isChevronAndTextWithLineAndMobile ? "node-1122_2236" : isChevronAndTextAndMobile ? "node-53_1165" : isChevronAndButtonAndDesktop ? "node-1122_3106" : isChevronAndTextWithLineAndDesktop ? "node-1122_2216" : divider === "Chevron" && type === "Text" && breakpoint === "Desktop" ? "node-53_1190" : isSlashAndButtonAndMobile ? "node-1122_3095" : isSlashAndTextWithLineAndMobile ? "node-1122_2226" : isSlashAndTextAndMobile ? "node-53_1262" : isSlashAndButtonAndDesktop ? "node-1122_3117" : divider === "Slash" && type === "Text with line" && breakpoint === "Desktop" ? "node-1122_2246" : "node-53_1287"}>
+      {["Text with line", "Button"].includes(type) && (
+        <div className={`content-stretch flex items-center relative shrink-0 ${type === "Button" && breakpoint === "Mobile" ? "gap-[var(--spacing-xxs,2px)]" : isTextWithLineAndMobile ? "gap-[var(--spacing-sm,6px)]" : type === "Button" && breakpoint === "Desktop" ? "gap-[var(--spacing-xs,4px)]" : "gap-[var(--spacing-md,8px)] pl-[var(--spacing-md,8px)]"}`} id={isChevronAndButtonAndMobile ? "node-1122_3085" : isChevronAndTextWithLineAndMobile ? "node-1122_2304" : isChevronAndButtonAndDesktop ? "node-1122_3107" : isChevronAndTextWithLineAndDesktop ? "node-1122_2295" : isSlashAndButtonAndMobile ? "node-1122_3096" : isSlashAndTextWithLineAndMobile ? "node-1122_2305" : isSlashAndButtonAndDesktop ? "node-1122_3118" : "node-1122_2294"} data-name="Tabs">
+          <BreadcrumbButtonBase className={`content-stretch flex items-start relative shrink-0 ${isButton ? "p-[var(--spacing-xs,4px)] rounded-[var(--spacing-sm,6px)]" : ""}`} type={isButton ? "Button" : undefined} />
+          {isSlashAndIsTextWithLineOrButton && (
+            <>
+              <div className="relative shrink-0 size-[20px]" id={isSlashAndButtonAndMobile ? "node-1122_3098" : isSlashAndTextWithLineAndMobile ? "node-1122_2228" : isSlashAndButtonAndDesktop ? "node-1122_3120" : "node-1122_2248"} data-name="slash-divider">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isSlashAndButton ? "px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]" : ""}`} id={isSlashAndButtonAndMobile ? "node-1122_3099" : isSlashAndTextWithLineAndMobile ? "node-1122_2229" : isSlashAndButtonAndDesktop ? "node-1122_3121" : "node-1122_2249"} data-name="_Breadcrumb button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isSlashAndButtonAndMobile ? "node-I1122_3099-1122_2568" : isSlashAndTextWithLineAndMobile ? "node-I1122_2229-43_3234" : isSlashAndButtonAndDesktop ? "node-I1122_3121-1122_2568" : "node-I1122_2249-43_3234"}>
+                  Quiz
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[20px]" id={isSlashAndButtonAndMobile ? "node-1122_3100" : isSlashAndTextWithLineAndMobile ? "node-1122_2230" : isSlashAndButtonAndDesktop ? "node-1122_3122" : "node-1122_2250"} data-name="slash-divider">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isSlashAndButton ? "px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]" : ""}`} id={isSlashAndButtonAndMobile ? "node-1122_3101" : isSlashAndTextWithLineAndMobile ? "node-1122_2231" : isSlashAndButtonAndDesktop ? "node-1122_3123" : "node-1122_2251"} data-name="_Breadcrumb button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isSlashAndButtonAndMobile ? "node-I1122_3101-1122_2568" : isSlashAndTextWithLineAndMobile ? "node-I1122_2231-43_3234" : isSlashAndButtonAndDesktop ? "node-I1122_3123-1122_2568" : "node-I1122_2251-43_3234"}>
+                  ...
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[20px]" id={isSlashAndButtonAndMobile ? "node-1122_3102" : isSlashAndTextWithLineAndMobile ? "node-1122_2232" : isSlashAndButtonAndDesktop ? "node-1122_3124" : "node-1122_2252"} data-name="slash-divider">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isSlashAndButton ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]` : ""}`} id={isSlashAndButtonAndMobile ? "node-1122_3105" : isSlashAndTextWithLineAndMobile ? "node-1122_2233" : isSlashAndButtonAndDesktop ? "node-1122_3127" : "node-1122_2255"} data-name="_Breadcrumb button base">
+                <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isSlashAndButton ? String.raw`text-[color:var(--colors\/text\/text-tertiary_hover,#414651)]` : String.raw`text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)]`}`} id={isSlashAndButtonAndMobile ? "node-I1122_3105-1122_2564" : isSlashAndTextWithLineAndMobile ? "node-I1122_2233-1122_117" : isSlashAndButtonAndDesktop ? "node-I1122_3127-1122_2564" : "node-I1122_2255-1122_117"}>
+                  Results
+                </p>
+              </div>
+            </>
+          )}
+          {isChevronAndIsTextWithLineOrButton && (
+            <>
+              <div className="relative shrink-0 size-[16px]" id={isChevronAndButtonAndMobile ? "node-1122_3087" : isChevronAndTextWithLineAndMobile ? "node-1122_2238" : isChevronAndButtonAndDesktop ? "node-1122_3109" : "node-1122_2218"} data-name="chevron-right">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isChevronAndButton ? "px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]" : ""}`} id={isChevronAndButtonAndMobile ? "node-1122_3088" : isChevronAndTextWithLineAndMobile ? "node-1122_2239" : isChevronAndButtonAndDesktop ? "node-1122_3110" : "node-1122_2219"} data-name="_Breadcrumb button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isChevronAndButtonAndMobile ? "node-I1122_3088-1122_2568" : isChevronAndTextWithLineAndMobile ? "node-I1122_2239-43_3234" : isChevronAndButtonAndDesktop ? "node-I1122_3110-1122_2568" : "node-I1122_2219-43_3234"}>
+                  Quiz
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" id={isChevronAndButtonAndMobile ? "node-1122_3089" : isChevronAndTextWithLineAndMobile ? "node-1122_2240" : isChevronAndButtonAndDesktop ? "node-1122_3111" : "node-1122_2220"} data-name="chevron-right">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isChevronAndButton ? "px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]" : ""}`} id={isChevronAndButtonAndMobile ? "node-1122_3090" : isChevronAndTextWithLineAndMobile ? "node-1122_2241" : isChevronAndButtonAndDesktop ? "node-1122_3112" : "node-1122_2221"} data-name="_Breadcrumb button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isChevronAndButtonAndMobile ? "node-I1122_3090-1122_2568" : isChevronAndTextWithLineAndMobile ? "node-I1122_2241-43_3234" : isChevronAndButtonAndDesktop ? "node-I1122_3112-1122_2568" : "node-I1122_2221-43_3234"}>
+                  ...
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" id={isChevronAndButtonAndMobile ? "node-1122_3091" : isChevronAndTextWithLineAndMobile ? "node-1122_2242" : isChevronAndButtonAndDesktop ? "node-1122_3113" : "node-1122_2222"} data-name="chevron-right">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+              </div>
+              <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isChevronAndButton ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] rounded-[var(--radius-sm,8px)]` : ""}`} id={isChevronAndButtonAndMobile ? "node-1122_3094" : isChevronAndTextWithLineAndMobile ? "node-1122_2243" : isChevronAndButtonAndDesktop ? "node-1122_3116" : "node-1122_2223"} data-name="_Breadcrumb button base">
+                <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isChevronAndButton ? String.raw`text-[color:var(--colors\/text\/text-tertiary_hover,#414651)]` : String.raw`text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)]`}`} id={isChevronAndButtonAndMobile ? "node-I1122_3094-1122_2564" : isChevronAndTextWithLineAndMobile ? "node-I1122_2243-1122_117" : isChevronAndButtonAndDesktop ? "node-I1122_3116-1122_2564" : "node-I1122_2223-1122_117"}>
+                  Results
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+      {type === "Text" && <BreadcrumbButtonBase className="content-stretch flex items-start relative shrink-0" />}
+      {isSlashAndText && (
+        <>
+          <div className="relative shrink-0 size-[20px]" id={isSlashAndTextAndMobile ? "node-1122_160" : "node-1122_212"} data-name="slash-divider">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isSlashAndTextAndMobile ? "node-53_1220" : "node-53_1278"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isSlashAndTextAndMobile ? "node-I53_1220-43_3234" : "node-I53_1278-43_3234"}>
+              Quiz
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[20px]" id={isSlashAndTextAndMobile ? "node-1122_162" : "node-1122_1896"} data-name="slash-divider">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isSlashAndTextAndMobile ? "node-1122_336" : "node-1122_510"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isSlashAndTextAndMobile ? "node-I1122_336-43_3234" : "node-I1122_510-43_3234"}>
+              ...
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[20px]" id={isSlashAndTextAndMobile ? "node-1122_337" : "node-1122_578"} data-name="slash-divider">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSlashDivider} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isSlashAndTextAndMobile ? "node-53_1222" : "node-53_1280"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isSlashAndTextAndMobile ? "node-I53_1222-1122_117" : "node-I53_1280-1122_117"}>
+              Results
+            </p>
+          </div>
+        </>
+      )}
+      {isChevronAndText && (
+        <>
+          <div className="relative shrink-0 size-[16px]" id={isChevronAndTextAndMobile ? "node-1122_1261" : "node-1122_164"} data-name="chevron-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isChevronAndTextAndMobile ? "node-53_1150" : "node-53_1181"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isChevronAndTextAndMobile ? "node-I53_1150-43_3234" : "node-I53_1181-43_3234"}>
+              Quiz
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isChevronAndTextAndMobile ? "node-1122_1263" : "node-1122_1073"} data-name="chevron-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isChevronAndTextAndMobile ? "node-1122_332" : "node-1122_346"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isChevronAndTextAndMobile ? "node-I1122_332-43_3234" : "node-I1122_346-43_3234"}>
+              ...
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isChevronAndTextAndMobile ? "node-1122_1265" : "node-1122_1133"} data-name="chevron-right">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+          </div>
+          <div className="content-stretch flex items-center justify-center relative shrink-0" id={isChevronAndTextAndMobile ? "node-53_1152" : "node-53_1183"} data-name="_Breadcrumb button base">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isChevronAndTextAndMobile ? "node-I53_1152-1122_117" : "node-I53_1183-1122_117"}>
+              Results
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

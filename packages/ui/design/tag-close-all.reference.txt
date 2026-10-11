@@ -1,0 +1,27 @@
+const imgXClose = "../assets/tag-close-all-imgXClose.svg";
+const imgXClose1 = "../assets/tag-close-all-imgXClose1.svg";
+const imgXClose2 = "../assets/tag-close-all-imgXClose2.svg";
+const imgXClose3 = "../assets/tag-close-all-imgXClose3.svg";
+const imgXClose4 = "../assets/tag-close-all-imgXClose4.svg";
+const imgXClose5 = "../assets/tag-close-all-imgXClose5.svg";
+
+type TagCloseXProps = {
+  className?: string;
+  size?: "sm" | "md" | "lg";
+  state?: "Default" | "Hover";
+};
+
+export default function TagCloseX({ className, size = "sm", state = "Default" }: TagCloseXProps) {
+  const isLgAndDefault = size === "lg" && state === "Default";
+  const isLgAndHover = size === "lg" && state === "Hover";
+  const isMdAndDefault = size === "md" && state === "Default";
+  const isMdAndHover = size === "md" && state === "Hover";
+  const isSmAndHover = size === "sm" && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex flex-col items-start overflow-clip relative rounded-[3px] ${isLgAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] p-[3px]` : state === "Hover" && ["sm", "md"].includes(size) ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] p-[var(--spacing-xxs,2px)]` : isLgAndDefault ? "p-[3px]" : "p-[var(--spacing-xxs,2px)]"}`} id={isLgAndHover ? "node-3307_417863" : isMdAndHover ? "node-3307_417724" : isSmAndHover ? "node-3307_417676" : isLgAndDefault ? "node-3307_417859" : isMdAndDefault ? "node-3307_417720" : "node-3307_417600"}>
+      <div className={`relative shrink-0 ${size === "lg" ? "size-[14px]" : size === "md" ? "size-[12px]" : "size-[10px]"}`} id={isLgAndHover ? "node-3307_417864" : isMdAndHover ? "node-3307_417725" : isSmAndHover ? "node-3307_417677" : isLgAndDefault ? "node-3307_417860" : isMdAndDefault ? "node-3307_417721" : "node-3307_417597"} data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={isLgAndHover ? imgXClose5 : isMdAndHover ? imgXClose4 : isSmAndHover ? imgXClose3 : isLgAndDefault ? imgXClose2 : isMdAndDefault ? imgXClose1 : imgXClose} />
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,47 @@
+const imgEndpoint = "https://www.figma.com/api/mcp/asset/1280f849-8a8d-41ce-b527-761fd36a1a9c.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/5ebfcf6b-4f2f-4608-a25d-460b3c322756.svg";
+const imgEndpoint1 = "https://www.figma.com/api/mcp/asset/2b3d2b4a-7ab2-462e-9106-a974c3eae0a7.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/97c0ad7a-7157-4f75-988a-70b0691dc9ba.svg";
+
+type MeasureLineBaseProps = {
+  className?: string;
+  type?: "Solid" | "Spacer";
+};
+
+export default function MeasureLineBase({ className, type = "Solid" }: MeasureLineBaseProps) {
+  const isSpacer = type === "Spacer";
+  return (
+    <div className={className || "content-stretch flex flex-col h-[80px] items-center relative w-[16px]"} id={isSpacer ? "node-1143_83662" : "node-1143_83631"}>
+      <div className={`flex h-0 items-center justify-center relative shrink-0 ${isSpacer ? "w-full" : "w-[16px]"}`} id={isSpacer ? "node-1143_83663" : "node-1143_83652"} style={isSpacer ? { containerType: "size" } : undefined}>
+        <div className={`-rotate-90 flex-none ${isSpacer ? "h-[100cqw]" : ""}`}>
+          <div className={`relative w-0 ${isSpacer ? "h-full" : "h-[16px]"}`} data-name="Endpoint">
+            <div className={`absolute ${isSpacer ? "inset-[-3.13%_-0.5px]" : "inset-[0_-0.5px]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isSpacer ? imgEndpoint1 : imgEndpoint} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-0" id={isSpacer ? "node-1143_83664" : "node-1143_83627"} style={{ containerType: "size" }}>
+        <div className="-rotate-90 flex-none w-[100cqh]">
+          <div className="h-0 relative w-full" data-name="Line">
+            {type === "Solid" && (
+              <div className="absolute inset-[-0.5px_0]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            )}
+            {isSpacer && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLine1} />}
+          </div>
+        </div>
+      </div>
+      <div className={`flex h-0 items-center justify-center relative shrink-0 ${isSpacer ? "w-full" : "w-[16px]"}`} id={isSpacer ? "node-1143_83665" : "node-1143_83650"} style={isSpacer ? { containerType: "size" } : undefined}>
+        <div className={`-rotate-90 flex-none ${isSpacer ? "h-[100cqw]" : ""}`}>
+          <div className={`relative w-0 ${isSpacer ? "h-full" : "h-[16px]"}`} data-name="Endpoint">
+            <div className={`absolute ${isSpacer ? "inset-[-3.13%_-0.5px]" : "inset-[0_-0.5px]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isSpacer ? imgEndpoint1 : imgEndpoint} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

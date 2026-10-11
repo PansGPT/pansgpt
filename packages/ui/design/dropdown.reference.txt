@@ -1,0 +1,546 @@
+const imgSizeMdPlaceholderFalseTextFalseStatusIconFalse = "../assets/dropdown-imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png";
+const imgDotsVertical = "../assets/dropdown-imgDotsVertical.svg";
+const imgUser01 = "../assets/dropdown-imgUser01.svg";
+const imgSettings01 = "../assets/dropdown-imgSettings01.svg";
+const imgZap = "../assets/dropdown-imgZap.svg";
+const imgDropdownListItem = "../assets/dropdown-imgDropdownListItem.svg";
+const imgHomeLine = "../assets/dropdown-imgHomeLine.svg";
+const imgUsers01 = "../assets/dropdown-imgUsers01.svg";
+const imgUserPlus01 = "../assets/dropdown-imgUserPlus01.svg";
+const imgLayersTwo01 = "../assets/dropdown-imgLayersTwo01.svg";
+const imgMessageSmileCircle = "../assets/dropdown-imgMessageSmileCircle.svg";
+const imgHelpCircle = "../assets/dropdown-imgHelpCircle.svg";
+const imgContainer = "../assets/dropdown-imgContainer.svg";
+const imgLogOut01 = "../assets/dropdown-imgLogOut01.svg";
+const imgDotsVertical1 = "../assets/dropdown-imgDotsVertical1.svg";
+const imgChevronDown = "../assets/dropdown-imgChevronDown.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "md";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "md", statusIcon = "False", text = "False" }: AvatarProps) {
+  return (
+    <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1016">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type DropdownProps = {
+  className?: string;
+  open?: boolean;
+  type?: "Button" | "Icon" | "Avatar";
+};
+
+export default function Dropdown({ className, open = false, type = "Button" }: DropdownProps) {
+  const isAvatar = type === "Avatar";
+  const isAvatarAndOpen = type === "Avatar" && open;
+  const isButtonAndNotOpen = type === "Button" && !open;
+  const isButtonAndOpen = type === "Button" && open;
+  const isIconAndNotOpen = type === "Icon" && !open;
+  return (
+    <button className={className || `content-stretch flex flex-col items-start relative ${isIconAndNotOpen || isAvatar ? "" : "rounded-[9999px]"}`} id={type === "Avatar" && !open ? "node-3281_383097" : isButtonAndNotOpen ? "node-3281_383095" : isAvatarAndOpen ? "node-3281_383092" : isButtonAndOpen ? "node-3281_383089" : isIconAndNotOpen ? "node-3281_383087" : "node-3281_383084"}>
+      {type === "Icon" && (
+        <div className="relative shrink-0 size-[20px]" id={isIconAndNotOpen ? "node-3281_383088" : "node-3281_383086"} data-name="dots-vertical">
+          {type === "Icon" && open && (
+            <div className="absolute inset-[-20%]">
+              <img alt="" className="block max-w-none size-full" src={imgDotsVertical} />
+            </div>
+          )}
+          {isIconAndNotOpen && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical1} />}
+        </div>
+      )}
+      {open && ["Icon", "Button"].includes(type) && (
+        <div className={`${String.raw`absolute bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start overflow-clip right-0 rounded-[var(--radius-md,12px)] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] w-[248px] `}${isButtonAndOpen ? "top-[48px]" : "top-[28px]"}`} id={isButtonAndOpen ? "node-3281_384410" : "node-5414_402779"} data-name="Menu">
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col items-start p-[var(--spacing-lg,12px)] relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384573" : "node-5414_402780"} data-name="_Dropdown list header">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isButtonAndOpen ? "node-I3281_384573-3281_382880" : "node-I5414_402780-3281_382880"} data-name="Avatar label group">
+              <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" id={isButtonAndOpen ? "node-I3281_384573-3281_382880-1034_778" : "node-I5414_402780-3281_382880-1034_778"} data-name="Avatar">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconFalse} />
+                <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384573-3281_382880-82_2790" : "node-I5414_402780-3281_382880-82_2790"} data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" id={isButtonAndOpen ? "node-I3281_384573-3281_382880-82_2788" : "node-I5414_402780-3281_382880-82_2788"}>
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" id={isButtonAndOpen ? "node-I3281_384573-3281_382880-82_2789" : "node-I5414_402780-3281_382880-82_2789"}>
+                  chioma@PansGPT.com
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col items-start overflow-clip py-[var(--spacing-xs,4px)] relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384648" : "node-8737_579033"} data-name="Menu items">
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384649" : "node-8737_579034"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384649-3929_405484" : "node-I8737_579034-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384649-3281_382846" : "node-I8737_579034-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384649-3473_603379" : "node-I8737_579034-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384649-3281_382848" : "node-I8737_579034-3281_382848"}>
+                    View profile
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384649-7891_95947" : "node-I8737_579034-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384649-3281_382849" : "node-I8737_579034-3281_382849"}>{`⌘K->P`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384650" : "node-8737_579035"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384650-3929_405484" : "node-I8737_579035-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384650-3281_382846" : "node-I8737_579035-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384650-3473_603379" : "node-I8737_579035-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384650-3281_382848" : "node-I8737_579035-3281_382848"}>
+                    Settings
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384650-7891_95947" : "node-I8737_579035-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384650-3281_382849" : "node-I8737_579035-3281_382849"}>
+                    ⌘S
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384651" : "node-8737_579036"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384651-3929_405484" : "node-I8737_579036-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384651-3281_382846" : "node-I8737_579036-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384651-3473_603379" : "node-I8737_579036-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZap} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384651-3281_382848" : "node-I8737_579036-3281_382848"}>
+                    Keyboard shortcuts
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384651-7891_95947" : "node-I8737_579036-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384651-3281_382849" : "node-I8737_579036-3281_382849"}>
+                    ?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" id={isButtonAndOpen ? "node-5413_401623" : "node-8737_579037"} data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384889" : "node-8737_579038"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384889-3929_405484" : "node-I8737_579038-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384889-3281_382846" : "node-I8737_579038-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384889-3473_603379" : "node-I8737_579038-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHomeLine} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384889-3281_382848" : "node-I8737_579038-3281_382848"}>
+                    Company profile
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384889-7891_95947" : "node-I8737_579038-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384889-3281_382849" : "node-I8737_579038-3281_382849"}>{`⌘K->C`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384890" : "node-8737_579039"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384890-3929_405484" : "node-I8737_579039-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384890-3281_382846" : "node-I8737_579039-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384890-3473_603379" : "node-I8737_579039-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUsers01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384890-3281_382848" : "node-I8737_579039-3281_382848"}>
+                    Team
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384890-7891_95947" : "node-I8737_579039-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384890-3281_382849" : "node-I8737_579039-3281_382849"}>{`⌘K->T`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384891" : "node-8737_579040"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384891-3929_405484" : "node-I8737_579040-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384891-3281_382846" : "node-I8737_579040-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384891-3473_603379" : "node-I8737_579040-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUserPlus01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384891-3281_382848" : "node-I8737_579040-3281_382848"}>
+                    Invite colleagues
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_384891-7891_95947" : "node-I8737_579040-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_384891-3281_382849" : "node-I8737_579040-3281_382849"}>
+                    ⌘I
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" id={isButtonAndOpen ? "node-5414_401628" : "node-8737_579041"} data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384968" : "node-8737_579042"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384968-3929_405484" : "node-I8737_579042-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384968-3281_382846" : "node-I8737_579042-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384968-3473_603379" : "node-I8737_579042-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384968-3281_382848" : "node-I8737_579042-3281_382848"}>
+                    Changelog
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384969" : "node-8737_579043"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384969-3929_405484" : "node-I8737_579043-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384969-3281_382846" : "node-I8737_579043-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384969-3473_603379" : "node-I8737_579043-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMessageSmileCircle} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384969-3281_382848" : "node-I8737_579043-3281_382848"}>
+                    Slack Community
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384970" : "node-8737_579044"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384970-3929_405484" : "node-I8737_579044-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384970-3281_382846" : "node-I8737_579044-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384970-3473_603379" : "node-I8737_579044-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHelpCircle} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384970-3281_382848" : "node-I8737_579044-3281_382848"}>
+                    Support
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_384971" : "node-8737_579045"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_384971-3929_405484" : "node-I8737_579045-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_384971-3281_382846" : "node-I8737_579045-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_384971-3473_603379" : "node-I8737_579045-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgContainer} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_384971-3281_382848" : "node-I8737_579045-3281_382848"}>
+                    API
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" id={isButtonAndOpen ? "node-5414_401630" : "node-8737_579046"} data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" id={isButtonAndOpen ? "node-3281_385025" : "node-8737_579047"} data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" id={isButtonAndOpen ? "node-I3281_385025-3929_405484" : "node-I8737_579047-3929_405484"} data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isButtonAndOpen ? "node-I3281_385025-3281_382846" : "node-I8737_579047-3281_382846"} data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" id={isButtonAndOpen ? "node-I3281_385025-3473_603379" : "node-I8737_579047-3473_603379"} data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" id={isButtonAndOpen ? "node-I3281_385025-3281_382848" : "node-I8737_579047-3281_382848"}>
+                    Sign out
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" id={isButtonAndOpen ? "node-I3281_385025-7891_95947" : "node-I8737_579047-7891_95947"} data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" id={isButtonAndOpen ? "node-I3281_385025-3281_382849" : "node-I8737_579047-3281_382849"}>
+                    ⌥⇧Q
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {type === "Button" && (
+        <div className={`${String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 `}${isButtonAndNotOpen ? String.raw`shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : String.raw`shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]`}`} id={isButtonAndNotOpen ? "node-3281_383096" : "node-3287_439970"} data-name="Buttons/Button">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" id={isButtonAndNotOpen ? "node-I3281_383096-6421_279423" : "node-I3287_439970-6421_279938"} data-name="Text padding">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" id={isButtonAndNotOpen ? "node-I3281_383096-3287_433113" : "node-I3287_439970-3287_433109"}>
+              Account
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[20px]" id={isButtonAndNotOpen ? "node-I3281_383096-3466_449084" : "node-I3287_439970-3466_460114"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+      )}
+      {isAvatarAndOpen && <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="7307:467469" data-name="Focus ring" />}
+      {isAvatar && <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" />}
+      {isAvatarAndOpen && (
+        <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start overflow-clip right-0 rounded-[var(--radius-md,12px)] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] top-[48px] w-[248px]" data-node-id="5414:402967" data-name="Menu">
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex flex-col items-start p-[var(--spacing-lg,12px)] relative shrink-0 w-full" data-node-id="5414:402968" data-name="_Dropdown list header">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="I5414:402968;3281:382880" data-name="Avatar label group">
+              <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I5414:402968;3281:382880;1034:778" data-name="Avatar">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconFalse} />
+                <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I5414:402968;3281:382880;82:2790" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I5414:402968;3281:382880;82:2788">
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I5414:402968;3281:382880;82:2789">
+                  chioma@PansGPT.com
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col items-start overflow-clip py-[var(--spacing-xs,4px)] relative shrink-0 w-full" data-node-id="8737:579129" data-name="Menu items">
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579130" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579130;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579130;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579130;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579130;3281:382848">
+                    View profile
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579130;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579130;3281:382849">{`⌘K->P`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579131" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579131;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579131;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579131;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579131;3281:382848">
+                    Settings
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579131;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579131;3281:382849">
+                    ⌘S
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579132" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579132;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579132;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579132;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZap} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579132;3281:382848">
+                    Keyboard shortcuts
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579132;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579132;3281:382849">
+                    ?
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" data-node-id="8737:579133" data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579134" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579134;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579134;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579134;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHomeLine} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579134;3281:382848">
+                    Company profile
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579134;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579134;3281:382849">{`⌘K->C`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579135" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579135;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579135;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579135;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUsers01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579135;3281:382848">
+                    Team
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579135;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579135;3281:382849">{`⌘K->T`}</p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579136" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579136;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579136;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579136;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUserPlus01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579136;3281:382848">
+                    Invite colleagues
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579136;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579136;3281:382849">
+                    ⌘I
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" data-node-id="8737:579137" data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579138" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579138;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579138;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579138;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579138;3281:382848">
+                    Changelog
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579139" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579139;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579139;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579139;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMessageSmileCircle} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579139;3281:382848">
+                    Slack Community
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579140" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579140;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579140;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579140;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHelpCircle} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579140;3281:382848">
+                    Support
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579141" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579141;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579141;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579141;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgContainer} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579141;3281:382848">
+                    API
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-[9px] relative shrink-0 w-full" data-node-id="8737:579142" data-name="_Dropdown list item">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDropdownListItem} />
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="8737:579143" data-name="_Dropdown list item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I8737:579143;3929:405484" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I8737:579143;3281:382846" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[16px]" data-node-id="I8737:579143;3473:603379" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut01} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I8737:579143;3281:382848">
+                    Sign out
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I8737:579143;7891:95947" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I8737:579143;3281:382849">
+                    ⌥⇧Q
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Avatar user square/Olivia Rhye: , Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4), Focus rings/focus-ring-shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## dots-vertical
+**Node ID:** 3463:405039
+
+dots, vertical, line, more, options, menu
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+
+## settings-01
+**Node ID:** 3463:405312
+
+settings, preferences, cog
+
+## zap
+**Node ID:** 3463:405174
+
+zap, lightning, weather, speed, bolt
+
+## home-line
+**Node ID:** 3463:405438
+
+home, homepage, return, house, menu
+
+## users-01
+**Node ID:** 3463:405729
+
+users, persona, account, people, team
+
+## user-plus-01
+**Node ID:** 3463:405702
+
+user, plus, add, persona, account, person
+
+## layers-two-01
+**Node ID:** 3463:403774
+
+layers, two, layer, stack, isometic
+
+## message-smile-circle
+**Node ID:** 3463:406278
+
+message, smile, chat, notification
+
+## help-circle
+**Node ID:** 3463:405411
+
+help, info, information, documentation, question, circle
+
+## container
+**Node ID:** 3463:404263
+
+container, box, cube, code, markdown, css, div
+
+## log-out-01
+**Node ID:** 3463:405222
+
+log out, logout, sign out, signout, account
+
+## chevron-down
+**Node ID:** 3463:404533
+
+chevron, down, dropdown
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

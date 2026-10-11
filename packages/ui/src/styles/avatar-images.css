@@ -1,0 +1,34 @@
+.p-avatar-image {
+  width: 320px;
+  max-width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.p-avatar-image-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.p-avatar-image[data-variant="portrait"] .p-avatar-image-photo {
+  aspect-ratio: 8 / 11;
+}
+.p-avatar-image-caption {
+  color: var(--text-primary-900);
+}
+.p-avatar-image-caption > * {
+  margin: 0;
+}
+.p-avatar-image-source {
+  color: var(--text-tertiary-600);
+  text-decoration: underline;
+}
+.p-avatar-image-source a {
+  color: inherit;
+}
+.p-avatar-image-source a:focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 2px;
+}

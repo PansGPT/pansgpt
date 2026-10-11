@@ -1,0 +1,84 @@
+const imgSizeMdOutlineFalse = "https://www.figma.com/api/mcp/asset/414ea8cf-511b-45f9-9e26-a4d10558ff6d.svg";
+const imgBarChartSquare02 = "https://www.figma.com/api/mcp/asset/ea6bb753-b531-4776-bf0d-1fe3f12fedf8.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/13a7c1bc-14ee-4385-b6fb-2211b36ed06f.svg";
+const imgBarChartSquare3 = "https://www.figma.com/api/mcp/asset/74623ab5-d9a2-4a0a-840b-4feda500646f.svg";
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "md";
+};
+
+function Dot({ className, outline = "False", size = "md" }: DotProps) {
+  return (
+    <div className={className || "relative size-[10px]"} data-node-id="1046:10693">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeMdOutlineFalse} />
+    </div>
+  );
+}
+
+type NavItemBaseProps = {
+  className?: string;
+  badge?: boolean;
+  current?: boolean;
+  dot?: boolean;
+  iconLeading?: boolean;
+  iconSwap?: React.ReactNode | null;
+  iconTrailing?: boolean;
+  state?: "Default" | "Hover" | "Focused";
+};
+
+export default function NavItemBase({ className, badge = true, current = false, dot = true, iconLeading = true, iconSwap = null, iconTrailing = true, state = "Default" }: NavItemBaseProps) {
+  const isCurrentAndDefault = current && state === "Default";
+  const isCurrentAndFocused = current && state === "Focused";
+  const isCurrentAndHover = current && state === "Hover";
+  const isDefault = state === "Default";
+  const isHover = state === "Hover";
+  const isNotCurrentAndFocused = !current && state === "Focused";
+  const isNotCurrentAndHover = !current && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center overflow-clip py-[var(--spacing-xxs,2px)] relative w-[272px] ${state === "Focused" ? String.raw`shadow-[0px_0px_0px_0px_var(--colors\/background\/bg-primary,white),0px_0px_0px_0px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : ""}`} id={isCurrentAndHover ? "node-1153_90789" : isNotCurrentAndHover ? "node-1152_89337" : isCurrentAndFocused ? "node-1153_90708" : isNotCurrentAndFocused ? "node-1152_89344" : isCurrentAndDefault ? "node-1153_90754" : "node-1152_89351"}>
+      <div className={`content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] ${isCurrentAndHover ? String.raw`bg-[var(--colors\/background\/bg-secondary_hover,#f5f5f5)]` : isNotCurrentAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : isCurrentAndFocused ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)] shadow-[0px_0px_0px_0px_var(--colors\/background\/bg-primary,white),0px_0px_0px_0px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isNotCurrentAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_0px_var(--colors\/background\/bg-primary,white),0px_0px_0px_0px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : isCurrentAndDefault ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)]`}`} id={isCurrentAndHover ? "node-7879_445821" : isNotCurrentAndHover ? "node-7879_445581" : isCurrentAndFocused ? "node-7879_446054" : isNotCurrentAndFocused ? "node-7879_445582" : isCurrentAndDefault ? "node-7879_445583" : "node-7879_434781"} data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isCurrentAndHover ? "node-1153_90790" : isNotCurrentAndHover ? "node-1152_89338" : isCurrentAndFocused ? "node-1153_90709" : isNotCurrentAndFocused ? "node-1152_89345" : isCurrentAndDefault ? "node-1153_90755" : "node-1152_89352"} data-name="Text and icon">
+          {dot && <Dot className="relative shrink-0 size-[10px]" />}
+          {(isDefault || isNotCurrentAndFocused || isHover) &&
+            iconLeading &&
+            (iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3479:464410" data-name="bar-chart-square-02">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBarChartSquare02} />
+              </div>
+            ))}
+          {(isDefault || isNotCurrentAndFocused || isHover) && (
+            <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap `}${isCurrentAndDefault || isHover ? String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isCurrentAndHover ? "node-1153_90792" : isNotCurrentAndHover ? "node-1152_89340" : isNotCurrentAndFocused ? "node-1152_89347" : isCurrentAndDefault ? "node-1153_90757" : "node-1152_89354"}>
+              Dashboard
+            </p>
+          )}
+          {isCurrentAndFocused &&
+            iconLeading &&
+            (iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3479:467047" data-name="bar-chart-square-02">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBarChartSquare3} />
+              </div>
+            ))}
+          {isCurrentAndFocused && (
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary_hover,#252b37)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="1153:90711">
+              Dashboard
+            </p>
+          )}
+        </div>
+        {badge && (
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1152:89356" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1152:89356;3918:407462">
+              10
+            </p>
+          </div>
+        )}
+        {iconTrailing && (
+          <div className="relative shrink-0 size-[16px]" data-node-id="1152:89357" data-name="chevron-down">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

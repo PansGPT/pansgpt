@@ -1,0 +1,9 @@
+export default function CalendarRowLabel({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-r border-solid content-stretch flex flex-col h-[96px] items-start relative w-[72px]"} data-node-id="7999:12176" data-name="_Calendar row label">
+      <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] right-[7px] text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-right top-[-8px] whitespace-nowrap" data-node-id="7998:12174">
+        9 AM
+      </p>
+    </div>
+  );
+}

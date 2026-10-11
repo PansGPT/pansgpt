@@ -1,0 +1,847 @@
+{
+  "assets": [
+    {
+      "name": "card0_imgArrowUpRight",
+      "file": "metric-card0_imgArrowUpRight.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "c37aab7edb0c5dbbbf640f81c32a0676435b98804e719633ae305babf2754875"
+    },
+    {
+      "name": "card0_imgDotsVertical",
+      "file": "metric-card0_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card1_imgArrowUpRight",
+      "file": "metric-card1_imgArrowUpRight.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "c37aab7edb0c5dbbbf640f81c32a0676435b98804e719633ae305babf2754875"
+    },
+    {
+      "name": "card1_imgDotsVertical",
+      "file": "metric-card1_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card1_imgTrendUp01",
+      "file": "metric-card1_imgTrendUp01.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "447ecb3404de7a318d24181b2d4496248ba19eac2734c50c8ac2390e301ee92b"
+    },
+    {
+      "name": "card2_imgArrowUp",
+      "file": "metric-card2_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "2e0d8236d1d6207c4fdcffcccc2f52134cb7ea4a0e43e3687baaeefb04570363"
+    },
+    {
+      "name": "card2_imgDotsVertical",
+      "file": "metric-card2_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card2_imgZap",
+      "file": "metric-card2_imgZap.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "14ee59780d74882fa54bb9c0b42aa04089fd95b5ec6e5d7a73ee2c800922d57e"
+    },
+    {
+      "name": "card3_imgDotsVertical",
+      "file": "metric-card3_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card3_imgTrendUp01",
+      "file": "metric-card3_imgTrendUp01.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "6eacbe7a0ec86f31eaa23ab46704bdaea51f2168bc258023ea21c6b8155ee296"
+    },
+    {
+      "name": "card3_imgTrendUp2",
+      "file": "metric-card3_imgTrendUp2.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "524c688d28d8c315c029ba4b4ab14db1fa39c0f99b7ffccce9c464831a90a9f5"
+    },
+    {
+      "name": "card4_imgArrowUpRight",
+      "file": "metric-card4_imgArrowUpRight.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "c37aab7edb0c5dbbbf640f81c32a0676435b98804e719633ae305babf2754875"
+    },
+    {
+      "name": "card4_imgDotsVertical",
+      "file": "metric-card4_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card4_imgTrendUp01",
+      "file": "metric-card4_imgTrendUp01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "3295d4b66b31e7e81b861ed917a62e1d6b10b508b4acedbb4caae4699825c55f"
+    },
+    {
+      "name": "card5_imgArrowUp",
+      "file": "metric-card5_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "2e0d8236d1d6207c4fdcffcccc2f52134cb7ea4a0e43e3687baaeefb04570363"
+    },
+    {
+      "name": "card5_imgDotsVertical",
+      "file": "metric-card5_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card6_imgDotsVertical",
+      "file": "metric-card6_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card6_imgEye",
+      "file": "metric-card6_imgEye.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "d8cc4a665a64174ec9de7c4c942ab59512a58232d83a87d4d363a524bab87e20"
+    },
+    {
+      "name": "card6_imgTrendUp01",
+      "file": "metric-card6_imgTrendUp01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "524c688d28d8c315c029ba4b4ab14db1fa39c0f99b7ffccce9c464831a90a9f5"
+    },
+    {
+      "name": "card7_imgDotsVertical",
+      "file": "metric-card7_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card7_imgTrendUp01",
+      "file": "metric-card7_imgTrendUp01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "524c688d28d8c315c029ba4b4ab14db1fa39c0f99b7ffccce9c464831a90a9f5"
+    },
+    {
+      "name": "card8_imgDotsVertical",
+      "file": "metric-card8_imgDotsVertical.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0185d52ef31f20428044a6de93fe620129418818ab37abb1a8dc0af86c49043e"
+    },
+    {
+      "name": "card8_imgTrendUp01",
+      "file": "metric-card8_imgTrendUp01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "524c688d28d8c315c029ba4b4ab14db1fa39c0f99b7ffccce9c464831a90a9f5"
+    },
+    {
+      "name": "change_imgArrowDown",
+      "file": "metric-change_imgArrowDown.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "47d1bf1056b7b733fc9959d54ea8cae23abb7b4be5bdcde48e86bf93b44fe4a9"
+    },
+    {
+      "name": "change_imgArrowDownRight",
+      "file": "metric-change_imgArrowDownRight.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "c736b2c8afb8959a609b22e3672871c407e928ee64b0be86567a7f6600313004"
+    },
+    {
+      "name": "change_imgArrowUp",
+      "file": "metric-change_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "2e0d8236d1d6207c4fdcffcccc2f52134cb7ea4a0e43e3687baaeefb04570363"
+    },
+    {
+      "name": "change_imgArrowUpRight",
+      "file": "metric-change_imgArrowUpRight.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "c37aab7edb0c5dbbbf640f81c32a0676435b98804e719633ae305babf2754875"
+    },
+    {
+      "name": "change_imgTrendDown01",
+      "file": "metric-change_imgTrendDown01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "32c467ac7e7da2b5e59a16724fbf0378e4f4113b5813bac16bea32ff54151a6f"
+    },
+    {
+      "name": "change_imgTrendUp01",
+      "file": "metric-change_imgTrendUp01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "524c688d28d8c315c029ba4b4ab14db1fa39c0f99b7ffccce9c464831a90a9f5"
+    },
+    {
+      "name": "native_1561_265483_0",
+      "file": "metric-mini-1561-265483-0.svg",
+      "sourceId": "4990:373155",
+      "width": 112,
+      "height": 56,
+      "sha256": "50900e411a3d8266364a8c3187d5d1bae10028e6edb97eab3edc71cb8d88e5fb"
+    },
+    {
+      "name": "native_1561_265483_1",
+      "file": "metric-mini-1561-265483-1.svg",
+      "sourceId": "1561:265482",
+      "width": 114,
+      "height": 58,
+      "sha256": "219f926078c5d32907bdd14bd1fb0506845d3bfff72bfa5fc70188a563152429"
+    },
+    {
+      "name": "native_1561_265483_2",
+      "file": "metric-mini-1561-265483-2.svg",
+      "sourceId": "4990:372409",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_1561_265492_0",
+      "file": "metric-mini-1561-265492-0.svg",
+      "sourceId": "4990:374465",
+      "width": 112,
+      "height": 56,
+      "sha256": "31a2e09c5e2ff69b0eeb1c59f13bec3701da64c1d00187195f24facefb39ecd8"
+    },
+    {
+      "name": "native_1561_265492_1",
+      "file": "metric-mini-1561-265492-1.svg",
+      "sourceId": "1561:265491",
+      "width": 114,
+      "height": 58,
+      "sha256": "1ebb1caa103a87a54ada50e95e0f7ca278c5bdc64645aa605361c52b8d6bd7ba"
+    },
+    {
+      "name": "native_1561_265492_2",
+      "file": "metric-mini-1561-265492-2.svg",
+      "sourceId": "4990:373051",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_4992_376490_0",
+      "file": "metric-mini-4992-376490-0.svg",
+      "sourceId": "4990:376399",
+      "width": 112,
+      "height": 56,
+      "sha256": "fe8c9ff9de6f963c703e124ae2b7a725c6b2c3c69f778964fc113d1d1db3f998"
+    },
+    {
+      "name": "native_4992_376490_1",
+      "file": "metric-mini-4992-376490-1.svg",
+      "sourceId": "4990:376411",
+      "width": 114,
+      "height": 58,
+      "sha256": "b2e7f44f057f6192043a1cbddfb96767606aba669916af51ffda604ea8a22531"
+    },
+    {
+      "name": "native_4992_376490_2",
+      "file": "metric-mini-4992-376490-2.svg",
+      "sourceId": "4991:376481",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_4992_376491_0",
+      "file": "metric-mini-4992-376491-0.svg",
+      "sourceId": "4991:376474",
+      "width": 112,
+      "height": 56,
+      "sha256": "a3f70cfabf764048627693a927c1566183c0b67b48effbd125f6d2c148638266"
+    },
+    {
+      "name": "native_4992_376491_1",
+      "file": "metric-mini-4992-376491-1.svg",
+      "sourceId": "4991:376480",
+      "width": 114,
+      "height": 58,
+      "sha256": "934b1bb545c754fb13d8b69cf6e1e354d046e74e616b295b4b9dc23a9887a425"
+    },
+    {
+      "name": "native_4992_376491_2",
+      "file": "metric-mini-4992-376491-2.svg",
+      "sourceId": "4991:376484",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_4992_376492_0",
+      "file": "metric-mini-4992-376492-0.svg",
+      "sourceId": "4990:373154",
+      "width": 112,
+      "height": 56,
+      "sha256": "d477efa2ec89ddfe7d6df118946ea7ebe896f8282950eddf28d3cce561ac8653"
+    },
+    {
+      "name": "native_4992_376492_1",
+      "file": "metric-mini-4992-376492-1.svg",
+      "sourceId": "4990:373140",
+      "width": 114,
+      "height": 58,
+      "sha256": "fc6b178596c555e90f7b0699c26eef922e4feb559ff6f506dc1174858e07bea0"
+    },
+    {
+      "name": "native_4992_376492_2",
+      "file": "metric-mini-4992-376492-2.svg",
+      "sourceId": "4990:373137",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_4992_376492_3",
+      "file": "metric-mini-4992-376492-3.svg",
+      "sourceId": "4990:373143",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_4992_376493_0",
+      "file": "metric-mini-4992-376493-0.svg",
+      "sourceId": "4990:376461",
+      "width": 112,
+      "height": 56,
+      "sha256": "e7b715c87431fa91862ca2a57b56ca0e9e06d919bfba411ba8d8de32f9997848"
+    },
+    {
+      "name": "native_4992_376493_1",
+      "file": "metric-mini-4992-376493-1.svg",
+      "sourceId": "4990:376471",
+      "width": 114,
+      "height": 58,
+      "sha256": "6ef18682fca4c4c3e98f06864e4993f87cc5d4c6881476538fb81121a897ddb2"
+    },
+    {
+      "name": "native_4992_376493_2",
+      "file": "metric-mini-4992-376493-2.svg",
+      "sourceId": "4990:376465",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_4992_376493_3",
+      "file": "metric-mini-4992-376493-3.svg",
+      "sourceId": "4990:376468",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_4992_376494_0",
+      "file": "metric-mini-4992-376494-0.svg",
+      "sourceId": "4990:376459",
+      "width": 128,
+      "height": 56,
+      "sha256": "e864e5e455a3e924c77756524b700d3d8cdd1d24d476fe986120291aac337b2c"
+    },
+    {
+      "name": "native_4992_376494_1",
+      "file": "metric-mini-4992-376494-1.svg",
+      "sourceId": "4990:376428",
+      "width": 128,
+      "height": 44,
+      "sha256": "36e15dfdc4778454bf9aecd0ba05a2da1395e40b714697cf61ecdd9ef79c1a04"
+    },
+    {
+      "name": "native_4992_376495_0",
+      "file": "metric-mini-4992-376495-0.svg",
+      "sourceId": "4990:376455",
+      "width": 128,
+      "height": 56,
+      "sha256": "e8a74c9d626ce6b73cba7f81989cbb58d2b88ae08855ea785666de380f83a859"
+    },
+    {
+      "name": "native_4992_376495_1",
+      "file": "metric-mini-4992-376495-1.svg",
+      "sourceId": "4990:376450",
+      "width": 128,
+      "height": 38,
+      "sha256": "b431b797c8c740ae383fba35842e56cc9ebc54aaf9c1dcd61c75fa7e6910ad87"
+    },
+    {
+      "name": "native_5002_371330_0",
+      "file": "metric-wide-5002-371330-0.svg",
+      "sourceId": "I5002:371330;4990:373155",
+      "width": 348,
+      "height": 72,
+      "sha256": "8c1078757a1a24c4f16bf398ddfab8cb686d388c82bfef2016b3cd4fbf3f0f41"
+    },
+    {
+      "name": "native_5002_371330_1",
+      "file": "metric-wide-5002-371330-1.svg",
+      "sourceId": "I5002:371330;1561:265482",
+      "width": 350,
+      "height": 74,
+      "sha256": "28193c1ca3fa03571f278ba11aec15ae8adab6b4f679904315f04de2d8a95ea4"
+    },
+    {
+      "name": "native_5002_371353_0",
+      "file": "metric-wide-5002-371353-0.svg",
+      "sourceId": "I5002:371353;4990:373155",
+      "width": 311,
+      "height": 72,
+      "sha256": "971e03863d88bd918c8748e13e9b7b424525583a825073aeb70b40433f4c1742"
+    },
+    {
+      "name": "native_5002_371353_1",
+      "file": "metric-wide-5002-371353-1.svg",
+      "sourceId": "I5002:371353;1561:265482",
+      "width": 313,
+      "height": 74,
+      "sha256": "ce286918dd5fbcfc05a97b395a61c834b80b7d67f2a3885c88872b6f6a7a3551"
+    },
+    {
+      "name": "native_7947_105588_0",
+      "file": "metric-wide-7947-105588-0.svg",
+      "sourceId": "I7947:105588;7947:79982",
+      "width": 348,
+      "height": 56,
+      "sha256": "c9b710f1c00357d5c31326a2e0e2f526d1b72b84cf4ffa3e64bc363fbe282817"
+    },
+    {
+      "name": "native_7947_105588_1",
+      "file": "metric-wide-7947-105588-1.svg",
+      "sourceId": "I7947:105588;7947:79985",
+      "width": 350,
+      "height": 46,
+      "sha256": "b646ba6163627d99f462ac9b2d65cb3724d184bc5aee88d2da6f87bdbd3820f6"
+    },
+    {
+      "name": "native_7947_105605_0",
+      "file": "metric-wide-7947-105605-0.svg",
+      "sourceId": "I7947:105605;7947:79982",
+      "width": 311,
+      "height": 56,
+      "sha256": "8766ff454faf0e7b8b3a0985d316bf09e876dd13f183c786572c9ada7aaeafae"
+    },
+    {
+      "name": "native_7947_105605_1",
+      "file": "metric-wide-7947-105605-1.svg",
+      "sourceId": "I7947:105605;7947:79985",
+      "width": 313,
+      "height": 46,
+      "sha256": "e8867884acf3943445f31ef376f5507249821ca1c54f920c7abb02be85e6370e"
+    },
+    {
+      "name": "native_7947_80006_0",
+      "file": "metric-mini-7947-80006-0.svg",
+      "sourceId": "7947:79974",
+      "width": 112,
+      "height": 56,
+      "sha256": "60700fb0d9a8eaedef237cc7a2d2c233a7789034d3484fdd7fc33d25f775fd26"
+    },
+    {
+      "name": "native_7947_80006_1",
+      "file": "metric-mini-7947-80006-1.svg",
+      "sourceId": "7947:79977",
+      "width": 114,
+      "height": 57,
+      "sha256": "6e81a2f026eab15e1305b9412a3b896b02530b9f8db5813488c6c5465a8847b0"
+    },
+    {
+      "name": "native_7947_80006_2",
+      "file": "metric-mini-7947-80006-2.svg",
+      "sourceId": "7947:79978",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_7947_80007_0",
+      "file": "metric-mini-7947-80007-0.svg",
+      "sourceId": "7947:79982",
+      "width": 112,
+      "height": 56,
+      "sha256": "669fa1a8d0ccb8a7744b2965be20b593f06dae168f0276c45b348e4157edf736"
+    },
+    {
+      "name": "native_7947_80007_1",
+      "file": "metric-mini-7947-80007-1.svg",
+      "sourceId": "7947:79985",
+      "width": 114,
+      "height": 46,
+      "sha256": "8f230e8c007412f6f1ea4e3d5d1b23531969066f40799f0a486f3b8de307ef34"
+    },
+    {
+      "name": "native_7947_80007_2",
+      "file": "metric-mini-7947-80007-2.svg",
+      "sourceId": "7947:79986",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_7947_80008_0",
+      "file": "metric-mini-7947-80008-0.svg",
+      "sourceId": "7947:79990",
+      "width": 112,
+      "height": 56,
+      "sha256": "8a83d12f1fecd6a6ff5a19a64b67393c9ddbde2931b457dab309045d01ed88b7"
+    },
+    {
+      "name": "native_7947_80008_1",
+      "file": "metric-mini-7947-80008-1.svg",
+      "sourceId": "7947:79993",
+      "width": 114,
+      "height": 57,
+      "sha256": "688f12ab013fa4e255de69fe66e50b4f9594ddbfbaa64287d58cfe41e502d5c9"
+    },
+    {
+      "name": "native_7947_80008_2",
+      "file": "metric-mini-7947-80008-2.svg",
+      "sourceId": "7947:79994",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_7947_80009_0",
+      "file": "metric-mini-7947-80009-0.svg",
+      "sourceId": "7947:79998",
+      "width": 112,
+      "height": 56,
+      "sha256": "46a9a09ea09526cba03be3b11825e31252275a80268b3a23a3c8952a4eb81950"
+    },
+    {
+      "name": "native_7947_80009_1",
+      "file": "metric-mini-7947-80009-1.svg",
+      "sourceId": "7947:80001",
+      "width": 114,
+      "height": 46,
+      "sha256": "07b1e7dc3452b3a1458bc0bc68cf3f8749144fae88fa01982aead8a4ddfb468e"
+    },
+    {
+      "name": "native_7947_80009_2",
+      "file": "metric-mini-7947-80009-2.svg",
+      "sourceId": "7947:80002",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155346_0",
+      "file": "metric-mini-8049-155346-0.svg",
+      "sourceId": "8049:155347",
+      "width": 112,
+      "height": 56,
+      "sha256": "bff750bfd86d1e528bcf7fa3b60775cb45b38e8e1a8dacde391d8676860efa17"
+    },
+    {
+      "name": "native_8049_155346_1",
+      "file": "metric-mini-8049-155346-1.svg",
+      "sourceId": "8049:155542",
+      "width": 114,
+      "height": 34,
+      "sha256": "0fd6d4e2a97bcb3e1e0408a8ddc4e3d11e9aca4a6de51fe3261f01f686dc8e75"
+    },
+    {
+      "name": "native_8049_155346_2",
+      "file": "metric-mini-8049-155346-2.svg",
+      "sourceId": "8049:155351",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155354_0",
+      "file": "metric-mini-8049-155354-0.svg",
+      "sourceId": "8049:155543",
+      "width": 112,
+      "height": 56,
+      "sha256": "8f462079614f07b2757574c19faef59948b28882492449235be90b2fcd751a51"
+    },
+    {
+      "name": "native_8049_155354_1",
+      "file": "metric-mini-8049-155354-1.svg",
+      "sourceId": "8049:155546",
+      "width": 114,
+      "height": 34,
+      "sha256": "a038992caedb5eb4095ba1cf3e78ddad0189fbdcf0ebc96bdac60544a819456c"
+    },
+    {
+      "name": "native_8049_155354_2",
+      "file": "metric-mini-8049-155354-2.svg",
+      "sourceId": "8049:155359",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155378_0",
+      "file": "metric-mini-8049-155378-0.svg",
+      "sourceId": "8049:155379",
+      "width": 112,
+      "height": 56,
+      "sha256": "b1e73f45deb940276f0f2b5f78333ca69cc45e8051eb8fbe713740ccbd522940"
+    },
+    {
+      "name": "native_8049_155378_1",
+      "file": "metric-mini-8049-155378-1.svg",
+      "sourceId": "8049:155548",
+      "width": 114,
+      "height": 24,
+      "sha256": "fb45d7664af33872dc06522658717cd1c85430c3e9ed9f206dd9c70314cdd17e"
+    },
+    {
+      "name": "native_8049_155378_2",
+      "file": "metric-mini-8049-155378-2.svg",
+      "sourceId": "8049:155383",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155386_0",
+      "file": "metric-mini-8049-155386-0.svg",
+      "sourceId": "8049:155553",
+      "width": 112,
+      "height": 56,
+      "sha256": "2b6130b842f3c30054babc8410bf26bb9423fb2bb98d8f6aef6eaaf537359066"
+    },
+    {
+      "name": "native_8049_155386_1",
+      "file": "metric-mini-8049-155386-1.svg",
+      "sourceId": "8049:155556",
+      "width": 114,
+      "height": 24,
+      "sha256": "b077021512794be08f4fa25337d0969eedd803191300667a4cec4c6457ee50a5"
+    },
+    {
+      "name": "native_8049_155386_2",
+      "file": "metric-mini-8049-155386-2.svg",
+      "sourceId": "8049:155391",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155410_0",
+      "file": "metric-mini-8049-155410-0.svg",
+      "sourceId": "8049:155411",
+      "width": 112,
+      "height": 56,
+      "sha256": "c0218a2bc4bb01565339d1722ad2f37f07156e36511824dbdf82db55ddf3e897"
+    },
+    {
+      "name": "native_8049_155410_1",
+      "file": "metric-mini-8049-155410-1.svg",
+      "sourceId": "8049:155549",
+      "width": 114,
+      "height": 32,
+      "sha256": "313c9a50e720f3509fbe42cbb24c697f7a7e8fbb09021b816550a14dadee0f48"
+    },
+    {
+      "name": "native_8049_155410_2",
+      "file": "metric-mini-8049-155410-2.svg",
+      "sourceId": "8049:155415",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155418_0",
+      "file": "metric-mini-8049-155418-0.svg",
+      "sourceId": "8049:155558",
+      "width": 112,
+      "height": 56,
+      "sha256": "e19ce6c1f4bf407a97a38f2072c3a26b5506a935aa7365246ca8b81b368c36b5"
+    },
+    {
+      "name": "native_8049_155418_1",
+      "file": "metric-mini-8049-155418-1.svg",
+      "sourceId": "8049:155561",
+      "width": 114,
+      "height": 32,
+      "sha256": "a6f356e9fed1e6ce59b18e920394fcb74f48dc466d3ca94ce11b7b4440cc9e04"
+    },
+    {
+      "name": "native_8049_155418_2",
+      "file": "metric-mini-8049-155418-2.svg",
+      "sourceId": "8049:155423",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155442_0",
+      "file": "metric-mini-8049-155442-0.svg",
+      "sourceId": "8049:155443",
+      "width": 112,
+      "height": 56,
+      "sha256": "e1dff8bf3301dc21d33704ac8b7d1f6eccb91ea4f2cd33dbdb73abc7d45bf676"
+    },
+    {
+      "name": "native_8049_155442_1",
+      "file": "metric-mini-8049-155442-1.svg",
+      "sourceId": "8049:155550",
+      "width": 114,
+      "height": 40,
+      "sha256": "470ddf97f6bb0b2273d77bcfd670b5cdf24f6240e49002a7657c537e383aaa8c"
+    },
+    {
+      "name": "native_8049_155442_2",
+      "file": "metric-mini-8049-155442-2.svg",
+      "sourceId": "8049:155447",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155450_0",
+      "file": "metric-mini-8049-155450-0.svg",
+      "sourceId": "8049:155563",
+      "width": 112,
+      "height": 56,
+      "sha256": "d0c1cbba0560fa8da23b24b27682d7235699c0440d44b2aef10c1e354c72d220"
+    },
+    {
+      "name": "native_8049_155450_1",
+      "file": "metric-mini-8049-155450-1.svg",
+      "sourceId": "8049:155566",
+      "width": 114,
+      "height": 40,
+      "sha256": "747ec973d24775a77cfdc901c37c53f0d9ea7641eb6354af7d60a2871a718d01"
+    },
+    {
+      "name": "native_8049_155450_2",
+      "file": "metric-mini-8049-155450-2.svg",
+      "sourceId": "8049:155455",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155474_0",
+      "file": "metric-mini-8049-155474-0.svg",
+      "sourceId": "8049:155475",
+      "width": 112,
+      "height": 56,
+      "sha256": "faa72b525c5e642ec422bef19b97a9827423ee75702f7b9e62e637588e300047"
+    },
+    {
+      "name": "native_8049_155474_1",
+      "file": "metric-mini-8049-155474-1.svg",
+      "sourceId": "8049:155551",
+      "width": 114,
+      "height": 38,
+      "sha256": "ce553c0ae61bcccfe6f906e9569abfee702166cf8a3633a562a0f356c5fd2cd9"
+    },
+    {
+      "name": "native_8049_155474_2",
+      "file": "metric-mini-8049-155474-2.svg",
+      "sourceId": "8049:155479",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155482_0",
+      "file": "metric-mini-8049-155482-0.svg",
+      "sourceId": "8049:155568",
+      "width": 112,
+      "height": 56,
+      "sha256": "c3c84c2eba0bc06f2fee971cbe9097f81ed97c0282bcd70deff4e20e0828a121"
+    },
+    {
+      "name": "native_8049_155482_1",
+      "file": "metric-mini-8049-155482-1.svg",
+      "sourceId": "8049:155571",
+      "width": 114,
+      "height": 38,
+      "sha256": "a836becffa79d104d59aabda3a384cf3b42e825830abf93739db9cd0808e25a4"
+    },
+    {
+      "name": "native_8049_155482_2",
+      "file": "metric-mini-8049-155482-2.svg",
+      "sourceId": "8049:155487",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    },
+    {
+      "name": "native_8049_155524_0",
+      "file": "metric-mini-8049-155524-0.svg",
+      "sourceId": "8049:155525",
+      "width": 112,
+      "height": 56,
+      "sha256": "cb157935051ed4fa7c1c67021926eb2d48c5f136ae49a7e80b567b7c4f288114"
+    },
+    {
+      "name": "native_8049_155524_1",
+      "file": "metric-mini-8049-155524-1.svg",
+      "sourceId": "8049:155552",
+      "width": 114,
+      "height": 24,
+      "sha256": "1eedfc69f87153d95ec312ca2b99183f1b287fe94144d815aeec4d97856851e6"
+    },
+    {
+      "name": "native_8049_155524_2",
+      "file": "metric-mini-8049-155524-2.svg",
+      "sourceId": "8049:155529",
+      "width": 20,
+      "height": 20,
+      "sha256": "a85e48c4d89b12475baf02b842d90f5e7a957a69e618d78dc2b94a8c78f1f2bb"
+    },
+    {
+      "name": "native_8049_155532_0",
+      "file": "metric-mini-8049-155532-0.svg",
+      "sourceId": "8049:155573",
+      "width": 112,
+      "height": 56,
+      "sha256": "80a0b05677029e50a67262c714285c9b90b0e053b848fa7b792829c98841205a"
+    },
+    {
+      "name": "native_8049_155532_1",
+      "file": "metric-mini-8049-155532-1.svg",
+      "sourceId": "8049:155576",
+      "width": 114,
+      "height": 24,
+      "sha256": "5212fb16a435563b771692153769e6297fa46d1f7b2c1409961e51d5261749ec"
+    },
+    {
+      "name": "native_8049_155532_2",
+      "file": "metric-mini-8049-155532-2.svg",
+      "sourceId": "8049:155537",
+      "width": 20,
+      "height": 20,
+      "sha256": "78fee8423b7459483d0e220b1e24c7f48b58da7b312fb24d229d7cc0a9186014"
+    }
+  ]
+}

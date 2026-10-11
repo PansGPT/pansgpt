@@ -1,0 +1,209 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/12e75e39-67b8-454d-8da3-f3d7f7c1cc1c.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/2ce1a8dd-9376-4c03-a0bb-af6424056eec.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/df67a6d2-e59b-469b-9705-915569721d41.png";
+const imgAvatar2 = "https://www.figma.com/api/mcp/asset/2b471d12-2076-4121-ae52-aefe9acd1d46.png";
+const imgAvatar3 = "https://www.figma.com/api/mcp/asset/028cfe51-856d-450e-aaa3-0be612d47ab4.png";
+const imgAvatar4 = "https://www.figma.com/api/mcp/asset/bcbdf3e1-c867-438c-8016-dfed16ffe858.png";
+const imgAvatar5 = "https://www.figma.com/api/mcp/asset/d6447ecd-b2c6-4e7e-badd-9d6d8a75de99.png";
+const imgAvatar6 = "https://www.figma.com/api/mcp/asset/43f115bf-f463-41c7-9729-81e817276cc3.png";
+const imgDividerWrap = "https://www.figma.com/api/mcp/asset/468e4ae7-0607-46cc-9286-ef30b5347d8b.svg";
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "True";
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = "True", indeterminate = "False", size = "sm", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} data-node-id="1097:63713">
+      <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="1097:64015" data-name="_Checkbox base">
+        <div className="absolute inset-[12.5%]" data-node-id="I1097:64015;1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Stacked with team and invites";
+};
+
+function Modal({ className, breakpoint = "Mobile", type = "Stacked with team and invites" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[812px] items-center justify-end overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-xl,16px)] px-[var(--container-padding-mobile,16px)] relative w-[375px]"} data-node-id="4057:417077">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411414" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411414;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:425162" data-name="Modal">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-center pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="4057:425163" data-name="Content">
+          <div className="h-[56px] relative shrink-0 w-[120px]" data-node-id="9265:20746" data-name="Avatar group">
+            <div className="absolute border border-[rgba(0,0,0,0.08)] border-solid left-0 rounded-[var(--radius-full,9999px)] size-[48px] top-[8px]" data-node-id="9265:20747" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+            </div>
+            <div className="absolute border border-[rgba(0,0,0,0.08)] border-solid left-[72px] rounded-[var(--radius-full,9999px)] size-[48px] top-[8px]" data-node-id="9265:20748" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+              </div>
+            </div>
+            <div className="absolute border border-[rgba(0,0,0,0.08)] border-solid left-[32px] rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] size-[56px] top-0" data-node-id="9265:20749" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4057:432351" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I4057:432351;4055:413669" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 text-center w-full" data-node-id="I4057:432351;4055:413671" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:432351;4055:413672">
+                Add your team members
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:432351;4055:413673">
+                You’ve created a new project! Invite colleagues to collaborate on this project.
+              </p>
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I4057:432351;4059:420622" data-name="Padding bottom" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="4057:425169" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:425674" data-name="Users">
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="4057:425675" data-name="Row">
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="4057:425676" data-name="Content">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4057:425678" data-name="Avatar label group">
+                  <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I4057:425678;1109:488" data-name="Avatar">
+                    <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                      <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                      <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+                    </div>
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:425678;1109:489" data-name="Text and supporting text">
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I4057:425678;1109:490">
+                      Ṣọ̀pẹ́ Emenike
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I4057:425678;1109:491">
+                      @candice
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="4057:425679">
+                Admin
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="4057:425680" data-name="Row">
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="4057:425681" data-name="Content">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4057:425683" data-name="Avatar label group">
+                  <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I4057:425683;1109:488" data-name="Avatar">
+                    <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                      <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                      <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+                    </div>
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:425683;1109:489" data-name="Text and supporting text">
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I4057:425683;1109:490">
+                      Ọ̀rẹ́fúnmi Àrẹ̀gbẹ́ṣọ́lá
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I4057:425683;1109:491">
+                      @demi
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="4057:425684">
+                Admin
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="4057:425685" data-name="Row">
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="4057:425686" data-name="Content">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4057:425688" data-name="Avatar label group">
+                  <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I4057:425688;1109:488" data-name="Avatar">
+                    <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                      <div className="absolute bg-[#d9e5cc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                      <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar5} />
+                    </div>
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:425688;1109:489" data-name="Text and supporting text">
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I4057:425688;1109:490">
+                      Ikenna Danjuma
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I4057:425688;1109:491">
+                      @drew
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="4057:425689">
+                Editor
+              </p>
+            </div>
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="4057:425690" data-name="Row">
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="4057:425691" data-name="Content">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4057:425693" data-name="Avatar label group">
+                  <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I4057:425693;1109:488" data-name="Avatar">
+                    <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                      <div className="absolute bg-[#e9dcbb] inset-0 rounded-[var(--radius-full,9999px)]" />
+                      <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar6} />
+                    </div>
+                  </div>
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:425693;1109:489" data-name="Text and supporting text">
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I4057:425693;1109:490">
+                      Àrábìnrin Mbachu
+                    </p>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I4057:425693;1109:491">
+                      @natali
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="4057:425694">
+                Editor
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="4057:425173" data-name="_Modal actions">
+          <div className="h-[17px] relative shrink-0 w-full" data-node-id="I4057:425173;4057:415157" data-name="Divider-wrap">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap} />
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I4057:425173;4057:414907" data-name="Content">
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I4057:425173;4057:414908" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:425173;4057:414908;6421:273911" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:425173;4057:414908;3287:432949">
+                  Add to project
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I4057:425173;4057:414909" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:425173;4057:414909;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:425173;4057:414909;3287:433081">
+                  Cancel
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

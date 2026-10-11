@@ -1,0 +1,79 @@
+type HorizontalTabsProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  fullWidth?: "False";
+  size?: "md";
+  type?: "Button border";
+};
+
+function HorizontalTabs({ className, breakpoint = "Desktop", fullWidth = "False", size = "md", type = "Button border" }: HorizontalTabsProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-secondary_alt,#fafafa)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center p-[var(--spacing-sm,6px)] relative rounded-[9999px] w-[1280px]"} data-node-id="1319:13263">
+      <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0" data-node-id="1319:13264" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13264;2640:401548">
+          My details
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13265" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13265;2640:401584">
+          Profile
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13266" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13266;2640:401584">
+          Password
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13267" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13267;2640:401584">
+          Team
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13268" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13268;2640:401584">
+          Plan
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13269" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13269;2640:401584">
+          Billing
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13270" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13270;2640:401584">
+          Email
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13271" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13271;2640:401584">
+          Notifications
+        </p>
+        <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I1319:13271;2640:401585" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1319:13271;2640:401585;3918:406278">
+            2
+          </p>
+        </div>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13272" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13272;2640:401584">
+          Integrations
+        </p>
+      </div>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[44px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shrink-0" data-node-id="1319:13273" data-name="_Tab button base">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1319:13273;2640:401584">
+          API
+        </p>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

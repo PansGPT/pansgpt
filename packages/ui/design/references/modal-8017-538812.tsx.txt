@@ -1,0 +1,395 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/6cbd77a5-60e0-4b84-8eea-a11ad49303a4.svg";
+const imgControls = "https://www.figma.com/api/mcp/asset/94f6742f-5bae-4c92-ae88-d9657c962e0f.svg";
+const imgXClose1 = "https://www.figma.com/api/mcp/asset/2995472f-4ec3-4bb7-8728-43a75fff6b30.svg";
+const imgIPhoneMockup = "https://www.figma.com/api/mcp/asset/6e279005-69d5-4c26-95c9-86c322750c38.svg";
+const imgXClose2 = "https://www.figma.com/api/mcp/asset/ce5415df-e636-49bc-849e-0e08ae94555f.svg";
+const imgXClose3 = "https://www.figma.com/api/mcp/asset/5c3e78be-e89f-410a-88bd-c9c1e41171c0.svg";
+const imgIPhoneMockup1 = "https://www.figma.com/api/mcp/asset/1baef8d0-6177-45e7-a502-7215ef55c17e.svg";
+const imgCode02 = "https://www.figma.com/api/mcp/asset/07abeb94-8de5-443a-8a70-50423f2cf5fa.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Radio" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : "node-1100_569"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type CheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  text?: "False";
+  type?: "Radio";
+};
+
+function Checkbox({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", text = "False", type = "Radio" }: CheckboxProps) {
+  const isNotCheckedAndFalseAndSmAndRadioAndFalseAndDefault = !checked && indeterminate === "False" && size === "sm" && type === "Radio" && text === "False" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} id={isNotCheckedAndFalseAndSmAndRadioAndFalseAndDefault ? "node-1100_1030" : "node-1100_894"}>
+      <CheckboxBase checked={checked && indeterminate === "False" && size === "sm" && type === "Radio" && text === "False" && state === "Default" ? true : undefined} className={`relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px] ${isNotCheckedAndFalseAndSmAndRadioAndFalseAndDefault ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip`}`} />
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Banner appearance";
+};
+
+function Modal({ className, breakpoint = "Mobile", type = "Banner appearance" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[812px] items-center justify-end overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-xl,16px)] px-[var(--container-padding-mobile,16px)] relative w-[375px]"} data-node-id="8017:538812">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="8017:538813" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I8017:538813;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="8017:538814" data-name="Modal">
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="8017:538816" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I8017:538816;4057:414525" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="I8017:538816;4057:414527" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I8017:538816;4057:414528">
+                Banner appearance
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I8017:538816;4057:414529">
+                Change how banners appear to visitors.
+              </p>
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I8017:538816;4059:420763" data-name="Padding bottom" />
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="I8017:538816;4055:413667" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[24px]" data-node-id="I8017:538816;4055:413667;2763:420143" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="8017:538817" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="8017:539132" data-name="Cards">
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="8017:539133" data-name="Card and text">
+              <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid h-[64px] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 w-[96px]" data-node-id="8017:539452" data-name="Card">
+                <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[84px] left-[-1px] overflow-clip top-[-1px] w-[128px]" data-node-id="8022:9948" data-name="Card">
+                  <div className="absolute h-[85.333px] left-0 top-0 w-[128px]" data-node-id="8022:9949" data-name="Background">
+                    <div className="absolute h-[85.333px] left-0 top-0 w-[128px]" data-node-id="8022:9950" data-name="Lines">
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[17.524px] left-[11.81px] opacity-50 top-[11.81px] w-[104.381px]" data-node-id="8022:9951" data-name="Fill" />
+                      <div className="absolute flex h-[85.143px] items-center justify-center left-[26.29px] top-[0.19px] w-[0.762px]" data-node-id="8022:9952">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.143px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[11.05px] top-0 w-[0.762px]" data-node-id="8022:9953">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[11.05px] w-[128px]" data-node-id="8022:9954" data-name="Line" />
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[29.33px] w-[128px]" data-node-id="8022:9955" data-name="Line" />
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[116.19px] top-0 w-[0.762px]" data-node-id="8022:9956">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[0.381px] border-[var(--component-colors\/utility\/gray\/utility-gray-300,#d5d7da)] border-solid h-[79.238px] left-[25.9px] overflow-clip rounded-[3.048px] top-[10.67px] w-[91.429px]" data-node-id="8022:9957" data-name="Screen">
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[6.476px] left-[-0.38px] overflow-clip right-[-0.38px] rounded-tl-[3.048px] rounded-tr-[3.048px] top-[-0.38px]" data-node-id="8022:9958" data-name="Nav">
+                      <div className="absolute h-[2.286px] left-[2.67px] top-[2.29px] w-[9.905px]" data-node-id="8022:9959" data-name="Controls">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgControls} />
+                      </div>
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[22.857px] left-[-0.38px] right-[-0.38px] top-[51.43px]" data-node-id="8022:9963" data-name="Section" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[28.571px] left-[calc(55%+0.04px)] right-[calc(0.42%-0.38px)] rounded-bl-[2.286px] rounded-tl-[2.286px] top-[16.76px]" data-node-id="8022:9964" data-name="Mockup" />
+                    <div className="absolute content-stretch flex gap-[1.905px] items-start left-[7.24px] top-[32.38px] w-[26.286px]" data-node-id="8022:9965" data-name="Actions">
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:9966" data-name="Action" />
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:9967" data-name="Action" />
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[2.286px] left-[7.24px] rounded-[0.762px] top-[26.29px] w-[28.952px]" data-node-id="8022:9968" data-name="Supporting text" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[4.571px] left-[7.24px] rounded-[1.143px] top-[19.43px] w-[35.048px]" data-node-id="8022:9969" data-name="Heading" />
+                    <div className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] h-[6.095px] left-[-0.38px] overflow-clip top-[6.1px] w-[91.429px]" data-node-id="8022:9970" data-name="Banner">
+                      <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[1.524px] left-[8.76px] opacity-40 rounded-[0.762px] top-[2.29px] w-[34.286px]" data-node-id="8022:9971" data-name="Supporting text" />
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] left-[calc(50%-39.81px)] opacity-80 rounded-[5.333px] size-[3.048px] top-[1.52px]" data-node-id="8022:9972" data-name="Action" />
+                      <div className="absolute content-stretch flex h-[3.048px] items-start right-[8px] top-[1.52px] w-[8.381px]" data-node-id="8022:9973" data-name="Actions">
+                        <div className="bg-[var(--colors\/foreground\/fg-white,white)] flex-[1_0_0] h-full min-w-px opacity-80 relative rounded-[0.762px]" data-node-id="8022:9974" data-name="Action" />
+                      </div>
+                      <div className="absolute left-[84.57px] size-[2.286px] top-[1.9px]" data-node-id="8022:9975" data-name="X close">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute h-[65.714px] left-[10.67px] top-[28.95px] w-[32px]" data-node-id="8022:9977" data-name="iPhone">
+                    <div className="absolute h-[65.714px] left-0 top-0 w-[32px]" data-node-id="8022:9978" data-name="iPhone mockup">
+                      <div className="absolute inset-[-14.49%_-148.81%_-72.46%_-29.76%]">
+                        <img alt="" className="block max-w-none size-full" src={imgIPhoneMockup} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-10.09px)] rounded-[5.333px] size-[3.048px] top-[5.14px]" data-node-id="8022:9980" data-name="Logo" />
+                    <div className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] h-[13.714px] left-[3.43px] overflow-clip rounded-[1.143px] top-[38.86px] w-[25.143px]" data-node-id="8022:9981" data-name="Banner">
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[3.048px] left-1/2 opacity-80 rounded-[0.762px] top-[9.14px] w-[22.095px]" data-node-id="8022:9982" data-name="Action" />
+                      <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[1.524px] left-[1.52px] opacity-40 rounded-[0.762px] top-[6.1px] w-[22.095px]" data-node-id="8022:9983" data-name="Text" />
+                      <div className="absolute left-[21.71px] size-[2.286px] top-[1.53px]" data-node-id="8022:9984" data-name="X close">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose2} />
+                      </div>
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] left-[calc(50%-9.52px)] opacity-80 rounded-[5.333px] size-[3.048px] top-[1.53px]" data-node-id="8022:9986" data-name="Icon" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="8017:539174" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="8017:539175">
+                  Default
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="8017:539176">
+                  Default solid brand color.
+                </p>
+              </div>
+              <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="8017:539499" data-name="Card and text">
+              <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid h-[64px] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 w-[96px]" data-node-id="8017:539500" data-name="Card">
+                <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[84px] left-[-2px] overflow-clip top-[-2px] w-[128px]" data-node-id="8022:9988" data-name="Card">
+                  <div className="absolute h-[85.333px] left-0 top-[0.47px] w-[128px]" data-node-id="8022:9989" data-name="Background">
+                    <div className="absolute h-[85.333px] left-0 top-0 w-[128px]" data-node-id="8022:9990" data-name="Lines">
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[17.524px] left-[11.81px] opacity-50 top-[11.81px] w-[104.381px]" data-node-id="8022:9991" data-name="Fill" />
+                      <div className="absolute flex h-[85.143px] items-center justify-center left-[26.29px] top-[0.19px] w-[0.762px]" data-node-id="8022:9992">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.143px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[11.05px] top-0 w-[0.762px]" data-node-id="8022:9993">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[11.05px] w-[128px]" data-node-id="8022:9994" data-name="Line" />
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[29.33px] w-[128px]" data-node-id="8022:9995" data-name="Line" />
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[116.19px] top-0 w-[0.762px]" data-node-id="8022:9996">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[0.381px] border-[var(--component-colors\/utility\/gray\/utility-gray-300,#d5d7da)] border-solid h-[79.238px] left-[25.9px] overflow-clip rounded-[3.048px] top-[11.13px] w-[91.429px]" data-node-id="8022:9997" data-name="Screen">
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[6.476px] left-[-0.38px] overflow-clip right-[-0.38px] rounded-tl-[3.048px] rounded-tr-[3.048px] top-[-0.38px]" data-node-id="8022:9998" data-name="Nav">
+                      <div className="absolute h-[2.286px] left-[2.67px] top-[2.29px] w-[9.905px]" data-node-id="8022:9999" data-name="Controls">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgControls} />
+                      </div>
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[22.857px] left-[-0.38px] right-[-0.38px] top-[51.43px]" data-node-id="8022:10003" data-name="Section" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[28.571px] left-[calc(55%+0.04px)] right-[calc(0.42%-0.38px)] rounded-bl-[2.286px] rounded-tl-[2.286px] top-[16.76px]" data-node-id="8022:10004" data-name="Mockup" />
+                    <div className="absolute content-stretch flex gap-[1.905px] items-start left-[7.24px] top-[32.38px] w-[26.286px]" data-node-id="8022:10005" data-name="Actions">
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10006" data-name="Action" />
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10007" data-name="Action" />
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[2.286px] left-[7.24px] rounded-[0.762px] top-[26.29px] w-[28.952px]" data-node-id="8022:10008" data-name="Supporting text" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[4.571px] left-[7.24px] rounded-[1.143px] top-[19.43px] w-[35.048px]" data-node-id="8022:10009" data-name="Heading" />
+                    <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-b-[0.19px] border-solid h-[6.095px] left-[-0.38px] overflow-clip top-[6.1px] w-[91.429px]" data-node-id="8022:10010" data-name="Banner">
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[1.524px] left-[8.76px] rounded-[0.762px] top-[2.29px] w-[34.286px]" data-node-id="8022:10011" data-name="Supporting text" />
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-39.62px)] rounded-[5.333px] size-[3.048px] top-[1.52px]" data-node-id="8022:10012" data-name="Action" />
+                      <div className="absolute content-stretch flex h-[3.048px] items-start right-[7.62px] top-[1.52px] w-[8.381px]" data-node-id="8022:10013" data-name="Actions">
+                        <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] flex-[1_0_0] h-full min-w-px relative rounded-[0.762px]" data-node-id="8022:10014" data-name="Action" />
+                      </div>
+                      <div className="absolute left-[84.57px] size-[2.286px] top-[1.9px]" data-node-id="8022:10015" data-name="X close">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose3} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute h-[65.714px] left-[10.67px] top-[29.42px] w-[32px]" data-node-id="8022:10017" data-name="iPhone">
+                    <div className="absolute h-[65.714px] left-0 top-0 w-[32px]" data-node-id="8022:10018" data-name="iPhone mockup">
+                      <div className="absolute inset-[-14.49%_-148.81%_-72.46%_-29.76%]">
+                        <img alt="" className="block max-w-none size-full" src={imgIPhoneMockup1} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-10.09px)] rounded-[5.333px] size-[3.048px] top-[5.14px]" data-node-id="8022:10020" data-name="Logo" />
+                    <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[0.19px] border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid h-[13.714px] left-[3.43px] overflow-clip rounded-[1.143px] top-[38.86px] w-[25.143px]" data-node-id="8022:10021" data-name="Banner">
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] h-[3.048px] left-1/2 rounded-[0.762px] top-[8.95px] w-[22.095px]" data-node-id="8022:10022" data-name="Action" />
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[1.524px] left-[1.33px] rounded-[0.762px] top-[5.91px] w-[22.095px]" data-node-id="8022:10023" data-name="Text" />
+                      <div className="absolute left-[21.52px] size-[2.286px] top-[1.34px]" data-node-id="8022:10024" data-name="X close">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose2} />
+                      </div>
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-9.52px)] rounded-[5.333px] size-[3.048px] top-[1.34px]" data-node-id="8022:10026" data-name="Icon" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="8017:539540" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="8017:539541">
+                  Simplified
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="8017:539542">
+                  Minimal and simplified.
+                </p>
+              </div>
+              <Checkbox checked className="content-stretch flex items-center justify-center relative shrink-0" />
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="8017:539590" data-name="Card and text">
+              <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid h-[64px] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 w-[96px]" data-node-id="8017:539591" data-name="Card">
+                <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[84px] left-[-1px] overflow-clip top-[-1px] w-[128px]" data-node-id="8022:10028" data-name="Card">
+                  <div className="absolute h-[85.333px] left-0 top-[-0.07px] w-[128px]" data-node-id="8022:10029" data-name="Background">
+                    <div className="absolute h-[85.333px] left-0 top-0 w-[128px]" data-node-id="8022:10030" data-name="Lines">
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[17.524px] left-[11.81px] opacity-50 top-[11.81px] w-[104.381px]" data-node-id="8022:10031" data-name="Fill" />
+                      <div className="absolute flex h-[85.143px] items-center justify-center left-[26.29px] top-[0.19px] w-[0.762px]" data-node-id="8022:10032">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.143px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[11.05px] top-0 w-[0.762px]" data-node-id="8022:10033">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[11.05px] w-[128px]" data-node-id="8022:10034" data-name="Line" />
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[29.33px] w-[128px]" data-node-id="8022:10035" data-name="Line" />
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[116.19px] top-0 w-[0.762px]" data-node-id="8022:10036">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[0.381px] border-[var(--component-colors\/utility\/gray\/utility-gray-300,#d5d7da)] border-solid h-[79.238px] left-[25.9px] overflow-clip rounded-[3.048px] top-[10.6px] w-[91.429px]" data-node-id="8022:10037" data-name="Screen">
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[6.476px] left-[-0.38px] overflow-clip right-[-0.38px] rounded-tl-[3.048px] rounded-tr-[3.048px] top-[-0.38px]" data-node-id="8022:10038" data-name="Nav">
+                      <div className="absolute h-[2.286px] left-[2.67px] top-[2.29px] w-[9.905px]" data-node-id="8022:10039" data-name="Controls">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgControls} />
+                      </div>
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[22.857px] left-[-0.38px] right-[-0.38px] top-[51.43px]" data-node-id="8022:10043" data-name="Section" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[28.571px] left-[calc(55%+0.04px)] right-[calc(0.42%-0.38px)] rounded-bl-[2.286px] rounded-tl-[2.286px] top-[16.76px]" data-node-id="8022:10044" data-name="Mockup" />
+                    <div className="absolute content-stretch flex gap-[1.905px] items-start left-[7.24px] top-[32.38px] w-[26.286px]" data-node-id="8022:10045" data-name="Actions">
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10046" data-name="Action" />
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10047" data-name="Action" />
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[2.286px] left-[7.24px] rounded-[0.762px] top-[26.29px] w-[28.952px]" data-node-id="8022:10048" data-name="Supporting text" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[4.571px] left-[7.24px] rounded-[1.143px] top-[19.43px] w-[35.048px]" data-node-id="8022:10049" data-name="Heading" />
+                    <div className="absolute h-[6.095px] left-[-0.38px] overflow-clip top-[6.1px] w-[91.429px]" data-node-id="8022:10050" data-name="Banner">
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-39.62px)] rounded-[5.333px] size-[3.048px] top-[1.52px]" data-node-id="8022:10051" data-name="Action" />
+                    </div>
+                  </div>
+                  <div className="absolute h-[65.714px] left-[10.67px] top-[28.88px] w-[32px]" data-node-id="8022:10052" data-name="iPhone">
+                    <div className="absolute h-[65.714px] left-0 top-0 w-[32px]" data-node-id="8022:10053" data-name="iPhone mockup">
+                      <div className="absolute inset-[-14.49%_-148.81%_-72.46%_-29.76%]">
+                        <img alt="" className="block max-w-none size-full" src={imgIPhoneMockup} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-10.09px)] rounded-[5.333px] size-[3.048px] top-[5.14px]" data-node-id="8022:10055" data-name="Logo" />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="8017:539631" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="8017:539632">
+                  None
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="8017:539633">
+                  Hide all banners.
+                </p>
+              </div>
+              <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="8017:539700" data-name="Card and text">
+              <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid h-[64px] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 w-[96px]" data-node-id="8017:539701" data-name="Card">
+                <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[84px] left-[-1px] overflow-clip top-[-1px] w-[128px]" data-node-id="8022:10057" data-name="Card">
+                  <div className="absolute h-[85.333px] left-0 top-[0.4px] w-[128px]" data-node-id="8022:10058" data-name="Background">
+                    <div className="absolute h-[85.333px] left-0 top-0 w-[128px]" data-node-id="8022:10059" data-name="Lines">
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[17.524px] left-[11.81px] opacity-50 top-[11.81px] w-[104.381px]" data-node-id="8022:10060" data-name="Fill" />
+                      <div className="absolute flex h-[85.143px] items-center justify-center left-[26.29px] top-[0.19px] w-[0.762px]" data-node-id="8022:10061">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.143px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[11.05px] top-0 w-[0.762px]" data-node-id="8022:10062">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[11.05px] w-[128px]" data-node-id="8022:10063" data-name="Line" />
+                      <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] left-0 top-[29.33px] w-[128px]" data-node-id="8022:10064" data-name="Line" />
+                      <div className="absolute flex h-[85.333px] items-center justify-center left-[116.19px] top-0 w-[0.762px]" data-node-id="8022:10065">
+                        <div className="-rotate-90 flex-none">
+                          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[0.762px] relative w-[85.333px]" data-name="Line" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border-[0.381px] border-[var(--component-colors\/utility\/gray\/utility-gray-300,#d5d7da)] border-solid h-[79.238px] left-[25.9px] overflow-clip rounded-[3.048px] top-[11.07px] w-[91.429px]" data-node-id="8022:10066" data-name="Screen">
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[6.476px] left-[-0.38px] overflow-clip right-[-0.38px] rounded-tl-[3.048px] rounded-tr-[3.048px] top-[-0.38px]" data-node-id="8022:10067" data-name="Nav">
+                      <div className="absolute h-[2.286px] left-[2.67px] top-[2.29px] w-[9.905px]" data-node-id="8022:10068" data-name="Controls">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgControls} />
+                      </div>
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] h-[22.857px] left-[-0.38px] right-[-0.38px] top-[51.43px]" data-node-id="8022:10072" data-name="Section" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[28.571px] left-[calc(55%+0.04px)] right-[calc(0.42%-0.38px)] rounded-bl-[2.286px] rounded-tl-[2.286px] top-[16.76px]" data-node-id="8022:10073" data-name="Mockup" />
+                    <div className="absolute content-stretch flex gap-[1.905px] items-start left-[7.24px] top-[32.38px] w-[26.286px]" data-node-id="8022:10074" data-name="Actions">
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10075" data-name="Action" />
+                      <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] flex-[1_0_0] h-[4.19px] min-w-px relative rounded-[1.143px]" data-node-id="8022:10076" data-name="Action" />
+                    </div>
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] h-[2.286px] left-[7.24px] rounded-[0.762px] top-[26.29px] w-[28.952px]" data-node-id="8022:10077" data-name="Supporting text" />
+                    <div className="absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] h-[4.571px] left-[7.24px] rounded-[1.143px] top-[19.43px] w-[35.048px]" data-node-id="8022:10078" data-name="Heading" />
+                    <div className="absolute h-[6.095px] left-[-0.38px] overflow-clip top-[6.1px] w-[91.429px]" data-node-id="8022:10079" data-name="Banner">
+                      <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-39.62px)] rounded-[5.333px] size-[3.048px] top-[1.52px]" data-node-id="8022:10080" data-name="Action" />
+                    </div>
+                  </div>
+                  <div className="absolute h-[65.714px] left-[10.67px] top-[29.35px] w-[32px]" data-node-id="8022:10081" data-name="iPhone">
+                    <div className="absolute h-[65.714px] left-0 top-0 w-[32px]" data-node-id="8022:10082" data-name="iPhone mockup">
+                      <div className="absolute inset-[-14.49%_-148.81%_-72.46%_-29.76%]">
+                        <img alt="" className="block max-w-none size-full" src={imgIPhoneMockup1} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] left-[calc(50%-10.09px)] rounded-[5.333px] size-[3.048px] top-[5.14px]" data-node-id="8022:10084" data-name="Logo" />
+                  </div>
+                  <div className="absolute backdrop-blur-[1.143px] bg-gradient-to-b from-[rgba(0,0,0,0.02)] inset-[0.48%_0_-2.06%_0] to-[86.852%] to-[rgba(0,0,0,0.17)]" data-node-id="8022:10085" data-name="Background blur" />
+                </div>
+                <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex items-center justify-center left-[calc(50%+0.5px)] overflow-clip p-[var(--spacing-md,8px)] rounded-[var(--radius-md,12px)] top-[calc(50%+0.33px)]" data-node-id="8017:539765" data-name="Buttons/Button">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I8017:539765;3471:597240" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCode02} />
+                  </div>
+                </div>
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="8017:539730" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="8017:539731">
+                  Custom styling
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="8017:539732">
+                  Manage styling with CSS.
+                </p>
+              </div>
+              <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="8017:538878" data-name="_Modal actions">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I8017:538878;4057:414907" data-name="Content">
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I8017:538878;4057:414908" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I8017:538878;4057:414908;6421:273911" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I8017:538878;4057:414908;3287:432949">
+                  Save changes
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I8017:538878;4057:414909" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I8017:538878;4057:414909;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I8017:538878;4057:414909;3287:433081">
+                  Cancel
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

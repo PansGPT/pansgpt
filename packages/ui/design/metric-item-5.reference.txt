@@ -1,0 +1,79 @@
+const imgBackground = "https://www.figma.com/api/mcp/asset/fa5b289e-4b9d-472b-a597-fba985dc0a1f.svg";
+const imgTypeRealistic01TrendPositive = "https://www.figma.com/api/mcp/asset/b7a1b115-be8e-4fd7-b59f-131c915f727d.svg";
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/3b0d361e-f9a7-4e75-a59c-b5bbd490c8fa.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/6035914a-6f53-4847-bbd3-12a604b941e5.svg";
+
+type ChartMiniProps = {
+  className?: string;
+  background?: boolean;
+  markerS?: boolean;
+  trend?: "Positive";
+  type?: "Realistic 01";
+};
+
+function ChartMini({ className, background = true, markerS = true, trend = "Positive", type = "Realistic 01" }: ChartMiniProps) {
+  return (
+    <div className={className || "h-[56px] relative w-[112px]"} data-node-id="4992:376490">
+      {background && (
+        <div className="absolute inset-0" data-node-id="4990:376399" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+        </div>
+      )}
+      <div className="absolute inset-[-1.79%_-0.89%]">
+        <img alt="" className="block max-w-none size-full" src={imgTypeRealistic01TrendPositive} />
+      </div>
+      {markerS && (
+        <div className="absolute bottom-[60.94%] left-[57.81%] right-1/4 top-[4.69%]" data-node-id="4991:376481" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4991:376482" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4991:376483" data-name="Dot" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  type?: "Chart 01";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Desktop", dropdownIcon = true, type = "Chart 01" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="1561:265452">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-[min-content]" data-node-id="1561:265456">
+        Views 24 hours
+      </p>
+      <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-end relative shrink-0 w-full" data-node-id="1561:265478" data-name="Number and chart">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1561:265458" data-name="Number and badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] w-full" data-node-id="1561:265459">
+            2,000
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="1561:265460" data-name="Change and text">
+            <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative shrink-0" data-node-id="1563:260398" data-name="_Change">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I1563:260398;1563:260315" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1563:260398;1563:260316">
+                100%
+              </p>
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="1561:265464">
+              vs last month
+            </p>
+          </div>
+        </div>
+        <ChartMini className="h-[56px] relative shrink-0 w-[112px]" />
+      </div>
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="3292:578610" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3292:578610;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,826 @@
+type ProgressBarProps = {
+  className?: string;
+  label?: "False" | "Right" | "Bottom" | "Top floating" | "Bottom floating";
+  progress?: "0%" | "10%" | "20%" | "30%" | "40%" | "50%" | "60%" | "70%" | "80%" | "90%" | "100%";
+};
+
+export default function ProgressBar({ className, label = "False", progress = "0%" }: ProgressBarProps) {
+  if (progress === "0%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57381" data-name="Progress=0%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57362" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57363" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[97.18%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57375" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57374">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">0%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "0%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:270" data-name="Progress=0%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:271" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:272" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[97.5%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:273" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:274">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">0%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "0%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57395" data-name="Progress=0%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57396" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57397" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[312px] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57398" data-name="Progress" />
+          <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%-156px)] top-[-42px]" data-node-id="6505:304860" data-name="Tooltip">
+            <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304861" data-name="Content">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304862">
+                0%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "0%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57694" data-name="Progress=0%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57695" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57696" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[312px] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57697" data-name="Progress" />
+          <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%-156px)] top-[16px]" data-node-id="6505:304854" data-name="Tooltip">
+            <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304855" data-name="Content">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304856">
+                0%
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "10%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57383" data-name="Progress=10%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57384" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57385" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[89.93%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57386" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57387">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">10%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "10%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:260" data-name="Progress=10%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:261" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:262" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[90%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:263" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:264">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">10%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "10%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57390" data-name="Progress=10%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57391" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57392" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[90%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57419" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57393" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-20px] top-[-42px]" data-node-id="6505:304878" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304879" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304880">
+                  10%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "10%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57682" data-name="Progress=10%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57683" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57684" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[90%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57685" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57686" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-20px] top-[16px]" data-node-id="6505:304821" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304822" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304823">
+                  10%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "10%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:145" data-name="Progress=10%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:146" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:147" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[77.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:148" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "20%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57393" data-name="Progress=20%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57394" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57395" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[79.85%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57396" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57397">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">20%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "20%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:250" data-name="Progress=20%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:278" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:279" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[80%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:280" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:254">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">20%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "20%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57385" data-name="Progress=20%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57386" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57387" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[80%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57436" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57388" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304845" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304846" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304847">
+                  20%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "20%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57670" data-name="Progress=20%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57671" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57672" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[80%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57673" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57674" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304872" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304873" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304874">
+                  20%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "20%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:135" data-name="Progress=20%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:136" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:137" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[68.38%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:138" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "30%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57398" data-name="Progress=30%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57399" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57400" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[69.78%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57401" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57402">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">30%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "30%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:240" data-name="Progress=30%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:281" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:282" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[70%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:283" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:244">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">30%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "30%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57375" data-name="Progress=30%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57376" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57377" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[70%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57437" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57378" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304824" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304825" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304826">
+                  30%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "30%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57658" data-name="Progress=30%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57659" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57660" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[70%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57661" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57662" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304863" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304864" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304865">
+                  30%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "30%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:125" data-name="Progress=30%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:126" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:127" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[59.75%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:128" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "40%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57403" data-name="Progress=40%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57404" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57405" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[59.71%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57406" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57407">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">40%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "40%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:230" data-name="Progress=40%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:284" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:285" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[60%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:286" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:234">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">40%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "40%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57365" data-name="Progress=40%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57366" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57367" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[60%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57438" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57368" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304869" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304870" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304871">
+                  40%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "40%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57646" data-name="Progress=40%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57647" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57648" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[60%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57649" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57650" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304857" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304858" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304859">
+                  40%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "40%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:150" data-name="Progress=40%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:151" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:152" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[50.94%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:153" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "50%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57408" data-name="Progress=50%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57409" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57410" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[49.64%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57411" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57412">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">50%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "50%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:220" data-name="Progress=50%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:287" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:288" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-1/2 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:289" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:224">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">50%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "50%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57355" data-name="Progress=50%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57356" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57357" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-1/2 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57439" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57358" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304830" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304831" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304832">
+                  50%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "50%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57688" data-name="Progress=50%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57689" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57690" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-1/2 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57691" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57692" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304851" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304852" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304853">
+                  50%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "50%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:120" data-name="Progress=50%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:121" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:122" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[42.5%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:123" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "60%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57413" data-name="Progress=60%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57414" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57415" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[39.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57416" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57417">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "60%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:265" data-name="Progress=60%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:290" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:291" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[40%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:292" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:269">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "60%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57345" data-name="Progress=60%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57346" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57347" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[40%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57440" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57348" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304833" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304834" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304835">
+                  60%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "60%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57676" data-name="Progress=60%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57677" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57678" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[40%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57679" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57680" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304842" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304843" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304844">
+                  60%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "60%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:155" data-name="Progress=60%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:156" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:157" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[33.87%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:158" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "70%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57418" data-name="Progress=70%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57419" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57420" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[29.49%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57421" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57422">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">70%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "70%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:255" data-name="Progress=70%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:293" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:294" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[30%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:295" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:259">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">70%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "70%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57380" data-name="Progress=70%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57381" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57382" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[30%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57441" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57383" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-20px] top-[-42px]" data-node-id="6505:304884" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304885" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304886">
+                  70%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "70%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57664" data-name="Progress=70%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57665" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57666" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[30%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57667" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57668" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-20px] top-[16px]" data-node-id="6505:304881" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304882" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304883">
+                  70%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "70%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:140" data-name="Progress=70%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:141" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:142" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[25.34%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:143" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "80%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57423" data-name="Progress=80%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57424" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57425" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[19.42%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57426" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57427">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">80%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "80%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:245" data-name="Progress=80%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:296" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:297" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[20%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:298" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:249">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">80%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "80%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57370" data-name="Progress=80%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57371" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57372" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[20%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57442" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57373" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304827" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304828" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304829">
+                  80%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "80%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57652" data-name="Progress=80%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57653" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57654" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[20%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57655" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57656" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304875" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304876" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304877">
+                  80%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "80%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:130" data-name="Progress=80%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:131" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:132" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[16.63%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:133" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "90%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57428" data-name="Progress=90%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57429" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57430" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[9.34%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57431" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57432">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">90%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "90%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:235" data-name="Progress=90%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:299" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:300" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[10%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:301" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:239">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">90%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "90%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57360" data-name="Progress=90%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57361" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57362" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[10%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57443" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57363" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[-42px]" data-node-id="6505:304866" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304867" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304868">
+                  90%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "90%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57640" data-name="Progress=90%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57641" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57642" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-[10%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57643" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57644" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-21px] top-[16px]" data-node-id="6505:304839" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304840" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304841">
+                  90%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "90%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:115" data-name="Progress=90%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:116" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:117" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[8%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:118" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  if (progress === "100%" && label === "Right") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1085:57433" data-name="Progress=100%, Label=Right">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1085:57434" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57435" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1085:57436" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1085:57437">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">100%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "100%" && label === "Bottom") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1086:225" data-name="Progress=100%, Label=Bottom">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1086:302" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:303" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:304" data-name="Progress" />
+        </div>
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1086:229">
+          <p className="leading-[var(--line-height\/text-sm,20px)]">100%</p>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "100%" && label === "Top floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57350" data-name="Progress=100%, Label=Top floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57351" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57352" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57444" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57353" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-24px] top-[-42px]" data-node-id="6505:304836" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304837" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304838">
+                  100%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "100%" && label === "Bottom floating") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-end relative w-[320px]"} data-node-id="1087:57634" data-name="Progress=100%, Label=Bottom floating">
+        <div className="h-[8px] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="1087:57635" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57636" data-name="Background" />
+          <div className="absolute h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1087:57637" data-name="Progress">
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--spacing-xs,4px)] top-0" data-node-id="1087:57638" data-name="Progress" />
+            <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center right-[-24px] top-[16px]" data-node-id="6505:304848" data-name="Tooltip">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="6505:304849" data-name="Content">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="6505:304850">
+                  100%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (progress === "100%" && label === "False") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:110" data-name="Progress=100%, Label=False">
+        <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:111" data-name="Progress bar">
+          <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:112" data-name="Background" />
+          <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:113" data-name="Progress" />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1086:160" data-name="Progress=0%, Label=False">
+      <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="1086:161" data-name="Progress bar">
+        <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:162" data-name="Background" />
+        <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[86.25%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="1086:163" data-name="Progress" />
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

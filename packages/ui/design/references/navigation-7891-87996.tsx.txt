@@ -1,0 +1,472 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/9f065170-c3b7-4949-9e55-5eaff3d4776e.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/6e0ddbe8-4a99-4919-a95f-6ccdc1e5ee03.png";
+const imgLogOut01 = "https://www.figma.com/api/mcp/asset/c3b0511e-ce80-46d8-a519-50378132af67.svg";
+const imgChevronSelectorVertical = "https://www.figma.com/api/mcp/asset/87726727-7d28-46ea-9cfc-4554f397aac4.svg";
+const imgChevronSelectorVertical1 = "https://www.figma.com/api/mcp/asset/094283a4-4e27-4e13-8935-12b2acaadb36.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/19ab60f3-d2fa-4841-be66-e335f1b2e0a5.svg";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/1e85890d-b57b-4595-b6af-8fe7ce5f966b.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/dbca1537-cba0-4b51-9cbe-e07b2290732c.svg";
+const imgBookOpen01 = "https://www.figma.com/api/mcp/asset/b6b5fe64-accb-41e1-bb35-baaacef48536.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/6599a036-4cbc-4bcd-b1bc-53f9898801ad.svg";
+const imgLogOut2 = "https://www.figma.com/api/mcp/asset/a9d0d58c-160a-4f70-9b95-16f447562aa6.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Radio" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : "node-1100_569"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type NavAccountCardProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  open?: boolean;
+  type?: "Card" | "Simple";
+};
+
+export default function NavAccountCard({ className, breakpoint = "Desktop", open = false, type = "Card" }: NavAccountCardProps) {
+  if (type === "Simple" && !open && breakpoint === "Desktop") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-md,8px)] relative w-[280px]"} data-node-id="7887:496747" data-name="Type=Simple, Open=False, Breakpoint=Desktop">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7891:86406" data-name="Avatar label group">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7891:86406;1034:778" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I7891:86406;82:2790" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7891:86406;82:2788">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7891:86406;82:2789">
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-0 rounded-[var(--radius-sm,8px)] top-[15px]" data-node-id="8003:529232" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I8003:529232;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Simple" && !open && breakpoint === "Mobile") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-xl,16px)] relative w-[256px]"} data-node-id="7893:122909" data-name="Type=Simple, Open=False, Breakpoint=Mobile">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7893:122910" data-name="Avatar label group">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:122910;1034:778" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I7893:122910;82:2790" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:122910;82:2788">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:122910;82:2789">
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-0 rounded-[var(--radius-sm,8px)] top-[11px]" data-node-id="8003:529392" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I8003:529392;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Card" && !open && breakpoint === "Mobile") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] w-[256px]"} data-node-id="7893:122792" data-name="Type=Card, Open=False, Breakpoint=Mobile">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7893:122793" data-name="Avatar label group">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:122793;1034:778" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:122793;82:2790" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:122793;82:2788">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:122793;82:2789">
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="8003:528604" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I8003:528604;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronSelectorVertical} />
+          </div>
+        </div>
+      </button>
+    );
+  }
+  if (type === "Card" && open && breakpoint === "Desktop") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] w-[280px]"} data-node-id="7891:88080" data-name="Type=Card, Open=True, Breakpoint=Desktop">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7891:88081" data-name="Avatar label group">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7891:88081;1034:778" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7891:88081;82:2790" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7891:88081;82:2788">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7891:88081;82:2789">
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="8003:527974" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I8003:527974;7932:552030" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronSelectorVertical1} />
+          </div>
+          <div className="absolute bottom-[-10px] right-[-10px] size-[20px]" data-node-id="I8003:527974;8014:531993" data-name="Cursor">
+            <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+              <img alt="" className="block max-w-none size-full" src={imgCursor} />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid bottom-[-1px] content-stretch flex flex-col items-start overflow-clip right-[-273px] rounded-[var(--radius-xl,20px)] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] w-[264px]" data-node-id="7891:88083" data-name="Menu">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-bl-[var(--radius-2xl,24px)] rounded-br-[var(--radius-2xl,24px)] rounded-tl-[var(--radius-xl,20px)] rounded-tr-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="7891:88084" data-name="Menu items wrapper">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88085" data-name="Menu items">
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88086" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88086;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88086;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7891:88086;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7891:88086;7891:71367">
+                      View profile
+                    </p>
+                  </div>
+                  <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7891:88086;7891:94827" data-name="Shortcut wrapper">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7891:88086;7891:71368">{`⌘K->P`}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88087" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88087;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88087;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7891:88087;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7891:88087;7891:71367">
+                      Account settings
+                    </p>
+                  </div>
+                  <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7891:88087;7891:94827" data-name="Shortcut wrapper">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7891:88087;7891:71368">
+                      ⌘S
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88088" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88088;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88088;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7891:88088;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBookOpen01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7891:88088;7891:71367">
+                      Documentation
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88090" data-name="Menu items">
+              <div className="content-stretch flex items-start pb-[var(--spacing-xs,4px)] pt-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)] relative shrink-0 w-full" data-node-id="7891:88091" data-name="Text wrapper">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left" data-node-id="7891:88092">
+                  Switch account
+                </p>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88093" data-name="_Nav account card menu item">
+                <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88093;7891:72771" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88093;7891:72772" data-name="Avatar label group">
+                    <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7891:88093;7891:72772;1034:778" data-name="Avatar">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7891:88093;7891:72772;82:2790" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7891:88093;7891:72772;82:2788">
+                        Diepreye Ọ̀rẹ̀kọ́yà
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7891:88093;7891:72772;82:2789">
+                        chioma@PansGPT.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="absolute content-stretch flex items-center justify-center right-[8px] top-[8px]" data-node-id="I7891:88093;7891:72773" data-name="Checkbox">
+                    <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88094" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88094;7891:72619" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88094;7891:72636" data-name="Avatar label group">
+                    <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7891:88094;7891:72636;1034:778" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[var(--component-colors\/components\/avatars\/avatar-styles-bg-neutral,#e0e0e0)] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+                      </div>
+                      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7891:88094;7891:72636;82:2790" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7891:88094;7891:72636;82:2788">
+                        Fatimah Ọ̀ṣúntókun
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7891:88094;7891:72636;82:2789">
+                        ngozi@PansGPT.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="absolute content-stretch flex items-center justify-center right-[8px] top-[8px]" data-node-id="I7891:88094;7891:72687" data-name="Checkbox">
+                    <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center pb-[var(--spacing-md,8px)] pt-[var(--spacing-xxs,2px)] px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="7891:88095" data-name="Menu actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-xs,4px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="7891:88096" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="relative shrink-0 size-[20px]" data-node-id="I7891:88096;3466:438465" data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I7891:88096;6421:271250" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7891:88096;3287:433057">
+                    Add account
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip pb-[var(--spacing-sm,6px)] pt-[var(--spacing-xs,4px)] relative shrink-0 w-full" data-node-id="7891:88097" data-name="Footer items">
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7891:88098" data-name="_Nav account card menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7891:88098;7891:71364" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7891:88098;7891:71365" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I7891:88098;7891:72247" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut2} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7891:88098;7891:71367">
+                    Sign out
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7891:88098;7891:94827" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7891:88098;7891:71368">
+                    ⌥⇧Q
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </button>
+    );
+  }
+  if (type === "Card" && open && breakpoint === "Mobile") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] w-[256px]"} data-node-id="7893:122795" data-name="Type=Card, Open=True, Breakpoint=Mobile">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7893:122796" data-name="Avatar label group">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:122796;1034:778" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:122796;82:2790" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:122796;82:2788">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:122796;82:2789">
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex items-center justify-center p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="8003:528590" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I8003:528590;7932:552030" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronSelectorVertical1} />
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid bottom-[71px] content-stretch flex flex-col items-start left-[-1px] overflow-clip right-[-1px] rounded-[12px] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))]" data-node-id="7893:122798" data-name="Menu">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-bl-[var(--radius-2xl,24px)] rounded-br-[var(--radius-2xl,24px)] rounded-tl-[var(--radius-xl,20px)] rounded-tr-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="7893:122799" data-name="Menu items wrapper">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122800" data-name="Menu items">
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122801" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122801;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122801;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7893:122801;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7893:122801;7891:71367">
+                      View profile
+                    </p>
+                  </div>
+                  <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7893:122801;7891:94827" data-name="Shortcut wrapper">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7893:122801;7891:71368">{`⌘K->P`}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122802" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122802;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122802;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7893:122802;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7893:122802;7891:71367">
+                      Account settings
+                    </p>
+                  </div>
+                  <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7893:122802;7891:94827" data-name="Shortcut wrapper">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7893:122802;7891:71368">
+                      ⌘S
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122803" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122803;7891:71364" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122803;7891:71365" data-name="Icon and text">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I7893:122803;7891:72247" data-name="placeholder">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBookOpen01} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7893:122803;7891:71367">
+                      Documentation
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122805" data-name="Menu items">
+              <div className="content-stretch flex items-start pb-[var(--spacing-xs,4px)] pt-[var(--spacing-sm,6px)] px-[var(--spacing-lg,12px)] relative shrink-0 w-full" data-node-id="7893:122806" data-name="Text wrapper">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left" data-node-id="7893:122807">
+                  Switch account
+                </p>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122808" data-name="_Nav account card menu item">
+                <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122808;7891:72771" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122808;7891:72772" data-name="Avatar label group">
+                    <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:122808;7891:72772;1034:778" data-name="Avatar">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:122808;7891:72772;82:2790" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:122808;7891:72772;82:2788">
+                        Diepreye Ọ̀rẹ̀kọ́yà
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:122808;7891:72772;82:2789">
+                        chioma@PansGPT.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="absolute content-stretch flex items-center justify-center right-[8px] top-[8px]" data-node-id="I7893:122808;7891:72773" data-name="Checkbox">
+                    <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122809" data-name="_Nav account card menu item">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122809;7891:72619" data-name="Content">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122809;7891:72636" data-name="Avatar label group">
+                    <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7893:122809;7891:72636;1034:778" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[var(--component-colors\/components\/avatars\/avatar-styles-bg-neutral,#e0e0e0)] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+                      </div>
+                      <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:122809;7891:72636;82:2790" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7893:122809;7891:72636;82:2788">
+                        Fatimah Ọ̀ṣúntókun
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7893:122809;7891:72636;82:2789">
+                        ngozi@PansGPT.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="absolute content-stretch flex items-center justify-center right-[8px] top-[8px]" data-node-id="I7893:122809;7891:72687" data-name="Checkbox">
+                    <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center pb-[var(--spacing-md,8px)] pt-[var(--spacing-xxs,2px)] px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="7893:122810" data-name="Menu actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-xs,4px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="7893:122811" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="relative shrink-0 size-[20px]" data-node-id="I7893:122811;3466:438465" data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I7893:122811;6421:271250" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7893:122811;3287:433057">
+                    Add account
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip pb-[var(--spacing-sm,6px)] pt-[var(--spacing-xs,4px)] relative shrink-0 w-full" data-node-id="7893:122812" data-name="Footer items">
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] relative shrink-0 w-full" data-node-id="7893:122813" data-name="_Nav account card menu item">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="I7893:122813;7891:71364" data-name="Content">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I7893:122813;7891:71365" data-name="Icon and text">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I7893:122813;7891:72247" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLogOut2} />
+                  </div>
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left" data-node-id="I7893:122813;7891:71367">
+                    Sign out
+                  </p>
+                </div>
+                <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I7893:122813;7891:94827" data-name="Shortcut wrapper">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I7893:122813;7891:71368">
+                    ⌥⇧Q
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </button>
+    );
+  }
+  return (
+    <button className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch cursor-pointer flex gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] w-[280px]"} data-node-id="7891:87631" data-name="Type=Card, Open=False, Breakpoint=Desktop">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7891:86704" data-name="Avatar label group">
+        <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="I7891:86704;1034:778" data-name="Avatar">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+          <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I7891:86704;82:2790" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I7891:86704;82:2788">
+            Diepreye Ọ̀rẹ̀kọ́yà
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I7891:86704;82:2789">
+            chioma@PansGPT.com
+          </p>
+        </div>
+      </div>
+      <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] right-[7px] rounded-[var(--radius-sm,8px)] top-[7px]" data-node-id="8003:526604" data-name="Buttons/Button utility">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I8003:526604;7932:552036" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronSelectorVertical} />
+        </div>
+      </div>
+    </button>
+  );
+}

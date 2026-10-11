@@ -1,0 +1,58 @@
+const imgPaymentMethodIcon = "https://www.figma.com/api/mcp/asset/f6f652b5-47eb-4331-bb5e-980603c6e1f8.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px]"} data-node-id="1097:63885" />;
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Payment icon";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = false, size = "sm", state = "Default", type = "Payment icon" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px]"} data-node-id="1142:83057">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1142:83058" data-name="Content">
+        <div className="h-[32px] relative shrink-0 w-[46px]" data-node-id="1142:83261" data-name="Payment method icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPaymentMethodIcon} />
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="1142:83060" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1142:86525" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1142:83061">
+              Visa ending in 1234
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1142:83062">
+              Expiry 06/2025
+            </p>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1142:86526" data-name="Actions">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1142:86527" data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1142:86527;3287:433377">
+                Set as default
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1142:86530" data-name="Buttons/Button">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1142:86530;3287:433289">
+                Edit
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+    </div>
+  );
+}

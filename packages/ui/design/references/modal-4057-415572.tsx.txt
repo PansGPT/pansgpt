@@ -1,0 +1,151 @@
+const imgContent = "https://www.figma.com/api/mcp/asset/93b16cb7-fc4c-44c1-906d-ccf467bcaf1c.svg";
+const imgContent1 = "https://www.figma.com/api/mcp/asset/1b66cb95-6ca9-4110-9930-dae764b0954d.svg";
+const imgLock01 = "https://www.figma.com/api/mcp/asset/0e029e33-34f2-4991-af8e-3cc5f0e58ad6.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/eb8dbfdd-e281-4cf0-a688-0a4acbb77a7d.svg";
+const imgQrCode = "https://www.figma.com/api/mcp/asset/bddf769d-1aa2-4230-89e8-179bc292b658.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/d219ebbe-9675-4ff5-8f24-edcaec5e21ea.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/8311907f-181d-496b-891b-3fa7516681e6.svg";
+
+type MegaInputFieldBaseProps = {
+  className?: string;
+  size?: "sm";
+  state?: "Placeholder";
+};
+
+function MegaInputFieldBase({ className, size = "sm", state = "Placeholder" }: MegaInputFieldBaseProps) {
+  return (
+    <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[64px]"} data-node-id="1106:66615">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66617">
+        0
+      </p>
+    </button>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "2FA code";
+};
+
+function Modal({ className, breakpoint = "Desktop", type = "2FA code" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[960px] items-center justify-center overflow-clip px-[var(--container-padding-desktop,32px)] py-[var(--spacing-4xl,32px)] relative w-[1440px]"} data-node-id="4057:415572">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411221" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411221;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center max-w-[512px] overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:425917" data-name="Modal">
+        <div className="absolute left-[-120px] size-[336px] top-[-120px]" data-node-id="7449:110771" data-name="Background pattern decorative">
+          <div className="-translate-x-1/2 absolute left-1/2 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[336px_336px] size-[336px] top-0" data-node-id="I7449:110771;4947:374952" style={{ maskImage: `url("${imgContent}")` }} data-name="Content">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgContent1} />
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4057:425918" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4057:425918;4055:413573" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="I4057:425918;4055:413574" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+              <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4057:425918;4055:413574;4041:412673" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLock01} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="I4057:425918;4055:413575" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:425918;4055:413576">
+                Set up two-factor authentication
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:425918;4055:413577">
+                To authorise transactions, please scan this QR code with your Google Authenticator App and enter the verification code below.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="I4057:425918;4055:413592" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[24px]" data-node-id="I4057:425918;4055:413592;2763:420143" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I4057:425918;4059:419667" data-name="Padding bottom" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="4057:425919" data-name="Content">
+          <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] content-stretch flex flex-col items-center justify-center overflow-clip p-[var(--spacing-2xl,20px)] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="7912:554548" data-name="QR code wrapper">
+            <div className="content-stretch flex flex-col items-center justify-center p-[var(--spacing-lg,12px)] relative shrink-0" data-node-id="7912:554549" data-name="QR code frame">
+              <div className="relative shrink-0 size-[128px]" data-node-id="7912:554550" data-name="QR code">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgQrCode} />
+              </div>
+              <div className="absolute bottom-0 flex items-center justify-center left-0 size-[12px]" data-node-id="7912:554552">
+                <div className="-rotate-90 flex-none">
+                  <div className="border-[var(--colors\/border\/border-brand_alt,#079455)] border-l-2 border-solid border-t-2 relative rounded-tl-[4px] size-[12px]" data-name="Handle" />
+                </div>
+              </div>
+              <div className="absolute bottom-0 flex items-center justify-center right-0 size-[12px]" data-node-id="7912:554553">
+                <div className="-rotate-90 -scale-y-100 flex-none">
+                  <div className="border-[var(--colors\/border\/border-brand_alt,#079455)] border-l-2 border-solid border-t-2 relative rounded-tl-[4px] size-[12px]" data-name="Handle" />
+                </div>
+              </div>
+              <div className="absolute border-[var(--colors\/border\/border-brand_alt,#079455)] border-l-2 border-solid border-t-2 left-0 rounded-tl-[4px] size-[12px] top-0" data-node-id="7912:554554" data-name="Handle" />
+              <div className="absolute flex items-center justify-center right-0 size-[12px] top-0" data-node-id="7912:554555">
+                <div className="-scale-y-100 flex-none rotate-180">
+                  <div className="border-[var(--colors\/border\/border-brand_alt,#079455)] border-l-2 border-solid border-t-2 relative rounded-tl-[4px] size-[12px]" data-name="Handle" />
+                </div>
+              </div>
+            </div>
+            <div className="-translate-x-1/2 absolute bottom-0 left-1/2 overflow-clip top-[92px] w-[424px]" data-node-id="7912:554556" data-name="Gradient scan">
+              <div className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[100%_100%] opacity-10" data-node-id="7912:554558" style={{ maskImage: `url("${imgBackground}")` }} data-name="Background" />
+              <div className="absolute h-0 left-0 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[0px_-1px] mask-size-[100%_100px] right-0 top-px" data-node-id="7912:554608" style={{ maskImage: `url("${imgBackground}")` }} data-name="Line">
+                <div className="absolute inset-[-2px_0_0_0]">
+                  <img alt="" className="block max-w-none size-full" src={imgLine} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="4057:427418" data-name="Input">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0" data-node-id="4057:427419" data-name="Verification code input field">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I4057:427419;1106:67436" data-name="Input with label">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:427419;1106:67437">
+                  Verification code
+                </p>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I4057:427419;1106:67438" data-name="Input">
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                  <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium h-[64px] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] w-[28px]" data-node-id="I4057:427419;1106:67628">
+                    <p className="leading-[var(--line-height\/display-xl,72px)]">-</p>
+                  </div>
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                  <MegaInputFieldBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-[64px]" />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:427419;1106:67443">
+                <span className="leading-[var(--line-height\/text-sm,20px)]">{`Didn’t get a code? `}</span>
+                <span className="[text-decoration-skip-ink:none] [text-underline-position:from-font] decoration-from-font decoration-solid leading-[var(--line-height\/text-sm,20px)] underline">Click to resend</span>
+                <span className="leading-[var(--line-height\/text-sm,20px)]">.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-4xl,32px)] relative shrink-0 w-full" data-node-id="4057:425920" data-name="_Modal actions">
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4057:425920;4057:414532" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-sm,6px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="I4057:425920;4057:414364" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:425920;4057:414364;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:425920;4057:414364;3287:433081">
+                  Cancel
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-sm,6px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="I4057:425920;4057:414365" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:425920;4057:414365;6421:273911" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:425920;4057:414365;3287:432949">
+                  Confirm
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

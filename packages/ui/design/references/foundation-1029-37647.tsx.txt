@@ -1,0 +1,19 @@
+export default function SwatchBase({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col isolate items-start overflow-clip relative rounded-[var(--radius-xl,20px)] w-[160px]"} data-node-id="1029:37647" data-name="_Swatch base">
+      <div className="absolute bg-[var(--colors\/gray-\(light-mode\)\/900,#181d27)] border border-[rgba(0,0,0,0.1)] border-solid h-[80px] left-0 right-0 rounded-[var(--radius-xl,20px)] top-0 z-[2]" data-node-id="1140:82455" data-name="Swatch">
+        <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] left-[7px] right-[7px] text-[color:var(--colors\/base\/white,white)] text-[length:var(--font-size\/text-lg,18px)] text-center top-[calc(50%-14px)]" data-node-id="1140:80474">
+          AA 4.55
+        </p>
+      </div>
+      <div className="[word-break:break-word] bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-l border-r border-solid content-stretch flex flex-col items-start pb-[var(--spacing-lg,12px)] pt-[92px] px-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full z-[1]" data-node-id="1029:33752" data-name="Content">
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="1029:36980">
+          900
+        </p>
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1029:33754">
+          #000000
+        </p>
+      </div>
+    </div>
+  );
+}

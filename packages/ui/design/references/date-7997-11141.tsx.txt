@@ -1,0 +1,42 @@
+type CalendarColumnHeaderProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  date?: boolean;
+  type?: "Default" | "Selected" | "Today's date";
+};
+
+export default function CalendarColumnHeader({ className, breakpoint = "Desktop", date = true, type = "Default" }: CalendarColumnHeaderProps) {
+  const isDefaultAndMobile = type === "Default" && breakpoint === "Mobile";
+  const isSelectedAndDesktop = type === "Selected" && breakpoint === "Desktop";
+  const isSelectedAndMobile = type === "Selected" && breakpoint === "Mobile";
+  const isTodaysDateAndDesktop = type === "Today's date" && breakpoint === "Desktop";
+  const isTodaysDateAndMobile = type === "Today's date" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-r border-solid content-stretch flex items-center p-[var(--spacing-md,8px)] relative `}${breakpoint === "Desktop" && ["Selected", "Today's date"].includes(type) ? "gap-[var(--spacing-md,8px)] justify-center w-[160px]" : breakpoint === "Mobile" ? "flex-col gap-[var(--spacing-sm,6px)] w-[64px]" : "gap-[var(--spacing-xs,4px)] justify-center w-[160px]"}`} id={isTodaysDateAndMobile ? "node-8001_20143" : isTodaysDateAndDesktop ? "node-7998_12056" : isSelectedAndMobile ? "node-8001_20139" : isSelectedAndDesktop ? "node-7997_11140" : isDefaultAndMobile ? "node-8001_20135" : "node-7997_8488"}>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" id={isTodaysDateAndMobile ? "node-8001_20144" : isTodaysDateAndDesktop ? "node-7998_12057" : isSelectedAndMobile ? "node-8001_20140" : isSelectedAndDesktop ? "node-7997_11122" : isDefaultAndMobile ? "node-8001_20136" : "node-7996_12413"}>
+        Mon
+      </p>
+      {type === "Default" && date && (
+        <div className="content-stretch flex flex-col h-[24px] items-center justify-center relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7997:11168" data-name="Date wrapper">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] w-full" data-node-id="7997:11169">
+            1
+          </p>
+        </div>
+      )}
+      {type === "Selected" && date && (
+        <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] content-stretch flex flex-col items-center justify-center relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="7997:11142" data-name="Date wrapper">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center w-full" data-node-id="7997:11143">
+            1
+          </p>
+        </div>
+      )}
+      {type === "Today's date" && date && (
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-col items-center justify-center relative rounded-[9999px] shrink-0 size-[24px]" data-node-id="7998:12058" data-name="Date wrapper">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center w-full" data-node-id="7998:12059">
+            1
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,1425 @@
+[
+  {
+    "id": "1560:266242",
+    "name": "Actions=False, Type=Simple, Breakpoint=Desktop",
+    "width": 388,
+    "height": 106,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 8,
+    "children": [
+      {
+        "id": "1561:261476",
+        "name": "Heading",
+        "width": 348,
+        "height": 20,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "id": "1561:261477",
+        "name": "Number and badge",
+        "width": 348,
+        "height": 38,
+        "x": 20,
+        "y": 48,
+        "gap": 16
+      },
+      {
+        "id": "3292:578016",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:262223",
+    "name": "Actions=True, Type=Simple, Breakpoint=Desktop",
+    "width": 388,
+    "height": 158,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262237",
+        "name": "Content",
+        "width": 388,
+        "height": 106,
+        "x": 0,
+        "y": 0,
+        "gap": 8
+      },
+      {
+        "id": "1561:262246",
+        "name": "Action",
+        "width": 388,
+        "height": 52,
+        "x": 0,
+        "y": 106,
+        "gap": 0
+      },
+      {
+        "id": "3292:579841",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:262364",
+    "name": "Actions=True, Type=Simple, Breakpoint=Mobile",
+    "width": 343,
+    "height": 158,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262365",
+        "name": "Content",
+        "width": 343,
+        "height": 106,
+        "x": 0,
+        "y": 0,
+        "gap": 8
+      },
+      {
+        "id": "1561:262373",
+        "name": "Action",
+        "width": 343,
+        "height": 52,
+        "x": 0,
+        "y": 106,
+        "gap": 0
+      },
+      {
+        "id": "3292:580210",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:261551",
+    "name": "Actions=False, Type=Icon 01, Breakpoint=Desktop",
+    "width": 388,
+    "height": 174,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "1561:262031",
+        "name": "Featured icon",
+        "width": 48,
+        "height": 48,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "id": "1561:262028",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      },
+      {
+        "id": "1561:261565",
+        "name": "Heading and number",
+        "width": 348,
+        "height": 66,
+        "x": 20,
+        "y": 88,
+        "gap": 8
+      }
+    ]
+  },
+  {
+    "id": "4988:370796",
+    "name": "Actions=False, Type=Icon 03, Breakpoint=Desktop",
+    "width": 388,
+    "height": 174,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "4988:370797",
+        "name": "Featured icon",
+        "width": 48,
+        "height": 48,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "id": "4988:370798",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      },
+      {
+        "id": "4988:370799",
+        "name": "Heading and number",
+        "width": 348,
+        "height": 66,
+        "x": 20,
+        "y": 88,
+        "gap": 8
+      }
+    ]
+  },
+  {
+    "id": "8082:163481",
+    "name": "Actions=False, Type=Icon 04, Breakpoint=Desktop",
+    "width": 388,
+    "height": 106,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "8082:163482",
+        "name": "Featured icon",
+        "width": 40,
+        "height": 40,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "id": "8082:163483",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      },
+      {
+        "id": "8082:163484",
+        "name": "Heading and number",
+        "width": 292,
+        "height": 66,
+        "x": 76,
+        "y": 20,
+        "gap": 8
+      }
+    ]
+  },
+  {
+    "id": "5002:371238",
+    "name": "Actions=False, Type=Chart 03, Breakpoint=Desktop",
+    "width": 388,
+    "height": 198,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "5002:371240",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      },
+      {
+        "id": "5002:371241",
+        "name": "Heading and number",
+        "width": 348,
+        "height": 66,
+        "x": 20,
+        "y": 20,
+        "gap": 8
+      },
+      {
+        "id": "5002:371330",
+        "name": "_Chart mini",
+        "width": 348,
+        "height": 72,
+        "x": 20,
+        "y": 106
+      }
+    ]
+  },
+  {
+    "id": "1561:262190",
+    "name": "Actions=True, Type=Icon 01, Breakpoint=Desktop",
+    "width": 388,
+    "height": 226,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262208",
+        "name": "Content",
+        "width": 388,
+        "height": 174,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "1561:262238",
+        "name": "Action",
+        "width": 388,
+        "height": 52,
+        "x": 0,
+        "y": 174,
+        "gap": 0
+      },
+      {
+        "id": "3292:579898",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "4988:370805",
+    "name": "Actions=True, Type=Icon 03, Breakpoint=Desktop",
+    "width": 388,
+    "height": 242,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "4988:370806",
+        "name": "Content",
+        "width": 388,
+        "height": 174,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "4988:370814",
+        "name": "Action",
+        "width": 388,
+        "height": 68,
+        "x": 0,
+        "y": 174,
+        "gap": 0
+      },
+      {
+        "id": "4988:370817",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "8082:163491",
+    "name": "Actions=True, Type=Icon 04, Breakpoint=Desktop",
+    "width": 388,
+    "height": 174,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "8082:163492",
+        "name": "Content",
+        "width": 388,
+        "height": 106,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "8082:163501",
+        "name": "Action",
+        "width": 388,
+        "height": 68,
+        "x": 0,
+        "y": 106,
+        "gap": 0
+      },
+      {
+        "id": "8082:163505",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "5002:371248",
+    "name": "Actions=True, Type=Chart 03, Breakpoint=Desktop",
+    "width": 388,
+    "height": 266,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "5002:371249",
+        "name": "Content",
+        "width": 388,
+        "height": 198,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "5002:371258",
+        "name": "Action",
+        "width": 388,
+        "height": 68,
+        "x": 0,
+        "y": 198,
+        "gap": 0
+      },
+      {
+        "id": "5002:371262",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:262349",
+    "name": "Actions=True, Type=Icon 01, Breakpoint=Mobile",
+    "width": 343,
+    "height": 222,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262350",
+        "name": "Content",
+        "width": 343,
+        "height": 170,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "1561:262360",
+        "name": "Action",
+        "width": 343,
+        "height": 52,
+        "x": 0,
+        "y": 170,
+        "gap": 0
+      },
+      {
+        "id": "3292:580267",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "4988:370818",
+    "name": "Actions=True, Type=Icon 03, Breakpoint=Mobile",
+    "width": 343,
+    "height": 230,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "4988:370819",
+        "name": "Content",
+        "width": 343,
+        "height": 170,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "4988:370827",
+        "name": "Action",
+        "width": 343,
+        "height": 60,
+        "x": 0,
+        "y": 170,
+        "gap": 0
+      },
+      {
+        "id": "4988:370830",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "8082:163506",
+    "name": "Actions=True, Type=Icon 04, Breakpoint=Mobile",
+    "width": 343,
+    "height": 222,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "8082:163507",
+        "name": "Content",
+        "width": 343,
+        "height": 162,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "8082:163516",
+        "name": "Action",
+        "width": 343,
+        "height": 60,
+        "x": 0,
+        "y": 162,
+        "gap": 0
+      },
+      {
+        "id": "8082:163520",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "5002:371263",
+    "name": "Actions=True, Type=Chart 03, Breakpoint=Mobile",
+    "width": 343,
+    "height": 254,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "5002:371264",
+        "name": "Content",
+        "width": 343,
+        "height": 194,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "5002:371273",
+        "name": "Action",
+        "width": 343,
+        "height": 60,
+        "x": 0,
+        "y": 194,
+        "gap": 0
+      },
+      {
+        "id": "5002:371277",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:261634",
+    "name": "Actions=False, Type=Icon 02, Breakpoint=Desktop",
+    "width": 388,
+    "height": 178,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "1561:262053",
+        "name": "Heading and icon",
+        "width": 348,
+        "height": 48,
+        "x": 20,
+        "y": 20,
+        "gap": 12
+      },
+      {
+        "id": "1561:261638",
+        "name": "Number and badge",
+        "width": 348,
+        "height": 70,
+        "x": 20,
+        "y": 88,
+        "gap": 12
+      },
+      {
+        "id": "3292:578559",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "4993:376878",
+    "name": "Actions=False, Type=Chart 02, Breakpoint=Desktop",
+    "width": 388,
+    "height": 164,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "4993:376879",
+        "name": "Heading and icon",
+        "width": 348,
+        "height": 48,
+        "x": 20,
+        "y": 20,
+        "gap": 12
+      },
+      {
+        "id": "4993:377003",
+        "name": "Number and chart",
+        "width": 348,
+        "height": 56,
+        "x": 20,
+        "y": 88,
+        "gap": 16
+      },
+      {
+        "id": "4993:376887",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:265452",
+    "name": "Actions=False, Type=Chart 01, Breakpoint=Desktop",
+    "width": 388,
+    "height": 154,
+    "padding": [
+      20,
+      20,
+      20,
+      20
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "1561:265456",
+        "name": "Heading",
+        "width": 348,
+        "height": 24,
+        "x": 20,
+        "y": 20
+      },
+      {
+        "id": "1561:265478",
+        "name": "Number and chart",
+        "width": 348,
+        "height": 70,
+        "x": 20,
+        "y": 64,
+        "gap": 16
+      },
+      {
+        "id": "3292:578610",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:265555",
+    "name": "Actions=False, Type=Chart 01, Breakpoint=Mobile",
+    "width": 343,
+    "height": 154,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 20,
+    "children": [
+      {
+        "id": "1561:265557",
+        "name": "Heading",
+        "width": 311,
+        "height": 24,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "id": "1561:265559",
+        "name": "Number and chart",
+        "width": 311,
+        "height": 70,
+        "x": 16,
+        "y": 64,
+        "gap": 16
+      },
+      {
+        "id": "3292:579379",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:262116",
+    "name": "Actions=True, Type=Icon 02, Breakpoint=Desktop",
+    "width": 388,
+    "height": 230,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262149",
+        "name": "Content",
+        "width": 388,
+        "height": 178,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "1561:262139",
+        "name": "Action",
+        "width": 388,
+        "height": 52,
+        "x": 0,
+        "y": 178,
+        "gap": 0
+      },
+      {
+        "id": "3292:579967",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "4993:376888",
+    "name": "Actions=True, Type=Chart 02, Breakpoint=Desktop",
+    "width": 388,
+    "height": 232,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "4993:376889",
+        "name": "Content",
+        "width": 388,
+        "height": 164,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "4993:376964",
+        "name": "Action",
+        "width": 388,
+        "height": 68,
+        "x": 0,
+        "y": 164,
+        "gap": 0
+      },
+      {
+        "id": "4993:376901",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "1561:262331",
+    "name": "Actions=True, Type=Icon 02, Breakpoint=Mobile",
+    "width": 343,
+    "height": 226,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:262332",
+        "name": "Content",
+        "width": 343,
+        "height": 174,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "1561:262345",
+        "name": "Action",
+        "width": 343,
+        "height": 52,
+        "x": 0,
+        "y": 174,
+        "gap": 0
+      },
+      {
+        "id": "3292:580336",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:265642",
+    "name": "Actions=True, Type=Chart 01, Breakpoint=Desktop",
+    "width": 388,
+    "height": 206,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:265643",
+        "name": "Content",
+        "width": 388,
+        "height": 154,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "1561:265656",
+        "name": "Action",
+        "width": 388,
+        "height": 52,
+        "x": 0,
+        "y": 154,
+        "gap": 0
+      },
+      {
+        "id": "3292:580036",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 348,
+        "y": 20
+      }
+    ]
+  },
+  {
+    "id": "4993:376902",
+    "name": "Actions=True, Type=Chart 02, Breakpoint=Mobile",
+    "width": 343,
+    "height": 220,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "4993:376903",
+        "name": "Content",
+        "width": 343,
+        "height": 160,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "4993:376975",
+        "name": "Action",
+        "width": 343,
+        "height": 60,
+        "x": 0,
+        "y": 160,
+        "gap": 0
+      },
+      {
+        "id": "4993:376915",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:265624",
+    "name": "Actions=True, Type=Chart 01, Breakpoint=Mobile",
+    "width": 343,
+    "height": 206,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "1561:265625",
+        "name": "Content",
+        "width": 343,
+        "height": 154,
+        "x": 0,
+        "y": 0,
+        "gap": 20
+      },
+      {
+        "id": "1561:265638",
+        "name": "Action",
+        "width": 343,
+        "height": 52,
+        "x": 0,
+        "y": 154,
+        "gap": 0
+      },
+      {
+        "id": "3292:580405",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:261674",
+    "name": "Actions=False, Type=Icon 02, Breakpoint=Mobile",
+    "width": 343,
+    "height": 174,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "1561:262059",
+        "name": "Heading and icon",
+        "width": 311,
+        "height": 48,
+        "x": 16,
+        "y": 20,
+        "gap": 12
+      },
+      {
+        "id": "1561:261678",
+        "name": "Number and badge",
+        "width": 311,
+        "height": 70,
+        "x": 16,
+        "y": 84,
+        "gap": 12
+      },
+      {
+        "id": "3292:579328",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "4993:376916",
+    "name": "Actions=False, Type=Chart 02, Breakpoint=Mobile",
+    "width": 343,
+    "height": 160,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "4993:376917",
+        "name": "Heading and icon",
+        "width": 311,
+        "height": 48,
+        "x": 16,
+        "y": 20,
+        "gap": 12
+      },
+      {
+        "id": "4993:377044",
+        "name": "Number and chart",
+        "width": 311,
+        "height": 56,
+        "x": 16,
+        "y": 84,
+        "gap": 16
+      },
+      {
+        "id": "4993:376925",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1561:261602",
+    "name": "Actions=False, Type=Icon 01, Breakpoint=Mobile",
+    "width": 343,
+    "height": 170,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "1561:264950",
+        "name": "Featured icon",
+        "width": 48,
+        "height": 48,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "id": "1561:261604",
+        "name": "Heading and number",
+        "width": 311,
+        "height": 66,
+        "x": 16,
+        "y": 84,
+        "gap": 8
+      },
+      {
+        "id": "3292:579167",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "4988:370831",
+    "name": "Actions=False, Type=Icon 03, Breakpoint=Mobile",
+    "width": 343,
+    "height": 170,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "4988:370832",
+        "name": "Featured icon",
+        "width": 48,
+        "height": 48,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "id": "4988:370833",
+        "name": "Heading and number",
+        "width": 311,
+        "height": 66,
+        "x": 16,
+        "y": 84,
+        "gap": 8
+      },
+      {
+        "id": "4988:370839",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "8082:163521",
+    "name": "Actions=False, Type=Icon 04, Breakpoint=Mobile",
+    "width": 343,
+    "height": 162,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "8082:163522",
+        "name": "Featured icon",
+        "width": 40,
+        "height": 40,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "id": "8082:163523",
+        "name": "Heading and number",
+        "width": 311,
+        "height": 66,
+        "x": 16,
+        "y": 76,
+        "gap": 8
+      },
+      {
+        "id": "8082:163530",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "5002:371278",
+    "name": "Actions=False, Type=Chart 03, Breakpoint=Mobile",
+    "width": 343,
+    "height": 194,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 16,
+    "children": [
+      {
+        "id": "5002:371280",
+        "name": "Heading and number",
+        "width": 311,
+        "height": 66,
+        "x": 16,
+        "y": 20,
+        "gap": 8
+      },
+      {
+        "id": "5002:371353",
+        "name": "_Chart mini",
+        "width": 311,
+        "height": 72,
+        "x": 16,
+        "y": 102
+      },
+      {
+        "id": "5002:371287",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "1560:266285",
+    "name": "Actions=False, Type=Simple, Breakpoint=Mobile",
+    "width": 343,
+    "height": 106,
+    "padding": [
+      20,
+      16,
+      20,
+      16
+    ],
+    "gap": 8,
+    "children": [
+      {
+        "id": "1561:261718",
+        "name": "Heading",
+        "width": 311,
+        "height": 20,
+        "x": 16,
+        "y": 20
+      },
+      {
+        "id": "1561:261471",
+        "name": "Number and badge",
+        "width": 311,
+        "height": 38,
+        "x": 16,
+        "y": 48,
+        "gap": 16
+      },
+      {
+        "id": "3292:578970",
+        "name": "Dropdown",
+        "width": 20,
+        "height": 20,
+        "x": 307,
+        "y": 16
+      }
+    ]
+  },
+  {
+    "id": "7947:105121",
+    "name": "Actions=True, Type=Chart 04, Breakpoint=Desktop",
+    "width": 388,
+    "height": 256,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "7947:105794",
+        "name": "Heading and content",
+        "width": 388,
+        "height": 196,
+        "x": 0,
+        "y": 0,
+        "gap": 2
+      },
+      {
+        "id": "7947:80155",
+        "name": "Action",
+        "width": 388,
+        "height": 60,
+        "x": 0,
+        "y": 196,
+        "gap": 0
+      }
+    ]
+  },
+  {
+    "id": "7947:105579",
+    "name": "Actions=False, Type=Chart 04, Breakpoint=Desktop",
+    "width": 388,
+    "height": 196,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "7947:105796",
+        "name": "Heading and content",
+        "width": 388,
+        "height": 196,
+        "x": 0,
+        "y": 0,
+        "gap": 2
+      }
+    ]
+  },
+  {
+    "id": "7947:105116",
+    "name": "Actions=True, Type=Chart 04, Breakpoint=Mobile",
+    "width": 343,
+    "height": 252,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 0,
+    "children": [
+      {
+        "id": "7947:105795",
+        "name": "Heading and content",
+        "width": 343,
+        "height": 192,
+        "x": 0,
+        "y": 0,
+        "gap": 2
+      },
+      {
+        "id": "7947:80136",
+        "name": "Action",
+        "width": 343,
+        "height": 60,
+        "x": 0,
+        "y": 192,
+        "gap": 0
+      }
+    ]
+  },
+  {
+    "id": "7947:105594",
+    "name": "Actions=False, Type=Chart 04, Breakpoint=Mobile",
+    "width": 343,
+    "height": 192,
+    "padding": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "gap": 2,
+    "children": [
+      {
+        "id": "7947:105595",
+        "name": "Heading and content",
+        "width": 343,
+        "height": 40,
+        "x": 0,
+        "y": 0,
+        "gap": 16
+      },
+      {
+        "id": "7947:105597",
+        "name": "Heading and content",
+        "width": 343,
+        "height": 150,
+        "x": 0,
+        "y": 42,
+        "gap": 16
+      }
+    ]
+  }
+]

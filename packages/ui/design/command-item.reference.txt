@@ -1,0 +1,1112 @@
+const imgSizeMdOutlineFalse = "https://www.figma.com/api/mcp/asset/c26eeaec-b2ae-4313-bbc8-a1378dcb54a2.svg";
+const imgSizeLgPlaceholderFalseTextFalseStatusIconFalse = "https://www.figma.com/api/mcp/asset/9dd7597a-ae10-4510-9dbb-7d8188b4629e.png";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/b0072468-5bb5-4a6d-9c69-550efe94eac5.svg";
+const imgUser2 = "https://www.figma.com/api/mcp/asset/71fab623-efb1-4aac-af16-cdabf042d05b.svg";
+const imgUser3 = "https://www.figma.com/api/mcp/asset/01181583-edd7-4698-829f-0e3ad5d2d3d2.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/a2d439ee-f04e-4633-b547-a35bbee8cb4b.svg";
+
+type CommandShortcutProps = {
+  className?: string;
+  dual?: "False";
+};
+
+function CommandShortcut({ className, dual = "False" }: CommandShortcutProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative"} data-node-id="3307:405244">
+      <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="3307:405241" data-name="Key">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405242">
+          ⌘C
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "md";
+};
+
+function Dot({ className, outline = "False", size = "md" }: DotProps) {
+  return (
+    <div className={className || "relative size-[10px]"} data-node-id="1046:10693">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeMdOutlineFalse} />
+    </div>
+  );
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "xs" | "md" | "lg";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "xs", statusIcon = "False", text = "False" }: AvatarProps) {
+  const isMdAndFalseAndFalseAndFalse = size === "md" && placeholder === "False" && text === "False" && statusIcon === "False";
+  const isXsAndFalseAndFalseAndFalse = size === "xs" && placeholder === "False" && text === "False" && statusIcon === "False";
+  return (
+    <div className={className || `border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] ${isXsAndFalseAndFalseAndFalse ? "border-[0.5px] size-[24px]" : isMdAndFalseAndFalseAndFalse ? "border size-[40px]" : "border size-[48px]"}`} id={isXsAndFalseAndFalseAndFalse ? "node-19_1011" : isMdAndFalseAndFalseAndFalse ? "node-19_1016" : "node-19_1017"}>
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeLgPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type CommandDropdownMenuItemProps = {
+  className?: string;
+  iconSwap?: React.ReactNode | null;
+  shortcut?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focus";
+  supportingText?: boolean;
+  text?: "Default" | "Stacked";
+  type?: "Default" | "Icon leading" | "Avatar leading" | "Dot leading";
+};
+
+export default function CommandDropdownMenuItem({ className, iconSwap = null, shortcut = true, size = "sm", state = "Default", supportingText = true, text = "Default", type = "Default" }: CommandDropdownMenuItemProps) {
+  if (type === "Default" && state === "Default" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411138" data-name="Type=Default, State=Default, Text=Default, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411139" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411140" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411141">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411142">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Default" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406086" data-name="Type=Default, State=Default, Text=Stacked, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406087" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406233" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406234">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406235">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Default" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411144" data-name="Type=Default, State=Default, Text=Stacked, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411145" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411146" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411147">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411148">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Hover" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406430" data-name="Type=Default, State=Hover, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406431" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406432" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406433">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406434">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Hover" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411150" data-name="Type=Default, State=Hover, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411151" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411152" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411153">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411154">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Focus" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406506" data-name="Type=Default, State=Focus, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:406507" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406508" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406509">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406510">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Focus" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411156" data-name="Type=Default, State=Focus, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411157" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411158" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411159">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411160">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Default" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405054" data-name="Type=Icon leading, State=Default, Text=Default, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405055" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:405153" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405057" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405058">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405059">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Default" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411162" data-name="Type=Icon leading, State=Default, Text=Default, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411163" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:411164" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411165" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411166">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411167">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Default" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406093" data-name="Type=Icon leading, State=Default, Text=Stacked, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406094" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4896:412216" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4896:412216;4041:412675" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406236" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406237">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406238">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Default" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411169" data-name="Type=Icon leading, State=Default, Text=Stacked, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411170" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="4896:412217" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4896:412217;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411172" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411173">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411174">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Hover" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406436" data-name="Type=Icon leading, State=Hover, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406437" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4896:412218" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4896:412218;4041:412675" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406439" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406440">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406441">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Hover" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411176" data-name="Type=Icon leading, State=Hover, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411177" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="4896:412219" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4896:412219;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411179" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411180">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411181">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Focus" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406512" data-name="Type=Icon leading, State=Focus, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:406513" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4896:412220" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4896:412220;4041:412675" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406515" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406516">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406517">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Focus" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411183" data-name="Type=Icon leading, State=Focus, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411184" data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="4896:412221" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4896:412221;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start justify-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411186" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411187">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411188">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Default" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405120" data-name="Type=Avatar leading, State=Default, Text=Default, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405121" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405123" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405124">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405125">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Default" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411190" data-name="Type=Avatar leading, State=Default, Text=Default, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411191" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411193" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411194">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411195">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Default" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406101" data-name="Type=Avatar leading, State=Default, Text=Stacked, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406102" data-name="Content">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="3307:406103" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeLgPlaceholderFalseTextFalseStatusIconFalse} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406380" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406381">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406382">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Default" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411197" data-name="Type=Avatar leading, State=Default, Text=Stacked, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411198" data-name="Content">
+          <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" size="lg" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411200" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411201">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411202">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Hover" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406443" data-name="Type=Avatar leading, State=Hover, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406444" data-name="Content">
+          <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" size="md" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406446" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406447">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406448">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Hover" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411204" data-name="Type=Avatar leading, State=Hover, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411205" data-name="Content">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="3307:411206" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeLgPlaceholderFalseTextFalseStatusIconFalse} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411207" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411208">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411209">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Focus" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406519" data-name="Type=Avatar leading, State=Focus, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:406520" data-name="Content">
+          <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" size="md" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406522" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406523">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406524">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Focus" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411211" data-name="Type=Avatar leading, State=Focus, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411212" data-name="Content">
+          <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" size="lg" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411214" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411215">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411216">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Default" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405192" data-name="Type=Dot leading, State=Default, Text=Default, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405193" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405195" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405196">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405197">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Default" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411218" data-name="Type=Dot leading, State=Default, Text=Default, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411219" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411221" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411222">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411223">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Default" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406109" data-name="Type=Dot leading, State=Default, Text=Stacked, Size=sm">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406110" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406385" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406386">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406387">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:406111" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Default" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411225" data-name="Type=Dot leading, State=Default, Text=Stacked, Size=md">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411226" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411227" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411228">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411229">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:411231" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Hover" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406450" data-name="Type=Dot leading, State=Hover, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:406451" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406452" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406453">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406454">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:406456" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Hover" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411232" data-name="Type=Dot leading, State=Hover, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411233" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411234" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411235">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411236">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:411238" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Focus" && text === "Stacked" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:406526" data-name="Type=Dot leading, State=Focus, Text=Stacked, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:406527" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="3307:406528" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:406529">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:406530">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:406532" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Focus" && text === "Stacked" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411239" data-name="Type=Dot leading, State=Focus, Text=Stacked, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px overflow-clip pl-[var(--spacing-4xl,32px)] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411240" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="3307:411241" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="3307:411242">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="3307:411243">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+          <div className="absolute left-[14px] size-[10px] top-[17px]" data-node-id="3307:411245" data-name="_Dot">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Hover" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:404955" data-name="Type=Default, State=Hover, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:404942" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:404944" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:404945">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:404946">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Hover" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411246" data-name="Type=Default, State=Hover, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411247" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411248" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411249">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411250">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Hover" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405062" data-name="Type=Icon leading, State=Hover, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405063" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:405155" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405065" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405066">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405067">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Hover" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411252" data-name="Type=Icon leading, State=Hover, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411253" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:411254" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411255" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411256">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411257">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Hover" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405128" data-name="Type=Avatar leading, State=Hover, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405129" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405131" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405132">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405133">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Hover" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411259" data-name="Type=Avatar leading, State=Hover, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411260" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411262" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411263">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411264">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Hover" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405200" data-name="Type=Dot leading, State=Hover, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:405201" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405203" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405204">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405205">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Hover" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411266" data-name="Type=Dot leading, State=Hover, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:411267" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411269" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411270">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411271">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Focus" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:404971" data-name="Type=Default, State=Focus, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:404972" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:404974" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:404975">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:404976">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Default" && state === "Focus" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411273" data-name="Type=Default, State=Focus, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411274" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411275" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411276">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411277">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Focus" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405070" data-name="Type=Icon leading, State=Focus, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:405071" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:405157" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405073" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405074">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405075">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon leading" && state === "Focus" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411279" data-name="Type=Icon leading, State=Focus, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411280" data-name="Content">
+          {iconSwap || (
+            <div className="relative shrink-0 size-[20px]" data-node-id="3307:411281" data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+          )}
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411282" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411283">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411284">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Focus" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405136" data-name="Type=Avatar leading, State=Focus, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:405137" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405139" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405140">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405141">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar leading" && state === "Focus" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411286" data-name="Type=Avatar leading, State=Focus, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411287" data-name="Content">
+          <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411289" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411290">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411291">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Focus" && text === "Default" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:405208" data-name="Type=Dot leading, State=Focus, Text=Default, Size=sm">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:405209" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:405211" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:405212">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:405213">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Dot leading" && state === "Focus" && text === "Default" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:411293" data-name="Type=Dot leading, State=Focus, Text=Default, Size=md">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[14px] pr-[10px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]" data-node-id="3307:411294" data-name="Content">
+          <Dot className="relative shrink-0 size-[10px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3307:411296" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:411297">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:411298">
+                @olivia
+              </p>
+            )}
+          </div>
+          {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative w-[576px]"} data-node-id="3307:404926" data-name="Type=Default, State=Default, Text=Default, Size=sm">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="3307:404913" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3307:404915" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3307:404916">
+            Diepreye Ọ̀rẹ̀kọ́yà
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3307:404917">
+              @olivia
+            </p>
+          )}
+        </div>
+        {shortcut && <CommandShortcut className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" />}
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-md, weight: 500, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Avatar user square/Olivia Rhye: .
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

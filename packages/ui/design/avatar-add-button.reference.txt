@@ -1,0 +1,222 @@
+const imgTypeHandPoint = "https://www.figma.com/api/mcp/asset/f510e436-c392-496f-b4bf-097c000b12db.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/1ce17133-1b12-4f04-a882-6fa1337cbd80.svg";
+const imgPlus1 = "https://www.figma.com/api/mcp/asset/ed76f0f3-2c6e-413d-8559-d7efde3d4006.svg";
+const imgPlus2 = "https://www.figma.com/api/mcp/asset/79e843ac-7ace-41e1-afc9-7d4dcad28540.svg";
+const imgPlus3 = "https://www.figma.com/api/mcp/asset/870ea6be-587e-47e7-955a-722c13c73496.svg";
+const imgPlus4 = "https://www.figma.com/api/mcp/asset/48a5f09e-55b1-4d50-be0c-fbd7127aeb52.svg";
+const imgTooltip = "https://www.figma.com/api/mcp/asset/75013ba9-86b8-4f16-b9d9-620a6aa22911.svg";
+const imgPlus5 = "https://www.figma.com/api/mcp/asset/f1acb8ac-3435-495d-b5a3-4376a25fd5e9.svg";
+
+type CursorProps = {
+  className?: string;
+  type?: "Hand point";
+};
+
+function Cursor({ className, type = "Hand point" }: CursorProps) {
+  return (
+    <div className={className || "relative size-[20px]"} data-node-id="9342:257136">
+      <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+        <img alt="" className="block max-w-none size-full" src={imgTypeHandPoint} />
+      </div>
+    </div>
+  );
+}
+
+type AvatarAddButtonProps = {
+  className?: string;
+  size?: "xs" | "sm" | "md";
+  state?: "Default" | "Hover" | "Focus" | "Disabled";
+};
+
+export default function AvatarAddButton({ className, size = "xs", state = "Default" }: AvatarAddButtonProps) {
+  if (size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1274:686" data-name="Size=sm, State=Default">
+        <div className="absolute content-stretch flex inset-[calc(12.5%-0.38px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:687" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1274:688" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1274:883" data-name="Size=md, State=Default">
+        <div className="absolute content-stretch flex inset-[calc(15%-0.35px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:884" data-name="Content">
+          <div className="relative shrink-0 size-[20px]" data-node-id="1274:885" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "xs" && state === "Focus") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[24px]"} data-node-id="1102:4884" data-name="Size=xs, State=Focus">
+        <div className="absolute content-stretch flex inset-[-0.5px] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1102:4885" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1102:4886" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+          </div>
+        </div>
+      </button>
+    );
+  }
+  if (size === "sm" && state === "Focus") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[32px]"} data-node-id="1274:683" data-name="Size=sm, State=Focus">
+        <div className="absolute content-stretch flex inset-[calc(12.5%-0.38px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:684" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1274:685" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+          </div>
+        </div>
+      </button>
+    );
+  }
+  if (size === "md" && state === "Focus") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[40px]"} data-node-id="1274:875" data-name="Size=md, State=Focus">
+        <div className="absolute content-stretch flex inset-[calc(15%-0.35px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:876" data-name="Content">
+          <div className="relative shrink-0 size-[20px]" data-node-id="1274:877" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus1} />
+          </div>
+        </div>
+      </button>
+    );
+  }
+  if (size === "xs" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1102:4892" data-name="Size=xs, State=Disabled">
+        <div className="absolute content-stretch flex inset-[-0.5px] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1102:4893" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1102:4894" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1274:680" data-name="Size=sm, State=Disabled">
+        <div className="absolute content-stretch flex inset-[calc(12.5%-0.38px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:681" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1274:682" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1274:872" data-name="Size=md, State=Disabled">
+        <div className="absolute content-stretch flex inset-[calc(15%-0.35px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:873" data-name="Content">
+          <div className="relative shrink-0 size-[20px]" data-node-id="1274:874" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "xs" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1102:4865" data-name="Size=xs, State=Hover">
+        <div className="absolute content-stretch flex inset-[-0.5px] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1102:4866" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1102:4867" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus4} />
+          </div>
+        </div>
+        <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col inset-[calc(-179.17%-2.29px)_calc(-110.42%-1.6px)_calc(112.5%+0.63px)_calc(-106.25%-1.56px)] items-center" data-node-id="1102:4869" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1102:4869;1052:583" data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1102:4869;1052:584">
+              Add user
+            </p>
+          </div>
+          <div className="h-[6px] relative shrink-0 w-[16px]" data-node-id="I1102:4869;1052:585" data-name="Tooltip">
+            <div className="absolute inset-[-41.91%_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgTooltip} />
+            </div>
+          </div>
+        </div>
+        <Cursor className="absolute bottom-[calc(-33.33%-0.83px)] left-[calc(66.67%+0.17px)] right-[calc(-50%-1px)] top-1/2" />
+      </button>
+    );
+  }
+  if (size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer relative rounded-[var(--radius-full,9999px)] size-[32px]"} data-node-id="1274:675" data-name="Size=sm, State=Hover">
+        <div className="absolute content-stretch flex inset-[calc(12.5%-0.38px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:676" data-name="Content">
+          <div className="relative shrink-0 size-[16px]" data-node-id="1274:677" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus4} />
+          </div>
+        </div>
+        <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col inset-[calc(-134.38%-1.84px)_calc(-68.75%-1.19px)_calc(109.38%+0.59px)_calc(-68.75%-1.19px)] items-center" data-node-id="1274:678" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1274:678;1052:583" data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1274:678;1052:584">
+              Add user
+            </p>
+          </div>
+          <div className="h-[6px] relative shrink-0 w-[16px]" data-node-id="I1274:678;1052:585" data-name="Tooltip">
+            <div className="absolute inset-[-41.91%_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgTooltip} />
+            </div>
+          </div>
+        </div>
+        <Cursor className="absolute bottom-[calc(-12.5%-0.63px)] left-[calc(62.5%+0.13px)] right-[calc(-25%-0.75px)] top-1/2" />
+      </button>
+    );
+  }
+  if (size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] block border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed cursor-pointer relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="1274:878" data-name="Size=md, State=Hover">
+        <div className="absolute content-stretch flex inset-[calc(15%-0.35px)] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1274:879" data-name="Content">
+          <div className="relative shrink-0 size-[20px]" data-node-id="1274:880" data-name="plus">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus5} />
+          </div>
+        </div>
+        <div className="absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col inset-[calc(-107.5%-1.57px)_calc(-45%-0.95px)_calc(107.5%+0.57px)_calc(-45%-0.95px)] items-center" data-node-id="1274:881" data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1274:881;1052:583" data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1274:881;1052:584">
+              Add user
+            </p>
+          </div>
+          <div className="h-[6px] relative shrink-0 w-[16px]" data-node-id="I1274:881;1052:585" data-name="Tooltip">
+            <div className="absolute inset-[-41.91%_0_0_0]">
+              <img alt="" className="block max-w-none size-full" src={imgTooltip} />
+            </div>
+          </div>
+        </div>
+        <Cursor className="absolute inset-[calc(60%+0.1px)_calc(-20%-0.7px)_calc(-10%-0.6px)_calc(70%+0.2px)]" />
+      </button>
+    );
+  }
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-dashed relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="1102:4863" data-name="Size=xs, State=Default">
+      <div className="absolute content-stretch flex inset-[-0.5px] items-center justify-center overflow-clip p-[var(--spacing-xs,4px)]" data-node-id="1102:4856" data-name="Content">
+        <div className="relative shrink-0 size-[16px]" data-node-id="1102:4857" data-name="plus">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,65 @@
+const imgMenu02 = "https://www.figma.com/api/mcp/asset/ca18e695-74ef-457e-9565-b2933034097b.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/9d04bf92-15d4-4607-8a67-b71d2a524f95.svg";
+const imgMenu3 = "https://www.figma.com/api/mcp/asset/2a806664-3404-43cf-aa11-69bec72a505a.svg";
+const imgXClose1 = "https://www.figma.com/api/mcp/asset/c798f88a-3e47-4392-8611-ae8f09ece6f8.svg";
+
+type ApplicationNavMenuButtonProps = {
+  className?: string;
+  opened?: boolean;
+  state?: "Default" | "Hover" | "Focused";
+};
+
+export default function ApplicationNavMenuButton({ className, opened = false, state = "Default" }: ApplicationNavMenuButtonProps) {
+  if (opened && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="1207:351" data-name="Opened=True, State=Default">
+        <div className="relative shrink-0 size-[24px]" data-node-id="1207:352" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+        </div>
+      </div>
+    );
+  }
+  if (!opened && state === "Focused") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1207:349" data-name="Opened=False, State=Focused">
+        <div className="relative shrink-0 size-[24px]" data-node-id="1207:350" data-name="menu-02">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMenu02} />
+        </div>
+      </div>
+    );
+  }
+  if (opened && state === "Focused") {
+    return (
+      <div className={className || "bg-[rgba(255,255,255,0)] content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)]"} data-node-id="1207:347" data-name="Opened=True, State=Focused">
+        <div className="relative shrink-0 size-[24px]" data-node-id="1207:348" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+        </div>
+      </div>
+    );
+  }
+  if (!opened && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary_hover,#fafafa)] content-stretch cursor-pointer flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="1207:345" data-name="Opened=False, State=Hover">
+        <div className="relative shrink-0 size-[24px]" data-node-id="1207:346" data-name="menu-02">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMenu3} />
+        </div>
+      </button>
+    );
+  }
+  if (opened && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--component-colors\\/alpha\\/alpha-white-10,rgba(255,255,255,0.1))] content-stretch cursor-pointer flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="1207:343" data-name="Opened=True, State=Hover">
+        <div className="relative shrink-0 size-[24px]" data-node-id="1207:344" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+        </div>
+      </button>
+    );
+  }
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="1207:353" data-name="Opened=False, State=Default">
+      <div className="relative shrink-0 size-[24px]" data-node-id="1207:354" data-name="menu-02">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMenu02} />
+      </div>
+    </div>
+  );
+}

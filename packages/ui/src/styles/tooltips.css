@@ -1,0 +1,231 @@
+.p-tooltip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: 100%;
+  color: var(--text-white);
+  font: 600 12px/18px var(--font-body);
+  filter: drop-shadow(0 12px 8px var(--shadow-lg-01)) drop-shadow(0 4px 3px var(--shadow-lg-02))
+    drop-shadow(0 2px 1px var(--shadow-lg-03));
+}
+.p-tooltip-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: var(--figma-radius-md);
+  background: var(--bg-primary-solid);
+  min-width: 0;
+}
+.p-tooltip[data-supporting="true"] > .p-tooltip-body {
+  padding: 12px;
+  width: 320px;
+  max-width: 100%;
+}
+.p-tooltip-title {
+  white-space: nowrap;
+}
+.p-tooltip[data-tone="light"] > .p-tooltip-body { background: var(--bg-primary-alt); color: var(--text-secondary-700); box-shadow: inset 0 0 0 1px var(--border-secondary-alt); }
+.p-tooltip[data-supporting="true"] .p-tooltip-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.p-tooltip-detail {
+  color: var(--tooltip-supporting-text);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.p-tooltip-arrow {
+  position: relative;
+  display: none;
+  flex: none;
+  width: 16px;
+  height: 6px;
+}
+.p-tooltip-arrow-rotation {
+  position: relative;
+  display: block;
+  width: 16px;
+  height: 6px;
+}
+.p-tooltip-arrow img {
+  position: absolute;
+  left: 0;
+  top: -2.51471px;
+}
+.p-tooltip-arrow[data-arrow="bottom-left"],
+.p-tooltip-arrow[data-arrow="bottom-right"],
+.p-tooltip-arrow[data-arrow="bottom-left"] > span,
+.p-tooltip-arrow[data-arrow="bottom-right"] > span {
+  width: 28px;
+}
+.p-tooltip[data-arrow="bottom-center"] > [data-arrow="bottom-center"],
+.p-tooltip[data-arrow="bottom-left"] > [data-arrow="bottom-left"],
+.p-tooltip[data-arrow="bottom-right"] > [data-arrow="bottom-right"],
+.p-tooltip[data-arrow="top-center"] > [data-arrow="top-center"],
+.p-tooltip[data-arrow="left"] > [data-arrow="left"],
+.p-tooltip[data-arrow="right"] > [data-arrow="right"] {
+  display: block;
+}
+.p-tooltip[data-arrow="bottom-left"] {
+  align-items: flex-start;
+}
+.p-tooltip[data-arrow="bottom-right"] {
+  align-items: flex-end;
+}
+.p-tooltip[data-arrow="top-center"] {
+  flex-direction: column-reverse;
+}
+.p-tooltip-arrow[data-arrow="top-center"] > span {
+  transform: rotate(180deg);
+}
+.p-tooltip[data-arrow="left"] {
+  flex-direction: row-reverse;
+}
+.p-tooltip[data-arrow="right"] {
+  flex-direction: row;
+}
+.p-tooltip-arrow[data-arrow="left"],
+.p-tooltip-arrow[data-arrow="right"] {
+  width: 6px;
+  height: 16px;
+}
+.p-tooltip-arrow[data-arrow="left"] > span {
+  top: 5px;
+  left: -5px;
+  transform: rotate(90deg);
+}
+.p-tooltip-arrow[data-arrow="right"] > span {
+  top: 5px;
+  left: -5px;
+  transform: rotate(-90deg);
+}
+.p-tooltip-positioner {
+  z-index: 70;
+  max-width: calc(100vw - 16px);
+}
+/* Radix may flip the requested side at viewport edges. Select the matching original asset. */
+.p-tooltip-positioner .p-tooltip > .p-tooltip-arrow {
+  display: none;
+}
+.p-tooltip-positioner[data-side="top"] .p-tooltip {
+  flex-direction: column;
+  align-items: center;
+}
+.p-tooltip-positioner[data-side="bottom"] .p-tooltip {
+  flex-direction: column-reverse;
+  align-items: center;
+}
+.p-tooltip-positioner[data-side="left"] .p-tooltip {
+  flex-direction: row;
+  align-items: center;
+}
+.p-tooltip-positioner[data-side="right"] .p-tooltip {
+  flex-direction: row-reverse;
+  align-items: center;
+}
+.p-tooltip-positioner[data-arrow="true"][data-side="top"] .p-tooltip > [data-arrow="bottom-center"],
+.p-tooltip-positioner[data-arrow="true"][data-side="bottom"] .p-tooltip > [data-arrow="top-center"],
+.p-tooltip-positioner[data-arrow="true"][data-side="left"] .p-tooltip > [data-arrow="right"],
+.p-tooltip-positioner[data-arrow="true"][data-side="right"] .p-tooltip > [data-arrow="left"] {
+  display: block;
+}
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="start"] .p-tooltip {
+  align-items: flex-start;
+}
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="end"] .p-tooltip {
+  align-items: flex-end;
+}
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="start"]
+  .p-tooltip
+  > [data-arrow="bottom-center"],
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="end"]
+  .p-tooltip
+  > [data-arrow="bottom-center"] {
+  display: none;
+}
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="start"]
+  .p-tooltip
+  > [data-arrow="bottom-left"],
+.p-tooltip-positioner[data-arrow="true"][data-side="top"][data-align="end"]
+  .p-tooltip
+  > [data-arrow="bottom-right"] {
+  display: block;
+}
+.p-help-icon {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  cursor: help;
+}
+.p-help-icon:focus-visible {
+  outline: none;
+  box-shadow: var(--effect-focus-ring-shadow-xs);
+}
+.p-help-icon:disabled {
+  cursor: default;
+}
+.p-help-reference {
+  position: relative;
+  width: 16px;
+  height: 16px;
+}
+.p-help-reference > .p-tooltip {
+  position: absolute;
+  max-width: none;
+}
+.p-help-reference[data-placement="top-no-arrow"] > .p-tooltip,
+.p-help-reference[data-placement="top-arrow"] > .p-tooltip {
+  left: calc(50% - 0.5px);
+  bottom: 20px;
+  transform: translateX(-50%);
+}
+.p-help-reference[data-supporting="true"][data-placement="top-no-arrow"] > .p-tooltip,
+.p-help-reference[data-supporting="true"][data-placement="top-arrow"] > .p-tooltip {
+  left: 50%;
+}
+.p-help-reference[data-placement="top-right"] > .p-tooltip {
+  left: -12px;
+  bottom: 20px;
+}
+.p-help-reference[data-placement="top-left"] > .p-tooltip {
+  right: -12px;
+  bottom: 20px;
+}
+.p-help-reference[data-placement="bottom"] > .p-tooltip {
+  left: calc(50% + 0.5px);
+  top: 20px;
+  transform: translateX(-50%);
+}
+.p-help-reference[data-supporting="true"][data-placement="bottom"] > .p-tooltip {
+  left: 50%;
+}
+.p-help-reference[data-placement="right"] > .p-tooltip {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.p-help-reference[data-placement="left"] > .p-tooltip {
+  right: 19px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.p-help-reference[data-supporting="true"][data-placement="left"] > .p-tooltip {
+  right: 20px;
+}
+.p-help-reference-cursor {
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  pointer-events: none;
+}

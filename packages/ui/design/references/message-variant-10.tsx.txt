@@ -1,0 +1,86 @@
+const imgEmoji = "https://www.figma.com/api/mcp/asset/004b8db3-f5e6-452c-8565-66fa2b98768b.png";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/8492c419-c8d1-43a5-8a58-cb329fdb2985.png";
+const imgEmoji1 = "https://www.figma.com/api/mcp/asset/5e77fd33-6aba-4cc8-8ab0-7c5b4e730348.png";
+
+type EmojiProps = {
+  className?: string;
+  emoji?: "Heart red";
+};
+
+function Emoji({ className, emoji = "Heart red" }: EmojiProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1244:280">
+      <div className="absolute left-0 size-[16px] top-0" data-node-id="1244:4" data-name="Emoji">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji} />
+      </div>
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "False";
+  reactions?: boolean;
+  sent?: "False";
+  type?: "Message reply";
+};
+
+function Message({ className, actionsPanel = "False", reactions = true, sent = "False", type = "Message reply" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[360px]"} data-node-id="9241:555098">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="9241:555099" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9241:555100" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="9241:555101" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9241:555102">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="9241:555103">
+            Friday 2:20pm
+          </p>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tr-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9241:555104" data-name="Input">
+          <div className="border-[var(--colors\/border\/border-brand,#17b26a)] border-l-3 border-solid content-stretch flex items-start overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9241:555315" data-name="Reply input wrapper">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-[1_0_0] flex-col items-start justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="9241:555133" data-name="Reply input">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full whitespace-nowrap" data-node-id="9241:555134">
+                Sure thing, I’ll have a look today.
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="9241:555105">
+            Awesome, thanks!
+          </p>
+        </div>
+        {reactions && (
+          <div className="content-stretch cursor-pointer flex gap-[var(--spacing-xs,4px)] items-center justify-end relative shrink-0 w-full" data-node-id="9241:555106" data-name="Row">
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9241:555107" data-name="_Message reaction">
+              <Emoji className="relative shrink-0 size-[16px]" />
+            </button>
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9241:555108" data-name="_Message reaction">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9241:555108;1244:377" data-name="Emoji=Okay">
+                <div className="absolute left-0 size-[16px] top-0" data-node-id="I9241:555108;1244:377;1244:7" data-name="Emoji">
+                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji1} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I9241:555108;1244:301">
+                2
+              </p>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

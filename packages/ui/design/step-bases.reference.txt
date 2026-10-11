@@ -1,0 +1,1026 @@
+const imgTypeCheckStatusIncompleteSizeSm = "https://www.figma.com/api/mcp/asset/a6598542-9300-46db-b8d6-9eb5bdcfb027.svg";
+const imgTypeCheckStatusIncompleteSizeMd = "https://www.figma.com/api/mcp/asset/50252cd0-c5f5-4b95-b2f4-35d0c959f8be.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/14d72616-367a-4f11-8c32-fdee6e9bdb88.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/165d66dc-efec-42a0-b3c6-e5bdab44ea43.svg";
+const imgTypeCheckStatusCurrentSizeSm = "https://www.figma.com/api/mcp/asset/51cd6b79-20f5-4c75-be90-240b69864525.svg";
+const imgTypeCheckStatusCurrentSizeMd = "https://www.figma.com/api/mcp/asset/31afd145-1c00-4fad-9c1a-bb7830fa2c07.svg";
+const imgConnector = "https://www.figma.com/api/mcp/asset/e51de5ce-e505-4b39-8453-94533d8788d5.svg";
+const imgConnector1 = "https://www.figma.com/api/mcp/asset/3af2f9be-5e36-4e0b-9c4b-26e73bbda6a7.svg";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/8aa7a4c6-660a-4246-ac27-2a9f4e075aba.svg";
+const imgConnector2 = "https://www.figma.com/api/mcp/asset/cec04af4-a460-485e-8cd9-91e33ed37c68.svg";
+const imgConnector3 = "https://www.figma.com/api/mcp/asset/5da7d6fe-c3e5-47c2-9687-1387f56c9c76.svg";
+const imgConnector4 = "https://www.figma.com/api/mcp/asset/3eca3f51-c26b-4008-9399-2c5653ce8edb.svg";
+const imgConnector5 = "https://www.figma.com/api/mcp/asset/f31b83b7-5e16-4160-8eca-975d205637e2.svg";
+const imgConnector6 = "https://www.figma.com/api/mcp/asset/f617d64b-f8a1-48a2-9908-674abbbedad5.svg";
+const imgConnector7 = "https://www.figma.com/api/mcp/asset/047a0ce3-7a90-421c-979f-735b0594c4dc.svg";
+const imgConnector8 = "https://www.figma.com/api/mcp/asset/08523113-0b76-4dee-af2a-d34d8ff3c5ee.svg";
+const imgConnector9 = "https://www.figma.com/api/mcp/asset/8ff2a5a7-7212-44f8-986b-da3aa7a23e3b.svg";
+const imgConnector10 = "https://www.figma.com/api/mcp/asset/6986d989-6873-4572-9b5f-28b643fa9651.svg";
+const imgConnector11 = "https://www.figma.com/api/mcp/asset/9d6208d4-859d-4418-92a9-10aa3b966a3e.svg";
+const imgUser2 = "https://www.figma.com/api/mcp/asset/e2ea9ba0-9b46-4281-8372-a08bbadc52c6.svg";
+
+type StepIconBaseProps = {
+  className?: string;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Current" | "Complete";
+  type?: "Check" | "Number";
+};
+
+function StepIconBase({ className, size = "sm", status = "Incomplete", type = "Check" }: StepIconBaseProps) {
+  const isCheckAndCompleteAndMd = type === "Check" && status === "Complete" && size === "md";
+  const isCheckAndCompleteAndSm = type === "Check" && status === "Complete" && size === "sm";
+  const isCheckAndCurrentAndMd = type === "Check" && status === "Current" && size === "md";
+  const isCheckAndIncompleteAndMd = type === "Check" && status === "Incomplete" && size === "md";
+  const isCompleteAndMd = status === "Complete" && size === "md";
+  const isNumberAndCompleteAndMd = type === "Number" && status === "Complete" && size === "md";
+  const isNumberAndCompleteAndSm = type === "Number" && status === "Complete" && size === "sm";
+  const isNumberAndCurrentAndMd = type === "Number" && status === "Current" && size === "md";
+  const isNumberAndCurrentAndSm = type === "Number" && status === "Current" && size === "sm";
+  const isNumberAndIncompleteAndMd = type === "Number" && status === "Incomplete" && size === "md";
+  const isNumberAndIncompleteAndSm = type === "Number" && status === "Incomplete" && size === "sm";
+  return (
+    <div className={className || `relative ${isNumberAndCurrentAndMd ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCurrentAndSm ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : isNumberAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[32px]` : isCheckAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[24px]` : isCheckAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : isNumberAndIncompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[9999px] size-[32px]` : type === "Check" && size === "md" && ["Incomplete", "Current"].includes(status) ? "size-[32px]" : isNumberAndIncompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip rounded-[9999px] size-[24px]` : "size-[24px]"}`} id={isNumberAndCurrentAndMd ? "node-9354_551795" : isCheckAndCurrentAndMd ? "node-1139_79863" : isNumberAndCurrentAndSm ? "node-9354_551792" : type === "Check" && status === "Current" && size === "sm" ? "node-1139_79866" : isNumberAndCompleteAndMd ? "node-9354_551777" : isCheckAndCompleteAndMd ? "node-1139_80061" : isNumberAndCompleteAndSm ? "node-9354_551774" : isCheckAndCompleteAndSm ? "node-1139_80037" : isNumberAndIncompleteAndMd ? "node-9354_551759" : isCheckAndIncompleteAndMd ? "node-1139_80082" : isNumberAndIncompleteAndSm ? "node-9354_551756" : "node-1139_80097"}>
+      {type === "Number" && ["Incomplete", "Current"].includes(status) && (
+        <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-center whitespace-nowrap `}${isNumberAndCurrentAndMd ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : isNumberAndCurrentAndSm ? String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]` : isNumberAndIncompleteAndMd ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]`}`} id={isNumberAndCurrentAndMd ? "node-9354_552136" : isNumberAndCurrentAndSm ? "node-9354_551817" : isNumberAndIncompleteAndMd ? "node-9354_552130" : "node-9354_551823"}>
+          1
+        </p>
+      )}
+      {status === "Complete" && (
+        <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isCompleteAndMd ? "size-[16px]" : "size-[12px]"}`} id={isNumberAndCompleteAndMd ? "node-9354_551779" : isCheckAndCompleteAndMd ? "node-9354_551627" : isNumberAndCompleteAndSm ? "node-9354_551776" : "node-9354_551453"} data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCompleteAndMd ? imgCheck1 : imgCheck} />
+        </div>
+      )}
+      {type === "Check" && status === "Incomplete" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCheckAndIncompleteAndMd ? imgTypeCheckStatusIncompleteSizeMd : imgTypeCheckStatusIncompleteSizeSm} />}
+      {type === "Check" && status === "Current" && (
+        <div className={`absolute ${isCheckAndCurrentAndMd ? "inset-[-12.5%]" : "inset-[-16.67%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isCheckAndCurrentAndMd ? imgTypeCheckStatusCurrentSizeMd : imgTypeCheckStatusCurrentSizeSm} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type StepBaseProps = {
+  className?: string;
+  connector?: boolean;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Current" | "Complete";
+  type?: "Icon left" | "Icon top" | "Number left" | "Number top" | "Featured icon left" | "Featured icon top" | "Text line";
+};
+
+export default function StepBase({ className, connector = true, size = "sm", status = "Incomplete", type = "Icon left" }: StepBaseProps) {
+  if (type === "Text line" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "border-[var(--colors\\/background\\/bg-quaternary,#e9eaeb)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-lg,12px)] relative w-[344px]"} data-node-id="1139:78992" data-name="Type=Text line, Status=Incomplete, Size=sm">
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1139:78993" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:78994">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:78995">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start opacity-60 relative w-[344px]"} data-node-id="9354:552406" data-name="Type=Number left, Status=Incomplete, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="9354:552407" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 size-[24px] z-[2]" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552843" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-3.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector1} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="9354:552410" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552411">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552412">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start opacity-60 relative w-[344px]"} data-node-id="5042:383470" data-name="Type=Featured icon left, Status=Incomplete, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383471" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383745" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383745;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553598" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-8.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="5042:383474" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383475">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383476">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon left" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="1254:140693" data-name="Type=Icon left, Status=Incomplete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="1254:140694" data-name="Connector wrap">
+          <StepIconBase className="relative shrink-0 size-[32px] z-[2]" size="md" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553488" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.5%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector3} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1254:140697" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1254:140698">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1254:140699">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start opacity-60 relative w-[344px]"} data-node-id="9354:552413" data-name="Type=Number left, Status=Incomplete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] isolate items-center pb-[var(--spacing-md,8px)] relative self-stretch shrink-0" data-node-id="9354:552414" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 size-[32px] z-[2]" size="md" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552886" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.78%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector4} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="9354:552417" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552418">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552419">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start opacity-60 relative w-[344px]"} data-node-id="5042:383477" data-name="Type=Featured icon left, Status=Incomplete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383478" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383736" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383736;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553624" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-4.17%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector5} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="5042:383481" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383482">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383483">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon left" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative"} data-node-id="1254:140260" data-name="Type=Icon left, Status=Complete, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="1254:140261" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px] z-[2]" status="Complete" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553560" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.94%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector6} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-[308px]" data-node-id="1254:140264" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1254:140265">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1254:140266">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="9354:552420" data-name="Type=Number left, Status=Complete, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="9354:552421" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip relative rounded-[9999px] shrink-0 size-[24px] z-[2]" status="Complete" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552855" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-3.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector1} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="9354:552424" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552425">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552426">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start opacity-60 relative w-[344px]"} data-node-id="5042:383491" data-name="Type=Featured icon left, Status=Complete, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383492" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383727" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383727;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553602" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-8.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="5042:383495" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383496">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383497">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon left" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="1254:140679" data-name="Type=Icon left, Status=Complete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="1254:140680" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px] z-[2]" size="md" status="Complete" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553378" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.5%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector7} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1254:140683" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1254:140684">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1254:140685">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="9354:552427" data-name="Type=Number left, Status=Complete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] isolate items-center pb-[var(--spacing-md,8px)] relative self-stretch shrink-0" data-node-id="9354:552428" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip relative rounded-[9999px] shrink-0 size-[32px] z-[2]" size="md" status="Complete" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552890" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.78%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector4} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="9354:552431" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552432">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552433">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start opacity-60 relative w-[344px]"} data-node-id="5042:383498" data-name="Type=Featured icon left, Status=Complete, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383499" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383769" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383769;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553590" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-4.17%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector5} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="5042:383502" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383503">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383504">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon left" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1254:140080" data-name="Type=Icon left, Status=Current, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="1254:140081" data-name="Connector wrap">
+          <StepIconBase className="relative shrink-0 size-[24px] z-[2]" status="Current" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553498" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.94%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1254:140084" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1254:140085">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1254:140086">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="9354:552434" data-name="Type=Number left, Status=Current, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="9354:552435" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px] z-[2]" status="Current" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552849" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-3.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector8} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="9354:552438" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552439">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552440">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="5042:383512" data-name="Type=Featured icon left, Status=Current, Size=sm">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383513" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383713" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383713;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553612" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-8.33%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector9} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="5042:383516" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383517">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383518">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon left" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="1254:140665" data-name="Type=Icon left, Status=Current, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] isolate items-center pb-[var(--spacing-sm,6px)] relative self-stretch shrink-0" data-node-id="1254:140666" data-name="Connector wrap">
+          <StepIconBase className="relative shrink-0 size-[32px] z-[2]" size="md" status="Current" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553447" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.5%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector3} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1254:140669" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1254:140670">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1254:140671">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number left" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="9354:552441" data-name="Type=Number left, Status=Current, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] isolate items-center pb-[var(--spacing-md,8px)] relative self-stretch shrink-0" data-node-id="9354:552442" data-name="Connector wrap">
+          <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px] z-[2]" size="md" status="Current" type="Number" />
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9354:552888" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-2.78%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector10} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-xs,4px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="9354:552445" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552446">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552447">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon left" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative w-[344px]"} data-node-id="5042:383519" data-name="Type=Featured icon left, Status=Current, Size=md">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="5042:383520" data-name="Connector wrap">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px] z-[2]" data-node-id="5042:383754" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+            <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:383754;4041:412673" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          {connector && (
+            <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553600" style={{ containerType: "size" }}>
+              <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+                <div className="relative size-full" data-name="Connector">
+                  <div className="absolute inset-[-1px_-4.17%]">
+                    <img alt="" className="block max-w-none size-full" src={imgConnector11} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px pb-[var(--spacing-4xl,32px)] relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="5042:383523" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:383524">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:383525">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1139:75888" data-name="Type=Icon top, Status=Incomplete, Size=sm">
+        <StepIconBase className="relative shrink-0 size-[24px]" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="1139:75890" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:75891">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:75892">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center opacity-60 relative w-[320px]"} data-node-id="9354:552448" data-name="Type=Number top, Status=Incomplete, Size=sm">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 size-[24px]" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="9354:552450" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552451">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552452">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Incomplete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center opacity-60 relative w-[320px]"} data-node-id="5042:384005" data-name="Type=Featured icon top, Status=Incomplete, Size=sm">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="5042:384194" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I5042:384194;4041:412675" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="5042:384007" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384008">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384009">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text line" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "border-[var(--colors\\/background\\/bg-quaternary,#e9eaeb)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-xl,16px)] relative w-[344px]"} data-node-id="1139:79004" data-name="Type=Text line, Status=Incomplete, Size=md">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1139:79005" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:79006">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:79007">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="1139:75963" data-name="Type=Icon top, Status=Incomplete, Size=md">
+        <StepIconBase className="relative shrink-0 size-[32px]" size="md" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="1139:75965" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:75966">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:75967">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center opacity-60 relative w-[320px]"} data-node-id="9354:552453" data-name="Type=Number top, Status=Incomplete, Size=md">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 size-[32px]" size="md" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="9354:552455" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552456">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552457">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Incomplete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center opacity-60 relative w-[320px]"} data-node-id="5042:384010" data-name="Type=Featured icon top, Status=Incomplete, Size=md">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="5042:384229" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+          <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:384229;4041:412673" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="5042:384012" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384013">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384014">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text line" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-lg,12px)] relative w-[344px]"} data-node-id="1139:78956" data-name="Type=Text line, Status=Current, Size=sm">
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1139:78957" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1139:78958">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1139:78959">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1139:75928" data-name="Type=Icon top, Status=Current, Size=sm">
+        <StepIconBase className="relative shrink-0 size-[24px]" status="Current" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="1139:75930" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1139:75931">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1139:75932">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="9354:552458" data-name="Type=Number top, Status=Current, Size=sm">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" status="Current" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="9354:552460" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552461">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552462">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Current" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="5042:384020" data-name="Type=Featured icon top, Status=Current, Size=sm">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="5042:384205" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I5042:384205;4041:412675" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="5042:384022" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384023">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384024">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text line" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-xl,16px)] relative w-[344px]"} data-node-id="1139:78852" data-name="Type=Text line, Status=Current, Size=md">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1139:78853" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1139:78854">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1139:78855">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="1139:75948" data-name="Type=Icon top, Status=Current, Size=md">
+        <StepIconBase className="relative shrink-0 size-[32px]" size="md" status="Current" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="1139:75950" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" data-node-id="1139:75951">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" data-node-id="1139:75952">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="9354:552463" data-name="Type=Number top, Status=Current, Size=md">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" size="md" status="Current" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="9354:552465" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552466">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552467">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Current" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="5042:384025" data-name="Type=Featured icon top, Status=Current, Size=md">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="5042:384238" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+          <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5042:384238;4041:412673" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="5042:384027" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384028">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384029">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text line" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-lg,12px)] relative w-[344px]"} data-node-id="1139:78908" data-name="Type=Text line, Status=Complete, Size=sm">
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1139:78909" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:78910">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:78911">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="1139:75833" data-name="Type=Icon top, Status=Complete, Size=sm">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" status="Complete" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="1139:75835" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:75836">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:75837">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="9354:552468" data-name="Type=Number top, Status=Complete, Size=sm">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip relative rounded-[9999px] shrink-0 size-[24px]" status="Complete" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="9354:552470" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552471">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552472">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Complete" && size === "sm") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-center relative w-[320px]"} data-node-id="5042:384035" data-name="Type=Featured icon top, Status=Complete, Size=sm">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="5042:384220" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I5042:384220;4041:412675" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col items-center leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-center w-full" data-node-id="5042:384037" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384038">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384039">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text line" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "border-[var(--colors\\/foreground\\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start pt-[var(--spacing-xl,16px)] relative w-[344px]"} data-node-id="1139:78872" data-name="Type=Text line, Status=Complete, Size=md">
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-none,0px)] items-start leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1139:78873" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:78874">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:78875">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Icon top" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="1139:75813" data-name="Type=Icon top, Status=Complete, Size=md">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" size="md" status="Complete" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="1139:75815" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:75816">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:75817">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Number top" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="9354:552473" data-name="Type=Number top, Status=Complete, Size=md">
+        <StepIconBase className="bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip relative rounded-[9999px] shrink-0 size-[32px]" size="md" status="Complete" type="Number" />
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="9354:552475" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="9354:552476">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="9354:552477">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Featured icon top" && status === "Complete" && size === "md") {
+    return (
+      <div className={className || "content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative w-[320px]"} data-node-id="5042:384040" data-name="Type=Featured icon top, Status=Complete, Size=md">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="5043:375538" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+          <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I5043:375538;4041:412673" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-center w-full" data-node-id="5042:384042" data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="5042:384043">
+            Your details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="5042:384044">
+            Please provide your name and email
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[344px]"} data-node-id="1139:74417" data-name="Type=Icon left, Status=Incomplete, Size=sm">
+      <div className="content-stretch flex flex-col gap-[var(--spacing-xs,4px)] isolate items-center pb-[var(--spacing-xs,4px)] relative self-stretch shrink-0" data-node-id="1254:139606" data-name="Connector wrap">
+        <StepIconBase className="relative shrink-0 size-[24px] z-[2]" />
+        {connector && (
+          <div className="flex flex-[1_0_0] items-center justify-center min-h-px relative w-full z-[1]" data-node-id="9357:553500" style={{ containerType: "size" }}>
+            <div className="flex-none h-[100cqw] rotate-90 w-[100cqh]">
+              <div className="relative size-full" data-name="Connector">
+                <div className="absolute inset-[-1px_-2.94%]">
+                  <img alt="" className="block max-w-none size-full" src={imgConnector} />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px pb-[var(--spacing-3xl,24px)] pt-[var(--spacing-xxs,2px)] relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="1139:74419" data-name="Text and supporting text">
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="1139:74420">
+          Your details
+        </p>
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1139:74421">
+          Please provide your name and email
+        </p>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

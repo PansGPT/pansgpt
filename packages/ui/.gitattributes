@@ -1,0 +1,4 @@
+# Preserve original Figma bytes and integrity checks on every platform.
+* text=auto eol=lf
+assets/** -text
+design/** -text

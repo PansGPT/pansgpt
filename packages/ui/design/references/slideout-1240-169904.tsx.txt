@@ -1,0 +1,257 @@
+const imgOpenFalseSupportingTextFalseTooltipTopNoArrow = "https://www.figma.com/api/mcp/asset/f02957f6-957e-4c29-ae87-1a627c617958.svg";
+const imgCardMockup = "https://www.figma.com/api/mcp/asset/0ed15d16-45a6-4279-ae0f-0d1a612d62aa.png";
+const imgCreditCard02 = "https://www.figma.com/api/mcp/asset/8da8c1f5-ae2a-409e-83eb-0fb4e1709237.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/51eccfcc-cead-40e1-b646-bb6a1c3ff148.svg";
+const imgMastercard = "https://www.figma.com/api/mcp/asset/3353df0c-a063-4a06-85c1-f468a3e28b1e.svg";
+const imgPayPassIcon = "https://www.figma.com/api/mcp/asset/79526c34-1978-46e6-baaf-1978d156649d.svg";
+const imgMastercard1 = "https://www.figma.com/api/mcp/asset/6df06daf-302f-4cb1-9ecc-d97ae32c42df.svg";
+const imgMail01 = "https://www.figma.com/api/mcp/asset/c918ef6e-76dc-48bf-83de-bd972ba42ad1.svg";
+
+type TooltipProps = {
+  className?: string;
+  arrow?: "None";
+  supportingText?: "False";
+  text?: string;
+};
+
+function Tooltip({ className, arrow = "None", supportingText = "False", text = "This is a tooltip" }: TooltipProps) {
+  return (
+    <div className={className || "content-stretch drop-shadow-[0px_12px_8px_var(--colors\\/effects\\/shadows\\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\\/effects\\/shadows\\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\\/effects\\/shadows\\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center relative"} data-node-id="1052:587">
+      <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="1052:588" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:589">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type HelpIconProps = {
+  className?: string;
+  open?: boolean;
+  supportingText?: "False";
+  tooltip?: "Top no arrow";
+};
+
+function HelpIcon({ className, open = false, supportingText = "False", tooltip = "Top no arrow" }: HelpIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1054:7">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOpenFalseSupportingTextFalseTooltipTopNoArrow} />
+    </div>
+  );
+}
+
+type SlideOutMenuProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "Payment details";
+};
+
+function SlideOutMenu({ className, breakpoint = "Desktop", type = "Payment details" }: SlideOutMenuProps) {
+  return (
+    <div className={className || "content-stretch flex h-[960px] items-start overflow-clip pl-[var(--spacing-5xl,40px)] relative w-[440px]"} data-node-id="1240:169904">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-l border-solid content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px overflow-clip relative shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]" data-node-id="1240:169905" data-name="Panel">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="1240:169906" data-name="_Slide out menu header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px relative" data-node-id="I1240:169906;1239:120658" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1240:169906;4943:372255" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1240:169906;4943:372255;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCreditCard02} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" data-node-id="I1240:169906;1239:120669" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="I1240:169906;1239:120659">
+                Payment details
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1240:169906;1239:120660">
+                Update your plan payment details.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" data-node-id="I1240:169906;2768:421123" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I1240:169906;2768:421123;2763:420385" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-3xl,24px)] items-center min-h-px px-[var(--spacing-3xl,24px)] relative w-full" data-node-id="1240:169907" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1240:170222" data-name="Section">
+            <div className="h-[238px] overflow-clip relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1240:170288" data-name="Card mockup">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-xl,20px)] size-full" src={imgCardMockup} />
+              <div className="absolute backdrop-blur-[6px] border border-solid border-white h-[190px] left-[18px] overflow-clip rounded-[var(--radius-2xl,24px)] top-[24px] w-[316px]" data-node-id="1291:157959" style={{ backgroundImage: "linear-gradient(125.10249556735224deg, rgba(255, 255, 255, 0.3) 3.5118%, rgba(255, 255, 255, 0) 111.71%), linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%)" }} data-name="Credit card mockup">
+                <div className="absolute bg-[rgba(255,255,255,0.1)] h-[32px] left-[254px] rounded-[var(--spacing-xs,4px)] top-[141px] w-[45.333px]" data-node-id="I1291:157959;1291:157822" data-name="Payment method icon">
+                  <div className="absolute inset-[20.96%_16.59%_23.21%_17.65%]" data-node-id="I1291:157959;1291:157822;1107:67069" data-name="Mastercard">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMastercard} />
+                  </div>
+                </div>
+                <p className="[word-break:break-word] absolute font-['Roboto_Mono:Medium'] font-medium leading-[normal] left-[15px] text-[16px] text-[color:var(--colors\/base\/white,white)] top-[151px] tracking-[0.64px] whitespace-nowrap" data-node-id="I1291:157959;1291:157823">
+                  1234 1234 1234 1234
+                </p>
+                <p className="[word-break:break-word] absolute font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[normal] left-[15px] text-[12px] text-[color:var(--colors\/base\/white,white)] top-[127px] tracking-[0.6px] uppercase whitespace-nowrap" data-node-id="I1291:157959;1291:157824">
+                  OLIVIA RHYE
+                </p>
+                <p className="-translate-x-full [word-break:break-word] absolute font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[normal] left-[208px] text-[12px] text-[color:var(--colors\/base\/white,white)] text-right top-[127px] tracking-[0.6px] whitespace-nowrap" data-node-id="I1291:157959;1291:157825">
+                  06/28
+                </p>
+                <p className="[word-break:break-word] absolute font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[normal] left-[19px] text-[16px] text-[color:var(--colors\/base\/white,white)] top-[19px] whitespace-nowrap" data-node-id="I1291:157959;1298:970">
+                  PansGPT.
+                </p>
+                <div className="absolute h-[24px] right-[19px] top-[19px] w-[20px]" data-node-id="I1291:157959;1307:7682" data-name="PayPass icon">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPayPassIcon} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch cursor-pointer flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1240:169908" data-name="Section">
+            <button className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="3293:417633" data-name="Input field">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3293:417633;3285:380201" data-name="Input with label">
+                <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I3293:417633;7486:523713" data-name="Label wrapper">
+                  <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I3293:417633;3285:380202">
+                    Name on card
+                  </p>
+                  <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="I3293:417633;7487:535278">
+                    *
+                  </p>
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3293:417633;3285:380203" data-name="Input">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3293:417633;3285:380204" data-name="Content">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3293:417633;3285:380206">
+                      Diepreye Ọ̀rẹ̀kọ́yà
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </button>
+            <button className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="3293:417645" data-name="Input field">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3293:417645;3285:380369" data-name="Input with label">
+                <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I3293:417645;7486:523715" data-name="Label wrapper">
+                  <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I3293:417645;3285:380370">
+                    Card number
+                  </p>
+                  <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="I3293:417645;7487:535276">
+                    *
+                  </p>
+                </div>
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center pl-[10px] pr-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3293:417645;3285:380371" data-name="Input">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3293:417645;3285:380372" data-name="Content">
+                    <div className="bg-[var(--colors\/base\/white,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid h-[24px] relative rounded-[var(--spacing-xs,4px)] shrink-0 w-[34px]" data-node-id="I3293:417645;3285:380373" data-name="Payment method icon">
+                      <div className="absolute inset-[calc(20.96%-0.58px)_calc(16.59%-0.67px)_calc(23.21%-0.54px)_calc(17.65%-0.65px)]" data-node-id="I3293:417645;3285:380373;1107:67069" data-name="Mastercard">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMastercard1} />
+                      </div>
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3293:417645;3285:380374">
+                      1234 1234 1234 1234
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </button>
+            <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1240:170182" data-name="Row">
+              <button className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-[112px]" data-node-id="3293:417666" data-name="Input field">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3293:417666;3285:380201" data-name="Input with label">
+                  <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I3293:417666;7486:523713" data-name="Label wrapper">
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I3293:417666;3285:380202">
+                      Expiry
+                    </p>
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="I3293:417666;7487:535278">
+                      *
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3293:417666;3285:380203" data-name="Input">
+                    <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3293:417666;3285:380204" data-name="Content">
+                      <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3293:417666;3285:380206">
+                        <span className="leading-[var(--line-height\/text-md,24px)]">06</span>
+                        <span className="leading-[var(--line-height\/text-md,24px)] text-[#a4a7ae]">{` / `}</span>
+                        <span className="leading-[var(--line-height\/text-md,24px)]">2025</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <button className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-[112px]" data-node-id="3293:417667" data-name="Input field">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3293:417667;3285:380201" data-name="Input with label">
+                  <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I3293:417667;7486:523713" data-name="Label wrapper">
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I3293:417667;3285:380202">
+                      CVV
+                    </p>
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="I3293:417667;7487:535278">
+                      *
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3293:417667;3285:380203" data-name="Input">
+                    <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3293:417667;3285:380204" data-name="Content">
+                      <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3293:417667;3285:380206">
+                        •••
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="1240:170759" data-name="Divider" />
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1240:170304" data-name="Section">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-[352px]" data-node-id="1240:170368" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="1240:170369">
+                Billing contact
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1240:170370">
+                Add a second billing contact email.
+              </p>
+            </div>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-end relative shrink-0 w-full" data-node-id="3292:581461" data-name="Form">
+              <button className="content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="3292:581462" data-name="Input field">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3292:581462;3285:380201" data-name="Input with label">
+                  <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="I3292:581462;7486:523713" data-name="Label wrapper">
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I3292:581462;3285:380202">
+                      Email address
+                    </p>
+                    <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="I3292:581462;7487:535278">
+                      *
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3292:581462;3285:380203" data-name="Input">
+                    <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3292:581462;3285:380204" data-name="Content">
+                      <div className="relative shrink-0 size-[20px]" data-node-id="I3292:581462;3473:606763" data-name="mail-01">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMail01} />
+                      </div>
+                      <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3292:581462;3285:380206">
+                        accounts@PansGPT.com
+                      </p>
+                    </div>
+                    <HelpIcon className="relative shrink-0 size-[16px]" />
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="1240:169931" data-name="Footer">
+          <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-end px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1240:169933" data-name="Content">
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="3292:581042" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581043" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581043;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581043;3287:433113">
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581044" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581044;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581044;3287:432941">
+                    Confirm
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

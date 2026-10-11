@@ -1,0 +1,294 @@
+const imgLine = "https://www.figma.com/api/mcp/asset/fab4d65d-51aa-42db-9f7e-d9f4d35265e7.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/a534e25c-81aa-4dd7-99dd-de522ee6239e.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/385a254b-26a4-4585-a4aa-361f091b1583.svg";
+const imgLine3 = "https://www.figma.com/api/mcp/asset/fb797948-23d7-450c-a336-183b6a9663b6.svg";
+const imgLine4 = "https://www.figma.com/api/mcp/asset/6637d8f3-afb6-42f8-afc5-afab8faf6f5a.svg";
+const imgRays = "https://www.figma.com/api/mcp/asset/898ef046-4433-4d4a-8bc9-8f2b0368f54f.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/187fb97d-e6e2-4ed3-be2e-ecdc6a13e0b3.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/664b95cb-38bc-4432-be3a-8adf15fc2134.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/2619baa3-b512-48de-9c6f-188f8c108ccf.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/8d269db4-da90-44ee-a585-72cbb9e2f3e1.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/6a3b6e37-e34a-4673-9468-8fadc234e4a7.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/4cadbdb0-f1cf-41c2-bb3e-a579d0b64b92.svg";
+const imgColor = "https://www.figma.com/api/mcp/asset/4c58eb93-2c5e-4d4f-b6a9-d178b1d81f6f.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/ef303687-0edf-448b-af69-b9b338f365ea.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/61300cc6-5738-4953-828e-6c5fbdccd4c9.svg";
+
+function RadarChart({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] h-[372px] relative w-[392px]"} data-node-id="1084:7152" data-name="_Radar chart">
+      <div className="absolute inset-[169px_164px_139px_164px]" data-node-id="1084:7195" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine} />
+        </div>
+      </div>
+      <div className="absolute inset-[137px_132px_107px_132px]" data-node-id="1084:7196" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine1} />
+        </div>
+      </div>
+      <div className="absolute inset-[105px_100px_75px_100px]" data-node-id="1084:7197" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine2} />
+        </div>
+      </div>
+      <div className="absolute inset-[73px_68px_43px_68px]" data-node-id="1084:7198" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine3} />
+        </div>
+      </div>
+      <div className="absolute inset-[41px_36px_11px_36px]" data-node-id="1084:7199" data-name="Line">
+        <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+          <img alt="" className="block max-w-none size-full" src={imgLine4} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[303px] left-1/2 top-[calc(50%+7px)] w-[312px]" data-node-id="1084:7200" data-name="Rays">
+        <div className="absolute inset-[-0.17%_-0.16%]">
+          <img alt="" className="block max-w-none size-full" src={imgRays} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[32px]" data-node-id="1084:7201" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7201;3918:407462">
+          1,000
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[64px]" data-node-id="1084:7202" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7202;3918:407462">
+          800
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[96px]" data-node-id="1084:7203" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7203;3918:407462">
+          600
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[128px]" data-node-id="1084:7204" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7204;3918:407462">
+          400
+        </p>
+      </div>
+      <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[160px]" data-node-id="1084:7205" data-name="Badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1084:7205;3918:407462">
+          200
+        </p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[0_46.17%_94.62%_46.17%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7206">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Mon</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_9.95%_73.92%_83.93%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7207">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Tue</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_0.77%_30.11%_91.07%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7208">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Wed</p>
+      </div>
+      <div className="[word-break:break-word] absolute bottom-[-0.27%] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] left-[68.88%] right-1/4 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[94.89%] whitespace-nowrap" data-node-id="1084:7209">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Thu</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[94.89%_69.13%_-0.27%_26.79%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7210">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Fri</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_91.84%_30.11%_2.3%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7211">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Sat</p>
+      </div>
+      <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_83.93%_73.92%_9.44%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1084:7212">
+        <p className="leading-[var(--line-height\/text-sm,20px)]">Sun</p>
+      </div>
+      <div className="absolute h-[208px] left-[96px] top-[107.5px] w-[199.781px]" data-node-id="1084:7154" data-name="Series 3">
+        <div className="absolute inset-[-0.48%_-0.5%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+        </div>
+      </div>
+      <div className="absolute h-[185px] left-[71px] top-[101.5px] w-[249.5px]" data-node-id="1084:7153" data-name="Series 2">
+        <div className="absolute inset-[-0.54%_-0.6%_-0.54%_-0.4%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+        </div>
+      </div>
+      <div className="absolute inset-[20.3%_26.4%_30.65%_34.31%]" data-node-id="1084:6792" data-name="Series 1">
+        <div className="absolute inset-[-0.55%_-0.65%_-0.55%_-61.36%]">
+          <img alt="" className="block max-w-none size-full" src={imgSeries1} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type RadarChart1Props = {
+  className?: string;
+  legend?: "False" | "Right" | "Bottom";
+};
+
+export default function RadarChart1({ className, legend = "False" }: RadarChart1Props) {
+  const isBottom = legend === "Bottom";
+  const isRight = legend === "Right";
+  const isRightOrBottom = ["Right", "Bottom"].includes(legend);
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-xl,16px)] relative ${isBottom ? "flex-col items-center" : "items-start"}`} id={isBottom ? "node-1084_7489" : isRight ? "node-1084_7363" : "node-1084_7279"}>
+      {isRightOrBottom && (
+        <>
+          <div className="h-[372px] relative shrink-0 w-[392px]" id={isBottom ? "node-1084_7490" : "node-1084_7364"} data-name="_Radar chart">
+            <div className="absolute inset-[169px_164px_139px_164px]" id={isBottom ? "node-I1084_7490-1084_7195" : "node-I1084_7364-1084_7195"} data-name="Line">
+              <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            </div>
+            <div className="absolute inset-[137px_132px_107px_132px]" id={isBottom ? "node-I1084_7490-1084_7196" : "node-I1084_7364-1084_7196"} data-name="Line">
+              <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine1} />
+              </div>
+            </div>
+            <div className="absolute inset-[105px_100px_75px_100px]" id={isBottom ? "node-I1084_7490-1084_7197" : "node-I1084_7364-1084_7197"} data-name="Line">
+              <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine2} />
+              </div>
+            </div>
+            <div className="absolute inset-[73px_68px_43px_68px]" id={isBottom ? "node-I1084_7490-1084_7198" : "node-I1084_7364-1084_7198"} data-name="Line">
+              <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine3} />
+              </div>
+            </div>
+            <div className="absolute inset-[41px_36px_11px_36px]" id={isBottom ? "node-I1084_7490-1084_7199" : "node-I1084_7364-1084_7199"} data-name="Line">
+              <div className="absolute inset-[0_1.25%_4.95%_1.25%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine4} />
+              </div>
+            </div>
+            <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[303px] left-1/2 top-[calc(50%+7px)] w-[312px]" id={isBottom ? "node-I1084_7490-1084_7200" : "node-I1084_7364-1084_7200"} data-name="Rays">
+              <div className="absolute inset-[-0.17%_-0.16%]">
+                <img alt="" className="block max-w-none size-full" src={imgRays} />
+              </div>
+            </div>
+            <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[32px]" id={isBottom ? "node-I1084_7490-1084_7201" : "node-I1084_7364-1084_7201"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7201-3918_407462" : "node-I1084_7364-1084_7201-3918_407462"}>
+                1,000
+              </p>
+            </div>
+            <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[64px]" id={isBottom ? "node-I1084_7490-1084_7202" : "node-I1084_7364-1084_7202"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7202-3918_407462" : "node-I1084_7364-1084_7202-3918_407462"}>
+                800
+              </p>
+            </div>
+            <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-0.5px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[96px]" id={isBottom ? "node-I1084_7490-1084_7203" : "node-I1084_7364-1084_7203"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7203-3918_407462" : "node-I1084_7364-1084_7203-3918_407462"}>
+                600
+              </p>
+            </div>
+            <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[128px]" id={isBottom ? "node-I1084_7490-1084_7204" : "node-I1084_7364-1084_7204"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7204-3918_407462" : "node-I1084_7364-1084_7204-3918_407462"}>
+                400
+              </p>
+            </div>
+            <div className="-translate-x-1/2 absolute bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center left-[calc(50%-1px)] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-full,9999px)] top-[160px]" id={isBottom ? "node-I1084_7490-1084_7205" : "node-I1084_7364-1084_7205"} data-name="Badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7205-3918_407462" : "node-I1084_7364-1084_7205-3918_407462"}>
+                200
+              </p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[0_46.17%_94.62%_46.17%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7206" : "node-I1084_7364-1084_7206"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Mon</p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_9.95%_73.92%_83.93%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7207" : "node-I1084_7364-1084_7207"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Tue</p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_0.77%_30.11%_91.07%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7208" : "node-I1084_7364-1084_7208"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Wed</p>
+            </div>
+            <div className="[word-break:break-word] absolute bottom-[-0.27%] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] left-[68.88%] right-1/4 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[94.89%] whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7209" : "node-I1084_7364-1084_7209"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Thu</p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[94.89%_69.13%_-0.27%_26.79%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7210" : "node-I1084_7364-1084_7210"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Fri</p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[64.52%_91.84%_30.11%_2.3%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7211" : "node-I1084_7364-1084_7211"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Sat</p>
+            </div>
+            <div className="[word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium inset-[20.7%_83.93%_73.92%_9.44%] justify-center leading-[0] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isBottom ? "node-I1084_7490-1084_7212" : "node-I1084_7364-1084_7212"}>
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Sun</p>
+            </div>
+            <div className="absolute h-[208px] left-[96px] top-[107.5px] w-[199.781px]" id={isBottom ? "node-I1084_7490-1084_7154" : "node-I1084_7364-1084_7154"} data-name="Series 3">
+              <div className="absolute inset-[-0.48%_-0.5%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+              </div>
+            </div>
+            <div className="absolute h-[185px] left-[71px] top-[101.5px] w-[249.5px]" id={isBottom ? "node-I1084_7490-1084_7153" : "node-I1084_7364-1084_7153"} data-name="Series 2">
+              <div className="absolute inset-[-0.54%_-0.6%_-0.54%_-0.4%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+              </div>
+            </div>
+            <div className="absolute inset-[20.3%_26.4%_30.65%_34.31%]" id={isBottom ? "node-I1084_7490-1084_6792" : "node-I1084_7364-1084_6792"} data-name="Series 1">
+              <div className="absolute inset-[-0.55%_-0.65%_-0.55%_-61.36%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries1} />
+              </div>
+            </div>
+          </div>
+          <div className={`content-stretch flex items-start relative shrink-0 ${isBottom ? "gap-[var(--spacing-lg,12px)]" : "flex-col gap-[var(--spacing-xs,4px)]"}`} id={isBottom ? "node-1084_7491" : "node-1084_7365"} data-name="_Legend">
+            <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isBottom ? "items-center" : "items-start w-full"}`} id={isBottom ? "node-I1084_7491-1067_6102" : "node-I1084_7365-1067_4654"} data-name="Legend series">
+              {isRight && (
+                <>
+                  <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1084:7365;1079:50479" data-name="Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7365;1067:4656">
+                    Series 1
+                  </p>
+                </>
+              )}
+              {isBottom && (
+                <>
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I1084:7491;1067:6103" data-name="Color">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7491;1067:6104">
+                    Series 1
+                  </p>
+                </>
+              )}
+            </div>
+            <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isBottom ? "items-center" : "items-start w-full"}`} id={isBottom ? "node-I1084_7491-1067_6405" : "node-I1084_7365-1067_4876"} data-name="Legend series">
+              {isRight && (
+                <>
+                  <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1084:7365;1079:50514" data-name="Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7365;1067:4878">
+                    Series 2
+                  </p>
+                </>
+              )}
+              {isBottom && (
+                <>
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I1084:7491;1067:6406" data-name="Color">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7491;1067:6407">
+                    Series 2
+                  </p>
+                </>
+              )}
+            </div>
+            <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isBottom ? "items-center" : "items-start w-full"}`} id={isBottom ? "node-I1084_7491-1067_6708" : "node-I1084_7365-1067_4987"} data-name="Legend series">
+              {isRight && (
+                <>
+                  <div className="h-[14px] relative shrink-0 w-[8px]" data-node-id="I1084:7365;1079:50670" data-name="Dot">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7365;1067:4989">
+                    Series 3
+                  </p>
+                </>
+              )}
+              {isBottom && (
+                <>
+                  <div className="relative shrink-0 size-[8px]" data-node-id="I1084:7491;1067:6709" data-name="Color">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1084:7491;1067:6710">
+                    Series 3
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+      {legend === "False" && <RadarChart className="bg-[var(--colors\/background\/bg-primary,white)] h-[372px] relative shrink-0 w-[392px]" />}
+    </div>
+  );
+}

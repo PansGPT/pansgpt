@@ -1,0 +1,23 @@
+type TagCountProps = {
+  className?: string;
+  size?: "sm" | "md" | "lg";
+};
+
+export default function TagCount({ className, size = "sm" }: TagCountProps) {
+  const isLg = size === "lg";
+  const isMd = size === "md";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] content-stretch flex flex-col items-center justify-center relative rounded-[3px] `}${isLg ? "px-[6px]" : isMd ? "px-[5px]" : "px-[var(--spacing-xs,4px)]"}`} id={isLg ? "node-3307_417848" : isMd ? "node-3307_417828" : "node-3307_417821"}>
+      {["sm", "md"].includes(size) && (
+        <div className={`${String.raw`[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center `}${isMd ? "h-[18px] w-[9px]" : "h-[16px] w-[8px]"}`} id={isMd ? "node-3307_417829" : "node-3307_417820"}>
+          <p className="leading-[var(--line-height\/text-xs,18px)]">5</p>
+        </div>
+      )}
+      {isLg && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3307:417849">
+          5
+        </p>
+      )}
+    </div>
+  );
+}

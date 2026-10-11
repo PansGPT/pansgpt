@@ -1,0 +1,59 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/cbad6244-02bb-4fbe-9c41-e8514c7dff83.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndCheckboxAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px] ${isCheckedAndFalseAndSmAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndCheckboxAndDefault ? "node-1097_63895" : "node-1097_63885"}>
+      {isCheckedAndFalseAndSmAndCheckboxAndDefault && (
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = false, size = "sm", state = "Default", type = "Checkbox" }: RadioGroupItemProps) {
+  const isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop = !selected && size === "sm" && type === "Checkbox" && state === "Default" && breakpoint === "Desktop";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[768px] `}${isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]` : String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]`}`} id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-1142_78927" : "node-1142_78955"}>
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_408925" : "node-3931_409164"} data-name="Content">
+        <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_408926" : "node-3931_409165"} data-name="Input">
+          {selected && size === "sm" && type === "Checkbox" && state === "Default" && breakpoint === "Desktop" && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />}
+          {isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" data-node-id="3931:408927" data-name="_Checkbox base" />}
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_408928" : "node-3931_409167"} data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_409803" : "node-3931_409491"} data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_409804" : "node-3931_409492"}>
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_409805" : "node-3931_409493"}>
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" id={isNotSelectedAndSmAndCheckboxAndDefaultAndDesktop ? "node-3931_408930" : "node-3931_409169"}>
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

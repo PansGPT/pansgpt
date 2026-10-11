@@ -1,0 +1,252 @@
+type ToggleBaseProps = {
+  className?: string;
+  pressed?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Focus" | "Disabled";
+  type?: "Default" | "Slim";
+};
+
+export default function ToggleBase({ className, pressed = false, size = "sm", state = "Default", type = "Default" }: ToggleBaseProps) {
+  if (type === "Default" && pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[44px]"} data-node-id="122:3305" data-name="Type=Default, Pressed=True, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239541" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[40px]"} data-node-id="7923:539305" data-name="Type=Slim, Pressed=True, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539306" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[36px]"} data-node-id="1102:4110" data-name="Type=Default, Pressed=True, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239172" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[32px]"} data-node-id="7923:539307" data-name="Type=Slim, Pressed=True, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539308" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3303" data-name="Type=Default, Pressed=True, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239539" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539309" data-name="Type=Slim, Pressed=True, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed-hover,#067647)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539310" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4104" data-name="Type=Default, Pressed=True, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239171" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-brand-solid_hover,#067647)] content-stretch cursor-pointer flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539311" data-name="Type=Slim, Pressed=True, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed-hover,#067647)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539312" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3301" data-name="Type=Default, Pressed=True, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239542" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539313" data-name="Type=Slim, Pressed=True, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539314" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4096" data-name="Type=Default, Pressed=True, Size=sm, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239173" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-brand-solid,#079455)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539315" data-name="Type=Slim, Pressed=True, Size=sm, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-slim-border_pressed,#079455)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539316" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="1101:105294" data-name="Type=Default, Pressed=True, Size=md, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239588" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539317" data-name="Type=Slim, Pressed=True, Size=md, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539429" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539318" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center justify-end overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4106" data-name="Type=Default, Pressed=True, Size=sm, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239168" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center justify-end relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539319" data-name="Type=Slim, Pressed=True, Size=sm, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539383" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539320" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[44px]"} data-node-id="122:3297" data-name="Type=Default, Pressed=False, Size=md, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239537" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[40px]"} data-node-id="7923:539321" data-name="Type=Slim, Pressed=False, Size=md, State=Focus">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539417" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539322" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[36px]"} data-node-id="1102:4098" data-name="Type=Default, Pressed=False, Size=sm, State=Focus">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239162" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Focus") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[32px]"} data-node-id="7923:539323" data-name="Type=Slim, Pressed=False, Size=sm, State=Focus">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539338" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539324" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3295" data-name="Type=Default, Pressed=False, Size=md, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239540" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539325" data-name="Type=Slim, Pressed=False, Size=md, State=Hover">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539411" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539326" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4088" data-name="Type=Default, Pressed=False, Size=sm, State=Hover">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239159" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Hover") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch cursor-pointer flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539327" data-name="Type=Slim, Pressed=False, Size=sm, State=Hover">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539340" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539328" data-name="Button" />
+      </button>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="122:3293" data-name="Type=Default, Pressed=False, Size=md, State=Default">
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239538" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539329" data-name="Type=Slim, Pressed=False, Size=md, State=Default">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539398" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539330" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539331" data-name="Type=Slim, Pressed=False, Size=sm, State=Default">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539341" data-name="Border" />
+        <div className="bg-[var(--colors\/foreground\/fg-white,white)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539332" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[24px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="1101:105292" data-name="Type=Default, Pressed=False, Size=md, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[20px]" data-node-id="6305:239583" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "md" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip relative rounded-[var(--radius-full,9999px)] w-[40px]"} data-node-id="7923:539333" data-name="Type=Slim, Pressed=False, Size=md, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539423" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[20px]" data-node-id="7923:539334" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Default" && !pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4090" data-name="Type=Default, Pressed=False, Size=sm, State=Disabled">
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:239165" data-name="Button" />
+      </div>
+    );
+  }
+  if (type === "Slim" && !pressed && size === "sm" && state === "Disabled") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled,#f5f5f5)] content-stretch flex h-[16px] items-center relative rounded-[var(--radius-full,9999px)] w-[32px]"} data-node-id="7923:539335" data-name="Type=Slim, Pressed=False, Size=sm, State=Disabled">
+        <div className="absolute border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid inset-0 rounded-[var(--radius-full,9999px)]" data-node-id="7923:539342" data-name="Border" />
+        <div className="bg-[var(--component-colors\/components\/toggles\/toggle-button-fg_disabled,#fafafa)] border border-[var(--component-colors\/components\/toggles\/toggle-border,#d5d7da)] border-solid relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[16px]" data-node-id="7923:539336" data-name="Button" />
+      </div>
+    );
+  }
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-tertiary,#f5f5f5)] content-stretch flex h-[20px] items-center overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] w-[36px]"} data-node-id="1102:4084" data-name="Type=Default, Pressed=False, Size=sm, State=Default">
+      <div className="bg-[var(--colors\/foreground\/fg-white,white)] relative rounded-[var(--radius-full,9999px)] shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_-1px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1))] shrink-0 size-[16px]" data-node-id="6305:238901" data-name="Button" />
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Shadows/shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

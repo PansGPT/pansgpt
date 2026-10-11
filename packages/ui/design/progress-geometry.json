@@ -1,0 +1,1040 @@
+{
+  "barColumns": [
+    "id",
+    "name",
+    "width",
+    "height",
+    "trackWidth",
+    "fillWidth",
+    "tooltip"
+  ],
+  "bars": [
+    [
+      "1085:57381",
+      "Progress=0%, Label=Right",
+      320,
+      20,
+      283,
+      7.97183084487915,
+      null
+    ],
+    [
+      "1086:270",
+      "Progress=0%, Label=Bottom",
+      320,
+      36,
+      320,
+      8,
+      null
+    ],
+    [
+      "1087:57395",
+      "Progress=0%, Label=Top floating",
+      320,
+      8,
+      320,
+      8,
+      {
+        "x": -18.5,
+        "y": -42,
+        "w": 45,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57694",
+      "Progress=0%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      8,
+      {
+        "x": -18.5,
+        "y": 16,
+        "w": 45,
+        "h": 34
+      }
+    ],
+    [
+      "1086:160",
+      "Progress=0%, Label=False",
+      320,
+      8,
+      320,
+      44,
+      null
+    ],
+    [
+      "1085:57383",
+      "Progress=10%, Label=Right",
+      320,
+      20,
+      278,
+      28.001449584960938,
+      null
+    ],
+    [
+      "1086:260",
+      "Progress=10%, Label=Bottom",
+      320,
+      36,
+      320,
+      32,
+      null
+    ],
+    [
+      "1087:57390",
+      "Progress=10%, Label=Top floating",
+      320,
+      8,
+      320,
+      32,
+      {
+        "x": 2,
+        "y": -42,
+        "w": 50,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57682",
+      "Progress=10%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      32,
+      {
+        "x": 2,
+        "y": 16,
+        "w": 50,
+        "h": 34
+      }
+    ],
+    [
+      "1086:145",
+      "Progress=10%, Label=False",
+      320,
+      8,
+      320,
+      71.80000305175781,
+      null
+    ],
+    [
+      "1085:57393",
+      "Progress=20%, Label=Right",
+      320,
+      20,
+      275,
+      55.40146255493164,
+      null
+    ],
+    [
+      "1086:250",
+      "Progress=20%, Label=Bottom",
+      320,
+      36,
+      320,
+      64,
+      null
+    ],
+    [
+      "1087:57385",
+      "Progress=20%, Label=Top floating",
+      320,
+      8,
+      320,
+      64,
+      {
+        "x": 32,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57670",
+      "Progress=20%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      64,
+      {
+        "x": 32,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:135",
+      "Progress=20%, Label=False",
+      320,
+      8,
+      320,
+      101.19999694824219,
+      null
+    ],
+    [
+      "1085:57398",
+      "Progress=30%, Label=Right",
+      320,
+      20,
+      275,
+      83.1021957397461,
+      null
+    ],
+    [
+      "1086:240",
+      "Progress=30%, Label=Bottom",
+      320,
+      36,
+      320,
+      96,
+      null
+    ],
+    [
+      "1087:57375",
+      "Progress=30%, Label=Top floating",
+      320,
+      8,
+      320,
+      96,
+      {
+        "x": 64,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57658",
+      "Progress=30%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      96,
+      {
+        "x": 64,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:125",
+      "Progress=30%, Label=False",
+      320,
+      8,
+      320,
+      128.8000030517578,
+      null
+    ],
+    [
+      "1085:57403",
+      "Progress=40%, Label=Right",
+      320,
+      20,
+      274,
+      110.4029312133789,
+      null
+    ],
+    [
+      "1086:230",
+      "Progress=40%, Label=Bottom",
+      320,
+      36,
+      320,
+      128,
+      null
+    ],
+    [
+      "1087:57365",
+      "Progress=40%, Label=Top floating",
+      320,
+      8,
+      320,
+      128,
+      {
+        "x": 96,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57646",
+      "Progress=40%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      128,
+      {
+        "x": 96,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:150",
+      "Progress=40%, Label=False",
+      320,
+      8,
+      320,
+      157,
+      null
+    ],
+    [
+      "1085:57408",
+      "Progress=50%, Label=Right",
+      320,
+      20,
+      275,
+      138.50364685058594,
+      null
+    ],
+    [
+      "1086:220",
+      "Progress=50%, Label=Bottom",
+      320,
+      36,
+      320,
+      160,
+      null
+    ],
+    [
+      "1087:57355",
+      "Progress=50%, Label=Top floating",
+      320,
+      8,
+      320,
+      160,
+      {
+        "x": 128,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57688",
+      "Progress=50%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      160,
+      {
+        "x": 128,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:120",
+      "Progress=50%, Label=False",
+      320,
+      8,
+      320,
+      184,
+      null
+    ],
+    [
+      "1085:57413",
+      "Progress=60%, Label=Right",
+      320,
+      20,
+      275,
+      166.2043914794922,
+      null
+    ],
+    [
+      "1086:265",
+      "Progress=60%, Label=Bottom",
+      320,
+      36,
+      320,
+      192,
+      null
+    ],
+    [
+      "1087:57345",
+      "Progress=60%, Label=Top floating",
+      320,
+      8,
+      320,
+      192,
+      {
+        "x": 160,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57676",
+      "Progress=60%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      192,
+      {
+        "x": 160,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:155",
+      "Progress=60%, Label=False",
+      320,
+      8,
+      320,
+      211.60000610351562,
+      null
+    ],
+    [
+      "1085:57418",
+      "Progress=70%, Label=Right",
+      320,
+      20,
+      276,
+      194.60507202148438,
+      null
+    ],
+    [
+      "1086:255",
+      "Progress=70%, Label=Bottom",
+      320,
+      36,
+      320,
+      224,
+      null
+    ],
+    [
+      "1087:57380",
+      "Progress=70%, Label=Top floating",
+      320,
+      8,
+      320,
+      224,
+      {
+        "x": 192,
+        "y": -42,
+        "w": 52,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57664",
+      "Progress=70%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      224,
+      {
+        "x": 192,
+        "y": 16,
+        "w": 52,
+        "h": 34
+      }
+    ],
+    [
+      "1086:140",
+      "Progress=70%, Label=False",
+      320,
+      8,
+      320,
+      238.89999389648438,
+      null
+    ],
+    [
+      "1085:57423",
+      "Progress=80%, Label=Right",
+      320,
+      20,
+      275,
+      221.60585021972656,
+      null
+    ],
+    [
+      "1086:245",
+      "Progress=80%, Label=Bottom",
+      320,
+      36,
+      320,
+      256,
+      null
+    ],
+    [
+      "1087:57370",
+      "Progress=80%, Label=Top floating",
+      320,
+      8,
+      320,
+      256,
+      {
+        "x": 224,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57652",
+      "Progress=80%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      256,
+      {
+        "x": 224,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:130",
+      "Progress=80%, Label=False",
+      320,
+      8,
+      320,
+      266.79998779296875,
+      null
+    ],
+    [
+      "1085:57428",
+      "Progress=90%, Label=Right",
+      320,
+      20,
+      275,
+      249.30654907226562,
+      null
+    ],
+    [
+      "1086:235",
+      "Progress=90%, Label=Bottom",
+      320,
+      36,
+      320,
+      288,
+      null
+    ],
+    [
+      "1087:57360",
+      "Progress=90%, Label=Top floating",
+      320,
+      8,
+      320,
+      288,
+      {
+        "x": 256,
+        "y": -42,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57640",
+      "Progress=90%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      288,
+      {
+        "x": 256,
+        "y": 16,
+        "w": 53,
+        "h": 34
+      }
+    ],
+    [
+      "1086:115",
+      "Progress=90%, Label=False",
+      320,
+      8,
+      320,
+      294.3999938964844,
+      null
+    ],
+    [
+      "1085:57433",
+      "Progress=100%, Label=Right",
+      320,
+      20,
+      268,
+      268,
+      null
+    ],
+    [
+      "1086:225",
+      "Progress=100%, Label=Bottom",
+      320,
+      36,
+      320,
+      320,
+      null
+    ],
+    [
+      "1087:57350",
+      "Progress=100%, Label=Top floating",
+      320,
+      8,
+      320,
+      320,
+      {
+        "x": 285,
+        "y": -42,
+        "w": 59,
+        "h": 34
+      }
+    ],
+    [
+      "1087:57634",
+      "Progress=100%, Label=Bottom floating",
+      320,
+      8,
+      320,
+      320,
+      {
+        "x": 285,
+        "y": 16,
+        "w": 59,
+        "h": 34
+      }
+    ],
+    [
+      "1086:110",
+      "Progress=100%, Label=False",
+      320,
+      8,
+      320,
+      320,
+      null
+    ]
+  ],
+  "circles": [
+    {
+      "id": "1084:2716",
+      "name": "Size=md, Shape=Circle",
+      "width": 240,
+      "height": 240,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 12,
+          "y": 12,
+          "w": 216,
+          "h": 216
+        },
+        {
+          "name": "Number and label",
+          "x": 77.5,
+          "y": 88,
+          "w": 85,
+          "h": 64
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Background",
+          "w": 216,
+          "h": 216,
+          "rotation": 0,
+          "stroke": 24,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 10.995574951171875,
+            "innerRadius": 1
+          }
+        },
+        {
+          "name": "Line",
+          "w": 216,
+          "h": 216,
+          "rotation": 0,
+          "stroke": 24,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 7.225663185119629,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:3005",
+      "name": "Size=lg, Shape=Circle",
+      "width": 280,
+      "height": 280,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 13,
+          "y": 14,
+          "w": 252,
+          "h": 252
+        },
+        {
+          "name": "Number and label",
+          "x": 83.5,
+          "y": 100,
+          "w": 113,
+          "h": 80
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Background",
+          "w": 252,
+          "h": 252,
+          "rotation": 0,
+          "stroke": 28,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 10.995574951171875,
+            "innerRadius": 1
+          }
+        },
+        {
+          "name": "Line",
+          "w": 252,
+          "h": 252,
+          "rotation": 0,
+          "stroke": 28,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 7.225663185119629,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:2896",
+      "name": "Size=sm, Shape=Circle",
+      "width": 200,
+      "height": 200,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 10,
+          "y": 10,
+          "w": 180,
+          "h": 180
+        },
+        {
+          "name": "Number and label",
+          "x": 64,
+          "y": 72,
+          "w": 72,
+          "h": 56
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Background",
+          "w": 180,
+          "h": 180,
+          "rotation": 0,
+          "stroke": 20,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 10.995574951171875,
+            "innerRadius": 1
+          }
+        },
+        {
+          "name": "Line",
+          "w": 180,
+          "h": 180,
+          "rotation": 0,
+          "stroke": 20,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 7.225663185119629,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:2981",
+      "name": "Size=xs, Shape=Circle",
+      "width": 160,
+      "height": 160,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 8,
+          "y": 8,
+          "w": 144,
+          "h": 144
+        },
+        {
+          "name": "Number and label",
+          "x": 44,
+          "y": 55,
+          "w": 72,
+          "h": 50
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Background",
+          "w": 144,
+          "h": 144,
+          "rotation": 0,
+          "stroke": 16,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 10.995574951171875,
+            "innerRadius": 1
+          }
+        },
+        {
+          "name": "Line",
+          "w": 144,
+          "h": 144,
+          "rotation": 0,
+          "stroke": 16,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 7.225663185119629,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:3128",
+      "name": "Size=md, Shape=Half circle",
+      "width": 240,
+      "height": 132,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 12,
+          "y": 12,
+          "w": 216,
+          "h": 216
+        },
+        {
+          "name": "Number and label",
+          "x": 77.5,
+          "y": 64,
+          "w": 85,
+          "h": 64
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Line",
+          "w": 216,
+          "h": 216,
+          "rotation": 0,
+          "stroke": 24,
+          "arc": {
+            "startingAngle": 3.1415927410125732,
+            "endingAngle": 5.654867172241211,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:3122",
+      "name": "Size=lg, Shape=Half circle",
+      "width": 280,
+      "height": 154,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 14,
+          "y": 14,
+          "w": 252,
+          "h": 252
+        },
+        {
+          "name": "Number and label",
+          "x": 83.5,
+          "y": 70,
+          "w": 113,
+          "h": 80
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Line",
+          "w": 252,
+          "h": 252,
+          "rotation": 0,
+          "stroke": 28,
+          "arc": {
+            "startingAngle": 3.1415927410125732,
+            "endingAngle": 5.654867172241211,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:3115",
+      "name": "Size=sm, Shape=Half circle",
+      "width": 200,
+      "height": 110,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 10,
+          "y": 10,
+          "w": 180,
+          "h": 180
+        },
+        {
+          "name": "Number and label",
+          "x": 64,
+          "y": 50,
+          "w": 72,
+          "h": 56
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Line",
+          "w": 180,
+          "h": 180,
+          "rotation": 0,
+          "stroke": 20,
+          "arc": {
+            "startingAngle": 3.1415927410125732,
+            "endingAngle": 5.654867172241211,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1084:3109",
+      "name": "Size=xs, Shape=Half circle",
+      "width": 160,
+      "height": 88,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 8,
+          "y": 8,
+          "w": 144,
+          "h": 144
+        },
+        {
+          "name": "Number and label",
+          "x": 44,
+          "y": 36,
+          "w": 72,
+          "h": 50
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Line",
+          "w": 144,
+          "h": 144,
+          "rotation": 0,
+          "stroke": 16,
+          "arc": {
+            "startingAngle": 3.1415927410125732,
+            "endingAngle": 5.654867172241211,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1157:90228",
+      "name": "Size=xxs, Shape=Circle",
+      "width": 64,
+      "height": 86,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 0,
+          "y": 0,
+          "w": 64,
+          "h": 64
+        },
+        {
+          "name": "Label",
+          "x": 0,
+          "y": 68,
+          "w": 64,
+          "h": 18
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Background",
+          "w": 58,
+          "h": 58,
+          "rotation": 0,
+          "stroke": 6,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 10.995574951171875,
+            "innerRadius": 1
+          }
+        },
+        {
+          "name": "Line",
+          "w": 58,
+          "h": 58,
+          "rotation": 0,
+          "stroke": 6,
+          "arc": {
+            "startingAngle": 4.71238899230957,
+            "endingAngle": 7.225663185119629,
+            "innerRadius": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "1157:90287",
+      "name": "Size=xxs, Shape=Half circle",
+      "width": 64,
+      "height": 53,
+      "children": [
+        {
+          "name": "Ring",
+          "x": 0,
+          "y": 0,
+          "w": 64,
+          "h": 35
+        },
+        {
+          "name": "Label",
+          "x": 0,
+          "y": 35,
+          "w": 64,
+          "h": 18
+        }
+      ],
+      "arcs": [
+        {
+          "name": "Line",
+          "w": 58,
+          "h": 58,
+          "rotation": 0,
+          "stroke": 6,
+          "arc": {
+            "startingAngle": 3.1415927410125732,
+            "endingAngle": 4.398229598999023,
+            "innerRadius": 1
+          }
+        }
+      ]
+    }
+  ]
+}

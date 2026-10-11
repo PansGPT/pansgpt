@@ -1,0 +1,231 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/98930515-fbb9-49d0-94cf-f6f2d25ea9f0.svg";
+const imgLayersTwo02 = "https://www.figma.com/api/mcp/asset/4bc689f8-de1b-43a8-bb95-e474015f7ea8.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/94f702d8-2ee6-4917-ba69-f0c227f09c3d.svg";
+const imgSearchLg = "https://www.figma.com/api/mcp/asset/5749f702-f42f-4bdc-b3de-d035b6620d0d.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/ffa54bc8-f111-450e-87d6-47e01b10f5fe.svg";
+
+type CheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  const isNotCheckedAndFalseAndSmAndCheckboxAndFalseAndDefault = !checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && text === "False" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} id={isNotCheckedAndFalseAndSmAndCheckboxAndFalseAndDefault ? "node-1097_63721" : "node-1097_63713"}>
+      <div className={`relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px] ${isNotCheckedAndFalseAndSmAndCheckboxAndFalseAndDefault ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip`}`} id={isNotCheckedAndFalseAndSmAndCheckboxAndFalseAndDefault ? "node-1097_63963" : "node-1097_64015"} data-name="_Checkbox base">
+        {checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && text === "False" && state === "Default" && (
+          <div className="absolute inset-[12.5%]" data-node-id="I1097:64015;1097:63897" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type SlideOutMenuProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Labels";
+};
+
+function SlideOutMenu({ className, breakpoint = "Mobile", type = "Labels" }: SlideOutMenuProps) {
+  return (
+    <div className={className || "content-stretch flex h-[960px] items-start overflow-clip pl-[var(--spacing-3xl,24px)] relative w-[375px]"} data-node-id="1251:9986">
+      <div className="absolute backdrop-blur-[8px] inset-0 overflow-clip" data-node-id="4943:373046" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4943:373046;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px overflow-clip relative shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]" data-node-id="1251:9987" data-name="Panel">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] items-start px-[var(--spacing-xl,16px)] py-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="1251:9988" data-name="_Slide out menu header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px relative" data-node-id="I1251:9988;1240:137264" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1251:9988;4943:372258" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1251:9988;4943:372258;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo02} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" data-node-id="I1251:9988;1240:137266" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1251:9988;1240:137267">
+                Add labels to project
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1251:9988;1240:137268">
+                Labels help organize projects.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" data-node-id="I1251:9988;1240:137270" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I1251:9988;1240:137270;2763:420385" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-3xl,24px)] items-center min-h-px px-[var(--spacing-xl,16px)] relative w-full" data-node-id="1251:9989" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="3292:581986" data-name="Section">
+            <button className="content-stretch cursor-pointer flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="3292:581987" data-name="Select">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3292:581987;7953:158174" data-name="Input with label">
+                <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I3292:581987;7953:158179" data-name="Input">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3292:581987;7953:158180" data-name="Content">
+                    <div className="relative shrink-0 size-[20px]" data-node-id="I3292:581987;7953:158181" data-name="search-lg">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSearchLg} />
+                    </div>
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-placeholder,#717680)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3292:581987;7953:158182">
+                      Search for label
+                    </p>
+                  </div>
+                  <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3292:581987;7953:158183" data-name="Shortcut wrapper">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-left whitespace-nowrap" data-node-id="I3292:581987;7953:158184">
+                      ⌘K
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1251:9992" data-name="Section">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1251:9993">
+              Custom labels
+            </p>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pl-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="1251:9994" data-name="Radio options">
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:9995" data-name="Checkbox">
+                <Checkbox checked className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:9997" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:9997;3918:406640">
+                    Design
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:9998" data-name="Checkbox">
+                <Checkbox checked className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10000" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10000;3918:408837">
+                    Product
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10001" data-name="Checkbox">
+                <Checkbox checked className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10003" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10003;3918:417456">
+                    Marketing
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10004" data-name="Checkbox">
+                <Checkbox checked className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10006" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10006;3918:413691">
+                    Management
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10007" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10009" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10009;3918:411505">
+                    Sales
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10010" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/gray-blue\/utility-gray-blue-50,#f8fcf9)] border border-[var(--component-colors\/utility\/gray-blue\/utility-gray-blue-200,#d5ebd9)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10012" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray-blue\/utility-gray-blue-700,#36723f)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10012;3918:413521">
+                    Product
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10013" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/blue-light\/utility-blue-light-50,#f0f9ff)] border border-[var(--component-colors\/utility\/blue-light\/utility-blue-light-200,#b9e6fe)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10015" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue-light\/utility-blue-light-700,#026aa2)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10015;3918:404592">
+                    Operations
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10016" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/purple\/utility-purple-50,#f4f3ff)] border border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10018" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/purple\/utility-purple-700,#5925dc)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10018;3918:404935">
+                    Customer Success
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10019" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10021" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10021;3918:408837">
+                    Human Resources
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10022" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10024" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10024;3918:404493">
+                    Compliance
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="1251:10025" data-name="Checkbox">
+                <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+                <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1251:10027" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1251:10027;3918:406278">
+                    Finance
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative shrink-0" data-node-id="3292:582002" data-name="Actions">
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3292:582003" data-name="Buttons/Button">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="I3292:582003;3468:532697" data-name="placeholder">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:582003;3287:433309">
+                    Add label
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="1251:10030" data-name="Footer">
+          <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-between p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1251:10032" data-name="Content">
+            <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative shrink-0" data-node-id="3292:581301" data-name="Actions">
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3292:581302" data-name="Buttons/Button">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581302;3287:433309">
+                  Manage labels
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="3292:581185" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581186" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581186;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581186;3287:433113">
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581187" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581187;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581187;3287:432941">
+                    Apply
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

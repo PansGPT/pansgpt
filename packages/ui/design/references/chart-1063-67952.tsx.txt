@@ -1,0 +1,95 @@
+const imgLabelFalse = "https://www.figma.com/api/mcp/asset/a61bb733-37d2-427c-825a-e3d28aa66a1a.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/1a60334b-72c5-4303-be43-394975234cc1.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/c07c9104-b574-4cc9-9bb4-e5c4cdd79c25.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/d25ab6b7-a1f3-4411-81d3-60682f4d14c6.svg";
+
+type YAxisLineProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxisLine({ className, label = "False" }: YAxisLineProps) {
+  return (
+    <div className={className || "h-[22px] relative w-[1216px]"} data-node-id="1062:47446">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLabelFalse} />
+    </div>
+  );
+}
+
+type YAxisProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxis({ className, label = "False" }: YAxisProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[167px] items-start justify-between relative w-[1216px]"} data-node-id="1067:823">
+      <YAxisLine className="h-[22px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+    </div>
+  );
+}
+
+type LineAndBarChartProps = {
+  className?: string;
+  axisLabels?: "False";
+  breakpoint?: "Mobile";
+  chartStyle?: "Line";
+  legend?: "False";
+};
+
+function LineAndBarChart({ className, axisLabels = "False", breakpoint = "Mobile", chartStyle = "Line", legend = "False" }: LineAndBarChartProps) {
+  return (
+    <div className={className || "h-[240px] relative w-[343px]"} data-node-id="1063:67952">
+      <div className="absolute content-stretch flex gap-[var(--spacing-xs,4px)] inset-0 items-start" data-node-id="1063:67953" data-name="Axis">
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="1063:67954" data-name="Content">
+          <YAxis className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative w-full" />
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal items-center justify-between leading-[var(--line-height\/text-xs,18px)] px-[var(--spacing-md,8px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-full whitespace-nowrap" data-node-id="1063:67962" data-name="_X-axis">
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47554">
+              Jan
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47556">
+              Mar
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1063:47258">
+              May
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47558">
+              Jul
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47560">
+              Sep
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47562">
+              Nov
+            </p>
+            <p className="relative shrink-0" data-node-id="I1063:67962;1061:47564">
+              Dec
+            </p>
+          </div>
+          <div className="absolute inset-[0_0_27px_0] overflow-clip" data-node-id="1063:67964" data-name="_Chart data">
+            <div className="absolute h-[146px] left-0 right-0 top-[46px]" data-node-id="I1063:67964;1062:46535" data-name="Series 1">
+              <div className="absolute inset-[0_-0.29%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries1} />
+              </div>
+            </div>
+            <div className="absolute inset-[51.56%_0_35.5%_0]" data-node-id="I1063:67964;1062:46538" data-name="Series 2">
+              <div className="absolute inset-[-3.63%_-0.29%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+              </div>
+            </div>
+            <div className="absolute inset-[55.73%_0_9.9%_0]" data-node-id="I1063:67964;1062:46576" data-name="Series 3">
+              <div className="absolute inset-[-1.37%_-0.29%]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,80 @@
+const imgDot = "https://www.figma.com/api/mcp/asset/ed87ab9a-4464-4729-b40a-b1ccd7c01058.svg";
+const imgConnectorRight = "https://www.figma.com/api/mcp/asset/d25d40d0-b2cb-4234-a5d6-d665ef1e99fb.svg";
+const imgConnectorLeft = "https://www.figma.com/api/mcp/asset/b18258df-673f-4933-940f-b7b61c42cd20.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/2a6e1e50-cc6b-4f9b-82e7-d1c29d4ff20e.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/ec77a8ae-76c4-47aa-ba65-70c95cfa2c6a.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/919a68b1-4377-4d41-b3ce-682cb180f7ca.svg";
+
+type CalendarCellProps = {
+  className?: string;
+  activeDot?: boolean;
+  leftConnector?: boolean;
+  rightConnector?: boolean;
+  state?: "Default" | "Hover" | "Disabled";
+  type?: "Default" | "Active" | "Selected" | "Today's date";
+};
+
+export default function CalendarCell({ className, activeDot = true, leftConnector = true, rightConnector = true, state = "Default", type = "Default" }: CalendarCellProps) {
+  const isActiveAndDefault = type === "Active" && state === "Default";
+  const isActiveAndDisabled = type === "Active" && state === "Disabled";
+  const isActiveAndHover = type === "Active" && state === "Hover";
+  const isDefaultAndDisabled = type === "Default" && state === "Disabled";
+  const isDefaultAndHover = type === "Default" && state === "Hover";
+  const isDefaultAndIsTodaysDateOrActive = state === "Default" && ["Today's date", "Active"].includes(type);
+  const isDisabled = state === "Disabled";
+  const isHoverAndIsActiveOrDefaultOrTodaysDate = state === "Hover" && ["Active", "Default", "Today's date"].includes(type);
+  const isSelectedAndDefault = type === "Selected" && state === "Default";
+  const isSelectedAndDisabled = type === "Selected" && state === "Disabled";
+  const isSelectedAndHover = type === "Selected" && state === "Hover";
+  const isSelectedAndIsDefaultOrHover = type === "Selected" && ["Default", "Hover"].includes(state);
+  const isTodaysDateAndDefault = type === "Today's date" && state === "Default";
+  const isTodaysDateAndDisabled = type === "Today's date" && state === "Disabled";
+  const isTodaysDateAndHover = type === "Today's date" && state === "Hover";
+  const isTodaysDateOrSelectedOrActive = ["Today's date", "Selected", "Active"].includes(type);
+  return (
+    <div className={className || `relative rounded-[var(--radius-full,9999px)] size-[40px] ${isSelectedAndHover ? String.raw`bg-[var(--colors\/background\/bg-brand-solid_hover,#067647)]` : isDefaultAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)]` : state === "Disabled" && ["Active", "Today's date", "Selected"].includes(type) ? String.raw`bg-[var(--colors\/background\/bg-disabled_subtle,#fafafa)]` : state === "Hover" && ["Active", "Today's date"].includes(type) ? String.raw`bg-[var(--colors\/background\/bg-secondary_hover,#f5f5f5)]` : isSelectedAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : isDefaultAndIsTodaysDateOrActive ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : ""}`} id={isSelectedAndHover ? "node-7365_58014" : isTodaysDateAndHover ? "node-7365_58000" : isDefaultAndHover ? "node-7365_57993" : isSelectedAndDisabled ? "node-7365_57985" : isTodaysDateAndDisabled ? "node-7365_57975" : isDefaultAndDisabled ? "node-7365_57970" : isActiveAndDisabled ? "node-7365_57964" : isActiveAndHover ? "node-7365_57956" : isActiveAndDefault ? "node-7365_57947" : isSelectedAndDefault ? "node-7365_57944" : isTodaysDateAndDefault ? "node-7365_57930" : "node-7365_57925"}>
+      {isTodaysDateOrSelectedOrActive && rightConnector && (
+        <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="7365:58080" data-name="Connector right">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+        </div>
+      )}
+      {isTodaysDateOrSelectedOrActive && leftConnector && (
+        <div className="absolute left-[-20px] size-[40px] top-0" data-node-id="7365:58081" data-name="Connector left">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorLeft} />
+        </div>
+      )}
+      <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px] `}${isDisabled ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal text-[color:var(--colors\/text\/text-disabled,#717680)]` : isHoverAndIsActiveOrDefaultOrTodaysDate ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]` : isSelectedAndIsDefaultOrHover ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium text-[color:var(--colors\/text\/text-white,white)]` : isDefaultAndIsTodaysDateOrActive ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isSelectedAndHover ? "node-7365_58015" : isTodaysDateAndHover ? "node-7365_58001" : isDefaultAndHover ? "node-7365_57994" : isSelectedAndDisabled ? "node-7365_57986" : isTodaysDateAndDisabled ? "node-7365_57976" : isDefaultAndDisabled ? "node-7365_57971" : isActiveAndDisabled ? "node-7365_57966" : isActiveAndHover ? "node-7365_57958" : isActiveAndDefault ? "node-7365_57949" : isSelectedAndDefault ? "node-7365_57945" : isTodaysDateAndDefault ? "node-7365_57931" : "node-7365_57926"}>
+        1
+      </p>
+      {((type === "Default" && state === "Default") || isTodaysDateAndDefault || isActiveAndDefault || isActiveAndHover || isDefaultAndHover || isTodaysDateAndHover) && activeDot && (
+        <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="7365:57927" data-name="Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+        </div>
+      )}
+      {isDisabled && activeDot && (
+        <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="7365:57967" data-name="Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+        </div>
+      )}
+      {isHoverAndIsActiveOrDefaultOrTodaysDate && (
+        <div className="absolute bottom-0 left-[60%] right-[-10%] top-1/2" id={isTodaysDateAndHover ? "node-7365_58003" : isDefaultAndHover ? "node-7365_57996" : "node-7365_57960"} data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+      {isSelectedAndIsDefaultOrHover && activeDot && (
+        <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="7365:57946" data-name="Dot">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+        </div>
+      )}
+      {isSelectedAndHover && (
+        <div className="absolute bottom-0 left-[60%] right-[-10%] top-1/2" data-node-id="7365:58017" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

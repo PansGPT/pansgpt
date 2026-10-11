@@ -1,0 +1,18 @@
+type VideoVolumeSliderHandleProps = {
+  className?: string;
+  volume?: "0%" | "25%" | "50%" | "75%" | "100%";
+};
+
+export default function VideoVolumeSliderHandle({ className, volume = "0%" }: VideoVolumeSliderHandleProps) {
+  const is0 = volume === "0%";
+  const is100 = volume === "100%";
+  const is25 = volume === "25%";
+  const is50 = volume === "50%";
+  return (
+    <div className={className || "bg-[var(--component-colors\\/alpha\\/alpha-white-30,rgba(255,255,255,0.3))] h-[4px] relative rounded-[var(--radius-full,9999px)] w-[44px]"} id={is50 ? "node-9264_575616" : is25 ? "node-9264_575606" : is0 ? "node-9264_575543" : is100 ? "node-9264_575519" : "node-9264_575518"}>
+      <div className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[4px] left-0 rounded-[var(--radius-full,9999px)] top-0 `}${is50 ? "right-[16px]" : is25 ? "right-[24px]" : is0 ? "right-[32px]" : is100 ? "right-0" : "right-[8px]"}`} id={is50 ? "node-9264_575618" : is25 ? "node-9264_575608" : is0 ? "node-9264_575535" : is100 ? "node-9264_575515" : "node-9264_575510"} data-name="Progress">
+        <div className="-translate-y-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] right-0 rounded-[var(--radius-full,9999px)] size-[12px] top-1/2" id={is50 ? "node-9264_575620" : is25 ? "node-9264_575610" : is0 ? "node-9264_575537" : is100 ? "node-9264_575517" : "node-9264_575512"} data-name="Control handle" />
+      </div>
+    </div>
+  );
+}

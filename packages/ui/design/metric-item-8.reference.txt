@@ -1,0 +1,60 @@
+const imgTrendUp01 = "https://www.figma.com/api/mcp/asset/b1c06cfb-8a73-48ea-8933-0200ef4c6edd.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/df9cfb17-f299-4bf8-9aa9-2da56134829f.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/cbe6774b-f56e-467d-8d16-5af027603395.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/cd0af599-1857-466c-8267-1c645750cc35.svg";
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Desktop";
+  type?: "Chart 04";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Desktop", type = "Chart 04" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-secondary_subtle,#fdfdfd)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start overflow-clip relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[388px]"} data-node-id="7947:105579">
+      <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="7947:105796" data-name="Heading and content">
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center pb-[var(--spacing-md,8px)] pt-[var(--spacing-lg,12px)] px-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="7947:105580" data-name="Heading wrapper">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="7947:105581">
+            Views 24 hours
+          </p>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="7947:105582" data-name="Content">
+          <div className="content-center flex flex-wrap gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" data-node-id="7947:105583" data-name="Number and badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] whitespace-nowrap" data-node-id="7947:105584">
+              2,000
+            </p>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="7947:105585" data-name="Change and text">
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center relative shrink-0" data-node-id="7947:105586" data-name="_Change">
+                <div className="relative shrink-0 size-[16px]" data-node-id="I7947:105586;4988:370935" data-name="trend-up-01">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrendUp01} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I7947:105586;4988:370936">
+                  100%
+                </p>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="7947:105587">
+                vs last month
+              </p>
+            </div>
+          </div>
+          <div className="h-[56px] relative shrink-0 w-full" data-node-id="7947:105588" data-name="_Chart mini">
+            <div className="absolute inset-0" data-node-id="I7947:105588;7947:79982" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+            </div>
+            <div className="absolute inset-[3px_0_9px_0]" data-node-id="I7947:105588;7947:79985" data-name="Line">
+              <div className="absolute inset-[-2.23%_-0.29%_-2.27%_-0.29%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            </div>
+          </div>
+          <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="7947:105589" data-name="Dropdown">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I7947:105589;3281:383088" data-name="dots-vertical">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

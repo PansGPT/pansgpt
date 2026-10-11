@@ -1,0 +1,1328 @@
+{
+  "previewSourceIds": 8556,
+  "families": [
+    {
+      "id": "1029:37647",
+      "name": "_Swatch base",
+      "page": "      ↳ Colors",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1272:4548",
+      "name": "_Swatch base gradient",
+      "page": "      ↳ Colors",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "43:3221",
+      "name": "_Breadcrumb button base",
+      "page": "      ↳ Breadcrumbs",
+      "variantCount": 24,
+      "defaultPresent": false
+    },
+    {
+      "id": "1122:153",
+      "name": "Breadcrumbs",
+      "page": "      ↳ Breadcrumbs",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1019:35537",
+      "name": "_Type scale base",
+      "page": "      ↳ Typography",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "5253:373419",
+      "name": "_Shadow card",
+      "page": "      ↳ Effect styles",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "5424:399227",
+      "name": "_Focus ring card",
+      "page": "      ↳ Effect styles",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "5253:373221",
+      "name": "_Blur card",
+      "page": "      ↳ Effect styles",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "5253:373849",
+      "name": "_Radius card",
+      "page": "      ↳ Spacing, radius & grids",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "6443:299109",
+      "name": "_Radius example",
+      "page": "      ↳ Spacing, radius & grids",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1072:50372",
+      "name": "_Container",
+      "page": "      ↳ Spacing, radius & grids",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1101:104589",
+      "name": "_Key",
+      "page": "      ↳ Design annotations",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1101:104597",
+      "name": "Numeric key",
+      "page": "      ↳ Design annotations",
+      "variantCount": 15,
+      "defaultPresent": true
+    },
+    {
+      "id": "1101:104664",
+      "name": "Numeric key combo",
+      "page": "      ↳ Design annotations",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1023:37095",
+      "name": "Design system footer",
+      "page": "      ↳ Design annotations",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1027:9560",
+      "name": "Design note",
+      "page": "      ↳ Design annotations",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "5263:372534",
+      "name": "Figma Variables note",
+      "page": "      ↳ Design annotations",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1518:345603",
+      "name": "Design system header",
+      "page": "      ↳ Design annotations",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1143:83960",
+      "name": "Measure + spacing guide",
+      "page": "      ↳ Design annotations",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1143:83642",
+      "name": "_Measure line base",
+      "page": "      ↳ Design annotations",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "6472:99378",
+      "name": "_Variables icon",
+      "page": "      ↳ Design annotations",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "6472:98427",
+      "name": "_Documentation table cell",
+      "page": "      ↳ Design annotations",
+      "variantCount": 8,
+      "defaultPresent": true
+    },
+    {
+      "id": "9342:257073",
+      "name": "Cursor",
+      "page": "      ↳ Design annotations",
+      "variantCount": 29,
+      "defaultPresent": true
+    },
+    {
+      "id": "3287:427074",
+      "name": "Buttons/Button",
+      "page": "      ↳ Buttons",
+      "variantCount": 160,
+      "defaultPresent": true
+    },
+    {
+      "id": "1256:130788",
+      "name": "Social button",
+      "page": "      ↳ Buttons",
+      "variantCount": 108,
+      "defaultPresent": true
+    },
+    {
+      "id": "1256:132638",
+      "name": "Social button groups",
+      "page": "      ↳ Buttons",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "1303:2162",
+      "name": "Mobile app store badge",
+      "page": "      ↳ Buttons",
+      "variantCount": 20,
+      "defaultPresent": false
+    },
+    {
+      "id": "2763:420129",
+      "name": "Buttons/Button close X",
+      "page": "      ↳ Buttons",
+      "variantCount": 18,
+      "defaultPresent": false
+    },
+    {
+      "id": "6218:85578",
+      "name": "Buttons/Button destructive",
+      "page": "      ↳ Buttons",
+      "variantCount": 140,
+      "defaultPresent": true
+    },
+    {
+      "id": "8003:526508",
+      "name": "Buttons/Button utility",
+      "page": "      ↳ Buttons",
+      "variantCount": 16,
+      "defaultPresent": false
+    },
+    {
+      "id": "8993:429278",
+      "name": "Buttons/Button loading icon",
+      "page": "      ↳ Buttons",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "1046:9312",
+      "name": "_Button group base",
+      "page": "      ↳ Button groups",
+      "variantCount": 32,
+      "defaultPresent": false
+    },
+    {
+      "id": "1046:10171",
+      "name": "Button group",
+      "page": "      ↳ Button groups",
+      "variantCount": 3,
+      "defaultPresent": false
+    },
+    {
+      "id": "1046:3819",
+      "name": "Badge",
+      "page": "      ↳ Badges",
+      "variantCount": 666,
+      "defaultPresent": true
+    },
+    {
+      "id": "1046:8088",
+      "name": "Badge group",
+      "page": "      ↳ Badges",
+      "variantCount": 80,
+      "defaultPresent": true
+    },
+    {
+      "id": "4824:404158",
+      "name": "_Badge close X",
+      "page": "      ↳ Badges",
+      "variantCount": 48,
+      "defaultPresent": false
+    },
+    {
+      "id": "3307:417515",
+      "name": "Tag",
+      "page": "      ↳ Tags",
+      "variantCount": 72,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:417672",
+      "name": "_Tag close X",
+      "page": "      ↳ Tags",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "3307:417827",
+      "name": "_Tag count",
+      "page": "      ↳ Tags",
+      "variantCount": 3,
+      "defaultPresent": false
+    },
+    {
+      "id": "3308:406033",
+      "name": "_Tag checkbox",
+      "page": "      ↳ Tags",
+      "variantCount": 24,
+      "defaultPresent": false
+    },
+    {
+      "id": "3281:382793",
+      "name": "_Dropdown list item",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 10,
+      "defaultPresent": false
+    },
+    {
+      "id": "3281:382878",
+      "name": "_Dropdown list header",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "3281:383083",
+      "name": "Dropdown",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "3281:380429",
+      "name": "_Select menu item",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 48,
+      "defaultPresent": true
+    },
+    {
+      "id": "8003:32901",
+      "name": "_Scroll bar (control fill with bottom padding)",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 0,
+      "defaultPresent": false
+    },
+    {
+      "id": "3281:377673",
+      "name": "Select",
+      "page": "      ↳ Dropdowns",
+      "variantCount": 60,
+      "defaultPresent": true
+    },
+    {
+      "id": "1090:57817",
+      "name": "Input field",
+      "page": "      ↳ Inputs",
+      "variantCount": 98,
+      "defaultPresent": true
+    },
+    {
+      "id": "1106:66560",
+      "name": "_Mega input field base",
+      "page": "      ↳ Inputs",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1106:66757",
+      "name": "Verification code input field",
+      "page": "      ↳ Inputs",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "1238:278",
+      "name": "Textarea input field",
+      "page": "      ↳ Inputs",
+      "variantCount": 14,
+      "defaultPresent": true
+    },
+    {
+      "id": "9291:551743",
+      "name": "_Text editor icon",
+      "page": "      ↳ Text editors",
+      "variantCount": 48,
+      "defaultPresent": false
+    },
+    {
+      "id": "9291:552999",
+      "name": "_Color select",
+      "page": "      ↳ Text editors",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "9291:557668",
+      "name": "Text editor toolbar",
+      "page": "      ↳ Text editors",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "9291:557669",
+      "name": "Text editor tooltip",
+      "page": "      ↳ Text editors",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "9291:558536",
+      "name": "Text highlight",
+      "page": "      ↳ Text editors",
+      "variantCount": 0,
+      "defaultPresent": false
+    },
+    {
+      "id": "9292:559325",
+      "name": "Text editor",
+      "page": "      ↳ Text editors",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "122:3294",
+      "name": "_Toggle base",
+      "page": "      ↳ Toggles",
+      "variantCount": 32,
+      "defaultPresent": true
+    },
+    {
+      "id": "1102:4208",
+      "name": "Toggle",
+      "page": "      ↳ Toggles",
+      "variantCount": 64,
+      "defaultPresent": true
+    },
+    {
+      "id": "1097:63652",
+      "name": "Checkbox",
+      "page": "      ↳ Checkboxes",
+      "variantCount": 72,
+      "defaultPresent": true
+    },
+    {
+      "id": "1097:63886",
+      "name": "_Checkbox base",
+      "page": "      ↳ Checkboxes",
+      "variantCount": 40,
+      "defaultPresent": true
+    },
+    {
+      "id": "124:2838",
+      "name": "Radio group item",
+      "page": "      ↳ Radio groups",
+      "variantCount": 192,
+      "defaultPresent": true
+    },
+    {
+      "id": "1142:87213",
+      "name": "Radio group",
+      "page": "      ↳ Radio groups",
+      "variantCount": 24,
+      "defaultPresent": true
+    },
+    {
+      "id": "933:30268",
+      "name": "_Avatar image",
+      "page": "      ↳ Avatars",
+      "variantCount": 2,
+      "defaultPresent": false
+    },
+    {
+      "id": "19:1038",
+      "name": "_Avatar online indicator",
+      "page": "      ↳ Avatars",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "82:2793",
+      "name": "Avatar label group",
+      "page": "      ↳ Avatars",
+      "variantCount": 16,
+      "defaultPresent": false
+    },
+    {
+      "id": "19:1012",
+      "name": "Avatar",
+      "page": "      ↳ Avatars",
+      "variantCount": 60,
+      "defaultPresent": true
+    },
+    {
+      "id": "1036:4",
+      "name": "_Avatar company icon",
+      "page": "      ↳ Avatars",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "1102:4864",
+      "name": "_Avatar add button",
+      "page": "      ↳ Avatars",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1217:108477",
+      "name": "Avatar profile photo",
+      "page": "      ↳ Avatars",
+      "variantCount": 9,
+      "defaultPresent": false
+    },
+    {
+      "id": "1274:812",
+      "name": "Avatar group",
+      "page": "      ↳ Avatars",
+      "variantCount": 3,
+      "defaultPresent": false
+    },
+    {
+      "id": "3302:418803",
+      "name": "Verified tick",
+      "page": "      ↳ Avatars",
+      "variantCount": 8,
+      "defaultPresent": false
+    },
+    {
+      "id": "1052:489",
+      "name": "Tooltip",
+      "page": "      ↳ Tooltips",
+      "variantCount": 14,
+      "defaultPresent": false
+    },
+    {
+      "id": "1054:13",
+      "name": "Help icon",
+      "page": "      ↳ Tooltips",
+      "variantCount": 28,
+      "defaultPresent": true
+    },
+    {
+      "id": "1085:57382",
+      "name": "Progress bar",
+      "page": "      ↳ Progress indicators",
+      "variantCount": 55,
+      "defaultPresent": true
+    },
+    {
+      "id": "1084:2717",
+      "name": "Progress circle",
+      "page": "      ↳ Progress indicators",
+      "variantCount": 10,
+      "defaultPresent": false
+    },
+    {
+      "id": "1086:534",
+      "name": "Slider",
+      "page": "      ↳ Sliders",
+      "variantCount": 30,
+      "defaultPresent": true
+    },
+    {
+      "id": "3287:442783",
+      "name": "_Control handle",
+      "page": "      ↳ Sliders",
+      "variantCount": 9,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:575544",
+      "name": "_Video volume slider handle",
+      "page": "      ↳ Video players",
+      "variantCount": 5,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:575739",
+      "name": "_Video volume slider",
+      "page": "      ↳ Video players",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:575953",
+      "name": "_Video action button",
+      "page": "      ↳ Video players",
+      "variantCount": 36,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:576129",
+      "name": "_Video actions bar",
+      "page": "      ↳ Video players",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:576771",
+      "name": "Video player 16:9",
+      "page": "      ↳ Video players",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:578567",
+      "name": "_Video timestamp indicator",
+      "page": "      ↳ Video players",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:577247",
+      "name": "_Video overlay action",
+      "page": "      ↳ Video players",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "9264:577644",
+      "name": "_Video action tooltip",
+      "page": "      ↳ Video players",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1239:122640",
+      "name": "Page header",
+      "page": "      ↳ Page headers",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1211:169",
+      "name": "Card header",
+      "page": "      ↳ Card headers",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1214:38",
+      "name": "Section header",
+      "page": "      ↳ Section headers",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "5013:376534",
+      "name": "Section label",
+      "page": "      ↳ Section headers",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "3275:372571",
+      "name": "Section footer",
+      "page": "      ↳ Section footers",
+      "variantCount": 8,
+      "defaultPresent": true
+    },
+    {
+      "id": "1158:90768",
+      "name": "Sidebar navigation",
+      "page": "      ↳ Application navigation",
+      "variantCount": 17,
+      "defaultPresent": true
+    },
+    {
+      "id": "1207:1678",
+      "name": "Header navigation",
+      "page": "      ↳ Application navigation",
+      "variantCount": 7,
+      "defaultPresent": true
+    },
+    {
+      "id": "1152:89220",
+      "name": "_Nav item base",
+      "page": "      ↳ Application navigation",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1152:90366",
+      "name": "_Nav item dropdown base",
+      "page": "      ↳ Application navigation",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1157:90307",
+      "name": "_Nav featured card",
+      "page": "      ↳ Application navigation",
+      "variantCount": 13,
+      "defaultPresent": true
+    },
+    {
+      "id": "1161:14070",
+      "name": "_Application nav menu button",
+      "page": "      ↳ Application navigation",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1165:736",
+      "name": "_Nav item button",
+      "page": "      ↳ Application navigation",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "7891:71338",
+      "name": "_Nav account card menu item",
+      "page": "      ↳ Application navigation",
+      "variantCount": 8,
+      "defaultPresent": true
+    },
+    {
+      "id": "7891:87996",
+      "name": "_Nav account card",
+      "page": "      ↳ Application navigation",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "4057:415205",
+      "name": "Modal",
+      "page": "      ↳ Modals",
+      "variantCount": 92,
+      "defaultPresent": false
+    },
+    {
+      "id": "4057:414352",
+      "name": "_Modal actions",
+      "page": "      ↳ Modals",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "4055:413620",
+      "name": "_Modal header",
+      "page": "      ↳ Modals",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "3307:404956",
+      "name": "_Command dropdown menu item",
+      "page": "      ↳ Command menus",
+      "variantCount": 48,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:405262",
+      "name": "_Command shortcut",
+      "page": "      ↳ Command menus",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:405355",
+      "name": "_Command input",
+      "page": "      ↳ Command menus",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:405570",
+      "name": "_Command bar menu section",
+      "page": "      ↳ Command menus",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:407570",
+      "name": "Command bar",
+      "page": "      ↳ Command menus",
+      "variantCount": 10,
+      "defaultPresent": true
+    },
+    {
+      "id": "3307:411609",
+      "name": "_Command menu header",
+      "page": "      ↳ Command menus",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "4898:411379",
+      "name": "_Command bar footer",
+      "page": "      ↳ Command menus",
+      "variantCount": 0,
+      "defaultPresent": false
+    },
+    {
+      "id": "4898:411319",
+      "name": "_Command bar navigation icon",
+      "page": "      ↳ Command menus",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1061:47348",
+      "name": "_X-axis label",
+      "page": "      ↳ Charts",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1061:47350",
+      "name": "_Y-axis label",
+      "page": "      ↳ Charts",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1061:47441",
+      "name": "_X-axis",
+      "page": "      ↳ Charts",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1061:47609",
+      "name": "_Chart data",
+      "page": "      ↳ Charts",
+      "variantCount": 18,
+      "defaultPresent": true
+    },
+    {
+      "id": "1062:46989",
+      "name": "Line and bar chart",
+      "page": "      ↳ Charts",
+      "variantCount": 24,
+      "defaultPresent": true
+    },
+    {
+      "id": "1062:47445",
+      "name": "_Y-axis line",
+      "page": "      ↳ Charts",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1062:47961",
+      "name": "_Legend",
+      "page": "      ↳ Charts",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1067:824",
+      "name": "_Y-axis",
+      "page": "      ↳ Charts",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1076:4088",
+      "name": "_Activity gauge",
+      "page": "      ↳ Charts",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1078:155",
+      "name": "Activity gauge",
+      "page": "      ↳ Charts",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1079:51184",
+      "name": "_Pie chart",
+      "page": "      ↳ Charts",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1084:114",
+      "name": "Pie chart",
+      "page": "      ↳ Charts",
+      "variantCount": 10,
+      "defaultPresent": true
+    },
+    {
+      "id": "1084:7152",
+      "name": "_Radar chart",
+      "page": "      ↳ Charts",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "1084:7362",
+      "name": "Radar chart",
+      "page": "      ↳ Charts",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "8100:193259",
+      "name": "Chart marker",
+      "page": "      ↳ Charts",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "1560:266217",
+      "name": "Metric item",
+      "page": "      ↳ Metrics",
+      "variantCount": 36,
+      "defaultPresent": true
+    },
+    {
+      "id": "1561:265493",
+      "name": "_Chart mini",
+      "page": "      ↳ Metrics",
+      "variantCount": 24,
+      "defaultPresent": false
+    },
+    {
+      "id": "1563:260319",
+      "name": "_Change",
+      "page": "      ↳ Metrics",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "1239:120673",
+      "name": "_Slide out menu header",
+      "page": "      ↳ Slideout menus",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1240:137582",
+      "name": "Slide out menu",
+      "page": "      ↳ Slideout menus",
+      "variantCount": 40,
+      "defaultPresent": true
+    },
+    {
+      "id": "1255:131915",
+      "name": "Inline CTA",
+      "page": "      ↳ Inline CTAs",
+      "variantCount": 14,
+      "defaultPresent": true
+    },
+    {
+      "id": "1111:1",
+      "name": "_Pagination dot indicator",
+      "page": "      ↳ Pagination",
+      "variantCount": 8,
+      "defaultPresent": false
+    },
+    {
+      "id": "1111:38",
+      "name": "Pagination dot group",
+      "page": "      ↳ Pagination",
+      "variantCount": 8,
+      "defaultPresent": false
+    },
+    {
+      "id": "1114:68174",
+      "name": "_Pagination number base",
+      "page": "      ↳ Pagination",
+      "variantCount": 6,
+      "defaultPresent": false
+    },
+    {
+      "id": "1114:68857",
+      "name": "_Pagination button group base",
+      "page": "      ↳ Pagination",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1115:68622",
+      "name": "Pagination",
+      "page": "      ↳ Pagination",
+      "variantCount": 24,
+      "defaultPresent": false
+    },
+    {
+      "id": "1253:164",
+      "name": "_Carousel arrow",
+      "page": "      ↳ Pagination",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1253:237",
+      "name": "Carousel image",
+      "page": "      ↳ Pagination",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "1138:23",
+      "name": "_Step icon base",
+      "page": "      ↳ Progress steps",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1138:1954",
+      "name": "_Step base",
+      "page": "      ↳ Progress steps",
+      "variantCount": 42,
+      "defaultPresent": true
+    },
+    {
+      "id": "1139:79128",
+      "name": "Progress steps / Progress minimal icons connected",
+      "page": "      ↳ Progress steps",
+      "variantCount": 8,
+      "defaultPresent": true
+    },
+    {
+      "id": "1139:79149",
+      "name": "Progress steps / Progress minimal icons",
+      "page": "      ↳ Progress steps",
+      "variantCount": 8,
+      "defaultPresent": true
+    },
+    {
+      "id": "1139:79465",
+      "name": "Progress steps / Progress text with line",
+      "page": "      ↳ Progress steps",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1141:76669",
+      "name": "Progress steps / Progress icons centered",
+      "page": "      ↳ Progress steps",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1254:144290",
+      "name": "Progress steps / Progress icons with text",
+      "page": "      ↳ Progress steps",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1254:127644",
+      "name": "_Feed item base",
+      "page": "      ↳ Activity feeds",
+      "variantCount": 16,
+      "defaultPresent": true
+    },
+    {
+      "id": "1254:128631",
+      "name": "Activity feed",
+      "page": "      ↳ Activity feeds",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1242:996",
+      "name": "Message",
+      "page": "      ↳ Messaging",
+      "variantCount": 33,
+      "defaultPresent": true
+    },
+    {
+      "id": "1244:298",
+      "name": "_Message reaction",
+      "page": "      ↳ Messaging",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "9206:591554",
+      "name": "_Message action panel",
+      "page": "      ↳ Messaging",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "9206:591516",
+      "name": "_Message action button",
+      "page": "      ↳ Messaging",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "9206:602532",
+      "name": "Message action",
+      "page": "      ↳ Messaging",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "9241:548211",
+      "name": "_Message status icon",
+      "page": "      ↳ Messaging",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "43:2412",
+      "name": "_Tab button base",
+      "page": "      ↳ Tabs",
+      "variantCount": 72,
+      "defaultPresent": true
+    },
+    {
+      "id": "1118:69893",
+      "name": "Horizontal tabs",
+      "page": "      ↳ Tabs",
+      "variantCount": 40,
+      "defaultPresent": true
+    },
+    {
+      "id": "1397:9880",
+      "name": "Vertical tabs",
+      "page": "      ↳ Tabs",
+      "variantCount": 20,
+      "defaultPresent": false
+    },
+    {
+      "id": "1221:106788",
+      "name": "_Table header label",
+      "page": "      ↳ Tables",
+      "variantCount": 16,
+      "defaultPresent": true
+    },
+    {
+      "id": "1221:107933",
+      "name": "Table header cell",
+      "page": "      ↳ Tables",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1222:107305",
+      "name": "Table cell",
+      "page": "      ↳ Tables",
+      "variantCount": 60,
+      "defaultPresent": true
+    },
+    {
+      "id": "1227:110587",
+      "name": "Table",
+      "page": "      ↳ Tables",
+      "variantCount": 16,
+      "defaultPresent": true
+    },
+    {
+      "id": "9400:570197",
+      "name": "Table cell lead action",
+      "page": "      ↳ Tables",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "1130:81134",
+      "name": "Alert",
+      "page": "      ↳ Alerts & notifications",
+      "variantCount": 24,
+      "defaultPresent": false
+    },
+    {
+      "id": "1135:618",
+      "name": "Notification",
+      "page": "      ↳ Alerts & notifications",
+      "variantCount": 18,
+      "defaultPresent": false
+    },
+    {
+      "id": "1150:62",
+      "name": "_Date picker list item",
+      "page": "      ↳ Date pickers",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1150:1925",
+      "name": "_Date picker menu",
+      "page": "      ↳ Date pickers",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "1150:16803",
+      "name": "Date picker dropdown",
+      "page": "      ↳ Date pickers",
+      "variantCount": 16,
+      "defaultPresent": true
+    },
+    {
+      "id": "1547:269867",
+      "name": "Date picker modal",
+      "page": "      ↳ Date pickers",
+      "variantCount": 4,
+      "defaultPresent": true
+    },
+    {
+      "id": "7365:57922",
+      "name": "_Calendar cell",
+      "page": "      ↳ Date pickers",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "7991:21267",
+      "name": "_Calendar view dropdown",
+      "page": "      ↳ Calendars",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "7991:53152",
+      "name": "_Calendar header",
+      "page": "      ↳ Calendars",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "8044:126959",
+      "name": "_Calendar date icon",
+      "page": "      ↳ Calendars",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "7991:56363",
+      "name": "_Calendar cell date",
+      "page": "      ↳ Calendars",
+      "variantCount": 3,
+      "defaultPresent": true
+    },
+    {
+      "id": "7991:78181",
+      "name": "_Calendar event/Month view",
+      "page": "      ↳ Calendars",
+      "variantCount": 27,
+      "defaultPresent": true
+    },
+    {
+      "id": "7991:104484",
+      "name": "_Calendar cell/Month view",
+      "page": "      ↳ Calendars",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "7996:12700",
+      "name": "_Calendar event/Day and week view",
+      "page": "      ↳ Calendars",
+      "variantCount": 18,
+      "defaultPresent": true
+    },
+    {
+      "id": "7996:12741",
+      "name": "_Calendar cell/Day and week view",
+      "page": "      ↳ Calendars",
+      "variantCount": 10,
+      "defaultPresent": true
+    },
+    {
+      "id": "7997:11141",
+      "name": "_Calendar column header",
+      "page": "      ↳ Calendars",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "7999:12176",
+      "name": "_Calendar row label",
+      "page": "      ↳ Calendars",
+      "variantCount": 0,
+      "defaultPresent": true
+    },
+    {
+      "id": "8003:31690",
+      "name": "_Calendar time marker",
+      "page": "      ↳ Calendars",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "8022:24550",
+      "name": "Calendar",
+      "page": "      ↳ Calendars",
+      "variantCount": 6,
+      "defaultPresent": true
+    },
+    {
+      "id": "1175:100312",
+      "name": "_File upload base",
+      "page": "      ↳ File upload",
+      "variantCount": 3,
+      "defaultPresent": false
+    },
+    {
+      "id": "1175:100366",
+      "name": "_File upload item base",
+      "page": "      ↳ File upload",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1175:101149",
+      "name": "File upload",
+      "page": "      ↳ File upload",
+      "variantCount": 8,
+      "defaultPresent": false
+    },
+    {
+      "id": "1252:126874",
+      "name": "Content divider",
+      "page": "      ↳ Content dividers",
+      "variantCount": 18,
+      "defaultPresent": false
+    },
+    {
+      "id": "1192:610",
+      "name": "Loading indicator",
+      "page": "      ↳ Loading indicators",
+      "variantCount": 12,
+      "defaultPresent": false
+    },
+    {
+      "id": "1182:317",
+      "name": "Empty state",
+      "page": "      ↳ Empty states",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1182:1085",
+      "name": "Illustration",
+      "page": "      ↳ Empty states",
+      "variantCount": 12,
+      "defaultPresent": true
+    },
+    {
+      "id": "1234:243",
+      "name": "Code snippet",
+      "page": "      ↳ Code snippets",
+      "variantCount": 2,
+      "defaultPresent": true
+    },
+    {
+      "id": "9282:60274",
+      "name": "_Code snippet tabs",
+      "page": "      ↳ Code snippets",
+      "variantCount": 6,
+      "defaultPresent": true
+    }
+  ]
+}

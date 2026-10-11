@@ -1,0 +1,129 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/4f12f039-73f6-4c3b-b62d-5999be156292.png";
+const imgSend01 = "https://www.figma.com/api/mcp/asset/cac54030-73a5-4837-85b1-3c0bf9183a63.svg";
+const imgResizeHandle = "https://www.figma.com/api/mcp/asset/db9cef61-92c3-47a0-b6c9-56650ee3bdb5.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/7e55fa98-0404-4297-ab62-7d9036a22939.svg";
+const imgItalicSquare = "https://www.figma.com/api/mcp/asset/ad73242a-d9b7-4218-96d3-ced98d710fda.svg";
+const imgAttachment01 = "https://www.figma.com/api/mcp/asset/a367790a-11df-408f-bf52-15c5b49a33ff.svg";
+const imgMicrophone02 = "https://www.figma.com/api/mcp/asset/6891b55b-0e44-44cb-bc27-ccf3ba39732a.svg";
+const imgRecording02 = "https://www.figma.com/api/mcp/asset/a243a48a-5f63-4746-9f82-dc754e960447.svg";
+const imgAttachment2 = "https://www.figma.com/api/mcp/asset/908c7ff5-6dbb-493a-b665-5eb2e00658c1.svg";
+const imgFaceSmile = "https://www.figma.com/api/mcp/asset/af6d14b1-c835-4a16-a4a2-af37d617bd57.svg";
+
+type MessageActionProps = {
+  className?: string;
+  type?: "Minimal" | "Textarea input" | "Advanced";
+};
+
+export default function MessageAction({ className, type = "Minimal" }: MessageActionProps) {
+  const isAdvanced = type === "Advanced";
+  const isAdvancedOrTextareaInput = ["Advanced", "Textarea input"].includes(type);
+  const isMinimal = type === "Minimal";
+  const isTextareaInput = type === "Textarea input";
+  return (
+    <div className={className || `content-stretch flex relative w-[360px] ${isTextareaInput ? "flex-col h-[128px] items-center" : isAdvanced ? String.raw`bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid flex-col h-[160px] items-center rounded-[var(--radius-xl,20px)]` : "gap-[var(--spacing-lg,12px)] items-start"}`} id={isTextareaInput ? "node-9206_602516" : isAdvanced ? "node-9206_602526" : "node-9206_602510"}>
+      {isAdvancedOrTextareaInput && (
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] isolate items-start min-h-px relative w-full" id={isTextareaInput ? "node-9206_602476" : "node-9206_602367"} data-name="Textarea input field">
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-h-px relative w-full z-[2]" id={isTextareaInput ? "node-I9206_602476-3285_380525" : "node-I9206_602367-3285_380525"} data-name="Input with label">
+            <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-h-px overflow-clip px-[14px] py-[var(--spacing-lg,12px)] relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] w-full `}${isTextareaInput ? "rounded-[var(--radius-md,12px)]" : "rounded-[var(--radius-xl,20px)]"}`} id={isTextareaInput ? "node-I9206_602476-3285_380527" : "node-I9206_602367-3285_380527"} data-name="Input">
+              <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal h-full leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-placeholder,#717680)] text-[length:var(--font-size\/text-md,16px)] text-left" id={isTextareaInput ? "node-I9206_602476-3285_380528" : "node-I9206_602367-3285_380528"}>
+                {isTextareaInput ? "Message" : isAdvanced ? "Ask me anything..." : ""}
+              </p>
+              {isAdvanced && (
+                <div className="absolute bottom-[5px] right-[5px] size-[12px]" data-node-id="I9206:602367;7588:72289" data-name="Resize handle">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgResizeHandle} />
+                </div>
+              )}
+            </div>
+          </div>
+        </button>
+      )}
+      {isMinimal && (
+        <>
+          <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9206:602246" data-name="Input field">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I9206:602246;3285:380390" data-name="Input with label">
+              <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9206:602246;3285:380392" data-name="Input">
+                <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I9206:602246;3285:380393" data-name="Content">
+                  <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-placeholder,#717680)] text-ellipsis text-left whitespace-nowrap" data-node-id="I9206:602246;3285:380395">
+                    Message
+                  </p>
+                </div>
+              </div>
+            </div>
+          </button>
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-lg,12px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="9206:602247" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9206:602247;3471:598314" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSend01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </>
+      )}
+      {isAdvanced && (
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="9206:602369" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] items-center min-w-px relative" data-node-id="9206:602370" data-name="Content left">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602537" data-name="Avatar and text">
+              <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" data-node-id="9206:602535" data-name="Avatar">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="9206:602371" data-name="Text and icon">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602372">
+                  Olivia
+                </p>
+                <div className="relative shrink-0 size-[12px]" data-node-id="9206:602395" data-name="chevron-down">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9206:602374" data-name="Content right">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602375" data-name="Text and icon">
+              <div className="relative shrink-0 size-[16px]" data-node-id="9206:602376" data-name="italic-square">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgItalicSquare} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602377">
+                Shortcuts
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="9206:602378" data-name="Text and icon">
+              <div className="relative shrink-0 size-[16px]" data-node-id="9206:602379" data-name="attachment-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAttachment01} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9206:602380">
+                Attach
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      {isAdvancedOrTextareaInput && (
+        <div className={`absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] rounded-[var(--radius-sm,8px)] ${isTextareaInput ? "right-[8px] top-[8px]" : "right-[7px] top-[7px]"}`} id={isTextareaInput ? "node-9230_133391" : "node-9230_133786"} data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" id={isTextareaInput ? "node-I9230_133391-7932_552036" : "node-I9230_133786-7932_552036"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isTextareaInput ? imgRecording02 : imgMicrophone02} />
+          </div>
+        </div>
+      )}
+      {isTextareaInput && (
+        <div className="absolute bottom-[8px] content-stretch flex gap-[var(--spacing-md,8px)] items-center right-[14px]" data-node-id="9217:609345" data-name="Actions">
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="9241:550066" data-name="Utilities">
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9230:133206" data-name="Buttons/Button utility">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9230:133206;7932:552036" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAttachment2} />
+              </div>
+            </div>
+            <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9241:549932" data-name="Buttons/Button utility">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9241:549932;7932:552036" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgFaceSmile} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9206:602449" data-name="Buttons/Button">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9206:602449;3287:433289">
+              Send
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

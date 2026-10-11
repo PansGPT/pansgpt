@@ -1,0 +1,1006 @@
+[
+  {
+    "id": "1052:489",
+    "name": "Tooltip",
+    "variants": [
+      {
+        "id": "1052:570",
+        "name": "Supporting text=True, Arrow=Bottom center",
+        "width": 320,
+        "height": 104,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 152,
+            "y": 98,
+            "width": 16,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:577",
+        "name": "Supporting text=True, Arrow=None",
+        "width": 320,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          }
+        ]
+      },
+      {
+        "id": "1052:582",
+        "name": "Supporting text=False, Arrow=Bottom center",
+        "width": 109,
+        "height": 40,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 46.5,
+            "y": 34,
+            "width": 16,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:587",
+        "name": "Supporting text=False, Arrow=None",
+        "width": 109,
+        "height": 34,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "id": "1052:590",
+        "name": "Supporting text=True, Arrow=Top center",
+        "width": 320,
+        "height": 104,
+        "children": [
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 168,
+            "y": 6,
+            "width": 16,
+            "height": 6
+          },
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 6,
+            "width": 320,
+            "height": 98
+          }
+        ]
+      },
+      {
+        "id": "1052:597",
+        "name": "Supporting text=False, Arrow=Top center",
+        "width": 109,
+        "height": 40,
+        "children": [
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 62.5,
+            "y": 6,
+            "width": 16,
+            "height": 6
+          },
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 6,
+            "width": 109,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "id": "1052:602",
+        "name": "Supporting text=True, Arrow=Bottom left",
+        "width": 320,
+        "height": 104,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 0,
+            "y": 98,
+            "width": 28,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:609",
+        "name": "Supporting text=False, Arrow=Bottom left",
+        "width": 109,
+        "height": 40,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 0,
+            "y": 34,
+            "width": 28,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:614",
+        "name": "Supporting text=True, Arrow=Left",
+        "width": 326,
+        "height": 98,
+        "children": [
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 6.000000476837158,
+            "y": 41,
+            "width": 16,
+            "height": 6
+          },
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 6.000000476837158,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          }
+        ]
+      },
+      {
+        "id": "1052:621",
+        "name": "Supporting text=False, Arrow=Left",
+        "width": 115,
+        "height": 34,
+        "children": [
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 6.000000476837158,
+            "y": 9,
+            "width": 16,
+            "height": 6
+          },
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 6.000000476837158,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          }
+        ]
+      },
+      {
+        "id": "1052:626",
+        "name": "Supporting text=True, Arrow=Right",
+        "width": 326,
+        "height": 98,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 320,
+            "y": 57,
+            "width": 16,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:633",
+        "name": "Supporting text=False, Arrow=Right",
+        "width": 115,
+        "height": 34,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 109,
+            "y": 25,
+            "width": 16,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:638",
+        "name": "Supporting text=True, Arrow=Bottom right",
+        "width": 320,
+        "height": 104,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 320,
+            "height": 98
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 292,
+            "y": 98,
+            "width": 28,
+            "height": 6
+          }
+        ]
+      },
+      {
+        "id": "1052:645",
+        "name": "Supporting text=False, Arrow=Bottom right",
+        "width": 109,
+        "height": 40,
+        "children": [
+          {
+            "name": "Content",
+            "type": "FRAME",
+            "x": 0,
+            "y": 0,
+            "width": 109,
+            "height": 34
+          },
+          {
+            "name": "Tooltip",
+            "type": "FRAME",
+            "x": 81,
+            "y": 34,
+            "width": 28,
+            "height": 6
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1054:13",
+    "name": "Help icon",
+    "variants": [
+      {
+        "id": "1054:7",
+        "name": "Open=False, Supporting text=False, Tooltip=Top no arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:407",
+        "name": "Open=False, Supporting text=True, Tooltip=Top no arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:66",
+        "name": "Open=False, Supporting text=False, Tooltip=Top arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:411",
+        "name": "Open=False, Supporting text=True, Tooltip=Top arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:90",
+        "name": "Open=False, Supporting text=False, Tooltip=Top right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:405",
+        "name": "Open=False, Supporting text=True, Tooltip=Top right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:133",
+        "name": "Open=False, Supporting text=False, Tooltip=Top left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:413",
+        "name": "Open=False, Supporting text=True, Tooltip=Top left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:159",
+        "name": "Open=False, Supporting text=False, Tooltip=Bottom",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:409",
+        "name": "Open=False, Supporting text=True, Tooltip=Bottom",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:251",
+        "name": "Open=False, Supporting text=False, Tooltip=Right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:400",
+        "name": "Open=False, Supporting text=True, Tooltip=Right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:285",
+        "name": "Open=False, Supporting text=False, Tooltip=Left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:395",
+        "name": "Open=False, Supporting text=True, Tooltip=Left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          }
+        ]
+      },
+      {
+        "id": "1054:14",
+        "name": "Open=True, Supporting text=False, Tooltip=Top no arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -47,
+            "y": -38,
+            "width": 109,
+            "height": 34
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:392",
+        "name": "Open=True, Supporting text=True, Tooltip=Top no arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -152,
+            "y": -102,
+            "width": 320,
+            "height": 98
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:63",
+        "name": "Open=True, Supporting text=False, Tooltip=Top arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -47,
+            "y": -44,
+            "width": 109,
+            "height": 40
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:389",
+        "name": "Open=True, Supporting text=True, Tooltip=Top arrow",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -152,
+            "y": -108,
+            "width": 320,
+            "height": 104
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:87",
+        "name": "Open=True, Supporting text=False, Tooltip=Top right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -12,
+            "y": -44,
+            "width": 109,
+            "height": 40
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:402",
+        "name": "Open=True, Supporting text=True, Tooltip=Top right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -12,
+            "y": -108,
+            "width": 320,
+            "height": 104
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:130",
+        "name": "Open=True, Supporting text=False, Tooltip=Top left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -81,
+            "y": -44,
+            "width": 109,
+            "height": 40
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:397",
+        "name": "Open=True, Supporting text=True, Tooltip=Top left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -292,
+            "y": -108,
+            "width": 320,
+            "height": 104
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:156",
+        "name": "Open=True, Supporting text=False, Tooltip=Bottom",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -46,
+            "y": 20,
+            "width": 109,
+            "height": 40
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:386",
+        "name": "Open=True, Supporting text=True, Tooltip=Bottom",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -152,
+            "y": 20,
+            "width": 320,
+            "height": 104
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:248",
+        "name": "Open=True, Supporting text=False, Tooltip=Right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": 20,
+            "y": -9,
+            "width": 115,
+            "height": 34
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:383",
+        "name": "Open=True, Supporting text=True, Tooltip=Right",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": 20,
+            "y": -41,
+            "width": 326,
+            "height": 98
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:282",
+        "name": "Open=True, Supporting text=False, Tooltip=Left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -118,
+            "y": -9,
+            "width": 115,
+            "height": 34
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      },
+      {
+        "id": "1054:380",
+        "name": "Open=True, Supporting text=True, Tooltip=Left",
+        "width": 16,
+        "height": 16,
+        "children": [
+          {
+            "name": "help-circle",
+            "type": "INSTANCE",
+            "x": 0,
+            "y": 0,
+            "width": 16,
+            "height": 16
+          },
+          {
+            "name": "Tooltip",
+            "type": "INSTANCE",
+            "x": -330,
+            "y": -41,
+            "width": 326,
+            "height": 98
+          },
+          {
+            "name": "Cursor",
+            "type": "INSTANCE",
+            "x": 6,
+            "y": 8,
+            "width": 20,
+            "height": 20
+          }
+        ]
+      }
+    ]
+  }
+]

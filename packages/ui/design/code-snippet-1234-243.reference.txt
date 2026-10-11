@@ -1,0 +1,275 @@
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/183c8f53-e179-4de6-b427-c598fa39fd3e.svg";
+const imgCode = "https://www.figma.com/api/mcp/asset/bef91b8f-8b50-440e-b10a-0427d46e3433.svg";
+
+type CodeSnippetTabsProps = {
+  className?: string;
+  current?: boolean;
+  state?: "Default";
+};
+
+function CodeSnippetTabs({ className, current = false, state = "Default" }: CodeSnippetTabsProps) {
+  const isNotCurrentAndDefault = !current && state === "Default";
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} id={isNotCurrentAndDefault ? "node-9282_60285" : "node-9282_60279"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isNotCurrentAndDefault ? String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]` : String.raw`text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]`}`} id={isNotCurrentAndDefault ? "node-9282_60286" : "node-9282_60280"}>
+        npm
+      </p>
+    </div>
+  );
+}
+
+type CodeSnippetProps = {
+  className?: string;
+  maskContent?: boolean;
+  type?: "Simple" | "Tabs";
+};
+
+export default function CodeSnippet({ className, maskContent = true, type = "Simple" }: CodeSnippetProps) {
+  const isSimple = type === "Simple";
+  const isTabs = type === "Tabs";
+  return (
+    <div className={className || `${String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex overflow-clip relative rounded-[var(--radius-xl,20px)] w-[720px] `}${isTabs ? String.raw`bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] flex-col isolate items-center shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)] items-start justify-center`}`} id={isTabs ? "node-9282_550144" : "node-1234_368"}>
+      {isSimple && (
+        <>
+          <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-r border-solid content-stretch flex flex-col items-start px-[var(--spacing-xl,16px)] py-[var(--spacing-2xl,20px)] relative self-stretch shrink-0" data-node-id="1234:369" data-name="Sidebar">
+            <div className="[word-break:break-word] font-['Roboto_Mono:Bold'] font-bold leading-[0] relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-right whitespace-nowrap" data-node-id="1234:370">
+              <p className="leading-[20px] mb-px">
+                1<br aria-hidden />2<br aria-hidden />3
+              </p>
+              <p className="leading-[20px] mb-px">4</p>
+              <p className="leading-[20px] mb-px">5</p>
+              <p className="leading-[20px] mb-px">6</p>
+              <p className="leading-[20px] mb-px">7</p>
+              <p className="leading-[20px] mb-px">8</p>
+              <p className="leading-[20px] mb-px">9</p>
+              <p className="leading-[20px] mb-px">10</p>
+              <p className="leading-[20px] mb-px">11</p>
+              <p className="leading-[20px] mb-px">12</p>
+              <p className="leading-[20px] mb-px">13</p>
+              <p className="leading-[20px] mb-px">14</p>
+              <p className="leading-[20px] mb-px">15</p>
+              <p className="leading-[20px] mb-px">16</p>
+              <p className="leading-[20px] mb-px">17</p>
+              <p className="leading-[20px] mb-px">18</p>
+              <p className="leading-[20px] mb-px">19</p>
+              <p className="leading-[20px] mb-px">20</p>
+              <p className="leading-[20px]">21</p>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] items-start min-w-px p-[var(--spacing-2xl,20px)] relative" data-node-id="1234:371" data-name="Content">
+            <div className="[word-break:break-word] flex-[1_0_0] font-['Roboto_Mono:Bold'] font-bold leading-[0] min-w-px relative text-[0px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] whitespace-pre-wrap" data-node-id="9283:550326">
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[#079455] text-[14px]">{`// Imports`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px] text-[#dd2590]">import</span>
+                <span className="leading-[20px]">{` `}</span>
+                <span className="leading-[20px] text-[#1570ef]">mongoose</span>
+                <span className="leading-[20px]">{`, { `}</span>
+                <span className="leading-[20px] text-[#1570ef]">Schema</span>
+                <span className="leading-[20px]">{` } `}</span>
+                <span className="leading-[20px] text-[#dd2590]">from</span>
+                <span className="leading-[20px]">{` 'PansGPT'`}</span>
+              </p>
+              <p className="leading-[20px] mb-px text-[14px]">​</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[#079455] text-[14px]">{`// Collection name`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px] text-[#dd2590]">export const</span>
+                <span className="leading-[20px]">{` `}</span>
+                <span className="leading-[20px] text-[#1570ef]">collection</span>
+                <span className="leading-[20px]">{` = 'Design'|`}</span>
+              </p>
+              <p className="leading-[20px] mb-px text-[14px]">​</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[#079455] text-[14px]">{`// Schema`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px] text-[#dd2590]">const</span>
+                <span className="leading-[20px]">{` `}</span>
+                <span className="leading-[20px] text-[#1570ef]">schema</span>
+                <span className="leading-[20px]">{` = `}</span>
+                <span className="leading-[20px] text-[#dd2590]">new</span>
+                <span className="leading-[20px]">{` Schema({`}</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`  `}</span>
+                <span className="leading-[20px] text-[#1570ef]">name</span>
+                <span className="leading-[20px]">{`: {`}</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`    `}</span>
+                <span className="leading-[20px] text-[#1570ef]">type</span>
+                <span className="leading-[20px]">: String,</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`    `}</span>
+                <span className="leading-[20px] text-[#1570ef]">required</span>
+                <span className="leading-[20px]">: true</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[14px]">{`  },`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`  `}</span>
+                <span className="leading-[20px] text-[#1570ef]">description</span>
+                <span className="leading-[20px]">{`: {`}</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`    `}</span>
+                <span className="leading-[20px] text-[#1570ef]">type</span>
+                <span className="leading-[20px]">: String</span>
+              </p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[14px]">{`  }`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal mb-px text-[14px]">
+                <span className="leading-[20px]">{`}, {`}</span>
+                <span className="leading-[20px] text-[#1570ef]">timestamps</span>
+                <span className="leading-[20px]">{`: true})`}</span>
+              </p>
+              <p className="leading-[20px] mb-px text-[14px]">​</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal leading-[20px] mb-px text-[#079455] text-[14px]">{`// Model`}</p>
+              <p className="font-['Roboto_Mono:Regular'] font-normal text-[14px]">
+                <span className="leading-[20px] text-[#dd2590]">export default</span>
+                <span className="leading-[20px]">{` PansGPT.model(`}</span>
+                <span className="leading-[20px] text-[#1570ef]">collection</span>
+                <span className="leading-[20px]">{`, `}</span>
+                <span className="leading-[20px] text-[#1570ef]">schema</span>
+                <span className="leading-[20px]">{`, `}</span>
+                <span className="leading-[20px] text-[#1570ef]">collection</span>
+                <span className="leading-[20px]">)</span>
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+      {isTabs && (
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start pl-[var(--spacing-lg,12px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative shrink-0 w-full z-[3]" data-node-id="9282:550145" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] items-start min-w-px relative" data-node-id="9282:550146" data-name="Tabs wrapper">
+            <CodeSnippetTabs className="content-stretch flex gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0" current />
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9282:550148" data-name="_Code snippet tabs">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9282:550148;9282:60286">
+                yarn
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9282:550149" data-name="_Code snippet tabs">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9282:550149;9282:60286">
+                bun
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="9282:550150" data-name="Buttons/Button utility">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9282:550150;7932:552036" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isTabs && maskContent && (
+        <div className="absolute bottom-[-1px] content-stretch flex flex-col items-center justify-center left-[-1px] pb-[var(--spacing-3xl,24px)] px-[var(--spacing-2xl,20px)] right-[-1px] z-[2]" data-node-id="9282:550151" data-name="Show more wrapper">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="9282:550152" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I9282:550152;6421:271250" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9282:550152;3287:433057">
+                Show more
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      )}
+      {isTabs && (
+        <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full z-[1]" data-node-id="9282:550153" data-name="Content">
+          <div className="[word-break:break-word] flex-[1_0_0] font-['Roboto_Mono:Regular'] font-normal leading-[0] mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-position-[-20px_-20px] mask-size-[720px_522px] min-w-px relative text-[0px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] whitespace-pre-wrap" data-node-id="9282:550157" style={{ maskImage: `url("${imgCode}")` }}>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px] text-[#d92d20]">export</span>
+              <span className="leading-[20px]">{` const `}</span>
+              <span className="leading-[20px] text-[#1570ef]">colors</span>
+              <span className="leading-[20px]">{` `}</span>
+              <span className="leading-[20px] text-[#d92d20]">=</span>
+              <span className="leading-[20px]">{` {`}</span>
+            </p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    current: "currentColor",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    transparent: "transparent",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    white: "rgb(var(--colors-white) / <alpha-value>)",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    black: "rgb(var(--colors-black) / <alpha-value>)",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">​</p>
+            <p className="leading-[20px] mb-px text-[#717680] text-[14px]">{`    // These will be inverted in dark mode.`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    "alpha-white": "rgb(var(--colors-alpha-white) / <alpha-value>)",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    "alpha-black": "rgb(var(--colors-alpha-black) / <alpha-value>)",`}</p>
+            <p className="leading-[20px] mb-px text-[14px]">{`    brand: {`}</p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">25</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-25) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">50</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-50) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">100</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-100) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">200</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-200) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">300</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-300) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">400</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-400) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">500</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-500) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">600</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-600) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">700</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-700) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">800</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-800) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">900</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-900) / <alpha-value>)",`}</span>
+            </p>
+            <p className="mb-px text-[14px]">
+              <span className="leading-[20px]">{`        `}</span>
+              <span className="leading-[20px] text-[#1570ef]">950</span>
+              <span className="leading-[20px]">{`: "rgb(var(--colors-brand-950) / <alpha-value>)",`}</span>
+            </p>
+            <p className="leading-[20px] text-[14px]">{`    }`}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## copy-01
+**Node ID:** 3463:405003
+
+copy, duplicate, replicate, squares, square
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

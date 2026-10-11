@@ -1,0 +1,768 @@
+{
+  "assets": [
+    {
+      "name": "editor_imgAlignCenter",
+      "file": "text-editor-editor_imgAlignCenter.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "975eb5e6e85a720e5caf7206b95a12c97569cf6065b7f2c772fa85b2b818576d"
+    },
+    {
+      "name": "editor_imgAlignLeft",
+      "file": "text-editor-editor_imgAlignLeft.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "8a3745a9f23a0e3f9a5b17c28383f020f2314401242c498ba7836a0931f70c17"
+    },
+    {
+      "name": "editor_imgBold01",
+      "file": "text-editor-editor_imgBold01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b5c5f2660e944a286c928ea30557316aa1830a9a17eca061861729ee62519904"
+    },
+    {
+      "name": "editor_imgChevronDown",
+      "file": "text-editor-editor_imgChevronDown.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "597ca6d58fd94c65aaa8fa3cb17ced1e1c7f21d76b911d80bcc7bc2e168998c6"
+    },
+    {
+      "name": "editor_imgDividerWrapper",
+      "file": "text-editor-editor_imgDividerWrapper.svg",
+      "width": 12,
+      "height": 32,
+      "sha256": "45193285960ae660e23138f17154eca5c5f2ba84196fa575ff0417be9a96e041"
+    },
+    {
+      "name": "editor_imgDividerWrapper1",
+      "file": "text-editor-editor_imgDividerWrapper1.svg",
+      "width": 12,
+      "height": 32,
+      "sha256": "45193285960ae660e23138f17154eca5c5f2ba84196fa575ff0417be9a96e041"
+    },
+    {
+      "name": "editor_imgDotpoints01",
+      "file": "text-editor-editor_imgDotpoints01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "eb01a8871751f48a0db1c0b8091e6a103e20eed22ff3bda5c8a17c83017d16e8"
+    },
+    {
+      "name": "editor_imgImage01",
+      "file": "text-editor-editor_imgImage01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "dc19a7f3dddd7815ca35c65f849c16cfdceb240cac852ca13b59b4aed5b203b7"
+    },
+    {
+      "name": "editor_imgItalic01",
+      "file": "text-editor-editor_imgItalic01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d904521aba5fcf0dd474bcf2dc456297e70152bc0e1f1e9c128cc047103050c"
+    },
+    {
+      "name": "editor_imgLink01",
+      "file": "text-editor-editor_imgLink01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4227e29a3ff4a9859af52dd1fcea445e3a12b7be9e3479f0e0a22796e47693c2"
+    },
+    {
+      "name": "editor_imgResizeHandle",
+      "file": "text-editor-editor_imgResizeHandle.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "e370db2f0bf0f2e591fb1e224f483a1468e4de79013b9f94395f17a124e2e7ad"
+    },
+    {
+      "name": "editor_imgStars02",
+      "file": "text-editor-editor_imgStars02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "82b0f5e82748f8b5b502dbaa50e42031007bc5128f5dcb5e3ff235051a721523"
+    },
+    {
+      "name": "editor_imgType01",
+      "file": "text-editor-editor_imgType01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "6701c12cd28f9af3490273b985bea16c662349bf1f79f48a0c69a8a71797a21c"
+    },
+    {
+      "name": "editor_imgUnderline01",
+      "file": "text-editor-editor_imgUnderline01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "08db5aaf5a8d4e0c67b8068c6cc5307b5f4e78531146c836847ab4cb68c6bf62"
+    },
+    {
+      "name": "imgAlignCenter",
+      "file": "text-editor-imgAlignCenter.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "975eb5e6e85a720e5caf7206b95a12c97569cf6065b7f2c772fa85b2b818576d"
+    },
+    {
+      "name": "imgAlignCenter1",
+      "file": "text-editor-imgAlignCenter1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "fa8a023975c84f524d8cb917414011680c0391f307d4d5d33096da3568fa3de2"
+    },
+    {
+      "name": "imgAlignCenter2",
+      "file": "text-editor-imgAlignCenter2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54c76f4f42e60a0ff68c7d473ef187bb79674ee93f57252f40e8d196d3c1235a"
+    },
+    {
+      "name": "imgAlignJustify",
+      "file": "text-editor-imgAlignJustify.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "c145d000eee50282020bde034436e546e4a3c0027f1a0303f677f1ee9a3c7fea"
+    },
+    {
+      "name": "imgAlignJustify1",
+      "file": "text-editor-imgAlignJustify1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "036f294df0fc99c19d420253a01799895956465be7e8cbfc20f82607e3784668"
+    },
+    {
+      "name": "imgAlignJustify2",
+      "file": "text-editor-imgAlignJustify2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "e92d14e4bc2e24cd5d1c55564183d0771d078bea72fada8317e2031a278aff20"
+    },
+    {
+      "name": "imgAlignLeft",
+      "file": "text-editor-imgAlignLeft.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "8a3745a9f23a0e3f9a5b17c28383f020f2314401242c498ba7836a0931f70c17"
+    },
+    {
+      "name": "imgAlignLeft1",
+      "file": "text-editor-imgAlignLeft1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "5c3ceb8a2a10e0f0cfde3830403759c8be4130523c0d8a30d43b54f2ae6078e7"
+    },
+    {
+      "name": "imgAlignLeft2",
+      "file": "text-editor-imgAlignLeft2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "5f87f545477b7527a03c07db9046a9f0bff31107ee23afd22389034a24803210"
+    },
+    {
+      "name": "imgAlignRight",
+      "file": "text-editor-imgAlignRight.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "6ea18a86d3c70f90e4a833b6f99916b42d9f1daf7357bdcbea1f4dca7c6a5b71"
+    },
+    {
+      "name": "imgAlignRight1",
+      "file": "text-editor-imgAlignRight1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "f58495ca31b17309033b9f6e2eb06e674a335b42946892e70ec30e8e0dece048"
+    },
+    {
+      "name": "imgAlignRight2",
+      "file": "text-editor-imgAlignRight2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "16be436883d8fb6bc98c3a82ead35f8c193f9fc0823d2808e0d0b135f005b310"
+    },
+    {
+      "name": "imgAttachment01",
+      "file": "text-editor-imgAttachment01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "c13f30c504fb51ff8493f35f6f5c8e231f7b7eef7a9d5b5cf2757184d14ecb04"
+    },
+    {
+      "name": "imgAttachment2",
+      "file": "text-editor-imgAttachment2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "7e0505902cbdc0bdf43e3bcdf0168aaf0f3344b6802b5f04109d8347962f1a1c"
+    },
+    {
+      "name": "imgAttachment3",
+      "file": "text-editor-imgAttachment3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "07dae1f6c638ddbf4efbfdbdd5e8d1cb4cbb1d7f6f39726b5cba254e9a63a5a1"
+    },
+    {
+      "name": "imgBold01",
+      "file": "text-editor-imgBold01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b5c5f2660e944a286c928ea30557316aa1830a9a17eca061861729ee62519904"
+    },
+    {
+      "name": "imgBold2",
+      "file": "text-editor-imgBold2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "c5e456694644454803315576868cbe7ce3021390c08363b28d1d8491baa5b4b1"
+    },
+    {
+      "name": "imgBold3",
+      "file": "text-editor-imgBold3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "266408609755bb939878ea6c43334a12d3ceb0f9b4dd02fbda03162a756776a0"
+    },
+    {
+      "name": "imgCodeSnippet02",
+      "file": "text-editor-imgCodeSnippet02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "9e91d2aafd0ac400cd33b363dc03054bead018438858597d66e4e792a3d715cc"
+    },
+    {
+      "name": "imgCodeSnippet3",
+      "file": "text-editor-imgCodeSnippet3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "dbded36d22a74053e62e5ffdd6d07838db306c942822051cc4885dda7decc053"
+    },
+    {
+      "name": "imgCodeSnippet4",
+      "file": "text-editor-imgCodeSnippet4.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "239791003279c629e533bea4d12502164d31321c24cbf64555dc45e162000614"
+    },
+    {
+      "name": "imgDotpoints01",
+      "file": "text-editor-imgDotpoints01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "eb01a8871751f48a0db1c0b8091e6a103e20eed22ff3bda5c8a17c83017d16e8"
+    },
+    {
+      "name": "imgDotpoints2",
+      "file": "text-editor-imgDotpoints2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "7afa1aa04d9cb610d416f5b11c4a3427fdf4f6eaf5c03d7235dac779926bcb8e"
+    },
+    {
+      "name": "imgDotpoints3",
+      "file": "text-editor-imgDotpoints3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "63a71937535f3228974191ab268ac15d8ef9da834e88898a46a7c4a9525100c2"
+    },
+    {
+      "name": "imgDotsHorizontal",
+      "file": "text-editor-imgDotsHorizontal.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "2a1122764ad8ed1e455f10d41dac2ece2435d60f70e895aaf1a45fe92813ca1a"
+    },
+    {
+      "name": "imgDotsHorizontal1",
+      "file": "text-editor-imgDotsHorizontal1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "6f299c1e1f48c45ad3831f64f3a3b741edf984115a6eeffc71297efc7b5a4ca5"
+    },
+    {
+      "name": "imgDotsHorizontal2",
+      "file": "text-editor-imgDotsHorizontal2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b75d21bbe4757861e4b421755dc6f8207de15a36f221b329b4b19846708af1d7"
+    },
+    {
+      "name": "imgImage01",
+      "file": "text-editor-imgImage01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "dc19a7f3dddd7815ca35c65f849c16cfdceb240cac852ca13b59b4aed5b203b7"
+    },
+    {
+      "name": "imgImage2",
+      "file": "text-editor-imgImage2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "5103835fddfd5a24eadf3c3a41afeabb4fa90bfb611d5a79b1ce8f17857dc1de"
+    },
+    {
+      "name": "imgImage3",
+      "file": "text-editor-imgImage3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "ddb9e327c697e91cd76dd0a30db90a3596b4fa090ad57527a981d80b93fa7b8e"
+    },
+    {
+      "name": "imgItalic01",
+      "file": "text-editor-imgItalic01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d904521aba5fcf0dd474bcf2dc456297e70152bc0e1f1e9c128cc047103050c"
+    },
+    {
+      "name": "imgItalic2",
+      "file": "text-editor-imgItalic2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "599dff51f61155fe2e86c04999aae0f5a2c913063a9751c8a48590a5681a01fd"
+    },
+    {
+      "name": "imgItalic3",
+      "file": "text-editor-imgItalic3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "3bd109637372317790a26ce5b0bfba8d628664c01ec111309600dfd674876cfb"
+    },
+    {
+      "name": "imgLink01",
+      "file": "text-editor-imgLink01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4227e29a3ff4a9859af52dd1fcea445e3a12b7be9e3479f0e0a22796e47693c2"
+    },
+    {
+      "name": "imgLink2",
+      "file": "text-editor-imgLink2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "2a67c085fede10869c7f4b9c265e192f86f637b9baaa71ceaa35dd11d13f8b43"
+    },
+    {
+      "name": "imgLink3",
+      "file": "text-editor-imgLink3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "da8d0254f41472d04bf3e69cde92060ca3f9d0159ced4aae147361f9970c0492"
+    },
+    {
+      "name": "imgPlaySquare",
+      "file": "text-editor-imgPlaySquare.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "1d6e30309bfa83057d9c762fbc13ca0fc0b7b65fe178adefe215d2988dccb3d3"
+    },
+    {
+      "name": "imgPlaySquare1",
+      "file": "text-editor-imgPlaySquare1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "279dee584ed358f4137d83be740565e04597acbd9201ab893d8aade50f9d9de3"
+    },
+    {
+      "name": "imgPlaySquare2",
+      "file": "text-editor-imgPlaySquare2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "8f85321c6dfdaec151bf5d6b7802da073c1fbf38bf14b5f435a6dd03a448aeed"
+    },
+    {
+      "name": "imgStars02",
+      "file": "text-editor-imgStars02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "607d93b870d1f4b0727d4172e8c9d60a895673c222bd86a99c8ef868eaa97781"
+    },
+    {
+      "name": "imgStars3",
+      "file": "text-editor-imgStars3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "fae0306f5191e2f6c0d6a62215cd50bc79a8183693f437bb8da47bcd54752dd3"
+    },
+    {
+      "name": "imgStars4",
+      "file": "text-editor-imgStars4.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "fd0a0c5b251cb33355649af72529e1a3364246c491a62f35591bd949ee71527a"
+    },
+    {
+      "name": "imgUnderline01",
+      "file": "text-editor-imgUnderline01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "08db5aaf5a8d4e0c67b8068c6cc5307b5f4e78531146c836847ab4cb68c6bf62"
+    },
+    {
+      "name": "imgUnderline2",
+      "file": "text-editor-imgUnderline2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "e63f3aa456384fc577957f100e6c74371263a74c8999666a8f0e37bb6ed5a04b"
+    },
+    {
+      "name": "imgUnderline3",
+      "file": "text-editor-imgUnderline3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4f6d8e8625736d68b675659d411859580c2eeb8c49266868bd54280bffbfd447"
+    },
+    {
+      "name": "tooltip_imgAlignCenter",
+      "file": "text-editor-tooltip_imgAlignCenter.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "975eb5e6e85a720e5caf7206b95a12c97569cf6065b7f2c772fa85b2b818576d"
+    },
+    {
+      "name": "tooltip_imgAlignCenter1",
+      "file": "text-editor-tooltip_imgAlignCenter1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "975eb5e6e85a720e5caf7206b95a12c97569cf6065b7f2c772fa85b2b818576d"
+    },
+    {
+      "name": "tooltip_imgAlignLeft",
+      "file": "text-editor-tooltip_imgAlignLeft.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "8a3745a9f23a0e3f9a5b17c28383f020f2314401242c498ba7836a0931f70c17"
+    },
+    {
+      "name": "tooltip_imgAlignLeft1",
+      "file": "text-editor-tooltip_imgAlignLeft1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "8a3745a9f23a0e3f9a5b17c28383f020f2314401242c498ba7836a0931f70c17"
+    },
+    {
+      "name": "tooltip_imgBold01",
+      "file": "text-editor-tooltip_imgBold01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "c5e456694644454803315576868cbe7ce3021390c08363b28d1d8491baa5b4b1"
+    },
+    {
+      "name": "tooltip_imgBold2",
+      "file": "text-editor-tooltip_imgBold2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "c5e456694644454803315576868cbe7ce3021390c08363b28d1d8491baa5b4b1"
+    },
+    {
+      "name": "tooltip_imgDividerWrapper",
+      "file": "text-editor-tooltip_imgDividerWrapper.svg",
+      "width": 12,
+      "height": 32,
+      "sha256": "45193285960ae660e23138f17154eca5c5f2ba84196fa575ff0417be9a96e041"
+    },
+    {
+      "name": "tooltip_imgDotpoints01",
+      "file": "text-editor-tooltip_imgDotpoints01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "eb01a8871751f48a0db1c0b8091e6a103e20eed22ff3bda5c8a17c83017d16e8"
+    },
+    {
+      "name": "tooltip_imgImage01",
+      "file": "text-editor-tooltip_imgImage01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "dc19a7f3dddd7815ca35c65f849c16cfdceb240cac852ca13b59b4aed5b203b7"
+    },
+    {
+      "name": "tooltip_imgItalic01",
+      "file": "text-editor-tooltip_imgItalic01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d904521aba5fcf0dd474bcf2dc456297e70152bc0e1f1e9c128cc047103050c"
+    },
+    {
+      "name": "tooltip_imgItalic2",
+      "file": "text-editor-tooltip_imgItalic2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d904521aba5fcf0dd474bcf2dc456297e70152bc0e1f1e9c128cc047103050c"
+    },
+    {
+      "name": "tooltip_imgLink01",
+      "file": "text-editor-tooltip_imgLink01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4227e29a3ff4a9859af52dd1fcea445e3a12b7be9e3479f0e0a22796e47693c2"
+    },
+    {
+      "name": "tooltip_imgLink2",
+      "file": "text-editor-tooltip_imgLink2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4227e29a3ff4a9859af52dd1fcea445e3a12b7be9e3479f0e0a22796e47693c2"
+    },
+    {
+      "name": "tooltip_imgStars02",
+      "file": "text-editor-tooltip_imgStars02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "2886e882acb4a1c727531d92847ed2e34851a2dfd97ae26e7cf74dc99f648055"
+    },
+    {
+      "name": "tooltip_imgUnderline01",
+      "file": "text-editor-tooltip_imgUnderline01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "08db5aaf5a8d4e0c67b8068c6cc5307b5f4e78531146c836847ab4cb68c6bf62"
+    },
+    {
+      "name": "tooltip_imgUnderline2",
+      "file": "text-editor-tooltip_imgUnderline2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "08db5aaf5a8d4e0c67b8068c6cc5307b5f4e78531146c836847ab4cb68c6bf62"
+    }
+  ],
+  "mappings": [
+    {
+      "type": "Generate",
+      "state": "default",
+      "asset": "imgStars02"
+    },
+    {
+      "type": "More options",
+      "state": "default",
+      "asset": "imgDotsHorizontal"
+    },
+    {
+      "type": "Generate",
+      "state": "current",
+      "asset": "imgStars3"
+    },
+    {
+      "type": "More options",
+      "state": "current",
+      "asset": "imgDotsHorizontal1"
+    },
+    {
+      "type": "Generate",
+      "state": "hover",
+      "asset": "imgStars4"
+    },
+    {
+      "type": "More options",
+      "state": "hover",
+      "asset": "imgDotsHorizontal2"
+    },
+    {
+      "type": "Bold",
+      "state": "current",
+      "asset": "imgBold2"
+    },
+    {
+      "type": "Bold",
+      "state": "hover",
+      "asset": "imgBold3"
+    },
+    {
+      "type": "Italic",
+      "state": "default",
+      "asset": "imgItalic01"
+    },
+    {
+      "type": "Italic",
+      "state": "current",
+      "asset": "imgItalic2"
+    },
+    {
+      "type": "Italic",
+      "state": "hover",
+      "asset": "imgItalic3"
+    },
+    {
+      "type": "Underline",
+      "state": "default",
+      "asset": "imgUnderline01"
+    },
+    {
+      "type": "Underline",
+      "state": "current",
+      "asset": "imgUnderline2"
+    },
+    {
+      "type": "Underline",
+      "state": "hover",
+      "asset": "imgUnderline3"
+    },
+    {
+      "type": "Dot points",
+      "state": "default",
+      "asset": "imgDotpoints01"
+    },
+    {
+      "type": "Dot points",
+      "state": "current",
+      "asset": "imgDotpoints2"
+    },
+    {
+      "type": "Dot points",
+      "state": "hover",
+      "asset": "imgDotpoints3"
+    },
+    {
+      "type": "Left align",
+      "state": "default",
+      "asset": "imgAlignLeft"
+    },
+    {
+      "type": "Left align",
+      "state": "current",
+      "asset": "imgAlignLeft1"
+    },
+    {
+      "type": "Left align",
+      "state": "hover",
+      "asset": "imgAlignLeft2"
+    },
+    {
+      "type": "Center align",
+      "state": "default",
+      "asset": "imgAlignCenter"
+    },
+    {
+      "type": "Center align",
+      "state": "current",
+      "asset": "imgAlignCenter1"
+    },
+    {
+      "type": "Center align",
+      "state": "hover",
+      "asset": "imgAlignCenter2"
+    },
+    {
+      "type": "Right align",
+      "state": "default",
+      "asset": "imgAlignRight"
+    },
+    {
+      "type": "Right align",
+      "state": "current",
+      "asset": "imgAlignRight1"
+    },
+    {
+      "type": "Right align",
+      "state": "hover",
+      "asset": "imgAlignRight2"
+    },
+    {
+      "type": "Justify",
+      "state": "default",
+      "asset": "imgAlignJustify"
+    },
+    {
+      "type": "Justify",
+      "state": "current",
+      "asset": "imgAlignJustify1"
+    },
+    {
+      "type": "Justify",
+      "state": "hover",
+      "asset": "imgAlignJustify2"
+    },
+    {
+      "type": "Link",
+      "state": "default",
+      "asset": "imgLink01"
+    },
+    {
+      "type": "Link",
+      "state": "current",
+      "asset": "imgLink2"
+    },
+    {
+      "type": "Link",
+      "state": "hover",
+      "asset": "imgLink3"
+    },
+    {
+      "type": "Insert image",
+      "state": "default",
+      "asset": "imgImage01"
+    },
+    {
+      "type": "Insert video",
+      "state": "default",
+      "asset": "imgPlaySquare"
+    },
+    {
+      "type": "Insert image",
+      "state": "current",
+      "asset": "imgImage2"
+    },
+    {
+      "type": "Insert video",
+      "state": "current",
+      "asset": "imgPlaySquare1"
+    },
+    {
+      "type": "Insert image",
+      "state": "hover",
+      "asset": "imgImage3"
+    },
+    {
+      "type": "Insert video",
+      "state": "hover",
+      "asset": "imgPlaySquare2"
+    },
+    {
+      "type": "Attach file",
+      "state": "default",
+      "asset": "imgAttachment01"
+    },
+    {
+      "type": "Attach file",
+      "state": "current",
+      "asset": "imgAttachment2"
+    },
+    {
+      "type": "Attach file",
+      "state": "hover",
+      "asset": "imgAttachment3"
+    },
+    {
+      "type": "Insert code",
+      "state": "default",
+      "asset": "imgCodeSnippet02"
+    },
+    {
+      "type": "Color picker",
+      "state": "default"
+    },
+    {
+      "type": "Insert code",
+      "state": "current",
+      "asset": "imgCodeSnippet3"
+    },
+    {
+      "type": "Color picker",
+      "state": "current"
+    },
+    {
+      "type": "Insert code",
+      "state": "hover",
+      "asset": "imgCodeSnippet4"
+    },
+    {
+      "type": "Color picker",
+      "state": "hover"
+    },
+    {
+      "type": "Bold",
+      "state": "default",
+      "asset": "imgBold01"
+    }
+  ]
+}

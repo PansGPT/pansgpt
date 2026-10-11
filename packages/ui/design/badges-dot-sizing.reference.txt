@@ -1,0 +1,67 @@
+Size=md, Type=Badge color, Icon=Dot, Color=Brand (4825:409816)
+const imgDot = "../assets/badge-dot-brand.svg";
+
+type BadgeProps = {
+  className?: string;
+  color?: "Brand";
+  icon?: "Dot";
+  size?: "md";
+  type?: "Badge color";
+};
+
+function Badge({ className, color = "Brand", icon = "Dot", size = "md", type = "Badge color" }: BadgeProps) {
+  return (
+    <div className={className || "bg-[var(--component-colors\\/utility\\/brand\\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\\/utility\\/brand\\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="4825:409816">
+      <div className="relative shrink-0 size-[8px]" data-node-id="4825:409817" data-name="_Dot">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+      </div>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="4825:409818">
+        Label
+      </p>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = '[transient example] These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.
+
+## Size=lg, Type=Badge color, Icon=Dot, Color=Brand (4825:410077)
+const imgDot = "../assets/badge-dot-brand.svg";
+
+type BadgeProps = {
+  className?: string;
+  color?: "Brand";
+  icon?: "Dot";
+  size?: "lg";
+  type?: "Badge color";
+};
+
+function Badge({ className, color = "Brand", icon = "Dot", size = "lg", type = "Badge color" }: BadgeProps) {
+  return (
+    <div className={className || "bg-[var(--component-colors\\/utility\\/brand\\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\\/utility\\/brand\\/utility-brand-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center px-[10px] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="4825:410077">
+      <div className="relative shrink-0 size-[8px]" data-node-id="4825:410078" data-name="_Dot">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+      </div>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="4825:410079">
+        Label
+      </p>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = '[transient example] These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

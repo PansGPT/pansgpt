@@ -1,0 +1,85 @@
+type StepBaseProps = {
+  className?: string;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Complete";
+  type?: "Text line";
+};
+
+function StepBase({ className, size = "sm", status = "Incomplete", type = "Text line" }: StepBaseProps) {
+  const isTextLineAndCompleteAndMd = type === "Text line" && status === "Complete" && size === "md";
+  const isTextLineAndCompleteAndSm = type === "Text line" && status === "Complete" && size === "sm";
+  return (
+    <div className={className || `border-solid border-t-4 content-stretch flex flex-col items-start relative w-[344px] ${isTextLineAndCompleteAndMd ? String.raw`border-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] pt-[var(--spacing-xl,16px)]` : isTextLineAndCompleteAndSm ? String.raw`border-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] pt-[var(--spacing-lg,12px)]` : String.raw`border-[var(--colors\/background\/bg-quaternary,#e9eaeb)] pt-[var(--spacing-lg,12px)]`}`} id={isTextLineAndCompleteAndMd ? "node-1139_78872" : isTextLineAndCompleteAndSm ? "node-1139_78908" : "node-1139_78992"}>
+      <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full ${isTextLineAndCompleteAndMd ? String.raw`gap-[var(--spacing-none,0px)] leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]`}`} id={isTextLineAndCompleteAndMd ? "node-1139_78873" : isTextLineAndCompleteAndSm ? "node-1139_78909" : "node-1139_78993"} data-name="Content">
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" id={isTextLineAndCompleteAndMd ? "node-1139_78874" : isTextLineAndCompleteAndSm ? "node-1139_78910" : "node-1139_78994"}>
+          Your details
+        </p>
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" id={isTextLineAndCompleteAndMd ? "node-1139_78875" : isTextLineAndCompleteAndSm ? "node-1139_78911" : "node-1139_78995"}>
+          Please provide your name and email
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type ProgressStepsProgressTextWithLineProps = {
+  className?: string;
+  breakpoint?: "Mobile" | "Desktop";
+  size?: "sm" | "md";
+};
+
+export default function ProgressStepsProgressTextWithLine({ className, breakpoint = "Desktop", size = "sm" }: ProgressStepsProgressTextWithLineProps) {
+  const isMdAndDesktop = size === "md" && breakpoint === "Desktop";
+  const isSm = size === "sm";
+  const isSmAndDesktop = size === "sm" && breakpoint === "Desktop";
+  const isSmAndMobile = size === "sm" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex items-start relative ${breakpoint === "Desktop" ? "gap-[var(--spacing-xl,16px)] w-[1280px]" : "flex-col gap-[var(--spacing-2xl,20px)] w-[343px]"}`} id={isSmAndDesktop ? "node-1141_78399" : isMdAndDesktop ? "node-1141_76734" : isSmAndMobile ? "node-1141_78404" : "node-1141_76738"}>
+      <StepBase className={`${String.raw`border-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start relative `}${isSmAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-lg,12px)] self-stretch" : isMdAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-xl,16px)] self-stretch" : isSmAndMobile ? "pt-[var(--spacing-lg,12px)] shrink-0 w-full" : "pt-[var(--spacing-xl,16px)] shrink-0 w-full"}`} size={size === "md" ? "md" : undefined} status="Complete" />
+      <div className={`${String.raw`border-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] border-solid border-t-4 content-stretch flex flex-col items-start relative `}${isSmAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-lg,12px)] self-stretch" : isMdAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-xl,16px)] self-stretch" : isSmAndMobile ? "pt-[var(--spacing-lg,12px)] shrink-0 w-full" : "pt-[var(--spacing-xl,16px)] shrink-0 w-full"}`} id={isSmAndDesktop ? "node-1141_78401" : isMdAndDesktop ? "node-1141_76736" : isSmAndMobile ? "node-1141_78406" : "node-1141_76740"} data-name="_Step base">
+        <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full ${isSm ? String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : String.raw`gap-[var(--spacing-none,0px)] leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]`}`} id={isSmAndDesktop ? "node-I1141_78401-1139_78957" : isMdAndDesktop ? "node-I1141_76736-1139_78853" : isSmAndMobile ? "node-I1141_78406-1139_78957" : "node-I1141_76740-1139_78853"} data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] w-full" id={isSmAndDesktop ? "node-I1141_78401-1139_78958" : isMdAndDesktop ? "node-I1141_76736-1139_78854" : isSmAndMobile ? "node-I1141_78406-1139_78958" : "node-I1141_76740-1139_78854"}>
+            Company details
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] w-full" id={isSmAndDesktop ? "node-I1141_78401-1139_78959" : isMdAndDesktop ? "node-I1141_76736-1139_78855" : isSmAndMobile ? "node-I1141_78406-1139_78959" : "node-I1141_76740-1139_78855"}>
+            A few details about your company
+          </p>
+        </div>
+      </div>
+      <div className={`${String.raw`border-[var(--colors\/background\/bg-quaternary,#e9eaeb)] border-solid border-t-4 content-stretch flex flex-col items-start relative `}${isSmAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-lg,12px)] self-stretch" : isMdAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-xl,16px)] self-stretch" : isSmAndMobile ? "pt-[var(--spacing-lg,12px)] shrink-0 w-full" : "pt-[var(--spacing-xl,16px)] shrink-0 w-full"}`} id={isSmAndDesktop ? "node-1141_78402" : isMdAndDesktop ? "node-1141_76737" : isSmAndMobile ? "node-1141_78407" : "node-1141_76741"} data-name="_Step base">
+        <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full ${isSm ? String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : String.raw`gap-[var(--spacing-none,0px)] leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]`}`} id={isSmAndDesktop ? "node-I1141_78402-1139_78993" : isMdAndDesktop ? "node-I1141_76737-1139_79005" : isSmAndMobile ? "node-I1141_78407-1139_78993" : "node-I1141_76741-1139_79005"} data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" id={isSmAndDesktop ? "node-I1141_78402-1139_78994" : isMdAndDesktop ? "node-I1141_76737-1139_79006" : isSmAndMobile ? "node-I1141_78407-1139_78994" : "node-I1141_76741-1139_79006"}>
+            Invite your team
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" id={isSmAndDesktop ? "node-I1141_78402-1139_78995" : isMdAndDesktop ? "node-I1141_76737-1139_79007" : isSmAndMobile ? "node-I1141_78407-1139_78995" : "node-I1141_76741-1139_79007"}>
+            Start collaborating with your team
+          </p>
+        </div>
+      </div>
+      <div className={`${String.raw`border-[var(--colors\/background\/bg-quaternary,#e9eaeb)] border-solid border-t-4 content-stretch flex flex-col items-start relative `}${isSmAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-lg,12px)] self-stretch" : isMdAndDesktop ? "flex-[1_0_0] min-w-px pt-[var(--spacing-xl,16px)] self-stretch" : isSmAndMobile ? "pt-[var(--spacing-lg,12px)] shrink-0 w-full" : "pt-[var(--spacing-xl,16px)] shrink-0 w-full"}`} id={isSmAndDesktop ? "node-1141_78403" : isMdAndDesktop ? "node-1141_76766" : isSmAndMobile ? "node-1141_78408" : "node-1141_76771"} data-name="_Step base">
+        <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full ${isSm ? String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : String.raw`gap-[var(--spacing-none,0px)] leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]`}`} id={isSmAndDesktop ? "node-I1141_78403-1139_78993" : isMdAndDesktop ? "node-I1141_76766-1139_79005" : isSmAndMobile ? "node-I1141_78408-1139_78993" : "node-I1141_76771-1139_79005"} data-name="Content">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" id={isSmAndDesktop ? "node-I1141_78403-1139_78994" : isMdAndDesktop ? "node-I1141_76766-1139_79006" : isSmAndMobile ? "node-I1141_78408-1139_78994" : "node-I1141_76771-1139_79006"}>
+            Add your socials
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" id={isSmAndDesktop ? "node-I1141_78403-1139_78995" : isMdAndDesktop ? "node-I1141_76766-1139_79007" : isSmAndMobile ? "node-I1141_78408-1139_78995" : "node-I1141_76771-1139_79007"}>
+            Share posts to your social accounts
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,161 @@
+const imgSizeSm = "https://www.figma.com/api/mcp/asset/ab6b6617-20f2-4a69-8472-efa09f152306.svg";
+const imgSizeMd = "https://www.figma.com/api/mcp/asset/cdd0da03-3215-47db-8e10-07c34e63a087.svg";
+const imgSizeLg = "https://www.figma.com/api/mcp/asset/d5e73491-6de6-498b-84e5-e155b4d10284.svg";
+const imgSizeXl = "https://www.figma.com/api/mcp/asset/f7a5ea94-ca41-4b54-acc9-7f6cfb266051.svg";
+const imgSizeSm1 = "https://www.figma.com/api/mcp/asset/7f3ac0ae-bacc-4962-9f19-bfb34936bbdc.png";
+const imgSizeXlPlaceholderFalseTextFalseStatusIconCompany = "https://www.figma.com/api/mcp/asset/1dad1255-87fb-41d1-91c9-5b9febe89f04.png";
+
+type VerifiedTickProps = {
+  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+};
+
+function VerifiedTick({ className, size = "sm" }: VerifiedTickProps) {
+  const isLg = size === "lg";
+  const isMd = size === "md";
+  const isXl = size === "xl";
+  return (
+    <div className={className || `relative ${isXl ? "size-[18px]" : isLg ? "size-[16px]" : isMd ? "size-[14px]" : "size-[12px]"}`} id={isXl ? "node-3302_420328" : isLg ? "node-3302_418813" : isMd ? "node-3302_418810" : "node-3302_418804"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isXl ? imgSizeXl : isLg ? imgSizeLg : isMd ? imgSizeMd : imgSizeSm} />
+    </div>
+  );
+}
+
+type AvatarCompanyIconProps = {
+  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+};
+
+function AvatarCompanyIcon({ className, size = "sm" }: AvatarCompanyIconProps) {
+  const isLg = size === "lg";
+  const isMd = size === "md";
+  const isXl = size === "xl";
+  return (
+    <div className={className || `${String.raw`border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] `}${isXl ? "size-[18px]" : isLg ? "size-[16px]" : isMd ? "size-[14px]" : "size-[12px]"}`} id={isXl ? "node-1036_45" : isLg ? "node-1036_35" : isMd ? "node-1036_25" : "node-1036_15"}>
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeSm1} />
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "sm" | "md" | "lg" | "xl";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "sm" }: AvatarOnlineIndicatorProps) {
+  const isLgAndTrue = size === "lg" && online === "True";
+  const isMdAndTrue = size === "md" && online === "True";
+  const isXlAndTrue = size === "xl" && online === "True";
+  return <div className={className || `${String.raw`bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] `}${isXlAndTrue ? "size-[14px]" : isLgAndTrue ? "size-[12px]" : isMdAndTrue ? "size-[10px]" : "size-[8px]"}`} id={isXlAndTrue ? "node-1034_364" : isLgAndTrue ? "node-1034_367" : isMdAndTrue ? "node-1034_365" : "node-1034_366"} />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "sm" | "md" | "lg" | "xl";
+  statusIcon?: "False" | "Online indicator" | "Company" | "Verified";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "sm", statusIcon = "False", text = "False" }: AvatarProps) {
+  const isLgAndFalseAndFalseAndCompany = size === "lg" && placeholder === "False" && text === "False" && statusIcon === "Company";
+  const isLgAndFalseAndFalseAndFalse = size === "lg" && placeholder === "False" && text === "False" && statusIcon === "False";
+  const isLgAndFalseAndFalseAndVerified = size === "lg" && placeholder === "False" && text === "False" && statusIcon === "Verified";
+  const isMdAndFalseAndFalseAndCompany = size === "md" && placeholder === "False" && text === "False" && statusIcon === "Company";
+  const isMdAndFalseAndFalseAndFalse = size === "md" && placeholder === "False" && text === "False" && statusIcon === "False";
+  const isMdAndFalseAndFalseAndOnlineIndicator = size === "md" && placeholder === "False" && text === "False" && statusIcon === "Online indicator";
+  const isMdAndFalseAndFalseAndVerified = size === "md" && placeholder === "False" && text === "False" && statusIcon === "Verified";
+  const isSmAndFalseAndFalseAndCompany = size === "sm" && placeholder === "False" && text === "False" && statusIcon === "Company";
+  const isSmAndFalseAndFalseAndFalse = size === "sm" && placeholder === "False" && text === "False" && statusIcon === "False";
+  const isSmAndFalseAndFalseAndVerified = size === "sm" && placeholder === "False" && text === "False" && statusIcon === "Verified";
+  const isXlAndFalseAndFalseAndFalse = size === "xl" && placeholder === "False" && text === "False" && statusIcon === "False";
+  const isXlAndFalseAndFalseAndVerified = size === "xl" && placeholder === "False" && text === "False" && statusIcon === "Verified";
+  return (
+    <div className={className || `border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] ${isSmAndFalseAndFalseAndFalse ? "border-[0.75px] overflow-clip size-[32px]" : isMdAndFalseAndFalseAndFalse ? "border overflow-clip size-[40px]" : isLgAndFalseAndFalseAndFalse ? "border overflow-clip size-[48px]" : isXlAndFalseAndFalseAndFalse ? "border overflow-clip size-[56px]" : size === "sm" && placeholder === "False" && text === "False" && ["Company", "Verified"].includes(statusIcon) ? "border-[0.75px] size-[32px]" : size === "md" && placeholder === "False" && text === "False" && ["Online indicator", "Company", "Verified"].includes(statusIcon) ? "border size-[40px]" : size === "lg" && placeholder === "False" && text === "False" && ["Company", "Verified"].includes(statusIcon) ? "border size-[48px]" : "border size-[56px]"}`} id={isSmAndFalseAndFalseAndFalse ? "node-19_1015" : isMdAndFalseAndFalseAndFalse ? "node-19_1016" : isLgAndFalseAndFalseAndFalse ? "node-19_1017" : isXlAndFalseAndFalseAndFalse ? "node-19_1018" : isSmAndFalseAndFalseAndVerified ? "node-3302_419204" : isSmAndFalseAndFalseAndCompany ? "node-1036_60" : isMdAndFalseAndFalseAndVerified ? "node-3302_419198" : isMdAndFalseAndFalseAndCompany ? "node-1036_64" : isMdAndFalseAndFalseAndOnlineIndicator ? "node-19_1084" : isLgAndFalseAndFalseAndVerified ? "node-3302_419192" : isLgAndFalseAndFalseAndCompany ? "node-1036_66" : isXlAndFalseAndFalseAndVerified ? "node-3302_419180" : "node-1036_68"}>
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconCompany} />
+      {placeholder === "False" && text === "False" && statusIcon === "Company" && <AvatarCompanyIcon className={`${String.raw`absolute border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid rounded-[var(--radius-full,9999px)] `}${isSmAndFalseAndFalseAndCompany ? "bottom-[-2.75px] right-[-2.75px] size-[12px]" : isMdAndFalseAndFalseAndCompany ? "bottom-[-3px] right-[-3px] size-[14px]" : isLgAndFalseAndFalseAndCompany ? "bottom-[-3px] right-[-3px] size-[16px]" : "bottom-[-3px] right-[-3px] size-[18px]"}`} size={isMdAndFalseAndFalseAndCompany ? "md" : isLgAndFalseAndFalseAndCompany ? "lg" : size === "xl" && placeholder === "False" && text === "False" && statusIcon === "Company" ? "xl" : undefined} />}
+      {placeholder === "False" && text === "False" && statusIcon === "Verified" && <VerifiedTick className={`absolute ${isSmAndFalseAndFalseAndVerified ? "bottom-[-0.75px] right-[-0.75px] size-[12px]" : isMdAndFalseAndFalseAndVerified ? "bottom-[-1px] right-[-1px] size-[14px]" : isLgAndFalseAndFalseAndVerified ? "bottom-[-1px] right-[-1px] size-[16px]" : "bottom-[-1px] right-[-1px] size-[18px]"}`} size={isMdAndFalseAndFalseAndVerified ? "md" : isLgAndFalseAndFalseAndVerified ? "lg" : isXlAndFalseAndFalseAndVerified ? "xl" : undefined} />}
+      {isMdAndFalseAndFalseAndOnlineIndicator && <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" size="md" />}
+    </div>
+  );
+}
+
+type AvatarLabelGroupProps = {
+  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+  statusIcon?: "Online indicator" | "False" | "Company" | "Verified";
+};
+
+export default function AvatarLabelGroup({ className, size = "sm", statusIcon = "False" }: AvatarLabelGroupProps) {
+  const isCompany = statusIcon === "Company";
+  const isFalse = statusIcon === "False";
+  const isLgAndCompany = size === "lg" && statusIcon === "Company";
+  const isLgAndFalse = size === "lg" && statusIcon === "False";
+  const isLgAndIsCompanyOrVerifiedOrFalse = size === "lg" && ["Company", "Verified", "False"].includes(statusIcon);
+  const isLgAndOnlineIndicator = size === "lg" && statusIcon === "Online indicator";
+  const isLgAndVerified = size === "lg" && statusIcon === "Verified";
+  const isMdAndCompany = size === "md" && statusIcon === "Company";
+  const isMdAndFalse = size === "md" && statusIcon === "False";
+  const isMdAndOnlineIndicator = size === "md" && statusIcon === "Online indicator";
+  const isMdAndVerified = size === "md" && statusIcon === "Verified";
+  const isOnlineIndicatorAndIsLgOrXlOrSm = statusIcon === "Online indicator" && ["lg", "xl", "sm"].includes(size);
+  const isSmAndCompany = size === "sm" && statusIcon === "Company";
+  const isSmAndFalse = size === "sm" && statusIcon === "False";
+  const isSmAndIsCompanyOrVerifiedOrFalse = size === "sm" && ["Company", "Verified", "False"].includes(statusIcon);
+  const isSmAndOnlineIndicator = size === "sm" && statusIcon === "Online indicator";
+  const isSmAndVerified = size === "sm" && statusIcon === "Verified";
+  const isVerified = statusIcon === "Verified";
+  const isXlAndCompany = size === "xl" && statusIcon === "Company";
+  const isXlAndFalse = size === "xl" && statusIcon === "False";
+  const isXlAndIsCompanyOrVerifiedOrFalse = size === "xl" && ["Company", "Verified", "False"].includes(statusIcon);
+  const isXlAndOnlineIndicator = size === "xl" && statusIcon === "Online indicator";
+  const isXlAndVerified = size === "xl" && statusIcon === "Verified";
+  return (
+    <div className={className || `content-stretch flex items-center relative ${size === "xl" ? "gap-[var(--spacing-xl,16px)]" : size === "lg" ? "gap-[var(--spacing-lg,12px)]" : "gap-[var(--spacing-md,8px)]"}`} id={isSmAndFalse ? "node-1142_92901" : isXlAndFalse ? "node-1211_422" : isLgAndFalse ? "node-1142_93198" : isMdAndFalse ? "node-1109_487" : isSmAndVerified ? "node-3302_420633" : isSmAndCompany ? "node-1142_92906" : isXlAndVerified ? "node-3302_420628" : isXlAndCompany ? "node-1211_412" : isLgAndVerified ? "node-3302_420623" : isLgAndCompany ? "node-1142_93203" : isMdAndVerified ? "node-3302_420618" : isMdAndCompany ? "node-1109_523" : isSmAndOnlineIndicator ? "node-1142_92911" : isXlAndOnlineIndicator ? "node-1211_417" : isLgAndOnlineIndicator ? "node-1142_93208" : "node-82_2792"}>
+      {(isMdAndOnlineIndicator || isCompany || isVerified || isFalse) && (
+        <>
+          <Avatar className={`border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 ${isSmAndIsCompanyOrVerifiedOrFalse ? "border-[0.75px] size-[32px]" : isXlAndIsCompanyOrVerifiedOrFalse ? "border size-[56px]" : isLgAndIsCompanyOrVerifiedOrFalse ? "border size-[48px]" : "border size-[40px]"}`} size={isXlAndIsCompanyOrVerifiedOrFalse ? "xl" : isLgAndIsCompanyOrVerifiedOrFalse ? "lg" : size === "md" ? "md" : undefined} statusIcon={isVerified ? "Verified" : isCompany ? "Company" : isMdAndOnlineIndicator ? "Online indicator" : undefined} />
+          <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 whitespace-nowrap ${isXlAndCompany || isXlAndVerified || isSmAndCompany || isSmAndVerified || isXlAndFalse || isSmAndFalse ? "" : isLgAndIsCompanyOrVerifiedOrFalse ? String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]`}`} id={isSmAndFalse ? "node-1142_92903" : isXlAndFalse ? "node-1211_424" : isLgAndFalse ? "node-1142_93200" : isMdAndFalse ? "node-1109_489" : isSmAndVerified ? "node-3302_420635" : isSmAndCompany ? "node-1142_92908" : isXlAndVerified ? "node-3302_420630" : isXlAndCompany ? "node-1211_414" : isLgAndVerified ? "node-3302_420625" : isLgAndCompany ? "node-1142_93205" : isMdAndVerified ? "node-3302_420620" : isMdAndCompany ? "node-1109_525" : "node-82_2790"} data-name="Text and supporting text">
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] `}${isSmAndIsCompanyOrVerifiedOrFalse ? String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : isXlAndIsCompanyOrVerifiedOrFalse ? String.raw`leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)]` : ""}`} id={isSmAndFalse ? "node-1142_92904" : isXlAndFalse ? "node-1211_425" : isLgAndFalse ? "node-1142_93201" : isMdAndFalse ? "node-1109_490" : isSmAndVerified ? "node-3302_420636" : isSmAndCompany ? "node-1142_92909" : isXlAndVerified ? "node-3302_420631" : isXlAndCompany ? "node-1211_415" : isLgAndVerified ? "node-3302_420626" : isLgAndCompany ? "node-1142_93206" : isMdAndVerified ? "node-3302_420621" : isMdAndCompany ? "node-1109_526" : "node-82_2788"}>
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] `}${isSmAndIsCompanyOrVerifiedOrFalse ? String.raw`leading-[var(--line-height\/text-xs,18px)] text-[length:var(--font-size\/text-xs,12px)]` : isXlAndIsCompanyOrVerifiedOrFalse ? String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : ""}`} id={isSmAndFalse ? "node-1142_92905" : isXlAndFalse ? "node-1211_426" : isLgAndFalse ? "node-1142_93202" : isMdAndFalse ? "node-1109_491" : isSmAndVerified ? "node-3302_420637" : isSmAndCompany ? "node-1142_92910" : isXlAndVerified ? "node-3302_420632" : isXlAndCompany ? "node-1211_416" : isLgAndVerified ? "node-3302_420627" : isLgAndCompany ? "node-1142_93207" : isMdAndVerified ? "node-3302_420622" : isMdAndCompany ? "node-1109_527" : "node-82_2789"}>
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </>
+      )}
+      {isOnlineIndicatorAndIsLgOrXlOrSm && (
+        <>
+          <div className={`border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 ${isSmAndOnlineIndicator ? "border-[0.75px] size-[32px]" : isXlAndOnlineIndicator ? "border size-[56px]" : "border size-[48px]"}`} id={isSmAndOnlineIndicator ? "node-1142_92912" : isXlAndOnlineIndicator ? "node-1211_418" : "node-1142_93209"} data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconCompany} />
+            <AvatarOnlineIndicator className={`${String.raw`absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid rounded-[var(--radius-full,9999px)] `}${isSmAndOnlineIndicator ? "bottom-[-0.75px] right-[-0.75px] size-[8px]" : isXlAndOnlineIndicator ? "bottom-[-1px] right-[-1px] size-[14px]" : "bottom-[-1px] right-[-1px] size-[12px]"}`} size={isXlAndOnlineIndicator ? "xl" : isLgAndOnlineIndicator ? "lg" : undefined} />
+          </div>
+          <div className={`[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 whitespace-nowrap ${statusIcon === "Online indicator" && ["xl", "sm"].includes(size) ? "" : String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]`}`} id={isSmAndOnlineIndicator ? "node-1142_92913" : isXlAndOnlineIndicator ? "node-1211_419" : "node-1142_93210"} data-name="Text and supporting text">
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] `}${isSmAndOnlineIndicator ? String.raw`leading-[var(--line-height\/text-sm,20px)] text-[length:var(--font-size\/text-sm,14px)]` : isXlAndOnlineIndicator ? String.raw`leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)]` : ""}`} id={isSmAndOnlineIndicator ? "node-1142_92914" : isXlAndOnlineIndicator ? "node-1211_420" : "node-1142_93211"}>
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] `}${isSmAndOnlineIndicator ? String.raw`leading-[var(--line-height\/text-xs,18px)] text-[length:var(--font-size\/text-xs,12px)]` : isXlAndOnlineIndicator ? String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : ""}`} id={isSmAndOnlineIndicator ? "node-1142_92915" : isXlAndOnlineIndicator ? "node-1211_421" : "node-1142_93212"}>
+              chioma@PansGPT.com
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Avatar user square/Olivia Rhye: , Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text lg/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-lg, weight: 600, lineHeight: Line height/text-lg, letterSpacing: 0), Text xs/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-xs, weight: 400, lineHeight: Line height/text-xs, letterSpacing: 0), Avatar company logo/Layers: .
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

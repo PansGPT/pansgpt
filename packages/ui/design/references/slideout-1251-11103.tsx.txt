@@ -1,0 +1,271 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/3e82593f-5c95-4dd7-ba6a-803db909dc4a.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/da32d52a-4bb5-4760-8b56-911046ad75fd.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox" | "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  const isNotCheckedAndFalseAndSmAndRadioAndDefault = !checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)]` : isNotCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid rounded-[var(--radius-full,9999px)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid rounded-[var(--radius-xs,6px)]`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : isNotCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_569" : "node-1097_63885"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type SlideOutMenuProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Notification settings checkboxes";
+};
+
+function SlideOutMenu({ className, breakpoint = "Mobile", type = "Notification settings checkboxes" }: SlideOutMenuProps) {
+  return (
+    <div className={className || "content-stretch flex h-[960px] items-start overflow-clip pl-[var(--spacing-3xl,24px)] relative w-[375px]"} data-node-id="1251:11103">
+      <div className="absolute backdrop-blur-[8px] inset-0 overflow-clip" data-node-id="4943:373050" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4943:373050;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px overflow-clip relative shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]" data-node-id="1251:11104" data-name="Panel">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex gap-[var(--spacing-md,8px)] items-start px-[var(--spacing-xl,16px)] py-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="1251:11105" data-name="_Slide out menu header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px relative" data-node-id="I1251:11105;1240:137264" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" data-node-id="I1251:11105;1240:137266" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1251:11105;1240:137267">
+                Notifications
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1251:11105;1240:137268">
+                Manage when you’ll receive notifications.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" data-node-id="I1251:11105;1240:137270" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I1251:11105;1240:137270;2763:420385" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-3xl,24px)] items-center min-h-px px-[var(--spacing-xl,16px)] relative w-full" data-node-id="1251:11106" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1251:11107" data-name="Section">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1251:11108" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="1251:11109">{`In-app notifications `}</p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1251:11110">
+                Select when you’ll be notified in-app.
+              </p>
+            </div>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pl-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="1251:11111" data-name="Checkboxes">
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11112" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11112;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11112;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11112;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11112;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11112;1097:63669">
+                    Message mentions
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11112;1097:63670">
+                    I’m mentioned in a message or comment.
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11113" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11113;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11113;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11113;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11113;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11113;1097:63669">
+                    Message replies
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11113;1097:63670">
+                    Someone replies to any message or comment.
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11114" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11114;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11114;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11114;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11114;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11114;1097:63669">
+                    New projects
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11114;1097:63670">
+                    New projects are created on my team.
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11115" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11115;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11115;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11115;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11115;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11115;1097:63669">
+                    Outstanding tasks
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11115;1097:63670">
+                    I’ve had outstanding tasks for more than:
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pl-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="3292:581957" data-name="Radio group">
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3292:581958" data-name="Checkbox">
+                  <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581958;1100:1479" data-name="Input">
+                    <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" type="Radio" />
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I3292:581958;1100:1481" data-name="Text and supporting text">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I3292:581958;1100:1482">
+                      1 hour
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3292:581959" data-name="Checkbox">
+                  <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581959;1100:1431" data-name="Input">
+                    <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" type="Radio" />
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I3292:581959;1100:1433" data-name="Text and supporting text">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I3292:581959;1100:1434">
+                      24 hours
+                    </p>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="3292:581960" data-name="Checkbox">
+                  <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581960;1100:1431" data-name="Input">
+                    <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" type="Radio" />
+                  </div>
+                  <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I3292:581960;1100:1433" data-name="Text and supporting text">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I3292:581960;1100:1434">
+                      1 week
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11120" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11120;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11120;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11120;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11120;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11120;1097:63669">
+                    Outstanding tasks
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11120;1097:63670">
+                    I’ve had outstanding tasks for more than:
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="1251:11121" data-name="Divider" />
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1251:11122" data-name="Section">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1251:11123" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full" data-node-id="1251:11124">{`Email notifications `}</p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="1251:11125">
+                Select when you’ll be notified in-app.
+              </p>
+            </div>
+            <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pl-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="1251:11126" data-name="Checkboxes">
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11127" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11127;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11127;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11127;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11127;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11127;1097:63669">
+                    Message mentions
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11127;1097:63670">
+                    I’m mentioned in a message or comment.
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="1251:11128" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11128;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11128;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11128;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11128;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11128;1097:63669">
+                    Message replies
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11128;1097:63670">
+                    Someone replies to any message or comment.
+                  </p>
+                </div>
+              </div>
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-[344px]" data-node-id="1251:11129" data-name="Checkbox">
+                <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1251:11129;1097:63666" data-name="Input">
+                  <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I1251:11129;3281:386068" data-name="_Checkbox base">
+                    <div className="absolute inset-[12.5%]" data-node-id="I1251:11129;3281:386068;1097:63897" data-name="check">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                    </div>
+                  </div>
+                </div>
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1251:11129;1097:63668" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1251:11129;1097:63669">
+                    Outstanding tasks
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1251:11129;1097:63670">
+                    I’ve had outstanding tasks for more than:
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="1251:11130" data-name="Footer">
+          <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-end p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1251:11132" data-name="Content">
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="3292:581237" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581238" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581238;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581238;3287:433113">
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:581239" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:581239;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:581239;3287:432941">
+                    Save
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

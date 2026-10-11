@@ -1,0 +1,163 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/ccba887a-c95e-4cb8-bdd7-a04b072e2551.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/c981ea5c-530c-47f0-b43a-56e7d68bf5a3.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/4e5dfa71-215a-487d-a19c-344f331eb238.png";
+const imgAvatar2 = "https://www.figma.com/api/mcp/asset/838bcdd7-53c5-4d3d-b603-affbca98e01c.png";
+const imgAvatar3 = "https://www.figma.com/api/mcp/asset/1386fba3-025a-47a6-8029-eaf1e92fb01b.png";
+const imgAvatar4 = "https://www.figma.com/api/mcp/asset/fa37e0f9-66aa-456d-9c45-77b4f09e8751.png";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndCheckboxAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-xs,6px)] size-[16px] ${isCheckedAndFalseAndSmAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndCheckboxAndDefault ? "node-1097_63895" : "node-1097_63885"}>
+      {isCheckedAndFalseAndSmAndCheckboxAndDefault && (
+        <div className="absolute inset-[12.5%]" data-node-id="1097:63897" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  size?: "sm";
+  type?: "Avatar";
+};
+
+function RadioGroup({ className, breakpoint = "Mobile", size = "sm", type = "Avatar" }: RadioGroupProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative w-[343px]"} data-node-id="1142:88315">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:88316" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1142:88316;1142:81717" data-name="Content">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="I1142:88316;1142:81718" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:88316;1142:81719" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:88316;3931:407880" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:88316;1142:81720">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:88316;3931:407881">
+                @olivia
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:88316;1142:81721">
+              Product Manager, Integrations
+            </p>
+          </div>
+        </div>
+        <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:88317" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1142:88317;1142:81686" data-name="Content">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="I1142:88317;1142:81687" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:88317;1142:81688" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:88317;3931:407840" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:88317;1142:81689">
+                Olúwadámilọ́lá Buhari
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:88317;3931:407841">
+                @phoenix
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:88317;1142:81690">
+              Frontend Developer, Payments
+            </p>
+          </div>
+        </div>
+        <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:88318" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1142:88318;1142:81686" data-name="Content">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="I1142:88318;1142:81687" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:88318;1142:81688" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:88318;3931:407840" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:88318;1142:81689">
+                Ọ̀jọ́ Balogun
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:88318;3931:407841">
+                @lori
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:88318;1142:81690">
+              Backend Developer, Payments
+            </p>
+          </div>
+        </div>
+        <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:88319" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1142:88319;1142:81686" data-name="Content">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="I1142:88319;1142:81687" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:88319;1142:81688" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:88319;3931:407840" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:88319;1142:81689">
+                Foláshadé Chukwuma
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:88319;3931:407841">
+                @orlando
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:88319;1142:81690">
+              Sales Manager, Enterprise
+            </p>
+          </div>
+        </div>
+        <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:88320" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1142:88320;1142:81686" data-name="Content">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="I1142:88320;1142:81687" data-name="Avatar">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:88320;1142:81688" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:88320;3931:407840" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:88320;1142:81689">
+                Rukayat Lawal
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:88320;3931:407841">
+                @kate
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:88320;1142:81690">
+              Product Designer, Dashboard
+            </p>
+          </div>
+        </div>
+        <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[16px]" />
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Avatar user square/Olivia Rhye: , Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Avatar user square/Phoenix Baker: , Avatar user square/Lori Bryson: , Avatar user square/Orlando Diggs: , Avatar user square/Kate Morrison: .
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

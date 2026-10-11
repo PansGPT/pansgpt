@@ -1,0 +1,22 @@
+const imgVariablesIcon = "https://www.figma.com/api/mcp/asset/bca18549-b7d0-456b-b2f5-b46601007c3e.svg";
+
+export default function FigmaVariablesNote({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[#7b61ff] border-dashed content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-md,8px)] items-start max-w-[1024px] p-[var(--spacing-2xl,20px)] relative rounded-[var(--spacing-md,8px)] w-[var(--width-xl,768px)]"} data-node-id="5263:372534" data-name="Figma Variables note">
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="5263:372535" data-name="Text and icon">
+        <div className="relative shrink-0 size-[24px]" data-node-id="5263:372547" data-name="_Variables icon">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVariablesIcon} />
+        </div>
+        <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)]" data-node-id="5263:372536">
+          Figma Variables note
+        </p>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" data-node-id="5263:372546">
+          You can delete this
+        </p>
+      </div>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="5263:372538">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae congue nullam consectetur ornare consectetur sed in leo. Enim imperdiet urna tincidunt.
+      </p>
+    </div>
+  );
+}

@@ -1,0 +1,1074 @@
+[
+  {
+    "id": "1138:23",
+    "variants": [
+      [
+        "1139:80097",
+        "Type=Check, Status=Incomplete, Size=sm",
+        24,
+        24,
+        [
+          [
+            "Dot",
+            8,
+            8,
+            8,
+            8
+          ]
+        ]
+      ],
+      [
+        "9354:551756",
+        "Type=Number, Status=Incomplete, Size=sm",
+        24,
+        24,
+        [
+          [
+            "Text",
+            10,
+            3,
+            5,
+            18
+          ]
+        ]
+      ],
+      [
+        "1139:80082",
+        "Type=Check, Status=Incomplete, Size=md",
+        32,
+        32,
+        [
+          [
+            "Dot",
+            11,
+            11,
+            10,
+            10
+          ]
+        ]
+      ],
+      [
+        "9354:551759",
+        "Type=Number, Status=Incomplete, Size=md",
+        32,
+        32,
+        [
+          [
+            "Text",
+            12.5,
+            6,
+            6,
+            20
+          ]
+        ]
+      ],
+      [
+        "1139:80037",
+        "Type=Check, Status=Complete, Size=sm",
+        24,
+        24,
+        [
+          [
+            "check",
+            6,
+            6,
+            12,
+            12
+          ]
+        ]
+      ],
+      [
+        "9354:551774",
+        "Type=Number, Status=Complete, Size=sm",
+        24,
+        24,
+        [
+          [
+            "check",
+            6,
+            6,
+            12,
+            12
+          ]
+        ]
+      ],
+      [
+        "1139:80061",
+        "Type=Check, Status=Complete, Size=md",
+        32,
+        32,
+        [
+          [
+            "check",
+            8,
+            8,
+            16,
+            16
+          ]
+        ]
+      ],
+      [
+        "9354:551777",
+        "Type=Number, Status=Complete, Size=md",
+        32,
+        32,
+        [
+          [
+            "check",
+            8,
+            8,
+            16,
+            16
+          ]
+        ]
+      ],
+      [
+        "1139:79866",
+        "Type=Check, Status=Current, Size=sm",
+        24,
+        24,
+        [
+          [
+            "Dot",
+            8,
+            8,
+            8,
+            8
+          ]
+        ]
+      ],
+      [
+        "9354:551792",
+        "Type=Number, Status=Current, Size=sm",
+        24,
+        24,
+        [
+          [
+            "Text",
+            10,
+            3,
+            5,
+            18
+          ]
+        ]
+      ],
+      [
+        "1139:79863",
+        "Type=Check, Status=Current, Size=md",
+        32,
+        32,
+        [
+          [
+            "Dot",
+            11,
+            11,
+            10,
+            10
+          ]
+        ]
+      ],
+      [
+        "9354:551795",
+        "Type=Number, Status=Current, Size=md",
+        32,
+        32,
+        [
+          [
+            "Text",
+            12.5,
+            6,
+            6,
+            20
+          ]
+        ]
+      ]
+    ]
+  },
+  {
+    "id": "1138:1954",
+    "variants": [
+      [
+        "1139:78992",
+        "Type=Text line, Status=Incomplete, Size=sm",
+        344,
+        52,
+        [
+          [
+            "Content",
+            0,
+            12,
+            344,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:74417",
+        "Type=Icon left, Status=Incomplete, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "9354:552406",
+        "Type=Number left, Status=Incomplete, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "5042:383470",
+        "Type=Featured icon left, Status=Incomplete, Size=sm",
+        344,
+        68,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            68
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            284,
+            68
+          ]
+        ]
+      ],
+      [
+        "1254:140693",
+        "Type=Icon left, Status=Incomplete, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "9354:552413",
+        "Type=Number left, Status=Incomplete, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "5042:383477",
+        "Type=Featured icon left, Status=Incomplete, Size=md",
+        344,
+        80,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            80
+          ],
+          [
+            "Text and supporting text",
+            64,
+            0,
+            280,
+            80
+          ]
+        ]
+      ],
+      [
+        "1254:140260",
+        "Type=Icon left, Status=Complete, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "9354:552420",
+        "Type=Number left, Status=Complete, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "5042:383491",
+        "Type=Featured icon left, Status=Complete, Size=sm",
+        344,
+        68,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            68
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            284,
+            68
+          ]
+        ]
+      ],
+      [
+        "1254:140679",
+        "Type=Icon left, Status=Complete, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "9354:552427",
+        "Type=Number left, Status=Complete, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "5042:383498",
+        "Type=Featured icon left, Status=Complete, Size=md",
+        344,
+        80,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            80
+          ],
+          [
+            "Text and supporting text",
+            64,
+            0,
+            280,
+            80
+          ]
+        ]
+      ],
+      [
+        "1254:140080",
+        "Type=Icon left, Status=Current, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "9354:552434",
+        "Type=Number left, Status=Current, Size=sm",
+        344,
+        66,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            24,
+            66
+          ],
+          [
+            "Text and supporting text",
+            36,
+            0,
+            308,
+            66
+          ]
+        ]
+      ],
+      [
+        "5042:383512",
+        "Type=Featured icon left, Status=Current, Size=sm",
+        344,
+        68,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            68
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            284,
+            68
+          ]
+        ]
+      ],
+      [
+        "1254:140665",
+        "Type=Icon left, Status=Current, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "9354:552441",
+        "Type=Number left, Status=Current, Size=md",
+        344,
+        84,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            32,
+            84
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            296,
+            84
+          ]
+        ]
+      ],
+      [
+        "5042:383519",
+        "Type=Featured icon left, Status=Current, Size=md",
+        344,
+        80,
+        [
+          [
+            "Connector wrap",
+            0,
+            0,
+            48,
+            80
+          ],
+          [
+            "Text and supporting text",
+            64,
+            0,
+            280,
+            80
+          ]
+        ]
+      ],
+      [
+        "1139:75888",
+        "Type=Icon top, Status=Incomplete, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "9354:552448",
+        "Type=Number top, Status=Incomplete, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "5042:384005",
+        "Type=Featured icon top, Status=Incomplete, Size=sm",
+        320,
+        92,
+        [
+          [
+            "Featured icon",
+            140,
+            0,
+            40,
+            40
+          ],
+          [
+            "Content",
+            0,
+            52,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:79004",
+        "Type=Text line, Status=Incomplete, Size=md",
+        344,
+        64,
+        [
+          [
+            "Content",
+            0,
+            16,
+            344,
+            48
+          ]
+        ]
+      ],
+      [
+        "1139:75963",
+        "Type=Icon top, Status=Incomplete, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "9354:552453",
+        "Type=Number top, Status=Incomplete, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "5042:384010",
+        "Type=Featured icon top, Status=Incomplete, Size=md",
+        320,
+        114,
+        [
+          [
+            "Featured icon",
+            136,
+            0,
+            48,
+            48
+          ],
+          [
+            "Content",
+            0,
+            64,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "1139:78956",
+        "Type=Text line, Status=Current, Size=sm",
+        344,
+        52,
+        [
+          [
+            "Content",
+            0,
+            12,
+            344,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:75928",
+        "Type=Icon top, Status=Current, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "9354:552458",
+        "Type=Number top, Status=Current, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "5042:384020",
+        "Type=Featured icon top, Status=Current, Size=sm",
+        320,
+        92,
+        [
+          [
+            "Featured icon",
+            140,
+            0,
+            40,
+            40
+          ],
+          [
+            "Content",
+            0,
+            52,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:78852",
+        "Type=Text line, Status=Current, Size=md",
+        344,
+        64,
+        [
+          [
+            "Content",
+            0,
+            16,
+            344,
+            48
+          ]
+        ]
+      ],
+      [
+        "1139:75948",
+        "Type=Icon top, Status=Current, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "9354:552463",
+        "Type=Number top, Status=Current, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "5042:384025",
+        "Type=Featured icon top, Status=Current, Size=md",
+        320,
+        114,
+        [
+          [
+            "Featured icon",
+            136,
+            0,
+            48,
+            48
+          ],
+          [
+            "Content",
+            0,
+            64,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "1139:78908",
+        "Type=Text line, Status=Complete, Size=sm",
+        344,
+        52,
+        [
+          [
+            "Content",
+            0,
+            12,
+            344,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:75833",
+        "Type=Icon top, Status=Complete, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "9354:552468",
+        "Type=Number top, Status=Complete, Size=sm",
+        320,
+        76,
+        [
+          [
+            "_Step icon base",
+            148,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            0,
+            36,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "5042:384035",
+        "Type=Featured icon top, Status=Complete, Size=sm",
+        320,
+        92,
+        [
+          [
+            "Featured icon",
+            140,
+            0,
+            40,
+            40
+          ],
+          [
+            "Content",
+            0,
+            52,
+            320,
+            40
+          ]
+        ]
+      ],
+      [
+        "1139:78872",
+        "Type=Text line, Status=Complete, Size=md",
+        344,
+        64,
+        [
+          [
+            "Content",
+            0,
+            16,
+            344,
+            48
+          ]
+        ]
+      ],
+      [
+        "1139:75813",
+        "Type=Icon top, Status=Complete, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "9354:552473",
+        "Type=Number top, Status=Complete, Size=md",
+        320,
+        98,
+        [
+          [
+            "_Step icon base",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            0,
+            48,
+            320,
+            50
+          ]
+        ]
+      ],
+      [
+        "5042:384040",
+        "Type=Featured icon top, Status=Complete, Size=md",
+        320,
+        114,
+        [
+          [
+            "Featured icon",
+            136,
+            0,
+            48,
+            48
+          ],
+          [
+            "Content",
+            0,
+            64,
+            320,
+            50
+          ]
+        ]
+      ]
+    ]
+  }
+]

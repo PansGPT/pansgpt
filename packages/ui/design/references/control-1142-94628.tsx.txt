@@ -1,0 +1,86 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/88424b8c-3377-4c68-afd0-c85dd5ff77e1.svg";
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/a4ba6d5e-2da3-4d54-8689-9c9680f773d8.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/cb1a4019-9cd1-4c49-8747-109d161a7a9e.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "md", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndMdAndCheckboxAndDefault = checked && indeterminate === "False" && size === "md" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px] ${isCheckedAndFalseAndMdAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndMdAndCheckboxAndDefault ? "node-1190_580" : "node-1097_63887"}>
+      {isCheckedAndFalseAndMdAndCheckboxAndDefault && (
+        <div className="absolute inset-[15%]" data-node-id="1190:582" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  badge?: boolean;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "md";
+  state?: "Default";
+  type?: "Icon card";
+};
+
+function RadioGroupItem({ className, badge = true, breakpoint = "Mobile", selected = false, size = "md", state = "Default", type = "Icon card" }: RadioGroupItemProps) {
+  const isSelectedAndMdAndIconCardAndDefaultAndMobile = selected && size === "md" && type === "Icon card" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isSelectedAndMdAndIconCardAndDefaultAndMobile ? String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]` : String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]`}`} id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94628" : "node-1142_94643"}>
+      <div className={`border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full ${isSelectedAndMdAndIconCardAndDefaultAndMobile ? String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]` : String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]`}`} id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94629" : "node-1142_94644"} data-name="Header">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94630" : "node-1142_94645"} data-name="Content">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94902" : "node-1142_94898"} data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-I1142_94902-4041_412675" : "node-I1142_94898-4041_412675"} data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94633" : "node-1142_94648"}>
+            Basic plan
+          </p>
+        </div>
+        {!selected && size === "md" && type === "Icon card" && state === "Default" && breakpoint === "Mobile" && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" data-node-id="5373:388162" data-name="_Checkbox base" />}
+        {isSelectedAndMdAndIconCardAndDefaultAndMobile && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />}
+      </div>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94635" : "node-1142_94650"} data-name="Body">
+        {badge && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-sm,6px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="1142:94657" data-name="Badge">
+            <div className="relative shrink-0 size-[8px]" data-node-id="I1142:94657;4825:411756" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1142:94657;4825:411757">
+              Limited time only
+            </p>
+          </div>
+        )}
+        <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94636" : "node-1142_94651"} data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94637" : "node-1142_94652"} data-name="Price">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94638" : "node-1142_94653"}>
+              $10
+            </p>
+            <div className="content-stretch flex items-start pb-[3px] relative shrink-0" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94639" : "node-1142_94654"} data-name="Time period">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94640" : "node-1142_94655"}>
+                per month
+              </p>
+            </div>
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" id={isSelectedAndMdAndIconCardAndDefaultAndMobile ? "node-1142_94641" : "node-1142_94656"}>
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

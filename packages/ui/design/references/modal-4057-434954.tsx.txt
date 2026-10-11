@@ -1,0 +1,219 @@
+const imgTypeLineSizeSmColorPrimary = "https://www.figma.com/api/mcp/asset/5ee35cb4-e7e2-4627-9e95-14986bb85f47.svg";
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/864165ff-3410-4bae-9614-928a7016672e.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/5bf30880-b9d3-4b78-87df-5f6127db612e.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/fdcf9084-8a40-457f-89e5-afce12da5817.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/485f45f5-4642-483f-afe5-94a32d97b474.svg";
+const imgDividerWrap = "https://www.figma.com/api/mcp/asset/c81f8eb0-8eeb-4189-8728-6c076ec9ffaf.svg";
+const imgMessageChatCircle = "https://www.figma.com/api/mcp/asset/64b80ed0-2249-4b6e-853f-a2c5be460f88.svg";
+
+type CheckIconProps = {
+  className?: string;
+  color?: "Primary";
+  size?: "sm";
+  type?: "Line";
+};
+
+function CheckIcon({ className, color = "Primary", size = "sm", type = "Line" }: CheckIconProps) {
+  return (
+    <div className={className || "overflow-clip relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="3488:546955">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTypeLineSizeSmColorPrimary} />
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "Plan 02";
+};
+
+function Modal({ className, breakpoint = "Desktop", type = "Plan 02" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[960px] items-center justify-center overflow-clip px-[var(--container-padding-desktop,32px)] py-[var(--spacing-4xl,32px)] relative w-[1440px]"} data-node-id="4057:434954">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411215" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411215;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center max-w-[640px] overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:434174" data-name="Modal">
+        <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4059:420850" data-name="_Modal header">
+          <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4059:420850;4055:413607" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[48px]" data-node-id="I4059:420850;4055:413608" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-lg,16px)]" />
+              <div className="absolute left-[11px] size-[24px] top-[11px]" data-node-id="I4059:420850;4055:413608;4041:412673" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" data-node-id="I4059:420850;4055:413609" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4059:420850;4055:413610">
+                Select plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4059:420850;4055:413611">
+                Simple and flexible per-user pricing.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="I4059:420850;4055:413612" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[24px]" data-node-id="I4059:420850;4055:413612;2763:420143" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I4059:420850;4059:420275" data-name="Padding bottom" />
+          <div className="h-px relative shrink-0 w-full" data-node-id="I4059:420850;4059:422184" data-name="Divider">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="4057:434176" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-2xl,20px)] items-start relative shrink-0 w-full" data-node-id="4057:434754" data-name="Pricing cards">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex flex-[1_0_0] flex-col items-start min-w-px relative rounded-[var(--spacing-lg,12px)]" data-node-id="4057:434755" data-name="Pricing card">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="4057:434756" data-name="Header">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xs,32px)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-xs,24px)] w-[min-content]" data-node-id="4057:434757">
+                  $10/mth
+                </p>
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="4057:434758" data-name="Heading and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="4057:434759">
+                    Basic plan
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="4057:434760">
+                    Billed annually
+                  </p>
+                </div>
+                <div className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip right-[16px] rounded-[var(--radius-sm,8px)] size-[20px] top-[16px]" data-node-id="4057:434764" data-name="_Checkbox base">
+                  <div className="absolute inset-[15%]" data-node-id="I4057:434764;1190:582" data-name="check">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                  </div>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-3xl,24px)] items-start p-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="4057:434765" data-name="Content">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434766" data-name="Check items">
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434767" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434767;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434767;3488:547158">
+                        Basic features
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434768" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434768;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434768;3488:547158">
+                        Basic reporting
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434769" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434769;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434769;3488:547158">
+                        Up to 10 individual users
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434770" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434770;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434770;3488:547158">
+                        20 GB data per user
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex flex-[1_0_0] flex-col items-start min-w-px relative rounded-[var(--spacing-lg,12px)]" data-node-id="4057:434771" data-name="Pricing card">
+              <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="4057:434772" data-name="Header">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-xs,32px)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-xs,24px)] w-[min-content]" data-node-id="4057:434773">
+                  $20/mth
+                </p>
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="4057:434774" data-name="Heading and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="4057:434775">
+                    Business plan
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="4057:434776">
+                    Billed annually
+                  </p>
+                </div>
+                <div className="absolute border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid right-[16px] rounded-[var(--radius-sm,8px)] size-[20px] top-[16px]" data-node-id="4057:434780" data-name="_Checkbox base" />
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-3xl,24px)] items-start p-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="4057:434781" data-name="Content">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434782" data-name="Check items">
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434783" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434783;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434783;3488:547158">
+                        Advanced features
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434784" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434784;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434784;3488:547158">
+                        Advanced reporting
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434785" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434785;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434785;3488:547158">
+                        Up to 20 individual users
+                      </p>
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="4057:434786" data-name="Check item text">
+                    <CheckIcon className="overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+                    <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="I4057:434786;3488:547157" data-name="Text wrap">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:434786;3488:547158">
+                        40 GB data per user
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start justify-center pt-[var(--spacing-4xl,32px)] relative shrink-0 w-full" data-node-id="4057:434183" data-name="_Modal actions">
+          <div className="h-[25px] relative shrink-0 w-full" data-node-id="I4057:434183;4057:415133" data-name="Divider-wrap">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap} />
+          </div>
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center pb-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4057:434183;4057:414534" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I4057:434183;4057:414375" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="relative shrink-0 size-[20px]" data-node-id="I4057:434183;4057:414375;3466:442262" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMessageChatCircle} />
+              </div>
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:434183;4057:414375;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:434183;4057:414375;3287:433081">
+                  Chat to us
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center justify-end min-w-px relative" data-node-id="I4057:434183;4057:414376" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I4057:434183;4057:414377" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:434183;4057:414377;6421:274451" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:434183;4057:414377;3287:433081">
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I4057:434183;4057:414378" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:434183;4057:414378;6421:273911" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:434183;4057:414378;3287:432949">
+                    Select plan
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

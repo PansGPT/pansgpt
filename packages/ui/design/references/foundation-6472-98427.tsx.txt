@@ -1,0 +1,82 @@
+const imgConnector = "https://www.figma.com/api/mcp/asset/1d9e18fa-dfa1-485c-823e-5058d3a5aab0.svg";
+const imgConnector1 = "https://www.figma.com/api/mcp/asset/9dab1fc4-c740-4d5a-934a-a276f1aa87e8.svg";
+const imgConnector2 = "https://www.figma.com/api/mcp/asset/cbf8e086-bef6-451a-aeb5-6c957fcdb43b.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/cb5bed08-9c3a-4eca-84a4-da66f296660c.svg";
+
+type DocumentationTableCellProps = {
+  className?: string;
+  cursor?: boolean;
+  followOn?: boolean;
+  modifier?: boolean;
+  type?: "Header" | "Lead cell primary" | "Lead cell secondary" | "Lead cell tertiary" | "Cell default" | "Cell swatch light" | "Cell swatch dark" | "Divider";
+};
+
+export default function DocumentationTableCell({ className, cursor = true, followOn = false, modifier = true, type = "Header" }: DocumentationTableCellProps) {
+  const isCellDefault = type === "Cell default";
+  const isCellSwatchDark = type === "Cell swatch dark";
+  const isCellSwatchLight = type === "Cell swatch light";
+  const isCellSwatchLightOrCellSwatchDark = ["Cell swatch light", "Cell swatch dark"].includes(type);
+  const isDivider = type === "Divider";
+  const isHeader = type === "Header";
+  const isLeadCellSecondary = type === "Lead cell secondary";
+  const isLeadCellSecondaryOrLeadCellTertiary = ["Lead cell secondary", "Lead cell tertiary"].includes(type);
+  const isLeadCellTertiary = type === "Lead cell tertiary";
+  return (
+    <div className={className || `${String.raw`border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid relative `}${isHeader ? "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start justify-center min-w-[112px] pb-[var(--spacing-xl,16px)] pr-[var(--spacing-7xl,64px)] w-[112px]" : isCellSwatchLightOrCellSwatchDark ? "content-stretch flex gap-[var(--spacing-md,8px)] items-center min-h-[80px] min-w-[128px] pr-[var(--spacing-7xl,64px)] py-[var(--spacing-lg,12px)]" : isCellDefault ? "content-stretch flex items-center min-h-[80px] min-w-[128px] pr-[var(--spacing-7xl,64px)] py-[var(--spacing-lg,12px)]" : isLeadCellTertiary ? "content-stretch flex items-center min-h-[80px] min-w-[112px] pl-[var(--spacing-10xl,128px)] pr-[var(--spacing-7xl,64px)] py-[var(--spacing-lg,12px)]" : isLeadCellSecondary ? "content-stretch flex items-center min-h-[80px] min-w-[112px] px-[var(--spacing-7xl,64px)] py-[var(--spacing-lg,12px)]" : isDivider ? String.raw`bg-[var(--colors\/background\/bg-secondary,#fafafa)] h-[12px] min-w-[112px] w-[128px]` : "content-stretch flex items-center min-h-[80px] min-w-[112px] pr-[var(--spacing-7xl,64px)] py-[var(--spacing-lg,12px)]"}`} id={isHeader ? "node-5248_376665" : isCellSwatchDark ? "node-6483_313900" : isCellSwatchLight ? "node-6483_313895" : isCellDefault ? "node-5245_375732" : isLeadCellTertiary ? "node-6472_98426" : isLeadCellSecondary ? "node-6472_98416" : isDivider ? "node-6487_350379" : "node-5245_375739"}>
+      {["Lead cell primary", "Lead cell secondary", "Lead cell tertiary", "Cell swatch light", "Cell swatch dark"].includes(type) && (
+        <div className={`border border-solid content-stretch flex items-center py-[4px] relative shrink-0 ${isCellSwatchDark ? String.raw`bg-[var(--colors\/background\/bg-primary,#0c0e12)] border-[var(--colors\/border\/border-secondary,#22262f)] gap-[var(--spacing-sm,6px)] pl-[4px] pr-[12px] rounded-[var(--radius-xl,20px)]` : isCellSwatchLight ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] gap-[var(--spacing-sm,6px)] pl-[4px] pr-[12px] rounded-[var(--radius-xl,20px)]` : isLeadCellSecondaryOrLeadCellTertiary ? String.raw`[word-break:break-word] bg-[var(--colors\/background\/bg-secondary,#fafafa)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] px-[12px] rounded-[var(--radius-sm,8px)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap` : String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] px-[12px] rounded-[var(--radius-sm,8px)]`}`} id={isCellSwatchDark ? "node-6483_313901" : isCellSwatchLight ? "node-6483_313896" : isLeadCellTertiary ? "node-6474_162940" : isLeadCellSecondary ? "node-6474_162187" : "node-6474_161786"} data-name="Badge">
+          {["Lead cell primary", "Lead cell secondary", "Lead cell tertiary"].includes(type) && (
+            <p className={`${String.raw`relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] `}${isLeadCellSecondaryOrLeadCellTertiary ? "" : String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap`}`} id={isLeadCellTertiary ? "node-6472_98424" : isLeadCellSecondary ? "node-6472_98414" : "node-5245_375738"}>
+              Content
+            </p>
+          )}
+          {isLeadCellSecondaryOrLeadCellTertiary && modifier && (
+            <p className="relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]" data-node-id="6472:98455">
+              _modifier
+            </p>
+          )}
+          {isCellSwatchLightOrCellSwatchDark && (
+            <>
+              <div className={`border border-solid content-stretch flex items-center justify-center p-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0 size-[32px] ${isCellSwatchDark ? String.raw`bg-[var(--colors\/background\/bg-primary,#0c0e12)] border-[var(--colors\/border\/border-secondary,#22262f)]` : String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)]`}`} id={isCellSwatchDark ? "node-6483_313902" : "node-6483_313897"} data-name="Swatch">
+                <div className={`flex-[1_0_0] h-full min-w-px relative rounded-[var(--radius-xs,6px)] ${isCellSwatchDark ? String.raw`bg-[var(--colors\/background\/bg-primary-solid,#13161b)]` : String.raw`bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)]`}`} id={isCellSwatchDark ? "node-6483_313903" : "node-6483_313898"} data-name="Color">
+                  {cursor && (
+                    <div className="absolute left-[10px] size-[20px] top-[10px]" data-node-id="6487:339577" data-name="Cursor">
+                      <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                        <img alt="" className="block max-w-none size-full" src={imgCursor} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap `}${isCellSwatchDark ? String.raw`text-[color:var(--colors\/text\/text-primary-\(900\),#f7f7f7)]` : String.raw`text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]`}`} id={isCellSwatchDark ? "node-6483_313904" : "node-6483_313899"}>
+                gray-900
+              </p>
+            </>
+          )}
+        </div>
+      )}
+      {isLeadCellSecondaryOrLeadCellTertiary && (
+        <div className={`absolute h-[64px] top-[-24px] w-[32px] ${isLeadCellTertiary ? "left-[96px]" : "left-[32px]"}`} id={isLeadCellTertiary ? "node-6476_313459" : "node-6472_98415"} data-name="Connector">
+          <div className="absolute inset-[0_0_-0.78%_-1.56%]">
+            <img alt="" className="block max-w-none size-full" src={imgConnector} />
+          </div>
+        </div>
+      )}
+      {["Cell default", "Header"].includes(type) && (
+        <p className={`${String.raw`[word-break:break-word] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] whitespace-nowrap `}${isHeader ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium leading-[var(--line-height\/text-xs,18px)] text-[length:var(--font-size\/text-xs,12px)]` : String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]`}`} id={isHeader ? "node-5245_376510" : "node-5245_375731"}>
+          {isCellDefault ? "Content" : "Heading"}
+        </p>
+      )}
+      {isLeadCellSecondary && followOn && (
+        <div className="absolute h-[144px] left-[32px] top-[-104px] w-[32px]" data-node-id="6487:350174" data-name="Connector">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnector1} />
+        </div>
+      )}
+      {isLeadCellTertiary && followOn && (
+        <div className="absolute h-[144px] left-[96px] top-[-104px] w-[32px]" data-node-id="6487:350340" data-name="Connector">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnector2} />
+        </div>
+      )}
+    </div>
+  );
+}

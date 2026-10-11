@@ -1,0 +1,44 @@
+type DesignNoteProps = {
+  className?: string;
+  badge?: boolean;
+  size?: "sm" | "md";
+  supportingText?: boolean;
+};
+
+export default function DesignNote({ className, badge = true, size = "md", supportingText = true }: DesignNoteProps) {
+  const isMd = size === "md";
+  const isSm = size === "sm";
+  return (
+    <div className={className || `content-stretch flex flex-col items-start max-w-[1024px] relative w-[var(--paragraph-max-width,720px)] ${isSm ? "gap-[var(--spacing-md,8px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isSm ? "node-2680_401978" : "node-2680_401975"}>
+      <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isSm ? "node-2680_401999" : "node-2680_401988"} data-name="Text and badge">
+        <p className={`${String.raw`[word-break:break-word] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] whitespace-nowrap `}${isSm ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)]` : String.raw`font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] leading-[var(--line-height\/display-xs,32px)] text-[length:var(--font-size\/display-xs,24px)]`}`} id={isSm ? "node-2680_401979" : "node-2680_401976"}>
+          Heading
+        </p>
+        {isMd && badge && (
+          <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[10px] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2680:401985" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I2680:401985;3918:411505">
+              New
+            </p>
+          </div>
+        )}
+        {isSm && badge && (
+          <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="2680:401992" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I2680:401992;3918:415771">
+              New
+            </p>
+          </div>
+        )}
+      </div>
+      {isMd && supportingText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="2680:401977">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae congue nullam consectetur ornare consectetur sed in leo. Enim imperdiet urna tincidunt at integer.
+        </p>
+      )}
+      {isSm && supportingText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="2680:401980">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae congue nullam consectetur ornare consectetur sed in leo. Enim imperdiet urna tincidunt at integer.
+        </p>
+      )}
+    </div>
+  );
+}

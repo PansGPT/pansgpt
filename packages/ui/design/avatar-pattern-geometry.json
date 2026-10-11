@@ -1,0 +1,1406 @@
+[
+  {
+    "id": "1274:812",
+    "variants": [
+      {
+        "id": "1274:811",
+        "name": "Size=xs",
+        "width": 256,
+        "height": 24,
+        "layers": [
+          [
+            "Avatars",
+            0,
+            0,
+            224,
+            24
+          ],
+          [
+            "Avatar",
+            0,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            20,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            40,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            60,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            80,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            100,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            120,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            140,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            160,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            180,
+            0,
+            24,
+            24
+          ],
+          [
+            "Avatar",
+            200,
+            0,
+            24,
+            24
+          ],
+          [
+            "Text",
+            200,
+            3,
+            24,
+            18
+          ],
+          [
+            "_Avatar add button",
+            232,
+            0,
+            24,
+            24
+          ],
+          [
+            "Content",
+            232,
+            0,
+            24,
+            24
+          ],
+          [
+            "plus",
+            236,
+            4,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:813",
+        "name": "Size=sm",
+        "width": 312,
+        "height": 32,
+        "layers": [
+          [
+            "Avatars",
+            0,
+            0,
+            272,
+            32
+          ],
+          [
+            "Avatar",
+            0,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            24,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            48,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            72,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            96,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            120,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            144,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            168,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            192,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            216,
+            0,
+            32,
+            32
+          ],
+          [
+            "Avatar",
+            240,
+            0,
+            32,
+            32
+          ],
+          [
+            "Text",
+            240,
+            6,
+            32,
+            20
+          ],
+          [
+            "_Avatar add button",
+            280,
+            0,
+            32,
+            32
+          ],
+          [
+            "Content",
+            284,
+            4,
+            24,
+            24
+          ],
+          [
+            "plus",
+            288,
+            8,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:927",
+        "name": "Size=md",
+        "width": 368,
+        "height": 40,
+        "layers": [
+          [
+            "Avatars",
+            0,
+            0,
+            320,
+            40
+          ],
+          [
+            "Avatar",
+            0,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            28,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            56,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            84,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            112,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            140,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            168,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            196,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            224,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            252,
+            0,
+            40,
+            40
+          ],
+          [
+            "Avatar",
+            280,
+            0,
+            40,
+            40
+          ],
+          [
+            "Text",
+            280,
+            8,
+            40,
+            24
+          ],
+          [
+            "_Avatar add button",
+            328,
+            0,
+            40,
+            40
+          ],
+          [
+            "Content",
+            334,
+            6,
+            28,
+            28
+          ],
+          [
+            "plus",
+            338,
+            10,
+            20,
+            20
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1102:4864",
+    "variants": [
+      {
+        "id": "1102:4863",
+        "name": "Size=xs, State=Default",
+        "width": 24,
+        "height": 24,
+        "layers": [
+          [
+            "Content",
+            0,
+            0,
+            24,
+            24
+          ],
+          [
+            "plus",
+            4,
+            4,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:686",
+        "name": "Size=sm, State=Default",
+        "width": 32,
+        "height": 32,
+        "layers": [
+          [
+            "Content",
+            4,
+            4,
+            24,
+            24
+          ],
+          [
+            "plus",
+            8,
+            8,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:883",
+        "name": "Size=md, State=Default",
+        "width": 40,
+        "height": 40,
+        "layers": [
+          [
+            "Content",
+            6,
+            6,
+            28,
+            28
+          ],
+          [
+            "plus",
+            10,
+            10,
+            20,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1102:4884",
+        "name": "Size=xs, State=Focus",
+        "width": 24,
+        "height": 24,
+        "layers": [
+          [
+            "Content",
+            0,
+            0,
+            24,
+            24
+          ],
+          [
+            "plus",
+            4,
+            4,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:683",
+        "name": "Size=sm, State=Focus",
+        "width": 32,
+        "height": 32,
+        "layers": [
+          [
+            "Content",
+            4,
+            4,
+            24,
+            24
+          ],
+          [
+            "plus",
+            8,
+            8,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:875",
+        "name": "Size=md, State=Focus",
+        "width": 40,
+        "height": 40,
+        "layers": [
+          [
+            "Content",
+            6,
+            6,
+            28,
+            28
+          ],
+          [
+            "plus",
+            10,
+            10,
+            20,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1102:4892",
+        "name": "Size=xs, State=Disabled",
+        "width": 24,
+        "height": 24,
+        "layers": [
+          [
+            "Content",
+            0,
+            0,
+            24,
+            24
+          ],
+          [
+            "plus",
+            4,
+            4,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:680",
+        "name": "Size=sm, State=Disabled",
+        "width": 32,
+        "height": 32,
+        "layers": [
+          [
+            "Content",
+            4,
+            4,
+            24,
+            24
+          ],
+          [
+            "plus",
+            8,
+            8,
+            16,
+            16
+          ]
+        ]
+      },
+      {
+        "id": "1274:872",
+        "name": "Size=md, State=Disabled",
+        "width": 40,
+        "height": 40,
+        "layers": [
+          [
+            "Content",
+            6,
+            6,
+            28,
+            28
+          ],
+          [
+            "plus",
+            10,
+            10,
+            20,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1102:4865",
+        "name": "Size=xs, State=Hover",
+        "width": 24,
+        "height": 24,
+        "layers": [
+          [
+            "Content",
+            0,
+            0,
+            24,
+            24
+          ],
+          [
+            "plus",
+            4,
+            4,
+            16,
+            16
+          ],
+          [
+            "Tooltip",
+            -25.5,
+            -43,
+            76,
+            40
+          ],
+          [
+            "Content",
+            -25.5,
+            -43,
+            76,
+            34
+          ],
+          [
+            "Text",
+            -13.5,
+            -35,
+            52,
+            18
+          ],
+          [
+            "Tooltip",
+            4.5,
+            -9,
+            16,
+            6
+          ],
+          [
+            "Cursor",
+            16,
+            12,
+            20,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1274:675",
+        "name": "Size=sm, State=Hover",
+        "width": 32,
+        "height": 32,
+        "layers": [
+          [
+            "Content",
+            4,
+            4,
+            24,
+            24
+          ],
+          [
+            "plus",
+            8,
+            8,
+            16,
+            16
+          ],
+          [
+            "Tooltip",
+            -22,
+            -43,
+            76,
+            40
+          ],
+          [
+            "Content",
+            -22,
+            -43,
+            76,
+            34
+          ],
+          [
+            "Text",
+            -10,
+            -35,
+            52,
+            18
+          ],
+          [
+            "Tooltip",
+            8,
+            -9,
+            16,
+            6
+          ],
+          [
+            "Cursor",
+            20,
+            16,
+            20,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1274:878",
+        "name": "Size=md, State=Hover",
+        "width": 40,
+        "height": 40,
+        "layers": [
+          [
+            "Content",
+            6,
+            6,
+            28,
+            28
+          ],
+          [
+            "plus",
+            10,
+            10,
+            20,
+            20
+          ],
+          [
+            "Tooltip",
+            -18,
+            -43,
+            76,
+            40
+          ],
+          [
+            "Content",
+            -18,
+            -43,
+            76,
+            34
+          ],
+          [
+            "Text",
+            -6,
+            -35,
+            52,
+            18
+          ],
+          [
+            "Tooltip",
+            12,
+            -9,
+            16,
+            6
+          ],
+          [
+            "Cursor",
+            28,
+            24,
+            20,
+            20
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "82:2793",
+    "variants": [
+      {
+        "id": "82:2792",
+        "name": "Size=md, Status icon=Online indicator",
+        "width": 204,
+        "height": 40,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            40,
+            40
+          ],
+          [
+            "_Avatar online indicator",
+            30,
+            30,
+            10,
+            10
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            156,
+            40
+          ],
+          [
+            "Text",
+            48,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            48,
+            20,
+            156,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1142:93208",
+        "name": "Size=lg, Status icon=Online indicator",
+        "width": 238,
+        "height": 48,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            48,
+            48
+          ],
+          [
+            "_Avatar online indicator",
+            36,
+            36,
+            12,
+            12
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            178,
+            48
+          ],
+          [
+            "Text",
+            60,
+            0,
+            141,
+            24
+          ],
+          [
+            "Supporting text",
+            60,
+            24,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1211:417",
+        "name": "Size=xl, Status icon=Online indicator",
+        "width": 250,
+        "height": 56,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            56,
+            56
+          ],
+          [
+            "_Avatar online indicator",
+            42,
+            42,
+            14,
+            14
+          ],
+          [
+            "Text and supporting text",
+            72,
+            2,
+            178,
+            52
+          ],
+          [
+            "Text",
+            72,
+            2,
+            158,
+            28
+          ],
+          [
+            "Supporting text",
+            72,
+            30,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1142:92911",
+        "name": "Size=sm, Status icon=Online indicator",
+        "width": 173,
+        "height": 38,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            3,
+            32,
+            32
+          ],
+          [
+            "_Avatar online indicator",
+            24,
+            27,
+            8,
+            8
+          ],
+          [
+            "Text and supporting text",
+            40,
+            0,
+            133,
+            38
+          ],
+          [
+            "Text",
+            40,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            40,
+            20,
+            133,
+            18
+          ]
+        ]
+      },
+      {
+        "id": "1109:523",
+        "name": "Size=md, Status icon=Company",
+        "width": 204,
+        "height": 40,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            40,
+            40
+          ],
+          [
+            "_Avatar company icon",
+            28,
+            28,
+            14,
+            14
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            156,
+            40
+          ],
+          [
+            "Text",
+            48,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            48,
+            20,
+            156,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "3302:420618",
+        "name": "Size=md, Status icon=Verified",
+        "width": 204,
+        "height": 40,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            40,
+            40
+          ],
+          [
+            "Verified tick",
+            26,
+            26,
+            14,
+            14
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            156,
+            40
+          ],
+          [
+            "Text",
+            48,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            48,
+            20,
+            156,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1142:93203",
+        "name": "Size=lg, Status icon=Company",
+        "width": 238,
+        "height": 48,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            48,
+            48
+          ],
+          [
+            "_Avatar company icon",
+            34,
+            34,
+            16,
+            16
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            178,
+            48
+          ],
+          [
+            "Text",
+            60,
+            0,
+            141,
+            24
+          ],
+          [
+            "Supporting text",
+            60,
+            24,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "3302:420623",
+        "name": "Size=lg, Status icon=Verified",
+        "width": 238,
+        "height": 48,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            48,
+            48
+          ],
+          [
+            "Verified tick",
+            32,
+            32,
+            16,
+            16
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            178,
+            48
+          ],
+          [
+            "Text",
+            60,
+            0,
+            141,
+            24
+          ],
+          [
+            "Supporting text",
+            60,
+            24,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1211:412",
+        "name": "Size=xl, Status icon=Company",
+        "width": 250,
+        "height": 56,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            56,
+            56
+          ],
+          [
+            "_Avatar company icon",
+            40,
+            40,
+            18,
+            18
+          ],
+          [
+            "Text and supporting text",
+            72,
+            2,
+            178,
+            52
+          ],
+          [
+            "Text",
+            72,
+            2,
+            158,
+            28
+          ],
+          [
+            "Supporting text",
+            72,
+            30,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "3302:420628",
+        "name": "Size=xl, Status icon=Verified",
+        "width": 250,
+        "height": 56,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            56,
+            56
+          ],
+          [
+            "Verified tick",
+            38,
+            38,
+            18,
+            18
+          ],
+          [
+            "Text and supporting text",
+            72,
+            2,
+            178,
+            52
+          ],
+          [
+            "Text",
+            72,
+            2,
+            158,
+            28
+          ],
+          [
+            "Supporting text",
+            72,
+            30,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1142:92906",
+        "name": "Size=sm, Status icon=Company",
+        "width": 173,
+        "height": 38,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            3,
+            32,
+            32
+          ],
+          [
+            "_Avatar company icon",
+            22,
+            25,
+            12,
+            12
+          ],
+          [
+            "Text and supporting text",
+            40,
+            0,
+            133,
+            38
+          ],
+          [
+            "Text",
+            40,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            40,
+            20,
+            133,
+            18
+          ]
+        ]
+      },
+      {
+        "id": "3302:420633",
+        "name": "Size=sm, Status icon=Verified",
+        "width": 173,
+        "height": 38,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            3,
+            32,
+            32
+          ],
+          [
+            "Verified tick",
+            20,
+            23,
+            12,
+            12
+          ],
+          [
+            "Text and supporting text",
+            40,
+            0,
+            133,
+            38
+          ],
+          [
+            "Text",
+            40,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            40,
+            20,
+            133,
+            18
+          ]
+        ]
+      },
+      {
+        "id": "1109:487",
+        "name": "Size=md, Status icon=False",
+        "width": 204,
+        "height": 40,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            40,
+            40
+          ],
+          [
+            "Text and supporting text",
+            48,
+            0,
+            156,
+            40
+          ],
+          [
+            "Text",
+            48,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            48,
+            20,
+            156,
+            20
+          ]
+        ]
+      },
+      {
+        "id": "1142:93198",
+        "name": "Size=lg, Status icon=False",
+        "width": 238,
+        "height": 48,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            48,
+            48
+          ],
+          [
+            "Text and supporting text",
+            60,
+            0,
+            178,
+            48
+          ],
+          [
+            "Text",
+            60,
+            0,
+            141,
+            24
+          ],
+          [
+            "Supporting text",
+            60,
+            24,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1211:422",
+        "name": "Size=xl, Status icon=False",
+        "width": 250,
+        "height": 56,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            0,
+            56,
+            56
+          ],
+          [
+            "Text and supporting text",
+            72,
+            2,
+            178,
+            52
+          ],
+          [
+            "Text",
+            72,
+            2,
+            158,
+            28
+          ],
+          [
+            "Supporting text",
+            72,
+            30,
+            178,
+            24
+          ]
+        ]
+      },
+      {
+        "id": "1142:92901",
+        "name": "Size=sm, Status icon=False",
+        "width": 173,
+        "height": 38,
+        "layers": [
+          [
+            "Avatar",
+            0,
+            3,
+            32,
+            32
+          ],
+          [
+            "Text and supporting text",
+            40,
+            0,
+            133,
+            38
+          ],
+          [
+            "Text",
+            40,
+            0,
+            123,
+            20
+          ],
+          [
+            "Supporting text",
+            40,
+            20,
+            133,
+            18
+          ]
+        ]
+      }
+    ]
+  }
+]

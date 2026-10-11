@@ -1,0 +1,53 @@
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/f2929d1b-9bac-4e05-b8c8-047f891db70b.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Focused";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = "False", indeterminate = "False", size = "md", state = "Focused", type = "Checkbox" }: CheckboxBaseProps) {
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] size-[20px]"} data-node-id="1097:63954" />;
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  selected?: "False";
+  size?: "md";
+  state?: "Focused";
+  type?: "Icon simple";
+};
+
+function RadioGroupItem({ className, breakpoint = "Desktop", selected = "False", size = "md", state = "Focused", type = "Icon simple" }: RadioGroupItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start overflow-clip p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[768px]"} data-node-id="1142:80473">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1142:80873" data-name="Content">
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="1142:80875" data-name="Featured icon">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:80875;4041:412675" data-name="check-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1142:80876" data-name="Text and supporting text">
+          <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:408512" data-name="Text and subtext">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3931:408513">
+              Basic plan
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:408514">
+              $10/month
+            </p>
+          </div>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="1142:80878">
+            Includes up to 10 users, 20 GB individual data and access to all features.
+          </p>
+        </div>
+      </div>
+      <CheckboxBase className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] shrink-0 size-[20px]" />
+    </div>
+  );
+}

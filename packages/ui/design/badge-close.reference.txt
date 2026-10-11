@@ -1,0 +1,479 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/e6ce2024-6708-4837-8e71-b53328fe6ef3.svg";
+const imgXClose1 = "https://www.figma.com/api/mcp/asset/9118712f-8b71-4d0c-890c-d04c8b446ffb.svg";
+const imgXClose2 = "https://www.figma.com/api/mcp/asset/e409ee0c-d67e-4765-984a-24ecd74bf003.svg";
+const imgXClose3 = "https://www.figma.com/api/mcp/asset/b175a9f3-55d5-4c59-bee4-cce59e96b830.svg";
+const imgXClose4 = "https://www.figma.com/api/mcp/asset/68c8c6f5-69d0-4b40-a3d7-39aef4b3580e.svg";
+const imgXClose5 = "https://www.figma.com/api/mcp/asset/e79a9a7a-8f3f-40f1-8dcd-6e6efd759a09.svg";
+const imgXClose6 = "https://www.figma.com/api/mcp/asset/84aaf8ba-65da-49fa-ac4e-72df50361ec2.svg";
+const imgXClose7 = "https://www.figma.com/api/mcp/asset/0949859b-e87e-46f8-bb0c-865939f8854c.svg";
+const imgXClose8 = "https://www.figma.com/api/mcp/asset/34cfcde2-24a4-4e55-ad3c-23738250c039.svg";
+const imgXClose9 = "https://www.figma.com/api/mcp/asset/61a1da3f-20ab-4918-803c-06d6501aa5ad.svg";
+const imgXClose10 = "https://www.figma.com/api/mcp/asset/e8d53252-5249-49fa-b8cc-2899c605d023.svg";
+const imgXClose11 = "https://www.figma.com/api/mcp/asset/090068e2-2a55-473c-9282-2a2d9591b790.svg";
+const imgXClose12 = "https://www.figma.com/api/mcp/asset/62911373-7cf8-4bf4-9634-47bb07ba9eb4.svg";
+const imgXClose13 = "https://www.figma.com/api/mcp/asset/b9e451a3-d252-4ac9-b1e1-9007b236cee5.svg";
+const imgXClose14 = "https://www.figma.com/api/mcp/asset/42a19b3d-d4bf-4648-96b6-48ae943beb96.svg";
+const imgXClose15 = "https://www.figma.com/api/mcp/asset/1bb77d1c-3bf1-4b17-b654-1396b391039a.svg";
+const imgXClose16 = "https://www.figma.com/api/mcp/asset/70ff7082-821f-45b2-963e-886873b46c5c.svg";
+const imgXClose17 = "https://www.figma.com/api/mcp/asset/fe04f006-7c58-414d-b34b-345b198f956b.svg";
+const imgXClose18 = "https://www.figma.com/api/mcp/asset/4d524e78-5f29-4d89-b15a-c8fa7879c83d.svg";
+const imgXClose19 = "https://www.figma.com/api/mcp/asset/d8e91d8d-ea17-453b-be8e-32d6ac783bf0.svg";
+const imgXClose20 = "https://www.figma.com/api/mcp/asset/10c4eb81-83a2-4b4b-b9d3-bcc1c2888b72.svg";
+const imgXClose21 = "https://www.figma.com/api/mcp/asset/37a6795b-9ee7-4487-8227-97de9d2fd981.svg";
+const imgXClose22 = "https://www.figma.com/api/mcp/asset/f3e806d2-bdae-4029-9614-ea523d799b30.svg";
+const imgXClose23 = "https://www.figma.com/api/mcp/asset/e7a548f6-1f6a-4544-84d4-61a43af0f5f1.svg";
+
+type BadgeCloseXProps = {
+  className?: string;
+  color?: "Gray" | "Primary" | "Error" | "Warning" | "Success" | "Gray blue" | "Blue light" | "Blue" | "Indigo" | "Purple" | "Pink" | "Orange";
+  state?: "Default" | "Hover";
+  type?: "Square" | "Rounded";
+};
+
+export default function BadgeCloseX({ className, color = "Gray", state = "Default", type = "Square" }: BadgeCloseXProps) {
+  if (type === "Square" && color === "Primary" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404273" data-name="Type=Square, Color=Primary, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404274" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Error" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404337" data-name="Type=Square, Color=Error, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404338" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose2} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Warning" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404361" data-name="Type=Square, Color=Warning, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404362" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose3} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Success" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404385" data-name="Type=Square, Color=Success, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404386" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose4} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Gray blue" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404409" data-name="Type=Square, Color=Gray blue, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404410" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose5} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Blue light" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404433" data-name="Type=Square, Color=Blue light, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404434" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose6} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Blue" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404457" data-name="Type=Square, Color=Blue, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404458" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose7} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Indigo" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404481" data-name="Type=Square, Color=Indigo, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404482" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose8} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Purple" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404505" data-name="Type=Square, Color=Purple, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404506" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose9} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Pink" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404529" data-name="Type=Square, Color=Pink, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404530" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose10} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Orange" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404579" data-name="Type=Square, Color=Orange, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404580" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose11} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Gray" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404230" data-name="Type=Rounded, Color=Gray, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404231" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Primary" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404275" data-name="Type=Rounded, Color=Primary, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404276" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose1} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Error" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404339" data-name="Type=Rounded, Color=Error, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404340" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose2} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Warning" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404363" data-name="Type=Rounded, Color=Warning, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404364" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose3} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Success" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404387" data-name="Type=Rounded, Color=Success, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404388" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose4} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Gray blue" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404411" data-name="Type=Rounded, Color=Gray blue, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404412" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose5} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Blue light" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404435" data-name="Type=Rounded, Color=Blue light, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404436" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose6} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Blue" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404459" data-name="Type=Rounded, Color=Blue, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404460" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose7} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Indigo" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404483" data-name="Type=Rounded, Color=Indigo, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404484" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose8} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Purple" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404507" data-name="Type=Rounded, Color=Purple, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404508" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose9} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Pink" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404531" data-name="Type=Rounded, Color=Pink, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404532" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose10} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Orange" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404581" data-name="Type=Rounded, Color=Orange, State=Default">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404582" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose11} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/gray\\/utility-gray-100,#f5f5f5)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4824:404173" data-name="Type=Square, Color=Gray, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4824:404174" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose12} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Primary" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/brand\\/utility-brand-100,#dcfae6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404281" data-name="Type=Square, Color=Primary, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404282" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose13} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Error" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/error\\/utility-error-100,#fee4e2)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404341" data-name="Type=Square, Color=Error, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404342" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose14} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Warning" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/warning\\/utility-warning-100,#fef0c7)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404365" data-name="Type=Square, Color=Warning, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404366" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose15} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Success" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/success\\/utility-success-100,#dcfae6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404389" data-name="Type=Square, Color=Success, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404390" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose16} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Gray blue" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/gray-blue\\/utility-gray-blue-100,#eaf5ec)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404413" data-name="Type=Square, Color=Gray blue, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404414" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose17} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Blue light" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/blue-light\\/utility-blue-light-100,#e0f2fe)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404437" data-name="Type=Square, Color=Blue light, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404438" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose18} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Blue" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/blue\\/utility-blue-100,#d1e9ff)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404461" data-name="Type=Square, Color=Blue, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404462" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose19} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Indigo" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/indigo\\/utility-indigo-100,#e0eaff)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404485" data-name="Type=Square, Color=Indigo, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404486" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose20} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Purple" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/purple\\/utility-purple-100,#ebe9fe)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404509" data-name="Type=Square, Color=Purple, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404510" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose21} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Pink" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/pink\\/utility-pink-100,#fce7f6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404533" data-name="Type=Square, Color=Pink, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404534" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose22} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Square" && color === "Orange" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/orange\\/utility-orange-100,#fdead7)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4825:404583" data-name="Type=Square, Color=Orange, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404584" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose23} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Gray" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/gray\\/utility-gray-100,#f5f5f5)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404234" data-name="Type=Rounded, Color=Gray, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404235" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose12} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Primary" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/brand\\/utility-brand-100,#dcfae6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404283" data-name="Type=Rounded, Color=Primary, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404284" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose13} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Error" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/error\\/utility-error-100,#fee4e2)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404343" data-name="Type=Rounded, Color=Error, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404344" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose14} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Warning" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/warning\\/utility-warning-100,#fef0c7)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404367" data-name="Type=Rounded, Color=Warning, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404368" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose15} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Success" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/success\\/utility-success-100,#dcfae6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404391" data-name="Type=Rounded, Color=Success, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404392" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose16} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Gray blue" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/gray-blue\\/utility-gray-blue-100,#eaf5ec)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404415" data-name="Type=Rounded, Color=Gray blue, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404416" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose17} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Blue light" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/blue-light\\/utility-blue-light-100,#e0f2fe)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404439" data-name="Type=Rounded, Color=Blue light, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404440" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose18} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Blue" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/blue\\/utility-blue-100,#d1e9ff)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404463" data-name="Type=Rounded, Color=Blue, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404464" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose19} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Indigo" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/indigo\\/utility-indigo-100,#e0eaff)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404487" data-name="Type=Rounded, Color=Indigo, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404488" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose20} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Purple" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/purple\\/utility-purple-100,#ebe9fe)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404511" data-name="Type=Rounded, Color=Purple, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404512" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose21} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Pink" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/pink\\/utility-pink-100,#fce7f6)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404535" data-name="Type=Rounded, Color=Pink, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404536" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose22} />
+        </div>
+      </div>
+    );
+  }
+  if (type === "Rounded" && color === "Orange" && state === "Hover") {
+    return (
+      <div className={className || "bg-[var(--component-colors\\/utility\\/orange\\/utility-orange-100,#fdead7)] content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)]"} data-node-id="4825:404585" data-name="Type=Rounded, Color=Orange, State=Hover">
+        <div className="relative shrink-0 size-[12px]" data-node-id="4825:404586" data-name="x-close">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose23} />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="4824:404161" data-name="Type=Square, Color=Gray, State=Default">
+      <div className="relative shrink-0 size-[12px]" data-node-id="4824:404315" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

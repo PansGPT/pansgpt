@@ -1,0 +1,93 @@
+const imgPlaceholder = "../assets/button-group-imgPlaceholder.svg";
+const imgArrowLeft = "../assets/button-group-imgArrowLeft.svg";
+const imgPlus = "../assets/button-group-imgPlus.svg";
+const imgArrowRight = "../assets/button-group-imgArrowRight.svg";
+
+type ButtonGroupProps = {
+  className?: string;
+  icon?: "False" | "Leading" | "Only";
+};
+
+export default function ButtonGroup({ className, icon = "False" }: ButtonGroupProps) {
+  const isFalseOrLeading = ["False", "Leading"].includes(icon);
+  const isLeading = icon === "Leading";
+  const isLeadingOrOnly = ["Leading", "Only"].includes(icon);
+  const isOnly = icon === "Only";
+  return (
+    <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex isolate items-start overflow-clip relative rounded-[var(--radius-md,12px)]"} id={isOnly ? "node-1046_10351" : isLeading ? "node-1046_10172" : "node-1046_10170"}>
+      <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[9] `}${isOnly ? "px-[var(--spacing-lg,12px)]" : isLeading ? "pl-[14px] pr-[var(--spacing-xl,16px)]" : "px-[var(--spacing-xl,16px)]"}`} id={isOnly ? "node-1046_10352" : isLeading ? "node-1046_10173" : "node-1046_10121"} data-name="_Button group base">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+        {isLeadingOrOnly && (
+          <div className="relative shrink-0 size-[20px]" id={isOnly ? "node-I1046_10352-3473_602539" : "node-I1046_10173-3473_602385"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isOnly ? imgArrowLeft : imgPlaceholder} />
+          </div>
+        )}
+        {isFalseOrLeading && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isLeading ? "node-I1046_10173-1046_9737" : "node-I1046_10121-1046_9414"}>
+            Text
+          </p>
+        )}
+        <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+      <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[8] `}${isOnly ? "px-[var(--spacing-lg,12px)]" : isLeading ? "pl-[14px] pr-[var(--spacing-xl,16px)]" : "px-[var(--spacing-xl,16px)]"}`} id={isOnly ? "node-1046_10353" : isLeading ? "node-1046_10174" : "node-1046_10120"} data-name="_Button group base">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+        {isLeadingOrOnly && (
+          <div className="relative shrink-0 size-[20px]" id={isOnly ? "node-I1046_10353-3473_602539" : "node-I1046_10174-3473_602385"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isOnly ? imgPlus : imgPlaceholder} />
+          </div>
+        )}
+        {isFalseOrLeading && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isLeading ? "node-I1046_10174-1046_9737" : "node-I1046_10120-1046_9414"}>
+            Text
+          </p>
+        )}
+        <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+      <div className={`${String.raw`border-[var(--colors\/border\/border-primary,#d5d7da)] border-r border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center min-h-[40px] py-[var(--spacing-md,8px)] relative shrink-0 z-[1] `}${isOnly ? "px-[var(--spacing-lg,12px)]" : isLeading ? "pl-[14px] pr-[var(--spacing-xl,16px)]" : "px-[var(--spacing-xl,16px)]"}`} id={isOnly ? "node-1046_10366" : isLeading ? "node-1046_10187" : "node-1046_10119"} data-name="_Button group base">
+        <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none" />
+        {isLeadingOrOnly && (
+          <div className="relative shrink-0 size-[20px]" id={isOnly ? "node-I1046_10366-3473_602539" : "node-I1046_10187-3473_602385"} data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isOnly ? imgArrowRight : imgPlaceholder} />
+          </div>
+        )}
+        {isFalseOrLeading && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isLeading ? "node-I1046_10187-1046_9737" : "node-I1046_10119-1046_9414"}>
+            Text
+          </p>
+        )}
+        <div className="absolute inset-[0_-0.5px_0_0] pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+
+## arrow-left
+**Node ID:** 3463:404455
+
+arrow, left
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+
+## arrow-right
+**Node ID:** 3463:404482
+
+arrow, right
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

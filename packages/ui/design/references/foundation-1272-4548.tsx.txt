@@ -1,0 +1,32 @@
+const imgSwatch = "https://www.figma.com/api/mcp/asset/8413ba0c-bb22-429f-b6d5-29e8b00e887b.svg";
+
+export default function SwatchBaseGradient({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip relative rounded-[var(--radius-xl,20px)] w-[280px]"} data-node-id="1272:4548" data-name="_Swatch base gradient">
+      <div className="[word-break:break-word] bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-l border-r border-solid content-stretch flex gap-[var(--spacing-xl,16px)] items-end justify-center pb-[var(--spacing-lg,12px)] pt-[212px] px-[var(--spacing-lg,12px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1272:4527" data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" data-node-id="1272:4530" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="1272:4528">
+            800
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1272:4529">
+            #000000
+          </p>
+        </div>
+        <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] text-center whitespace-nowrap" data-node-id="1272:4536">
+          45deg
+        </p>
+        <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative text-right" data-node-id="1272:4531" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] w-full" data-node-id="1272:4532">
+            600
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1272:4533">
+            #000000
+          </p>
+        </div>
+      </div>
+      <div className="absolute inset-[0_0_27.54%_0]" data-node-id="1272:4525" data-name="Swatch">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSwatch} />
+      </div>
+    </div>
+  );
+}

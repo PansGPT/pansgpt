@@ -1,0 +1,61 @@
+const imgStatusUnreadStateDefault = "https://www.figma.com/api/mcp/asset/273767dd-d4f6-4b61-b8a5-d60b560858e2.svg";
+const imgIcon = "https://www.figma.com/api/mcp/asset/4da99373-6984-44c8-98db-37116e137cde.svg";
+const imgStatusReadStateDefault = "https://www.figma.com/api/mcp/asset/231dab77-4370-407d-b8d8-6be389019bbd.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/6e7d7444-ef09-48ff-bd35-d3f73cbb511b.svg";
+const imgStatusFailedStateDefault = "https://www.figma.com/api/mcp/asset/6cb994f2-5ea6-41f3-9490-dd49514d1719.svg";
+const imgIcon1 = "https://www.figma.com/api/mcp/asset/25144f93-3cba-4aa7-90c6-f443d49ee80a.svg";
+
+type MessageStatusIconProps = {
+  className?: string;
+  state?: "Default" | "Hover";
+  status?: "Unread" | "Read" | "Failed";
+};
+
+export default function MessageStatusIcon({ className, state = "Default", status = "Unread" }: MessageStatusIconProps) {
+  const isFailedAndDefault = status === "Failed" && state === "Default";
+  const isFailedAndHover = status === "Failed" && state === "Hover";
+  const isHoverAndIsUnreadOrFailed = state === "Hover" && ["Unread", "Failed"].includes(status);
+  const isReadAndDefault = status === "Read" && state === "Default";
+  const isReadAndHover = status === "Read" && state === "Hover";
+  const isUnreadAndHover = status === "Unread" && state === "Hover";
+  return (
+    <div className={className || "relative size-[16px]"} id={isFailedAndHover ? "node-9244_2572" : isFailedAndDefault ? "node-9241_548210" : isReadAndHover ? "node-9244_2553" : isReadAndDefault ? "node-9241_548209" : isUnreadAndHover ? "node-9244_2546" : "node-9241_548208"}>
+      {state === "Default" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isFailedAndDefault ? imgStatusFailedStateDefault : isReadAndDefault ? imgStatusReadStateDefault : imgStatusUnreadStateDefault} />}
+      {isHoverAndIsUnreadOrFailed && (
+        <>
+          <div className={`absolute ${isFailedAndHover ? "left-[2px] size-[12px] top-[2px]" : "-translate-x-1/2 -translate-y-1/2 h-[6px] left-[calc(50%+0.5px)] top-1/2 w-[9px]"}`} id={isFailedAndHover ? "node-9244_2573" : "node-9244_2547"} data-name="Icon">
+            {isUnreadAndHover && (
+              <div className="absolute inset-[-12.5%_-8.33%]">
+                <img alt="" className="block max-w-none size-full" src={imgIcon} />
+              </div>
+            )}
+            {isFailedAndHover && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgIcon1} />}
+          </div>
+          <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%+0.5px)] top-[-34px]" id={isFailedAndHover ? "node-9244_2578" : "node-9244_2548"} data-name="Tooltip">
+            <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" id={isFailedAndHover ? "node-I9244_2578-1052_588" : "node-I9244_2548-1052_588"} data-name="Content">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isFailedAndHover ? "node-I9244_2578-1052_589" : "node-I9244_2548-1052_589"}>
+                {isFailedAndHover ? "Failed" : isUnreadAndHover ? "Unread" : ""}
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+      {isReadAndHover && (
+        <>
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute h-[6px] left-1/2 top-1/2 w-[13px]" data-node-id="9244:2554" data-name="Vector">
+            <div className="absolute inset-[-12.5%_-5.77%]">
+              <img alt="" className="block max-w-none size-full" src={imgVector} />
+            </div>
+          </div>
+          <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%+0.5px)] top-[-34px]" data-node-id="9244:2555" data-name="Tooltip">
+            <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9244:2555;1052:588" data-name="Content">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9244:2555;1052:589">
+                Read 2:20 PM
+              </p>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

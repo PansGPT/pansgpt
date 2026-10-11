@@ -1,0 +1,108 @@
+const imgLabelFalse = "https://www.figma.com/api/mcp/asset/1c09b315-1074-4d13-9d76-b28549df663b.svg";
+const imgSeries1 = "https://www.figma.com/api/mcp/asset/95e6e0bb-c0b7-4add-90db-99926a17caff.svg";
+const imgSeries2 = "https://www.figma.com/api/mcp/asset/93eea82a-5e6d-4dd1-afbb-dd7a8183371b.svg";
+const imgSeries3 = "https://www.figma.com/api/mcp/asset/6189637b-9819-464c-b739-2a2411793c28.svg";
+
+type YAxisLineProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxisLine({ className, label = "False" }: YAxisLineProps) {
+  return (
+    <div className={className || "h-[22px] relative w-[1216px]"} data-node-id="1062:47446">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLabelFalse} />
+    </div>
+  );
+}
+
+type YAxisProps = {
+  className?: string;
+  label?: "False";
+};
+
+function YAxis({ className, label = "False" }: YAxisProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[167px] items-start justify-between relative w-[1216px]"} data-node-id="1067:823">
+      <YAxisLine className="h-[22px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+      <YAxisLine className="h-[17px] relative shrink-0 w-full" />
+    </div>
+  );
+}
+
+type LineAndBarChartProps = {
+  className?: string;
+  axisLabels?: "False";
+  breakpoint?: "Desktop";
+  chartStyle?: "Line";
+  legend?: "False";
+};
+
+function LineAndBarChart({ className, axisLabels = "False", breakpoint = "Desktop", chartStyle = "Line", legend = "False" }: LineAndBarChartProps) {
+  return (
+    <div className={className || "h-[240px] relative w-[1216px]"} data-node-id="1061:47355">
+      <div className="absolute content-stretch flex gap-[var(--spacing-xs,4px)] inset-0 items-start" data-node-id="1061:46465" data-name="Axis">
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-start min-w-px relative" data-node-id="1061:46467" data-name="Content">
+          <YAxis className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative w-full" />
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal items-center justify-between leading-[var(--line-height\/text-xs,18px)] px-[var(--spacing-3xl,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center w-full whitespace-nowrap" data-node-id="1061:47353" data-name="_X-axis">
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46486">
+              Jan
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46487">
+              Feb
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46488">
+              Mar
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1063:47030">
+              Apr
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1063:47139">
+              May
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46489">
+              Jun
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46490">
+              Jul
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46491">
+              Aug
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46492">
+              Sep
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46493">
+              Oct
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46902">
+              Nov
+            </p>
+            <p className="relative shrink-0" data-node-id="I1061:47353;1061:46903">
+              Dec
+            </p>
+          </div>
+          <div className="absolute inset-[0_0_27px_0] overflow-clip" data-node-id="1062:46625" data-name="_Chart data">
+            <div className="absolute h-[146px] left-0 right-0 top-[46px]" data-node-id="I1062:46625;1062:46535" data-name="Series 1">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSeries1} />
+            </div>
+            <div className="absolute inset-[51.56%_0_35.5%_0]" data-node-id="I1062:46625;1062:46538" data-name="Series 2">
+              <div className="absolute inset-[-3.63%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries2} />
+              </div>
+            </div>
+            <div className="absolute inset-[55.73%_0_9.9%_0]" data-node-id="I1062:46625;1062:46576" data-name="Series 3">
+              <div className="absolute inset-[-1.37%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgSeries3} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

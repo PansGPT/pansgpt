@@ -1,0 +1,41 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="149.333" height="106.333" viewBox="0 0 149.333 106.333" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Card" filter="url(#filter0_dd_0_125)">
+<g id="Card_2">
+<path d="M17.1667 6.5C17.1667 3.18629 19.853 0.5 23.1667 0.5H126.167C129.48 0.5 132.167 3.18629 132.167 6.5V66.5C132.167 69.8137 129.48 72.5 126.167 72.5H23.1667C19.853 72.5 17.1667 69.8137 17.1667 66.5V6.5Z" fill="url(#paint0_linear_0_125)"/>
+<path d="M126.167 0.25C129.618 0.25 132.417 3.04822 132.417 6.5V66.5C132.417 69.9518 129.618 72.75 126.167 72.75H23.1667C19.7149 72.75 16.9167 69.9518 16.9167 66.5V6.5C16.9167 3.04822 19.7149 0.25 23.1667 0.25H126.167Z" stroke="black" stroke-opacity="0.08" stroke-width="0.5"/>
+</g>
+<path id="Chip" d="M27.1667 16.5C27.1667 15.3954 28.0621 14.5 29.1667 14.5H45.1667C46.2712 14.5 47.1667 15.3954 47.1667 16.5V27.5C47.1667 28.6046 46.2712 29.5 45.1667 29.5H29.1667C28.0621 29.5 27.1667 28.6046 27.1667 27.5V16.5Z" fill="#E9EAEB"/>
+<g id="Mastercard">
+<circle id="Circle" cx="113.833" cy="20.8334" r="8.33333" fill="#D5D7DA"/>
+<circle id="Circle_2" cx="103.833" cy="20.8333" r="8.33333" fill="#E9EAEB"/>
+</g>
+<g id="Vector">
+<path d="M27.1667 62.1667C27.1667 61.2462 27.9129 60.5 28.8333 60.5H45.5C46.4205 60.5 47.1667 61.2462 47.1667 62.1667C47.1667 63.0871 46.4205 63.8333 45.5 63.8333H28.8333C27.9129 63.8333 27.1667 63.0871 27.1667 62.1667Z" fill="#D5D7DA"/>
+<path d="M52.1667 62.1667C52.1667 61.2462 52.9129 60.5 53.8333 60.5H70.5C71.4205 60.5 72.1667 61.2462 72.1667 62.1667C72.1667 63.0871 71.4205 63.8333 70.5 63.8333H53.8333C52.9129 63.8333 52.1667 63.0871 52.1667 62.1667Z" fill="#D5D7DA"/>
+<path d="M77.1667 62.1667C77.1667 61.2462 77.9129 60.5 78.8333 60.5H95.5C96.4205 60.5 97.1667 61.2462 97.1667 62.1667C97.1667 63.0871 96.4205 63.8333 95.5 63.8333H78.8333C77.9129 63.8333 77.1667 63.0871 77.1667 62.1667Z" fill="#D5D7DA"/>
+<path d="M102.167 62.1667C102.167 61.2462 102.913 60.5 103.833 60.5H120.5C121.42 60.5 122.167 61.2462 122.167 62.1667C122.167 63.0871 121.42 63.8333 120.5 63.8333H103.833C102.913 63.8333 102.167 63.0871 102.167 62.1667Z" fill="#D5D7DA"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_dd_0_125" x="-4.76837e-07" y="0" width="149.333" height="106.333" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="3.33333" operator="erode" in="SourceAlpha" result="effect1_dropShadow_0_125"/>
+<feOffset dy="6.66667"/>
+<feGaussianBlur stdDeviation="3.33333"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.04 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_125"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="3.33333" operator="erode" in="SourceAlpha" result="effect2_dropShadow_0_125"/>
+<feOffset dy="16.6667"/>
+<feGaussianBlur stdDeviation="10"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.0627451 0 0 0 0 0.0941176 0 0 0 0 0.156863 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="effect1_dropShadow_0_125" result="effect2_dropShadow_0_125"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_0_125" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_0_125" x1="21.1715" y1="71.6477" x2="19.0801" y2="5.75054" gradientUnits="userSpaceOnUse">
+<stop stop-color="#F5F5F5"/>
+<stop offset="1" stop-color="#FAFAFA"/>
+</linearGradient>
+</defs>
+</svg>

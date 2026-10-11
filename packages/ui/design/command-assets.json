@@ -1,0 +1,628 @@
+{
+  "assets": [
+    {
+      "name": "actions_imgArrowRight",
+      "file": "command-actions_imgArrowRight.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6c85c12962c1e8ea81955a42aa441edf6b171c47c0f410f93908effdda157aa5"
+    },
+    {
+      "name": "actions_imgFilePlus03",
+      "file": "command-actions_imgFilePlus03.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "972708b2009b785ec400bab098da9c6b73bf07b0c2465dc1fb3ea727b15571c1"
+    },
+    {
+      "name": "actions_imgFolder",
+      "file": "command-actions_imgFolder.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "9306ec148039da80eb91757c764455a1fa0cac9ef67779f177434f5a65edddb3"
+    },
+    {
+      "name": "actions_imgFolderPlus",
+      "file": "command-actions_imgFolderPlus.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "e3e1aab0e4c2b92b87149991c7db14f43f9d7e9354c1ead580a42987489546d0"
+    },
+    {
+      "name": "actions_imgHelpCircle",
+      "file": "command-actions_imgHelpCircle.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "44111b5096e97cd9f7874aac05c1f7eb96abb39188f9d06c0ec6d70a0fdf3ce3"
+    },
+    {
+      "name": "actions_imgLayersTwo02",
+      "file": "command-actions_imgLayersTwo02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "d1b97bd006d7dfbc795b26c8d493c78ab5f9148a9bef12e70106fe3df216aa07"
+    },
+    {
+      "name": "actions_imgSearchLg",
+      "file": "command-actions_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "actions_imgUser01",
+      "file": "command-actions_imgUser01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "00b3b5f6e51ff46b3fcc4eb57d66992ed92bb24a1c55f94ecda18c84ebaef15c"
+    },
+    {
+      "name": "actions_imgUserPlus01",
+      "file": "command-actions_imgUserPlus01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "39d2703becde69a68e00f2ec4559adfbe2ab9762fec5c16ca19f77f643f835e0"
+    },
+    {
+      "name": "actions_imgUsers01",
+      "file": "command-actions_imgUsers01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af4e483e9a628c34857e1726703d6e218bca1d397a932062de7603f864e3d4fb"
+    },
+    {
+      "name": "actions_imgZapFast",
+      "file": "command-actions_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "07f12126cc29bf599b422d7c2e5e3d3cfe2e9415bdec28400994742be8ce63c0"
+    },
+    {
+      "name": "empty_imgContent",
+      "file": "command-empty_imgContent.svg",
+      "width": 480,
+      "height": 480,
+      "sha256": "1710df3e8622ca083ad58760a42ab6dcb4b97f8005f6b647225552de79f34599"
+    },
+    {
+      "name": "empty_imgContent1",
+      "file": "command-empty_imgContent1.svg",
+      "width": 480,
+      "height": 480,
+      "sha256": "effa6da758eab34dfe21e209f496245c3b99005afb3223dbfa186ea9f7d88e71"
+    },
+    {
+      "name": "empty_imgPlus",
+      "file": "command-empty_imgPlus.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "fead1d09fb0ba6d40d6d96d51416e8d2152fb5e1c83d805b1d225fb048354088"
+    },
+    {
+      "name": "empty_imgSearchLg",
+      "file": "command-empty_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "empty_imgSearchLg1",
+      "file": "command-empty_imgSearchLg1.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "c3abb32c18286a92077d5df17fe8b76a331030767a4feaabbde183c73e17c114"
+    },
+    {
+      "name": "footer_imgArrowDown",
+      "file": "command-footer_imgArrowDown.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "ed2e34d0e34a64f5a0af12fbfe5468fc1c87de08d6a5d2fe9a856aaee2de8e87"
+    },
+    {
+      "name": "footer_imgArrowLeft",
+      "file": "command-footer_imgArrowLeft.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "64a3c3f9a43098710debfdf79da27d072ebff6a1fb7acfda96e9b09cbd896df4"
+    },
+    {
+      "name": "footer_imgArrowUp",
+      "file": "command-footer_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "aa7fa5549f5af1b9d25e976b83bd45be53d616d46537d6518a5fd15ca0db2957"
+    },
+    {
+      "name": "footer_imgCornerDownLeft",
+      "file": "command-footer_imgCornerDownLeft.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0dc5550b0dd920d9d097ebe2702023ec1aeac6b196bb0a67e698053ca4bf225a"
+    },
+    {
+      "name": "footer_imgSettings01",
+      "file": "command-footer_imgSettings01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "ae9def2eb1e348964a6fed03f20aa385b96e76014997c42e2cb9e8037a04cfd5"
+    },
+    {
+      "name": "input_imgOpenFalseSupportingTextFalseTooltipTopArrow",
+      "file": "command-input_imgOpenFalseSupportingTextFalseTooltipTopArrow.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "c1d3939c764305e79e1a507076e13a47ff1fe9e2f87294de9d8161faaa382962"
+    },
+    {
+      "name": "input_imgSearchLg",
+      "file": "command-input_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "input_imgTooltip",
+      "file": "command-input_imgTooltip.svg",
+      "width": 16,
+      "height": 8.51471,
+      "sha256": "3140a2dbe94be46378eb2e673d289bb37df30701a554092b822ef58881eda646"
+    },
+    {
+      "name": "integrations_imgHelpIcon",
+      "file": "command-integrations_imgHelpIcon.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "04addf69df1db9dc7cbb815b383391eb1d21d7801ae782aaafef508a787f3648"
+    },
+    {
+      "name": "integrations_imgLinear",
+      "file": "command-integrations_imgLinear.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "integrations_imgLinear1",
+      "file": "command-integrations_imgLinear1.svg",
+      "width": 64,
+      "height": 64,
+      "sha256": "6645b0166da1fbf0d35d59ccbf755b08899fa5240728a89a23295ef515f45653"
+    },
+    {
+      "name": "integrations_imgSearchLg",
+      "file": "command-integrations_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "integrations_imgSlack",
+      "file": "command-integrations_imgSlack.svg",
+      "width": 19.5,
+      "height": 19.5,
+      "sha256": "227d56b1537694816fe0bbafad650426c7e3b5b4e2b19f398452ed129fe518ca"
+    },
+    {
+      "name": "item_imgDot",
+      "file": "command-item_imgDot.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "9adc4902d0dca1cdb8ff8224e8d99fd605e5f7eceb8d24ca62cf1ff92477dbc1"
+    },
+    {
+      "name": "item_imgSizeLgPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "command-item_imgSizeLgPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "item_imgSizeMdOutlineFalse",
+      "file": "command-item_imgSizeMdOutlineFalse.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "9adc4902d0dca1cdb8ff8224e8d99fd605e5f7eceb8d24ca62cf1ff92477dbc1"
+    },
+    {
+      "name": "item_imgUser01",
+      "file": "command-item_imgUser01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "00b3b5f6e51ff46b3fcc4eb57d66992ed92bb24a1c55f94ecda18c84ebaef15c"
+    },
+    {
+      "name": "item_imgUser2",
+      "file": "command-item_imgUser2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "16ec97b6c89a88cae034496a6686ef3c67ddcdfe0085b49ca9b4cf31251d3149"
+    },
+    {
+      "name": "item_imgUser3",
+      "file": "command-item_imgUser3.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "3f2d5900f7832bfacd4ce9450efd7ccc5fd52c0722bfe71b1565e134b2de7a51"
+    },
+    {
+      "name": "logo_dropbox",
+      "file": "command-logo-dropbox.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "e37302c54425607268b4a3b87f29fb9b985cf95d2fb3042a83add6f828cacf03"
+    },
+    {
+      "name": "logo_dropbox_40",
+      "file": "command-logo-dropbox-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "a8459fbb2cf74d116057bc6a15511672846691275c18462e40d1e3ba1cdba253"
+    },
+    {
+      "name": "logo_figma",
+      "file": "command-logo-figma.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "fb20134c8dc9eeb9d8d27da38e9ffc9bc1f20c690280612d5b2a9f79012927f1"
+    },
+    {
+      "name": "logo_figma_40",
+      "file": "command-logo-figma-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "79f744e110b2634574edcd99a96508bcb85413003a99c1a005c1e84b6973e533"
+    },
+    {
+      "name": "logo_github",
+      "file": "command-logo-github.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "792512085791d48896301d892c7d4ce412929de2866304fce5282002152269b2"
+    },
+    {
+      "name": "logo_github_40",
+      "file": "command-logo-github-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "2f84b9d2ddf42c443230c2523f4ad6192939c0a65a691bd98ee635a4cb86d6e0"
+    },
+    {
+      "name": "logo_linear",
+      "file": "command-logo-linear.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "f3b160cc4adbf6c2a5f86a3b2688c838606577d1caaa41c2bb01b9f395962431"
+    },
+    {
+      "name": "logo_linear_40",
+      "file": "command-logo-linear-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "d4bc349403bea673a56a223978cdc33319f53e371ff5ed7dea327abfc089cded"
+    },
+    {
+      "name": "logo_linear_64",
+      "file": "command-logo-linear-64.svg",
+      "width": 64,
+      "height": 64,
+      "sha256": "71024c006052107c729867a49cfd993870aa90795dbcaf9350b5ff7a2deb5868"
+    },
+    {
+      "name": "logo_notion",
+      "file": "command-logo-notion.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "06728d531001e4363a98225370e97a0f5c6a60d971b10583432857f648abc5d2"
+    },
+    {
+      "name": "logo_notion_40",
+      "file": "command-logo-notion-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "b9f8f4ea8b95708fbabd91e786a6e525db2964827e4d14ffa1772bcddce01745"
+    },
+    {
+      "name": "logo_slack",
+      "file": "command-logo-slack.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "95de24b2a4f7d1047c14c20aa56fc55d9b6b1d1c5d213ba1443b1982a214ba87"
+    },
+    {
+      "name": "logo_slack_40",
+      "file": "command-logo-slack-40.svg",
+      "width": 40,
+      "height": 14,
+      "sha256": "26656f6570e441c157749f4b01c458477160d385ba4c89c856f8bd7b8c5ea33b"
+    },
+    {
+      "name": "logo_zapier",
+      "file": "command-logo-zapier.svg",
+      "width": 24,
+      "height": 24,
+      "sha256": "a445fc3dcf1009321b02383f77912bdbcd41098b28b8d5d56641a25a9426ef02"
+    },
+    {
+      "name": "logo_zapier_40",
+      "file": "command-logo-zapier-40.svg",
+      "width": 40,
+      "height": 40,
+      "sha256": "682d85b050b928bed3bfd83a31f1d415bad8c695aa7b491ea37a23a7a8551e67"
+    },
+    {
+      "name": "nav_imgArrowUp",
+      "file": "command-nav_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "aa7fa5549f5af1b9d25e976b83bd45be53d616d46537d6518a5fd15ca0db2957"
+    },
+    {
+      "name": "profile_imgAvatar",
+      "file": "command-profile_imgAvatar.png",
+      "sha256": "6ddede6a5099715b1a6c21fd02ac2345208b25531fd1da01cc41ada5a1420c37"
+    },
+    {
+      "name": "profile_imgAvatar1",
+      "file": "command-profile_imgAvatar1.png",
+      "sha256": "6347ee8e792bd72a791ee1175dafd2acf17a3bf5352cc887ce9c3f7ca06050bd"
+    },
+    {
+      "name": "profile_imgAvatar2",
+      "file": "command-profile_imgAvatar2.png",
+      "sha256": "50d10182964d375eff0374670b7b6699da47ca21b4e99e200ae89df721dfa431"
+    },
+    {
+      "name": "profile_imgAvatar3",
+      "file": "command-profile_imgAvatar3.png",
+      "sha256": "eb9d99f390df72dac59175f630875e26a4bf2f0411e094c0a04445944c30d509"
+    },
+    {
+      "name": "profile_imgAvatar4",
+      "file": "command-profile_imgAvatar4.png",
+      "sha256": "4c21e8ba179c723c9726fbf1dbf08ceb1f633bc55c848b8288445ced5f89639b"
+    },
+    {
+      "name": "profile_imgAvatar5",
+      "file": "command-profile_imgAvatar5.png",
+      "sha256": "2462cae68c7153458bf5d29be2fd5f83e44737d8dc52a94437eaf6b02d52b4c7"
+    },
+    {
+      "name": "profile_imgContent",
+      "file": "command-profile_imgContent.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "profile_imgPlus",
+      "file": "command-profile_imgPlus.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "3b21df913ffc1abe219167dc54603c513be4dcfd46bd2af8947eb03113e39e23"
+    },
+    {
+      "name": "profile_imgSearchLg",
+      "file": "command-profile_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "profile_imgSize2Xl",
+      "file": "command-profile_imgSize2Xl.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "a12fec341f93f140a4025a880123e311d07e8c28e2eeecf916f149b538c98d4c"
+    },
+    {
+      "name": "profile_imgSocialIcon",
+      "file": "command-profile_imgSocialIcon.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "bb573b1695076594ddef1a5eb3e0eb0b53e8bfc166bfd716c4ba766117216aa1"
+    },
+    {
+      "name": "profile_imgSocialIcon1",
+      "file": "command-profile_imgSocialIcon1.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "d5033e9266357b916082c30f084e0c0e1dbe421da9db909cdf22cd47b7f507bb"
+    },
+    {
+      "name": "profile_imgSocialIcon2",
+      "file": "command-profile_imgSocialIcon2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "2add0fa2a54b58beed834bcea52a518be3ad8650efd168764c83fe9b39cc2f90"
+    },
+    {
+      "name": "shortcut_imgArrowRight",
+      "file": "command-shortcut_imgArrowRight.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6c85c12962c1e8ea81955a42aa441edf6b171c47c0f410f93908effdda157aa5"
+    },
+    {
+      "name": "stackedActions_imgArrowRight",
+      "file": "command-stackedActions_imgArrowRight.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6c85c12962c1e8ea81955a42aa441edf6b171c47c0f410f93908effdda157aa5"
+    },
+    {
+      "name": "stackedActions_imgFilePlus03",
+      "file": "command-stackedActions_imgFilePlus03.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "fda68599d11e234e536bbe7b04f986d5584ffa2c356f4f34340629210ab8f3ee"
+    },
+    {
+      "name": "stackedActions_imgFolder",
+      "file": "command-stackedActions_imgFolder.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "6812cb34633492075f3f0498aae76daa7b720737af4e1c88af7c5638aea9d42a"
+    },
+    {
+      "name": "stackedActions_imgFolderPlus",
+      "file": "command-stackedActions_imgFolderPlus.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d5b8c01b064647c9977a99b7e38a3f4e597f3e222721f4e595f1db677444c04"
+    },
+    {
+      "name": "stackedActions_imgHelpCircle",
+      "file": "command-stackedActions_imgHelpCircle.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b2455a16d8670ee9d54ead70b19b79534d0f5ff1d0962195fd436ffe2f9381a1"
+    },
+    {
+      "name": "stackedActions_imgLayersTwo02",
+      "file": "command-stackedActions_imgLayersTwo02.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "d23cc404db5c6355d2fc8052f75c7cb9e5075a1e0c03b6733291c419f9bcabdf"
+    },
+    {
+      "name": "stackedActions_imgSearchLg",
+      "file": "command-stackedActions_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "stackedActions_imgUser01",
+      "file": "command-stackedActions_imgUser01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "16ec97b6c89a88cae034496a6686ef3c67ddcdfe0085b49ca9b4cf31251d3149"
+    },
+    {
+      "name": "stackedActions_imgUserPlus01",
+      "file": "command-stackedActions_imgUserPlus01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b25c78489badaad5c8291aae830886d440e71ed6ac70e89264a9ac2a2b00c0b0"
+    },
+    {
+      "name": "stackedActions_imgUsers01",
+      "file": "command-stackedActions_imgUsers01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "d871852b6a5b1021e4d85c8db9a2e504a110a196f66810732aa60b455a6c156a"
+    },
+    {
+      "name": "stackedActions_imgZapFast",
+      "file": "command-stackedActions_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54fdb2726385b14e2b0a67abc0b55a40fffac5b5ef994dbde1e4a5a2111cacb1"
+    },
+    {
+      "name": "stackedIntegrations_imgGithub",
+      "file": "command-stackedIntegrations_imgGithub.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "stackedIntegrations_imgHelpIcon",
+      "file": "command-stackedIntegrations_imgHelpIcon.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "08200937a617f22b18c76ff0807f2301201744ed7a02b8ef8cd8d4e99bf36db2"
+    },
+    {
+      "name": "stackedIntegrations_imgLinear",
+      "file": "command-stackedIntegrations_imgLinear.svg",
+      "width": 64,
+      "height": 64,
+      "sha256": "7826589e23c9fb8b371ea166bc6f069e81fb52bc17b41f5a644039691cb9d138"
+    },
+    {
+      "name": "stackedIntegrations_imgSearchLg",
+      "file": "command-stackedIntegrations_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "stackedIntegrations_imgSlack",
+      "file": "command-stackedIntegrations_imgSlack.svg",
+      "width": 32.5,
+      "height": 32.5,
+      "sha256": "7ed100a070b62ed1214ce6031655ab2192169e002f9b84965b3c3acc8ee9a248"
+    },
+    {
+      "name": "users_imgArrowDown",
+      "file": "command-users_imgArrowDown.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "ed2e34d0e34a64f5a0af12fbfe5468fc1c87de08d6a5d2fe9a856aaee2de8e87"
+    },
+    {
+      "name": "users_imgArrowLeft",
+      "file": "command-users_imgArrowLeft.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "64a3c3f9a43098710debfdf79da27d072ebff6a1fb7acfda96e9b09cbd896df4"
+    },
+    {
+      "name": "users_imgArrowUp",
+      "file": "command-users_imgArrowUp.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "aa7fa5549f5af1b9d25e976b83bd45be53d616d46537d6518a5fd15ca0db2957"
+    },
+    {
+      "name": "users_imgAvatar",
+      "file": "command-users_imgAvatar.png",
+      "sha256": "6ddede6a5099715b1a6c21fd02ac2345208b25531fd1da01cc41ada5a1420c37"
+    },
+    {
+      "name": "users_imgAvatar1",
+      "file": "command-users_imgAvatar1.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "users_imgAvatar2",
+      "file": "command-users_imgAvatar2.png",
+      "sha256": "6347ee8e792bd72a791ee1175dafd2acf17a3bf5352cc887ce9c3f7ca06050bd"
+    },
+    {
+      "name": "users_imgAvatar3",
+      "file": "command-users_imgAvatar3.png",
+      "sha256": "50d10182964d375eff0374670b7b6699da47ca21b4e99e200ae89df721dfa431"
+    },
+    {
+      "name": "users_imgAvatar4",
+      "file": "command-users_imgAvatar4.png",
+      "sha256": "eb9d99f390df72dac59175f630875e26a4bf2f0411e094c0a04445944c30d509"
+    },
+    {
+      "name": "users_imgAvatar5",
+      "file": "command-users_imgAvatar5.png",
+      "sha256": "4c21e8ba179c723c9726fbf1dbf08ceb1f633bc55c848b8288445ced5f89639b"
+    },
+    {
+      "name": "users_imgAvatar6",
+      "file": "command-users_imgAvatar6.png",
+      "sha256": "2462cae68c7153458bf5d29be2fd5f83e44737d8dc52a94437eaf6b02d52b4c7"
+    },
+    {
+      "name": "users_imgCornerDownLeft",
+      "file": "command-users_imgCornerDownLeft.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0dc5550b0dd920d9d097ebe2702023ec1aeac6b196bb0a67e698053ca4bf225a"
+    },
+    {
+      "name": "users_imgSearchLg",
+      "file": "command-users_imgSearchLg.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "b515536fee7e1336a743bed1919c8a21ef666ff8d0decab993e9fdebb075a806"
+    },
+    {
+      "name": "users_imgSettings01",
+      "file": "command-users_imgSettings01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "75c0e1ef8e33312b5925769bf781dc05d276c9003bad78fa1c5672567d82265a"
+    }
+  ]
+}

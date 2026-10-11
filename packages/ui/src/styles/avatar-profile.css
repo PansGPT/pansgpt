@@ -1,0 +1,97 @@
+.p-avatar-profile {
+  --profile-size: 72px;
+  --profile-padding: 3px;
+  --profile-content-size: 66px;
+  --profile-text-size: 30px;
+  --profile-text-line: 38px;
+  --profile-text-tracking: 0px;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--profile-size);
+  height: var(--profile-size);
+  border-radius: var(--figma-radius-full);
+}
+.p-avatar-profile[data-size="md"] {
+  --profile-size: 96px;
+  --profile-padding: 4px;
+  --profile-content-size: 88px;
+  --profile-text-size: 36px;
+  --profile-text-line: 44px;
+  --profile-text-tracking: -0.72px;
+}
+.p-avatar-profile[data-size="lg"] {
+  --profile-size: 160px;
+  --profile-padding: 6px;
+  --profile-content-size: 148px;
+  --profile-text-size: 60px;
+  --profile-text-line: 72px;
+  --profile-text-tracking: -1.2px;
+}
+.p-avatar-profile:not([data-mode="photo"]) {
+  --profile-padding: 4px;
+  --profile-content-size: 64px;
+}
+.p-avatar-profile[data-size="md"]:not([data-mode="photo"]) {
+  --profile-padding: 5px;
+  --profile-content-size: 86px;
+}
+.p-avatar-profile[data-size="lg"]:not([data-mode="photo"]) {
+  --profile-padding: 7px;
+  --profile-content-size: 146px;
+}
+.p-avatar-profile-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--profile-padding);
+  background: var(--bg-primary);
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--border-secondary-alt);
+}
+.p-avatar-profile .p-avatar-profile-content {
+  --avatar-size: var(--profile-content-size);
+  border: 0;
+  overflow: hidden;
+}
+.p-avatar-profile-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px var(--border-secondary-alt);
+}
+.p-avatar-profile[data-size="md"] .p-avatar-profile-content {
+  box-shadow: var(--effect-shadow-xl);
+}
+.p-avatar-profile[data-size="lg"] .p-avatar-profile-content {
+  box-shadow: var(--effect-shadow-2xl);
+}
+.p-avatar-profile .p-avatar-initials {
+  flex: none;
+  width: var(--profile-size);
+  font-family: var(--font-display);
+  font-size: var(--profile-text-size);
+  line-height: var(--profile-text-line);
+  letter-spacing: var(--profile-text-tracking);
+  text-align: center;
+}
+.p-avatar-profile-glyph {
+  display: block;
+}
+.p-avatar-profile-verified {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+}
+.p-avatar-profile[data-size="md"] .p-avatar-profile-verified {
+  bottom: 4px;
+  right: 4px;
+}
+.p-avatar-profile[data-size="lg"] .p-avatar-profile-verified {
+  bottom: 8px;
+  right: 8px;
+}

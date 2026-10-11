@@ -1,0 +1,84 @@
+const imgTypeImageBreakpointDesktop = "https://www.figma.com/api/mcp/asset/e0d9083a-9f17-4526-b90a-4f3d6d97614d.png";
+const imgImage = "https://www.figma.com/api/mcp/asset/696425f4-4482-4234-be46-b61e0d985951.png";
+const imgXClose = "https://www.figma.com/api/mcp/asset/da54b60b-cda7-4ede-bd9e-017a6fdf0883.svg";
+
+type NotificationProps = {
+  className?: string;
+  actions?: boolean;
+  breakpoint?: "Desktop";
+  supportingText?: boolean;
+  type?: "Image";
+};
+
+function Notification({ className, actions = true, breakpoint = "Desktop", supportingText = true, type = "Image" }: NotificationProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start pb-[var(--spacing-8xl,80px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative w-[544px]"} data-node-id="1135:890">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgTypeImageBreakpointDesktop} />
+      <div className="content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex items-start overflow-clip relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1135:712" data-name="Notification">
+        <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[rgba(0,0,0,0.1)] border-solid overflow-clip relative rounded-bl-[var(--radius-xl,20px)] rounded-tl-[var(--radius-xl,20px)] self-stretch shrink-0 w-[160px]" data-node-id="1135:756" data-name="Image wrap">
+          <div className="absolute inset-[-1px]" data-node-id="1719:447423" data-name="Image">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgImage} />
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px pr-px py-px relative" data-node-id="8724:552292" data-name="Content wrapper">
+          <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-b border-r border-solid border-t content-stretch flex gap-[var(--spacing-xl,16px)] items-start pl-[var(--spacing-2xl,20px)] pr-[var(--spacing-xl,16px)] py-[var(--spacing-xl,16px)] relative rounded-br-[var(--radius-xl,20px)] rounded-tr-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1135:778" data-name="Content">
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px pr-[var(--spacing-4xl,32px)] relative" data-node-id="1135:713" data-name="Content">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1135:716" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1135:717" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-primary-\(900\),#181d27)] w-full" data-node-id="1135:718">
+                    We’ve just released a new update!
+                  </p>
+                  {supportingText && (
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/foreground\/fg-secondary-\(700\),#414651)] w-full" data-node-id="1135:719">
+                      Check out the all new dashboard view. Pages and exports now load faster.
+                    </p>
+                  )}
+                </div>
+                {actions && (
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1135:720" data-name="Actions">
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1135:721" data-name="Buttons/Button">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1135:721;3287:433377">
+                        Dismiss
+                      </p>
+                    </div>
+                    <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1135:722" data-name="Buttons/Button">
+                      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1135:722;3287:433289">
+                        Changelog
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[8px] rounded-[var(--radius-md,12px)] size-[36px] top-[8px]" data-node-id="3255:388695" data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3255:388695;2763:420457" data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

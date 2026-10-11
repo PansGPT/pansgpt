@@ -1,0 +1,237 @@
+.p-progress {
+  position: relative;
+}
+.p-progress[data-label-position="bottom"] {
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.p-progress[data-label-position="bottom"] > .p-progress-track {
+  flex: none;
+  width: 100%;
+}
+.p-progress[data-label-position$="floating"] > .p-progress-track {
+  flex: none;
+  width: 100%;
+}
+.p-progress-bubble {
+  position: absolute;
+  transform: translateX(-50%);
+}
+.p-progress[data-label-position="top-floating"] > .p-progress-bubble {
+  top: -42px;
+}
+.p-progress[data-label-position="bottom-floating"] > .p-progress-bubble {
+  top: 16px;
+}
+.p-progress-label {
+  flex: none;
+  font-weight: 500;
+}
+.p-spinner {
+  width: 100%;
+  justify-content: center;
+}
+.p-spinner-graphic {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 32px;
+  height: 32px;
+}
+.p-spinner-graphic img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.p-spinner[data-size="md"] .p-spinner-graphic {
+  width: 48px;
+  height: 48px;
+}
+.p-spinner[data-size="lg"] .p-spinner-graphic {
+  width: 56px;
+  height: 56px;
+}
+.p-spinner[data-size="xl"] .p-spinner-graphic {
+  width: 64px;
+  height: 64px;
+}
+.p-spinner[data-size="lg"],
+.p-spinner[data-size="xl"] {
+  font-size: 18px;
+  line-height: 28px;
+}
+.p-spinner[data-size="xl"] {
+  gap: 20px;
+}
+.p-progress-circle {
+  --circle-size: 64px;
+  --circle-stroke: 6px;
+  --circle-angle: 0deg;
+  --circle-start: 0deg;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: var(--circle-size);
+  font-family: var(--font-body);
+  color: var(--text-primary-900);
+}
+.p-progress-circle[data-size="xs"] {
+  --circle-size: 160px;
+  --circle-stroke: 16px;
+}
+.p-progress-circle[data-size="sm"] {
+  --circle-size: 200px;
+  --circle-stroke: 20px;
+}
+.p-progress-circle[data-size="md"] {
+  --circle-size: 240px;
+  --circle-stroke: 24px;
+}
+.p-progress-circle[data-size="lg"] {
+  --circle-size: 280px;
+  --circle-stroke: 28px;
+}
+.p-progress-circle[data-shape="half-circle"] {
+  --circle-start: -90deg;
+  gap: 0;
+}
+.p-progress-circle-graphic {
+  position: relative;
+  flex: none;
+  width: var(--circle-size);
+  height: var(--circle-size);
+}
+.p-progress-circle[data-shape="half-circle"] > .p-progress-circle-graphic {
+  height: calc((var(--circle-size) + var(--circle-stroke)) / 2);
+  overflow: hidden;
+}
+.p-circle-track,
+.p-circle-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--circle-size);
+  height: var(--circle-size);
+  border-radius: 50%;
+  mask-image: radial-gradient(
+    farthest-side,
+    transparent calc(100% - var(--circle-stroke)),
+    black calc(100% - var(--circle-stroke))
+  );
+}
+.p-circle-track {
+  background: var(--bg-quaternary);
+}
+.p-circle-fill {
+  background: conic-gradient(
+    from var(--circle-start),
+    var(--fg-brand-primary-600) var(--circle-angle),
+    transparent var(--circle-angle)
+  );
+}
+.p-progress-circle[data-shape="half-circle"] .p-circle-track {
+  background: conic-gradient(from -90deg, var(--bg-quaternary) 180deg, transparent 180deg);
+}
+.p-circle-track-cap,
+.p-circle-fill-cap {
+  position: absolute;
+  width: var(--circle-stroke);
+  height: var(--circle-stroke);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.p-circle-track-cap {
+  background: var(--bg-quaternary);
+}
+.p-circle-fill-cap {
+  background: var(--fg-brand-primary-600);
+}
+.p-progress-circle-number {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.p-progress-circle-value {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+.p-progress-circle-label {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: nowrap;
+  color: var(--text-tertiary-600);
+}
+.p-progress-circle[data-size="xxs"] > .p-progress-circle-number {
+  top: 32px;
+}
+.p-progress-circle[data-size="xxs"][data-shape="half-circle"] > .p-progress-circle-number {
+  top: 25px;
+}
+.p-progress-circle[data-size="xxs"][data-reference="true"][data-shape="circle"]
+  > .p-progress-circle-number {
+  left: calc(50% - 0.5px);
+}
+.p-progress-circle[data-size="xs"] .p-progress-circle-value {
+  font-size: 24px;
+  line-height: 32px;
+}
+.p-progress-circle[data-size="sm"] .p-progress-circle-value {
+  font-size: 30px;
+  line-height: 38px;
+}
+.p-progress-circle[data-size="md"] .p-progress-circle-value {
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.72px;
+}
+.p-progress-circle[data-size="lg"] .p-progress-circle-value {
+  font-size: 48px;
+  line-height: 60px;
+  letter-spacing: -0.96px;
+}
+.p-progress-circle[data-size="md"] .p-progress-circle-label,
+.p-progress-circle[data-size="lg"] .p-progress-circle-label {
+  font-size: 14px;
+  line-height: 20px;
+}
+.p-progress-circle[data-shape="half-circle"][data-size="xs"] .p-progress-circle-number {
+  top: 61px;
+}
+.p-progress-circle[data-shape="half-circle"][data-size="sm"] .p-progress-circle-number {
+  top: 78px;
+}
+.p-progress-circle[data-shape="half-circle"][data-size="md"] .p-progress-circle-number {
+  top: 96px;
+}
+.p-progress-circle[data-shape="half-circle"][data-size="lg"] .p-progress-circle-number {
+  top: 110px;
+}
+.p-circle-reference-background,
+.p-circle-reference-line,
+.p-circle-reference-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.p-progress-circle[data-reference="true"][data-size="lg"][data-shape="circle"]
+  .p-circle-reference-ring {
+  left: -1px;
+}
+.p-progress-circle[data-size="xxs"][data-shape="circle"] .p-circle-reference-line {
+  left: 29px;
+}
+.p-progress-circle[data-size="xxs"][data-shape="half-circle"] .p-circle-reference-line {
+  top: 1.4186px;
+}

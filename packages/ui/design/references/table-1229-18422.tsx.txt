@@ -1,0 +1,356 @@
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/d28a0c69-d329-4b55-b3e6-78f78d71e2b6.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/970c01f0-9c66-472d-9ab3-2480da019287.svg";
+const imgReverseLeft = "https://www.figma.com/api/mcp/asset/0baf50db-1b2e-4b94-8903-508aa7fc032d.svg";
+const imgX = "https://www.figma.com/api/mcp/asset/5ac1cdd2-679a-4aaa-92a4-f33027217e2b.svg";
+const imgArrowLeft = "https://www.figma.com/api/mcp/asset/6b4fccf4-ea92-4570-97d5-cb3858153752.svg";
+const imgArrowRight = "https://www.figma.com/api/mcp/asset/14169918-7443-4251-9550-049eac043a95.svg";
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = "False", indeterminate = "False", size = "md", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} data-node-id="1100:295">
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="1100:296" data-name="_Checkbox base" />
+    </div>
+  );
+}
+
+type TableCellLeadActionProps = {
+  className?: string;
+  type?: "Checkbox";
+};
+
+function TableCellLeadAction({ className, type = "Checkbox" }: TableCellLeadActionProps) {
+  return (
+    <div className={className || "content-stretch flex items-start relative"} data-node-id="9400:570194">
+      <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+    </div>
+  );
+}
+
+type TableProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  dividers?: "Alternating fills";
+  example?: "Sales";
+};
+
+function Table({ className, breakpoint = "Mobile", dividers = "Alternating fills", example = "Sales" }: TableProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid border-t content-stretch flex flex-col isolate items-start overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[375px]"} data-node-id="1229:18422">
+      <div className="content-stretch flex items-start relative shrink-0 w-full z-[2]" data-node-id="1229:19339" data-name="Content">
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0" data-node-id="1229:19340" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[11]" data-node-id="1229:19341" data-name="Table header cell">
+            <div className="content-stretch flex items-center justify-center relative shrink-0" data-node-id="I1229:19341;1224:2935" data-name="Checkbox">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="I1229:19341;1224:2935;1100:296" data-name="_Checkbox base" />
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:19341;1221:107056" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:19341;1221:107056;1221:106889">
+                Invoice
+              </p>
+              <div className="relative shrink-0 size-[12px]" data-node-id="I1229:19341;1221:107056;1221:106890" data-name="arrow-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+              </div>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[10]" data-node-id="1229:19342" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19342;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19342;1222:107428">
+                #3066
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[9]" data-node-id="1229:19343" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19343;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19343;1222:107428">
+                #3065
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[8]" data-node-id="1229:19344" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19344;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19344;1222:107428">
+                #3064
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:19345" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19345;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19345;1222:107428">
+                #3063
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:19346" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19346;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19346;1222:107428">
+                #3062
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:19347" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19347;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19347;1222:107428">
+                #3061
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:19348" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19348;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19348;1222:107428">
+                #3060
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:19349" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19349;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19349;1222:107428">
+                #3059
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:19350" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19350;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19350;1222:107428">
+                #3058
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:19351" data-name="Table cell">
+            <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19351;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19351;1222:107428">
+                #3057
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0" data-node-id="1229:19352" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[11]" data-node-id="1229:19353" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I1229:19353;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I1229:19353;1224:4556;1221:106781">
+                Date
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[10]" data-node-id="1229:19354" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19354;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19354;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[9]" data-node-id="1229:19355" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19355;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19355;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[8]" data-node-id="1229:19356" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19356;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19356;1222:107429">
+                Jan 6, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="1229:19357" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19357;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19357;1222:107429">
+                Jan 5, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="1229:19358" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19358;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19358;1222:107429">
+                Jan 5, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="1229:19359" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19359;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19359;1222:107429">
+                Jan 5, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="1229:19360" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19360;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19360;1222:107429">
+                Jan 4, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="1229:19361" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19361;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19361;1222:107429">
+                Jan 3, 2025
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="1229:19362" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19362;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19362;1222:107429">
+                Jan 3, 2025
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="1229:19363" data-name="Table cell">
+            <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I1229:19363;1222:107427" data-name="Text and supporting text">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1229:19363;1222:107429">
+                Jan 3, 2025
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col isolate items-start relative shrink-0" data-node-id="3920:399114" data-name="Column">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[11]" data-node-id="3920:399115" data-name="Table header cell">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I3920:399115;1224:4556" data-name="_Table header label">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="I3920:399115;1224:4556;1221:106781">
+                Status
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[10]" data-node-id="3920:399116" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399116;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399116;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399116;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[9]" data-node-id="3920:399117" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399117;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399117;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399117;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[8]" data-node-id="3920:399118" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399118;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399118;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399118;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[7]" data-node-id="3920:399119" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399119;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399119;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399119;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[6]" data-node-id="3920:399120" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399120;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399120;1224:173;3918:412801" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgReverseLeft} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399120;1224:173;3918:412802">
+                Refunded
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[5]" data-node-id="3920:399121" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399121;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399121;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399121;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[4]" data-node-id="3920:399122" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/error\/utility-error-50,#fef3f2)] border border-[var(--component-colors\/utility\/error\/utility-error-200,#fecdca)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399122;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399122;1224:173;3918:407205" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgX} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/error\/utility-error-700,#b42318)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399122;1224:173;3918:407206">
+                Cancelled
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[3]" data-node-id="3920:399123" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399123;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399123;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399123;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-secondary_subtle,#fdfdfd)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[2]" data-node-id="3920:399124" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399124;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399124;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399124;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full z-[1]" data-node-id="3920:399125" data-name="Table cell">
+            <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="I3920:399125;1224:173" data-name="Badge">
+              <div className="relative shrink-0 size-[12px]" data-node-id="I3920:399125;1224:173;3918:416533" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I3920:399125;1224:173;3918:416534">
+                Paid
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex items-center justify-between px-[var(--spacing-xl,16px)] py-[var(--spacing-lg,12px)] relative shrink-0 w-full z-[1]" data-node-id="1229:18622" data-name="Pagination">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-disabled_subtle,#e9eaeb)] border-solid content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I1229:18622;226:132" data-name="Buttons/Button">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I1229:18622;226:132;3471:598378" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowLeft} />
+          </div>
+        </div>
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[0] relative shrink-0 text-[0px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] whitespace-nowrap" data-node-id="I1229:18622;1114:68675">
+          <span className="font-['Plus_Jakarta_Sans:Medium'] leading-[20px] text-[#414651] text-[14px]">{`Page `}</span>
+          <span className="font-['Plus_Jakarta_Sans:Medium'] leading-[20px] text-[#414651] text-[14px]">1</span>
+          <span className="font-['Plus_Jakarta_Sans:Medium'] leading-[20px] text-[#414651] text-[14px]">{` of `}</span>
+          <span className="font-['Plus_Jakarta_Sans:Medium'] leading-[20px] text-[#414651] text-[14px]">10</span>
+        </p>
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="I1229:18622;1114:68327" data-name="Buttons/Button">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="relative shrink-0 size-[20px]" data-node-id="I1229:18622;1114:68327;3471:597240" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowRight} />
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+      </div>
+    </div>
+  );
+}

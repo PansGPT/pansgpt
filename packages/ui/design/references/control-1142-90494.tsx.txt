@@ -1,0 +1,141 @@
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Radio" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : "node-1100_569"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type RadioGroupProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  size?: "sm";
+  type?: "Radio button";
+};
+
+function RadioGroup({ className, breakpoint = "Desktop", size = "sm", type = "Radio button" }: RadioGroupProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative w-[768px]"} data-node-id="1142:90494">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:90495" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="I1142:90495;3931:409326" data-name="Content">
+          <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:90495;3931:409327" data-name="Input">
+            <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:90495;3931:409329" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:90495;3931:409455" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:90495;3931:409456">
+                Basic plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:90495;3931:409457">
+                $10/month
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:90495;3931:409331">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:90496" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="I1142:90496;3931:408744" data-name="Content">
+          <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:90496;3931:408745" data-name="Input">
+            <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:90496;3931:408747" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:90496;3931:409353" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:90496;3931:409354">
+                Business plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:90496;3931:409355">
+                $20/month
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:90496;3931:408749">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:90497" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="I1142:90497;3931:408744" data-name="Content">
+          <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:90497;3931:408745" data-name="Input">
+            <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:90497;3931:408747" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:90497;3931:409353" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:90497;3931:409354">
+                Enterprise plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:90497;3931:409355">
+                $40/month
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:90497;3931:408749">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:90498" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="I1142:90498;3931:408744" data-name="Content">
+          <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:90498;3931:408745" data-name="Input">
+            <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:90498;3931:408747" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:90498;3931:409353" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:90498;3931:409354">
+                Ultimate plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:90498;3931:409355">
+                $60/month
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:90498;3931:408749">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:90499" data-name="Radio group item">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="I1142:90499;3931:408744" data-name="Content">
+          <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:90499;3931:408745" data-name="Input">
+            <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px]" />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1142:90499;3931:408747" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="I1142:90499;3931:409353" data-name="Text and subtext">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1142:90499;3931:409354">
+                Secret plan
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I1142:90499;3931:409355">
+                $80/month
+              </p>
+            </div>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="I1142:90499;3931:408749">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

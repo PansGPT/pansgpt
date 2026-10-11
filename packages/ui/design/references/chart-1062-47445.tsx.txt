@@ -1,0 +1,31 @@
+const imgDivider = "https://www.figma.com/api/mcp/asset/002a7e92-f4d3-4a4e-8e58-278a4a9c0842.svg";
+const imgLabelFalse = "https://www.figma.com/api/mcp/asset/8b3f1264-ae6d-4d96-b506-441841f77c31.svg";
+
+type YAxisLineProps = {
+  className?: string;
+  label?: boolean;
+};
+
+export default function YAxisLine({ className, label = false }: YAxisLineProps) {
+  const isLabel = label;
+  const isNotLabel = !label;
+  return (
+    <div className={className || `h-[22px] relative w-[1216px] ${isNotLabel ? "" : "content-stretch flex gap-[var(--spacing-md,8px)] items-center"}`} id={isNotLabel ? "node-1062_47446" : "node-1061_46550"}>
+      {isLabel && (
+        <>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="1061:46470">
+            1,000
+          </p>
+          <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="1076:3243" data-name="Divider">
+            <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="1076:1987" data-name="Divider">
+              <div className="absolute inset-[-1px_0_0_0]">
+                <img alt="" className="block max-w-none size-full" src={imgDivider} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {isNotLabel && <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLabelFalse} />}
+    </div>
+  );
+}

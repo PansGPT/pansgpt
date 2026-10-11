@@ -1,0 +1,58 @@
+[
+  {
+    "id": "18:1957",
+    "name": "Type=Square",
+    "width": 320,
+    "height": 380,
+    "children": [
+      {
+        "name": "Image",
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 320
+      },
+      {
+        "name": "Text and supporting text",
+        "x": 0,
+        "y": 328,
+        "width": 320,
+        "height": 52
+      }
+    ],
+    "links": [
+      {
+        "text": "Source",
+        "hyperlink": null
+      }
+    ]
+  },
+  {
+    "id": "1490:1297",
+    "name": "Type=Portrait",
+    "width": 320,
+    "height": 500,
+    "children": [
+      {
+        "name": "Image",
+        "x": 0,
+        "y": 0,
+        "width": 320,
+        "height": 440
+      },
+      {
+        "name": "Text and supporting text",
+        "x": 0,
+        "y": 448,
+        "width": 320,
+        "height": 52
+      }
+    ],
+    "links": [
+      {
+        "text": "Source",
+        "hyperlink": null
+      }
+    ]
+  }
+]

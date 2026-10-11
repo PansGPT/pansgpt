@@ -1,0 +1,37 @@
+{
+  "reason": "Original SVG foreignObject conic gradients do not render in browser image contexts; PNGs exported directly from the original Figma artwork at 1x, without editing it.",
+  "assets": [
+    {
+      "variantId": "1192:633",
+      "nodeId": "1196:162",
+      "size": "md",
+      "width": 48,
+      "height": 48,
+      "path": "assets/spinner-dot-md.png"
+    },
+    {
+      "variantId": "1198:99432",
+      "nodeId": "1198:99453",
+      "size": "sm",
+      "width": 32,
+      "height": 32,
+      "path": "assets/spinner-dot-sm.png"
+    },
+    {
+      "variantId": "1196:141",
+      "nodeId": "1196:144",
+      "size": "lg",
+      "width": 56,
+      "height": 56,
+      "path": "assets/spinner-dot-lg.png"
+    },
+    {
+      "variantId": "1196:189",
+      "nodeId": "1196:215",
+      "size": "xl",
+      "width": 64,
+      "height": 64,
+      "path": "assets/spinner-dot-xl.png"
+    }
+  ]
+}

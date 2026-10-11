@@ -1,0 +1,574 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/be10cc1e-b0b9-49a4-b94e-53811a14a1da.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/51774830-d228-48a0-9a3e-5cb6f9ba422a.png";
+const imgAvatar2 = "https://www.figma.com/api/mcp/asset/fbfeefed-58d3-41d1-b4c7-fff76122729c.png";
+const imgAvatar3 = "https://www.figma.com/api/mcp/asset/5abf885d-b6ee-46df-8e11-0006a3d3a467.png";
+const imgAvatar4 = "https://www.figma.com/api/mcp/asset/a6b0c187-b104-43fb-8b5c-937fb0f67ce7.png";
+const imgAvatar5 = "https://www.figma.com/api/mcp/asset/9b83a72b-1092-4cf7-98aa-19b73d9041f1.png";
+const imgAvatar6 = "https://www.figma.com/api/mcp/asset/bd05085e-6594-4f19-bf15-1a5ab962e112.png";
+const imgAvatar7 = "https://www.figma.com/api/mcp/asset/527431fc-183e-4a99-8acf-4ce1461a4d94.png";
+const imgAvatar8 = "https://www.figma.com/api/mcp/asset/3f4f4f84-4b9a-4c77-838a-a92fd5d1fbae.png";
+const imgAvatar9 = "https://www.figma.com/api/mcp/asset/c3f356b5-4c79-4f79-a5aa-84687871a570.png";
+const imgAvatar10 = "https://www.figma.com/api/mcp/asset/93f93e9c-46d6-4e6b-8083-008b44709c11.png";
+const imgAvatar11 = "https://www.figma.com/api/mcp/asset/8265d795-f4bf-4420-9324-30e72252ea78.png";
+const imgAvatar12 = "https://www.figma.com/api/mcp/asset/8c7ac355-40d9-45ec-8cb4-2a2eccb4354c.png";
+const imgAvatar13 = "https://www.figma.com/api/mcp/asset/82b7985a-dd87-4536-b8af-13c2c2a12ed3.png";
+const imgAvatar14 = "https://www.figma.com/api/mcp/asset/46e223c2-719d-45c1-8515-0f7a537574ac.png";
+const imgXClose = "https://www.figma.com/api/mcp/asset/8dc2470e-83bb-442c-a3cc-d2f5a6a79987.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/2998a55b-79c2-4131-8c98-ef39d9bdb7e7.svg";
+const imgPage = "https://www.figma.com/api/mcp/asset/214954db-809f-42aa-8a72-bdd75f9b96c6.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: boolean;
+  size?: "lg";
+};
+
+function AvatarOnlineIndicator({ className, online = false, size = "lg" }: AvatarOnlineIndicatorProps) {
+  const isLgAndOnline = size === "lg" && online;
+  return <div className={className || `${String.raw`border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[12px] `}${isLgAndOnline ? String.raw`bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)]` : String.raw`bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)]`}`} id={isLgAndOnline ? "node-1034_367" : "node-19_1041"} />;
+}
+
+type SlideOutMenuProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Messages";
+};
+
+function SlideOutMenu({ className, breakpoint = "Mobile", type = "Messages" }: SlideOutMenuProps) {
+  return (
+    <div className={className || "content-stretch flex h-[960px] items-start overflow-clip pl-[var(--spacing-3xl,24px)] relative w-[375px]"} data-node-id="1251:6984">
+      <div className="absolute backdrop-blur-[8px] inset-0 overflow-clip" data-node-id="4943:373041" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4943:373041;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-[1_0_0] flex-col h-full items-center min-w-px overflow-clip relative shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]" data-node-id="1251:6985" data-name="Panel">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start overflow-clip pb-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="1251:6986" data-name="_Slide out menu header">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-b border-solid content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-start pb-[var(--spacing-xl,16px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1251:6986;1251:2101" data-name="Content">
+            <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="I1251:6986;1251:2102" data-name="Heading">
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" data-node-id="I1251:6986;1251:2104" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1251:6986;1251:2105">
+                  Messages
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1251:6986;1251:2106">
+                  Lorem ipsum dolor sit amet.
+                </p>
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative rounded-[9999px] shrink-0 w-full" data-node-id="I1251:6986;7259:530223" data-name="Horizontal tabs">
+              <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="I1251:6986;7259:530223;7249:43499" data-name="_Tab button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1251:6986;7259:530223;7249:43499;7248:8796">
+                  Recent
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]" data-node-id="I1251:6986;7259:530223;7249:43500" data-name="_Tab button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1251:6986;7259:530223;7249:43500;7248:8814">
+                  Groups
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]" data-node-id="I1251:6986;7259:530223;7249:43501" data-name="_Tab button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1251:6986;7259:530223;7249:43501;7248:8814">
+                  Archive
+                </p>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" data-node-id="I1251:6986;1251:2108" data-name="Buttons/Button close X">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I1251:6986;1251:2108;2763:420385" data-name="x-close">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-4xl,32px)] items-center min-h-px px-[var(--spacing-xl,16px)] relative w-full" data-node-id="1251:6987" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1251:6988" data-name="Section">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" data-node-id="1254:134563" data-name="Activity feed">
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133105" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133105;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133105;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133105;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133105;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133105;1254:128126">
+                        Olúwadámilọ́lá Buhari
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133105;1254:128127">
+                        Just now
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133105;1254:128128">
+                      @phoenix
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133105;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133105;1254:128129">
+                      Looks good!
+                    </p>
+                  </div>
+                </div>
+                <div className="absolute right-0 size-[10px] top-0" data-node-id="I1254:134563;1254:133105;1254:128130" data-name="_Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133106" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133107" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133107;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+                  </div>
+                  <div className="absolute bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" data-node-id="I1254:134563;1254:133107;1254:128121;19:1083" data-name="_Avatar online indicator" />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133107;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133107;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133107;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133107;1254:128126">
+                        Ìbùkúnọlá Abubakar
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133107;1254:128127">
+                        2 mins ago
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133107;1254:128128">
+                      @lana
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133107;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133107;1254:128129">
+                      Thanks so much, happy with that.
+                    </p>
+                  </div>
+                </div>
+                <div className="absolute right-0 size-[10px] top-0" data-node-id="I1254:134563;1254:133107;1254:128130" data-name="_Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133108" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133109" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133109;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133109;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133109;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133109;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133109;1254:128126">
+                        Oghenekaro Dikko
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133109;1254:128127">
+                        2 mins ago
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133109;1254:128128">
+                      @demi
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133109;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133109;1254:128129">
+                      Got you a coffee
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133110" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133111" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133111;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+                  </div>
+                  <div className="absolute bg-[var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" data-node-id="I1254:134563;1254:133111;1254:128121;19:1083" data-name="_Avatar online indicator" />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133111;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133111;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133111;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133111;1254:128126">
+                        Ṣọ̀pẹ́ Emenike
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133111;1254:128127">
+                        3 hours ago
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133111;1254:128128">
+                      @candice
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133111;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133111;1254:128129">
+                      Great to see you again!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133112" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133113" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133113;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#e9dcbb] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133113;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133113;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133113;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133113;1254:128126">
+                        Chizaram Àkànjí
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133113;1254:128127">
+                        6 hours ago
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133113;1254:128128">
+                      @natali
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133113;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133113;1254:128129">
+                      We should ask Oli about this...
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133114" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133115" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133115;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d9e5cc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar5} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133115;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133115;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133115;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133115;1254:128126">
+                        Ikenna Danjuma
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133115;1254:128127">
+                        12 hours ago
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133115;1254:128128">
+                      @drew
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133115;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133115;1254:128129">
+                      Okay, see you then.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133116" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133117" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133117;1254:128185" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#e5ddce] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar6} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133117;1254:128187" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133117;1254:128188" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133117;1254:128189" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133117;1254:128190">
+                        Foláshadé Chukwuma
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133117;1254:128191">
+                        3:42pm 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133117;1254:128192">
+                      @orlando
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133117;1254:128193" data-name="Content">
+                    <div className="relative shrink-0 size-[40px]" data-node-id="I1254:134563;1254:133117;4920:414395" data-name="File type icon">
+                      <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1254:134563;1254:133117;4920:414395;4916:411371" data-name="Page">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                      </div>
+                      <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1254:134563;1254:133117;4920:414395;4916:411374" data-name="File type wrap">
+                        <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1254:134563;1254:133117;4920:414395;4916:411375">
+                          PDF
+                        </p>
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative self-stretch text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133117;1254:128195" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1254:134563;1254:133117;1254:128196">
+                        Datasheet_draft_02.pdf
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1254:134563;1254:133117;1254:128197">
+                        720 KB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133118" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133119" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133119;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#dcccbd] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar7} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133119;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133119;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133119;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133119;1254:128126">
+                        Hassana Garba
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133119;1254:128127">
+                        3:42pm 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133119;1254:128128">
+                      @andi
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133119;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133119;1254:128129">
+                      We should ask Oli about this...
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133120" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133121" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133121;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#cccbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar8} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133121;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133121;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133121;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133121;1254:128126">
+                        Rukayat Lawal
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133121;1254:128127">
+                        2:12pm 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133121;1254:128128">
+                      @kate
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133121;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133121;1254:128129">
+                      That sounds like a good plan!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133122" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133123" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133123;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#e5cfe7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar9} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133123;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133123;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133123;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133123;1254:128126">{`Koray Okumus `}</p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133123;1254:128127">
+                        12:10pm 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133123;1254:128128">
+                      @koray
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133123;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133123;1254:128129">
+                      Yep! That checks out.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133124" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133125" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133125;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#ddd0be] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar10} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133125;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133125;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133125;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133125;1254:128126">
+                        Ụzọma Nwachukwu
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133125;1254:128127">
+                        11:38am 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133125;1254:128128">
+                      @ava
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133125;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133125;1254:128129">
+                      We should ask Oli about this today.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133126" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133127" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133127;1254:128185" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#dfc3cd] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar11} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133127;1254:128187" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133127;1254:128188" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133127;1254:128189" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133127;1254:128190">
+                        Adaora Achebe
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133127;1254:128191">
+                        11:30am 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133127;1254:128192">
+                      @eve
+                    </p>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133127;1254:128193" data-name="Content">
+                    <div className="relative shrink-0 size-[40px]" data-node-id="I1254:134563;1254:133127;4920:414395" data-name="File type icon">
+                      <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I1254:134563;1254:133127;4920:414395;4916:411431" data-name="Page">
+                        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+                      </div>
+                      <div className="absolute bg-[var(--colors\/brand\/600,#079455)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_33.75%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I1254:134563;1254:133127;4920:414395;4916:411434" data-name="File type wrap">
+                        <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I1254:134563;1254:133127;4920:414395;4916:411435">
+                          JPG
+                        </p>
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col items-start leading-[var(--line-height\/text-sm,20px)] min-w-px relative self-stretch text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133127;1254:128195" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] w-full" data-node-id="I1254:134563;1254:133127;1254:128196">
+                        Design screenshot.jpg
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full" data-node-id="I1254:134563;1254:133127;1254:128197">
+                        720 KB
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133128" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133129" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133129;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d3d6e9] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar12} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133129;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133129;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133129;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133129;1254:128126">
+                        Chizọba Fágbénlé
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133129;1254:128127">
+                        10:02am 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133129;1254:128128">
+                      @zahir
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133129;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133129;1254:128129">
+                      Thanks for helping out with that!
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133130" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133131" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133131;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#d3dccf] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar13} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133131;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133131;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133131;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133131;1254:128126">
+                        Zainab Ọdùnlàmí
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133131;1254:128127">
+                        9:40am 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133131;1254:128128">
+                      @joshua
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133131;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133131;1254:128129">
+                      Hey I’ve sent everything off now. All done.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[var(--colors\/border\/border-secondary,#e9eaeb)] h-px relative shrink-0 w-full" data-node-id="I1254:134563;1254:133132" data-name="Divider" />
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133133" data-name="_Feed item base">
+                <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I1254:134563;1254:133133;1254:128121" data-name="Avatar">
+                  <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                    <div className="absolute bg-[#e9dcbb] inset-0 rounded-[var(--radius-full,9999px)]" />
+                    <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar14} />
+                  </div>
+                  <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[12px]" online />
+                </div>
+                <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="I1254:134563;1254:133133;1254:128123" data-name="Content">
+                  <div className="[word-break:break-word] content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I1254:134563;1254:133133;1254:128124" data-name="Text and supporting text">
+                    <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="I1254:134563;1254:133133;1254:128125" data-name="Text and subtext">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I1254:134563;1254:133133;1254:128126">
+                        Ayọ̀bámi Gambo
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="I1254:134563;1254:133133;1254:128127">
+                        9:24am 20 Jan 2025
+                      </p>
+                    </div>
+                    <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I1254:134563;1254:133133;1254:128128">
+                      @rene
+                    </p>
+                  </div>
+                  <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--spacing-md,8px)] rounded-br-[var(--spacing-md,8px)] rounded-tr-[var(--spacing-md,8px)] shrink-0 w-full" data-node-id="I1254:134563;1254:133133;5063:371716" data-name="Message bubble">
+                    <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[0] min-w-px relative text-[0px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="I1254:134563;1254:133133;1254:128129">
+                      <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">{`Hey `}</span>
+                      <span className="font-['Plus_Jakarta_Sans:Medium'] font-medium leading-[20px] text-[#067647] text-[14px]">@olivia</span>
+                      <span className="leading-[var(--line-height\/text-sm,20px)] text-[14px]">—just wanted to say thanks for your help on this. Really buried under!</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

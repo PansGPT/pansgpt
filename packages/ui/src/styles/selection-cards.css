@@ -1,0 +1,67 @@
+.p-selection-card-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.p-selection-card { position: relative; display: flex; align-items: flex-start; gap: 4px; padding: 16px; width: 100%; border-radius: var(--figma-radius-xl); color: var(--text-secondary-700); background: var(--bg-primary); box-shadow: inset 0 0 0 1px var(--border-secondary); font: 400 14px/20px var(--font-body); }
+.p-selection-card-input, .p-selection-card-button { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 1; }
+.p-selection-card-button { border: 0; padding: 0; }
+.p-selection-card:has(> :checked), .p-selection-card:has(> [data-state="checked"]) { box-shadow: inset 0 0 0 2px var(--border-brand); }
+.p-selection-card:has(> :focus-visible), .p-selection-card[data-reference-state="focused"] { box-shadow: inset 0 0 0 1px var(--border-secondary), var(--effect-focus-ring); }
+.p-selection-card:has(> :checked:focus-visible), .p-selection-card:has(> [data-state="checked"]:focus-visible), .p-selection-card[data-reference-state="focused"]:has(> :checked) { box-shadow: inset 0 0 0 2px var(--border-brand), var(--effect-focus-ring); }
+.p-selection-card[data-disabled] { background: var(--bg-disabled-subtle); box-shadow: inset 0 0 0 1px var(--border-disabled); }
+.p-selection-card[data-disabled]:has(> :checked), .p-selection-card[data-disabled]:has(> [data-state="checked"]) { box-shadow: inset 0 0 0 2px var(--border-disabled); }
+.p-selection-card-input:disabled, .p-selection-card-button:disabled { cursor: not-allowed; }
+.p-selection-card-content { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 0; }
+.p-selection-card-copy { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.p-selection-card-title-row { display: flex; gap: 4px; white-space: nowrap; }
+.p-selection-card-title { font-weight: 500; }
+.p-selection-card-subtext, .p-selection-card-description, .p-selection-card-period { color: var(--text-tertiary-600); }
+.p-selection-card-description { overflow-wrap: break-word; }
+.p-selection-card-ornament { display: inline-flex; align-items: center; justify-content: center; position: relative; width: 32px; height: 32px; flex: none; border-radius: var(--figma-radius-sm); background: var(--bg-primary); box-shadow: inset 0 0 0 1px var(--border-primary), var(--effect-shadow-xs-skeuomorphic); }
+.p-selection-card-marker { display: flex; align-items: center; justify-content: center; width: 16px; height: 16px; flex: none; border-radius: var(--figma-radius-xs); background: var(--bg-primary); box-shadow: inset 0 0 0 1px var(--border-primary); }
+.p-selection-card-check { display: none; }
+.p-selection-card:has(> :checked) > .p-selection-card-marker, .p-selection-card:has(> [data-state="checked"]) > .p-selection-card-marker { background: var(--bg-brand-solid); box-shadow: none; }
+.p-selection-card:has(> :checked) .p-selection-card-check, .p-selection-card:has(> [data-state="checked"]) .p-selection-card-check { display: inline-flex; }
+.p-selection-card[data-disabled] > .p-selection-card-marker { background: var(--bg-disabled-subtle); box-shadow: inset 0 0 0 1px var(--border-disabled); }
+.p-selection-card[data-variant="radio"] > .p-selection-card-marker, .p-selection-card[data-variant="checkbox"] > .p-selection-card-marker { order: -1; margin-top: 2px; margin-right: 4px; }
+.p-selection-card[data-variant="radio"] > .p-selection-card-marker { border-radius: var(--figma-radius-full); }
+.p-selection-card[data-variant="radio"] .p-selection-card-check { font-size: 0; width: 6px; height: 6px; border-radius: var(--figma-radius-full); background: var(--fg-white); }
+.p-selection-card[data-variant="avatar"] .p-selection-card-ornament { border-radius: var(--figma-radius-full); overflow: hidden; background: transparent; box-shadow: inset 0 0 0 .75px rgb(0 0 0 / .08); }
+.p-selection-card[data-variant="avatar"] .p-selection-card-ornament > img { width: 100%; height: 100%; object-fit: cover; }
+.p-selection-card[data-variant="payment"] .p-selection-card-content { gap: 12px; }
+.p-selection-card[data-variant="payment"] .p-selection-card-ornament { width: 34px; height: 24px; box-shadow: none; background: transparent; border-radius: 0; }
+.p-selection-card-actions { display: flex; gap: 12px; margin-top: 8px; position: relative; z-index: 2; }
+.p-selection-card-actions > * { position: relative; }
+.p-selection-card[data-size="sm"] .p-selection-card-actions[data-spacing="md"] { margin-top: 12px; }
+.p-selection-card[data-disabled] .p-selection-card-actions { pointer-events: none; }
+.p-selection-card[data-size="md"] { font-size: 16px; line-height: 24px; }
+.p-selection-card[data-size="md"] .p-selection-card-copy { gap: 2px; }
+.p-selection-card[data-size="md"] .p-selection-card-title-row { gap: 6px; }
+.p-selection-card[data-size="md"] .p-selection-card-ornament { width: 40px; height: 40px; border-radius: var(--figma-radius-md); }
+.p-selection-card[data-size="md"] > .p-selection-card-marker { width: 20px; height: 20px; border-radius: var(--figma-radius-sm); }
+.p-selection-card[data-size="md"][data-variant="radio"] > .p-selection-card-marker { border-radius: var(--figma-radius-full); }
+.p-selection-card[data-size="md"][data-variant="radio"] .p-selection-card-check { width: 8px; height: 8px; }
+.p-selection-card[data-size="md"][data-variant="avatar"] .p-selection-card-ornament { border-radius: var(--figma-radius-full); }
+.p-selection-card[data-size="md"][data-variant="payment"] .p-selection-card-ornament { width: 46px; height: 32px; }
+.p-selection-card[data-size="md"][data-variant="payment"] .p-selection-card-content { gap: 16px; }
+.p-selection-card[data-size="md"][data-variant="payment"] .p-selection-card-actions { margin-top: 10px; font-size: 14px; line-height: 20px; }
+.p-selection-card[data-variant="plan"] { display: block; padding: 0; }
+.p-selection-card-header { display: flex; align-items: center; gap: 12px; padding: 12px 20px 12px 12px; box-shadow: inset 0 -1px var(--border-secondary); }
+.p-selection-card-header > .p-selection-card-title { flex: 1; font-size: 16px; line-height: 24px; font-weight: 600; padding-right: 20px; }
+.p-selection-card[data-variant="plan"] > .p-selection-card-marker { position: absolute; top: 20px; right: 20px; }
+.p-selection-card-body { display: flex; align-items: flex-start; gap: 4px; padding: 16px; }
+.p-selection-card-badge { display: inline-flex; }
+.p-selection-card-plan-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 4px; }
+.p-selection-card-price { display: flex; align-items: flex-end; gap: 4px; font: 600 30px/38px var(--font-display); }
+.p-selection-card-period { padding-bottom: 3px; font: 400 14px/20px var(--font-body); }
+.p-selection-card[data-size="md"] .p-selection-card-header > .p-selection-card-title { font-size: 18px; line-height: 28px; }
+.p-selection-card[data-size="md"][data-variant="plan"] > .p-selection-card-marker { top: 22px; }
+.p-selection-card[data-size="md"] .p-selection-card-plan-copy { gap: 8px; }
+.p-selection-card[data-size="md"] .p-selection-card-price { font-size: 36px; line-height: 44px; letter-spacing: -.72px; }
+.p-selection-card[data-size="md"] .p-selection-card-period { font-size: 16px; line-height: 24px; letter-spacing: 0; }
+.p-selection-card[data-breakpoint="mobile"] .p-selection-card-body { flex-direction: column; gap: 16px; }
+.p-selection-card[data-breakpoint="mobile"] .p-selection-card-badge { order: -1; }
+.p-selection-card[data-reference-state="focused"] > .p-selection-card-marker { box-shadow: inset 0 0 0 1px var(--border-primary), var(--effect-focus-ring); }
+.p-selection-card[data-reference-state="focused"]:has(> :checked) > .p-selection-card-marker { box-shadow: var(--effect-focus-ring); }
+.p-selection-card:has(> :focus-visible) > .p-selection-card-marker { box-shadow: inset 0 0 0 1px var(--border-primary), var(--effect-focus-ring); }
+.p-selection-card:has(> :checked:focus-visible) > .p-selection-card-marker, .p-selection-card:has(> [data-state="checked"]:focus-visible) > .p-selection-card-marker { box-shadow: var(--effect-focus-ring); }
+.p-selection-card[data-disabled] .p-selection-card-ornament { background: var(--bg-disabled-subtle); }
+.p-selection-card[data-disabled][data-variant="radio"] .p-selection-card-check { background: var(--fg-disabled-subtle); }
+@media (max-width: 640px) { .p-selection-card-body { flex-direction: column; gap: 16px; } .p-selection-card-badge { order: -1; } }

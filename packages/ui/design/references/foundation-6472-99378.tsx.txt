@@ -1,0 +1,16 @@
+const imgSingleFalse = "https://www.figma.com/api/mcp/asset/e5bf22ce-85ad-485d-b4b0-7463863e8873.svg";
+const imgSingleTrue = "https://www.figma.com/api/mcp/asset/881955f8-f480-4357-aa5c-bd6eb8a799f8.svg";
+
+type VariablesIconProps = {
+  className?: string;
+  single?: boolean;
+};
+
+export default function VariablesIcon({ className, single = true }: VariablesIconProps) {
+  const isSingle = single;
+  return (
+    <div className={className || "relative size-[24px]"} id={isSingle ? "node-6472_99377" : "node-5253_373244"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isSingle ? imgSingleTrue : imgSingleFalse} />
+    </div>
+  );
+}

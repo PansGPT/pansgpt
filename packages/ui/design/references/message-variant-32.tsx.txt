@@ -1,0 +1,89 @@
+const imgStatusReadStateDefault = "https://www.figma.com/api/mcp/asset/9c2527a4-4c48-4ceb-bdc0-b1db95108fc6.svg";
+const imgImage43 = "https://www.figma.com/api/mcp/asset/1aa0e823-61f0-4f77-a414-31d5e2076804.png";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/b4e76b10-e345-4e53-830d-b06a97fd304b.svg";
+const imgDownloadCloud02 = "https://www.figma.com/api/mcp/asset/9dcd5bab-fc8f-4e52-817a-cc1d6f4346e0.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/aa74f819-8a95-4b2c-8d6e-2ae0a9eb173a.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/ad9b01bb-a858-48d8-bfe1-dd89f94da8b0.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/0baccf89-9655-4fcc-8de5-162de654dabd.svg";
+
+type MessageStatusIconProps = {
+  className?: string;
+  state?: "Default";
+  status?: "Read";
+};
+
+function MessageStatusIcon({ className, state = "Default", status = "Read" }: MessageStatusIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="9241:548209">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusReadStateDefault} />
+    </div>
+  );
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "True";
+  sent?: "True";
+  statusIcon?: boolean;
+  type?: "Image";
+};
+
+function Message({ className, actionsPanel = "True", sent = "True", statusIcon = true, type = "Image" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end max-w-[360px] relative w-[360px]"} data-node-id="9244:2723">
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9244:2724" data-name="Content">
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9244:2725" data-name="Name and time">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis whitespace-nowrap" data-node-id="9244:2726">
+            You
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative shrink-0" data-node-id="9244:2727" data-name="Time and status icon">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9244:2728">
+              Friday 2:20pm
+            </p>
+            {statusIcon && <MessageStatusIcon className="relative shrink-0 size-[16px]" />}
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="9244:4596" data-name="Content">
+          <div className="aspect-[400/300] border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid relative rounded-[6px] shrink-0 w-full" data-node-id="9244:4597" data-name="Image 4:3">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[6px] size-full" src={imgImage43} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-xs,4px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 w-full whitespace-nowrap" data-node-id="9244:4598" data-name="File name and file size">
+            <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9244:4599">
+              Background image.jpg
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="9244:4600">
+              128 KB
+            </p>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[6px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="9244:2731" data-name="_Message action panel">
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9244:2731;9206:591510" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9244:2731;9206:591510;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9244:2731;9206:591517" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9244:2731;9206:591517;9206:591497" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+            </div>
+            <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9244:2731;9206:591517;9206:591520" data-name="Cursor">
+              <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgCursor} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9244:2731;9206:591537" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9244:2731;9206:591537;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9244:2731;9206:591541" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9244:2731;9206:591541;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

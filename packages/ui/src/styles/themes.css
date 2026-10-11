@@ -1,0 +1,28 @@
+/* Project extensions. Figma exports remain untouched in tokens.css. */
+:root, [data-theme="light"], [data-theme="dark"], [data-theme="sepia"] {
+  --font-body: "Plus Jakarta Sans Variable", var(--figma-font-family-font-family-body), sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", var(--figma-font-family-font-family-display), sans-serif;
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary-900);
+  --primary: var(--bg-brand-solid);
+}
+[data-theme="dark"] { --bg-primary: oklch(0% 0 0); }
+[data-theme="sepia"] {
+  --bg-primary: oklch(97.4% 0.011 80);
+  --bg-primary-hover: oklch(94.8% 0.016 80);
+  --bg-secondary: oklch(94.8% 0.016 80);
+  --bg-tertiary: oklch(91% 0.02 80);
+  --bg-quaternary: oklch(87% 0.025 80);
+  --bg-disabled-subtle: oklch(94.8% 0.016 80);
+  --bg-brand-solid: oklch(49% 0.092 150);
+  --bg-brand-solid-hover: oklch(43% 0.085 150);
+  --fg-brand-primary-600: oklch(49% 0.092 150);
+  --text-primary-900: oklch(28% 0.018 75);
+  --text-secondary-700: oklch(35% 0.018 75);
+  --text-tertiary-600: oklch(43% 0.018 75);
+  --text-quaternary-500: oklch(49% 0.018 75);
+  --text-placeholder: oklch(49% 0.018 75);
+  --border-primary: oklch(82% 0.022 75);
+  --border-secondary: oklch(88% 0.022 75);
+}
+

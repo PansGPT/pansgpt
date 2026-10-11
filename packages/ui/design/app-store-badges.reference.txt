@@ -1,0 +1,84 @@
+const imgStoreGooglePlayStyleOutlineSizeMd = "https://www.figma.com/api/mcp/asset/9ecc433a-58b2-4360-bd95-7cd0786a41a9.svg";
+const imgStoreGooglePlayStyleOutlineSizeLg = "https://www.figma.com/api/mcp/asset/f40475f1-a687-4d9b-a837-03e646699fe6.svg";
+const imgStoreAppStoreStyleOutlineSizeMd = "https://www.figma.com/api/mcp/asset/c536c17a-2468-4e35-aad9-d74af55ad8c7.svg";
+const imgStoreAppStoreStyleOutlineSizeLg = "https://www.figma.com/api/mcp/asset/10284172-b355-4974-bbee-a9025eb717e2.svg";
+const imgStoreGalaxyStoreStyleOutlineSizeMd = "https://www.figma.com/api/mcp/asset/41091cb5-2fbb-43c7-b510-327705b1c96d.svg";
+const imgStoreGalaxyStoreStyleOutlineSizeLg = "https://www.figma.com/api/mcp/asset/e4461da3-023e-4012-a97b-cf4b5a29c0d0.svg";
+const imgStoreAppGalleryStyleOutlineSizeMd = "https://www.figma.com/api/mcp/asset/ce06a47c-3431-4a77-ad91-d4f91d139241.svg";
+const imgStoreAppGalleryStyleOutlineSizeLg = "https://www.figma.com/api/mcp/asset/9b3de7cc-3c7f-4117-a8c9-11b05f07c473.svg";
+const imgStoreGooglePlayStyleBrandSizeMd = "https://www.figma.com/api/mcp/asset/f81a707b-53e7-47dd-b354-265703007b43.svg";
+const imgStoreGooglePlayStyleBrandSizeLg = "https://www.figma.com/api/mcp/asset/faba28e1-e17b-48a6-ab72-cfa98f985dda.svg";
+const imgStoreAppStoreStyleBrandSizeMd = "https://www.figma.com/api/mcp/asset/4d385252-7402-4abc-8120-9942a26e4135.svg";
+const imgStoreAppStoreStyleBrandSizeLg = "https://www.figma.com/api/mcp/asset/1ea129ea-2e57-4ad3-a64f-56a610a936ff.svg";
+const imgGalaxyStore = "https://www.figma.com/api/mcp/asset/abb97543-3d36-476b-91b7-bb87585981a6.svg";
+const imgAvailableOn = "https://www.figma.com/api/mcp/asset/5555cd1b-bbd4-4f72-8276-6f2139c6e3ca.svg";
+const imgBag = "https://www.figma.com/api/mcp/asset/59be5337-26d5-4660-a840-ae9d93499029.svg";
+const imgGalaxyStore1 = "https://www.figma.com/api/mcp/asset/ad646445-913a-42ee-a00b-743cebf56406.svg";
+const imgAvailableOn1 = "https://www.figma.com/api/mcp/asset/3c8b7beb-6d59-43d4-89d1-66a328827f12.svg";
+const imgBag1 = "https://www.figma.com/api/mcp/asset/e3605cf3-e0b3-4395-998b-8da5f43da804.svg";
+const imgStoreAppGalleryStyleBrandSizeMd = "https://www.figma.com/api/mcp/asset/dc71d46c-d430-4bf6-bc94-d70fcdb2a8ff.svg";
+const imgStoreAppGalleryStyleBrandSizeLg = "https://www.figma.com/api/mcp/asset/38d41b63-cdc2-41da-8ca8-44235eb03722.svg";
+const imgStoreMacAppStoreStyleBrandSizeMd = "https://www.figma.com/api/mcp/asset/9051bcac-285f-4a9c-9c7d-33fa5c8e7cee.svg";
+const imgStoreMacAppStoreStyleBrandSizeLg = "https://www.figma.com/api/mcp/asset/ae1f7bf2-fd29-4ea6-a286-ddabfbb83415.svg";
+const imgStoreMacAppStoreStyleOutlineSizeMd = "https://www.figma.com/api/mcp/asset/01e38803-d4e4-4643-baf0-7d4832d3fc1e.svg";
+const imgStoreMacAppStoreStyleOutlineSizeLg = "https://www.figma.com/api/mcp/asset/9b3c958e-c852-4e4b-b358-a6c8548a6e60.svg";
+
+type MobileAppStoreBadgeProps = {
+  className?: string;
+  size?: "md" | "lg";
+  store?: "Google Play" | "App Store" | "Mac App Store" | "Galaxy Store" | "AppGallery";
+  style?: "Brand" | "Outline";
+};
+
+export default function MobileAppStoreBadge({ className, size = "md", store = "Google Play", style = "Brand" }: MobileAppStoreBadgeProps) {
+  const isAppGalleryAndBrandAndLg = store === "AppGallery" && style === "Brand" && size === "lg";
+  const isAppGalleryAndBrandAndMd = store === "AppGallery" && style === "Brand" && size === "md";
+  const isAppGalleryAndOutlineAndLg = store === "AppGallery" && style === "Outline" && size === "lg";
+  const isAppGalleryAndOutlineAndMd = store === "AppGallery" && style === "Outline" && size === "md";
+  const isAppStoreAndBrandAndLg = store === "App Store" && style === "Brand" && size === "lg";
+  const isAppStoreAndBrandAndMd = store === "App Store" && style === "Brand" && size === "md";
+  const isAppStoreAndOutlineAndLg = store === "App Store" && style === "Outline" && size === "lg";
+  const isAppStoreAndOutlineAndMd = store === "App Store" && style === "Outline" && size === "md";
+  const isGalaxyStoreAndBrand = store === "Galaxy Store" && style === "Brand";
+  const isGalaxyStoreAndBrandAndLg = store === "Galaxy Store" && style === "Brand" && size === "lg";
+  const isGalaxyStoreAndBrandAndMd = store === "Galaxy Store" && style === "Brand" && size === "md";
+  const isGalaxyStoreAndOutlineAndLg = store === "Galaxy Store" && style === "Outline" && size === "lg";
+  const isGalaxyStoreAndOutlineAndMd = store === "Galaxy Store" && style === "Outline" && size === "md";
+  const isGooglePlayAndBrandAndLg = store === "Google Play" && style === "Brand" && size === "lg";
+  const isGooglePlayAndBrandAndMd = store === "Google Play" && style === "Brand" && size === "md";
+  const isGooglePlayAndOutlineAndLg = store === "Google Play" && style === "Outline" && size === "lg";
+  const isMacAppStoreAndBrandAndLg = store === "Mac App Store" && style === "Brand" && size === "lg";
+  const isMacAppStoreAndBrandAndMd = store === "Mac App Store" && style === "Brand" && size === "md";
+  const isMacAppStoreAndOutlineAndLg = store === "Mac App Store" && style === "Outline" && size === "lg";
+  const isMacAppStoreAndOutlineAndMd = store === "Mac App Store" && style === "Outline" && size === "md";
+  return (
+    <div className={className || `relative ${store === "Mac App Store" && size === "lg" ? "h-[44px] w-[172px]" : store === "Mac App Store" && size === "md" ? "h-[40px] w-[156px]" : isGalaxyStoreAndBrandAndLg ? String.raw`bg-[var(--colors\/base\/black,black)] border border-[var(--component-colors\/components\/app-store-badges\/app-store-badge-border,#a6a6a6)] border-solid h-[44px] rounded-[8px] w-[161.7px]` : isGalaxyStoreAndBrandAndMd ? String.raw`bg-[var(--colors\/base\/black,black)] border border-[var(--component-colors\/components\/app-store-badges\/app-store-badge-border,#a6a6a6)] border-solid h-[40px] rounded-[7px] w-[147px]` : store === "AppGallery" && size === "lg" ? "h-[44px] w-[146.3px]" : store === "AppGallery" && size === "md" ? "h-[40px] w-[133px]" : isGalaxyStoreAndOutlineAndLg ? "h-[44px] w-[161.7px]" : isGalaxyStoreAndOutlineAndMd ? "h-[40px] w-[147px]" : store === "App Store" && size === "lg" ? "h-[44px] w-[132px]" : store === "App Store" && size === "md" ? "h-[40px] w-[120px]" : store === "Google Play" && size === "lg" ? "h-[44px] w-[148.5px]" : "h-[40px] w-[135px]"}`} id={isMacAppStoreAndOutlineAndLg ? "node-8284_20818" : isMacAppStoreAndOutlineAndMd ? "node-8284_20802" : isMacAppStoreAndBrandAndLg ? "node-8284_20814" : isMacAppStoreAndBrandAndMd ? "node-8284_2195" : isAppGalleryAndBrandAndLg ? "node-1316_993" : isAppGalleryAndBrandAndMd ? "node-1303_2207" : isGalaxyStoreAndBrandAndLg ? "node-1316_1000" : isGalaxyStoreAndBrandAndMd ? "node-1303_2200" : isAppStoreAndBrandAndLg ? "node-1316_1007" : isAppStoreAndBrandAndMd ? "node-1303_2196" : isGooglePlayAndBrandAndLg ? "node-1316_1011" : isGooglePlayAndBrandAndMd ? "node-1303_2188" : isAppGalleryAndOutlineAndLg ? "node-1316_1027" : isAppGalleryAndOutlineAndMd ? "node-1303_2180" : isGalaxyStoreAndOutlineAndLg ? "node-1316_1036" : isGalaxyStoreAndOutlineAndMd ? "node-1303_2174" : isAppStoreAndOutlineAndLg ? "node-1316_1045" : isAppStoreAndOutlineAndMd ? "node-1303_2170" : isGooglePlayAndOutlineAndLg ? "node-1316_1060" : "node-1303_2163"}>
+      {(style === "Outline" || (store === "Google Play" && style === "Brand") || (store === "App Store" && style === "Brand") || (store === "AppGallery" && style === "Brand") || (store === "Mac App Store" && style === "Brand")) && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isMacAppStoreAndOutlineAndLg ? imgStoreMacAppStoreStyleOutlineSizeLg : isMacAppStoreAndOutlineAndMd ? imgStoreMacAppStoreStyleOutlineSizeMd : isMacAppStoreAndBrandAndLg ? imgStoreMacAppStoreStyleBrandSizeLg : isMacAppStoreAndBrandAndMd ? imgStoreMacAppStoreStyleBrandSizeMd : isAppGalleryAndBrandAndLg ? imgStoreAppGalleryStyleBrandSizeLg : isAppGalleryAndBrandAndMd ? imgStoreAppGalleryStyleBrandSizeMd : isAppStoreAndBrandAndLg ? imgStoreAppStoreStyleBrandSizeLg : isAppStoreAndBrandAndMd ? imgStoreAppStoreStyleBrandSizeMd : isGooglePlayAndBrandAndLg ? imgStoreGooglePlayStyleBrandSizeLg : isGooglePlayAndBrandAndMd ? imgStoreGooglePlayStyleBrandSizeMd : isAppGalleryAndOutlineAndLg ? imgStoreAppGalleryStyleOutlineSizeLg : isAppGalleryAndOutlineAndMd ? imgStoreAppGalleryStyleOutlineSizeMd : isGalaxyStoreAndOutlineAndLg ? imgStoreGalaxyStoreStyleOutlineSizeLg : isGalaxyStoreAndOutlineAndMd ? imgStoreGalaxyStoreStyleOutlineSizeMd : isAppStoreAndOutlineAndLg ? imgStoreAppStoreStyleOutlineSizeLg : isAppStoreAndOutlineAndMd ? imgStoreAppStoreStyleOutlineSizeMd : isGooglePlayAndOutlineAndLg ? imgStoreGooglePlayStyleOutlineSizeLg : imgStoreGooglePlayStyleOutlineSizeMd} />}
+      {isGalaxyStoreAndBrand && (
+        <>
+          <div className="absolute bottom-[calc(11.5%-0.77px)] left-[calc(28.91%-0.42px)] right-[calc(5.57%-0.89px)] top-1/2" id={isGalaxyStoreAndBrandAndLg ? "node-1316_1001" : "node-1303_2201"} data-name="Galaxy Store">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isGalaxyStoreAndBrandAndLg ? imgGalaxyStore1 : imgGalaxyStore} />
+          </div>
+          <div className="absolute inset-[calc(21%-0.58px)_calc(33.34%-0.33px)_calc(61.29%+0.23px)_calc(28.91%-0.42px)]" id={isGalaxyStoreAndBrandAndLg ? "node-1316_1002" : "node-1303_2202"} data-name="Available on">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={isGalaxyStoreAndBrandAndLg ? imgAvailableOn1 : imgAvailableOn} />
+          </div>
+          <div className={`absolute contents ${isGalaxyStoreAndBrandAndLg ? "inset-[calc(17.5%-0.65px)_calc(76.19%+0.52px)_calc(17.5%-0.65px)_calc(5.57%-0.89px)]" : "inset-[calc(17.5%-0.65px)_calc(76.19%+0.52px)_calc(17.5%-0.65px)_calc(6.12%-0.88px)]"}`} id={isGalaxyStoreAndBrandAndLg ? "node-1316_1003" : "node-1303_2203"} data-name="Galaxy Store icon">
+            <div className="absolute inset-[17.5%_76.19%_17.5%_6.12%] rounded-[10px]" id={isGalaxyStoreAndBrandAndLg ? "node-1316_1005" : "node-1303_2205"} style={isGalaxyStoreAndBrandAndLg ? { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28.6 28.6' preserveAspectRatio='none'><g transform='matrix(0.029184 1.43 -1.43 0.029184 14.3 14.3)'><foreignObject x='-193.8' y='-193.8' width='387.59' height='387.59'><div xmlns='http://www.w3.org/1999/xhtml' style='background-image: conic-gradient(from 90deg, rgb(247, 101, 81) -6.1954%, rgb(244, 96, 94) 0.041541%, rgb(233, 75, 128) 6.4238%, rgb(222, 51, 164) 12.84%, rgb(212, 26, 200) 18.665%, rgb(203, 6, 229) 25.095%, rgb(201, 2, 236) 28.172%, rgb(203, 4, 229) 31.686%, rgb(209, 8, 211) 37.135%, rgb(216, 13, 186) 43.351%, rgb(225, 19, 158) 50.402%, rgb(236, 30, 123) 59.576%, rgb(242, 42, 101) 67.329%, rgb(245, 53, 91) 71.38%, rgb(247, 68, 82) 75.45%, rgb(247, 86, 81) 81.858%, rgb(247, 96, 81) 87.848%, rgb(247, 101, 81) 93.805%, rgb(244, 96, 94) 100.04%); opacity:1; height: 100%; width: 100%;'></div></foreignObject></g></svg>\")" } : { backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26' preserveAspectRatio='none'><g transform='matrix(0.026531 1.3 -1.3 0.026531 13 13)'><foreignObject x='-193.8' y='-193.8' width='387.59' height='387.59'><div xmlns='http://www.w3.org/1999/xhtml' style='background-image: conic-gradient(from 90deg, rgb(247, 101, 81) -6.1954%, rgb(244, 96, 94) 0.041541%, rgb(233, 75, 128) 6.4238%, rgb(222, 51, 164) 12.84%, rgb(212, 26, 200) 18.665%, rgb(203, 6, 229) 25.095%, rgb(201, 2, 236) 28.172%, rgb(203, 4, 229) 31.686%, rgb(209, 8, 211) 37.135%, rgb(216, 13, 186) 43.351%, rgb(225, 19, 158) 50.402%, rgb(236, 30, 123) 59.576%, rgb(242, 42, 101) 67.329%, rgb(245, 53, 91) 71.38%, rgb(247, 68, 82) 75.45%, rgb(247, 86, 81) 81.858%, rgb(247, 96, 81) 87.848%, rgb(247, 101, 81) 93.805%, rgb(244, 96, 94) 100.04%); opacity:1; height: 100%; width: 100%;'></div></foreignObject></g></svg>\")" }} data-name="gradient" />
+            <div className="absolute inset-[31.49%_80.37%_32.39%_10.3%]" id={isGalaxyStoreAndBrandAndLg ? "node-1316_1006" : "node-1303_2206"} data-name="bag">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={isGalaxyStoreAndBrandAndLg ? imgBag1 : imgBag} />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

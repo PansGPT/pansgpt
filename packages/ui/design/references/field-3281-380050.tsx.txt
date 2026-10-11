@@ -1,0 +1,266 @@
+const imgOpenFalseSupportingTextFalseTooltipTopNoArrow = "https://www.figma.com/api/mcp/asset/21a87755-ba97-4d42-90a2-327ff25346f2.svg";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/da4eedf9-9dfc-4fe3-8a62-707c445b8b49.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/c36cf4ea-7636-4c80-b301-3a8bcde27934.svg";
+
+type TooltipProps = {
+  className?: string;
+  arrow?: "None";
+  supportingText?: "False";
+  text?: string;
+};
+
+function Tooltip({ className, arrow = "None", supportingText = "False", text = "This is a tooltip" }: TooltipProps) {
+  return (
+    <div className={className || "content-stretch drop-shadow-[0px_12px_8px_var(--colors\\/effects\\/shadows\\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\\/effects\\/shadows\\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\\/effects\\/shadows\\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center relative"} data-node-id="1052:587">
+      <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="1052:588" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:589">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type HelpIconProps = {
+  className?: string;
+  open?: boolean;
+  supportingText?: "False";
+  tooltip?: "Top no arrow";
+};
+
+function HelpIcon({ className, open = false, supportingText = "False", tooltip = "Top no arrow" }: HelpIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1054:7">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOpenFalseSupportingTextFalseTooltipTopNoArrow} />
+    </div>
+  );
+}
+
+type SelectProps = {
+  className?: string;
+  helpIcon?: boolean;
+  hintText?: boolean;
+  label?: boolean;
+  required?: boolean;
+  scrollBar?: boolean;
+  size?: "md";
+  state?: "Focused" | "Open";
+  supportingText?: boolean;
+  type?: "Default";
+};
+
+function Select({ className, helpIcon = true, hintText = true, label = true, required = true, scrollBar = true, size = "md", state = "Focused", supportingText = true, type = "Default" }: SelectProps) {
+  const isMdAndDefaultAndFocused = size === "md" && type === "Default" && state === "Focused";
+  const isMdAndDefaultAndOpen = size === "md" && type === "Default" && state === "Open";
+  return (
+    <button className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative w-[320px]"} id={isMdAndDefaultAndOpen ? "node-3281_380050" : "node-3281_379830"}>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" id={isMdAndDefaultAndOpen ? "node-3281_380051" : "node-3281_379831"} data-name="Input with label">
+        {isMdAndDefaultAndFocused && label && (
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7495:525969" data-name="Label wrapper">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3281:379832">
+              Team member
+            </p>
+            {required && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7495:530386">
+                *
+              </p>
+            )}
+            {helpIcon && (
+              <div className="relative shrink-0 size-[16px]" data-node-id="7495:530644" data-name="Help icon">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgOpenFalseSupportingTextFalseTooltipTopNoArrow} />
+              </div>
+            )}
+          </div>
+        )}
+        {isMdAndDefaultAndFocused && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="3281:379833" data-name="Input">
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3281:379834" data-name="Content">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:379835">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+              {supportingText && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:379836">
+                  @olivia
+                </p>
+              )}
+            </div>
+            <div className="relative shrink-0 size-[20px]" data-node-id="3281:379837" data-name="chevron-down">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+            </div>
+          </div>
+        )}
+        {isMdAndDefaultAndOpen && label && (
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0" data-node-id="7495:525967" data-name="Label wrapper">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="3281:380052">
+              Team member
+            </p>
+            {required && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7495:530360">
+                *
+              </p>
+            )}
+            {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" />}
+          </div>
+        )}
+        {isMdAndDefaultAndOpen && (
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="3281:380053" data-name="Input">
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="3281:380054" data-name="Content">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:380055">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+              {supportingText && (
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:380056">
+                  @olivia
+                </p>
+              )}
+            </div>
+            <div className="relative shrink-0 size-[20px]" data-node-id="3281:380057" data-name="chevron-down">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+            </div>
+          </div>
+        )}
+      </div>
+      {isMdAndDefaultAndFocused && hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full" data-node-id="3281:379838">
+          This is a hint text to help user.
+        </p>
+      )}
+      {isMdAndDefaultAndOpen && (
+        <div className="absolute bottom-[-324px] content-stretch flex h-[320px] items-start left-0 right-0" data-node-id="3281:381218" data-name="Menu">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-[1_0_0] flex-col items-start max-h-[320px] min-w-px overflow-clip py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_12px_16px_-4px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_6px_-2px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_2px_-1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))]" data-node-id="3281:381219" data-name="Menu items">
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381220" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381220;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381220;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381220;3281:380432">
+                    Olúwadámilọ́lá Buhari
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381220;3281:380433">
+                    @phoenix
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381221" data-name="_Select menu item">
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381221;3930:406603" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] text-left whitespace-nowrap" data-node-id="I3281:381221;3281:380438" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381221;3281:380439">
+                    Diepreye Ọ̀rẹ̀kọ́yà
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381221;3281:380440">
+                    @olivia
+                  </p>
+                </div>
+                <div className="relative shrink-0 size-[20px]" data-node-id="I3281:381221;3281:380441" data-name="check">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381222" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381222;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381222;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381222;3281:380432">
+                    Ìbùkúnọlá Abubakar
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381222;3281:380433">
+                    @lana
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381223" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381223;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381223;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381223;3281:380432">
+                    Ọ̀rẹ́fúnmi Àrẹ̀gbẹ́ṣọ́lá
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381223;3281:380433">
+                    @demi
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381224" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381224;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381224;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381224;3281:380432">
+                    Ṣọ̀pẹ́ Emenike
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381224;3281:380433">
+                    @candice
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381225" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381225;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381225;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381225;3281:380432">
+                    Chizaram Àkànjí
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381225;3281:380433">
+                    @natali
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381226" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381226;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381226;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381226;3281:380432">
+                    Ikenna Danjuma
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381226;3281:380433">
+                    @drew
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative shrink-0 w-full" data-node-id="3281:381227" data-name="_Select menu item">
+              <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--spacing-sm,6px)]" data-node-id="I3281:381227;3930:406495" data-name="Content">
+                <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] text-left w-full whitespace-nowrap" data-node-id="I3281:381227;3281:380431" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3281:381227;3281:380432">
+                    Foláshadé Chukwuma
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3281:381227;3281:380433">
+                    @orlando
+                  </p>
+                </div>
+              </div>
+            </div>
+            {scrollBar && (
+              <div className="absolute bottom-0 content-stretch flex flex-col items-start pb-[160px] pt-[var(--spacing-md,8px)] px-[var(--spacing-sm,6px)] right-0 top-0" data-node-id="8003:32948" data-name="_Scroll bar (control fill with bottom padding)">
+                <div className="bg-[var(--component-colors\/alpha\/alpha-black-100,black)] border border-[var(--component-colors\/alpha\/alpha-white-100,white)] border-solid flex-[1_0_0] min-h-px opacity-15 relative rounded-[var(--radius-full,9999px)] w-[6px]" data-node-id="I8003:32948;8003:32900" data-name="Bar" />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-md, weight: 500, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## help-circle
+**Node ID:** 3463:405411
+
+help, info, information, documentation, question, circle
+
+## chevron-down
+**Node ID:** 3463:404533
+
+chevron, down, dropdown
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

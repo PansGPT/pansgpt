@@ -1,0 +1,29 @@
+const imgFavicon1 = "https://www.figma.com/api/mcp/asset/b3fb44a9-87ef-407a-bf8c-195b3b15aa34.png";
+
+export default function DesignSystemFooter({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] content-stretch flex flex-col gap-[var(--spacing-8xl,80px)] items-start min-w-[1600px] p-[var(--spacing-4xl,32px)] relative w-[1600px]"} data-node-id="1023:37095" data-name="Design system footer">
+      <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] content-stretch flex flex-col gap-[var(--spacing-10xl,128px)] items-start p-[var(--spacing-6xl,48px)] relative rounded-[var(--radius-3xl,32px)] shrink-0 w-full" data-node-id="6692:41961" data-name="Content">
+        <div className="content-stretch flex items-start justify-between relative shrink-0 w-full" data-node-id="1023:36854" data-name="Footer">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="1023:36847" data-name="Text">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xl,30px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)] whitespace-nowrap" data-node-id="1023:36848">
+              PansGPT Kit and Design system
+            </p>
+          </div>
+          <div className="content-stretch flex items-start relative shrink-0 w-[139px]" data-node-id="1023:36855" data-name="Logo">
+            <div className="h-[32px] relative shrink-0 w-[139px]" data-node-id="I1023:36855;2924:375962" data-name="Logo wrap">
+              <div className="absolute content-stretch flex inset-[0_76.98%_0_0] items-start" data-node-id="I1023:36855;1083:50705" data-name="Logomark">
+                <div className="relative shrink-0 size-[32px]" data-node-id="I1023:36855;1083:50705;18492:16258" data-name="favicon 1">
+                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgFavicon1} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] inset-[6.25%_6.83%_6.25%_37.05%] leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)] text-black whitespace-nowrap" data-node-id="I1023:36855;18492:510946">
+                PansGPT
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

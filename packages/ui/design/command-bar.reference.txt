@@ -1,0 +1,14 @@
+<frame id="3307:407570" name="Command bar" x="3078" y="680" width="5888" height="3040">
+  <symbol id="3307:407212" name="Type=Command only, Text=Default" x="16" y="2064" width="1440" height="960" />
+  <symbol id="3307:407511" name="Type=Users, Text=Default" x="16" y="16" width="1440" height="960" />
+  <symbol id="3307:410235" name="Type=Users, Text=Stacked" x="16" y="1040" width="1440" height="960" />
+  <symbol id="3307:409632" name="Type=Empty state, Text=Default" x="1488" y="2064" width="1440" height="960" />
+  <symbol id="3307:408520" name="Type=Users menu, Text=Default" x="2960" y="16" width="1440" height="960" />
+  <symbol id="3307:410240" name="Type=Users menu, Text=Stacked" x="2960" y="1040" width="1440" height="960" />
+  <symbol id="3307:409015" name="Type=Integrations menu, Text=Default" x="4432" y="16" width="1440" height="960" />
+  <symbol id="3307:410261" name="Type=Integrations menu, Text=Stacked" x="4432" y="1040" width="1440" height="960" />
+  <symbol id="3307:407697" name="Type=Actions, Text=Default" x="1488" y="16" width="1440" height="960" />
+  <symbol id="3307:410277" name="Type=Actions, Text=Stacked" x="1488" y="1040" width="1440" height="960" />
+</frame>
+
+IMPORTANT: The design was too large to fit into context with get_design_context. Instead you have received a sparse metadata response, you MUST call get_design_context on the IDs of the sublayers to get the full code. Split up the calls to ensure the sublayers do not also exceed the context limit.

@@ -1,0 +1,7 @@
+export default function RadiusExample({ className }: { className?: string }) {
+  return (
+    <div className={className || "h-[40px] overflow-clip relative w-[128px]"} data-node-id="6443:299109" data-name="_Radius example">
+      <div className="absolute bg-[var(--colors\/background\/bg-brand-primary_alt,#ecfdf3)] border-2 border-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] border-solid h-[80px] right-0 top-0 w-[256px]" data-node-id="6443:299108" data-name="Radius inner" />
+    </div>
+  );
+}

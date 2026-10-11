@@ -1,0 +1,88 @@
+type MegaInputFieldBaseProps = {
+  className?: string;
+  size?: "md" | "sm" | "lg";
+  state?: "Placeholder";
+};
+
+function MegaInputFieldBase({ className, size = "sm", state = "Placeholder" }: MegaInputFieldBaseProps) {
+  const isPlaceholderAndLg = state === "Placeholder" && size === "lg";
+  const isPlaceholderAndSm = state === "Placeholder" && size === "sm";
+  return (
+    <button className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] `}${isPlaceholderAndSm ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isPlaceholderAndLg ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} id={isPlaceholderAndSm ? "node-1106_66615" : isPlaceholderAndLg ? "node-1106_66639" : "node-1106_66591"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Medium")] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-center w-full `}${isPlaceholderAndLg ? String.raw`leading-[var(--line-height\/display-xl,72px)] text-[length:var(--font-size\/display-xl,60px)] tracking-[-1.2px]` : String.raw`leading-[var(--line-height\/display-lg,60px)] text-[length:var(--font-size\/display-lg,48px)] tracking-[-0.96px]`}`} id={isPlaceholderAndSm ? "node-1106_66617" : isPlaceholderAndLg ? "node-1106_66641" : "node-1106_66593"}>
+        0
+      </p>
+    </button>
+  );
+}
+
+type VerificationCodeInputFieldProps = {
+  className?: string;
+  digits?: "4" | "6";
+  hintText?: boolean;
+  label?: boolean;
+  size?: "sm" | "md" | "lg";
+};
+
+export default function VerificationCodeInputField({ className, digits = "4", hintText = true, label = true, size = "sm" }: VerificationCodeInputFieldProps) {
+  const is6 = digits === "6";
+  const isLg = size === "lg";
+  const isLgAnd4 = size === "lg" && digits === "4";
+  const isLgAnd6 = size === "lg" && digits === "6";
+  const isMd = size === "md";
+  const isMdAnd4 = size === "md" && digits === "4";
+  const isMdAnd6 = size === "md" && digits === "6";
+  const isSmAnd4 = size === "sm" && digits === "4";
+  const isSmAnd6 = size === "sm" && digits === "6";
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative"} id={isSmAnd6 ? "node-1106_67435" : isSmAnd4 ? "node-1106_66907" : isLgAnd6 ? "node-1106_67364" : isLgAnd4 ? "node-1106_67067" : isMdAnd6 ? "node-1106_67355" : "node-1106_66810"}>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" id={isSmAnd6 ? "node-1106_67436" : isSmAnd4 ? "node-1106_66908" : isLgAnd6 ? "node-1106_67365" : isLgAnd4 ? "node-1106_67068" : isMdAnd6 ? "node-1106_67356" : "node-1106_66811"} data-name="Input with label">
+        {label && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1106:66812">
+            Secure code
+          </p>
+        )}
+        <div className={`content-stretch flex relative shrink-0 ${isSmAnd6 ? "gap-[var(--spacing-md,8px)] items-center" : isSmAnd4 ? "cursor-pointer gap-[var(--spacing-md,8px)] items-start" : isLgAnd4 ? "cursor-pointer gap-[var(--spacing-lg,12px)] items-start" : digits === "6" && ["md", "lg"].includes(size) ? "gap-[var(--spacing-lg,12px)] items-center" : "cursor-pointer gap-[var(--spacing-lg,12px)] items-start w-[356px]"}`} id={isSmAnd6 ? "node-1106_67438" : isSmAnd4 ? "node-1106_66910" : isLgAnd6 ? "node-1106_67367" : isLgAnd4 ? "node-1106_67070" : isMdAnd6 ? "node-1106_67358" : "node-1106_66813"} data-name="Input">
+          <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "cursor-pointer min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isSmAnd4 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "cursor-pointer min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isLgAnd4 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isMdAnd6 ? "cursor-pointer min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLg ? "lg" : isMd ? "md" : undefined} />
+          <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "cursor-pointer min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isSmAnd4 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "cursor-pointer min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isLgAnd4 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isMdAnd6 ? "cursor-pointer min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLg ? "lg" : isMd ? "md" : undefined} />
+          <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "cursor-pointer min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isSmAnd4 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "cursor-pointer min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isLgAnd4 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : isMdAnd6 ? "cursor-pointer min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLg ? "lg" : isMd ? "md" : undefined} />
+          {digits === "4" && <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd4 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd4 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLgAnd4 ? "lg" : isMdAnd4 ? "md" : undefined} />}
+          {is6 && (
+            <>
+              <div className={`${String.raw`[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Medium")] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] `}${isSmAnd6 ? "h-[64px] w-[28px]" : "whitespace-nowrap"}`} id={isSmAnd6 ? "node-1106_67628" : isLgAnd6 ? "node-1106_67621" : "node-1106_67625"}>
+                <p className="leading-[var(--line-height\/display-xl,72px)]">-</p>
+              </div>
+              <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLgAnd6 ? "lg" : isMdAnd6 ? "md" : undefined} />
+              <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLgAnd6 ? "lg" : isMdAnd6 ? "md" : undefined} />
+              <MegaInputFieldBase className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center overflow-clip relative shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 `}${isSmAnd6 ? "min-h-[64px] px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] rounded-[var(--radius-lg,16px)] w-[64px]" : isLgAnd6 ? "min-h-[96px] px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] rounded-[12px] w-[96px]" : "min-h-[80px] p-[var(--spacing-md,8px)] rounded-[var(--radius-xl,20px)] w-[80px]"}`} size={isLgAnd6 ? "lg" : isMdAnd6 ? "md" : undefined} />
+            </>
+          )}
+        </div>
+      </div>
+      {(isMdAnd4 || is6 || isLgAnd4) && hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1106:66818">
+          This is a hint text to help user.
+        </p>
+      )}
+      {isSmAnd4 && hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1106:66915">
+          This is a hint text to help user.
+        </p>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Display lg/Medium: Font(family: "Font family/font-family-display", style: Font weight/medium, size: Font size/display-lg, weight: 500, lineHeight: Line height/display-lg, letterSpacing: -2), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Display xl/Medium: Font(family: "Font family/font-family-display", style: Font weight/medium, size: Font size/display-xl, weight: 500, lineHeight: Line height/display-xl, letterSpacing: -2).
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

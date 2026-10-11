@@ -1,0 +1,79 @@
+const imgMail01 = "https://www.figma.com/api/mcp/asset/3c1feefd-7fc5-43e0-823e-5da3705bcb8c.svg";
+const imgAlertCircle = "https://www.figma.com/api/mcp/asset/e7b8d7d7-e638-42c1-afd1-14fc29f9a429.svg";
+
+type InputFieldProps = {
+  className?: string;
+  destructive?: "True";
+  hintText?: boolean;
+  iconLeading?: boolean;
+  iconSwap?: React.ReactNode | null;
+  label?: boolean;
+  required?: boolean;
+  size?: "md";
+  state?: "Placeholder" | "Filled";
+  type?: "Default";
+};
+
+function InputField({ className, destructive = "True", hintText = true, iconLeading = true, iconSwap = null, label = true, required = true, size = "md", state = "Placeholder", type = "Default" }: InputFieldProps) {
+  const isMdAndDefaultAndTrueAndFilled = size === "md" && type === "Default" && destructive === "True" && state === "Filled";
+  return (
+    <button className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative w-[320px]"} id={isMdAndDefaultAndTrueAndFilled ? "node-1094_7246" : "node-1094_7278"}>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" id={isMdAndDefaultAndTrueAndFilled ? "node-3285_380190" : "node-3285_379861"} data-name="Input with label">
+        {label && (
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7486:523659" data-name="Label wrapper">
+            <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3285:379862">
+              Email
+            </p>
+            {required && (
+              <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="7487:535329">
+                *
+              </p>
+            )}
+          </div>
+        )}
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-error_subtle,#fda29b)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" id={isMdAndDefaultAndTrueAndFilled ? "node-3285_380192" : "node-3285_379863"} data-name="Input">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isMdAndDefaultAndTrueAndFilled ? "node-3285_380193" : "node-3285_379864"} data-name="Content">
+            {iconLeading &&
+              (iconSwap || (
+                <div className="relative shrink-0 size-[20px]" data-node-id="3473:606869" data-name="mail-01">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMail01} />
+                </div>
+              ))}
+            <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Regular")] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-ellipsis text-left whitespace-nowrap `}${isMdAndDefaultAndTrueAndFilled ? String.raw`text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]` : String.raw`text-[color:var(--colors\/text\/text-placeholder,#717680)]`}`} id={isMdAndDefaultAndTrueAndFilled ? "node-3285_380195" : "node-3285_379866"}>
+              chioma@PansGPT.com
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isMdAndDefaultAndTrueAndFilled ? "node-3285_380196" : "node-3285_379867"} data-name="alert-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAlertCircle} />
+          </div>
+        </div>
+      </div>
+      {hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full" data-node-id="3285:379868">
+          This is an error message.
+        </p>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## mail-01
+**Node ID:** 3463:406209
+
+mail, message, inbox, tray, mailbox
+
+## alert-circle
+**Node ID:** 3463:405479
+
+alert, circle, warning, error
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

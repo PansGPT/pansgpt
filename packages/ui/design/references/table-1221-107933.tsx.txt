@@ -1,0 +1,52 @@
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/ad6a25ae-46e9-49a6-b8d4-317cf56e4b3e.svg";
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = "False", indeterminate = "False", size = "md", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} data-node-id="1100:295">
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="1100:296" data-name="_Checkbox base" />
+    </div>
+  );
+}
+
+type TableHeaderCellProps = {
+  className?: string;
+  checkbox?: boolean;
+  size?: "sm" | "md";
+  text?: boolean;
+};
+
+export default function TableHeaderCell({ className, checkbox = true, size = "sm", text = true }: TableHeaderCellProps) {
+  const isMdAndNotTextAndNotCheckbox = size === "md" && !text && !checkbox;
+  const isMdAndTextAndNotCheckbox = size === "md" && text && !checkbox;
+  const isSmAndNotTextAndNotCheckbox = size === "sm" && !text && !checkbox;
+  const isSmAndTextAndCheckbox = size === "sm" && text && checkbox;
+  const isSmAndTextAndNotCheckbox = size === "sm" && text && !checkbox;
+  const isTextAndCheckbox = text && checkbox;
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid relative `}${isSmAndNotTextAndNotCheckbox ? "h-[40px] max-h-[40px] w-[68px]" : isMdAndNotTextAndNotCheckbox ? "h-[44px] max-h-[44px] w-[68px]" : size === "sm" && text ? "content-stretch flex gap-[var(--spacing-lg,12px)] h-[40px] items-center max-h-[40px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-md,8px)]" : "content-stretch flex gap-[var(--spacing-lg,12px)] h-[44px] items-center max-h-[44px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-lg,12px)]"}`} id={isSmAndNotTextAndNotCheckbox ? "node-9413_728014" : isMdAndNotTextAndNotCheckbox ? "node-1224_4552" : isSmAndTextAndNotCheckbox ? "node-9413_728012" : isMdAndTextAndNotCheckbox ? "node-1224_4554" : isSmAndTextAndCheckbox ? "node-9413_728009" : "node-214_9"}>
+      {isTextAndCheckbox && <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />}
+      {text && (
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" id={isSmAndTextAndNotCheckbox ? "node-9413_728013" : isMdAndTextAndNotCheckbox ? "node-1224_4556" : isSmAndTextAndCheckbox ? "node-9413_728011" : "node-1221_107056"} data-name="_Table header label">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" id={isSmAndTextAndNotCheckbox ? "node-I9413_728013-1221_106781" : isMdAndTextAndNotCheckbox ? "node-I1224_4556-1221_106781" : isSmAndTextAndCheckbox ? "node-I9413_728011-1221_106889" : "node-I1221_107056-1221_106889"}>
+            Company
+          </p>
+          {isTextAndCheckbox && (
+            <div className="relative shrink-0 size-[12px]" id={isSmAndTextAndCheckbox ? "node-I9413_728011-1221_106890" : "node-I1221_107056-1221_106890"} data-name="arrow-down">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}

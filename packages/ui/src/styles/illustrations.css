@@ -1,0 +1,154 @@
+/* Native source illustration slots: assets retain their intrinsic SVG dimensions. */
+.p-illustration { flex: none; }
+.p-illustration-paper-rotation { flex: none; }
+.p-illustration img { display: block; max-width: none; }
+.p-illustration-layer-0 { background: var(--figma-component-colors-alpha-alpha-black-20); }
+.p-illustration-layer-1 { inset: -1.56% -18.75% -64.06% -18.75%; }
+.p-illustration-layer-2 { inset: -1.01% -12.07% -41.24% -12.07%; }
+.p-illustration-layer-3 { inset: -0.58% -14.86% -47.09% -14.86%; }
+.p-illustration-layer-4 { inset: -0.69% -14.93% -46.99% -14.93%; }
+.p-illustration-layer-5 { inset: -0.48% -12.35% -38.94% -12.35%; }
+.p-illustration-layer-6 { inset: -0.53% -29.97% -42.93% -29.97%; }
+.p-illustration-layer-7 { inset: -0.97% -16.59% -29.69% -16.59%; }
+.p-illustration-layer-8 { inset: -1.21% -16.82% -30.59% -16.82%; }
+.p-illustration-layer-9 { inset: -0.79% -16.41% -29.37% -16.41%; }
+.p-illustration-layer-10 { inset: -0.7% -39.42% -56.47% -39.42%; }
+.p-illustration-layer-11 { inset: -0.84% -47.3% -67.74% -47.3%; }
+.p-illustration-layer-12 { border-radius: var(--figma-radius-full); }
+.p-illustration-layer-13 { inset: 13.56% 13.16% 32.2% 13.16%; }
+.p-illustration-layer-14 { inset: -1.25% -15% -51.25% -15%; }
+.p-illustration-layer-15 { backdrop-filter: blur(4px); }
+.p-illustration-layer-16 { left: 13.44px; }
+.p-illustration-layer-17 { left: 11.44px; }
+.p-illustration-layer-18 { justify-content: center; }
+.p-illustration-layer-19 { left: 40.84px; }
+.p-illustration-layer-20 { left: 64.45px; }
+.p-illustration-layer-21 { left: 60.01px; }
+.p-illustration-layer-22 { overflow: clip; }
+.p-illustration-layer-23 { height: 114.437px; }
+.p-illustration-layer-24 { height: 114.406px; }
+.p-illustration-layer-25 { width: 101.857px; }
+.p-illustration-layer-26 { left: 94.7px; }
+.p-illustration-layer-27 { width: 128px; height: 128px; }
+.p-illustration-layer-28 { width: 104px; height: 104px; }
+.p-illustration-layer-29 { width: 160px; height: 160px; }
+.p-illustration-layer-30 { left: 192px; }
+.p-illustration-layer-31 { left: 156px; }
+.p-illustration-layer-32 { left: 152px; }
+.p-illustration-layer-33 { left: 138px; }
+.p-illustration-layer-34 { left: 144px; }
+.p-illustration-layer-35 { left: 130px; }
+.p-illustration-layer-36 { left: 200px; }
+.p-illustration-layer-37 { left: 184px; }
+.p-illustration-layer-38 { height: 99.429px; }
+.p-illustration-layer-39 { height: 87.004px; }
+.p-illustration-layer-40 { width: 149.44px; }
+.p-illustration-layer-41 { height: 72.519px; }
+.p-illustration-layer-42 { width: 124.56px; }
+.p-illustration-layer-43 { width: 196.56px; }
+.p-illustration-layer-44 { align-items: center; }
+.p-illustration-layer-45 { top: 0.02px; }
+.p-illustration-layer-46 { height: 72.499px; }
+.p-illustration-layer-47 { width: 64.547px; }
+.p-illustration-layer-48 { top: 0.03px; }
+.p-illustration-layer-49 { height: 71.724px; }
+.p-illustration-layer-50 { height: 59.783px; }
+.p-illustration-layer-51 { width: 43.343px; }
+.p-illustration-layer-52 { height: 94.339px; }
+.p-illustration-layer-53 { width: 68.396px; }
+.p-illustration-layer-54 { left: 22px; }
+.p-illustration-layer-55 { left: 24px; }
+.p-illustration-layer-56 { left: 30px; }
+.p-illustration-layer-57 { left: 14px; }
+.p-illustration-layer-58 { width: 12px; height: 12px; }
+.p-illustration-layer-59 { left: 16px; }
+.p-illustration-layer-60 { width: 10px; height: 10px; }
+.p-illustration-layer-61 { left: 18px; }
+.p-illustration-layer-62 { width: 16px; height: 16px; }
+.p-illustration-layer-63 { left: 10px; }
+.p-illustration-layer-64 { top: 112px; }
+.p-illustration-layer-65 { left: 11px; }
+.p-illustration-layer-66 { width: 14px; height: 14px; }
+.p-illustration-layer-67 { top: 102px; }
+.p-illustration-layer-68 { top: 104px; }
+.p-illustration-layer-69 { top: 128px; }
+.p-illustration-layer-70 { top: 136px; }
+.p-illustration-layer-71 { top: 120px; }
+.p-illustration-layer-72 { left: 15px; }
+.p-illustration-layer-73 { width: 20px; height: 20px; }
+.p-illustration-layer-74 { left: 17px; }
+.p-illustration-layer-75 { left: 27px; }
+.p-illustration-layer-76 { width: 56px; height: 56px; }
+.p-illustration-layer-77 { left: 58px; }
+.p-illustration-layer-78 { left: 82px; }
+.p-illustration-layer-79 { width: 28px; height: 28px; }
+.p-illustration-layer-80 { height: 86.98px; }
+.p-illustration-layer-81 { width: 77.44px; }
+.p-illustration-layer-82 { left: 49px; }
+.p-illustration-layer-83 { left: 72px; }
+.p-illustration-layer-84 { left: 34px; }
+.p-illustration-layer-85 { left: 46px; }
+.p-illustration-layer-86 { left: 52px; }
+.p-illustration-layer-87 { width: 48px; height: 48px; }
+.p-illustration-layer-88 { left: 12px; }
+.p-illustration-layer-89 { width: 24px; height: 24px; }
+.p-illustration-layer-90 { max-width: none; }
+.p-illustration-layer-91 { top: 22px; }
+.p-illustration-layer-92 { top: 20px; }
+.p-illustration-layer-93 { top: 14px; }
+.p-illustration-layer-94 { top: 12px; }
+.p-illustration-layer-95 { left: 9px; }
+.p-illustration-layer-96 { top: 88px; }
+.p-illustration-layer-97 { top: 36px; }
+.p-illustration-layer-98 { top: 34px; }
+.p-illustration-layer-99 { top: 28px; }
+.p-illustration-layer-100 { width: 8px; height: 8px; }
+.p-illustration-layer-101 { top: 10px; }
+.p-illustration-layer-102 { top: 44px; }
+.p-illustration-layer-103 { top: 16px; }
+.p-illustration-layer-104 { top: 78px; }
+.p-illustration-layer-105 { top: 60px; }
+.p-illustration-layer-106 { top: 92px; }
+.p-illustration-layer-107 { top: 84px; }
+.p-illustration-layer-108 { transform: rotate(-25deg); }
+.p-illustration-layer-109 { top: 68px; }
+.p-illustration-layer-110 { top: 72px; }
+.p-illustration-layer-111 { top: 70px; }
+.p-illustration-layer-112 { top: 62px; }
+.p-illustration-layer-113 { height: 134px; }
+.p-illustration-layer-114 { width: 172px; }
+.p-illustration-layer-115 { height: 136px; }
+.p-illustration-layer-116 { height: 124px; }
+.p-illustration-layer-117 { width: 152px; }
+.p-illustration-layer-118 { height: 118px; }
+.p-illustration-layer-119 { height: 128px; }
+.p-illustration-layer-120 { height: 168px; }
+.p-illustration-layer-121 { width: 220px; }
+.p-illustration-layer-122 { height: 160px; }
+.p-illustration-layer-123 { top: 8px; }
+.p-illustration-layer-124 { top: 6px; }
+.p-illustration-layer-126 { top: 4px; }
+.p-illustration-layer-127 { width: 140px; }
+.p-illustration-layer-128 { width: 174px; }
+.p-illustration-layer-129 { width: 138px; }
+.p-illustration-layer-130 { width: 115px; }
+.p-illustration-layer-131 { height: 104px; }
+.p-illustration-layer-132 { width: 166px; }
+.p-illustration-layer-133 { transform: rotate(25deg); }
+.p-illustration-layer-134 { height: 112px; }
+.p-illustration-layer-135 { width: 104px; }
+.p-illustration-layer-136 { height: 138px; }
+.p-illustration-layer-137 { width: 128px; }
+.p-illustration-layer-138 { position: relative; }
+.p-illustration-layer-139 { position: absolute; }
+.p-illustration-layer-140 { height: 80px; }
+.p-illustration-layer-141 { height: 86px; }
+.p-illustration-layer-142 { height: 72px; }
+.p-illustration-layer-143 { width: 52px; }
+.p-illustration-layer-144 { height: 90px; }
+.p-illustration-layer-145 { width: 84px; }
+.p-illustration-layer-146 { inset: 0; }
+.p-illustration-layer-147 { left: 0; }
+.p-illustration-layer-148 { top: 0; }
+.p-illustration-layer-149 { display: block; }
+.p-illustration-layer-150 { display: flex; }

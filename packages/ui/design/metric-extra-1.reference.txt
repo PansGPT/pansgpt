@@ -1,0 +1,63 @@
+const imgArrowUpRight = "https://www.figma.com/api/mcp/asset/eff8ea98-d809-4cc9-b32e-badd18c09405.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/6291d9cf-2ecd-4c88-af72-750c62ce7f57.svg";
+
+type ChangeProps = {
+  className?: string;
+  trend?: "Positive";
+  type?: "03";
+};
+
+function Change({ className, trend = "Positive", type = "03" }: ChangeProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,6px)]"} data-node-id="8083:164432">
+      <div className="relative shrink-0 size-[12px]" data-node-id="8083:164429" data-name="arrow-up-right">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUpRight} />
+      </div>
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="8083:164430">
+        100%
+      </p>
+    </div>
+  );
+}
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "True";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  type?: "Simple";
+};
+
+function MetricItem({ className, actions = "True", breakpoint = "Desktop", dropdownIcon = true, type = "Simple" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col items-start relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="1561:262223">
+      <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="1561:262237" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1561:262225">
+          Views 24 hours
+        </p>
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-end relative shrink-0 w-full" data-node-id="1561:262227" data-name="Number and badge">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)]" data-node-id="1561:262228">
+            2,000
+          </p>
+          <Change className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,6px)] shrink-0" />
+        </div>
+      </div>
+      <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="1561:262246" data-name="Action">
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-end px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1561:262248" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3292:580477" data-name="Buttons/Button">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:580477;3287:433309">
+              View report
+            </p>
+          </div>
+        </div>
+      </div>
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="3292:579841" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3292:579841;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

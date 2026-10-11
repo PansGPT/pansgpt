@@ -1,0 +1,99 @@
+const imgEmoji = "https://www.figma.com/api/mcp/asset/73d25bc9-1565-434b-8eae-38a94debe9a9.png";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/0a043e59-de20-47a4-8842-6f809e334507.png";
+const imgEmoji1 = "https://www.figma.com/api/mcp/asset/9e075757-f89c-497e-99be-a8450f623f09.png";
+const imgPage = "https://www.figma.com/api/mcp/asset/adf454f1-540b-4069-afbe-6996d64d9fab.svg";
+
+type EmojiProps = {
+  className?: string;
+  emoji?: "Heart red";
+};
+
+function Emoji({ className, emoji = "Heart red" }: EmojiProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1244:280">
+      <div className="absolute left-0 size-[16px] top-0" data-node-id="1244:4" data-name="Emoji">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji} />
+      </div>
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "False";
+  reactions?: boolean;
+  sent?: "False";
+  type?: "File";
+};
+
+function Message({ className, actionsPanel = "False", reactions = true, sent = "False", type = "File" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[360px] relative w-[360px]"} data-node-id="1249:72">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="1249:73" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="1249:74" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="1249:75" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="1249:76">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="1249:77">
+            Friday 2:20pm
+          </p>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start justify-center overflow-clip p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tr-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="1249:78" data-name="Input">
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="1249:79" data-name="Content">
+            <div className="relative shrink-0 size-[40px]" data-node-id="4920:413234" data-name="File type icon">
+              <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I4920:413234;4916:411431" data-name="Page">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+              </div>
+              <div className="absolute bg-[var(--colors\/brand\/600,#079455)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_33.75%_13.75%_3.75%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I4920:413234;4916:411434" data-name="File type wrap">
+                <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I4920:413234;4916:411435">
+                  JPG
+                </p>
+              </div>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-w-px relative" data-node-id="1249:81" data-name="Content">
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 w-full" data-node-id="1249:82" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full whitespace-nowrap" data-node-id="1249:83">
+                  Latest design screenshot.jpg
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1249:84">
+                  1.2 MB
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {reactions && (
+          <div className="content-stretch cursor-pointer flex gap-[var(--spacing-xs,4px)] items-center justify-end relative shrink-0 w-full" data-node-id="1249:89" data-name="Row">
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1249:90" data-name="_Message reaction">
+              <Emoji className="relative shrink-0 size-[16px]" />
+            </button>
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1249:91" data-name="_Message reaction">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I1249:91;1244:377" data-name="Emoji=Okay">
+                <div className="absolute left-0 size-[16px] top-0" data-node-id="I1249:91;1244:377;1244:7" data-name="Emoji">
+                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji1} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1249:91;1244:301">
+                2
+              </p>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

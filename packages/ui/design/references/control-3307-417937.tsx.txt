@@ -1,0 +1,27 @@
+const imgAu = "https://www.figma.com/api/mcp/asset/7a0bf609-1d4e-43a7-afbe-183a03b46df3.svg";
+
+type TagProps = {
+  className?: string;
+  action?: "Text only";
+  checkbox?: "False";
+  flagSwap?: React.ReactNode | null;
+  icon?: "Country";
+  size?: "lg";
+};
+
+function Tag({ className, action = "Text only", checkbox = "False", flagSwap = null, icon = "Country", size = "lg" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center pl-[7px] pr-[10px] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3307:417937">
+      <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:406297" data-name="Content">
+        {flagSwap || (
+          <div className="relative shrink-0 size-[16px]" data-node-id="3307:417938" data-name="AU">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAu} />
+          </div>
+        )}
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3307:417939">
+          Label
+        </p>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,107 @@
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/c46fdaa1-ee9f-4c31-81ac-48a63e836628.svg";
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/b9769252-ad7b-4929-bb29-49a9a8f0885d.svg";
+const imgCornerDownLeft = "https://www.figma.com/api/mcp/asset/eb069ffb-ff9a-4fcc-8d82-83dd8b1dbdda.svg";
+const imgArrowLeft = "https://www.figma.com/api/mcp/asset/9c21659b-8321-4616-8f3e-74d7d39714cc.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/fc8bb974-46bc-4707-abd1-6a2cac39630a.svg";
+
+export default function CommandBarFooter({ className }: { className?: string }) {
+  return (
+    <div className={className || "backdrop-blur-[8px] bg-[var(--component-colors\\/alpha\\/alpha-white-80,rgba(255,255,255,0.8))] border-[var(--colors\\/border\\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid border-t content-stretch flex gap-[var(--spacing-lg,12px)] items-center pl-[18px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative w-[640px]"} data-node-id="4898:411379" data-name="_Command bar footer">
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xl,16px)] items-start min-w-px relative" data-node-id="4898:411257" data-name="Content">
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4898:411258" data-name="Navigation icons and text">
+          <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0" data-node-id="4898:411259" data-name="Navigation icons">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411320" data-name="_Command bar navigation icon">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I4898:411320;4898:411303" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411323" data-name="_Command bar navigation icon">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I4898:411323;4898:411303" data-name="arrow-up">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+              </div>
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="4898:411262">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">to navigate</p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4898:411329" data-name="Navigation icons and text">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411332" data-name="_Command bar navigation icon">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I4898:411332;4898:411303" data-name="arrow-up">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCornerDownLeft} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="4898:411333">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">to select</p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4898:411346" data-name="Navigation icons and text">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start px-[var(--spacing-sm,6px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411347" data-name="_Command bar navigation icon">
+            <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/foreground\/fg-quaternary-\(400\),#a4a7ae)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4898:411347;4898:411317">
+              <p className="leading-[var(--line-height\/text-sm,20px)]">esc</p>
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="4898:411348">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">to close</p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="4898:411351" data-name="Navigation icons and text">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-start p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411352" data-name="_Command bar navigation icon">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I4898:411352;4898:411303" data-name="arrow-up">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowLeft} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="4898:411353">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">return to parent</p>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="4898:411358" data-name="Buttons/Button">
+        <div className="relative shrink-0 size-[20px]" data-node-id="I4898:411358;3471:598450" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Backdrop blurs/backdrop-blur-md: Effect(type: BACKGROUND_BLUR, radius: 16).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## arrow-up
+**Node ID:** 3463:404509
+
+arrow, up
+
+## arrow-down
+**Node ID:** 3463:404446
+
+arrow, down
+
+## corner-down-left
+**Node ID:** 3463:404563
+
+corner, down, left, rotate, enter, line break
+
+## arrow-left
+**Node ID:** 3463:404455
+
+arrow, left
+
+## settings-01
+**Node ID:** 3463:405312
+
+settings, preferences, cog
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

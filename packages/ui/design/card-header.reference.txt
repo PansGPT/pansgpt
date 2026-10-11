@@ -1,0 +1,233 @@
+const imgSizeXlPlaceholderFalseTextFalseStatusIconFalse = "https://www.figma.com/api/mcp/asset/cc594fc8-a250-4069-b160-f0d8fb2fe577.png";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/2272858f-e263-4b3a-a35a-b29891c1bdf2.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/2a5b08e5-6172-4af5-9c20-fbcdb2297b8c.svg";
+const imgDivider1 = "https://www.figma.com/api/mcp/asset/c0b90b35-047b-4298-bcef-c02299036d2a.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "lg" | "xl";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "lg", statusIcon = "False", text = "False" }: AvatarProps) {
+  const isLgAndFalseAndFalseAndFalse = size === "lg" && placeholder === "False" && text === "False" && statusIcon === "False";
+  return (
+    <div className={className || `border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] ${isLgAndFalseAndFalseAndFalse ? "size-[48px]" : "size-[56px]"}`} id={isLgAndFalseAndFalseAndFalse ? "node-19_1017" : "node-19_1018"}>
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXlPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type DropdownProps = {
+  className?: string;
+  open?: boolean;
+  type?: "Icon";
+};
+
+function Dropdown({ className, open = false, type = "Icon" }: DropdownProps) {
+  return (
+    <button className={className || "content-stretch flex flex-col items-start relative"} data-node-id="3281:383087">
+      <div className="relative shrink-0 size-[20px]" data-node-id="3281:383088" data-name="dots-vertical">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+      </div>
+    </button>
+  );
+}
+
+type CardHeaderProps = {
+  className?: string;
+  actions?: boolean;
+  avatar?: boolean;
+  badge?: boolean;
+  breakpoint?: "Desktop" | "Mobile";
+  divider?: boolean;
+  dropdownIcon?: boolean;
+  supportingText?: boolean;
+};
+
+export default function CardHeader({ className, actions = true, avatar = false, badge = true, breakpoint = "Desktop", divider = true, dropdownIcon = true, supportingText = true }: CardHeaderProps) {
+  const isAvatarAndDesktop = avatar && breakpoint === "Desktop";
+  const isAvatarAndMobile = avatar && breakpoint === "Mobile";
+  const isDesktop = breakpoint === "Desktop";
+  const isMobile = breakpoint === "Mobile";
+  const isNotAvatarAndMobile = !avatar && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] isolate items-start relative `}${isMobile ? "w-[375px]" : "w-[1216px]"}`} id={isNotAvatarAndMobile ? "node-1211_221" : isAvatarAndMobile ? "node-1211_622" : isAvatarAndDesktop ? "node-1211_272" : "node-1211_168"}>
+      <div className={`content-stretch flex gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-2xl,20px)] relative shrink-0 w-full z-[2] ${isMobile ? "flex-col px-[var(--spacing-xl,16px)]" : "px-[var(--spacing-3xl,24px)]"}`} id={isNotAvatarAndMobile ? "node-1211_222" : isAvatarAndMobile ? "node-1211_623" : isAvatarAndDesktop ? "node-1211_273" : "node-1211_74"} data-name="Content">
+        {!avatar && (
+          <div className={`content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative ${isNotAvatarAndMobile ? "shrink-0 w-full" : "flex-[1_0_0] justify-center min-w-px"}`} id={isNotAvatarAndMobile ? "node-1213_102764" : "node-1211_75"} data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isNotAvatarAndMobile ? "node-1213_102765" : "node-1213_102753"} data-name="Text and badge">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" id={isNotAvatarAndMobile ? "node-1213_102766" : "node-1211_76"}>
+                {isNotAvatarAndMobile ? "Team members " : "Team members"}
+              </p>
+              {badge && (
+                <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1213:102750" data-name="Badge">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1213:102750;3918:405139">
+                    10/20 seats
+                  </p>
+                </div>
+              )}
+            </div>
+            {!avatar && breakpoint === "Desktop" && supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full whitespace-nowrap" data-node-id="1211:77">
+                Manage your team members and their account permissions here.
+              </p>
+            )}
+            {isNotAvatarAndMobile && supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1213:102768">
+                Manage your team members and their account permissions here.
+              </p>
+            )}
+          </div>
+        )}
+        {avatar && (
+          <div className={`content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative ${isAvatarAndMobile ? "shrink-0 w-full" : "flex-[1_0_0] min-w-px"}`} id={isAvatarAndMobile ? "node-1213_102771" : "node-1211_645"} data-name="Avatar and text">
+            <Avatar className={`border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 ${isAvatarAndMobile ? "size-[48px]" : "size-[56px]"}`} size={isAvatarAndDesktop ? "xl" : undefined} />
+            <div className="content-stretch flex flex-[1_0_0] flex-col items-start min-w-px relative" id={isAvatarAndMobile ? "node-1213_102773" : "node-1211_647"} data-name="Text and supporting text">
+              <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" id={isAvatarAndMobile ? "node-1213_102774" : "node-1213_102754"} data-name="Text and badge">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-lg,18px)] whitespace-nowrap" id={isAvatarAndMobile ? "node-1213_102775" : "node-1213_102755"}>
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                {badge && (
+                  <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1213:102756" data-name="Badge">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1213:102756;3918:405139">
+                      New user
+                    </p>
+                  </div>
+                )}
+              </div>
+              {isAvatarAndDesktop && supportingText && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] overflow-hidden relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full whitespace-nowrap" data-node-id="1211:649">
+                  chioma@PansGPT.com
+                </p>
+              )}
+              {isAvatarAndMobile && supportingText && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1213:102777">
+                  chioma@PansGPT.com
+                </p>
+              )}
+            </div>
+            {isAvatarAndMobile && (
+              <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-0 top-0" data-node-id="3292:532275" data-name="Dropdown">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I3292:532275;3281:383088" data-name="dots-vertical">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+                </div>
+              </button>
+            )}
+          </div>
+        )}
+        {isDesktop && actions && (
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="3292:532759" data-name="Actions">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0" data-node-id="3292:532760" data-name="Buttons/Button">
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:532760;6421:280995" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:532760;3287:433265">
+                  Tertiary
+                </p>
+              </div>
+            </div>
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:532761" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:532761;6421:279423" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:532761;3287:433113">
+                  Secondary
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:532762" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:532762;6421:279423" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:532762;3287:433113">
+                  Secondary
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:532763" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:532763;6421:278974" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:532763;3287:432941">
+                  Primary
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        )}
+        {isDesktop && dropdownIcon && <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />}
+        {isMobile && actions && (
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="3292:533367" data-name="Actions">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:533370" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:533370;6421:279423" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:533370;3287:433113">
+                  Secondary
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3292:533371" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:533371;6421:278974" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:533371;3287:432941">
+                  Primary
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        )}
+        {isNotAvatarAndMobile && dropdownIcon && (
+          <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[16px] top-[20px]" data-node-id="3292:532346" data-name="Dropdown">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I3292:532346;3281:383088" data-name="dots-vertical">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+            </div>
+          </button>
+        )}
+      </div>
+      {isDesktop && divider && (
+        <div className="h-px relative shrink-0 w-full z-[1]" data-node-id="3304:426693" data-name="Divider">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider} />
+        </div>
+      )}
+      {isMobile && divider && (
+        <div className="h-px relative shrink-0 w-full z-[1]" data-node-id="3304:427145" data-name="Divider">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDivider1} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text lg/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-lg, weight: 600, lineHeight: Line height/text-lg, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Gradient/skeuemorphic-gradient-border: , Avatar user square/Olivia Rhye: .
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## dots-vertical
+**Node ID:** 3463:405039
+
+dots, vertical, line, more, options, menu
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

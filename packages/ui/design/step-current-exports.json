@@ -1,0 +1,7 @@
+{
+  "reason": "Figma MCP SVG exports produce a rounded-square outer focus ring instead of the source circle. Native original graphic PNG exports preserve the source contour.",
+  "exports": [
+    {"nodeId":"1139:79866","format":"PNG","scale":1,"sourceWidth":24,"sourceHeight":24,"pixelWidth":32,"pixelHeight":32,"path":"assets/step-icon-current-sm.png"},
+    {"nodeId":"1139:79863","format":"PNG","scale":1,"sourceWidth":32,"sourceHeight":32,"pixelWidth":40,"pixelHeight":40,"path":"assets/step-icon-current-md.png"}
+  ]
+}

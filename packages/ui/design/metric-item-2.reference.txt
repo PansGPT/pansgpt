@@ -1,0 +1,56 @@
+const imgZap = "https://www.figma.com/api/mcp/asset/8999bfca-fc28-4e7d-bfe7-6da6d5e5185a.svg";
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/03c0cc0e-ec5c-4ac1-982f-442ff09d9871.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/b8bfde03-f279-4194-8217-f75827a1c488.svg";
+
+type MetricItemProps = {
+  className?: string;
+  actions?: "False";
+  breakpoint?: "Desktop";
+  dropdownIcon?: boolean;
+  featuredIcon?: boolean;
+  type?: "Icon 02";
+};
+
+function MetricItem({ className, actions = "False", breakpoint = "Desktop", dropdownIcon = true, featuredIcon = true, type = "Icon 02" }: MetricItemProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] flex flex-col gap-[var(--spacing-2xl,20px)] items-start p-[var(--spacing-2xl,20px)] relative rounded-[var(--radius-xl,20px)] w-[388px]"} data-node-id="1561:261634">
+      <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" data-node-id="1561:262053" data-name="Heading and icon">
+        {featuredIcon && (
+          <div className="bg-[var(--colors\/background\/bg-brand-secondary,#dcfae6)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="1561:265329" data-name="Featured icon">
+            <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="I1561:265329;3465:402858" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZap} />
+            </div>
+          </div>
+        )}
+        <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)]" data-node-id="1561:262055">
+          Views 24 hours
+        </p>
+      </div>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="1561:261638" data-name="Number and badge">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-sm,38px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-sm,30px)] w-full" data-node-id="1561:261639">
+          2,000
+        </p>
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="1561:261640" data-name="Change and text">
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative shrink-0" data-node-id="1563:260325" data-name="_Change">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I1563:260325;1563:260315" data-name="arrow-up">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-success-primary-\(600\),#079455)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1563:260325;1563:260316">
+              100%
+            </p>
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis whitespace-nowrap" data-node-id="1561:261650">
+            vs last month
+          </p>
+        </div>
+      </div>
+      {dropdownIcon && (
+        <button className="absolute content-stretch cursor-pointer flex flex-col items-start right-[19px] top-[19px]" data-node-id="3292:578559" data-name="Dropdown">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3292:578559;3281:383088" data-name="dots-vertical">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+          </div>
+        </button>
+      )}
+    </div>
+  );
+}

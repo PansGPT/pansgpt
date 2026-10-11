@@ -1,0 +1,532 @@
+const imgBackground = "https://www.figma.com/api/mcp/asset/e75ab361-027c-4df0-a60c-071347cc376d.svg";
+const imgTypeWavy01TrendPositive = "https://www.figma.com/api/mcp/asset/c9c87405-829a-4250-9665-9f07bdf1e7fc.svg";
+const imgBackground1 = "https://www.figma.com/api/mcp/asset/64f899b3-359d-4c74-afa0-082979a3daf7.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/588d2354-17a5-47a1-9559-616f8a2b13ce.svg";
+const imgBackground2 = "https://www.figma.com/api/mcp/asset/667eaab0-9a53-45b5-b806-e0535f8888e9.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/68aa57c8-0d60-4e38-8a76-5aadfb2885db.svg";
+const imgBackground3 = "https://www.figma.com/api/mcp/asset/94ece428-190b-4224-945c-a63408195dce.svg";
+const imgLine2 = "https://www.figma.com/api/mcp/asset/68847845-c660-40d2-8f54-570013f895d9.svg";
+const imgBackground4 = "https://www.figma.com/api/mcp/asset/edf17195-fece-4a5f-b884-256b04153949.svg";
+const imgLine3 = "https://www.figma.com/api/mcp/asset/be80a4d6-e37e-4e30-a33d-6a5e0fc58bcb.svg";
+const imgBackground5 = "https://www.figma.com/api/mcp/asset/53ee5d52-cb9d-4fc0-838e-e7bf1084169e.svg";
+const imgLine4 = "https://www.figma.com/api/mcp/asset/12f1786c-b985-4afe-b920-face2db4989b.svg";
+const imgBackground6 = "https://www.figma.com/api/mcp/asset/48c64275-a744-45b8-9938-b8a416fae963.svg";
+const imgLine5 = "https://www.figma.com/api/mcp/asset/9f0e82f3-a2df-4c59-8ab8-284611461a61.svg";
+const imgBackground7 = "https://www.figma.com/api/mcp/asset/63c5fefc-576d-4bfb-b621-d513cfe67a56.svg";
+const imgLine6 = "https://www.figma.com/api/mcp/asset/b5a481ce-af21-4319-86d5-69340aef76e1.svg";
+const imgBackground8 = "https://www.figma.com/api/mcp/asset/60787646-9aee-4b02-b085-2894787788d9.svg";
+const imgLine7 = "https://www.figma.com/api/mcp/asset/d3fda09b-d1c6-4602-9091-8ec483a28919.svg";
+const imgBackground9 = "https://www.figma.com/api/mcp/asset/7069fbff-e1c7-4d64-af4c-1ba7dddd0d95.svg";
+const imgLine8 = "https://www.figma.com/api/mcp/asset/52296c67-c0a5-43c1-b32c-f2d1680c46fb.svg";
+const imgBackground10 = "https://www.figma.com/api/mcp/asset/58681cd4-c5bd-425c-8f3f-69fdbca589ec.svg";
+const imgLine9 = "https://www.figma.com/api/mcp/asset/c98a99a9-7914-4fac-b35e-bad5e1031767.svg";
+const imgBackground11 = "https://www.figma.com/api/mcp/asset/209e7732-a390-470e-af81-d4def0ffc9e4.svg";
+const imgLine10 = "https://www.figma.com/api/mcp/asset/387f4dbb-b081-43f4-8782-50dd3468fcb8.svg";
+const imgBackground12 = "https://www.figma.com/api/mcp/asset/f2db6a90-318b-4240-9051-f87062f336e0.svg";
+const imgLine11 = "https://www.figma.com/api/mcp/asset/eb24f4c4-1e55-4d6c-b2a7-5802d1dafb0f.svg";
+const imgBackground13 = "https://www.figma.com/api/mcp/asset/82a48a8c-a6d4-4cad-a637-6b76796bafad.svg";
+const imgLine12 = "https://www.figma.com/api/mcp/asset/90a453d9-f087-4a90-a2d5-2eba40c93e03.svg";
+const imgBackground14 = "https://www.figma.com/api/mcp/asset/93c5b09a-3008-4272-bc71-e497b5c81fbf.svg";
+const imgTypeRealistic01TrendPositive = "https://www.figma.com/api/mcp/asset/1a19a747-7e1a-4d6c-badb-b407306a6eae.svg";
+const imgBackground15 = "https://www.figma.com/api/mcp/asset/1ebc297e-d9cc-468c-9212-2b276d46c0f6.svg";
+const imgTypeRealistic01TrendNegative = "https://www.figma.com/api/mcp/asset/daddc495-93d7-43ba-a9db-0abbc2e3b324.svg";
+const imgBackground16 = "https://www.figma.com/api/mcp/asset/fba20c7f-b618-4291-b5f7-157b5c59b5c1.svg";
+const imgTypeStraightTrendPositive = "https://www.figma.com/api/mcp/asset/04b7d427-8325-44d3-a85d-411833f208cd.svg";
+const imgBackground17 = "https://www.figma.com/api/mcp/asset/5b486729-1534-42b0-8382-ac103b33828f.svg";
+const imgTypeStraightTrendNegative = "https://www.figma.com/api/mcp/asset/5421936d-d085-4d2e-9d6c-e2ab9759b834.svg";
+const imgTypeLayersTrendNegative = "https://www.figma.com/api/mcp/asset/30966a41-1c45-49f5-8b4f-663a53bcfd3e.svg";
+const imgTypeLayersTrendPositive = "https://www.figma.com/api/mcp/asset/6b7e0a9a-6690-425d-b48f-26e66c501931.svg";
+const imgBackground18 = "https://www.figma.com/api/mcp/asset/0031dc64-a9d3-4140-b4a4-35aaac9e37b6.svg";
+const imgTypeRealistic02TrendPositive = "https://www.figma.com/api/mcp/asset/621c916e-f8f6-4513-86b2-1688206f6ac1.svg";
+const imgBackground19 = "https://www.figma.com/api/mcp/asset/4634556f-3fac-4692-bc13-4067648d0957.svg";
+const imgLine13 = "https://www.figma.com/api/mcp/asset/7986d59b-0508-4d73-af29-4efe2a9ad963.svg";
+const imgBackground20 = "https://www.figma.com/api/mcp/asset/da0d51cd-bdc0-4ef3-b166-c9d75d9343ff.svg";
+const imgTypeRealistic02TrendNegative = "https://www.figma.com/api/mcp/asset/2aebb452-5350-48b3-bd6e-7ff4367b0329.svg";
+const imgBackground21 = "https://www.figma.com/api/mcp/asset/51ab7d2d-c75d-4253-ba0c-1b3a3677ee9a.svg";
+const imgLine14 = "https://www.figma.com/api/mcp/asset/a582a1ed-9ba4-437f-99c9-66c8d916c086.svg";
+
+type ChartMiniProps = {
+  className?: string;
+  background?: boolean;
+  markerS?: boolean;
+  trend?: "Positive" | "Negative";
+  type?: "Realistic 01" | "Realistic 02" | "Realistic 03" | "Wavy 01" | "Wavy 02" | "Wavy 03" | "Wavy 04" | "Wavy 05" | "Wavy 06" | "Wavy 07" | "Straight" | "Layers";
+};
+
+export default function ChartMini({ className, background = true, markerS = true, trend = "Positive", type = "Realistic 01" }: ChartMiniProps) {
+  const isLayers = type === "Layers";
+  const isLayersAndPositive = type === "Layers" && trend === "Positive";
+  const isRealistic01AndNegative = type === "Realistic 01" && trend === "Negative";
+  const isRealistic01AndPositive = type === "Realistic 01" && trend === "Positive";
+  const isRealistic02AndNegative = type === "Realistic 02" && trend === "Negative";
+  const isRealistic02AndPositive = type === "Realistic 02" && trend === "Positive";
+  const isRealistic03AndNegative = type === "Realistic 03" && trend === "Negative";
+  const isRealistic03AndPositive = type === "Realistic 03" && trend === "Positive";
+  const isStraightAndNegative = type === "Straight" && trend === "Negative";
+  const isStraightAndPositive = type === "Straight" && trend === "Positive";
+  const isWavy01AndNegative = type === "Wavy 01" && trend === "Negative";
+  const isWavy01AndPositive = type === "Wavy 01" && trend === "Positive";
+  const isWavy02AndNegative = type === "Wavy 02" && trend === "Negative";
+  const isWavy02AndPositive = type === "Wavy 02" && trend === "Positive";
+  const isWavy03AndNegative = type === "Wavy 03" && trend === "Negative";
+  const isWavy03AndPositive = type === "Wavy 03" && trend === "Positive";
+  const isWavy04AndNegative = type === "Wavy 04" && trend === "Negative";
+  const isWavy04AndPositive = type === "Wavy 04" && trend === "Positive";
+  const isWavy05AndNegative = type === "Wavy 05" && trend === "Negative";
+  const isWavy05AndPositive = type === "Wavy 05" && trend === "Positive";
+  const isWavy06AndNegative = type === "Wavy 06" && trend === "Negative";
+  const isWavy06AndPositive = type === "Wavy 06" && trend === "Positive";
+  const isWavy07AndNegative = type === "Wavy 07" && trend === "Negative";
+  const isWavy07AndPositive = type === "Wavy 07" && trend === "Positive";
+  return (
+    <div className={className || `h-[56px] relative ${isLayers ? "w-[128px]" : "w-[112px]"}`} id={isRealistic03AndNegative ? "node-7947_80009" : isRealistic02AndNegative ? "node-7947_80008" : isRealistic03AndPositive ? "node-7947_80007" : isRealistic02AndPositive ? "node-7947_80006" : isLayersAndPositive ? "node-4992_376494" : type === "Layers" && trend === "Negative" ? "node-4992_376495" : isStraightAndNegative ? "node-4992_376493" : isStraightAndPositive ? "node-4992_376492" : isRealistic01AndNegative ? "node-4992_376491" : isRealistic01AndPositive ? "node-4992_376490" : isWavy07AndNegative ? "node-8049_155532" : isWavy06AndNegative ? "node-8049_155482" : isWavy05AndNegative ? "node-8049_155450" : isWavy04AndNegative ? "node-8049_155418" : isWavy03AndNegative ? "node-8049_155386" : isWavy02AndNegative ? "node-8049_155354" : isWavy01AndNegative ? "node-1561_265492" : isWavy07AndPositive ? "node-8049_155524" : isWavy06AndPositive ? "node-8049_155474" : isWavy05AndPositive ? "node-8049_155442" : isWavy04AndPositive ? "node-8049_155410" : isWavy03AndPositive ? "node-8049_155378" : isWavy02AndPositive ? "node-8049_155346" : "node-1561_265483"}>
+      {isLayers && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isLayersAndPositive ? imgTypeLayersTrendPositive : imgTypeLayersTrendNegative} />}
+      {isWavy01AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="4990:373155" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground} />
+        </div>
+      )}
+      {isWavy01AndPositive && (
+        <div className="absolute inset-[-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeWavy01TrendPositive} />
+        </div>
+      )}
+      {isWavy01AndPositive && markerS && (
+        <div className="absolute inset-[21.88%_9.38%_43.75%_73.44%]" data-node-id="4990:372409" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:372411" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:372412" data-name="Dot" />
+        </div>
+      )}
+      {isWavy02AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155347" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground1} />
+        </div>
+      )}
+      {isWavy02AndPositive && (
+        <div className="absolute flex inset-[8.21px_0_15.79px_0] items-center justify-center" data-node-id="8049:155542" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-3.13%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy02AndPositive && markerS && (
+        <div className="absolute inset-[29.02%_26.34%_36.61%_56.47%]" data-node-id="8049:155351" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155352" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155353" data-name="Dot" />
+        </div>
+      )}
+      {isWavy03AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155379" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground2} />
+        </div>
+      )}
+      {isWavy03AndPositive && (
+        <div className="absolute flex inset-[16.96px_0_17.04px_0] items-center justify-center" data-node-id="8049:155548" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-4.55%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine1} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy03AndPositive && markerS && (
+        <div className="absolute inset-[23.66%_37.95%_41.96%_44.87%]" data-node-id="8049:155383" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155384" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155385" data-name="Dot" />
+        </div>
+      )}
+      {isWavy04AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155411" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground3} />
+        </div>
+      )}
+      {isWavy04AndPositive && (
+        <div className="absolute inset-[13.4px_0_12.6px_0]" data-node-id="8049:155549" data-name="Line">
+          <div className="absolute inset-[-3.33%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine2} />
+          </div>
+        </div>
+      )}
+      {isWavy04AndPositive && markerS && (
+        <div className="absolute inset-[18.3%_9.38%_47.32%_73.44%]" data-node-id="8049:155415" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155416" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155417" data-name="Dot" />
+        </div>
+      )}
+      {isWavy05AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155443" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground4} />
+        </div>
+      )}
+      {isWavy05AndPositive && (
+        <div className="absolute inset-[9.18px_0_8.82px_0]" data-node-id="8049:155550" data-name="Line">
+          <div className="absolute inset-[-2.63%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine3} />
+          </div>
+        </div>
+      )}
+      {isWavy05AndPositive && markerS && (
+        <div className="absolute inset-[27.23%_27.23%_38.39%_55.58%]" data-node-id="8049:155447" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155448" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155449" data-name="Dot" />
+        </div>
+      )}
+      {isWavy06AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155475" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground5} />
+        </div>
+      )}
+      {isWavy06AndPositive && (
+        <div className="absolute inset-[9.48px_0_10.52px_0]" data-node-id="8049:155551" data-name="Line">
+          <div className="absolute inset-[-2.78%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine4} />
+          </div>
+        </div>
+      )}
+      {isWavy06AndPositive && markerS && (
+        <div className="absolute inset-[25.45%_14.73%_40.18%_68.08%]" data-node-id="8049:155479" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155480" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155481" data-name="Dot" />
+        </div>
+      )}
+      {isWavy07AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="8049:155525" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground6} />
+        </div>
+      )}
+      {isWavy07AndPositive && (
+        <div className="absolute inset-[16.74px_0_17.26px_0]" data-node-id="8049:155552" data-name="Line">
+          <div className="absolute inset-[-4.54%_-0.89%_-4.55%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine5} />
+          </div>
+        </div>
+      )}
+      {isWavy07AndPositive && markerS && (
+        <div className="absolute inset-[16.52%_17.41%_49.11%_65.4%]" data-node-id="8049:155529" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155530" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155531" data-name="Dot" />
+        </div>
+      )}
+      {isWavy01AndNegative && background && (
+        <div className="absolute inset-0" data-node-id="4990:374465" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground7} />
+        </div>
+      )}
+      {isWavy01AndNegative && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="1561:265491" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-1.79%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine6} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy01AndNegative && markerS && (
+        <div className="absolute inset-[53.13%_9.38%_12.5%_73.44%]" data-node-id="4990:373051" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:373052" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:373053" data-name="Dot" />
+        </div>
+      )}
+      {isWavy02AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155543" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground8} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy02AndNegative && (
+        <div className="absolute inset-[8.21px_0_15.79px_0]" data-node-id="8049:155546" data-name="Line">
+          <div className="absolute inset-[-3.13%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine7} />
+          </div>
+        </div>
+      )}
+      {isWavy02AndNegative && markerS && (
+        <div className="absolute inset-[12.95%_26.34%_52.68%_56.47%]" data-node-id="8049:155359" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155360" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155361" data-name="Dot" />
+        </div>
+      )}
+      {isWavy03AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155553" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground9} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy03AndNegative && (
+        <div className="absolute inset-[16.96px_0_17.04px_0]" data-node-id="8049:155556" data-name="Line">
+          <div className="absolute inset-[-4.55%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine8} />
+          </div>
+        </div>
+      )}
+      {isWavy03AndNegative && markerS && (
+        <div className="absolute inset-[16.52%_37.95%_49.11%_44.87%]" data-node-id="8049:155391" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155392" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155393" data-name="Dot" />
+        </div>
+      )}
+      {isWavy04AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155558" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground10} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy04AndNegative && (
+        <div className="absolute flex inset-[13.4px_0_12.6px_0] items-center justify-center" data-node-id="8049:155561" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-3.33%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine9} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy04AndNegative && markerS && (
+        <div className="absolute inset-[53.13%_9.38%_12.5%_73.44%]" data-node-id="8049:155423" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155424" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155425" data-name="Dot" />
+        </div>
+      )}
+      {isWavy05AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155563" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground11} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy05AndNegative && (
+        <div className="absolute flex inset-[9.18px_0_8.82px_0] items-center justify-center" data-node-id="8049:155566" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-2.63%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine10} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy05AndNegative && markerS && (
+        <div className="absolute bottom-1/4 left-[55.58%] right-[27.23%] top-[40.63%]" data-node-id="8049:155455" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155456" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155457" data-name="Dot" />
+        </div>
+      )}
+      {isWavy06AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155568" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground12} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy06AndNegative && (
+        <div className="absolute flex inset-[9.48px_0_10.52px_0] items-center justify-center" data-node-id="8049:155571" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-2.78%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine11} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy06AndNegative && markerS && (
+        <div className="absolute inset-[54.91%_14.73%_10.71%_68.08%]" data-node-id="8049:155487" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155488" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155489" data-name="Dot" />
+        </div>
+      )}
+      {isWavy07AndNegative && background && (
+        <div className="absolute flex inset-0 items-center justify-center" data-node-id="8049:155573" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Background">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground13} />
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy07AndNegative && (
+        <div className="absolute flex inset-[16.74px_0_17.26px_0] items-center justify-center" data-node-id="8049:155576" style={{ containerType: "size" }}>
+          <div className="-scale-x-100 flex-none h-[100cqh] w-[100cqw]">
+            <div className="relative size-full" data-name="Line">
+              <div className="absolute inset-[-4.54%_-0.89%_-4.55%_-0.89%]">
+                <img alt="" className="block max-w-none size-full" src={imgLine12} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {isWavy07AndNegative && markerS && (
+        <div className="absolute inset-[35.27%_17.41%_30.36%_65.4%]" data-node-id="8049:155537" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="8049:155538" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="8049:155539" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic01AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="4990:376399" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground14} />
+        </div>
+      )}
+      {isRealistic01AndPositive && (
+        <div className="absolute inset-[-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeRealistic01TrendPositive} />
+        </div>
+      )}
+      {isRealistic01AndPositive && markerS && (
+        <div className="absolute bottom-[60.94%] left-[57.81%] right-1/4 top-[4.69%]" data-node-id="4991:376481" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4991:376482" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4991:376483" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic01AndNegative && background && (
+        <div className="absolute inset-0" data-node-id="4991:376474" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground15} />
+        </div>
+      )}
+      {isRealistic01AndNegative && (
+        <div className="absolute inset-[-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeRealistic01TrendNegative} />
+        </div>
+      )}
+      {isRealistic01AndNegative && markerS && (
+        <div className="absolute bottom-[40.63%] left-[54.69%] right-[28.13%] top-1/4" data-node-id="4991:376484" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4991:376485" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4991:376486" data-name="Dot" />
+        </div>
+      )}
+      {isStraightAndPositive && background && (
+        <div className="absolute inset-0" data-node-id="4990:373154" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground16} />
+        </div>
+      )}
+      {isStraightAndPositive && (
+        <div className="absolute inset-[-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeStraightTrendPositive} />
+        </div>
+      )}
+      {isStraightAndPositive && markerS && (
+        <div className="absolute bottom-1/4 left-[64.06%] right-[18.75%] top-[40.63%]" data-node-id="4990:373137" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:373138" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:373139" data-name="Dot" />
+        </div>
+      )}
+      {isStraightAndPositive && markerS && (
+        <div className="absolute bottom-[40.63%] left-[18.75%] right-[64.06%] top-1/4" data-node-id="4990:373143" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:373144" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:373145" data-name="Dot" />
+        </div>
+      )}
+      {isStraightAndNegative && background && (
+        <div className="absolute inset-0" data-node-id="4990:376461" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground17} />
+        </div>
+      )}
+      {isStraightAndNegative && (
+        <div className="absolute inset-[-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeStraightTrendNegative} />
+        </div>
+      )}
+      {isStraightAndNegative && markerS && (
+        <div className="absolute bottom-[40.63%] left-[64.06%] right-[18.75%] top-1/4" data-node-id="4990:376465" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:376466" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:376467" data-name="Dot" />
+        </div>
+      )}
+      {isStraightAndNegative && markerS && (
+        <div className="absolute bottom-1/4 left-[18.75%] right-[64.06%] top-[40.63%]" data-node-id="4990:376468" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="4990:376469" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="4990:376470" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic02AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="7947:79974" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground18} />
+        </div>
+      )}
+      {isRealistic02AndPositive && (
+        <div className="absolute inset-[0.78%_-0.89%_-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeRealistic02TrendPositive} />
+        </div>
+      )}
+      {isRealistic02AndPositive && markerS && (
+        <div className="absolute inset-[12.5%_41.07%_53.13%_41.74%]" data-node-id="7947:79978" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="7947:79979" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="7947:79980" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic03AndPositive && background && (
+        <div className="absolute inset-0" data-node-id="7947:79982" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground19} />
+        </div>
+      )}
+      {isRealistic03AndPositive && (
+        <div className="absolute inset-[3px_0_9px_0]" data-node-id="7947:79985" data-name="Line">
+          <div className="absolute inset-[-1.88%_-0.89%_-2.27%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine13} />
+          </div>
+        </div>
+      )}
+      {isRealistic03AndPositive && markerS && (
+        <div className="absolute inset-[8.93%_26.79%_56.7%_56.03%]" data-node-id="7947:79986" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="7947:79987" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="7947:79988" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic02AndNegative && background && (
+        <div className="absolute inset-0" data-node-id="7947:79990" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground20} />
+        </div>
+      )}
+      {isRealistic02AndNegative && (
+        <div className="absolute inset-[0.78%_-0.89%_-1.79%_-0.89%]">
+          <img alt="" className="block max-w-none size-full" src={imgTypeRealistic02TrendNegative} />
+        </div>
+      )}
+      {isRealistic02AndNegative && markerS && (
+        <div className="absolute inset-[12.5%_41.52%_53.13%_41.29%]" data-node-id="7947:79994" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="7947:79995" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="7947:79996" data-name="Dot" />
+        </div>
+      )}
+      {isRealistic03AndNegative && background && (
+        <div className="absolute inset-0" data-node-id="7947:79998" data-name="Background">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackground21} />
+        </div>
+      )}
+      {isRealistic03AndNegative && (
+        <div className="absolute inset-[3px_0_9px_0]" data-node-id="7947:80001" data-name="Line">
+          <div className="absolute inset-[-1.88%_-0.89%_-2.27%_-0.89%]">
+            <img alt="" className="block max-w-none size-full" src={imgLine14} />
+          </div>
+        </div>
+      )}
+      {isRealistic03AndNegative && markerS && (
+        <div className="absolute bottom-[40.63%] left-[56.03%] right-[26.79%] top-1/4" data-node-id="7947:80002" data-name="Marker">
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 opacity-20 rounded-[200px] size-[19.25px] top-1/2" data-node-id="7947:80003" data-name="Ring" />
+          <div className="-translate-x-1/2 -translate-y-1/2 absolute bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/foreground\/fg-error-secondary,#f04438)] border-solid left-1/2 rounded-[200px] size-[10.5px] top-1/2" data-node-id="7947:80004" data-name="Dot" />
+        </div>
+      )}
+    </div>
+  );
+}

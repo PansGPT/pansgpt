@@ -1,0 +1,20 @@
+const imgHoleFalse = "https://www.figma.com/api/mcp/asset/2b23ca47-132a-4e5b-ad18-a62b030ad6de.svg";
+const imgHole25 = "https://www.figma.com/api/mcp/asset/e4fda2fb-b505-48f4-80f9-7fe5f7b9c9ed.svg";
+const imgHole50 = "https://www.figma.com/api/mcp/asset/4b062f82-8209-401b-a94b-d2bf00b5182a.svg";
+const imgHole75 = "https://www.figma.com/api/mcp/asset/fdffed22-3d51-4c7b-9709-d1e676369ebc.svg";
+
+type PieChartProps = {
+  className?: string;
+  hole?: "False" | "25%" | "50%" | "75%";
+};
+
+export default function PieChart({ className, hole = "False" }: PieChartProps) {
+  const is25 = hole === "25%";
+  const is50 = hole === "50%";
+  const is75 = hole === "75%";
+  return (
+    <div className={className || "relative size-[160px]"} id={is75 ? "node-1084_2259" : is50 ? "node-1084_2267" : is25 ? "node-1084_2275" : "node-1084_2283"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={is75 ? imgHole75 : is50 ? imgHole50 : is25 ? imgHole25 : imgHoleFalse} />
+    </div>
+  );
+}

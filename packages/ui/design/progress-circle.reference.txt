@@ -1,0 +1,104 @@
+const imgRing = "https://www.figma.com/api/mcp/asset/d76d80a9-15eb-4935-8abd-9cc1e4ab9b3c.svg";
+const imgRing1 = "https://www.figma.com/api/mcp/asset/b8704a31-7ae5-4242-8891-e0a568aafbf8.svg";
+const imgRing2 = "https://www.figma.com/api/mcp/asset/29e15d8a-db55-4c3d-8130-80853983cf23.svg";
+const imgRing3 = "https://www.figma.com/api/mcp/asset/edeeb1d7-8351-48d2-9de4-424cbd92f2bf.svg";
+const imgRing4 = "https://www.figma.com/api/mcp/asset/1dc50d9a-aefb-47d1-8491-4113705412c0.svg";
+const imgRing5 = "https://www.figma.com/api/mcp/asset/c85092cf-bc93-4ed1-a810-08f0090a325f.svg";
+const imgRing6 = "https://www.figma.com/api/mcp/asset/16887c02-317e-4c9f-aa54-4c789add681a.svg";
+const imgRing7 = "https://www.figma.com/api/mcp/asset/55ca0493-6ff3-4717-82cd-fde8e44f0dfc.svg";
+const imgBackground = "https://www.figma.com/api/mcp/asset/465776bd-a8d3-4bc0-99b9-aeb04dc7db27.svg";
+const imgLine = "https://www.figma.com/api/mcp/asset/75315080-0c38-4527-9cc8-860fede771c3.svg";
+const imgBackground1 = "https://www.figma.com/api/mcp/asset/3ee61519-2118-4c1f-ad2d-0cd3baadc551.svg";
+const imgLine1 = "https://www.figma.com/api/mcp/asset/3cd7cf32-61b2-4f53-8c6f-26b05c0d3d8d.svg";
+
+type ProgressCircleProps = {
+  className?: string;
+  label?: boolean;
+  shape?: "Circle" | "Half circle";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg";
+};
+
+export default function ProgressCircle({ className, label = true, shape = "Circle", size = "xxs" }: ProgressCircleProps) {
+  const isLg = size === "lg";
+  const isLgAndCircle = size === "lg" && shape === "Circle";
+  const isLgAndHalfCircle = size === "lg" && shape === "Half circle";
+  const isMdAndHalfCircle = size === "md" && shape === "Half circle";
+  const isMdOrLg = ["md", "lg"].includes(size);
+  const isMdOrLgOrSmOrXs = ["md", "lg", "sm", "xs"].includes(size);
+  const isSmAndCircle = size === "sm" && shape === "Circle";
+  const isSmAndHalfCircle = size === "sm" && shape === "Half circle";
+  const isSmOrXs = ["sm", "xs"].includes(size);
+  const isXs = size === "xs";
+  const isXsAndCircle = size === "xs" && shape === "Circle";
+  const isXsAndHalfCircle = size === "xs" && shape === "Half circle";
+  const isXxs = size === "xxs";
+  const isXxsAndCircle = size === "xxs" && shape === "Circle";
+  const isXxsAndHalfCircle = size === "xxs" && shape === "Half circle";
+  return (
+    <div className={className || `relative ${isXxsAndHalfCircle ? "content-stretch flex flex-col items-center" : isXxsAndCircle ? "content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-center" : isXsAndHalfCircle ? "h-[88px] w-[160px]" : isSmAndHalfCircle ? "h-[110px] w-[200px]" : isLgAndHalfCircle ? "h-[154px] w-[280px]" : isMdAndHalfCircle ? "h-[132px] w-[240px]" : isXsAndCircle ? "size-[160px]" : isSmAndCircle ? "size-[200px]" : isLgAndCircle ? "size-[280px]" : "size-[240px]"}`} id={isXxsAndHalfCircle ? "node-1157_90287" : isXxsAndCircle ? "node-1157_90228" : isXsAndHalfCircle ? "node-1084_3109" : isSmAndHalfCircle ? "node-1084_3115" : isLgAndHalfCircle ? "node-1084_3122" : isMdAndHalfCircle ? "node-1084_3128" : isXsAndCircle ? "node-1084_2981" : isSmAndCircle ? "node-1084_2896" : isLgAndCircle ? "node-1084_3005" : "node-1084_2716"}>
+      <div className={isXxsAndHalfCircle ? "h-[35px] relative shrink-0 w-[64px]" : isXxsAndCircle ? "relative shrink-0 size-[64px]" : isXsAndHalfCircle ? "absolute inset-[8px_8px_-64px_8px]" : isSmAndHalfCircle ? "absolute inset-[10px_10px_-80px_10px]" : isLgAndHalfCircle ? "absolute inset-[14px_14px_-112px_14px]" : isMdAndHalfCircle ? "absolute inset-[12px_12px_-96px_12px]" : isXsAndCircle ? "absolute inset-[8px]" : isSmAndCircle ? "absolute inset-[10px]" : isLgAndCircle ? "absolute inset-[14px_15px_14px_13px]" : "absolute inset-[12px]"} id={isXxsAndHalfCircle ? "node-1157_90288" : isXxsAndCircle ? "node-1157_90229" : isXsAndHalfCircle ? "node-1084_3110" : isSmAndHalfCircle ? "node-1084_3116" : isLgAndHalfCircle ? "node-1084_3123" : isMdAndHalfCircle ? "node-1084_3129" : isXsAndCircle ? "node-1084_2982" : isSmAndCircle ? "node-1084_2897" : isLgAndCircle ? "node-1084_3006" : "node-1084_2705"} data-name="Ring">
+        {isMdOrLgOrSmOrXs && (
+          <div className={`absolute ${shape === "Half circle" && ["md", "lg", "sm", "xs"].includes(size) ? "inset-[-5.56%_-5.56%_0_-5.56%]" : "inset-[-5.56%]"}`}>
+            <img alt="" className="block max-w-none size-full" src={isXsAndHalfCircle ? imgRing7 : isSmAndHalfCircle ? imgRing6 : isLgAndHalfCircle ? imgRing5 : isMdAndHalfCircle ? imgRing4 : isXsAndCircle ? imgRing3 : isSmAndCircle ? imgRing2 : isLgAndCircle ? imgRing1 : imgRing} />
+          </div>
+        )}
+        {isXxs && (
+          <>
+            <div className={`absolute ${isXxsAndHalfCircle ? "inset-[8.57%_4.69%]" : "inset-[4.69%]"}`} id={isXxsAndHalfCircle ? "node-1157_90289" : "node-1157_90230"} data-name="Background">
+              <div className={`absolute ${isXxsAndHalfCircle ? "inset-[-10.34%_-5.17%]" : "inset-[-5.17%]"}`}>
+                <img alt="" className="block max-w-none size-full" src={isXxsAndHalfCircle ? imgBackground1 : imgBackground} />
+              </div>
+            </div>
+            <div className={`absolute ${isXxsAndHalfCircle ? "inset-[8.57%_4.69%_-74.29%_4.69%]" : "inset-[4.69%]"}`} id={isXxsAndHalfCircle ? "node-1157_90290" : "node-1157_90231"} data-name="Line">
+              <div className={`absolute ${isXxsAndHalfCircle ? "inset-[-2.73%_60.28%_44.83%_-5.17%]" : "inset-[-5.17%_-5.17%_4.38%_44.83%]"}`}>
+                <img alt="" className="block max-w-none size-full" src={isXxsAndHalfCircle ? imgLine1 : imgLine} />
+              </div>
+            </div>
+            <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap `}${isXxsAndHalfCircle ? "left-1/2 top-[calc(50%-2.5px)]" : "left-[calc(50%-0.5px)] top-[calc(50%-10px)]"}`} id={isXxsAndHalfCircle ? "node-1157_90291" : "node-1157_90232"}>
+              40%
+            </p>
+          </>
+        )}
+      </div>
+      {isMdOrLgOrSmOrXs && (
+        <div className={`-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute content-stretch flex flex-col items-center leading-[0] left-1/2 text-center ${isXsAndHalfCircle ? "top-[calc(50%+17px)]" : isSmAndHalfCircle ? "top-[calc(50%+23px)]" : isLgAndHalfCircle ? "top-[calc(50%+33px)]" : isMdAndHalfCircle ? "top-[calc(50%+30px)]" : "top-1/2"}`} id={isXsAndHalfCircle ? "node-9332_579243" : isSmAndHalfCircle ? "node-9332_579244" : isLgAndHalfCircle ? "node-9332_579246" : isMdAndHalfCircle ? "node-9332_579245" : isXsAndCircle ? "node-9332_579250" : isSmAndCircle ? "node-9332_579249" : isLgAndCircle ? "node-9332_579247" : "node-9332_579248"} data-name="Number and label">
+          {isMdOrLg && label && (
+            <div className="flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1084:2714">
+              <p className="leading-[var(--line-height\/text-sm,20px)]">Active users</p>
+            </div>
+          )}
+          {isMdOrLg && (
+            <div className={`${String.raw`flex flex-col font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] justify-center relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full `}${isLg ? String.raw`text-[length:var(--font-size\/display-lg,48px)] tracking-[-0.96px]` : String.raw`text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px]`}`} id={isLgAndHalfCircle ? "node-1084_3127" : isMdAndHalfCircle ? "node-1084_3133" : isLgAndCircle ? "node-1084_3010" : "node-1084_2715"}>
+              <p className={isLg ? String.raw`leading-[var(--line-height\/display-lg,60px)]` : String.raw`leading-[var(--line-height\/display-md,44px)]`}>40%</p>
+            </div>
+          )}
+          {isSmOrXs && label && (
+            <div className="flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] w-full" data-node-id="1084:2900">
+              <p className="leading-[var(--line-height\/text-xs,18px)]">Active users</p>
+            </div>
+          )}
+          {isSmOrXs && (
+            <div className={`${String.raw`flex flex-col font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] justify-center relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full `}${isXs ? String.raw`text-[length:var(--font-size\/display-xs,24px)]` : String.raw`text-[length:var(--font-size\/display-sm,30px)]`}`} id={isXsAndHalfCircle ? "node-1084_3114" : isSmAndHalfCircle ? "node-1084_3121" : isXsAndCircle ? "node-1084_2986" : "node-1084_2901"}>
+              <p className={isXs ? String.raw`leading-[var(--line-height\/display-xs,32px)]` : String.raw`leading-[var(--line-height\/display-sm,38px)]`}>40%</p>
+            </div>
+          )}
+        </div>
+      )}
+      {isXxs && label && (
+        <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center w-[min-content]" data-node-id="1157:90233">
+          <p className="leading-[var(--line-height\/text-xs,18px)]">Users</p>
+        </div>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Display md/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-md, weight: 600, lineHeight: Line height/display-md, letterSpacing: -2), Display lg/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-lg, weight: 600, lineHeight: Line height/display-lg, letterSpacing: -2), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0), Display sm/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-sm, weight: 600, lineHeight: Line height/display-sm, letterSpacing: 0), Display xs/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-xs, weight: 600, lineHeight: Line height/display-xs, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,95 @@
+const imgEmoji = "https://www.figma.com/api/mcp/asset/0230d7bd-a843-4440-9ea7-67dd76a40d05.png";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/4470ad96-40df-4a3d-a1d8-c4d6506a4ce0.png";
+const imgEmoji1 = "https://www.figma.com/api/mcp/asset/47d66bea-4d7e-4345-b760-f5b85863e117.png";
+const imgLink03 = "https://www.figma.com/api/mcp/asset/4f5c0a31-0a02-4d36-a7c9-025ea42d2e9d.svg";
+
+type EmojiProps = {
+  className?: string;
+  emoji?: "Heart red";
+};
+
+function Emoji({ className, emoji = "Heart red" }: EmojiProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="1244:280">
+      <div className="absolute left-0 size-[16px] top-0" data-node-id="1244:4" data-name="Emoji">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji} />
+      </div>
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "False";
+  reactions?: boolean;
+  sent?: "False";
+  type?: "Link minimal";
+};
+
+function Message({ className, actionsPanel = "False", reactions = true, sent = "False", type = "Link minimal" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative w-[360px]"} data-node-id="9244:4706">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="9244:4707" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9244:4708" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="9244:4709" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9244:4710">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="9244:4711">
+            Friday 2:20pm
+          </p>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start overflow-clip p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tr-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9244:4712" data-name="Input">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-start pl-[var(--spacing-md,8px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9244:4822" data-name="Content">
+            <div className="content-stretch flex items-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="9244:4838" data-name="Icon wrapper">
+              <div className="relative shrink-0 size-[16px]" data-node-id="9244:4834" data-name="link-03">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLink03} />
+              </div>
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xs,4px)] items-start min-w-px relative" data-node-id="9244:4824" data-name="Content">
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[14px] w-full whitespace-nowrap" data-node-id="9244:4825" data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis w-full" data-node-id="9244:4826">
+                  PansGPT — Figma UI Kit and Design System
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal overflow-hidden relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-ellipsis w-full" data-node-id="9244:4827">
+                  PansGPT is the largest UI kit and design system for Figma in the world. Kickstart any project, save thousands of hours, and level up as a designer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="[text-underline-position:from-font] [word-break:break-word] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:Regular'] font-normal leading-[24px] overflow-hidden relative shrink-0 text-[#067647] text-[16px] text-ellipsis underline w-full" data-node-id="9244:551690">{`https://www.PansGPT.com`}</p>
+        </div>
+        {reactions && (
+          <div className="content-stretch cursor-pointer flex gap-[var(--spacing-xs,4px)] items-center justify-end relative shrink-0 w-full" data-node-id="9244:4717" data-name="Row">
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9244:4718" data-name="_Message reaction">
+              <Emoji className="relative shrink-0 size-[16px]" />
+            </button>
+            <button className="bg-[var(--colors\/background\/bg-secondary,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[24px] items-center justify-center px-[var(--spacing-md,8px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9244:4719" data-name="_Message reaction">
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9244:4719;1244:377" data-name="Emoji=Okay">
+                <div className="absolute left-0 size-[16px] top-0" data-node-id="I9244:4719;1244:377;1244:7" data-name="Emoji">
+                  <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={imgEmoji1} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I9244:4719;1244:301">
+                2
+              </p>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

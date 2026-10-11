@@ -1,0 +1,2259 @@
+{
+  "fileKey": "upwm9MZsrE4V0XAIj3wWAw",
+  "collections": [
+    {
+      "id": "VariableCollectionId:5248:377685",
+      "name": "_Primitives",
+      "modes": [
+        {
+          "name": "Style",
+          "modeId": "5248:3"
+        }
+      ],
+      "defaultModeId": "5248:3"
+    },
+    {
+      "id": "VariableCollectionId:5256:372339",
+      "name": "1. Color modes",
+      "modes": [
+        {
+          "name": "Light mode",
+          "modeId": "5256:0"
+        },
+        {
+          "name": "Dark mode",
+          "modeId": "5353:0"
+        }
+      ],
+      "defaultModeId": "5256:0"
+    },
+    {
+      "id": "VariableCollectionId:6283:327807",
+      "name": "5. Containers",
+      "modes": [
+        {
+          "name": "Value",
+          "modeId": "6283:0"
+        }
+      ],
+      "defaultModeId": "6283:0"
+    },
+    {
+      "id": "VariableCollectionId:6298:45304",
+      "name": "4. Widths",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "modeId": "6298:1"
+        }
+      ],
+      "defaultModeId": "6298:1"
+    },
+    {
+      "id": "VariableCollectionId:6298:45383",
+      "name": "3. Spacing",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "modeId": "6298:2"
+        }
+      ],
+      "defaultModeId": "6298:2"
+    },
+    {
+      "id": "VariableCollectionId:6298:46388",
+      "name": "2. Radius",
+      "modes": [
+        {
+          "name": "Mode 1",
+          "modeId": "6298:3"
+        }
+      ],
+      "defaultModeId": "6298:3"
+    },
+    {
+      "id": "VariableCollectionId:7403:16248",
+      "name": "6. Typography",
+      "modes": [
+        {
+          "name": "Value",
+          "modeId": "7403:0"
+        }
+      ],
+      "defaultModeId": "7403:0"
+    }
+  ],
+  "textStyles": [
+    {
+      "id": "S:38af57a4cd3806d8038111d665eb146e187ce5e7,",
+      "name": "Display 2xl/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 72,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 90
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:4d65d19b042662abd316c23cf9d06e95fb0b6cd8,",
+      "name": "Display 2xl/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 72,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 90
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:f6f6c69d1447f2d5e8acfd40905352fedef04a8b,",
+      "name": "Display 2xl/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 72,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 90
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:c35a3e8d3ec8acd1a26aea530d501b5ac3643fbc,",
+      "name": "Display 2xl/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 72,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 90
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:39b965e34f465122be33eb2afcae66fb7cbb2a72,",
+      "name": "Display xl/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 60,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 72
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:a657ef842ec8e52e13a2c9a8590840846bd7f457,",
+      "name": "Display xl/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 60,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 72
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:c8bcd02fbab0359caff5bbb73002324045fa5185,",
+      "name": "Display xl/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 60,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 72
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:0beff540813f5b634bb356dd539bb438e26dc3f3,",
+      "name": "Display xl/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 60,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 72
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:ee7af938db4c71b743b17df59aa2a2c8925306dc,",
+      "name": "Display lg/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 48,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 60
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:414fc1eb2843a2caf787b847c5ce84b8221eee53,",
+      "name": "Display lg/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 48,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 60
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:d5b5b1e2b40dde687beb8c7f82dcea5c3036a0ef,",
+      "name": "Display lg/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 48,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 60
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:8f22b64ed7ac61e3a9faf341e1affe6e20250483,",
+      "name": "Display lg/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 48,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 60
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:057758279ace12282205ddccaeeaea6056d4337f,",
+      "name": "Display md/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 36,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 44
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:20ecac7f5d9a97c3dee02fea699e96939ad9ea31,",
+      "name": "Display md/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 36,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 44
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:d67cdbe9e6099504afcc6a33c19dbbff2a519345,",
+      "name": "Display md/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 36,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 44
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:fbeafa7d1587647651418891846be67da1e9fbb3,",
+      "name": "Display md/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 36,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 44
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": -2
+      }
+    },
+    {
+      "id": "S:d1fedb2023d557d3465ec32bf02d9600f9bd2395,",
+      "name": "Display sm/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 30,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 38
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:9d5a1fff97e267dbd8e13ad4d10689d539fdf950,",
+      "name": "Display sm/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 30,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 38
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:2b5905ae557e0763979e18427aec5ae5999bca07,",
+      "name": "Display sm/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 30,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 38
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:d586b5880de05e0d8e32b254a1b7266228faabb3,",
+      "name": "Display sm/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 30,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 38
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:4f6324294db649a3fcb7dff53cc124182222ded5,",
+      "name": "Display xs/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 24,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:36c259eedd41b064a654df363e991319eae7ab98,",
+      "name": "Display xs/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 24,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:070038a0b400b5eefd29d7bd0d09a3861c82a806,",
+      "name": "Display xs/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 24,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:fb3a5c1a20fb3d84a46279f6d23c82f7d7c34ce3,",
+      "name": "Display xs/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 24,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:ce71d9fbf6ac6dda7717e8864d831a388ec6df25,",
+      "name": "Text xl/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 20,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 30
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:7600b005f8477d859b38b2221335e3e45204d5fd,",
+      "name": "Text xl/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 20,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 30
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:7c27871155086dd61e2b79542e0d89f1fa4e368f,",
+      "name": "Text xl/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 20,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 30
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:fa0d5fa4c7e9bce75de1f872cbb4e1c5b41dea8f,",
+      "name": "Text xl/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 20,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 30
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:efee725efb9f6ec5421a7fbd8a69eebbd2dd8408,",
+      "name": "Text lg/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 18,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 28
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:47752761a448f69b94fa372bf3e2ae1e3e748d15,",
+      "name": "Text lg/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 18,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 28
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:47b500ed4f5482c7bb0c1dd224896668314d6359,",
+      "name": "Text lg/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 18,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 28
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:9cdca0f7fb484f83ddcef40bcd18a20ca16c7d55,",
+      "name": "Text lg/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 18,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 28
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:d5e70f8866355d37a98d20d43f19473d27e75018,",
+      "name": "Text md/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 16,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 24
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:44feca4a1ebed77ec1e5bacf74c2712547d2c7f3,",
+      "name": "Text md/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 16,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 24
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:ed5c72496c9a3ec2e5850689bf24e46d29fe7c9b,",
+      "name": "Text md/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 16,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 24
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:d3cebf83b988f861a836065c3e2a62f167711009,",
+      "name": "Text md/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 16,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 24
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:a650e0830c237c54049b8e2dc1fb9fb0deb02100,",
+      "name": "Text sm/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 14,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:089afc529b0187e4c3ce2ab70900fc0490194075,",
+      "name": "Text sm/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 14,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:e97b4dbc5eaf4c9efd4dba553798351191cbd314,",
+      "name": "Text sm/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 14,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:ce2cb429b4baf81dfffa76dd7f1d8518a5ff16b7,",
+      "name": "Text xs/Regular",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Regular",
+        "variationSettings": {
+          "wght": 400
+        }
+      },
+      "fontSize": 12,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 18
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:fac053380846047f40eab8053de0124fdc6e7fa2,",
+      "name": "Text xs/Medium",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Medium",
+        "variationSettings": {
+          "wght": 500
+        }
+      },
+      "fontSize": 12,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 18
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:5ecdd3fb441472378d1e317ea804e123d54da4c7,",
+      "name": "Text xs/Semibold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "SemiBold",
+        "variationSettings": {
+          "wght": 600
+        }
+      },
+      "fontSize": 12,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 18
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:18b2b3d7acdd0b3c2c69dea7243c74b704799f73,",
+      "name": "Text sm/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 14,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    },
+    {
+      "id": "S:ef0d4a624f14c37b7db18c532a8fdd38d1b34101,",
+      "name": "Text xs/Bold",
+      "fontName": {
+        "family": "Plus Jakarta Sans",
+        "style": "Bold",
+        "variationSettings": {
+          "wght": 700
+        }
+      },
+      "fontSize": 12,
+      "lineHeight": {
+        "unit": "PIXELS",
+        "value": 18
+      },
+      "letterSpacing": {
+        "unit": "PERCENT",
+        "value": 0
+      }
+    }
+  ],
+  "effectStyles": [
+    {
+      "id": "S:f2f1c8f70b6d57f706862bf463648182408ef5da,",
+      "name": "Shadows/shadow-xs",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:d84dc216e22028b3db08ba72fe0c38d831ab15ef,",
+      "name": "Shadows/shadow-xs-skeuomorphic",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7393:383290"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": -2
+          },
+          "spread": 0,
+          "blendMode": "NORMAL"
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7396:291712"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.18000000715255737
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 1,
+          "blendMode": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:6aa526fc216beb9f3900896d8a10f2c3390c1cfb,",
+      "name": "Shadows/shadow-sm",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18827"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.10000000149011612
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": -1,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 3,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18831"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.10000000149011612
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:14f49324544ea0180529cc090c38e202d072d2f0,",
+      "name": "Shadows/shadow-md",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 4,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212904"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05999999865889549
+          },
+          "offset": {
+            "x": 0,
+            "y": 2
+          },
+          "spread": -2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 6,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212903"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.10000000149011612
+          },
+          "offset": {
+            "x": 0,
+            "y": 4
+          },
+          "spread": -1,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:6189c63068e63dd1cf1df6baec0fe24a67edced6,",
+      "name": "Shadows/shadow-lg",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7981:234615"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.03999999910593033
+          },
+          "offset": {
+            "x": 0,
+            "y": 2
+          },
+          "spread": -1,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 6,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18830"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.029999999329447746
+          },
+          "offset": {
+            "x": 0,
+            "y": 4
+          },
+          "spread": -2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 16,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18828"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.07999999821186066
+          },
+          "offset": {
+            "x": 0,
+            "y": 12
+          },
+          "spread": -4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:9f3c182101edd2e183f5a1e48343ab1c6ed5f0b1,",
+      "name": "Shadows/shadow-xl",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 3,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7981:234616"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.03999999910593033
+          },
+          "offset": {
+            "x": 0,
+            "y": 3
+          },
+          "spread": -1.5,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 8,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212906"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.029999999329447746
+          },
+          "offset": {
+            "x": 0,
+            "y": 8
+          },
+          "spread": -4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 24,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212905"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.07999999821186066
+          },
+          "offset": {
+            "x": 0,
+            "y": 20
+          },
+          "spread": -4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:6b8373ca85fb5389baaefa90fad22d89b8d3f003,",
+      "name": "Shadows/shadow-2xl",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 4,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7981:234617"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.03999999910593033
+          },
+          "offset": {
+            "x": 0,
+            "y": 4
+          },
+          "spread": -2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 48,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18833"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.18000000715255737
+          },
+          "offset": {
+            "x": 0,
+            "y": 24
+          },
+          "spread": -12,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:b80cad8046f45807da46694051abad702c0ff836,",
+      "name": "Shadows/shadow-3xl",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 5,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7981:234618"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.03999999910593033
+          },
+          "offset": {
+            "x": 0,
+            "y": 5
+          },
+          "spread": -2.5,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 64,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18832"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.14000000059604645
+          },
+          "offset": {
+            "x": 0,
+            "y": 32
+          },
+          "spread": -12,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:85021008bd9aab459f37540509cd0f160b0b0111,",
+      "name": "Shadows/Portfolio mockups/shadow-main-centre-md",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 150,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212908"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.14000000059604645
+          },
+          "offset": {
+            "x": 0,
+            "y": 75
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:bf1c1c86e2ae325133c344a9304df4b2e5f2c960,",
+      "name": "Shadows/Portfolio mockups/shadow-main-centre-lg",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 200,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212909"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.18000000715255737
+          },
+          "offset": {
+            "x": 0,
+            "y": 100
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:ea84b9595ea6ebc75ae02864ffbca193515b61e6,",
+      "name": "Shadows/Portfolio mockups/shadow-overlay-right-lg",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 72,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212910"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.11999999731779099
+          },
+          "offset": {
+            "x": -40,
+            "y": 40
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:bfbaaa557e59ef59dd64d46b44817b1fd9b43298,",
+      "name": "Shadows/Portfolio mockups/shadow-overlay-left-lg",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 150,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212910"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.11999999731779099
+          },
+          "offset": {
+            "x": 100,
+            "y": 100
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:ff7da7af041c0d4a08184aef093551cd9dd785f0,",
+      "name": "Shadows/Portfolio mockups/shadow-grid-md",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 64,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212911"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.07999999821186066
+          },
+          "offset": {
+            "x": 32,
+            "y": 32
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        }
+      ]
+    },
+    {
+      "id": "S:b9c7e174352d4e86f141a2a77d0675864a743c4f,",
+      "name": "Focus rings/focus-ring",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212918"
+            }
+          },
+          "color": {
+            "r": 0.09064704179763794,
+            "g": 0.6975882649421692,
+            "b": 0.4143490195274353,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        }
+      ]
+    },
+    {
+      "id": "S:a4860e6bdee5137fb98fa8ee677d59c79058bb63,",
+      "name": "Focus rings/focus-ring-shadow-xs",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212918"
+            }
+          },
+          "color": {
+            "r": 0.09064704179763794,
+            "g": 0.6975882649421692,
+            "b": 0.4143490195274353,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:2da8e5a5dc22e2b2fc399376c464afe12021b5e3,",
+      "name": "Focus rings/focus-ring-shadow-xs-skeuomorphic",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212918"
+            }
+          },
+          "color": {
+            "r": 0.09064704179763794,
+            "g": 0.6975882649421692,
+            "b": 0.4143490195274353,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7393:383290"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": -2
+          },
+          "spread": 0,
+          "blendMode": "NORMAL"
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7396:291712"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.18000000715255737
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 1,
+          "blendMode": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:b363d38466a6c52238f8f0bda973e246b35998fa,",
+      "name": "Focus rings/focus-ring-shadow-sm",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212918"
+            }
+          },
+          "color": {
+            "r": 0.09064704179763794,
+            "g": 0.6975882649421692,
+            "b": 0.4143490195274353,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18827"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.10000000149011612
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 3,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7276:18831"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.10000000149011612
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:cef708e8b2c25209322c9f42e57272159faf286c,",
+      "name": "Focus rings/focus-ring-error",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {},
+          "color": {
+            "r": 0.9411764740943909,
+            "g": 0.2666666805744171,
+            "b": 0.21960784494876862,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        }
+      ]
+    },
+    {
+      "id": "S:065fd4067a1b28c449fc09a8278b5343b3714c91,",
+      "name": "Focus rings/focus-ring-error-shadow-xs",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212919"
+            }
+          },
+          "color": {
+            "r": 0.9412000775337219,
+            "g": 0.26695990562438965,
+            "b": 0.218799889087677,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        }
+      ]
+    },
+    {
+      "id": "S:d0385dabfb479edfa50a876ef0d428a0318dbcdb,",
+      "name": "Focus rings/focus-ring-error-shadow-xs-skeuomorphic",
+      "effects": [
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7371:212919"
+            }
+          },
+          "color": {
+            "r": 0.9412000775337219,
+            "g": 0.26695990562438965,
+            "b": 0.218799889087677,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 4,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:5269:371407"
+            }
+          },
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 2,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": false
+        },
+        {
+          "type": "DROP_SHADOW",
+          "visible": true,
+          "radius": 2,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7271:17030"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": 1
+          },
+          "spread": 0,
+          "blendMode": "NORMAL",
+          "showShadowBehindNode": true
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7393:383290"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.05000000074505806
+          },
+          "offset": {
+            "x": 0,
+            "y": -2
+          },
+          "spread": 0,
+          "blendMode": "NORMAL"
+        },
+        {
+          "type": "INNER_SHADOW",
+          "visible": true,
+          "radius": 0,
+          "boundVariables": {
+            "color": {
+              "type": "VARIABLE_ALIAS",
+              "id": "VariableID:7396:291712"
+            }
+          },
+          "color": {
+            "r": 0.03921568766236305,
+            "g": 0.04967320337891579,
+            "b": 0.07058823853731155,
+            "a": 0.18000000715255737
+          },
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "spread": 1,
+          "blendMode": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:b827884b313ae04ae0568e813b22ff990a6e9db1,",
+      "name": "Backdrop blurs/backdrop-blur-sm",
+      "effects": [
+        {
+          "type": "BACKGROUND_BLUR",
+          "visible": true,
+          "radius": 8,
+          "boundVariables": {},
+          "blurType": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:10c1c646c468fe58385cd782736be02541aa04e5,",
+      "name": "Backdrop blurs/backdrop-blur-md",
+      "effects": [
+        {
+          "type": "BACKGROUND_BLUR",
+          "visible": true,
+          "radius": 16,
+          "boundVariables": {},
+          "blurType": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:6b6d1aaddd1c309ec8b4e079b1726e4f88d0dd69,",
+      "name": "Backdrop blurs/backdrop-blur-lg",
+      "effects": [
+        {
+          "type": "BACKGROUND_BLUR",
+          "visible": true,
+          "radius": 24,
+          "boundVariables": {},
+          "blurType": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "S:393043e8c5b936e4bcb399a27cdf62ebd7d5b0fe,",
+      "name": "Backdrop blurs/backdrop-blur-xl",
+      "effects": [
+        {
+          "type": "BACKGROUND_BLUR",
+          "visible": true,
+          "radius": 40,
+          "boundVariables": {},
+          "blurType": "NORMAL"
+        }
+      ]
+    }
+  ]
+}

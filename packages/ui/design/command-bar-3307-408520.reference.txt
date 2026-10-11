@@ -1,0 +1,292 @@
+const imgSize2Xl = "https://www.figma.com/api/mcp/asset/580b3d26-a6f3-4114-9e71-63fce7ea4f75.svg";
+const imgContent = "https://www.figma.com/api/mcp/asset/4b04e70a-8553-45c2-a2dd-7ed1444a8269.png";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/cf0fe82b-a707-4bb2-b173-fc2a85c762a5.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/1533f1d1-ff23-46c4-ba60-b6b3a5cc894b.png";
+const imgAvatar2 = "https://www.figma.com/api/mcp/asset/326d37f4-75b9-43cf-9d7d-ddb2cc21c28f.png";
+const imgAvatar3 = "https://www.figma.com/api/mcp/asset/e40c994c-be04-44b9-bbd6-55c83d63a893.png";
+const imgAvatar4 = "https://www.figma.com/api/mcp/asset/0f819c8e-c799-467b-b6df-0d96c123be17.png";
+const imgAvatar5 = "https://www.figma.com/api/mcp/asset/269c4a7a-1b8c-4fc5-b814-160359c0a25d.png";
+const imgSearchLg = "https://www.figma.com/api/mcp/asset/97d46ec5-0c9a-4994-9f2a-f2481785143a.svg";
+const imgSocialIcon = "https://www.figma.com/api/mcp/asset/da2641b3-adf0-47f2-b2b1-a65ad34d5107.svg";
+const imgSocialIcon1 = "https://www.figma.com/api/mcp/asset/ef6b34eb-e044-4575-8058-0019b9b3f4ba.svg";
+const imgSocialIcon2 = "https://www.figma.com/api/mcp/asset/ed0729f8-c441-4cee-acb9-d20c2b85840e.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/e1982eb9-fce4-4c2a-806b-aca59e001929.svg";
+
+type VerifiedTickProps = {
+  className?: string;
+  size?: "2xl";
+};
+
+function VerifiedTick({ className, size = "2xl" }: VerifiedTickProps) {
+  return (
+    <div className={className || "relative size-[20px]"} data-node-id="3302:420334">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSize2Xl} />
+    </div>
+  );
+}
+
+type AvatarProfilePhotoProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "sm";
+  text?: "False";
+  verified?: boolean;
+};
+
+function AvatarProfilePhoto({ className, placeholder = "False", size = "sm", text = "False", verified = true }: AvatarProfilePhotoProps) {
+  return (
+    <div className={className || "relative rounded-[var(--radius-full,9999px)] size-[72px]"} data-node-id="3307:408887">
+      <div className="absolute bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex items-center justify-center left-0 p-[3px] rounded-[var(--radius-full,9999px)] size-[72px] top-0" data-node-id="9100:551346" data-name="Wrapper">
+        <div className="border border-[rgba(0,0,0,0.08)] border-solid flex-[1_0_0] h-full min-w-px relative rounded-[var(--radius-full,9999px)]" data-node-id="3307:408888" data-name="Content">
+          <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgContent} />
+        </div>
+      </div>
+      {verified && <VerifiedTick className="absolute bottom-[2px] right-[2px] size-[20px]" />}
+    </div>
+  );
+}
+
+type CommandBarProps = {
+  className?: string;
+  text?: "Default";
+  type?: "Users menu";
+};
+
+function CommandBar({ className, text = "Default", type = "Users menu" }: CommandBarProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[960px] items-center pb-[var(--spacing-4xl,32px)] pt-[var(--spacing-11xl,160px)] px-[var(--container-padding-desktop,32px)] relative w-[1440px]"} data-node-id="3307:408520">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411550" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411550;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-start max-w-[640px] overflow-clip relative rounded-[var(--radius-xl,20px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="3307:408521" data-name="Command bar">
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip p-[var(--spacing-xl,16px)] relative rounded-tl-[var(--radius-xl,20px)] rounded-tr-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="3307:408522" data-name="_Command input">
+          <div className="relative shrink-0 size-[20px]" data-node-id="I3307:408522;3307:404878" data-name="search-lg">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSearchLg} />
+          </div>
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-placeholder,#717680)] text-ellipsis whitespace-nowrap" data-node-id="I3307:408522;3307:404879">
+            Search
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="I3307:408522;3307:405277" data-name="_Command shortcut">
+            <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="I3307:408522;3307:405277;3307:405241" data-name="Key">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408522;3307:405277;3307:405242">
+                ⌘/
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex items-start relative shrink-0 w-full" data-node-id="3307:408743" data-name="Content">
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-r border-solid content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-[280px]" data-node-id="3307:408792" data-name="Content leading">
+            <div className="content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start overflow-clip py-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="3307:408523" data-name="_Command bar menu section">
+              <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center pt-[var(--spacing-md,8px)] px-[18px] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405442" data-name="_Command menu header">
+                <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)]" data-node-id="I3307:408523;3307:405442;3307:404986">
+                  Designers
+                </p>
+              </div>
+              <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="I3307:408523;3307:405392" data-name="Menu items">
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405430" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:405430;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:405430;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:405430;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:405430;3307:405124">
+                        Olúwadámilọ́lá Buhari
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:405430;3307:405125">
+                        @phoenix
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405444" data-name="_Command dropdown menu item">
+                  <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:405444;3307:405129" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:405444;3307:405130" data-name="Avatar">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgContent} />
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:405444;3307:405131" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:405444;3307:405132">
+                        Diepreye Ọ̀rẹ̀kọ́yà
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:405444;3307:405133">
+                        @olivia
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405456" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:405456;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:405456;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:405456;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:405456;3307:405124">
+                        Ìbùkúnọlá Abubakar
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:405456;3307:405125">
+                        @lana
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405468" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:405468;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:405468;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:405468;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:405468;3307:405124">
+                        Ọ̀rẹ́fúnmi Àrẹ̀gbẹ́ṣọ́lá
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:405468;3307:405125">
+                        @demi
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:405476" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:405476;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:405476;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:405476;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:405476;3307:405124">
+                        Ṣọ̀pẹ́ Emenike
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:405476;3307:405125">
+                        @candice
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:406655" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:406655;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:406655;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#e9dcbb] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:406655;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:406655;3307:405124">
+                        Chizaram Àkànjí
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:406655;3307:405125">
+                        @natali
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative shrink-0 w-full" data-node-id="I3307:408523;3307:406730" data-name="_Command dropdown menu item">
+                  <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[10px] pr-[var(--spacing-md,8px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]" data-node-id="I3307:408523;3307:406730;3307:405121" data-name="Content">
+                    <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" data-node-id="I3307:408523;3307:406730;3307:405122" data-name="Avatar">
+                      <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                        <div className="absolute bg-[#d9e5cc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                        <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar5} />
+                      </div>
+                    </div>
+                    <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-baseline leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408523;3307:406730;3307:405123" data-name="Text and supporting text">
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="I3307:408523;3307:406730;3307:405124">
+                        Ikenna Danjuma
+                      </p>
+                      <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="I3307:408523;3307:406730;3307:405125">
+                        @drew
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-3xl,24px)] items-center min-w-px relative" data-node-id="3307:408744" data-name="Content trailing">
+            <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="3307:408798" data-name="Text and image">
+              <div className="content-stretch flex flex-col items-start mb-[-32px] pt-[4px] px-[4px] relative shrink-0 w-full" data-node-id="8784:620303" data-name="Image wrap">
+                <div className="bg-gradient-to-b from-[#a5c0ee] h-[88px] relative rounded-[12px] shrink-0 to-[#fbc5ec] w-full" data-node-id="3307:408797" data-name="Image" />
+              </div>
+              <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="3307:408745" data-name="Text and avatar">
+                <AvatarProfilePhoto className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[72px]" />
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 text-center w-full" data-node-id="3307:408747" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="3307:408748">
+                    Diepreye Ọ̀rẹ̀kọ́yà
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="3307:408749">{`I'm a Product Designer and Webflow Developer based in Melbourne, Australia.`}</p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-center relative shrink-0" data-node-id="3307:412490" data-name="Social icons">
+                  <div className="relative shrink-0 size-[20px]" data-node-id="3307:412491" data-name="Social icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon} />
+                  </div>
+                  <div className="overflow-clip relative shrink-0 size-[20px]" data-node-id="3307:412492" data-name="Social icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon1} />
+                  </div>
+                  <div className="relative shrink-0 size-[20px]" data-node-id="3307:412493" data-name="Social icon">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSocialIcon2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="3307:408751" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3307:408754" data-name="Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3307:408754;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408754;3287:433113">
+                    View portfolio
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3307:408755" data-name="Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="relative shrink-0 size-[20px]" data-node-id="I3307:408755;3466:410053" data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+                </div>
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3307:408755;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3307:408755;3287:432941">
+                    Follow
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Backdrop blurs/backdrop-blur-md: Effect(type: BACKGROUND_BLUR, radius: 16), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Avatar user square/Phoenix Baker (color background): #D6CFB7,, Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Avatar user square/Olivia Rhye: , Avatar user square/Lana Steiner (color background): #D7E3E8,, Avatar user square/Demi Wilkinson (color background): #DADCD6,, Avatar user square/Candice Wu (color background): #D9D0E6,, Avatar user square/Natali Craig (color background): #E9DCBB,, Avatar user square/Drew Cano (color background): #D9E5CC,, Gradient/Linear/01: , Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Gradient/skeuemorphic-gradient-border: , Shadows/shadow-xl: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_03, offset: (0, 3), radius: 3, spread: -1.5); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_02, offset: (0, 8), radius: 8, spread: -4); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_01, offset: (0, 20), radius: 24, spread: -4).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## search-lg
+**Node ID:** 3463:405300
+
+search, search bar, searchbar, magnify, magnifying glass, filter
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

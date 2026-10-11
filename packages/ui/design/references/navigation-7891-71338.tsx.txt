@@ -1,0 +1,100 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/deb67dde-abf2-41fa-8487-753709c6930a.png";
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/10cc79db-4472-402b-86ff-1536f13c6560.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "sm";
+  state?: "Default";
+  type?: "Radio";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "sm", state = "Default", type = "Radio" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndSmAndRadioAndDefault = checked && indeterminate === "False" && size === "sm" && type === "Radio" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[16px] ${isCheckedAndFalseAndSmAndRadioAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndSmAndRadioAndDefault ? "node-1100_552" : "node-1100_569"}>
+      {isCheckedAndFalseAndSmAndRadioAndDefault && <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[31.25%] rounded-[var(--radius-full,9999px)]" data-node-id="6305:247707" data-name="Check" />}
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type NavAccountCardMenuItemProps = {
+  className?: string;
+  current?: boolean;
+  iconSwap?: React.ReactNode | null;
+  shortcut?: boolean;
+  state?: "Default" | "Hover";
+  type?: "Menu item" | "Account";
+};
+
+export default function NavAccountCardMenuItem({ className, current = false, iconSwap = null, shortcut = true, state = "Default", type = "Menu item" }: NavAccountCardMenuItemProps) {
+  const isAccount = type === "Account";
+  const isAccountAndCurrent = type === "Account" && current;
+  const isAccountAndDefaultAndCurrent = type === "Account" && state === "Default" && current;
+  const isAccountAndDefaultAndNotCurrent = type === "Account" && state === "Default" && !current;
+  const isAccountAndHoverAndCurrent = type === "Account" && state === "Hover" && current;
+  const isAccountAndHoverAndNotCurrent = type === "Account" && state === "Hover" && !current;
+  const isMenuItem = type === "Menu item";
+  const isMenuItemAndDefaultAndCurrent = type === "Menu item" && state === "Default" && current;
+  const isMenuItemAndDefaultAndNotCurrent = type === "Menu item" && state === "Default" && !current;
+  const isMenuItemAndHoverAndCurrent = type === "Menu item" && state === "Hover" && current;
+  return (
+    <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] relative w-[240px]"} id={isAccountAndDefaultAndCurrent ? "node-7891_72770" : isAccountAndDefaultAndNotCurrent ? "node-7891_72618" : isMenuItemAndDefaultAndCurrent ? "node-7917_526443" : isMenuItemAndDefaultAndNotCurrent ? "node-7891_71363" : isAccountAndHoverAndCurrent ? "node-7891_72766" : isAccountAndHoverAndNotCurrent ? "node-7891_72612" : isMenuItemAndHoverAndCurrent ? "node-7917_526436" : "node-7891_71351"}>
+      <div className={`content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] min-w-px overflow-clip relative ${isAccountAndDefaultAndNotCurrent ? "items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] rounded-[var(--radius-sm,8px)]" : isMenuItemAndDefaultAndCurrent ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] items-center p-[var(--spacing-md,8px)] rounded-[6px]` : isMenuItemAndDefaultAndNotCurrent ? "items-center p-[var(--spacing-md,8px)] rounded-[var(--radius-sm,8px)]" : isAccountAndHoverAndCurrent ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] rounded-[6px]` : type === "Account" && ((state === "Hover" && !current) || (state === "Default" && current)) ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] rounded-[var(--radius-sm,8px)]` : String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] items-center p-[var(--spacing-md,8px)] rounded-[var(--radius-sm,8px)]`}`} id={isAccountAndDefaultAndCurrent ? "node-7891_72771" : isAccountAndDefaultAndNotCurrent ? "node-7891_72619" : isMenuItemAndDefaultAndCurrent ? "node-7917_526444" : isMenuItemAndDefaultAndNotCurrent ? "node-7891_71364" : isAccountAndHoverAndCurrent ? "node-7891_72767" : isAccountAndHoverAndNotCurrent ? "node-7891_72613" : isMenuItemAndHoverAndCurrent ? "node-7917_526437" : "node-7891_71352"} data-name="Content">
+        {isMenuItem && (
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isMenuItemAndDefaultAndCurrent ? "node-7917_526445" : isMenuItemAndDefaultAndNotCurrent ? "node-7891_71365" : isMenuItemAndHoverAndCurrent ? "node-7917_526438" : "node-7891_71353"} data-name="Icon and text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7891:72473" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+              </div>
+            )}
+            <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] min-w-px relative text-[length:var(--font-size\/text-sm,14px)] `}${isMenuItemAndDefaultAndNotCurrent ? String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]` : String.raw`text-[color:var(--colors\/text\/text-secondary_hover,#252b37)]`}`} id={isMenuItemAndDefaultAndCurrent ? "node-7917_526447" : isMenuItemAndDefaultAndNotCurrent ? "node-7891_71367" : isMenuItemAndHoverAndCurrent ? "node-7917_526440" : "node-7891_71355"}>
+              Placeholder
+            </p>
+          </div>
+        )}
+        {isMenuItem && shortcut && (
+          <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex items-start px-[var(--spacing-xs,4px)] py-px relative rounded-[var(--radius-xs,6px)] shrink-0" data-node-id="7891:97034" data-name="Shortcut wrapper">
+            {shortcut && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="7891:71356">
+                ⌘C
+              </p>
+            )}
+          </div>
+        )}
+        {isAccount && (
+          <>
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isAccountAndDefaultAndCurrent ? "node-7891_72772" : isAccountAndDefaultAndNotCurrent ? "node-7891_72636" : isAccountAndHoverAndCurrent ? "node-7891_72768" : "node-7891_72650"} data-name="Avatar label group">
+              <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" id={isAccountAndDefaultAndCurrent ? "node-I7891_72772-1034_778" : isAccountAndDefaultAndNotCurrent ? "node-I7891_72636-1034_778" : isAccountAndHoverAndCurrent ? "node-I7891_72768-1034_778" : "node-I7891_72650-1034_778"} data-name="Avatar">
+                <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+                <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+              </div>
+              <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isAccountAndDefaultAndCurrent ? "node-I7891_72772-82_2790" : isAccountAndDefaultAndNotCurrent ? "node-I7891_72636-82_2790" : isAccountAndHoverAndCurrent ? "node-I7891_72768-82_2790" : "node-I7891_72650-82_2790"} data-name="Text and supporting text">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" id={isAccountAndDefaultAndCurrent ? "node-I7891_72772-82_2788" : isAccountAndDefaultAndNotCurrent ? "node-I7891_72636-82_2788" : isAccountAndHoverAndCurrent ? "node-I7891_72768-82_2788" : "node-I7891_72650-82_2788"}>
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" id={isAccountAndDefaultAndCurrent ? "node-I7891_72772-82_2789" : isAccountAndDefaultAndNotCurrent ? "node-I7891_72636-82_2789" : isAccountAndHoverAndCurrent ? "node-I7891_72768-82_2789" : "node-I7891_72650-82_2789"}>
+                  chioma@PansGPT.com
+                </p>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex items-center justify-center right-[8px] top-[8px]" id={isAccountAndDefaultAndCurrent ? "node-7891_72773" : isAccountAndDefaultAndNotCurrent ? "node-7891_72687" : isAccountAndHoverAndCurrent ? "node-7891_72769" : "node-7891_72693"} data-name="Checkbox">
+              <CheckboxBase checked={isAccountAndCurrent ? true : undefined} className={`relative rounded-[var(--radius-full,9999px)] shrink-0 size-[16px] ${isAccountAndCurrent ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} />
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

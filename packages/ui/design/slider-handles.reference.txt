@@ -1,0 +1,49 @@
+type ControlHandleProps = {
+  className?: string;
+  state?: "Default" | "Hover" | "Focused";
+  type?: "False" | "Text" | "Tooltip";
+};
+
+export default function ControlHandle({ className, state = "Default", type = "False" }: ControlHandleProps) {
+  const isDefaultAndFalse = state === "Default" && type === "False";
+  const isDefaultAndTooltip = state === "Default" && type === "Tooltip";
+  const isFocusedAndFalse = state === "Focused" && type === "False";
+  const isFocusedAndText = state === "Focused" && type === "Text";
+  const isFocusedAndTooltip = state === "Focused" && type === "Tooltip";
+  const isHoverAndFalse = state === "Hover" && type === "False";
+  const isHoverAndText = state === "Hover" && type === "Text";
+  const isHoverAndTooltip = state === "Hover" && type === "Tooltip";
+  return (
+    <div className={className || "relative size-[24px]"} id={isFocusedAndTooltip ? "node-3287_443149" : isFocusedAndFalse ? "node-3287_443181" : isFocusedAndText ? "node-3287_443092" : isHoverAndTooltip ? "node-3287_443146" : isHoverAndFalse ? "node-3287_443178" : isHoverAndText ? "node-3287_443082" : isDefaultAndTooltip ? "node-3287_443142" : isDefaultAndFalse ? "node-3287_443174" : "node-3287_442779"}>
+      <div className={`${String.raw`absolute bg-[var(--component-colors\/components\/sliders\/slider-handle-bg,white)] border-2 border-[var(--component-colors\/components\/sliders\/slider-handle-border,#079455)] border-solid left-0 rounded-[var(--radius-full,9999px)] size-[24px] top-0 `}${state === "Focused" ? String.raw`shadow-[0px_1px_3px_0px_var(--colors\/effects\/shadows\/shadow-sm_01,rgba(10,13,18,0.1)),0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-sm_02,rgba(10,13,18,0.1)),0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)]` : String.raw`shadow-[0px_4px_6px_-1px_var(--colors\/effects\/shadows\/shadow-md_01,rgba(10,13,18,0.1)),0px_2px_4px_-2px_var(--colors\/effects\/shadows\/shadow-md_02,rgba(10,13,18,0.06))]`}`} id={isFocusedAndTooltip ? "node-3287_443150" : isFocusedAndFalse ? "node-3287_443182" : isFocusedAndText ? "node-3287_443094" : isHoverAndTooltip ? "node-3287_443147" : isHoverAndFalse ? "node-3287_443179" : isHoverAndText ? "node-3287_443084" : isDefaultAndTooltip ? "node-3287_443143" : isDefaultAndFalse ? "node-3287_443175" : "node-3287_443068"} data-name="Handle" />
+      {type === "Text" && (
+        <div className="-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] left-1/2 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] text-center top-[44px] whitespace-nowrap" id={isFocusedAndText ? "node-3287_443195" : isHoverAndText ? "node-3287_443194" : "node-3287_443105"}>
+          <p className="leading-[var(--line-height\/text-md,24px)]">0%</p>
+        </div>
+      )}
+      {type === "Tooltip" && (
+        <div className="-translate-x-1/2 absolute content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-1/2 top-[-42px]" id={isFocusedAndTooltip ? "node-6505_304732" : isHoverAndTooltip ? "node-6505_304738" : "node-6505_304735"} data-name="Tooltip">
+          <div className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" id={isFocusedAndTooltip ? "node-6505_304733" : isHoverAndTooltip ? "node-6505_304739" : "node-6505_304736"} data-name="Content">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" id={isFocusedAndTooltip ? "node-6505_304734" : isHoverAndTooltip ? "node-6505_304740" : "node-6505_304737"}>
+              0%
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Shadows/shadow-md: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-md_02, offset: (0, 2), radius: 4, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-md_01, offset: (0, 4), radius: 6, spread: -1), Text md/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-md, weight: 500, lineHeight: Line height/text-md, letterSpacing: 0), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4), Focus rings/focus-ring-shadow-sm: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_02, offset: (0, 1), radius: 2, spread: 0); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-sm_01, offset: (0, 1), radius: 3, spread: 0).
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

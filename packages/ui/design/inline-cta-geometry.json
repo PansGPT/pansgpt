@@ -1,0 +1,1220 @@
+[
+  {
+    "id": "1255:131888",
+    "name": "Type=Image, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 154,
+    "children": [
+      {
+        "id": "1665:404933",
+        "name": "Image wrap",
+        "type": "FRAME",
+        "width": 239,
+        "height": 154,
+        "children": [
+          {
+            "id": "1665:404934",
+            "name": "Image",
+            "type": "FRAME",
+            "width": 239,
+            "height": 154,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "1254:136615",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 529,
+        "height": 154,
+        "children": [
+          {
+            "id": "1254:136617",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 481,
+            "height": 106,
+            "children": [
+              {
+                "id": "1254:136618",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 481,
+                "height": 46
+              },
+              {
+                "id": "3293:418176",
+                "name": "Actions",
+                "type": "FRAME",
+                "width": 203,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132370",
+    "name": "Type=Image, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 418,
+    "children": [
+      {
+        "id": "1665:404935",
+        "name": "Image wrap",
+        "type": "FRAME",
+        "width": 343,
+        "height": 200,
+        "children": [
+          {
+            "id": "1665:404936",
+            "name": "Image",
+            "type": "FRAME",
+            "width": 343,
+            "height": 200,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "1255:132382",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 218,
+        "children": [
+          {
+            "id": "1255:132383",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 311,
+            "height": 178,
+            "children": [
+              {
+                "id": "1255:132384",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 311,
+                "height": 66
+              },
+              {
+                "id": "1255:132387",
+                "name": "Actions",
+                "type": "FRAME",
+                "width": 311,
+                "height": 92
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131889",
+    "name": "Type=Actions, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 154,
+    "children": [
+      {
+        "id": "1254:137015",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137016",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "We’ve just released a new update!",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137017",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Check out the all new dashboard view. Pages and now load faster.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "3293:418284",
+        "name": "Actions",
+        "type": "FRAME",
+        "width": 203,
+        "height": 40,
+        "children": [
+          {
+            "id": "3293:418285",
+            "name": "Buttons/Button",
+            "type": "INSTANCE",
+            "width": 84,
+            "height": 40,
+            "children": [
+              {
+                "id": "I3293:418285;6421:279423",
+                "name": "Text padding",
+                "type": "FRAME",
+                "width": 56,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "3293:418286",
+            "name": "Buttons/Button",
+            "type": "INSTANCE",
+            "width": 107,
+            "height": 40,
+            "children": [
+              {
+                "id": "I3293:418286;6421:278974",
+                "name": "Text padding",
+                "type": "FRAME",
+                "width": 79,
+                "height": 20
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132361",
+    "name": "Type=Actions, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 210,
+    "children": [
+      {
+        "id": "1255:132831",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 210,
+        "children": [
+          {
+            "id": "1255:132362",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 311,
+            "height": 66,
+            "children": [
+              {
+                "id": "1255:132363",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 24,
+                "text": "We’ve just released a new update!",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132364",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 40,
+                "text": "Check out the all new dashboard view. Pages and now load faster.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "3293:418719",
+            "name": "Actions",
+            "type": "FRAME",
+            "width": 311,
+            "height": 92,
+            "children": [
+              {
+                "id": "3293:418720",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 40
+              },
+              {
+                "id": "3293:418721",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131908",
+    "name": "Type=Email field, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 184,
+    "children": [
+      {
+        "id": "1254:137186",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137187",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "We’ve just released a new update!",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137188",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Check out the all new dashboard view. Pages and now load faster.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "3293:418445",
+        "name": "Email capture",
+        "type": "FRAME",
+        "width": 400,
+        "height": 70,
+        "children": [
+          {
+            "id": "3293:418446",
+            "name": "Input field",
+            "type": "INSTANCE",
+            "width": 269,
+            "height": 70,
+            "children": [
+              {
+                "id": "I3293:418446;3285:380390",
+                "name": "Input with label",
+                "type": "FRAME",
+                "width": 269,
+                "height": 70
+              }
+            ]
+          },
+          {
+            "id": "3293:418447",
+            "name": "Buttons/Button",
+            "type": "INSTANCE",
+            "width": 115,
+            "height": 44,
+            "children": [
+              {
+                "id": "I3293:418447;6421:273911",
+                "name": "Text padding",
+                "type": "FRAME",
+                "width": 83,
+                "height": 24
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132354",
+    "name": "Type=Email field, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 252,
+    "children": [
+      {
+        "id": "1255:132836",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 252,
+        "children": [
+          {
+            "id": "1255:132355",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 311,
+            "height": 66,
+            "children": [
+              {
+                "id": "1255:132356",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 24,
+                "text": "We’ve just released a new update!",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132357",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 40,
+                "text": "Check out the all new dashboard view. Pages and now load faster.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "1255:132358",
+            "name": "Row",
+            "type": "FRAME",
+            "width": 311,
+            "height": 126,
+            "children": [
+              {
+                "id": "3293:418534",
+                "name": "Input field",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 70
+              },
+              {
+                "id": "3293:418570",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 44
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131909",
+    "name": "Type=Change plan, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 328,
+    "children": [
+      {
+        "id": "1254:137283",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137284",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "Change your plan",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137285",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Flexible pricing that grows with you.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "1254:137356",
+        "name": "Card",
+        "type": "FRAME",
+        "width": 720,
+        "height": 214,
+        "children": [
+          {
+            "id": "1254:137357",
+            "name": "Header",
+            "type": "FRAME",
+            "width": 720,
+            "height": 56,
+            "children": [
+              {
+                "id": "1254:137358",
+                "name": "Content",
+                "type": "FRAME",
+                "width": 684,
+                "height": 32
+              }
+            ]
+          },
+          {
+            "id": "1254:137363",
+            "name": "Body",
+            "type": "FRAME",
+            "width": 720,
+            "height": 158,
+            "children": [
+              {
+                "id": "1254:137364",
+                "name": "Content",
+                "type": "FRAME",
+                "width": 688,
+                "height": 62
+              },
+              {
+                "id": "3293:418419",
+                "name": "Actions",
+                "type": "FRAME",
+                "width": 244,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132334",
+    "name": "Type=Change plan, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 336,
+    "children": [
+      {
+        "id": "1255:132839",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 336,
+        "children": [
+          {
+            "id": "1255:132335",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 311,
+            "height": 46,
+            "children": [
+              {
+                "id": "1255:132336",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 24,
+                "text": "Change your plan",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132337",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 20,
+                "text": "Flexible pricing that grows with you.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "1255:132338",
+            "name": "Card",
+            "type": "FRAME",
+            "width": 311,
+            "height": 234,
+            "children": [
+              {
+                "id": "1255:132339",
+                "name": "Header",
+                "type": "FRAME",
+                "width": 311,
+                "height": 56
+              },
+              {
+                "id": "1255:132344",
+                "name": "Body",
+                "type": "FRAME",
+                "width": 311,
+                "height": 178
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131912",
+    "name": "Type=Upgrade plan, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 356,
+    "children": [
+      {
+        "id": "1254:137850",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137851",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "Upgrade your plan",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137852",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Need more space? Upgrade your plan today.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "1254:137993",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 720,
+        "height": 182,
+        "children": [
+          {
+            "id": "1254:137972",
+            "name": "Row",
+            "type": "FRAME",
+            "width": 720,
+            "height": 50,
+            "children": [
+              {
+                "id": "1254:137979",
+                "name": "Check icon",
+                "type": "INSTANCE",
+                "width": 24,
+                "height": 24
+              },
+              {
+                "id": "1254:137975",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 684,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "1254:137987",
+            "name": "Row",
+            "type": "FRAME",
+            "width": 720,
+            "height": 50,
+            "children": [
+              {
+                "id": "1254:137988",
+                "name": "Check icon",
+                "type": "INSTANCE",
+                "width": 24,
+                "height": 24
+              },
+              {
+                "id": "1254:137989",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 684,
+                "height": 50
+              }
+            ]
+          },
+          {
+            "id": "1254:138001",
+            "name": "Row",
+            "type": "FRAME",
+            "width": 720,
+            "height": 50,
+            "children": [
+              {
+                "id": "1254:138002",
+                "name": "Check icon",
+                "type": "INSTANCE",
+                "width": 24,
+                "height": 24
+              },
+              {
+                "id": "1254:138003",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 684,
+                "height": 50
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "3293:418297",
+        "name": "Actions",
+        "type": "FRAME",
+        "width": 224,
+        "height": 40,
+        "children": [
+          {
+            "id": "3293:418298",
+            "name": "Buttons/Button",
+            "type": "INSTANCE",
+            "width": 88,
+            "height": 40,
+            "children": [
+              {
+                "id": "I3293:418298;6421:279423",
+                "name": "Text padding",
+                "type": "FRAME",
+                "width": 60,
+                "height": 20
+              }
+            ]
+          },
+          {
+            "id": "3293:418299",
+            "name": "Buttons/Button",
+            "type": "INSTANCE",
+            "width": 124,
+            "height": 40,
+            "children": [
+              {
+                "id": "I3293:418299;6421:278974",
+                "name": "Text padding",
+                "type": "FRAME",
+                "width": 96,
+                "height": 20
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132311",
+    "name": "Type=Upgrade plan, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 424,
+    "children": [
+      {
+        "id": "1255:132842",
+        "name": "Contents",
+        "type": "FRAME",
+        "width": 343,
+        "height": 424,
+        "children": [
+          {
+            "id": "1255:132312",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 311,
+            "height": 46,
+            "children": [
+              {
+                "id": "1255:132313",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 24,
+                "text": "Upgrade your plan",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132314",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 20,
+                "text": "Need more space? Upgrade your plan today.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "1255:132315",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 311,
+            "height": 206,
+            "children": [
+              {
+                "id": "1255:132316",
+                "name": "Row",
+                "type": "FRAME",
+                "width": 311,
+                "height": 50
+              },
+              {
+                "id": "1255:132321",
+                "name": "Row",
+                "type": "FRAME",
+                "width": 311,
+                "height": 50
+              },
+              {
+                "id": "1255:132326",
+                "name": "Row",
+                "type": "FRAME",
+                "width": 311,
+                "height": 74
+              }
+            ]
+          },
+          {
+            "id": "3293:418732",
+            "name": "Actions",
+            "type": "FRAME",
+            "width": 311,
+            "height": 92,
+            "children": [
+              {
+                "id": "3293:418733",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 40
+              },
+              {
+                "id": "3293:418734",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 311,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131910",
+    "name": "Type=Payment method, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 214,
+    "children": [
+      {
+        "id": "1254:137390",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137391",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "Payment method",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137392",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Change how you pay for your plan.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "1254:137457",
+        "name": "Card",
+        "type": "FRAME",
+        "width": 720,
+        "height": 100,
+        "children": [
+          {
+            "id": "1255:132848",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 688,
+            "height": 68,
+            "children": [
+              {
+                "id": "1254:137459",
+                "name": "Payment method icon",
+                "type": "INSTANCE",
+                "width": 58,
+                "height": 40
+              },
+              {
+                "id": "1254:137460",
+                "name": "Content",
+                "type": "FRAME",
+                "width": 614,
+                "height": 68
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132295",
+    "name": "Type=Payment method, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 202,
+    "children": [
+      {
+        "id": "1255:132845",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 202,
+        "children": [
+          {
+            "id": "1255:132296",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 311,
+            "height": 46,
+            "children": [
+              {
+                "id": "1255:132297",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 24,
+                "text": "Payment method",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132298",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 311,
+                "height": 20,
+                "text": "Change how you pay for your plan.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "1255:132849",
+            "name": "Card",
+            "type": "FRAME",
+            "width": 311,
+            "height": 100,
+            "children": [
+              {
+                "id": "1680:585166",
+                "name": "Content",
+                "type": "FRAME",
+                "width": 279,
+                "height": 68
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:131911",
+    "name": "Type=Receipt, Breakpoint=Desktop",
+    "type": "COMPONENT",
+    "width": 768,
+    "height": 186,
+    "children": [
+      {
+        "id": "1254:137499",
+        "name": "Text and supporting text",
+        "type": "FRAME",
+        "width": 720,
+        "height": 46,
+        "children": [
+          {
+            "id": "1254:137500",
+            "name": "Text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 24,
+            "text": "Your latest receipt is available",
+            "fontSize": 16,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 24
+            }
+          },
+          {
+            "id": "1254:137501",
+            "name": "Supporting text",
+            "type": "TEXT",
+            "width": 720,
+            "height": 20,
+            "text": "Download receipt for January 2025.",
+            "fontSize": 14,
+            "lineHeight": {
+              "unit": "PIXELS",
+              "value": 20
+            }
+          }
+        ]
+      },
+      {
+        "id": "1254:137502",
+        "name": "Card",
+        "type": "FRAME",
+        "width": 720,
+        "height": 72,
+        "children": [
+          {
+            "id": "1254:137504",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 492,
+            "height": 40,
+            "children": [
+              {
+                "id": "4943:373440",
+                "name": "File type icon",
+                "type": "INSTANCE",
+                "width": 40,
+                "height": 40
+              },
+              {
+                "id": "1254:137505",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 440,
+                "height": 40
+              }
+            ]
+          },
+          {
+            "id": "3293:418311",
+            "name": "Actions",
+            "type": "FRAME",
+            "width": 180,
+            "height": 40,
+            "children": [
+              {
+                "id": "3293:418312",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 102,
+                "height": 40
+              },
+              {
+                "id": "3293:418313",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 66,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "1255:132811",
+    "name": "Type=Receipt, Breakpoint=Mobile",
+    "type": "COMPONENT",
+    "width": 343,
+    "height": 266,
+    "children": [
+      {
+        "id": "1255:132879",
+        "name": "Content",
+        "type": "FRAME",
+        "width": 343,
+        "height": 266,
+        "children": [
+          {
+            "id": "1255:132812",
+            "name": "Text and supporting text",
+            "type": "FRAME",
+            "width": 295,
+            "height": 46,
+            "children": [
+              {
+                "id": "1255:132813",
+                "name": "Text",
+                "type": "TEXT",
+                "width": 295,
+                "height": 24,
+                "text": "Your latest receipt is available",
+                "fontSize": 16,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 24
+                }
+              },
+              {
+                "id": "1255:132814",
+                "name": "Supporting text",
+                "type": "TEXT",
+                "width": 295,
+                "height": 20,
+                "text": "Download receipt for January 2025.",
+                "fontSize": 14,
+                "lineHeight": {
+                  "unit": "PIXELS",
+                  "value": 20
+                }
+              }
+            ]
+          },
+          {
+            "id": "1255:132816",
+            "name": "Content",
+            "type": "FRAME",
+            "width": 295,
+            "height": 40,
+            "children": [
+              {
+                "id": "4943:373461",
+                "name": "File type icon",
+                "type": "INSTANCE",
+                "width": 40,
+                "height": 40
+              },
+              {
+                "id": "1255:132818",
+                "name": "Text and supporting text",
+                "type": "FRAME",
+                "width": 243,
+                "height": 40
+              }
+            ]
+          },
+          {
+            "id": "3293:418745",
+            "name": "Actions",
+            "type": "FRAME",
+            "width": 295,
+            "height": 92,
+            "children": [
+              {
+                "id": "3293:418746",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 295,
+                "height": 40
+              },
+              {
+                "id": "3293:418747",
+                "name": "Buttons/Button",
+                "type": "INSTANCE",
+                "width": 295,
+                "height": 40
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,90 @@
+const imgAvatar = "https://www.figma.com/api/mcp/asset/0f3b4bf2-ee47-4ecc-92df-409daefc8f57.png";
+const imgPlayButton = "https://www.figma.com/api/mcp/asset/1c9ef582-168a-48d7-8071-f82bffe6cc11.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/71490a75-01d4-4957-97db-a57f168919c8.svg";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/b9b0d9b8-815f-4359-914d-e9715be65bc5.svg";
+const imgDownloadCloud02 = "https://www.figma.com/api/mcp/asset/1327b83e-daea-4c0a-8009-bf16ee9c1d59.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/80f45f62-1d9e-4ff7-9b5d-79f8f1f5d5c3.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/e4023520-8d1d-403b-9320-faed9e347c34.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/04cd410d-2787-4bfe-b575-c0df7a1a53bb.svg";
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "True";
+  sent?: "False";
+  type?: "Audio";
+};
+
+function Message({ className, actionsPanel = "True", sent = "False", type = "Audio" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[480px] relative w-[360px]"} data-node-id="9242:555631">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="9242:555632" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9242:555633" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="9242:555634" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9242:555635">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="9242:555636">
+            Friday 2:20pm
+          </p>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start justify-center overflow-clip p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tr-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9242:555637" data-name="Input">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9242:556247" data-name="Content">
+            <div className="relative shrink-0 size-[32px]" data-node-id="9242:556248" data-name="Play button">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlayButton} />
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px overflow-clip px-px relative" data-node-id="9242:556252" data-name="Audio waveform mask">
+              <div className="h-[32px] relative shrink-0 w-[556px]" data-node-id="9244:102780" data-name="Vector">
+                <div className="absolute inset-[-1.56%_0]">
+                  <img alt="" className="block max-w-none size-full" src={imgVector} />
+                </div>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9242:556254">
+              00:28
+            </p>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[-20px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="9242:555644" data-name="_Message action panel">
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9242:555644;9206:591510" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555644;9206:591510;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9242:555644;9206:591517" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555644;9206:591517;9206:591497" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+            </div>
+            <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9242:555644;9206:591517;9206:591520" data-name="Cursor">
+              <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgCursor} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9242:555644;9206:591537" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555644;9206:591537;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9242:555644;9206:591541" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555644;9206:591541;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,16 @@
+type CalendarCellDateProps = {
+  className?: string;
+  type?: "Default" | "Selected" | "Today's date";
+};
+
+export default function CalendarCellDate({ className, type = "Default" }: CalendarCellDateProps) {
+  const isSelected = type === "Selected";
+  const isTodaysDate = type === "Today's date";
+  return (
+    <div className={className || `relative rounded-[var(--radius-full,9999px)] size-[24px] ${isSelected ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : isTodaysDate ? String.raw`bg-[var(--colors\/background\/bg-active,#fafafa)]` : ""}`} id={isSelected ? "node-7991_56361" : isTodaysDate ? "node-7991_56362" : "node-7991_56360"}>
+      <p className={`${String.raw`[word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)] `}${isSelected ? String.raw`-translate-x-1/2 left-1/2 text-[color:var(--colors\/text\/text-white,white)] text-center w-[24px]` : isTodaysDate ? String.raw`-translate-x-1/2 left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-center w-[24px]` : String.raw`left-[4px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] whitespace-nowrap`}`} id={isSelected ? "node-7991_56317" : isTodaysDate ? "node-7991_56359" : "node-7991_56312"}>
+        1
+      </p>
+    </div>
+  );
+}

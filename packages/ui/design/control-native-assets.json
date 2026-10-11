@@ -1,0 +1,2658 @@
+{
+  "assets": [
+    {
+      "name": "source0_imgCheck",
+      "file": "control-native-source0_imgCheck.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "66e1112caa65e0892e8c91fd375fe6025c46e3616ed225e8890548999df11685"
+    },
+    {
+      "name": "source0_imgCheck1",
+      "file": "control-native-source0_imgCheck1.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "f2b978fafb8374546eee091bf1d5a0efcd2084692860037ac876aee49fdb162c"
+    },
+    {
+      "name": "source0_imgCheck2",
+      "file": "control-native-source0_imgCheck2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "ef988bc27da7c3d65d7929353824c77c66f47bc61ad6316749d0380e9bc3ddae"
+    },
+    {
+      "name": "source0_imgCheck3",
+      "file": "control-native-source0_imgCheck3.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "8d89836852fc784e6b3b0817b5f8c0a1e99d94db8c322d67fa5d1e545fde9a58"
+    },
+    {
+      "name": "source0_imgDot",
+      "file": "control-native-source0_imgDot.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "800e740ba73d78feb5d6113cd1dd8bf6ca6d1c23097cb657b1273017d49e314a"
+    },
+    {
+      "name": "source0_imgSizeMdOutlineFalse",
+      "file": "control-native-source0_imgSizeMdOutlineFalse.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "9adc4902d0dca1cdb8ff8224e8d99fd605e5f7eceb8d24ca62cf1ff92477dbc1"
+    },
+    {
+      "name": "source0_imgSizeXsPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source0_imgSizeXsPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source0_imgUser01",
+      "file": "control-native-source0_imgUser01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "00b3b5f6e51ff46b3fcc4eb57d66992ed92bb24a1c55f94ecda18c84ebaef15c"
+    },
+    {
+      "name": "source0_imgUser2",
+      "file": "control-native-source0_imgUser2.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "1c8cbdf4745152a8f42771322c5fc599074e504732b8c724fd76d09aea43592b"
+    },
+    {
+      "name": "source0_imgUser3",
+      "file": "control-native-source0_imgUser3.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "00b3b5f6e51ff46b3fcc4eb57d66992ed92bb24a1c55f94ecda18c84ebaef15c"
+    },
+    {
+      "name": "source1_imgOpenFalseSupportingTextFalseTooltipTopNoArrow",
+      "file": "control-native-source1_imgOpenFalseSupportingTextFalseTooltipTopNoArrow.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "f30aa4ba49e5c053e374d4162bd2379ee0c3456a082398de65784dcfbc636b94"
+    },
+    {
+      "name": "source1_imgResizeHandle",
+      "file": "control-native-source1_imgResizeHandle.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "e370db2f0bf0f2e591fb1e224f483a1468e4de79013b9f94395f17a124e2e7ad"
+    },
+    {
+      "name": "source1_imgResizeHandle1",
+      "file": "control-native-source1_imgResizeHandle1.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "4b58343cb289182eb6e3a376b0632ecfe0d73c7d729b2dabcaf657340f6a7a2b"
+    },
+    {
+      "name": "source1_imgXClose",
+      "file": "control-native-source1_imgXClose.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "eae4be31e0ad61ccc3847e2533a09c701d76c553336ea260796c681aa592056e"
+    },
+    {
+      "name": "source10_imgSizeSmOutlineFalse",
+      "file": "control-native-source10_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source10_imgXClose",
+      "file": "control-native-source10_imgXClose.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "eae4be31e0ad61ccc3847e2533a09c701d76c553336ea260796c681aa592056e"
+    },
+    {
+      "name": "source101_imgCheck",
+      "file": "control-native-source101_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source102_imgCheck",
+      "file": "control-native-source102_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source102_imgLayersTwo01",
+      "file": "control-native-source102_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source103_imgCheck",
+      "file": "control-native-source103_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source103_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source103_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source104_imgCheck",
+      "file": "control-native-source104_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source104_imgPaymentMethodIcon",
+      "file": "control-native-source104_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source106_imgCheck",
+      "file": "control-native-source106_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source107_imgCheck",
+      "file": "control-native-source107_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source107_imgLayersTwo01",
+      "file": "control-native-source107_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source108_imgCheck",
+      "file": "control-native-source108_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source108_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source108_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source109_imgCheck",
+      "file": "control-native-source109_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source109_imgPaymentMethodIcon",
+      "file": "control-native-source109_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source11_imgSizeSmOutlineFalse",
+      "file": "control-native-source11_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source11_imgXClose",
+      "file": "control-native-source11_imgXClose.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "fe1855f0b889df11b74e3a60b7597f05bf3da267df89fb0342c8ab5ae05cfc07"
+    },
+    {
+      "name": "source111_imgCheck",
+      "file": "control-native-source111_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source112_imgCheck",
+      "file": "control-native-source112_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source112_imgLayersTwo01",
+      "file": "control-native-source112_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source113_imgCheck",
+      "file": "control-native-source113_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source113_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source113_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source114_imgCheck",
+      "file": "control-native-source114_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source114_imgPaymentMethodIcon",
+      "file": "control-native-source114_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source117_imgLayersTwo01",
+      "file": "control-native-source117_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source118_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source118_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source119_imgPaymentMethodIcon",
+      "file": "control-native-source119_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source12_imgAu",
+      "file": "control-native-source12_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "64d7b90b96454d3b12ea666e023d1e2d942c7190e91af63387c766a8320458b1"
+    },
+    {
+      "name": "source12_imgXClose",
+      "file": "control-native-source12_imgXClose.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "da4b650d63143be3253796ac2347ef037e1ce1b78537618256f42c5416bedbf8"
+    },
+    {
+      "name": "source122_imgLayersTwo01",
+      "file": "control-native-source122_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source123_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source123_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source124_imgPaymentMethodIcon",
+      "file": "control-native-source124_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source127_imgLayersTwo01",
+      "file": "control-native-source127_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source128_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source128_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source129_imgPaymentMethodIcon",
+      "file": "control-native-source129_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source13_imgAu",
+      "file": "control-native-source13_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "4dbc9526244be79a42df279d2c78c3e8f3987d2c1c58a527e1e2803890d42c0b"
+    },
+    {
+      "name": "source13_imgXClose",
+      "file": "control-native-source13_imgXClose.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "eae4be31e0ad61ccc3847e2533a09c701d76c553336ea260796c681aa592056e"
+    },
+    {
+      "name": "source132_imgLayersTwo01",
+      "file": "control-native-source132_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source133_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source133_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source134_imgPaymentMethodIcon",
+      "file": "control-native-source134_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source135_imgCheck",
+      "file": "control-native-source135_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source135_imgDot",
+      "file": "control-native-source135_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source135_imgLayersTwo01",
+      "file": "control-native-source135_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source136_imgCheck",
+      "file": "control-native-source136_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source136_imgDot",
+      "file": "control-native-source136_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source136_imgLayersTwo01",
+      "file": "control-native-source136_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source137_imgDot",
+      "file": "control-native-source137_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source137_imgLayersTwo01",
+      "file": "control-native-source137_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source138_imgDot",
+      "file": "control-native-source138_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source138_imgLayersTwo01",
+      "file": "control-native-source138_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source139_imgCheck",
+      "file": "control-native-source139_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source139_imgDot",
+      "file": "control-native-source139_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source139_imgLayersTwo01",
+      "file": "control-native-source139_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source14_imgAu",
+      "file": "control-native-source14_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "64d7b90b96454d3b12ea666e023d1e2d942c7190e91af63387c766a8320458b1"
+    },
+    {
+      "name": "source14_imgXClose",
+      "file": "control-native-source14_imgXClose.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "fe1855f0b889df11b74e3a60b7597f05bf3da267df89fb0342c8ab5ae05cfc07"
+    },
+    {
+      "name": "source140_imgCheck",
+      "file": "control-native-source140_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source140_imgDot",
+      "file": "control-native-source140_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source140_imgLayersTwo01",
+      "file": "control-native-source140_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source141_imgDot",
+      "file": "control-native-source141_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source141_imgLayersTwo01",
+      "file": "control-native-source141_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source142_imgDot",
+      "file": "control-native-source142_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source142_imgLayersTwo01",
+      "file": "control-native-source142_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source143_imgCheck",
+      "file": "control-native-source143_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source143_imgDot",
+      "file": "control-native-source143_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source143_imgLayersTwo01",
+      "file": "control-native-source143_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source144_imgCheck",
+      "file": "control-native-source144_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source144_imgDot",
+      "file": "control-native-source144_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source144_imgLayersTwo01",
+      "file": "control-native-source144_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source145_imgDot",
+      "file": "control-native-source145_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source145_imgLayersTwo01",
+      "file": "control-native-source145_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source146_imgDot",
+      "file": "control-native-source146_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source146_imgLayersTwo01",
+      "file": "control-native-source146_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source147_imgCheck",
+      "file": "control-native-source147_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source147_imgDot",
+      "file": "control-native-source147_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source147_imgLayersTwo01",
+      "file": "control-native-source147_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source148_imgCheck",
+      "file": "control-native-source148_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source148_imgDot",
+      "file": "control-native-source148_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source148_imgLayersTwo01",
+      "file": "control-native-source148_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source149_imgCheck",
+      "file": "control-native-source149_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source149_imgDot",
+      "file": "control-native-source149_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source149_imgLayersTwo01",
+      "file": "control-native-source149_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source15_imgAvatar",
+      "file": "control-native-source15_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source15_imgXClose",
+      "file": "control-native-source15_imgXClose.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "da4b650d63143be3253796ac2347ef037e1ce1b78537618256f42c5416bedbf8"
+    },
+    {
+      "name": "source150_imgCheck",
+      "file": "control-native-source150_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source150_imgDot",
+      "file": "control-native-source150_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source150_imgLayersTwo01",
+      "file": "control-native-source150_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source151_imgDot",
+      "file": "control-native-source151_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source151_imgLayersTwo01",
+      "file": "control-native-source151_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source152_imgDot",
+      "file": "control-native-source152_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source152_imgLayersTwo01",
+      "file": "control-native-source152_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source153_imgCheck",
+      "file": "control-native-source153_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source153_imgDot",
+      "file": "control-native-source153_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source153_imgLayersTwo01",
+      "file": "control-native-source153_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source154_imgCheck",
+      "file": "control-native-source154_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source154_imgDot",
+      "file": "control-native-source154_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source154_imgLayersTwo01",
+      "file": "control-native-source154_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source155_imgDot",
+      "file": "control-native-source155_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source155_imgLayersTwo01",
+      "file": "control-native-source155_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source156_imgDot",
+      "file": "control-native-source156_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source156_imgLayersTwo01",
+      "file": "control-native-source156_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source157_imgCheck",
+      "file": "control-native-source157_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source157_imgDot",
+      "file": "control-native-source157_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source157_imgLayersTwo01",
+      "file": "control-native-source157_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source158_imgCheck",
+      "file": "control-native-source158_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source158_imgDot",
+      "file": "control-native-source158_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source158_imgLayersTwo01",
+      "file": "control-native-source158_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source159_imgDot",
+      "file": "control-native-source159_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source159_imgLayersTwo01",
+      "file": "control-native-source159_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source16_imgAvatar",
+      "file": "control-native-source16_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source16_imgXClose",
+      "file": "control-native-source16_imgXClose.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "eae4be31e0ad61ccc3847e2533a09c701d76c553336ea260796c681aa592056e"
+    },
+    {
+      "name": "source160_imgDot",
+      "file": "control-native-source160_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source160_imgLayersTwo01",
+      "file": "control-native-source160_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source161_imgCheck",
+      "file": "control-native-source161_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source161_imgDot",
+      "file": "control-native-source161_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source161_imgLayersTwo01",
+      "file": "control-native-source161_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source162_imgCheck",
+      "file": "control-native-source162_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source162_imgDot",
+      "file": "control-native-source162_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source162_imgLayersTwo01",
+      "file": "control-native-source162_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source165_imgLayersTwo01",
+      "file": "control-native-source165_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source166_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source166_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source167_imgPaymentMethodIcon",
+      "file": "control-native-source167_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source17_imgAvatar",
+      "file": "control-native-source17_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source17_imgXClose",
+      "file": "control-native-source17_imgXClose.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "fe1855f0b889df11b74e3a60b7597f05bf3da267df89fb0342c8ab5ae05cfc07"
+    },
+    {
+      "name": "source170_imgLayersTwo01",
+      "file": "control-native-source170_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source171_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source171_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source172_imgPaymentMethodIcon",
+      "file": "control-native-source172_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source174_imgCheck",
+      "file": "control-native-source174_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source175_imgCheck",
+      "file": "control-native-source175_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source175_imgLayersTwo01",
+      "file": "control-native-source175_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source176_imgCheck",
+      "file": "control-native-source176_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source176_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source176_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source177_imgCheck",
+      "file": "control-native-source177_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source177_imgPaymentMethodIcon",
+      "file": "control-native-source177_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source179_imgCheck",
+      "file": "control-native-source179_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source18_imgCheck",
+      "file": "control-native-source18_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source18_imgLayersThree01",
+      "file": "control-native-source18_imgLayersThree01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "aec549df57144dd02f7bcefec0b6dee77c9209dfd61d259393e5ef630afe5335"
+    },
+    {
+      "name": "source18_imgLayersTwo01",
+      "file": "control-native-source18_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source18_imgRocket01",
+      "file": "control-native-source18_imgRocket01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "62a2a02f43d875c87d00a0207920251dfd0146c89d3f895c18b9d6875547fcd0"
+    },
+    {
+      "name": "source18_imgZap",
+      "file": "control-native-source18_imgZap.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "31d3ebdace955744ac2694738856cafc0a08f040f07ac9a29eb4a44cfa552326"
+    },
+    {
+      "name": "source18_imgZapFast",
+      "file": "control-native-source18_imgZapFast.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "66a24a27b641bd43b3454f74b9fe1b915e638a91acb0734e23b4de62c28c2ce2"
+    },
+    {
+      "name": "source180_imgCheck",
+      "file": "control-native-source180_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source180_imgLayersTwo01",
+      "file": "control-native-source180_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source181_imgCheck",
+      "file": "control-native-source181_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source181_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source181_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source182_imgCheck",
+      "file": "control-native-source182_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source182_imgPaymentMethodIcon",
+      "file": "control-native-source182_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source184_imgCheck",
+      "file": "control-native-source184_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source185_imgCheck",
+      "file": "control-native-source185_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source185_imgLayersTwo01",
+      "file": "control-native-source185_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source186_imgCheck",
+      "file": "control-native-source186_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source186_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source186_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source187_imgCheck",
+      "file": "control-native-source187_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source187_imgPaymentMethodIcon",
+      "file": "control-native-source187_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source189_imgCheck",
+      "file": "control-native-source189_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source19_imgCheck",
+      "file": "control-native-source19_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source19_imgDot",
+      "file": "control-native-source19_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source19_imgLayersThree01",
+      "file": "control-native-source19_imgLayersThree01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "7ca8f9339b2bc4440207375a5c24ddc3ce557a208bec9eb6e47a7e5056f154e7"
+    },
+    {
+      "name": "source19_imgLayersTwo01",
+      "file": "control-native-source19_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source19_imgRocket01",
+      "file": "control-native-source19_imgRocket01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "a71c2ccb907a5dc9e11782604d12fbea7079992efdae46ff8849b14d868f2c59"
+    },
+    {
+      "name": "source19_imgZap",
+      "file": "control-native-source19_imgZap.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "31d3ebdace955744ac2694738856cafc0a08f040f07ac9a29eb4a44cfa552326"
+    },
+    {
+      "name": "source19_imgZapFast",
+      "file": "control-native-source19_imgZapFast.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "66a24a27b641bd43b3454f74b9fe1b915e638a91acb0734e23b4de62c28c2ce2"
+    },
+    {
+      "name": "source190_imgCheck",
+      "file": "control-native-source190_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source190_imgLayersTwo01",
+      "file": "control-native-source190_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source191_imgCheck",
+      "file": "control-native-source191_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source191_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source191_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source192_imgCheck",
+      "file": "control-native-source192_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source192_imgPaymentMethodIcon",
+      "file": "control-native-source192_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source194_imgCheck",
+      "file": "control-native-source194_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source195_imgCheck",
+      "file": "control-native-source195_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source195_imgLayersTwo01",
+      "file": "control-native-source195_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source196_imgCheck",
+      "file": "control-native-source196_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source196_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source196_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source197_imgCheck",
+      "file": "control-native-source197_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source197_imgPaymentMethodIcon",
+      "file": "control-native-source197_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source199_imgCheck",
+      "file": "control-native-source199_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source200_imgCheck",
+      "file": "control-native-source200_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source200_imgLayersTwo01",
+      "file": "control-native-source200_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source201_imgCheck",
+      "file": "control-native-source201_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source201_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source201_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source202_imgCheck",
+      "file": "control-native-source202_imgCheck.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source202_imgPaymentMethodIcon",
+      "file": "control-native-source202_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source204_imgCheck",
+      "file": "control-native-source204_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source205_imgCheck",
+      "file": "control-native-source205_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source205_imgLayersTwo01",
+      "file": "control-native-source205_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source206_imgCheck",
+      "file": "control-native-source206_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source206_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source206_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source207_imgCheck",
+      "file": "control-native-source207_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source207_imgPaymentMethodIcon",
+      "file": "control-native-source207_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source209_imgCheck",
+      "file": "control-native-source209_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source21_imgCheck",
+      "file": "control-native-source21_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source210_imgCheck",
+      "file": "control-native-source210_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source210_imgLayersTwo01",
+      "file": "control-native-source210_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source211_imgCheck",
+      "file": "control-native-source211_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source211_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source211_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source212_imgCheck",
+      "file": "control-native-source212_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source212_imgPaymentMethodIcon",
+      "file": "control-native-source212_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source215_imgLayersTwo01",
+      "file": "control-native-source215_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source216_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source216_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source217_imgPaymentMethodIcon",
+      "file": "control-native-source217_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source22_imgAvatar",
+      "file": "control-native-source22_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source22_imgAvatar1",
+      "file": "control-native-source22_imgAvatar1.png",
+      "sha256": "8b504f96b9d1ca453cf9c40a25fd592e4b2c8f645f604eb64190add519f255e7"
+    },
+    {
+      "name": "source22_imgAvatar2",
+      "file": "control-native-source22_imgAvatar2.png",
+      "sha256": "0c188f530cd3b1e9d95fbf0cbd3cfc3e49beab1a8870ced4b5d6ee01d6b673cb"
+    },
+    {
+      "name": "source22_imgAvatar3",
+      "file": "control-native-source22_imgAvatar3.png",
+      "sha256": "0c8369f6edc7928f0f05a77e2cde13c6c3e4640b4f85f96714e17204bcdb7947"
+    },
+    {
+      "name": "source22_imgAvatar4",
+      "file": "control-native-source22_imgAvatar4.png",
+      "sha256": "ac4147d648605f8e859bc46da204d651e14e1ee39def5939e14ccf5d676118d3"
+    },
+    {
+      "name": "source22_imgCheck",
+      "file": "control-native-source22_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source220_imgLayersTwo01",
+      "file": "control-native-source220_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source221_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source221_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source222_imgPaymentMethodIcon",
+      "file": "control-native-source222_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source225_imgLayersTwo01",
+      "file": "control-native-source225_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source226_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source226_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source227_imgPaymentMethodIcon",
+      "file": "control-native-source227_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source23_imgCheck",
+      "file": "control-native-source23_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source23_imgPaymentMethodIcon",
+      "file": "control-native-source23_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source23_imgPaymentMethodIcon1",
+      "file": "control-native-source23_imgPaymentMethodIcon1.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "d0858246a44173841148376b33193f2b140cec72b1029b0b4eed567c4115b5d2"
+    },
+    {
+      "name": "source23_imgPaymentMethodIcon2",
+      "file": "control-native-source23_imgPaymentMethodIcon2.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "757b7b82a100514237d6fa57275c4faac7ac738038df0e367c221adfe6eae079"
+    },
+    {
+      "name": "source230_imgLayersTwo01",
+      "file": "control-native-source230_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source231_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source231_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source232_imgPaymentMethodIcon",
+      "file": "control-native-source232_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source235_imgLayersTwo01",
+      "file": "control-native-source235_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "1ba64ce25758c379944d4793da264f69158a2683b0ce47d9fa86f0d86c4f9150"
+    },
+    {
+      "name": "source236_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source236_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source237_imgPaymentMethodIcon",
+      "file": "control-native-source237_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source24_imgAvatar",
+      "file": "control-native-source24_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source24_imgAvatar1",
+      "file": "control-native-source24_imgAvatar1.png",
+      "sha256": "8b504f96b9d1ca453cf9c40a25fd592e4b2c8f645f604eb64190add519f255e7"
+    },
+    {
+      "name": "source24_imgAvatar2",
+      "file": "control-native-source24_imgAvatar2.png",
+      "sha256": "0c188f530cd3b1e9d95fbf0cbd3cfc3e49beab1a8870ced4b5d6ee01d6b673cb"
+    },
+    {
+      "name": "source24_imgAvatar3",
+      "file": "control-native-source24_imgAvatar3.png",
+      "sha256": "0c8369f6edc7928f0f05a77e2cde13c6c3e4640b4f85f96714e17204bcdb7947"
+    },
+    {
+      "name": "source24_imgAvatar4",
+      "file": "control-native-source24_imgAvatar4.png",
+      "sha256": "ac4147d648605f8e859bc46da204d651e14e1ee39def5939e14ccf5d676118d3"
+    },
+    {
+      "name": "source24_imgCheck",
+      "file": "control-native-source24_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source240_imgLayersTwo01",
+      "file": "control-native-source240_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4b5047774e374dd747f2b2c16091bd6221ed7eb331a5583b0a3db06029baa32b"
+    },
+    {
+      "name": "source241_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source241_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source242_imgPaymentMethodIcon",
+      "file": "control-native-source242_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source25_imgCheck",
+      "file": "control-native-source25_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source25_imgPaymentMethodIcon",
+      "file": "control-native-source25_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source25_imgPaymentMethodIcon1",
+      "file": "control-native-source25_imgPaymentMethodIcon1.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "d0858246a44173841148376b33193f2b140cec72b1029b0b4eed567c4115b5d2"
+    },
+    {
+      "name": "source25_imgPaymentMethodIcon2",
+      "file": "control-native-source25_imgPaymentMethodIcon2.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "757b7b82a100514237d6fa57275c4faac7ac738038df0e367c221adfe6eae079"
+    },
+    {
+      "name": "source26_imgCheck",
+      "file": "control-native-source26_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source26_imgLayersThree01",
+      "file": "control-native-source26_imgLayersThree01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "aec549df57144dd02f7bcefec0b6dee77c9209dfd61d259393e5ef630afe5335"
+    },
+    {
+      "name": "source26_imgLayersTwo01",
+      "file": "control-native-source26_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source26_imgRocket01",
+      "file": "control-native-source26_imgRocket01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "62a2a02f43d875c87d00a0207920251dfd0146c89d3f895c18b9d6875547fcd0"
+    },
+    {
+      "name": "source26_imgZap",
+      "file": "control-native-source26_imgZap.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "31d3ebdace955744ac2694738856cafc0a08f040f07ac9a29eb4a44cfa552326"
+    },
+    {
+      "name": "source26_imgZapFast",
+      "file": "control-native-source26_imgZapFast.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "66a24a27b641bd43b3454f74b9fe1b915e638a91acb0734e23b4de62c28c2ce2"
+    },
+    {
+      "name": "source27_imgCheck",
+      "file": "control-native-source27_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source27_imgDot",
+      "file": "control-native-source27_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source27_imgLayersThree01",
+      "file": "control-native-source27_imgLayersThree01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "2c6500a93040f2bf87590a13cfe3fdae068a71ba1864bbf663ab19f5fbf40472"
+    },
+    {
+      "name": "source27_imgLayersTwo01",
+      "file": "control-native-source27_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source27_imgRocket01",
+      "file": "control-native-source27_imgRocket01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "c686f985235358099fff8eb5c5afa0337cf96e084b3e67c9cf8d007edd09c95e"
+    },
+    {
+      "name": "source27_imgZap",
+      "file": "control-native-source27_imgZap.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "31d3ebdace955744ac2694738856cafc0a08f040f07ac9a29eb4a44cfa552326"
+    },
+    {
+      "name": "source27_imgZapFast",
+      "file": "control-native-source27_imgZapFast.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "66a24a27b641bd43b3454f74b9fe1b915e638a91acb0734e23b4de62c28c2ce2"
+    },
+    {
+      "name": "source29_imgCheck",
+      "file": "control-native-source29_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source30_imgSizeSmOutlineFalse",
+      "file": "control-native-source30_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source31_imgSizeSmOutlineFalse",
+      "file": "control-native-source31_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source32_imgSizeSmOutlineFalse",
+      "file": "control-native-source32_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source33_imgAu",
+      "file": "control-native-source33_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6906ffc18f201deda9c2c187386e5857d48bcfa35c3bdc68bbb64d745eaff0d0"
+    },
+    {
+      "name": "source34_imgAu",
+      "file": "control-native-source34_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6906ffc18f201deda9c2c187386e5857d48bcfa35c3bdc68bbb64d745eaff0d0"
+    },
+    {
+      "name": "source35_imgAu",
+      "file": "control-native-source35_imgAu.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6906ffc18f201deda9c2c187386e5857d48bcfa35c3bdc68bbb64d745eaff0d0"
+    },
+    {
+      "name": "source36_imgAvatar",
+      "file": "control-native-source36_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source37_imgAvatar",
+      "file": "control-native-source37_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source38_imgAvatar",
+      "file": "control-native-source38_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source4_imgCheck",
+      "file": "control-native-source4_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source4_imgCheck1",
+      "file": "control-native-source4_imgCheck1.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source4_imgCheck2",
+      "file": "control-native-source4_imgCheck2.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source4_imgCheck3",
+      "file": "control-native-source4_imgCheck3.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source4_imgMinus",
+      "file": "control-native-source4_imgMinus.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "abaf74e15f8480e95bd1164209992aae1b8de5c1d2af50a28c8441eea83f4e8d"
+    },
+    {
+      "name": "source4_imgMinus1",
+      "file": "control-native-source4_imgMinus1.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "4235c88694e8c03960ee0e68cab41bda69d8d2a1aaadbda93272d49112d3751b"
+    },
+    {
+      "name": "source4_imgMinus2",
+      "file": "control-native-source4_imgMinus2.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "1dd96a927f2b0658851d868448c6d0583aec64c101cdbdfb613c836bcfeefa4a"
+    },
+    {
+      "name": "source4_imgMinus3",
+      "file": "control-native-source4_imgMinus3.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "34e43ae175d5fc6252cabac78890becf1fbc736ce4eab775ba6ef8d8b3108d56"
+    },
+    {
+      "name": "source41_imgLayersTwo01",
+      "file": "control-native-source41_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source42_imgDot",
+      "file": "control-native-source42_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source42_imgLayersTwo01",
+      "file": "control-native-source42_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source43_imgDot",
+      "file": "control-native-source43_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source43_imgLayersTwo01",
+      "file": "control-native-source43_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source44_imgDot",
+      "file": "control-native-source44_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source44_imgLayersTwo01",
+      "file": "control-native-source44_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source45_imgDot",
+      "file": "control-native-source45_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source45_imgLayersTwo01",
+      "file": "control-native-source45_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source46_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source46_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source47_imgPaymentMethodIcon",
+      "file": "control-native-source47_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source5_imgCheck",
+      "file": "control-native-source5_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source5_imgCheck1",
+      "file": "control-native-source5_imgCheck1.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "10269757dc2a8a76910d9333750834ec49f7d3743eec97df28bb4a2433132d86"
+    },
+    {
+      "name": "source5_imgCheck2",
+      "file": "control-native-source5_imgCheck2.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source5_imgCheck3",
+      "file": "control-native-source5_imgCheck3.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "6bacf4ca745f17bf266b2b1fb0aa463364967b2bee1d40dcfdf63ad19e9a462c"
+    },
+    {
+      "name": "source5_imgMinus",
+      "file": "control-native-source5_imgMinus.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "abaf74e15f8480e95bd1164209992aae1b8de5c1d2af50a28c8441eea83f4e8d"
+    },
+    {
+      "name": "source5_imgMinus1",
+      "file": "control-native-source5_imgMinus1.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "1dd96a927f2b0658851d868448c6d0583aec64c101cdbdfb613c836bcfeefa4a"
+    },
+    {
+      "name": "source5_imgMinus2",
+      "file": "control-native-source5_imgMinus2.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "4235c88694e8c03960ee0e68cab41bda69d8d2a1aaadbda93272d49112d3751b"
+    },
+    {
+      "name": "source5_imgMinus3",
+      "file": "control-native-source5_imgMinus3.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "34e43ae175d5fc6252cabac78890becf1fbc736ce4eab775ba6ef8d8b3108d56"
+    },
+    {
+      "name": "source50_imgLayersTwo01",
+      "file": "control-native-source50_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source51_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source51_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source52_imgPaymentMethodIcon",
+      "file": "control-native-source52_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source55_imgLayersTwo01",
+      "file": "control-native-source55_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source56_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source56_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source57_imgPaymentMethodIcon",
+      "file": "control-native-source57_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source6_imgXClose",
+      "file": "control-native-source6_imgXClose.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "da4b650d63143be3253796ac2347ef037e1ce1b78537618256f42c5416bedbf8"
+    },
+    {
+      "name": "source60_imgLayersTwo01",
+      "file": "control-native-source60_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source61_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source61_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source62_imgPaymentMethodIcon",
+      "file": "control-native-source62_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source63_imgCheck",
+      "file": "control-native-source63_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source63_imgPaymentMethodIcon",
+      "file": "control-native-source63_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source63_imgPaymentMethodIcon1",
+      "file": "control-native-source63_imgPaymentMethodIcon1.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "d0858246a44173841148376b33193f2b140cec72b1029b0b4eed567c4115b5d2"
+    },
+    {
+      "name": "source63_imgPaymentMethodIcon2",
+      "file": "control-native-source63_imgPaymentMethodIcon2.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "757b7b82a100514237d6fa57275c4faac7ac738038df0e367c221adfe6eae079"
+    },
+    {
+      "name": "source64_imgAvatar",
+      "file": "control-native-source64_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source64_imgAvatar1",
+      "file": "control-native-source64_imgAvatar1.png",
+      "sha256": "8b504f96b9d1ca453cf9c40a25fd592e4b2c8f645f604eb64190add519f255e7"
+    },
+    {
+      "name": "source64_imgAvatar2",
+      "file": "control-native-source64_imgAvatar2.png",
+      "sha256": "0c188f530cd3b1e9d95fbf0cbd3cfc3e49beab1a8870ced4b5d6ee01d6b673cb"
+    },
+    {
+      "name": "source64_imgAvatar3",
+      "file": "control-native-source64_imgAvatar3.png",
+      "sha256": "0c8369f6edc7928f0f05a77e2cde13c6c3e4640b4f85f96714e17204bcdb7947"
+    },
+    {
+      "name": "source64_imgAvatar4",
+      "file": "control-native-source64_imgAvatar4.png",
+      "sha256": "ac4147d648605f8e859bc46da204d651e14e1ee39def5939e14ccf5d676118d3"
+    },
+    {
+      "name": "source64_imgCheck",
+      "file": "control-native-source64_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source65_imgCheck",
+      "file": "control-native-source65_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source65_imgPaymentMethodIcon",
+      "file": "control-native-source65_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source65_imgPaymentMethodIcon1",
+      "file": "control-native-source65_imgPaymentMethodIcon1.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "d0858246a44173841148376b33193f2b140cec72b1029b0b4eed567c4115b5d2"
+    },
+    {
+      "name": "source65_imgPaymentMethodIcon2",
+      "file": "control-native-source65_imgPaymentMethodIcon2.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "757b7b82a100514237d6fa57275c4faac7ac738038df0e367c221adfe6eae079"
+    },
+    {
+      "name": "source66_imgAvatar",
+      "file": "control-native-source66_imgAvatar.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source66_imgAvatar1",
+      "file": "control-native-source66_imgAvatar1.png",
+      "sha256": "8b504f96b9d1ca453cf9c40a25fd592e4b2c8f645f604eb64190add519f255e7"
+    },
+    {
+      "name": "source66_imgAvatar2",
+      "file": "control-native-source66_imgAvatar2.png",
+      "sha256": "0c188f530cd3b1e9d95fbf0cbd3cfc3e49beab1a8870ced4b5d6ee01d6b673cb"
+    },
+    {
+      "name": "source66_imgAvatar3",
+      "file": "control-native-source66_imgAvatar3.png",
+      "sha256": "0c8369f6edc7928f0f05a77e2cde13c6c3e4640b4f85f96714e17204bcdb7947"
+    },
+    {
+      "name": "source66_imgAvatar4",
+      "file": "control-native-source66_imgAvatar4.png",
+      "sha256": "ac4147d648605f8e859bc46da204d651e14e1ee39def5939e14ccf5d676118d3"
+    },
+    {
+      "name": "source66_imgCheck",
+      "file": "control-native-source66_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source67_imgCheck",
+      "file": "control-native-source67_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source67_imgLayersThree01",
+      "file": "control-native-source67_imgLayersThree01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "42f4af2df53191a6f5af439853df3f3226594dd20038e42a8c524c45169b2f94"
+    },
+    {
+      "name": "source67_imgLayersTwo01",
+      "file": "control-native-source67_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source67_imgRocket01",
+      "file": "control-native-source67_imgRocket01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "952e7453dfdb1ba67701677dfad0521cceb387d4c82491c7dccce57c766eff61"
+    },
+    {
+      "name": "source67_imgZap",
+      "file": "control-native-source67_imgZap.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0f1735390c76cbb11ea9ed0d212430d266c1b068cbc3021c962eb35a9978b47a"
+    },
+    {
+      "name": "source67_imgZapFast",
+      "file": "control-native-source67_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54fdb2726385b14e2b0a67abc0b55a40fffac5b5ef994dbde1e4a5a2111cacb1"
+    },
+    {
+      "name": "source68_imgCheck",
+      "file": "control-native-source68_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source68_imgDot",
+      "file": "control-native-source68_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source68_imgLayersThree01",
+      "file": "control-native-source68_imgLayersThree01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d6c1a75f8fec0826a443d8ae5ba75e6d711b8beb9623e1510cf81cae9070b06"
+    },
+    {
+      "name": "source68_imgLayersTwo01",
+      "file": "control-native-source68_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source68_imgRocket01",
+      "file": "control-native-source68_imgRocket01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "952e7453dfdb1ba67701677dfad0521cceb387d4c82491c7dccce57c766eff61"
+    },
+    {
+      "name": "source68_imgZap",
+      "file": "control-native-source68_imgZap.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0f1735390c76cbb11ea9ed0d212430d266c1b068cbc3021c962eb35a9978b47a"
+    },
+    {
+      "name": "source68_imgZapFast",
+      "file": "control-native-source68_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54fdb2726385b14e2b0a67abc0b55a40fffac5b5ef994dbde1e4a5a2111cacb1"
+    },
+    {
+      "name": "source7_imgXClose",
+      "file": "control-native-source7_imgXClose.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "eae4be31e0ad61ccc3847e2533a09c701d76c553336ea260796c681aa592056e"
+    },
+    {
+      "name": "source70_imgCheck",
+      "file": "control-native-source70_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source71_imgCheck",
+      "file": "control-native-source71_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source71_imgLayersThree01",
+      "file": "control-native-source71_imgLayersThree01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "42f4af2df53191a6f5af439853df3f3226594dd20038e42a8c524c45169b2f94"
+    },
+    {
+      "name": "source71_imgLayersTwo01",
+      "file": "control-native-source71_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source71_imgRocket01",
+      "file": "control-native-source71_imgRocket01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "952e7453dfdb1ba67701677dfad0521cceb387d4c82491c7dccce57c766eff61"
+    },
+    {
+      "name": "source71_imgZap",
+      "file": "control-native-source71_imgZap.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0f1735390c76cbb11ea9ed0d212430d266c1b068cbc3021c962eb35a9978b47a"
+    },
+    {
+      "name": "source71_imgZapFast",
+      "file": "control-native-source71_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54fdb2726385b14e2b0a67abc0b55a40fffac5b5ef994dbde1e4a5a2111cacb1"
+    },
+    {
+      "name": "source72_imgCheck",
+      "file": "control-native-source72_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source72_imgDot",
+      "file": "control-native-source72_imgDot.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source72_imgLayersThree01",
+      "file": "control-native-source72_imgLayersThree01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "4d6c1a75f8fec0826a443d8ae5ba75e6d711b8beb9623e1510cf81cae9070b06"
+    },
+    {
+      "name": "source72_imgLayersTwo01",
+      "file": "control-native-source72_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source72_imgRocket01",
+      "file": "control-native-source72_imgRocket01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "952e7453dfdb1ba67701677dfad0521cceb387d4c82491c7dccce57c766eff61"
+    },
+    {
+      "name": "source72_imgZap",
+      "file": "control-native-source72_imgZap.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "0f1735390c76cbb11ea9ed0d212430d266c1b068cbc3021c962eb35a9978b47a"
+    },
+    {
+      "name": "source72_imgZapFast",
+      "file": "control-native-source72_imgZapFast.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "54fdb2726385b14e2b0a67abc0b55a40fffac5b5ef994dbde1e4a5a2111cacb1"
+    },
+    {
+      "name": "source74_imgCheck",
+      "file": "control-native-source74_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source76_imgCheck",
+      "file": "control-native-source76_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source77_imgCheck",
+      "file": "control-native-source77_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source77_imgLayersTwo01",
+      "file": "control-native-source77_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source78_imgCheck",
+      "file": "control-native-source78_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source78_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source78_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source79_imgCheck",
+      "file": "control-native-source79_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source79_imgPaymentMethodIcon",
+      "file": "control-native-source79_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source8_imgXClose",
+      "file": "control-native-source8_imgXClose.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "fe1855f0b889df11b74e3a60b7597f05bf3da267df89fb0342c8ab5ae05cfc07"
+    },
+    {
+      "name": "source81_imgCheck",
+      "file": "control-native-source81_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source82_imgCheck",
+      "file": "control-native-source82_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source82_imgLayersTwo01",
+      "file": "control-native-source82_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source83_imgCheck",
+      "file": "control-native-source83_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source83_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source83_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source84_imgCheck",
+      "file": "control-native-source84_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source84_imgPaymentMethodIcon",
+      "file": "control-native-source84_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source86_imgCheck",
+      "file": "control-native-source86_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source87_imgCheck",
+      "file": "control-native-source87_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source87_imgLayersTwo01",
+      "file": "control-native-source87_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source88_imgCheck",
+      "file": "control-native-source88_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source88_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source88_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source89_imgCheck",
+      "file": "control-native-source89_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source89_imgPaymentMethodIcon",
+      "file": "control-native-source89_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source9_imgSizeSmOutlineFalse",
+      "file": "control-native-source9_imgSizeSmOutlineFalse.svg",
+      "width": 8,
+      "height": 8,
+      "sha256": "e2dbd38847ea670bb2dc74e0a4a441a0f16c84dafe73af0462af7018c9e023d0"
+    },
+    {
+      "name": "source9_imgXClose",
+      "file": "control-native-source9_imgXClose.svg",
+      "width": 10,
+      "height": 10,
+      "sha256": "da4b650d63143be3253796ac2347ef037e1ce1b78537618256f42c5416bedbf8"
+    },
+    {
+      "name": "source91_imgCheck",
+      "file": "control-native-source91_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source92_imgCheck",
+      "file": "control-native-source92_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source92_imgLayersTwo01",
+      "file": "control-native-source92_imgLayersTwo01.svg",
+      "width": 20,
+      "height": 20,
+      "sha256": "af8117857346bc0e2a4182777ed3d73de496dd100baa14c6d898af48b34531d7"
+    },
+    {
+      "name": "source93_imgCheck",
+      "file": "control-native-source93_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source93_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source93_imgSizeMdPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source94_imgCheck",
+      "file": "control-native-source94_imgCheck.svg",
+      "width": 14,
+      "height": 14,
+      "sha256": "32096898c0eaa47d48005cc9df60524c1f01edb7fa267d880d59193a9803f633"
+    },
+    {
+      "name": "source94_imgPaymentMethodIcon",
+      "file": "control-native-source94_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    },
+    {
+      "name": "source96_imgCheck",
+      "file": "control-native-source96_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source97_imgCheck",
+      "file": "control-native-source97_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source97_imgLayersTwo01",
+      "file": "control-native-source97_imgLayersTwo01.svg",
+      "width": 16,
+      "height": 16,
+      "sha256": "0b89c8bb4e764227e95d2a44cfaf64159caee625bd35a343b548252c88b01703"
+    },
+    {
+      "name": "source98_imgCheck",
+      "file": "control-native-source98_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source98_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse",
+      "file": "control-native-source98_imgSizeSmPlaceholderFalseTextFalseStatusIconFalse.png",
+      "sha256": "2aa8bff3e8002f5e0e286fa6fe71ea584eb749202bab5095ec7b0399ea41265e"
+    },
+    {
+      "name": "source99_imgCheck",
+      "file": "control-native-source99_imgCheck.svg",
+      "width": 12,
+      "height": 12,
+      "sha256": "37a3624fcf6873f4fb0d50afebf26735ba0319357d4f7ba0ba5fbe9bbd763dec"
+    },
+    {
+      "name": "source99_imgPaymentMethodIcon",
+      "file": "control-native-source99_imgPaymentMethodIcon.svg",
+      "width": 46,
+      "height": 32,
+      "sha256": "6df403ff82cab0cfbbac902a3d06b240266d1a604038672b74f5334af104f357"
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+.p-avatar-add {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px dashed var(--border-primary);
+  border-radius: var(--figma-radius-full);
+  background: var(--bg-primary);
+  cursor: pointer;
+}
+.p-avatar-add[data-size="sm"] {
+  width: 32px;
+  height: 32px;
+}
+.p-avatar-add[data-size="md"] {
+  width: 40px;
+  height: 40px;
+}
+.p-avatar-add-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.p-avatar-add-glyph img {
+  display: block;
+}
+.p-avatar-add-hover {
+  display: none;
+}
+.p-avatar-add:hover:not(:disabled):not([data-reference-state]),
+.p-avatar-add[data-reference-state="hover"] {
+  background: var(--bg-primary-hover);
+}
+.p-avatar-add:hover:not(:disabled):not([data-reference-state]) .p-avatar-add-normal,
+.p-avatar-add[data-reference-state="hover"] .p-avatar-add-normal {
+  display: none;
+}
+.p-avatar-add:hover:not(:disabled):not([data-reference-state]) .p-avatar-add-hover,
+.p-avatar-add[data-reference-state="hover"] .p-avatar-add-hover {
+  display: block;
+}
+.p-avatar-add:focus-visible,
+.p-avatar-add[data-reference-state="focus"] {
+  outline: none;
+  box-shadow: var(--effect-focus-ring);
+}
+.p-avatar-add:disabled,
+.p-avatar-add[data-reference-state="disabled"] {
+  background: var(--bg-disabled-subtle);
+  border-color: var(--border-disabled);
+  cursor: not-allowed;
+}
+.p-avatar-add[data-reference-state] {
+  cursor: default;
+}
+.p-avatar-add-reference-tip {
+  position: absolute;
+  max-width: none;
+}
+.p-avatar-add-reference-tip .p-tooltip-body,
+.p-avatar-add-tooltip .p-tooltip-body {
+  border-radius: var(--figma-spacing-md);
+}
+.p-avatar-add-reference-cursor {
+  position: absolute;
+  left: 15px;
+  top: 11px;
+}
+.p-avatar-add[data-size="sm"] .p-avatar-add-reference-cursor {
+  left: 19px;
+  top: 15px;
+}
+.p-avatar-add[data-size="md"] .p-avatar-add-reference-cursor {
+  left: 27px;
+  top: 23px;
+}
+.p-avatar-add-cursor-slot {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+.p-avatar-group {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+  max-width: 100%;
+}
+.p-avatar-stack {
+  display: inline-flex;
+  align-items: flex-start;
+  flex: none;
+}
+.p-avatar-stack > .p-avatar {
+  box-shadow: 0 0 0 1.5px var(--bg-primary);
+}
+.p-avatar-group[data-size="xs"] .p-avatar-stack > .p-avatar:not(:last-child) {
+  margin-right: -4px;
+}
+.p-avatar-group[data-size="sm"] .p-avatar-stack > .p-avatar:not(:last-child) {
+  margin-right: -8px;
+}
+.p-avatar-group[data-size="md"] .p-avatar-stack > .p-avatar:not(:last-child) {
+  margin-right: -12px;
+}
+.p-avatar-group-more {
+  padding: 0;
+  font-weight: 600;
+  font-size: var(--avatar-font);
+  line-height: var(--avatar-line);
+}
+button.p-avatar-group-more {
+  cursor: pointer;
+}
+button.p-avatar-group-more:focus-visible {
+  outline: none;
+  box-shadow: var(--effect-focus-ring);
+  z-index: 1;
+}
+.p-avatar-label-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  font-family: var(--font-body);
+}
+.p-avatar-label-copy {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.p-avatar-label-name {
+  font-weight: 600;
+  color: var(--text-primary-900);
+  font-size: 14px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+.p-avatar-label-supporting {
+  font-weight: 400;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
+}
+.p-avatar-label-group[data-size="md"] .p-avatar-label-supporting {
+  font-size: 14px;
+  line-height: 20px;
+}
+.p-avatar-label-group[data-size="lg"] {
+  gap: 12px;
+}
+.p-avatar-label-group[data-size="lg"] .p-avatar-label-name,
+.p-avatar-label-group[data-size="lg"] .p-avatar-label-supporting {
+  font-size: 16px;
+  line-height: 24px;
+}
+.p-avatar-label-group[data-size="xl"] {
+  gap: 16px;
+}
+.p-avatar-label-group[data-size="xl"] .p-avatar-label-name {
+  font-size: 18px;
+  line-height: 28px;
+}
+.p-avatar-label-group[data-size="xl"] .p-avatar-label-supporting {
+  font-size: 16px;
+  line-height: 24px;
+}

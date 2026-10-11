@@ -1,0 +1,9 @@
+export default function XAxisLabel({ className }: { className?: string }) {
+  return (
+    <div className={className || "content-stretch flex items-start justify-center pt-[var(--spacing-md,8px)] relative w-[1133px]"} data-node-id="1061:47348" data-name="_X-axis label">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1061:47226">
+        Month
+      </p>
+    </div>
+  );
+}

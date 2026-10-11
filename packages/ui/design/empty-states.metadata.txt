@@ -1,0 +1,16 @@
+<frame id="1182:317" name="Empty state" x="751" y="745" width="1632" height="1324">
+  <symbol id="9239:545804" name="Icon=Folder icon, Size=sm" x="16" y="1078" width="512" height="196" />
+  <symbol id="9239:545816" name="Icon=Folder icon, Size=md" x="560" y="1078" width="512" height="216" />
+  <symbol id="9239:545828" name="Icon=Folder icon, Size=lg" x="1104" y="1078" width="512" height="230" />
+  <symbol id="4980:382743" name="Icon=File type icon, Size=sm" x="16" y="728" width="512" height="252" />
+  <symbol id="4980:382754" name="Icon=File type icon, Size=md" x="560" y="728" width="512" height="272" />
+  <symbol id="4980:382765" name="Icon=File type icon, Size=lg" x="1104" y="728" width="512" height="286" />
+  <symbol id="1182:2205" name="Icon=Illustration, Size=sm" x="16" y="318" width="512" height="266" />
+  <symbol id="1182:2191" name="Icon=Illustration, Size=md" x="560" y="318" width="512" height="296" />
+  <symbol id="1182:2177" name="Icon=Illustration, Size=lg" x="1104" y="318" width="512" height="346" />
+  <symbol id="1182:178" name="Icon=Featured icon, Size=sm" x="16" y="16" width="512" height="196" />
+  <symbol id="1182:412" name="Icon=Featured icon, Size=md" x="560" y="16" width="512" height="216" />
+  <symbol id="1182:473" name="Icon=Featured icon, Size=lg" x="1104" y="16" width="512" height="238" />
+</frame>
+
+IMPORTANT: The design was too large to fit into context with get_design_context. Instead you have received a sparse metadata response, you MUST call get_design_context on the IDs of the sublayers to get the full code. Split up the calls to ensure the sublayers do not also exceed the context limit.

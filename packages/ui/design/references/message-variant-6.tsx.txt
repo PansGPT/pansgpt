@@ -1,0 +1,161 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/1ad12bc2-d3f6-47cf-bb87-f1c7ce3756d8.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/f505746b-d6b5-4a45-8c3b-9460aea18c51.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/95b1b536-1301-451d-8dc8-3634f6402402.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/93f351e2-5daa-405b-b9f3-696d32b3c050.svg";
+const imgSizeSmPlayingFalse = "https://www.figma.com/api/mcp/asset/3de029aa-dd3a-4b67-a7d3-dc871f0cd045.png";
+const imgPlay1 = "https://www.figma.com/api/mcp/asset/d969d5b8-ae7f-4b87-8f25-d1846e85d571.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/2c0db027-77f4-407f-8b50-39d134b0073d.png";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/368e90c7-d291-4bf9-93b2-ae171e91cf41.svg";
+const imgDownloadCloud02 = "https://www.figma.com/api/mcp/asset/22e1af82-ad64-481f-b694-e3304df3911c.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/b0382e12-b645-4080-afab-115096744a27.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/0f617bc1-70be-4f4a-9c6f-fb20c1e34699.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/4b1aea7f-98c2-45b0-a0b7-bbe05e73c585.svg";
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Play" | "Pause" | "Volume max" | "Maximize 01";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isMaximize01AndDefault = type === "Maximize 01" && state === "Default";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isVolumeMaxAndDefault = type === "Volume max" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]"} id={isMaximize01AndDefault ? "node-9264_575711" : isVolumeMaxAndDefault ? "node-9264_575704" : isPauseAndDefault ? "node-9264_575967" : "node-9264_575952"}>
+      {type === "Play" && state === "Default" && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575950" data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {isPauseAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575968" data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {isVolumeMaxAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {isMaximize01AndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575675" data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type VideoActionsBarProps = {
+  className?: string;
+  playing?: boolean;
+  size?: "sm";
+};
+
+function VideoActionsBar({ className, playing = false, size = "sm" }: VideoActionsBarProps) {
+  const isPlayingAndSm = playing && size === "sm";
+  return (
+    <div className={className || "bg-gradient-to-b content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] relative to-[rgba(0,0,0,0.3)] w-[240px]"} id={isPlayingAndSm ? "node-9264_576599" : "node-9264_576588"}>
+      <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 w-full" id={isPlayingAndSm ? "node-9264_576631" : "node-9264_576589"} data-name="Content">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" id={isPlayingAndSm ? "node-9264_576632" : "node-9264_576630"} data-name="Actions">
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type={isPlayingAndSm ? "Pause" : undefined} />
+          <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+        </div>
+        <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+      </div>
+    </div>
+  );
+}
+
+type VideoPlayer169Props = {
+  className?: string;
+  actionsBar?: boolean;
+  overlayAction?: boolean;
+  playing?: boolean;
+  size?: "sm";
+};
+
+function VideoPlayer169({ className, actionsBar = true, overlayAction = true, playing = false, size = "sm" }: VideoPlayer169Props) {
+  return (
+    <button className={className || "block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid h-[180px] overflow-clip relative rounded-[var(--radius-md,12px)] w-[320px]"} data-node-id="9264:576756">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgSizeSmPlayingFalse} />
+      {overlayAction && (
+        <div className="absolute bg-[rgba(0,0,0,0.1)] content-stretch flex inset-[-0.5px] items-center justify-center" data-node-id="9264:577356" data-name="_Video overlay action">
+          <div className="backdrop-blur-[8px] content-stretch flex items-center justify-center relative rounded-[9999px] shrink-0 size-[64px]" data-node-id="I9264:577356;9264:577188" data-name="Button">
+            <div className="relative shrink-0 size-[20px]" data-node-id="I9264:577356;9264:577189" data-name="play">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay1} />
+            </div>
+          </div>
+        </div>
+      )}
+      {actionsBar && <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" />}
+    </button>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "True";
+  sent?: "False";
+  type?: "Video";
+};
+
+function Message({ className, actionsPanel = "True", sent = "False", type = "Video" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start max-w-[360px] relative w-[360px]"} data-node-id="9242:556403">
+      <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="9242:556404" data-name="Avatar">
+        <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+        <AvatarOnlineIndicator className="absolute bg-[var(--colors\/foreground\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\/background\/bg-primary,white)] border-solid bottom-[-1px] right-[-1px] rounded-[var(--radius-full,9999px)] size-[10px]" />
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9242:556405" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full whitespace-nowrap" data-node-id="9242:556406" data-name="Name and time">
+          <p className="flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis" data-node-id="9242:556407">
+            Olúwadámilọ́lá Buhari
+          </p>
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)]" data-node-id="9242:556408">
+            Friday 2:20pm
+          </p>
+        </div>
+        <VideoPlayer169 className="aspect-[560/315] block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" />
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[-19.75px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="9242:556418" data-name="_Message action panel">
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9242:556418;9206:591510" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:556418;9206:591510;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9242:556418;9206:591517" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:556418;9206:591517;9206:591497" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+            </div>
+            <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9242:556418;9206:591517;9206:591520" data-name="Cursor">
+              <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgCursor} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9242:556418;9206:591537" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:556418;9206:591537;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9242:556418;9206:591541" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:556418;9206:591541;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

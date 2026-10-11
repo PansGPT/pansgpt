@@ -1,0 +1,94 @@
+const imgStatusReadStateDefault = "https://www.figma.com/api/mcp/asset/b335bd9e-3153-4fe2-86b5-abbd46244916.svg";
+const imgPlayButton = "https://www.figma.com/api/mcp/asset/1b1648be-dba1-4233-a6c8-4604a7498af0.svg";
+const imgVector = "https://www.figma.com/api/mcp/asset/5b5d7feb-b78c-4a39-aab8-ed0afd1e81f9.svg";
+const imgStars02 = "https://www.figma.com/api/mcp/asset/0d04f901-973e-4691-9c53-79cdcd63879a.svg";
+const imgDownloadCloud02 = "https://www.figma.com/api/mcp/asset/d69b8acb-6cf7-4d13-9006-bd4a22ca287c.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/e35e0118-6b51-48f5-816c-de4ef2912603.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/06405476-88f0-4824-b6b5-3d33354c41f8.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/e698bbdc-eea8-4104-931f-adeb46912a4e.svg";
+
+type MessageStatusIconProps = {
+  className?: string;
+  state?: "Default";
+  status?: "Read";
+};
+
+function MessageStatusIcon({ className, state = "Default", status = "Read" }: MessageStatusIconProps) {
+  return (
+    <div className={className || "relative size-[16px]"} data-node-id="9241:548209">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStatusReadStateDefault} />
+    </div>
+  );
+}
+
+type MessageProps = {
+  className?: string;
+  actionsPanel?: "True";
+  sent?: "True";
+  statusIcon?: boolean;
+  type?: "Audio";
+};
+
+function Message({ className, actionsPanel = "True", sent = "True", statusIcon = true, type = "Audio" }: MessageProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end max-w-[480px] relative w-[360px]"} data-node-id="9242:555662">
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9242:555663" data-name="Content">
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9242:555664" data-name="Name and time">
+          <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] min-w-px overflow-hidden relative text-[14px] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-ellipsis whitespace-nowrap" data-node-id="9242:555665">
+            You
+          </p>
+          <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative shrink-0" data-node-id="9242:555666" data-name="Time and status icon">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9242:555667">
+              Friday 2:20pm
+            </p>
+            {statusIcon && <MessageStatusIcon className="relative shrink-0 size-[16px]" />}
+          </div>
+        </div>
+        <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start justify-center overflow-clip p-[var(--spacing-lg,12px)] relative rounded-bl-[var(--radius-md,12px)] rounded-br-[var(--radius-md,12px)] rounded-tl-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="9242:555669" data-name="Input">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="9242:556256" data-name="Content">
+            <div className="relative shrink-0 size-[32px]" data-node-id="9242:556257" data-name="Play button">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlayButton} />
+            </div>
+            <div className="content-stretch flex flex-[1_0_0] items-center min-w-px overflow-clip px-px relative" data-node-id="9242:556261" data-name="Audio waveform mask">
+              <div className="h-[32px] relative shrink-0 w-[556px]" data-node-id="9244:102782" data-name="Vector">
+                <div className="absolute inset-[-1.56%_0]">
+                  <img alt="" className="block max-w-none size-full" src={imgVector} />
+                </div>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap" data-node-id="9242:556263">
+              00:28
+            </p>
+          </div>
+        </div>
+        <div className="absolute bg-[var(--colors\/background\/bg-primary_alt,#13161b)] bottom-[-20px] content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] right-[8px] rounded-[var(--radius-md,12px)]" data-node-id="9242:555676" data-name="_Message action panel">
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="I9242:555676;9206:591510" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555676;9206:591510;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="I9242:555676;9206:591517" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555676;9206:591517;9206:591497" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+            </div>
+            <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9242:555676;9206:591517;9206:591520" data-name="Cursor">
+              <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+                <img alt="" className="block max-w-none size-full" src={imgCursor} />
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="I9242:555676;9206:591537" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555676;9206:591537;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+            </div>
+          </div>
+          <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="I9242:555676;9206:591541" data-name="_Message action button">
+            <div className="relative shrink-0 size-[16px]" data-node-id="I9242:555676;9206:591541;9206:591488" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

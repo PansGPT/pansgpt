@@ -1,0 +1,128 @@
+type MegaInputFieldBaseProps = {
+  className?: string;
+  size?: "md" | "sm" | "lg";
+  state?: "Placeholder" | "Focused" | "Filled" | "Disabled";
+};
+
+export default function MegaInputFieldBase({ className, size = "sm", state = "Placeholder" }: MegaInputFieldBaseProps) {
+  if (state === "Placeholder" && size === "md") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[80px] overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[80px]"} data-node-id="1106:66591" data-name="State=Placeholder, Size=md">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66593">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Placeholder" && size === "lg") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[96px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] relative rounded-[12px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[96px]"} data-node-id="1106:66639" data-name="State=Placeholder, Size=lg">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-xl,72px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] w-full" data-node-id="1106:66641">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Disabled" && size === "md") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[80px] overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[80px]"} data-node-id="1106:66588" data-name="State=Disabled, Size=md">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66590">
+          0
+        </p>
+      </div>
+    );
+  }
+  if (state === "Disabled" && size === "lg") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[96px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] relative rounded-[12px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[96px]"} data-node-id="1106:66636" data-name="State=Disabled, Size=lg">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-xl,72px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] w-full" data-node-id="1106:66638">
+          0
+        </p>
+      </div>
+    );
+  }
+  if (state === "Disabled" && size === "sm") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-disabled_subtle,#fafafa)] border border-[var(--colors\\/border\\/border-disabled,#d5d7da)] border-solid content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[64px]"} data-node-id="1106:66612" data-name="State=Disabled, Size=sm">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-disabled_subtle,#d5d7da)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66614">
+          0
+        </p>
+      </div>
+    );
+  }
+  if (state === "Focused" && size === "md") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[80px] overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[80px]"} data-node-id="1106:66582" data-name="State=Focused, Size=md">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66584">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Focused" && size === "lg") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[96px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] relative rounded-[12px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[96px]"} data-node-id="1106:66630" data-name="State=Focused, Size=lg">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-xl,72px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] w-full" data-node-id="1106:66632">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Focused" && size === "sm") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05)),0px_0px_0px_2px_var(--colors\\/background\\/bg-primary,white),0px_0px_0px_4px_var(--colors\\/effects\\/focus-rings\\/focus-ring,#17b26a)] w-[64px]"} data-node-id="1106:66609" data-name="State=Focused, Size=sm">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66611">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Filled" && size === "md") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[80px] overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-xl,20px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[80px]"} data-node-id="1106:66585" data-name="State=Filled, Size=md">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66587">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Filled" && size === "lg") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[96px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-lg,12px)] relative rounded-[12px] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[96px]"} data-node-id="1106:66633" data-name="State=Filled, Size=lg">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-xl,72px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-xl,60px)] text-center tracking-[-1.2px] w-full" data-node-id="1106:66635">
+          0
+        </p>
+      </button>
+    );
+  }
+  if (state === "Filled" && size === "sm") {
+    return (
+      <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border-2 border-[var(--colors\\/border\\/border-brand,#17b26a)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[64px]"} data-node-id="1106:66606" data-name="State=Filled, Size=sm">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary_alt,#079455)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66608">
+          0
+        </p>
+      </button>
+    );
+  }
+  return (
+    <button className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch cursor-pointer flex flex-col gap-[var(--spacing-md,8px)] items-center justify-center min-h-[64px] overflow-clip px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-lg,16px)] shadow-[0px_1px_2px_0px_var(--colors\\/effects\\/shadows\\/shadow-xs,rgba(10,13,18,0.05))] w-[64px]"} data-node-id="1106:66615" data-name="State=Placeholder, Size=sm">
+      <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/display-lg,60px)] relative shrink-0 text-[color:var(--colors\/text\/text-placeholder_subtle,#d5d7da)] text-[length:var(--font-size\/display-lg,48px)] text-center tracking-[-0.96px] w-full" data-node-id="1106:66617">
+        0
+      </p>
+    </button>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Display lg/Medium: Font(family: "Font family/font-family-display", style: Font weight/medium, size: Font size/display-lg, weight: 500, lineHeight: Line height/display-lg, letterSpacing: -2), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Display xl/Medium: Font(family: "Font family/font-family-display", style: Font weight/medium, size: Font size/display-xl, weight: 500, lineHeight: Line height/display-xl, letterSpacing: -2), Focus rings/focus-ring-shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0).
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

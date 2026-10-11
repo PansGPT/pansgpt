@@ -1,0 +1,196 @@
+const imgPlay = "https://www.figma.com/api/mcp/asset/1b3a2f91-aa38-48d2-9c98-dfbd1894e2f6.svg";
+const imgPause = "https://www.figma.com/api/mcp/asset/124f8da3-742c-4967-8932-3edda6d98804.svg";
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/ade51921-00ca-45df-892e-77c225e181f3.svg";
+const imgMaximize01 = "https://www.figma.com/api/mcp/asset/0c16b88b-8f38-424c-86ae-29f1c5dc2a71.svg";
+const imgVideoPreview169 = "https://www.figma.com/api/mcp/asset/be55ef41-fd97-4f49-bbe4-74e34bfeed72.png";
+const imgDivider = "https://www.figma.com/api/mcp/asset/29a263dc-d6d1-46fd-87b5-d9ac101c07c6.svg";
+const imgIndicatorLine = "https://www.figma.com/api/mcp/asset/7a5f42d7-f9f6-479d-a5d6-11ac2b7f7e89.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/7deb7c90-6eff-4aa7-a1f0-145478e9f4f5.svg";
+const imgVideoPlayer169 = "https://www.figma.com/api/mcp/asset/b541099f-c40d-4c71-b132-64ffc752fd99.png";
+
+type PaginationDotIndicatorProps = {
+  className?: string;
+  current?: boolean;
+  size?: "lg";
+  style?: "Dot";
+};
+
+function PaginationDotIndicator({ className, current = false, size = "lg", style = "Dot" }: PaginationDotIndicatorProps) {
+  const isCurrentAndDotAndLg = current && style === "Dot" && size === "lg";
+  return <div className={className || `overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px] ${isCurrentAndDotAndLg ? String.raw`bg-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)]` : String.raw`bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)]`}`} id={isCurrentAndDotAndLg ? "node-1253_506" : "node-1253_507"} />;
+}
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Play" | "Pause" | "Volume max" | "Maximize 01";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Play" }: VideoActionButtonProps) {
+  const isMaximize01AndDefault = type === "Maximize 01" && state === "Default";
+  const isPauseAndDefault = type === "Pause" && state === "Default";
+  const isVolumeMaxAndDefault = type === "Volume max" && state === "Default";
+  return (
+    <div className={className || "content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]"} id={isMaximize01AndDefault ? "node-9264_575711" : isVolumeMaxAndDefault ? "node-9264_575704" : isPauseAndDefault ? "node-9264_575967" : "node-9264_575952"}>
+      {type === "Play" && state === "Default" && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575950" data-name="play">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlay} />
+        </div>
+      )}
+      {isPauseAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575968" data-name="pause">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPause} />
+        </div>
+      )}
+      {isVolumeMaxAndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+        </div>
+      )}
+      {isMaximize01AndDefault && (
+        <div className="relative shrink-0 size-[16px]" data-node-id="9264:575675" data-name="maximize-01">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgMaximize01} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type VideoActionsBarProps = {
+  className?: string;
+  playing?: boolean;
+  size?: "sm" | "md";
+  timestampIndicator?: boolean;
+};
+
+function VideoActionsBar({ className, playing = false, size = "sm", timestampIndicator = true }: VideoActionsBarProps) {
+  const isPlayingAndMd = playing && size === "md";
+  return (
+    <div className={className || `bg-gradient-to-b content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start relative to-[rgba(0,0,0,0.3)] ${isPlayingAndMd ? "pb-[var(--spacing-xl,16px)] pt-[var(--spacing-5xl,40px)] px-[var(--spacing-2xl,20px)] w-[560px]" : "pb-[var(--spacing-xs,4px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xs,4px)] w-[240px]"}`} id={isPlayingAndMd ? "node-9264_576499" : "node-9264_576588"}>
+      <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 w-full" id={isPlayingAndMd ? "node-9264_576500" : "node-9264_576589"} data-name="Content">
+        {!playing && size === "sm" && (
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-xxs,2px)] items-center min-w-px relative" data-node-id="9264:576630" data-name="Actions">
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" />
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+          </div>
+        )}
+        <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type={isPlayingAndMd ? "Pause" : "Maximize 01"} />
+        {isPlayingAndMd && (
+          <>
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Volume max" />
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px px-[var(--spacing-xs,4px)] relative" data-node-id="9264:577119" data-name="Video progress">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="9264:577120">
+                02:08
+              </p>
+              <div className="backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--radius-full,9999px)]" data-node-id="9264:577121" data-name="Progress slider">
+                <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[0_40.51%_0_0] opacity-30 rounded-[var(--radius-full,9999px)]" data-node-id="9269:12806" data-name="Buffering progress" />
+                <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] inset-[0_74.68%_0_0] rounded-[var(--radius-full,9999px)]" data-node-id="9264:577123" data-name="Progress line" />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[42px]" data-node-id="9264:577124">
+                -06:18
+              </p>
+              {timestampIndicator && (
+                <div className="absolute bottom-[-9px] content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-center right-[55px] w-[128px]" data-node-id="9264:578996" data-name="_Video timestamp indicator">
+                  <div className="border-2 border-[var(--colors\/foreground\/fg-white,white)] border-solid content-stretch drop-shadow-[0px_20px_12px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9264:578996;9264:578873" data-name="Video preview wrapper">
+                    <div className="aspect-[560/315] border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I9264:578996;9264:578538" data-name="Video preview 16:9">
+                      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPreview169} />
+                    </div>
+                  </div>
+                  <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative shrink-0" data-node-id="I9264:578996;9264:578510" data-name="Timestamp indicator">
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9264:578996;9264:578511">
+                      06:48
+                    </p>
+                    <div className="h-[12px] relative shrink-0 w-0" data-node-id="I9264:578996;9264:578512" data-name="Divider">
+                      <div className="absolute inset-[-4.17%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                      </div>
+                    </div>
+                    <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] h-[18px] leading-[var(--line-height\/text-xs,18px)] opacity-70 relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] w-[36px]" data-node-id="I9264:578996;9264:578513">
+                      08:24
+                    </p>
+                  </div>
+                  <div className="content-stretch flex items-center justify-center relative shrink-0 w-full" data-node-id="I9264:578996;9264:578556" data-name="Timestamp indicator">
+                    <div className="h-[32px] relative shrink-0 w-0" data-node-id="I9264:578996;9264:578560" data-name="Indicator line">
+                      <div className="absolute inset-[-1.56%_-0.5px]">
+                        <img alt="" className="block max-w-none size-full" src={imgIndicatorLine} />
+                      </div>
+                    </div>
+                    <div className="-translate-x-1/2 -translate-y-1/2 absolute left-[calc(50%+2px)] size-[20px] top-1/2" data-node-id="I9264:578996;9264:578561" data-name="Cursor">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCursor} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" type="Maximize 01" />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Desktop";
+  type?: "Centered video carousel";
+};
+
+function Modal({ className, breakpoint = "Desktop", type = "Centered video carousel" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[960px] items-center justify-center overflow-clip px-[var(--container-padding-desktop,32px)] py-[var(--spacing-4xl,32px)] relative w-[1440px]"} data-node-id="4057:415350">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411223" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411223;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center max-w-[640px] overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:429394" data-name="Modal">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-2xl,20px)] items-center pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="4057:429395" data-name="Content">
+          <button className="aspect-[560/315] block border-[0.5px] border-[rgba(0,0,0,0.1)] border-solid cursor-pointer overflow-clip relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="4943:373325" data-name="Video player 16:9">
+            <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-md,12px)] size-full" src={imgVideoPlayer169} />
+            <VideoActionsBar className="absolute bg-gradient-to-b bottom-[-0.5px] content-stretch flex flex-col from-[rgba(0,0,0,0)] items-start left-[-0.5px] pb-[var(--spacing-xl,16px)] pt-[var(--spacing-5xl,40px)] px-[var(--spacing-2xl,20px)] right-[-0.5px] to-[rgba(0,0,0,0.3)]" playing size="md" />
+          </button>
+        </div>
+        <div className="content-stretch flex flex-col items-center relative shrink-0 w-full" data-node-id="4057:432385" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center pt-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4057:432385;4055:413596" data-name="Content">
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-center relative shrink-0 text-center w-full" data-node-id="I4057:432385;4055:413598" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:432385;4055:413599">
+                Welcome to your dashboard
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:432385;4055:413600">
+                Here are some tips to get you up and running.
+              </p>
+            </div>
+          </div>
+          <div className="h-[20px] relative shrink-0 w-full" data-node-id="I4057:432385;4059:420134" data-name="Padding bottom" />
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-center justify-center relative shrink-0" data-node-id="4057:429401" data-name="Pagination dot group">
+          <PaginationDotIndicator className="bg-[var(--colors\/foreground\/fg-brand-primary_alt,#079455)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" current />
+          <PaginationDotIndicator className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" />
+          <PaginationDotIndicator className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" />
+          <div className="bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[10px]" data-node-id="I4057:429401;1111:231" data-name="_Pagination dot indicator" />
+        </div>
+        <div className="content-stretch flex flex-col items-start pt-[var(--spacing-4xl,32px)] relative shrink-0 w-full" data-node-id="4057:429402" data-name="_Modal actions">
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-3xl,24px)] px-[var(--spacing-3xl,24px)] relative shrink-0 w-full" data-node-id="I4057:429402;4057:414532" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-sm,6px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="I4057:429402;4057:414364" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:429402;4057:414364;6421:274451" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:429402;4057:414364;3287:433081">
+                  Skip
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-sm,6px)] items-center justify-center min-w-px overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="I4057:429402;4057:414365" data-name="Buttons/Button">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:429402;4057:414365;6421:273911" data-name="Text padding">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:429402;4057:414365;3287:432949">
+                  Continue
+                </p>
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

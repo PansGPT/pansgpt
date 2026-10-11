@@ -1,0 +1,58 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/1eea9183-2996-4368-b097-94acd395d295.svg";
+const imgXClose1 = "https://www.figma.com/api/mcp/asset/db3ac934-a682-4446-86bb-6b90124aa7f4.svg";
+const imgXClose2 = "https://www.figma.com/api/mcp/asset/5162ff76-39b0-449b-9bd0-226cd083835f.svg";
+const imgXClose3 = "https://www.figma.com/api/mcp/asset/931854bc-e137-42fc-8981-957decb94ee8.svg";
+const imgXClose4 = "https://www.figma.com/api/mcp/asset/85465dc4-91f1-40b7-81dc-e7477b78431f.svg";
+const imgXClose5 = "https://www.figma.com/api/mcp/asset/342c9b76-257d-4cdc-9d26-361a1ebb01c7.svg";
+const imgXClose6 = "https://www.figma.com/api/mcp/asset/6b138905-25f0-46f4-9dc0-f94aa5e7ba14.svg";
+const imgXClose7 = "https://www.figma.com/api/mcp/asset/d8f903a4-3f39-4d6f-b12b-e38f3633a1fa.svg";
+
+type ButtonsButtonCloseXProps = {
+  className?: string;
+  darkBackground?: boolean;
+  size?: "sm" | "md" | "lg";
+  state?: "Default" | "Hover" | "Focused";
+};
+
+export default function ButtonsButtonCloseX({ className, darkBackground = false, size = "sm", state = "Default" }: ButtonsButtonCloseXProps) {
+  const isLgAndDarkBackgroundAndDefault = size === "lg" && darkBackground && state === "Default";
+  const isLgAndDarkBackgroundAndFocused = size === "lg" && darkBackground && state === "Focused";
+  const isLgAndDarkBackgroundAndHover = size === "lg" && darkBackground && state === "Hover";
+  const isLgAndNotDarkBackgroundAndFocused = size === "lg" && !darkBackground && state === "Focused";
+  const isLgAndNotDarkBackgroundAndHover = size === "lg" && !darkBackground && state === "Hover";
+  const isMdAndDarkBackgroundAndDefault = size === "md" && darkBackground && state === "Default";
+  const isMdAndDarkBackgroundAndFocused = size === "md" && darkBackground && state === "Focused";
+  const isMdAndDarkBackgroundAndHover = size === "md" && darkBackground && state === "Hover";
+  const isMdAndNotDarkBackgroundAndDefault = size === "md" && !darkBackground && state === "Default";
+  const isMdAndNotDarkBackgroundAndFocused = size === "md" && !darkBackground && state === "Focused";
+  const isMdAndNotDarkBackgroundAndHover = size === "md" && !darkBackground && state === "Hover";
+  const isSmAndDarkBackgroundAndDefault = size === "sm" && darkBackground && state === "Default";
+  const isSmAndDarkBackgroundAndFocused = size === "sm" && darkBackground && state === "Focused";
+  const isSmAndDarkBackgroundAndHover = size === "sm" && darkBackground && state === "Hover";
+  const isSmAndNotDarkBackgroundAndDefault = size === "sm" && !darkBackground && state === "Default";
+  const isSmAndNotDarkBackgroundAndFocused = size === "sm" && !darkBackground && state === "Focused";
+  const isSmAndNotDarkBackgroundAndHover = size === "sm" && !darkBackground && state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] ${isSmAndDarkBackgroundAndHover ? "bg-[rgba(255,255,255,0.2)] size-[36px]" : isMdAndDarkBackgroundAndHover ? "bg-[rgba(255,255,255,0.2)] size-[40px]" : isLgAndDarkBackgroundAndHover ? "bg-[rgba(255,255,255,0.2)] size-[44px]" : isSmAndDarkBackgroundAndFocused ? String.raw`bg-[rgba(255,255,255,0.2)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[36px]` : isMdAndDarkBackgroundAndFocused ? String.raw`bg-[rgba(255,255,255,0.2)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isLgAndDarkBackgroundAndFocused ? String.raw`bg-[rgba(255,255,255,0.2)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[44px]` : isSmAndNotDarkBackgroundAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] size-[36px]` : isMdAndNotDarkBackgroundAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] size-[40px]` : isLgAndNotDarkBackgroundAndHover ? String.raw`bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] size-[44px]` : isSmAndNotDarkBackgroundAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[36px]` : isMdAndNotDarkBackgroundAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[40px]` : isLgAndNotDarkBackgroundAndFocused ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] shadow-[0px_0px_0px_2px_var(--colors\/background\/bg-primary,white),0px_0px_0px_4px_var(--colors\/effects\/focus-rings\/focus-ring,#17b26a)] size-[44px]` : size === "sm" && state === "Default" ? "size-[36px]" : size === "md" && state === "Default" ? "size-[40px]" : "size-[44px]"}`} id={isSmAndDarkBackgroundAndHover ? "node-2763_420470" : isMdAndDarkBackgroundAndHover ? "node-2763_420398" : isLgAndDarkBackgroundAndHover ? "node-2763_420172" : isSmAndDarkBackgroundAndFocused ? "node-2763_420462" : isMdAndDarkBackgroundAndFocused ? "node-2763_420390" : isLgAndDarkBackgroundAndFocused ? "node-2763_420156" : isSmAndDarkBackgroundAndDefault ? "node-2763_420454" : isMdAndDarkBackgroundAndDefault ? "node-2763_420382" : isLgAndDarkBackgroundAndDefault ? "node-2763_420140" : isSmAndNotDarkBackgroundAndHover ? "node-2763_420472" : isMdAndNotDarkBackgroundAndHover ? "node-2763_420400" : isLgAndNotDarkBackgroundAndHover ? "node-2763_420174" : isSmAndNotDarkBackgroundAndFocused ? "node-2763_420464" : isMdAndNotDarkBackgroundAndFocused ? "node-2763_420392" : isLgAndNotDarkBackgroundAndFocused ? "node-2763_420158" : isSmAndNotDarkBackgroundAndDefault ? "node-2763_420456" : isMdAndNotDarkBackgroundAndDefault ? "node-2763_420384" : "node-2763_420142"}>
+      <div className={`relative shrink-0 ${["md", "sm"].includes(size) ? "size-[20px]" : "size-[24px]"}`} id={isSmAndDarkBackgroundAndHover ? "node-2763_420471" : isMdAndDarkBackgroundAndHover ? "node-2763_420399" : isLgAndDarkBackgroundAndHover ? "node-2763_420173" : isSmAndDarkBackgroundAndFocused ? "node-2763_420463" : isMdAndDarkBackgroundAndFocused ? "node-2763_420391" : isLgAndDarkBackgroundAndFocused ? "node-2763_420157" : isSmAndDarkBackgroundAndDefault ? "node-2763_420455" : isMdAndDarkBackgroundAndDefault ? "node-2763_420383" : isLgAndDarkBackgroundAndDefault ? "node-2763_420141" : isSmAndNotDarkBackgroundAndHover ? "node-2763_420473" : isMdAndNotDarkBackgroundAndHover ? "node-2763_420401" : isLgAndNotDarkBackgroundAndHover ? "node-2763_420175" : isSmAndNotDarkBackgroundAndFocused ? "node-2763_420465" : isMdAndNotDarkBackgroundAndFocused ? "node-2763_420393" : isLgAndNotDarkBackgroundAndFocused ? "node-2763_420159" : isSmAndNotDarkBackgroundAndDefault ? "node-2763_420457" : isMdAndNotDarkBackgroundAndDefault ? "node-2763_420385" : "node-2763_420143"} data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={darkBackground && state === "Hover" && ["md", "sm"].includes(size) ? imgXClose7 : isLgAndDarkBackgroundAndHover ? imgXClose6 : darkBackground && ((size === "md" && state === "Default") || (size === "sm" && state === "Default") || (size === "md" && state === "Focused") || (size === "sm" && state === "Focused")) ? imgXClose5 : size === "lg" && darkBackground && ["Default", "Focused"].includes(state) ? imgXClose4 : !darkBackground && state === "Hover" && ["md", "sm"].includes(size) ? imgXClose3 : isLgAndNotDarkBackgroundAndHover ? imgXClose2 : !darkBackground && ((size === "md" && state === "Default") || (size === "sm" && state === "Default") || (size === "md" && state === "Focused") || (size === "sm" && state === "Focused")) ? imgXClose1 : imgXClose} />
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

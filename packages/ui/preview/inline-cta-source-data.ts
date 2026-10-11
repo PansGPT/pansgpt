@@ -1,0 +1,16 @@
+export const inlineCTASources = [
+  ["1255:131888", "image", "desktop", 768, 154],
+  ["1255:132370", "image", "mobile", 343, 418],
+  ["1255:131889", "actions", "desktop", 768, 154],
+  ["1255:132361", "actions", "mobile", 343, 210],
+  ["1255:131908", "email", "desktop", 768, 184],
+  ["1255:132354", "email", "mobile", 343, 252],
+  ["1255:131909", "change-plan", "desktop", 768, 328],
+  ["1255:132334", "change-plan", "mobile", 343, 336],
+  ["1255:131912", "upgrade-plan", "desktop", 768, 356],
+  ["1255:132311", "upgrade-plan", "mobile", 343, 424],
+  ["1255:131910", "payment", "desktop", 768, 214],
+  ["1255:132295", "payment", "mobile", 343, 202],
+  ["1255:131911", "receipt", "desktop", 768, 186],
+  ["1255:132811", "receipt", "mobile", 343, 266],
+] as const;

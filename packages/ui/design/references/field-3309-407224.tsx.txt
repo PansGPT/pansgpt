@@ -1,0 +1,131 @@
+const imgXClose = "https://www.figma.com/api/mcp/asset/b34f15e6-b581-4d60-897a-8a26737f2825.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/4e795d53-0252-4290-8388-c96085961f52.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/711974e7-76bb-4453-8cf5-faacd7501061.png";
+const imgAlertCircle = "https://www.figma.com/api/mcp/asset/cbef81e5-ba88-427a-a2a5-04fdb8ea70d3.svg";
+
+type TagCloseXProps = {
+  className?: string;
+  size?: "md";
+  state?: "Default";
+};
+
+function TagCloseX({ className, size = "md", state = "Default" }: TagCloseXProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px]"} data-node-id="3307:417720">
+      <div className="relative shrink-0 size-[12px]" data-node-id="3307:417721" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+
+type InputFieldProps = {
+  className?: string;
+  destructive?: "True";
+  hintText?: boolean;
+  label?: boolean;
+  required?: boolean;
+  size?: "md";
+  state?: "Placeholder" | "Focused";
+  type?: "Tags";
+};
+
+function InputField({ className, destructive = "True", hintText = true, label = true, required = true, size = "md", state = "Placeholder", type = "Tags" }: InputFieldProps) {
+  const isMdAndTagsAndTrueAndFocused = size === "md" && type === "Tags" && destructive === "True" && state === "Focused";
+  const isMdAndTagsAndTrueAndPlaceholder = size === "md" && type === "Tags" && destructive === "True" && state === "Placeholder";
+  return (
+    <button className={className || "content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative w-[400px]"} id={isMdAndTagsAndTrueAndFocused ? "node-3309_407224" : "node-3309_407179"}>
+      <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407225" : "node-3309_407180"} data-name="Input with label">
+        {label && (
+          <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] text-left whitespace-nowrap" data-node-id="7486:523683" data-name="Label wrapper">
+            <p className="relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="3309:407181">
+              Users
+            </p>
+            {required && (
+              <p className="relative shrink-0 text-[color:var(--colors\/text\/text-brand-tertiary-\(600\),#079455)]" data-node-id="7487:535318">
+                *
+              </p>
+            )}
+          </div>
+        )}
+        <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shrink-0 w-full `}${isMdAndTagsAndTrueAndFocused ? String.raw`border-2 border-[var(--colors\/border\/border-error,#f04438)] overflow-clip shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]` : String.raw`border border-[var(--colors\/border\/border-error_subtle,#fda29b)] drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]`}`} id={isMdAndTagsAndTrueAndFocused ? "node-3309_407227" : "node-3309_407182"} data-name="Input">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407228" : "node-3309_407302"} data-name="Content">
+            <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407347" : "node-3309_407304"} data-name="Tags">
+              <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[5px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407348" : "node-3309_407305"} data-name="Tag">
+                <div className="content-stretch flex gap-[5px] items-center relative shrink-0" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407348-3309_406243" : "node-I3309_407305-3309_406243"} data-name="Content">
+                  <div className="border-[0.667px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,6666px)] shrink-0 size-[16px]" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407348-3307_418150" : "node-I3309_407305-3307_418150"} data-name="Avatar">
+                    <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,6666px)] size-full" src={imgAvatar} />
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407348-3307_418151" : "node-I3309_407305-3307_418151"}>
+                    Olivia
+                  </p>
+                </div>
+                {isMdAndTagsAndTrueAndPlaceholder && (
+                  <div className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" data-node-id="I3309:407305;3307:418152" data-name="_Tag close X">
+                    <div className="relative shrink-0 size-[12px]" data-node-id="I3309:407305;3307:418152;3307:417721" data-name="x-close">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+                    </div>
+                  </div>
+                )}
+                {isMdAndTagsAndTrueAndFocused && <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />}
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[5px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407349" : "node-3309_407306"} data-name="Tag">
+                <div className="content-stretch flex gap-[5px] items-center relative shrink-0" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407349-3309_406243" : "node-I3309_407306-3309_406243"} data-name="Content">
+                  <div className="border-[0.667px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,6666px)] shrink-0 size-[16px]" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407349-3307_418150" : "node-I3309_407306-3307_418150"} data-name="Avatar">
+                    <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,6666px)]">
+                      <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,6666px)]" />
+                      <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,6666px)] size-full" src={imgAvatar1} />
+                    </div>
+                  </div>
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" id={isMdAndTagsAndTrueAndFocused ? "node-I3309_407349-3307_418151" : "node-I3309_407306-3307_418151"}>
+                    Phoenix
+                  </p>
+                </div>
+                {isMdAndTagsAndTrueAndPlaceholder && (
+                  <div className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" data-node-id="I3309:407306;3307:418152" data-name="_Tag close X">
+                    <div className="relative shrink-0 size-[12px]" data-node-id="I3309:407306;3307:418152;3307:417721" data-name="x-close">
+                      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+                    </div>
+                  </div>
+                )}
+                {isMdAndTagsAndTrueAndFocused && <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[var(--spacing-xxs,2px)] relative rounded-[3px] shrink-0" />}
+              </div>
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407350" : "node-3309_407307"}>
+              Lana
+            </p>
+          </div>
+          <div className="relative shrink-0 size-[16px]" id={isMdAndTagsAndTrueAndFocused ? "node-3309_407231" : "node-3309_407186"} data-name="alert-circle">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgAlertCircle} />
+          </div>
+        </div>
+      </div>
+      {hintText && (
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-error-primary-\(600\),#d92d20)] text-[length:var(--font-size\/text-sm,14px)] text-left w-full" data-node-id="3309:407187">
+          This is an error message.
+        </p>
+      )}
+    </button>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Avatar user square/Olivia Rhye: , Avatar user square/Phoenix Baker (color background): #D6CFB7,, Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Shadows/shadow-xs: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## x-close
+**Node ID:** 3463:405165
+
+x, close, exit, remove, cross, delete
+
+## alert-circle
+**Node ID:** 3463:405479
+
+alert, circle, warning, error
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

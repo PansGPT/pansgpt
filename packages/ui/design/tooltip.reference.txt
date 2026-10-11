@@ -1,0 +1,150 @@
+const imgTooltip = "https://www.figma.com/api/mcp/asset/af9cfaf4-2489-4b3c-af08-eb8c6f402f2c.svg";
+const imgTooltip1 = "https://www.figma.com/api/mcp/asset/294301a6-1792-4282-bcd0-ae333ef30a96.svg";
+const imgTooltip2 = "https://www.figma.com/api/mcp/asset/6d5b62b4-7a0c-48a2-be34-d867d02b1f72.svg";
+const imgTooltip3 = "https://www.figma.com/api/mcp/asset/62d8a6e2-1dea-487d-8006-e274817b7693.svg";
+const imgTooltip4 = "https://www.figma.com/api/mcp/asset/d135f35e-a492-4b0b-80f0-c40f02924994.svg";
+const imgTooltip5 = "https://www.figma.com/api/mcp/asset/e92d2d49-b177-4b41-82b0-45696926547f.svg";
+
+type TooltipProps = {
+  className?: string;
+  arrow?: "None" | "Bottom left" | "Bottom right" | "Left" | "Right" | "Bottom center" | "Top center";
+  supportingText?: boolean;
+  text?: string;
+};
+
+export default function Tooltip({ className, arrow = "None", supportingText = false, text = "This is a tooltip" }: TooltipProps) {
+  const isBottomLeft = arrow === "Bottom left";
+  const isBottomRight = arrow === "Bottom right";
+  const isLeft = arrow === "Left";
+  const isLeftOrRight = ["Left", "Right"].includes(arrow);
+  const isNotSupportingTextAndBottomCenter = !supportingText && arrow === "Bottom center";
+  const isNotSupportingTextAndBottomLeft = !supportingText && arrow === "Bottom left";
+  const isNotSupportingTextAndBottomRight = !supportingText && arrow === "Bottom right";
+  const isNotSupportingTextAndIsBottomCenterOrNoneOrBottomLeftOrBottom = !supportingText && ["Bottom center", "None", "Bottom left", "Bottom right"].includes(arrow);
+  const isNotSupportingTextAndLeft = !supportingText && arrow === "Left";
+  const isNotSupportingTextAndNone = !supportingText && arrow === "None";
+  const isNotSupportingTextAndRight = !supportingText && arrow === "Right";
+  const isNotSupportingTextAndTopCenter = !supportingText && arrow === "Top center";
+  const isRight = arrow === "Right";
+  const isSupportingTextAndBottomLeft = supportingText && arrow === "Bottom left";
+  const isSupportingTextAndBottomRight = supportingText && arrow === "Bottom right";
+  const isSupportingTextAndLeft = supportingText && arrow === "Left";
+  const isSupportingTextAndNone = supportingText && arrow === "None";
+  const isSupportingTextAndRight = supportingText && arrow === "Right";
+  const isSupportingTextAndTopCenter = supportingText && arrow === "Top center";
+  return (
+    <div className={className || `${String.raw`content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex relative `}${isBottomRight ? "flex-col items-end" : isLeftOrRight ? "items-center" : isBottomLeft ? "flex-col items-start" : "flex-col items-center"}`} id={isNotSupportingTextAndBottomRight ? "node-1052_645" : isSupportingTextAndBottomRight ? "node-1052_638" : isNotSupportingTextAndRight ? "node-1052_633" : isSupportingTextAndRight ? "node-1052_626" : isNotSupportingTextAndLeft ? "node-1052_621" : isSupportingTextAndLeft ? "node-1052_614" : isNotSupportingTextAndBottomLeft ? "node-1052_609" : isSupportingTextAndBottomLeft ? "node-1052_602" : isNotSupportingTextAndTopCenter ? "node-1052_597" : isSupportingTextAndTopCenter ? "node-1052_590" : isNotSupportingTextAndNone ? "node-1052_587" : isNotSupportingTextAndBottomCenter ? "node-1052_582" : isSupportingTextAndNone ? "node-1052_577" : "node-1052_570"}>
+      {["Bottom center", "None", "Bottom left", "Bottom right"].includes(arrow) && (
+        <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 `}${isNotSupportingTextAndIsBottomCenterOrNoneOrBottomLeftOrBottom ? "px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] w-full" : "p-[var(--spacing-lg,12px)]"}`} id={isNotSupportingTextAndBottomRight ? "node-1052_646" : isSupportingTextAndBottomRight ? "node-1052_639" : isNotSupportingTextAndBottomLeft ? "node-1052_610" : isSupportingTextAndBottomLeft ? "node-1052_603" : isNotSupportingTextAndNone ? "node-1052_588" : isNotSupportingTextAndBottomCenter ? "node-1052_583" : isSupportingTextAndNone ? "node-1052_578" : "node-1052_571"} data-name="Content">
+          {supportingText && ["Bottom center", "None", "Bottom left", "Bottom right"].includes(arrow) && (
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" id={isSupportingTextAndBottomRight ? "node-1052_640" : isSupportingTextAndBottomLeft ? "node-1052_604" : isSupportingTextAndNone ? "node-1052_579" : "node-1052_572"} data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="1052:573">
+                {text}
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] w-[296px] whitespace-pre-wrap" id={isSupportingTextAndBottomRight ? "node-1052_642" : isSupportingTextAndBottomLeft ? "node-1052_606" : isSupportingTextAndNone ? "node-1052_581" : "node-1052_574"}>{`Tooltips are used to describe or identify an  element. In most scenarios, tooltips help the user understand meaning, function or alt-text.`}</p>
+            </div>
+          )}
+          {isNotSupportingTextAndIsBottomCenterOrNoneOrBottomLeftOrBottom && (
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:584">
+              {text}
+            </p>
+          )}
+        </div>
+      )}
+      {["Bottom center", "Bottom left", "Bottom right"].includes(arrow) && (
+        <div className={`h-[6px] relative shrink-0 ${["Bottom left", "Bottom right"].includes(arrow) ? "w-[28px]" : "w-[16px]"}`} id={isNotSupportingTextAndBottomRight ? "node-1052_648" : isSupportingTextAndBottomRight ? "node-1052_643" : isNotSupportingTextAndBottomLeft ? "node-1052_612" : isSupportingTextAndBottomLeft ? "node-1052_607" : isNotSupportingTextAndBottomCenter ? "node-1052_585" : "node-1052_575"} data-name="Tooltip">
+          <div className="absolute inset-[-41.91%_0_0_0]">
+            <img alt="" className="block max-w-none size-full" src={isBottomRight ? imgTooltip5 : isBottomLeft ? imgTooltip2 : imgTooltip} />
+          </div>
+        </div>
+      )}
+      {["Top center", "Left", "Right"].includes(arrow) && (
+        <div className={`flex items-center ${isRight ? "flex-row self-stretch" : isLeft ? "h-[16px] justify-center relative shrink-0 w-[6px]" : "justify-center relative shrink-0"}`} id={isNotSupportingTextAndRight ? "node-1052_634" : isSupportingTextAndRight ? "node-1052_627" : isNotSupportingTextAndLeft ? "node-1052_622" : isSupportingTextAndLeft ? "node-1052_615" : isNotSupportingTextAndTopCenter ? "node-1052_598" : "node-1052_591"}>
+          {["Top center", "Left"].includes(arrow) && (
+            <div className={`flex-none ${isLeft ? "rotate-90" : "rotate-180"}`}>
+              <div className="h-[6px] relative w-[16px]" data-name="Tooltip">
+                <div className="absolute inset-[-41.91%_0_0_0]">
+                  <img alt="" className="block max-w-none size-full" src={isLeft ? imgTooltip3 : imgTooltip1} />
+                </div>
+              </div>
+            </div>
+          )}
+          {isRight && (
+            <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col h-full items-start relative rounded-[var(--radius-md,12px)] shrink-0 `}${isNotSupportingTextAndRight ? "px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)]" : "p-[var(--spacing-lg,12px)]"}`} data-name="Content">
+              {isSupportingTextAndRight && (
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" data-node-id="1052:628" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="1052:629">
+                    {text}
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] w-[296px] whitespace-pre-wrap" data-node-id="1052:630">{`Tooltips are used to describe or identify an  element. In most scenarios, tooltips help the user understand meaning, function or alt-text.`}</p>
+                </div>
+              )}
+              {isNotSupportingTextAndRight && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:635">
+                  {text}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+      {isLeftOrRight && (
+        <div className={`flex items-center ${isRight ? "h-[16px] justify-center relative shrink-0 w-[6px]" : "flex-row self-stretch"}`} id={isNotSupportingTextAndRight ? "node-1052_636" : isSupportingTextAndRight ? "node-1052_631" : isNotSupportingTextAndLeft ? "node-1052_624" : "node-1052_617"}>
+          {isLeft && (
+            <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col h-full items-start relative rounded-[var(--radius-md,12px)] shrink-0 `}${isNotSupportingTextAndLeft ? "px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)]" : "p-[var(--spacing-lg,12px)]"}`} data-name="Content">
+              {isSupportingTextAndLeft && (
+                <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" data-node-id="1052:618" data-name="Text and supporting text">
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="1052:619">
+                    {text}
+                  </p>
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] w-[296px] whitespace-pre-wrap" data-node-id="1052:620">{`Tooltips are used to describe or identify an  element. In most scenarios, tooltips help the user understand meaning, function or alt-text.`}</p>
+                </div>
+              )}
+              {isNotSupportingTextAndLeft && (
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:625">
+                  {text}
+                </p>
+              )}
+            </div>
+          )}
+          {isRight && (
+            <div className="-rotate-90 flex-none">
+              <div className="h-[6px] relative w-[16px]" data-name="Tooltip">
+                <div className="absolute inset-[-41.91%_0_0_0]">
+                  <img alt="" className="block max-w-none size-full" src={imgTooltip4} />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+      {arrow === "Top center" && (
+        <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start relative rounded-[var(--radius-md,12px)] shrink-0 `}${isNotSupportingTextAndTopCenter ? "px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] w-full" : "p-[var(--spacing-lg,12px)]"}`} id={isNotSupportingTextAndTopCenter ? "node-1052_600" : "node-1052_593"} data-name="Content">
+          {isSupportingTextAndTopCenter && (
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-xs,18px)] max-w-[296px] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)]" data-node-id="1052:594" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] w-[min-content]" data-node-id="1052:595">
+                {text}
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--component-colors\/components\/tooltips\/tooltip-supporting-text,#d5d7da)] w-[296px] whitespace-pre-wrap" data-node-id="1052:596">{`Tooltips are used to describe or identify an  element. In most scenarios, tooltips help the user understand meaning, function or alt-text.`}</p>
+            </div>
+          )}
+          {isNotSupportingTextAndTopCenter && (
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:601">
+              {text}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Text xs/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-xs, weight: 500, lineHeight: Line height/text-xs, letterSpacing: 0), Shadows/shadow-lg: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_03, offset: (0, 2), radius: 2, spread: -1); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_02, offset: (0, 4), radius: 6, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-lg_01, offset: (0, 12), radius: 16, spread: -4).
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

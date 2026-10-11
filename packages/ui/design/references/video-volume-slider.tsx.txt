@@ -1,0 +1,47 @@
+const imgVolumeMax = "https://www.figma.com/api/mcp/asset/f01aad32-2acc-420c-9d8e-81695f4b17fb.svg";
+
+type VideoVolumeSliderHandleProps = {
+  className?: string;
+  volume?: "75%";
+};
+
+function VideoVolumeSliderHandle({ className, volume = "75%" }: VideoVolumeSliderHandleProps) {
+  return (
+    <div className={className || "bg-[var(--component-colors\\/alpha\\/alpha-white-30,rgba(255,255,255,0.3))] h-[4px] relative rounded-[var(--radius-full,9999px)] w-[44px]"} data-node-id="9264:575518">
+      <div className="absolute bg-[var(--colors\/foreground\/fg-white,white)] h-[4px] left-0 right-[8px] rounded-[var(--radius-full,9999px)] top-0" data-node-id="9264:575510" data-name="Progress">
+        <div className="-translate-y-1/2 absolute bg-[var(--colors\/foreground\/fg-white,white)] right-0 rounded-[var(--radius-full,9999px)] size-[12px] top-1/2" data-node-id="9264:575512" data-name="Control handle" />
+      </div>
+    </div>
+  );
+}
+
+type VideoActionButtonProps = {
+  className?: string;
+  state?: "Default";
+  type?: "Volume max";
+};
+
+function VideoActionButton({ className, state = "Default", type = "Volume max" }: VideoActionButtonProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="9264:575704">
+      <div className="relative shrink-0 size-[16px]" data-node-id="9264:575665" data-name="volume-max">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVolumeMax} />
+      </div>
+    </div>
+  );
+}
+
+type VideoVolumeSliderProps = {
+  className?: string;
+  state?: "Default" | "Hover";
+};
+
+export default function VideoVolumeSlider({ className, state = "Default" }: VideoVolumeSliderProps) {
+  const isHover = state === "Hover";
+  return (
+    <div className={className || `content-stretch flex items-center pr-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] w-[84px] ${isHover ? String.raw`backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-white-20,rgba(255,255,255,0.2))]` : ""}`} id={isHover ? "node-9264_575737" : "node-9264_575621"}>
+      <VideoActionButton className="content-stretch flex items-center justify-center p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)] shrink-0" />
+      <VideoVolumeSliderHandle className="bg-[var(--component-colors\/alpha\/alpha-white-30,rgba(255,255,255,0.3))] flex-[1_0_0] h-[4px] min-w-px relative rounded-[var(--radius-full,9999px)]" />
+    </div>
+  );
+}

@@ -1,0 +1,216 @@
+const imgLayersTwo01 = "https://www.figma.com/api/mcp/asset/61a14518-2a0d-438c-b9d3-049879a40729.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/3eb8029d-1e74-4663-9f9a-995ad2ae9351.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/9a7dda5c-4459-4fe0-9616-1e1e4a948dea.svg";
+const imgLayersThree01 = "https://www.figma.com/api/mcp/asset/9e7c7b57-94a6-449b-9b98-749ac8dec05a.svg";
+const imgZap = "https://www.figma.com/api/mcp/asset/0077d73c-df05-4dd8-bb55-8146df14268b.svg";
+const imgZapFast = "https://www.figma.com/api/mcp/asset/a41a0a8a-9392-4ab6-a101-38eb908368a2.svg";
+const imgRocket01 = "https://www.figma.com/api/mcp/asset/8ea61da1-c8a9-4f22-a5bf-ac638202a1db.svg";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "md", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  return <div className={className || "border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px]"} data-node-id="1097:63887" />;
+}
+
+type RadioGroupProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  size?: "md";
+  type?: "Icon card";
+};
+
+function RadioGroup({ className, breakpoint = "Mobile", size = "md", type = "Icon card" }: RadioGroupProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative w-[343px]"} data-node-id="1142:95300">
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:95301" data-name="Radio group item">
+        <div className="border-2 border-[var(--colors\/border\/border-brand,#17b26a)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="I1142:95301;1142:94629" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="I1142:95301;1142:94630" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1142:95301;1142:94902" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:95301;1142:94902;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersTwo01} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" data-node-id="I1142:95301;1142:94633">
+              Basic plan
+            </p>
+          </div>
+          <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" data-node-id="I1142:95301;1142:94634" data-name="_Checkbox base">
+            <div className="absolute inset-[15%]" data-node-id="I1142:95301;1142:94634;1190:582" data-name="check">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1142:95301;1142:94635" data-name="Body">
+          <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-sm,6px)] items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-sm,8px)] shrink-0" data-node-id="I1142:95301;1142:94642" data-name="Badge">
+            <div className="relative shrink-0 size-[8px]" data-node-id="I1142:95301;1142:94642;4825:411756" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="I1142:95301;1142:94642;4825:411757">
+              Limited time only
+            </p>
+          </div>
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1142:95301;1142:94636" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="I1142:95301;1142:94637" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" data-node-id="I1142:95301;1142:94638">
+                $10
+              </p>
+              <div className="content-stretch flex items-start pb-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:95301;1142:94639" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1142:95301;1142:94640">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1142:95301;1142:94641">
+              Includes up to 10 users, 20 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:95302" data-name="Radio group item">
+        <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="I1142:95302;1142:94644" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="I1142:95302;1142:94645" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1142:95302;1142:94898" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:95302;1142:94898;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgLayersThree01} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" data-node-id="I1142:95302;1142:94648">
+              Business plan
+            </p>
+          </div>
+          <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1142:95302;1142:94650" data-name="Body">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1142:95302;1142:94651" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="I1142:95302;1142:94652" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" data-node-id="I1142:95302;1142:94653">
+                $20
+              </p>
+              <div className="content-stretch flex items-start pb-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:95302;1142:94654" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1142:95302;1142:94655">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1142:95302;1142:94656">
+              Includes up to 20 users, 40 GB individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:95303" data-name="Radio group item">
+        <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="I1142:95303;1142:94644" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="I1142:95303;1142:94645" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1142:95303;1142:94898" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:95303;1142:94898;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZap} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" data-node-id="I1142:95303;1142:94648">
+              Enterprise plan
+            </p>
+          </div>
+          <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1142:95303;1142:94650" data-name="Body">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1142:95303;1142:94651" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="I1142:95303;1142:94652" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" data-node-id="I1142:95303;1142:94653">
+                $40
+              </p>
+              <div className="content-stretch flex items-start pb-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:95303;1142:94654" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1142:95303;1142:94655">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1142:95303;1142:94656">
+              Unlimited users, unlimited individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:95304" data-name="Radio group item">
+        <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="I1142:95304;1142:94644" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="I1142:95304;1142:94645" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1142:95304;1142:94898" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:95304;1142:94898;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgZapFast} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" data-node-id="I1142:95304;1142:94648">
+              Ultimate plan
+            </p>
+          </div>
+          <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1142:95304;1142:94650" data-name="Body">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1142:95304;1142:94651" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="I1142:95304;1142:94652" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" data-node-id="I1142:95304;1142:94653">
+                $60
+              </p>
+              <div className="content-stretch flex items-start pb-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:95304;1142:94654" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1142:95304;1142:94655">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1142:95304;1142:94656">
+              Unlimited users, unlimited individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex flex-col items-start relative rounded-[var(--radius-xl,20px)] shrink-0 w-full" data-node-id="1142:95305" data-name="Radio group item">
+        <div className="border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center pl-[var(--spacing-lg,12px)] pr-[var(--spacing-2xl,20px)] py-[var(--spacing-lg,12px)] relative rounded-tl-[var(--spacing-lg,12px)] rounded-tr-[var(--spacing-lg,12px)] shrink-0 w-full" data-node-id="I1142:95305;1142:94644" data-name="Header">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-center min-w-px relative" data-node-id="I1142:95305;1142:94645" data-name="Content">
+            <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="I1142:95305;1142:94898" data-name="Featured icon">
+              <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+              <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I1142:95305;1142:94898;4041:412675" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRocket01} />
+              </div>
+              <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+            </div>
+            <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-lg,28px)] min-w-px relative text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-lg,18px)]" data-node-id="I1142:95305;1142:94648">
+              Secret plan
+            </p>
+          </div>
+          <CheckboxBase className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />
+        </div>
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I1142:95305;1142:94650" data-name="Body">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-md,8px)] items-start relative shrink-0 w-full" data-node-id="I1142:95305;1142:94651" data-name="Text and supporting text">
+            <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-end relative shrink-0 w-full" data-node-id="I1142:95305;1142:94652" data-name="Price">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/display-md,44px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] whitespace-nowrap" data-node-id="I1142:95305;1142:94653">
+                $80
+              </p>
+              <div className="content-stretch flex items-start pb-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I1142:95305;1142:94654" data-name="Time period">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I1142:95305;1142:94655">
+                  per month
+                </p>
+              </div>
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I1142:95305;1142:94656">
+              Unlimited users, unlimited individual data and access to all features.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,1100 @@
+const imgSizeMdOutlineFalse = "https://www.figma.com/api/mcp/asset/8bc91dac-4adf-43c8-b777-2600448d8119.svg";
+const imgSizeXsPlaceholderFalseTextFalseStatusIconFalse = "https://www.figma.com/api/mcp/asset/18a2ee79-f022-409e-94a1-0e46a6e89e70.png";
+const imgCheck = "https://www.figma.com/api/mcp/asset/5bfe9cb0-f695-4997-91de-85f2cbe99a1e.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/5d5ffb45-fa38-4243-8cc3-f252363b5a0f.svg";
+const imgCheck2 = "https://www.figma.com/api/mcp/asset/d4e8b405-3d1e-45ea-9028-fb76b51f7cdb.svg";
+const imgCheck3 = "https://www.figma.com/api/mcp/asset/0886e038-45de-40f5-a35b-ebacf280a152.svg";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/73238e11-143d-49df-b0f0-4a94ce76bace.svg";
+const imgUser2 = "https://www.figma.com/api/mcp/asset/61aa4770-89c5-48fe-987c-304a38626e5e.svg";
+const imgUser3 = "https://www.figma.com/api/mcp/asset/23706846-3c48-471b-9cfa-2a7bfc16f11c.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/3dac1050-481a-4d27-948c-0429a5c4ab10.svg";
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "md";
+};
+
+function Dot({ className, outline = "False", size = "md" }: DotProps) {
+  return (
+    <div className={className || "relative size-[10px]"} data-node-id="1046:10693">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeMdOutlineFalse} />
+    </div>
+  );
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "xs";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "xs", statusIcon = "False", text = "False" }: AvatarProps) {
+  return (
+    <div className={className || "border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[24px]"} data-node-id="19:1011">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeXsPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type SelectMenuItemProps = {
+  className?: string;
+  iconSwap?: React.ReactNode | null;
+  selected?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover" | "Disabled";
+  supportingText?: boolean;
+  type?: "Default" | "Icon leading" | "Avatar leading" | "Dot leading";
+};
+
+export default function SelectMenuItem({ className, iconSwap = null, selected = false, size = "sm", state = "Default", supportingText = true, type = "Default" }: SelectMenuItemProps) {
+  if (size === "md" && !selected && type === "Default" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380430" data-name="Size=md, Selected=False, Type=Default, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406495" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="3281:380431" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:380432">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:380433">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Default" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380437" data-name="Size=md, Selected=True, Type=Default, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406603" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380438" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:380439">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:380440">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380441" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Default" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138929" data-name="Size=sm, Selected=True, Type=Default, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138930" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138931" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="7953:138932">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="7953:138933">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138934" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Default" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380462" data-name="Size=md, Selected=False, Type=Default, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406602" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="3281:380463" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0" data-node-id="3281:380464">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0" data-node-id="3281:380465">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Default" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138935" data-name="Size=sm, Selected=False, Type=Default, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138936" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="7953:138937" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0" data-node-id="7953:138938">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0" data-node-id="7953:138939">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Default" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380469" data-name="Size=md, Selected=True, Type=Default, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406618" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380470" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0" data-node-id="3281:380471">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0" data-node-id="3281:380472">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380473" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Default" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138940" data-name="Size=sm, Selected=True, Type=Default, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138941" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138942" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0" data-node-id="7953:138943">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0" data-node-id="7953:138944">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138945" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Default" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380478" data-name="Size=md, Selected=False, Type=Default, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406600" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="3281:380479" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:380480">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:380481">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Default" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138946" data-name="Size=sm, Selected=False, Type=Default, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138947" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="7953:138948" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="7953:138949">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="7953:138950">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Default" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380485" data-name="Size=md, Selected=True, Type=Default, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406616" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380486" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="3281:380487">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3281:380488">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380489" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Default" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138951" data-name="Size=sm, Selected=True, Type=Default, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138952" data-name="Content">
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138953" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="7953:138954">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="7953:138955">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138956" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Icon leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380494" data-name="Size=md, Selected=False, Type=Icon leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406634" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380495" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603814" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380497">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380498">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Icon leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138957" data-name="Size=sm, Selected=False, Type=Icon leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138958" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:138959" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138960" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138961">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138962">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Icon leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380503" data-name="Size=md, Selected=True, Type=Icon leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406622" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380504" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603914" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380506">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380507">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380508" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Icon leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138963" data-name="Size=sm, Selected=True, Type=Icon leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138964" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:138965" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138966" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138967">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138968">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138969" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Icon leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380534" data-name="Size=md, Selected=False, Type=Icon leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406631" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380535" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603912" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380537">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380538">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Icon leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138970" data-name="Size=sm, Selected=False, Type=Icon leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138971" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:138972" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138973" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser2} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138974">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138975">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Icon leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380543" data-name="Size=md, Selected=True, Type=Icon leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406619" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380544" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603926" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380546">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380547">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380548" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Icon leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138976" data-name="Size=sm, Selected=True, Type=Icon leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138977" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:138978" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138979" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser3} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138980">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138981">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138982" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Icon leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380554" data-name="Size=md, Selected=False, Type=Icon leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406633" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380555" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603908" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380557">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380558">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Icon leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138983" data-name="Size=sm, Selected=False, Type=Icon leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138984" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:138985" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138986" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138987">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138988">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Icon leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380563" data-name="Size=md, Selected=True, Type=Icon leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406621" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380564" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="3473:603924" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380566">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380567">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380568" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Icon leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138989" data-name="Size=sm, Selected=True, Type=Icon leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138990" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:138991" data-name="Text and supporting text">
+            {iconSwap || (
+              <div className="relative shrink-0 size-[20px]" data-node-id="7953:138992" data-name="user-01">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgUser01} />
+              </div>
+            )}
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138993">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:138994">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:138995" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Avatar leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380574" data-name="Size=md, Selected=False, Type=Avatar leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406713" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380575" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380577">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380578">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Avatar leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138996" data-name="Size=sm, Selected=False, Type=Avatar leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138997" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:138998" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139000">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139001">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Avatar leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380583" data-name="Size=md, Selected=True, Type=Avatar leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406842" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380584" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380586">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380587">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380588" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Avatar leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139002" data-name="Size=sm, Selected=True, Type=Avatar leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139003" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139004" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139006">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139007">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139008" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Avatar leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380614" data-name="Size=md, Selected=False, Type=Avatar leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406841" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380615" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380617">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380618">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Avatar leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139009" data-name="Size=sm, Selected=False, Type=Avatar leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139010" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:139011" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139013">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139014">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Avatar leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380623" data-name="Size=md, Selected=True, Type=Avatar leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406866" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380624" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380626">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380627">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380628" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Avatar leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139015" data-name="Size=sm, Selected=True, Type=Avatar leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139016" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139017" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139019">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139020">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139021" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Avatar leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380634" data-name="Size=md, Selected=False, Type=Avatar leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406839" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380635" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380637">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380638">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Avatar leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139022" data-name="Size=sm, Selected=False, Type=Avatar leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139023" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:139024" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139026">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139027">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Avatar leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380643" data-name="Size=md, Selected=True, Type=Avatar leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406864" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380644" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380646">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380647">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380648" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Avatar leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139028" data-name="Size=sm, Selected=True, Type=Avatar leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139029" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139030" data-name="Text and supporting text">
+            <Avatar className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[24px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139032">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139033">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139034" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Dot leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380655" data-name="Size=md, Selected=False, Type=Dot leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406867" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380656" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380658">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380659">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Dot leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139035" data-name="Size=sm, Selected=False, Type=Dot leading, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139036" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:139037" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139039">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139040">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Dot leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380664" data-name="Size=md, Selected=True, Type=Dot leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406949" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380665" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380667">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380668">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380669" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Dot leading" && state === "Default") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139041" data-name="Size=sm, Selected=True, Type=Dot leading, State=Default">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139042" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139043" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139045">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139046">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139047" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Dot leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380695" data-name="Size=md, Selected=False, Type=Dot leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406948" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380696" data-name="Text and supporting text">
+            <div className="relative shrink-0 size-[10px]" data-node-id="3281:380697" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380698">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380699">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Dot leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139048" data-name="Size=sm, Selected=False, Type=Dot leading, State=Disabled">
+        <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139049" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:139050" data-name="Text and supporting text">
+            <div className="relative shrink-0 size-[10px]" data-node-id="7953:139051" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139052">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139053">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Dot leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380704" data-name="Size=md, Selected=True, Type=Dot leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406960" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380705" data-name="Text and supporting text">
+            <div className="relative shrink-0 size-[10px]" data-node-id="3281:380706" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380707">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380708">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380709" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck2} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Dot leading" && state === "Disabled") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139054" data-name="Size=sm, Selected=True, Type=Dot leading, State=Disabled">
+        <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139055" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139056" data-name="Text and supporting text">
+            <div className="relative shrink-0 size-[10px]" data-node-id="7953:139057" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139058">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139059">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139060" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck3} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && !selected && type === "Dot leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380715" data-name="Size=md, Selected=False, Type=Dot leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406946" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="3281:380716" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380718">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380719">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && !selected && type === "Dot leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139061" data-name="Size=sm, Selected=False, Type=Dot leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139062" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0 w-full" data-node-id="7953:139063" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139065">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139066">
+                @olivia
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "md" && selected && type === "Dot leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="3281:380724" data-name="Size=md, Selected=True, Type=Dot leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[10px] relative rounded-[var(--radius-sm,8px)]" data-node-id="3930:406958" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="3281:380725" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380727">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3281:380728">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[20px]" data-node-id="3281:380729" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (size === "sm" && selected && type === "Dot leading" && state === "Hover") {
+    return (
+      <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:139067" data-name="Size=sm, Selected=True, Type=Dot leading, State=Hover">
+        <div className="bg-[var(--colors\/background\/bg-primary_hover,#fafafa)] content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px overflow-clip pl-[var(--spacing-md,8px)] pr-[10px] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:139068" data-name="Content">
+          <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="7953:139069" data-name="Text and supporting text">
+            <Dot className="relative shrink-0 size-[10px]" />
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139071">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+            {supportingText && (
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="7953:139072">
+                @olivia
+              </p>
+            )}
+          </div>
+          <div className="relative shrink-0 size-[16px]" data-node-id="7953:139073" data-name="check">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck1} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "content-stretch flex items-center px-[var(--spacing-sm,6px)] py-px relative w-[320px]"} data-node-id="7953:138924" data-name="Size=sm, Selected=False, Type=Default, State=Default">
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-md,8px)] items-start min-w-px overflow-clip p-[var(--spacing-md,8px)] relative rounded-[var(--radius-sm,8px)]" data-node-id="7953:138925" data-name="Content">
+        <div className="[word-break:break-word] content-stretch flex gap-[var(--spacing-md,8px)] items-center leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[length:var(--font-size\/text-md,16px)] w-full whitespace-nowrap" data-node-id="7953:138926" data-name="Text and supporting text">
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="7953:138927">
+            Diepreye Ọ̀rẹ̀kọ́yà
+          </p>
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="7953:138928">
+              @olivia
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text md/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-md, weight: 500, lineHeight: Line height/text-md, letterSpacing: 0), Text md/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-md, weight: 400, lineHeight: Line height/text-md, letterSpacing: 0), Avatar user square/Olivia Rhye: .
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

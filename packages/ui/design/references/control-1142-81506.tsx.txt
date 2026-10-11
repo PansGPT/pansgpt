@@ -1,0 +1,100 @@
+const imgCheck = "https://www.figma.com/api/mcp/asset/35b71f71-8b1b-4819-874b-6262e66a84a9.svg";
+const imgSizeMdPlaceholderFalseTextFalseStatusIconFalse = "https://www.figma.com/api/mcp/asset/09385e6e-5972-4e23-a170-4b0d3345a7e9.png";
+
+type CheckboxBaseProps = {
+  className?: string;
+  checked?: boolean;
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  type?: "Checkbox";
+};
+
+function CheckboxBase({ className, checked = false, indeterminate = "False", size = "md", state = "Default", type = "Checkbox" }: CheckboxBaseProps) {
+  const isCheckedAndFalseAndMdAndCheckboxAndDefault = checked && indeterminate === "False" && size === "md" && type === "Checkbox" && state === "Default";
+  return (
+    <div className={className || `overflow-clip relative rounded-[var(--radius-sm,8px)] size-[20px] ${isCheckedAndFalseAndMdAndCheckboxAndDefault ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)]` : String.raw`border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid`}`} id={isCheckedAndFalseAndMdAndCheckboxAndDefault ? "node-1190_580" : "node-1097_63887"}>
+      {isCheckedAndFalseAndMdAndCheckboxAndDefault && (
+        <div className="absolute inset-[15%]" data-node-id="1190:582" data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCheck} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type AvatarProps = {
+  className?: string;
+  placeholder?: "False";
+  size?: "md";
+  statusIcon?: "False";
+  text?: "False";
+};
+
+function Avatar({ className, placeholder = "False", size = "md", statusIcon = "False", text = "False" }: AvatarProps) {
+  return (
+    <div className={className || "border border-[rgba(0,0,0,0.08)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[40px]"} data-node-id="19:1016">
+      <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconFalse} />
+    </div>
+  );
+}
+
+type RadioGroupItemProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  selected?: boolean;
+  size?: "md";
+  state?: "Default";
+  type?: "Avatar";
+};
+
+function RadioGroupItem({ className, breakpoint = "Mobile", selected = false, size = "md", state = "Default", type = "Avatar" }: RadioGroupItemProps) {
+  const isNotSelectedAndMdAndAvatarAndDefaultAndMobile = !selected && size === "md" && type === "Avatar" && state === "Default" && breakpoint === "Mobile";
+  const isSelectedAndMdAndAvatarAndDefaultAndMobile = selected && size === "md" && type === "Avatar" && state === "Default" && breakpoint === "Mobile";
+  return (
+    <div className={className || `${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-start p-[var(--spacing-xl,16px)] relative rounded-[var(--radius-xl,20px)] w-[343px] `}${isNotSelectedAndMdAndAvatarAndDefaultAndMobile ? String.raw`border border-[var(--colors\/border\/border-secondary,#e9eaeb)]` : String.raw`border-2 border-[var(--colors\/border\/border-brand,#17b26a)]`}`} id={isNotSelectedAndMdAndAvatarAndDefaultAndMobile ? "node-1142_81415" : "node-1142_81506"}>
+      <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" id={isNotSelectedAndMdAndAvatarAndDefaultAndMobile ? "node-1142_82320" : "node-1142_82335"} data-name="Content">
+        {isSelectedAndMdAndAvatarAndDefaultAndMobile && (
+          <>
+            <Avatar className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" />
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1142:82337" data-name="Text and supporting text">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:407992" data-name="Text and subtext">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="1142:82338">
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:407993">
+                  @olivia
+                </p>
+              </div>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="1142:82339">
+                Product Manager, Integrations
+              </p>
+            </div>
+          </>
+        )}
+        {isNotSelectedAndMdAndAvatarAndDefaultAndMobile && (
+          <>
+            <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="1142:82321" data-name="Avatar">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgSizeMdPlaceholderFalseTextFalseStatusIconFalse} />
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start leading-[var(--line-height\/text-md,24px)] min-w-px relative text-[length:var(--font-size\/text-md,16px)]" data-node-id="1142:82322" data-name="Text and supporting text">
+              <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-start relative shrink-0 whitespace-nowrap" data-node-id="3931:407952" data-name="Text and subtext">
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]" data-node-id="1142:82323">
+                  Diepreye Ọ̀rẹ̀kọ́yà
+                </p>
+                <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="3931:407953">
+                  @olivia
+                </p>
+              </div>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal min-w-full relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-[min-content]" data-node-id="1142:82324">
+                Product Manager, Integrations
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+      {isSelectedAndMdAndAvatarAndDefaultAndMobile && <CheckboxBase checked className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" />}
+      {isNotSelectedAndMdAndAvatarAndDefaultAndMobile && <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-sm,8px)] shrink-0 size-[20px]" data-node-id="5373:388499" data-name="_Checkbox base" />}
+    </div>
+  );
+}

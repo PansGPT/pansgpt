@@ -1,0 +1,122 @@
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/13127ce6-dee7-4692-84d7-b31d0522cb8b.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/7d5dfb53-8e89-4daf-9b81-0977d6b09d92.svg";
+
+type TabButtonBaseProps = {
+  className?: string;
+  badge?: boolean;
+  current?: boolean;
+  size?: "sm";
+  state?: "Default";
+  type?: "Button minimal";
+};
+
+function TabButtonBase({ className, badge = true, current = false, size = "sm", state = "Default", type = "Button minimal" }: TabButtonBaseProps) {
+  const isNotCurrentAndSmAndButtonMinimalAndDefault = !current && size === "sm" && type === "Button minimal" && state === "Default";
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] ${isNotCurrentAndSmAndButtonMinimalAndDefault ? "" : String.raw`bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]`}`} id={isNotCurrentAndSmAndButtonMinimalAndDefault ? "node-7248_8813" : "node-7248_8795"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap `}${isNotCurrentAndSmAndButtonMinimalAndDefault ? String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]` : String.raw`text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)]`}`} id={isNotCurrentAndSmAndButtonMinimalAndDefault ? "node-7248_8814" : "node-7248_8796"}>
+        My details
+      </p>
+      {badge && (
+        <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="7248:8797" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I7248:8797;3918:407462">
+            2
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type SlideOutMenuHeaderProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  icon?: boolean;
+  supportingText?: boolean;
+  tabs?: boolean;
+};
+
+export default function SlideOutMenuHeader({ className, breakpoint = "Desktop", icon = true, supportingText = true, tabs = false }: SlideOutMenuHeaderProps) {
+  const isNotTabs = !tabs;
+  const isNotTabsAndMobile = !tabs && breakpoint === "Mobile";
+  const isTabs = tabs;
+  const isTabsAndDesktop = tabs && breakpoint === "Desktop";
+  const isTabsAndMobile = tabs && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex items-start relative ${isNotTabsAndMobile ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-md,8px)] px-[var(--spacing-xl,16px)] py-[var(--spacing-3xl,24px)] w-[336px]` : isTabsAndMobile ? "flex-col gap-[var(--spacing-2xl,20px)] pb-[var(--spacing-3xl,24px)] w-[336px]" : isTabsAndDesktop ? "flex-col gap-[var(--spacing-3xl,24px)] pb-[var(--spacing-3xl,24px)] w-[480px]" : String.raw`bg-[var(--colors\/background\/bg-primary,white)] gap-[var(--spacing-md,8px)] p-[var(--spacing-3xl,24px)] w-[480px]`}`} id={isNotTabsAndMobile ? "node-1240_137263" : isTabsAndMobile ? "node-1251_2100" : isTabsAndDesktop ? "node-1251_717" : "node-1239_120665"}>
+      <div className={`content-stretch flex items-start relative ${isTabsAndMobile ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-b border-solid flex-col gap-[var(--spacing-2xl,20px)] pb-[var(--spacing-xl,16px)] pt-[var(--spacing-3xl,24px)] px-[var(--spacing-xl,16px)] shrink-0 w-full` : isTabsAndDesktop ? String.raw`bg-[var(--colors\/background\/bg-primary,white)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-b border-solid flex-col gap-[var(--spacing-2xl,20px)] pb-[var(--spacing-xl,16px)] pl-[var(--spacing-3xl,24px)] pr-[var(--spacing-lg,12px)] pt-[var(--spacing-3xl,24px)] shrink-0 w-full` : "flex-[1_0_0] gap-[var(--spacing-xl,16px)] min-w-px"}`} id={isNotTabsAndMobile ? "node-1240_137264" : isTabsAndMobile ? "node-1251_2101" : isTabsAndDesktop ? "node-1251_783" : "node-1239_120658"} data-name="Content">
+        {isNotTabs && icon && (
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4943:372255" data-name="Featured icon">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4943:372255;4041:412675" data-name="check-circle">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        )}
+        {isNotTabs && (
+          <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" id={isNotTabsAndMobile ? "node-1240_137266" : "node-1239_120669"} data-name="Text and supporting text">
+            <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full `}${isNotTabsAndMobile ? String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : String.raw`leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)]`}`} id={isNotTabsAndMobile ? "node-1240_137267" : "node-1239_120659"}>
+              Heading
+            </p>
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1239:120660">
+                Lorem ipsum dolor sit amet.
+              </p>
+            )}
+          </div>
+        )}
+        {isTabs && (
+          <>
+            <div className="content-stretch flex gap-[var(--spacing-xl,16px)] items-start relative shrink-0 w-full" id={isTabsAndMobile ? "node-1251_2102" : "node-1251_718"} data-name="Heading">
+              {icon && (
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 size-[40px]" data-node-id="4943:372256" data-name="Featured icon">
+                  <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                  <div className="absolute left-[9px] size-[20px] top-[9px]" data-node-id="I4943:372256;4041:412675" data-name="check-circle">
+                    <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+                  </div>
+                  <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+                </div>
+              )}
+              <div className="[word-break:break-word] content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" id={isTabsAndMobile ? "node-1251_2104" : "node-1251_719"} data-name="Text and supporting text">
+                <p className={`${String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full `}${isTabsAndMobile ? String.raw`leading-[var(--line-height\/text-md,24px)] text-[length:var(--font-size\/text-md,16px)]` : String.raw`leading-[var(--line-height\/text-lg,28px)] text-[length:var(--font-size\/text-lg,18px)]`}`} id={isTabsAndMobile ? "node-1251_2105" : "node-1251_720"}>
+                  Heading
+                </p>
+                {supportingText && (
+                  <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1251:721">
+                    Lorem ipsum dolor sit amet.
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-secondary_alt,#fafafa)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center justify-center relative rounded-[9999px] shrink-0 w-full" id={isTabsAndMobile ? "node-7259_530223" : "node-7259_529696"} data-name="Horizontal tabs">
+              <TabButtonBase badge={false} className="bg-[var(--colors\/background\/bg-primary_alt,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" current />
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]" id={isTabsAndMobile ? "node-I7259_530223-7249_43500" : "node-I7259_529696-7249_43500"} data-name="_Tab button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isTabsAndMobile ? "node-I7259_530223-7249_43500-7248_8814" : "node-I7259_529696-7249_43500-7248_8814"}>
+                  Profile
+                </p>
+              </div>
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] h-[36px] items-center justify-center min-w-px overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[9999px]" id={isTabsAndMobile ? "node-I7259_530223-7249_43501" : "node-I7259_529696-7249_43501"} data-name="_Tab button base">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isTabsAndMobile ? "node-I7259_530223-7249_43501-7248_8814" : "node-I7259_529696-7249_43501-7248_8814"}>
+                  Password
+                </p>
+              </div>
+            </div>
+            <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" id={isTabsAndMobile ? "node-1251_2108" : "node-1251_723"} data-name="Buttons/Button close X">
+              <div className="relative shrink-0 size-[20px]" id={isTabsAndMobile ? "node-I1251_2108-2763_420385" : "node-I1251_723-2763_420385"} data-name="x-close">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      {isNotTabs && (
+        <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[40px] top-[12px]" id={isNotTabsAndMobile ? "node-1240_137270" : "node-2768_421123"} data-name="Buttons/Button close X">
+          <div className="relative shrink-0 size-[20px]" id={isNotTabsAndMobile ? "node-I1240_137270-2763_420385" : "node-I2768_421123-2763_420385"} data-name="x-close">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

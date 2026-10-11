@@ -1,0 +1,74 @@
+const imgTypeResizeSingleUp = "https://www.figma.com/api/mcp/asset/d5cbe697-3936-4c19-96f3-16a85a772c33.svg";
+const imgTypeResizeSingleTopRight = "https://www.figma.com/api/mcp/asset/c9c4a39d-a5f7-452f-b97f-4f697a5a26dd.svg";
+const imgTypeResizeSingleRight = "https://www.figma.com/api/mcp/asset/b5fc66b4-8f30-40f3-abc5-a94511ef7c78.svg";
+const imgTypeResizeSingleBottomRight = "https://www.figma.com/api/mcp/asset/bc1a453b-86fb-4b04-95ef-91c6b4457dfa.svg";
+const imgTypeResizeSingleDown = "https://www.figma.com/api/mcp/asset/6440a62f-50c8-40f4-9310-f0c10fda5308.svg";
+const imgTypeResizeSingleBottomLeft = "https://www.figma.com/api/mcp/asset/b2fe63f7-cbd6-408a-a235-a90dcae1eead.svg";
+const imgTypeResizeSingleLeft = "https://www.figma.com/api/mcp/asset/f5568126-da1b-44f0-8e85-f2759e4c432a.svg";
+const imgTypeResizeSingleTopLeft = "https://www.figma.com/api/mcp/asset/51df4645-8620-43fc-ae5a-fec32abba802.svg";
+const imgTypeResizeVertical = "https://www.figma.com/api/mcp/asset/1339884e-7637-46b2-ab06-882184355450.svg";
+const imgTypeResizeHorizontal = "https://www.figma.com/api/mcp/asset/bb18e7c8-c5f6-402b-acee-d00c6cfaff1b.svg";
+const imgTypeResizeDiagonal02 = "https://www.figma.com/api/mcp/asset/c5ce053e-1253-4a03-ba26-dd7342076f2f.svg";
+const imgTypeResizeDiagonal01 = "https://www.figma.com/api/mcp/asset/15ea41a8-804f-4b56-80bf-bd168ff18a05.svg";
+const imgTypeResizeUpDown = "https://www.figma.com/api/mcp/asset/4066ee73-7cf8-4051-9f4a-4c474f46f845.svg";
+const imgTypeResizeLeftRight = "https://www.figma.com/api/mcp/asset/f4ce3a97-07ee-4081-8a8a-e91dbbc90179.svg";
+const imgTypeResizeUp = "https://www.figma.com/api/mcp/asset/96082cd7-eb9e-4cfe-9fb1-2246c7d3033d.svg";
+const imgTypeResizeRight = "https://www.figma.com/api/mcp/asset/3e06e23f-7067-42a8-9cb6-1543a27351e6.svg";
+const imgTypeResizeDown = "https://www.figma.com/api/mcp/asset/e546b392-c99d-4b57-ac40-5e34ec46a3a3.svg";
+const imgTypeResizeLeft = "https://www.figma.com/api/mcp/asset/00e2a0bb-9f86-4987-8470-6390ec2d59f0.svg";
+const imgTypeHelp = "https://www.figma.com/api/mcp/asset/a740f805-0f69-4464-9dea-4df2343806bd.svg";
+const imgTypeMove = "https://www.figma.com/api/mcp/asset/c086f2e4-aad4-464c-bb13-a78394111194.svg";
+const imgTypeHandOpen = "https://www.figma.com/api/mcp/asset/44d4bb18-f36f-4f4f-b599-7fe615dad780.svg";
+const imgTypeHandGrab = "https://www.figma.com/api/mcp/asset/f2442505-d177-494d-88fc-0c7c5eb8bb8e.svg";
+const imgTypeHandPoint = "https://www.figma.com/api/mcp/asset/033b41e9-e295-4ba4-adf9-62eb9826bb27.svg";
+const imgTypeZoomIn = "https://www.figma.com/api/mcp/asset/7bf30561-be54-468c-bb16-88cf6859fd69.svg";
+const imgTypeZoomOut = "https://www.figma.com/api/mcp/asset/2d5d32e1-104b-445c-8be2-30d9a5bfb438.svg";
+const imgTypePlus = "https://www.figma.com/api/mcp/asset/9e11d999-3944-400d-88aa-b794e17bf12d.svg";
+const imgTypeTextCursor = "https://www.figma.com/api/mcp/asset/2151f324-ca5a-41bc-8d28-8b9bc0ccdaee.svg";
+const imgTypeTextCursorCustom = "https://www.figma.com/api/mcp/asset/431fa354-b726-4ff5-8277-619001bc9174.svg";
+const imgTypeDefault = "https://www.figma.com/api/mcp/asset/a9789689-540f-4b7e-946f-9f7d29f3a413.svg";
+
+type CursorProps = {
+  className?: string;
+  type?: "Default" | "Text cursor" | "Text cursor custom" | "Plus" | "Hand point" | "Hand grab" | "Hand open" | "Zoom in" | "Zoom out" | "Move" | "Help" | "Resize left" | "Resize down" | "Resize right" | "Resize up" | "Resize left-right" | "Resize up-down" | "Resize diagonal 01" | "Resize diagonal 02" | "Resize horizontal" | "Resize vertical" | "Resize single top-left" | "Resize single left" | "Resize single bottom-left" | "Resize single down" | "Resize single bottom-right" | "Resize single right" | "Resize single top-right" | "Resize single up";
+};
+
+export default function Cursor({ className, type = "Default" }: CursorProps) {
+  const isDefault = type === "Default";
+  const isHandGrab = type === "Hand grab";
+  const isHandOpen = type === "Hand open";
+  const isHandPoint = type === "Hand point";
+  const isHelp = type === "Help";
+  const isMove = type === "Move";
+  const isPlus = type === "Plus";
+  const isResizeDiagonal01 = type === "Resize diagonal 01";
+  const isResizeDiagonal02 = type === "Resize diagonal 02";
+  const isResizeDown = type === "Resize down";
+  const isResizeHorizontal = type === "Resize horizontal";
+  const isResizeLeft = type === "Resize left";
+  const isResizeLeftRight = type === "Resize left-right";
+  const isResizeRight = type === "Resize right";
+  const isResizeSingleBottomLeft = type === "Resize single bottom-left";
+  const isResizeSingleBottomRight = type === "Resize single bottom-right";
+  const isResizeSingleDown = type === "Resize single down";
+  const isResizeSingleLeft = type === "Resize single left";
+  const isResizeSingleRight = type === "Resize single right";
+  const isResizeSingleTopLeft = type === "Resize single top-left";
+  const isResizeSingleTopRight = type === "Resize single top-right";
+  const isResizeUp = type === "Resize up";
+  const isResizeUpDown = type === "Resize up-down";
+  const isTextCursor = type === "Text cursor";
+  const isTextCursorCustom = type === "Text cursor custom";
+  const isZoomIn = type === "Zoom in";
+  const isZoomOut = type === "Zoom out";
+  return (
+    <div className={className || "relative size-[20px]"} id={isDefault ? "node-9342_257183" : isTextCursorCustom ? "node-9342_558329" : isTextCursor ? "node-9342_257174" : isPlus ? "node-9342_257172" : isZoomOut ? "node-9342_257152" : isZoomIn ? "node-9342_257143" : isHandPoint ? "node-9342_257136" : isHandGrab ? "node-9342_257129" : isHandOpen ? "node-9342_257122" : isMove ? "node-9342_257114" : isHelp ? "node-9342_257110" : isResizeLeft ? "node-9342_257108" : isResizeDown ? "node-9342_257106" : isResizeRight ? "node-9342_257104" : isResizeUp ? "node-9342_257102" : isResizeLeftRight ? "node-9342_257100" : isResizeUpDown ? "node-9342_257098" : isResizeDiagonal01 ? "node-9342_257096" : isResizeDiagonal02 ? "node-9342_257094" : isResizeHorizontal ? "node-9342_257092" : type === "Resize vertical" ? "node-9342_257090" : isResizeSingleTopLeft ? "node-9342_257088" : isResizeSingleLeft ? "node-9342_257086" : isResizeSingleBottomLeft ? "node-9342_257084" : isResizeSingleDown ? "node-9342_257082" : isResizeSingleBottomRight ? "node-9342_257080" : isResizeSingleRight ? "node-9342_257078" : isResizeSingleTopRight ? "node-9342_257076" : "node-9342_257074"}>
+      {["Resize single up", "Resize single top-right", "Resize single right", "Resize single bottom-right", "Resize single down", "Resize single bottom-left", "Resize single left", "Resize single top-left", "Resize horizontal", "Resize diagonal 02", "Resize diagonal 01", "Resize up", "Resize down", "Help", "Hand grab", "Zoom in", "Zoom out", "Plus", "Text cursor", "Text cursor custom"].includes(type) && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isTextCursorCustom ? imgTypeTextCursorCustom : isTextCursor ? imgTypeTextCursor : isPlus ? imgTypePlus : isZoomOut ? imgTypeZoomOut : isZoomIn ? imgTypeZoomIn : isHandGrab ? imgTypeHandGrab : isHelp ? imgTypeHelp : isResizeDown ? imgTypeResizeDown : isResizeUp ? imgTypeResizeUp : isResizeDiagonal01 ? imgTypeResizeDiagonal01 : isResizeDiagonal02 ? imgTypeResizeDiagonal02 : isResizeHorizontal ? imgTypeResizeHorizontal : isResizeSingleTopLeft ? imgTypeResizeSingleTopLeft : isResizeSingleLeft ? imgTypeResizeSingleLeft : isResizeSingleBottomLeft ? imgTypeResizeSingleBottomLeft : isResizeSingleDown ? imgTypeResizeSingleDown : isResizeSingleBottomRight ? imgTypeResizeSingleBottomRight : isResizeSingleRight ? imgTypeResizeSingleRight : isResizeSingleTopRight ? imgTypeResizeSingleTopRight : imgTypeResizeSingleUp} />}
+      {["Resize vertical", "Resize up-down", "Resize left-right", "Resize right", "Resize left", "Move", "Hand open", "Hand point", "Default"].includes(type) && (
+        <div className={`absolute ${isDefault ? "inset-[0_0_-11.76%_0]" : isHandPoint ? "inset-[0_-0.61%_-5.6%_0]" : isHandOpen ? "inset-[0_0_-2%_-2%]" : isMove ? "inset-[0_0_-4.74%_0]" : ["Resize right", "Resize left"].includes(type) ? "inset-[0_0_-4.9%_0]" : isResizeLeftRight ? "inset-[0_-3.86%_-4.91%_-3.86%]" : isResizeUpDown ? "inset-[0_0_-8.86%_0]" : "inset-[0_0_-5%_0]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isDefault ? imgTypeDefault : isHandPoint ? imgTypeHandPoint : isHandOpen ? imgTypeHandOpen : isMove ? imgTypeMove : isResizeLeft ? imgTypeResizeLeft : isResizeRight ? imgTypeResizeRight : isResizeLeftRight ? imgTypeResizeLeftRight : isResizeUpDown ? imgTypeResizeUpDown : imgTypeResizeVertical} />
+        </div>
+      )}
+    </div>
+  );
+}

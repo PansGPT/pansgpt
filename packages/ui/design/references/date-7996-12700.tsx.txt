@@ -1,0 +1,147 @@
+const imgDot = "https://www.figma.com/api/mcp/asset/fd2fb001-99d6-4a1e-a8b9-8b81627bd0e7.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/c14cb2a6-42a7-4b91-833c-16ac904aa3dd.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/35e791d1-1332-4ea2-9825-329b8b74bb01.svg";
+const imgDot3 = "https://www.figma.com/api/mcp/asset/6acf1d66-adf7-4b35-bac7-3cbd169cf1c1.svg";
+const imgDot4 = "https://www.figma.com/api/mcp/asset/c8878ca7-3f46-4a15-b775-3ef4821ec46f.svg";
+const imgDot5 = "https://www.figma.com/api/mcp/asset/97099b6f-8e2a-42d5-9614-d109b9de2992.svg";
+const imgDot6 = "https://www.figma.com/api/mcp/asset/06b48280-3715-4334-8262-053a39336cb4.svg";
+const imgDot7 = "https://www.figma.com/api/mcp/asset/f6007f7f-640b-440f-88ed-eb88917be1fd.svg";
+const imgDot8 = "https://www.figma.com/api/mcp/asset/d237bc03-b469-4216-ba6d-61b721166a7c.svg";
+
+type CalendarEventDayAndWeekViewProps = {
+  className?: string;
+  color?: "Gray" | "Brand" | "Green" | "Blue" | "Indigo" | "Purple" | "Pink" | "Orange" | "Yellow";
+  dot?: boolean;
+  state?: "Default" | "Hover";
+  supportingText?: boolean;
+};
+
+export default function CalendarEventDayAndWeekView({ className, color = "Gray", dot = true, state = "Default", supportingText = true }: CalendarEventDayAndWeekViewProps) {
+  const isBlue = color === "Blue";
+  const isBrand = color === "Brand";
+  const isDefaultAndBlue = state === "Default" && color === "Blue";
+  const isDefaultAndBrand = state === "Default" && color === "Brand";
+  const isDefaultAndGreen = state === "Default" && color === "Green";
+  const isDefaultAndIndigo = state === "Default" && color === "Indigo";
+  const isDefaultAndOrange = state === "Default" && color === "Orange";
+  const isDefaultAndPink = state === "Default" && color === "Pink";
+  const isDefaultAndPurple = state === "Default" && color === "Purple";
+  const isDefaultAndYellow = state === "Default" && color === "Yellow";
+  const isGray = color === "Gray";
+  const isGreen = color === "Green";
+  const isHoverAndBlue = state === "Hover" && color === "Blue";
+  const isHoverAndBrand = state === "Hover" && color === "Brand";
+  const isHoverAndGray = state === "Hover" && color === "Gray";
+  const isHoverAndGreen = state === "Hover" && color === "Green";
+  const isHoverAndIndigo = state === "Hover" && color === "Indigo";
+  const isHoverAndOrange = state === "Hover" && color === "Orange";
+  const isHoverAndPink = state === "Hover" && color === "Pink";
+  const isHoverAndPurple = state === "Hover" && color === "Purple";
+  const isHoverAndYellow = state === "Hover" && color === "Yellow";
+  const isIndigo = color === "Indigo";
+  const isOrange = color === "Orange";
+  const isPink = color === "Pink";
+  const isPurple = color === "Purple";
+  const isYellow = color === "Yellow";
+  return (
+    <div className={className || `border border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[64px] items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] w-[160px] ${isHoverAndYellow ? String.raw`bg-[var(--component-colors\/utility\/yellow\/utility-yellow-100,#fef7c3)] border-[var(--component-colors\/utility\/yellow\/utility-yellow-200,#feee95)]` : isHoverAndOrange ? String.raw`bg-[var(--component-colors\/utility\/orange\/utility-orange-100,#fdead7)] border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)]` : isHoverAndPink ? String.raw`bg-[var(--component-colors\/utility\/pink\/utility-pink-100,#fce7f6)] border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)]` : isHoverAndPurple ? String.raw`bg-[var(--component-colors\/utility\/purple\/utility-purple-100,#ebe9fe)] border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)]` : isHoverAndIndigo ? String.raw`bg-[var(--component-colors\/utility\/indigo\/utility-indigo-100,#e0eaff)] border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)]` : isHoverAndBlue ? String.raw`bg-[var(--component-colors\/utility\/blue\/utility-blue-100,#d1e9ff)] border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)]` : isHoverAndGreen ? String.raw`bg-[var(--component-colors\/utility\/green\/utility-green-100,#d3f8df)] border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)]` : isHoverAndBrand ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-100,#dcfae6)] border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)]` : isHoverAndGray ? String.raw`bg-[var(--component-colors\/utility\/gray\/utility-gray-100,#f5f5f5)] border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)]` : isDefaultAndYellow ? String.raw`bg-[var(--component-colors\/utility\/yellow\/utility-yellow-50,#fefbe8)] border-[var(--component-colors\/utility\/yellow\/utility-yellow-200,#feee95)]` : isDefaultAndOrange ? String.raw`bg-[var(--component-colors\/utility\/orange\/utility-orange-50,#fef6ee)] border-[var(--component-colors\/utility\/orange\/utility-orange-200,#f9dbaf)]` : isDefaultAndPink ? String.raw`bg-[var(--component-colors\/utility\/pink\/utility-pink-50,#fdf2fa)] border-[var(--component-colors\/utility\/pink\/utility-pink-200,#fcceee)]` : isDefaultAndPurple ? String.raw`bg-[var(--component-colors\/utility\/purple\/utility-purple-50,#f4f3ff)] border-[var(--component-colors\/utility\/purple\/utility-purple-200,#d9d6fe)]` : isDefaultAndIndigo ? String.raw`bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)]` : isDefaultAndBlue ? String.raw`bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)]` : isDefaultAndGreen ? String.raw`bg-[var(--component-colors\/utility\/green\/utility-green-50,#edfcf2)] border-[var(--component-colors\/utility\/green\/utility-green-200,#aaf0c4)]` : isDefaultAndBrand ? String.raw`bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)]` : String.raw`bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)]`}`} id={isHoverAndYellow ? "node-8001_7552" : isHoverAndOrange ? "node-8001_7524" : isHoverAndPink ? "node-8001_7496" : isHoverAndPurple ? "node-8001_7468" : isHoverAndIndigo ? "node-7999_13002" : isHoverAndBlue ? "node-7999_12974" : isHoverAndGreen ? "node-7999_12946" : isHoverAndBrand ? "node-7999_12918" : isHoverAndGray ? "node-7996_12699" : isDefaultAndYellow ? "node-8001_7546" : isDefaultAndOrange ? "node-8001_7518" : isDefaultAndPink ? "node-8001_7490" : isDefaultAndPurple ? "node-8001_7462" : isDefaultAndIndigo ? "node-7999_12996" : isDefaultAndBlue ? "node-7999_12968" : isDefaultAndGreen ? "node-7999_12940" : isDefaultAndBrand ? "node-7999_12912" : "node-7996_12684"}>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-xxs,2px)] items-start min-w-px relative" id={isHoverAndYellow ? "node-8001_7553" : isHoverAndOrange ? "node-8001_7525" : isHoverAndPink ? "node-8001_7497" : isHoverAndPurple ? "node-8001_7469" : isHoverAndIndigo ? "node-7999_13003" : isHoverAndBlue ? "node-7999_12975" : isHoverAndGreen ? "node-7999_12947" : isHoverAndBrand ? "node-7999_12919" : isHoverAndGray ? "node-7996_12693" : isDefaultAndYellow ? "node-8001_7547" : isDefaultAndOrange ? "node-8001_7519" : isDefaultAndPink ? "node-8001_7491" : isDefaultAndPurple ? "node-8001_7463" : isDefaultAndIndigo ? "node-7999_12997" : isDefaultAndBlue ? "node-7999_12969" : isDefaultAndGreen ? "node-7999_12941" : isDefaultAndBrand ? "node-7999_12913" : "node-7996_12542"} data-name="Text and time">
+        <div className="content-stretch flex gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" id={isHoverAndYellow ? "node-8001_7554" : isHoverAndOrange ? "node-8001_7526" : isHoverAndPink ? "node-8001_7498" : isHoverAndPurple ? "node-8001_7470" : isHoverAndIndigo ? "node-7999_13004" : isHoverAndBlue ? "node-7999_12976" : isHoverAndGreen ? "node-7999_12948" : isHoverAndBrand ? "node-7999_12920" : isHoverAndGray ? "node-7996_12694" : isDefaultAndYellow ? "node-8001_7548" : isDefaultAndOrange ? "node-8001_7520" : isDefaultAndPink ? "node-8001_7492" : isDefaultAndPurple ? "node-8001_7464" : isDefaultAndIndigo ? "node-7999_12998" : isDefaultAndBlue ? "node-7999_12970" : isDefaultAndGreen ? "node-7999_12942" : isDefaultAndBrand ? "node-7999_12914" : "node-7996_12543"} data-name="Text and dot">
+          <p className={`${String.raw`[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] min-w-px overflow-hidden relative text-[12px] text-ellipsis whitespace-nowrap `}${isYellow ? String.raw`text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-700,#a15c07)]` : isOrange ? String.raw`text-[color:var(--component-colors\/utility\/orange\/utility-orange-700,#b93815)]` : isPink ? String.raw`text-[color:var(--component-colors\/utility\/pink\/utility-pink-700,#c11574)]` : isPurple ? String.raw`text-[color:var(--component-colors\/utility\/purple\/utility-purple-700,#5925dc)]` : isIndigo ? String.raw`text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)]` : isBlue ? String.raw`text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)]` : isGreen ? String.raw`text-[color:var(--component-colors\/utility\/green\/utility-green-700,#087443)]` : isBrand ? String.raw`text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)]` : String.raw`text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)]`}`} id={isHoverAndYellow ? "node-8001_7555" : isHoverAndOrange ? "node-8001_7527" : isHoverAndPink ? "node-8001_7499" : isHoverAndPurple ? "node-8001_7471" : isHoverAndIndigo ? "node-7999_13005" : isHoverAndBlue ? "node-7999_12977" : isHoverAndGreen ? "node-7999_12949" : isHoverAndBrand ? "node-7999_12921" : isHoverAndGray ? "node-7996_12695" : isDefaultAndYellow ? "node-8001_7549" : isDefaultAndOrange ? "node-8001_7521" : isDefaultAndPink ? "node-8001_7493" : isDefaultAndPurple ? "node-8001_7465" : isDefaultAndIndigo ? "node-7999_12999" : isDefaultAndBlue ? "node-7999_12971" : isDefaultAndGreen ? "node-7999_12943" : isDefaultAndBrand ? "node-7999_12915" : "node-7996_12544"}>
+            Event name
+          </p>
+          {isGray && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="7996:12545" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+            </div>
+          )}
+          {isBrand && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="7999:12916" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+            </div>
+          )}
+          {isGreen && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="7999:12944" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+            </div>
+          )}
+          {isBlue && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="7999:12972" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot3} />
+            </div>
+          )}
+          {isIndigo && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="7999:13000" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot4} />
+            </div>
+          )}
+          {isPurple && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="8001:7466" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot5} />
+            </div>
+          )}
+          {isPink && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="8001:7494" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot6} />
+            </div>
+          )}
+          {isOrange && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="8001:7522" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot7} />
+            </div>
+          )}
+          {isYellow && dot && (
+            <div className="relative shrink-0 size-[8px]" data-node-id="8001:7550" data-name="_Dot">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot8} />
+            </div>
+          )}
+        </div>
+        {isGray && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/gray\/utility-gray-600,#535862)] text-ellipsis w-full whitespace-nowrap" data-node-id="7996:12546">
+            9:00 AM
+          </p>
+        )}
+        {isBrand && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/brand\/utility-brand-600,#079455)] text-ellipsis w-full whitespace-nowrap" data-node-id="7999:12917">
+            9:00 AM
+          </p>
+        )}
+        {isGreen && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/green\/utility-green-600,#099250)] text-ellipsis w-full whitespace-nowrap" data-node-id="7999:12945">
+            9:00 AM
+          </p>
+        )}
+        {isBlue && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/blue\/utility-blue-600,#1570ef)] text-ellipsis w-full whitespace-nowrap" data-node-id="7999:12973">
+            9:00 AM
+          </p>
+        )}
+        {isIndigo && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-600,#444ce7)] text-ellipsis w-full whitespace-nowrap" data-node-id="7999:13001">
+            9:00 AM
+          </p>
+        )}
+        {isPurple && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/purple\/utility-purple-600,#6938ef)] text-ellipsis w-full whitespace-nowrap" data-node-id="8001:7467">
+            9:00 AM
+          </p>
+        )}
+        {isPink && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/pink\/utility-pink-600,#dd2590)] text-ellipsis w-full whitespace-nowrap" data-node-id="8001:7495">
+            9:00 AM
+          </p>
+        )}
+        {isOrange && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/orange\/utility-orange-600,#e04f16)] text-ellipsis w-full whitespace-nowrap" data-node-id="8001:7523">
+            9:00 AM
+          </p>
+        )}
+        {isYellow && supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] overflow-hidden relative shrink-0 text-[12px] text-[color:var(--component-colors\/utility\/yellow\/utility-yellow-600,#ca8504)] text-ellipsis w-full whitespace-nowrap" data-node-id="8001:7551">
+            9:00 AM
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

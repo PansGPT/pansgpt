@@ -1,0 +1,1423 @@
+const imgSizeMdOutlineFalse = "https://www.figma.com/api/mcp/asset/076f5912-173a-4e37-8474-417d1342fb69.svg";
+const imgSizeSmPaymentMethodVisa = "https://www.figma.com/api/mcp/asset/df61f064-d6bc-49a7-8d38-05670a7252be.svg";
+const imgFill0ColorYellow = "https://www.figma.com/api/mcp/asset/701451da-e8cc-4a21-8b2a-c47fda7806ca.svg";
+const imgFill100ColorYellow = "https://www.figma.com/api/mcp/asset/aba1ba7e-7b1b-4ab7-a2ba-ac5146524dfc.svg";
+const imgDotsVertical = "https://www.figma.com/api/mcp/asset/dce81466-03a1-4549-b7b4-592dd45624ec.svg";
+const imgAvatar = "https://www.figma.com/api/mcp/asset/3bddb543-de4a-40bf-9316-a97dab454ab3.png";
+const imgAvatar1 = "https://www.figma.com/api/mcp/asset/c8d011e6-ef04-499f-9188-1df85483f920.png";
+const imgAvatar2 = "https://www.figma.com/api/mcp/asset/cc0316eb-e2b3-4bcd-a567-1f139b2b5f44.png";
+const imgAvatar3 = "https://www.figma.com/api/mcp/asset/70905d67-b7bd-4517-83ac-ff33fa0369ca.png";
+const imgAvatar4 = "https://www.figma.com/api/mcp/asset/e978475c-096f-4eec-a404-857ef4912156.png";
+const imgChevronDown = "https://www.figma.com/api/mcp/asset/f64aa31c-174f-433f-8616-0894e9d03ccc.svg";
+const imgPage = "https://www.figma.com/api/mcp/asset/353acec1-ab35-4b83-8401-4a4d3308282f.svg";
+const imgPage1 = "https://www.figma.com/api/mcp/asset/9c6b5a8d-2757-4f7f-9b09-c58525d06bdd.svg";
+const imgPaymentMethodIcon = "https://www.figma.com/api/mcp/asset/7447a8f3-c630-43cf-a19b-f2ab9ad19659.svg";
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/032c691d-5089-4a79-836c-f2a6b1fef1ad.svg";
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/4500f145-725b-4198-896c-871a33046e6f.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/4094575b-fdb6-4f70-a146-8e2f80ea8eda.svg";
+const imgDownloadCloud02 = "https://www.figma.com/api/mcp/asset/b972d519-1c33-4203-8999-f8833161c144.svg";
+const imgTrash01 = "https://www.figma.com/api/mcp/asset/632ad764-e997-4a94-aa94-073e7c337694.svg";
+const imgEdit01 = "https://www.figma.com/api/mcp/asset/81cb52c5-16b3-462c-b73c-dbe1b09a1214.svg";
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "md";
+};
+
+function Dot({ className, outline = "False", size = "md" }: DotProps) {
+  return (
+    <div className={className || "relative size-[10px]"} data-node-id="1046:10693">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeMdOutlineFalse} />
+    </div>
+  );
+}
+
+type PaymentMethodIconProps = {
+  className?: string;
+  paymentMethod?: "Visa";
+  size?: "sm";
+};
+
+function PaymentMethodIcon({ className, paymentMethod = "Visa", size = "sm" }: PaymentMethodIconProps) {
+  return (
+    <div className={className || "h-[24px] relative w-[34px]"} data-node-id="1107:67112">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeSmPaymentMethodVisa} />
+    </div>
+  );
+}
+
+type CheckboxProps = {
+  className?: string;
+  checked?: "False";
+  indeterminate?: "False";
+  size?: "md";
+  state?: "Default";
+  text?: "False";
+  type?: "Checkbox";
+};
+
+function Checkbox({ className, checked = "False", indeterminate = "False", size = "md", state = "Default", text = "False", type = "Checkbox" }: CheckboxProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative"} data-node-id="1100:295">
+      <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-sm,6px)] shrink-0 size-[20px]" data-node-id="1100:296" data-name="_Checkbox base" />
+    </div>
+  );
+}
+
+type TableCellLeadActionProps = {
+  className?: string;
+  type?: "Checkbox";
+};
+
+function TableCellLeadAction({ className, type = "Checkbox" }: TableCellLeadActionProps) {
+  return (
+    <div className={className || "content-stretch flex items-start relative"} data-node-id="9400:570194">
+      <Checkbox className="content-stretch flex items-center justify-center relative shrink-0" />
+    </div>
+  );
+}
+
+type StarIconProps = {
+  className?: string;
+  color?: "Yellow";
+  fill?: "0%" | "100%";
+};
+
+function StarIcon({ className, color = "Yellow", fill = "0%" }: StarIconProps) {
+  const is100AndYellow = fill === "100%" && color === "Yellow";
+  return (
+    <div className={className || "relative size-[20px]"} id={is100AndYellow ? "node-1232_10" : "node-1232_82"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={is100AndYellow ? imgFill100ColorYellow : imgFill0ColorYellow} />
+    </div>
+  );
+}
+
+type AvatarOnlineIndicatorProps = {
+  className?: string;
+  online?: "True";
+  size?: "md";
+};
+
+function AvatarOnlineIndicator({ className, online = "True", size = "md" }: AvatarOnlineIndicatorProps) {
+  return <div className={className || "bg-[var(--colors\\/foreground\\/fg-success-secondary,#17b26a)] border-[1.5px] border-[var(--colors\\/background\\/bg-primary,white)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] size-[10px]"} data-node-id="1034:365" />;
+}
+
+type DropdownProps = {
+  className?: string;
+  open?: boolean;
+  type?: "Icon";
+};
+
+function Dropdown({ className, open = false, type = "Icon" }: DropdownProps) {
+  return (
+    <button className={className || "content-stretch flex flex-col items-start relative"} data-node-id="3281:383087">
+      <div className="relative shrink-0 size-[20px]" data-node-id="3281:383088" data-name="dots-vertical">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDotsVertical} />
+      </div>
+    </button>
+  );
+}
+
+type TableCellProps = {
+  className?: string;
+  leadAction?: boolean;
+  leadText?: boolean;
+  size?: "sm" | "md";
+  state?: "Default" | "Hover/selected";
+  supportingText?: boolean;
+  type?: "Text" | "Avatar" | "File type icon" | "Payment method" | "Badge" | "Badges multiple" | "Trend positive" | "Trend negative" | "Avatar group" | "Select dropdown" | "Progress bar" | "Star ratings" | "Action buttons" | "Action icons" | "Action dropdown icon";
+};
+
+export default function TableCell({ className, leadAction = true, leadText = true, size = "sm", state = "Default", supportingText = true, type = "Text" }: TableCellProps) {
+  if (type === "Badge" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:169" data-name="Type=Badge, Size=md, State=Default">
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:173" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:173;3918:415771">
+            Active
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badge" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710405" data-name="Type=Badge, Size=sm, State=Default">
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710406" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710406;3918:415771">
+            Active
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Select dropdown" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710007" data-name="Type=Select dropdown, Size=md, State=Default">
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9405:710008" data-name="Select">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I9405:710008;7953:158379" data-name="Input with label">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I9405:710008;7953:158384" data-name="Input">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I9405:710008;7953:158385" data-name="Content">
+                <Dot className="relative shrink-0 size-[10px]" />
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,14px)] text-left whitespace-nowrap" data-node-id="I9405:710008;7953:158387">
+                  In progress
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710008;7953:158389" data-name="chevron-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+    );
+  }
+  if (type === "Select dropdown" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710407" data-name="Type=Select dropdown, Size=sm, State=Default">
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9405:710408" data-name="Select">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I9405:710408;7953:158379" data-name="Input with label">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I9405:710408;7953:158384" data-name="Input">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I9405:710408;7953:158385" data-name="Content">
+                <Dot className="relative shrink-0 size-[10px]" />
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,14px)] text-left whitespace-nowrap" data-node-id="I9405:710408;7953:158387">
+                  In progress
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710408;7953:158389" data-name="chevron-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+    );
+  }
+  if (type === "Avatar group" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[240px]"} data-node-id="1224:1353" data-name="Type=Avatar group, Size=md, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1597">
+            10 users
+          </p>
+        )}
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="1274:959" data-name="Avatar group">
+          <div className="content-stretch flex items-start relative shrink-0" data-node-id="I1274:959;1274:784" data-name="Avatars">
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:786" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:788" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:790" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:792" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:794" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:959;1274:805" data-name="Avatar">
+              <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I1274:959;1274:805;19:1261">
+                +5
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar group" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[240px]"} data-node-id="9405:710409" data-name="Type=Avatar group, Size=sm, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710410">
+            10 users
+          </p>
+        )}
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="9405:710411" data-name="Avatar group">
+          <div className="content-stretch flex items-start relative shrink-0" data-node-id="I9405:710411;1274:784" data-name="Avatars">
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:786" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:788" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:790" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:792" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:794" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710411;1274:805" data-name="Avatar">
+              <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I9405:710411;1274:805;19:1261">
+                +5
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badges multiple" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:327" data-name="Type=Badges multiple, Size=md, State=Default">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="1224:328" data-name="Badges">
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:329" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:329;3918:405139">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:330" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:330;3918:417304">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:331" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:331;3918:409514">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:334" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:334;3918:407462">
+              +4
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badges multiple" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710412" data-name="Type=Badges multiple, Size=sm, State=Default">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="9405:710413" data-name="Badges">
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710414" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710414;3918:405139">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710415" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710415;3918:417304">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710416" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710416;3918:409514">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710419" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710419;3918:407462">
+              +4
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1222:107426" data-name="Type=Text, Size=md, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1222:107427" data-name="Text and supporting text">
+          {leadText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1222:107428">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+          )}
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1222:107429">
+              chioma@PansGPT.com
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1224:5904" data-name="Type=Avatar, Size=md, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9405:710737" data-name="Avatar and text">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="1224:5905" data-name="Avatar">
+            <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+              <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+              <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:5906" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1224:5907">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1224:5908">
+                chioma@PansGPT.com
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724011" data-name="Type=Avatar, Size=sm, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724013" data-name="Avatar and text">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="9405:724014" data-name="Avatar">
+            <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+              <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+              <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724015" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724016">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724017">
+                chioma@PansGPT.com
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "File type icon" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1224:1461" data-name="Type=File type icon, Size=md, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9405:719868" data-name="Icon and text">
+          <div className="relative shrink-0 size-[40px]" data-node-id="4917:411110" data-name="File type icon">
+            <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I4917:411110;4916:411371" data-name="Page">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+            </div>
+            <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I4917:411110;4916:411374" data-name="File type wrap">
+              <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I4917:411110;4916:411375">
+                PDF
+              </p>
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1463" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1224:1464">
+                Tech requirements.pdf
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1224:1465">
+                200 KB
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "File type icon" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724018" data-name="Type=File type icon, Size=sm, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724020" data-name="Icon and text">
+          <div className="relative shrink-0 size-[32px]" data-node-id="9405:724021" data-name="File type icon">
+            <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I9405:724021;4916:411371" data-name="Page">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage1} />
+            </div>
+            <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,6.400000095367432px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[2.4px] py-[var(--spacing-xxs,1.6px)] rounded-[var(--spacing-xxs,1.6px)]" data-node-id="I9405:724021;4916:411374" data-name="File type wrap">
+              <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[8px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I9405:724021;4916:411375">
+                PDF
+              </p>
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724022" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724023">
+                Tech requirements.pdf
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724024">
+                200 KB
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Payment method" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1722:460126" data-name="Type=Payment method, Size=md, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9405:721568" data-name="Icon and text">
+          <div className="h-[32px] relative shrink-0 w-[46px]" data-node-id="1722:460267" data-name="Payment method icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPaymentMethodIcon} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1722:460129" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1722:460130">
+                Visa ending in 1234
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1722:460131">
+                Expiry 06/2025
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Payment method" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724025" data-name="Type=Payment method, Size=sm, State=Default">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724027" data-name="Icon and text">
+          <PaymentMethodIcon className="h-[24px] relative shrink-0 w-[34px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724029" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724030">
+                Visa ending in 1234
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724031">
+                Expiry 06/2025
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend positive" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:410" data-name="Type=Trend positive, Size=md, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:413">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:417" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I1224:417;3918:416533" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:417;3918:416534">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend positive" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710443" data-name="Type=Trend positive, Size=sm, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710444">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710445" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I9405:710445;3918:416533" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710445;3918:416534">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend negative" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:1085" data-name="Type=Trend negative, Size=md, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1086">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/error\/utility-error-50,#fef3f2)] border border-[var(--component-colors\/utility\/error\/utility-error-200,#fecdca)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:1087" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I1224:1087;3918:407205" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/error\/utility-error-700,#b42318)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:1087;3918:407206">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend negative" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710446" data-name="Type=Trend negative, Size=sm, State=Default">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710447">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/error\/utility-error-50,#fef3f2)] border border-[var(--component-colors\/utility\/error\/utility-error-200,#fecdca)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710448" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I9405:710448;3918:407205" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/error\/utility-error-700,#b42318)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710448;3918:407206">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Progress bar" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="1224:1209" data-name="Type=Progress bar, Size=md, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] h-full items-center min-w-px relative" data-node-id="1224:1236" data-name="Progress bar">
+          <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="I1224:1236;1085:57414" data-name="Progress bar">
+            <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="I1224:1236;1085:57415" data-name="Background" />
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[39.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="I1224:1236;1085:57416" data-name="Progress" />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1224:1236;1085:57417">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Progress bar" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710449" data-name="Type=Progress bar, Size=sm, State=Default">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] h-full items-center min-w-px relative" data-node-id="9405:710450" data-name="Progress bar">
+          <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="I9405:710450;1085:57414" data-name="Progress bar">
+            <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="I9405:710450;1085:57415" data-name="Background" />
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[39.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="I9405:710450;1085:57416" data-name="Progress" />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710450;1085:57417">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action buttons" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center justify-end max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative rounded-[9999px]"} data-node-id="1224:1757" data-name="Type=Action buttons, Size=md, State=Default">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3293:421104" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:421104;3287:433377">
+            Delete
+          </p>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3293:421105" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:421105;3287:433289">
+            Edit
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action buttons" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center justify-end max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative rounded-[9999px]"} data-node-id="9405:710451" data-name="Type=Action buttons, Size=sm, State=Default">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9405:710452" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710452;3287:433377">
+            Delete
+          </p>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9405:710453" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710453;3287:433289">
+            Edit
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action dropdown icon" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative"} data-node-id="1224:5049" data-name="Type=Action dropdown icon, Size=md, State=Default">
+        <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+      </div>
+    );
+  }
+  if (type === "Action dropdown icon" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710454" data-name="Type=Action dropdown icon, Size=sm, State=Default">
+        <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+      </div>
+    );
+  }
+  if (type === "Action dropdown icon" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative"} data-node-id="1224:5295" data-name="Type=Action dropdown icon, Size=md, State=Hover/selected">
+        <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+      </div>
+    );
+  }
+  if (type === "Action dropdown icon" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] pl-[var(--spacing-xl,16px)] pr-[var(--spacing-lg,12px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710456" data-name="Type=Action dropdown icon, Size=sm, State=Hover/selected">
+        <Dropdown className="content-stretch cursor-pointer flex flex-col items-start relative shrink-0" />
+      </div>
+    );
+  }
+  if (type === "Action icons" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] h-[72px] isolate items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative"} data-node-id="7932:552076" data-name="Type=Action icons, Size=md, State=Default">
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[4]" data-node-id="7932:552114" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552114;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[3]" data-node-id="7932:552110" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552110;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[2]" data-node-id="7932:552106" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552106;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[1]" data-node-id="7932:552102" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552102;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action icons" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] h-[64px] isolate items-center max-h-[64px] p-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710458" data-name="Type=Action icons, Size=sm, State=Default">
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[4]" data-node-id="9405:710459" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710459;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[3]" data-node-id="9405:710460" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710460;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[2]" data-node-id="9405:710461" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710461;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[1]" data-node-id="9405:710462" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710462;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Star ratings" && size === "md" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1232:103" data-name="Type=Star ratings, Size=md, State=Default">
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" />
+      </div>
+    );
+  }
+  if (type === "Star ratings" && size === "sm" && state === "Default") {
+    return (
+      <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710463" data-name="Type=Star ratings, Size=sm, State=Default">
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" />
+      </div>
+    );
+  }
+  if (type === "Star ratings" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1232:164" data-name="Type=Star ratings, Size=md, State=Hover/selected">
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" />
+      </div>
+    );
+  }
+  if (type === "Star ratings" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xs,4px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710469" data-name="Type=Star ratings, Size=sm, State=Hover/selected">
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" fill="100%" />
+        <StarIcon className="relative shrink-0 size-[20px]" />
+      </div>
+    );
+  }
+  if (type === "Action icons" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] h-[72px] isolate items-center max-h-[72px] p-[var(--spacing-xl,16px)] relative"} data-node-id="7932:552081" data-name="Type=Action icons, Size=md, State=Hover/selected">
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[4]" data-node-id="7932:552130" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552130;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[3]" data-node-id="7932:552126" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552126;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[2]" data-node-id="7932:552122" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552122;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[1]" data-node-id="7932:552118" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I7932:552118;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action icons" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] h-[64px] isolate items-center max-h-[64px] p-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710475" data-name="Type=Action icons, Size=sm, State=Hover/selected">
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[4]" data-node-id="9405:710476" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710476;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[3]" data-node-id="9405:710477" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710477;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDownloadCloud02} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[2]" data-node-id="9405:710478" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710478;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+          </div>
+        </div>
+        <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 z-[1]" data-node-id="9405:710479" data-name="Buttons/Button utility">
+          <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710479;7932:552036" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit01} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Progress bar" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="1224:1247" data-name="Type=Progress bar, Size=md, State=Hover/selected">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] h-full items-center min-w-px relative" data-node-id="1224:1248" data-name="Progress bar">
+          <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="I1224:1248;1085:57414" data-name="Progress bar">
+            <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="I1224:1248;1085:57415" data-name="Background" />
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[39.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="I1224:1248;1085:57416" data-name="Progress" />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1224:1248;1085:57417">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Progress bar" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710480" data-name="Type=Progress bar, Size=sm, State=Hover/selected">
+        <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] h-full items-center min-w-px relative" data-node-id="9405:710481" data-name="Progress bar">
+          <div className="flex-[1_0_0] h-[8px] min-w-px relative rounded-[var(--spacing-md,8px)]" data-node-id="I9405:710481;1085:57414" data-name="Progress bar">
+            <div className="absolute bg-[var(--colors\/background\/bg-quaternary,#e9eaeb)] h-[8px] left-0 right-0 rounded-[var(--radius-full,9999px)] top-0" data-node-id="I9405:710481;1085:57415" data-name="Background" />
+            <div className="absolute bg-[var(--colors\/foreground\/fg-brand-primary-\(600\),#079455)] h-[8px] left-0 right-[39.56%] rounded-[var(--radius-full,9999px)] top-0" data-node-id="I9405:710481;1085:57416" data-name="Progress" />
+          </div>
+          <div className="[word-break:break-word] flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center leading-[0] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710481;1085:57417">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">60%</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action buttons" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center justify-end max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative rounded-[9999px]"} data-node-id="1224:1755" data-name="Type=Action buttons, Size=md, State=Hover/selected">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3293:425611" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:425611;3287:433377">
+            Delete
+          </p>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="3293:425612" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:425612;3287:433289">
+            Edit
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Action buttons" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center justify-end max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative rounded-[9999px]"} data-node-id="9405:710482" data-name="Type=Action buttons, Size=sm, State=Hover/selected">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9405:710483" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710483;3287:433377">
+            Delete
+          </p>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="9405:710484" data-name="Buttons/Button">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I9405:710484;3287:433289">
+            Edit
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend positive" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:971" data-name="Type=Trend positive, Size=md, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:972">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:973" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I1224:973;3918:416533" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:973;3918:416534">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend positive" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710485" data-name="Type=Trend positive, Size=sm, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710486">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710487" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I9405:710487;3918:416533" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowUp} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710487;3918:416534">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend negative" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:1078" data-name="Type=Trend negative, Size=md, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1079">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/error\/utility-error-50,#fef3f2)] border border-[var(--component-colors\/utility\/error\/utility-error-200,#fecdca)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:1138" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I1224:1138;3918:407205" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/error\/utility-error-700,#b42318)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:1138;3918:407206">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Trend negative" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710488" data-name="Type=Trend negative, Size=sm, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710489">
+            $1,800
+          </p>
+        )}
+        <div className="bg-[var(--component-colors\/utility\/error\/utility-error-50,#fef3f2)] border border-[var(--component-colors\/utility\/error\/utility-error-200,#fecdca)] border-solid content-stretch flex gap-[var(--spacing-xxs,2px)] items-center pl-[var(--spacing-sm,6px)] pr-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710490" data-name="Badge">
+          <div className="relative shrink-0 size-[12px]" data-node-id="I9405:710490;3918:407205" data-name="arrow-up">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgArrowDown} />
+          </div>
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/error\/utility-error-700,#b42318)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710490;3918:407206">
+            20%
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1222:107439" data-name="Type=Text, Size=md, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1222:107441" data-name="Text and supporting text">
+          {leadText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1222:107442">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+          )}
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1222:107443">
+              chioma@PansGPT.com
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Text" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:710491" data-name="Type=Text, Size=sm, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710493" data-name="Text and supporting text">
+          {leadText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:710494">
+              Diepreye Ọ̀rẹ̀kọ́yà
+            </p>
+          )}
+          {supportingText && (
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:710495">
+              chioma@PansGPT.com
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1224:5890" data-name="Type=Avatar, Size=md, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[12px] items-center relative shrink-0" data-node-id="9405:719626" data-name="Avatar and text">
+          <div className="border border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="1224:5891" data-name="Avatar">
+            <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+              <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+              <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:5892" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1224:5893">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1224:5894">
+                chioma@PansGPT.com
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724032" data-name="Type=Avatar, Size=sm, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724034" data-name="Avatar and text">
+          <div className="border-[0.75px] border-[rgba(0,0,0,0.08)] border-solid relative rounded-[var(--radius-full,9999px)] shrink-0 size-[32px]" data-node-id="9405:724035" data-name="Avatar">
+            <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+              <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+              <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724036" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724037">
+                Diepreye Ọ̀rẹ̀kọ́yà
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724038">
+                chioma@PansGPT.com
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "File type icon" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1224:1450" data-name="Type=File type icon, Size=md, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9405:719867" data-name="Icon and text">
+          <div className="relative shrink-0 size-[40px]" data-node-id="4917:411119" data-name="File type icon">
+            <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I4917:411119;4916:411371" data-name="Page">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage} />
+            </div>
+            <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,8px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[3px] py-[var(--spacing-xxs,2px)] rounded-[var(--spacing-xxs,2px)]" data-node-id="I4917:411119;4916:411374" data-name="File type wrap">
+              <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[10px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I4917:411119;4916:411375">
+                PDF
+              </p>
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1452" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1224:1453">
+                Tech requirements.pdf
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1224:1454">
+                200 KB
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "File type icon" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724039" data-name="Type=File type icon, Size=sm, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724041" data-name="Icon and text">
+          <div className="relative shrink-0 size-[32px]" data-node-id="9405:724042" data-name="File type icon">
+            <div className="absolute inset-[0_2.5%_0_17.5%]" data-node-id="I9405:724042;4916:411371" data-name="Page">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPage1} />
+            </div>
+            <div className="absolute bg-[var(--colors\/error\/600,#d92d20)] content-stretch flex gap-[var(--spacing-md,6.400000095367432px)] inset-[43.75%_32.5%_13.75%_2.5%] items-start px-[2.4px] py-[var(--spacing-xxs,1.6px)] rounded-[var(--spacing-xxs,1.6px)]" data-node-id="I9405:724042;4916:411374" data-name="File type wrap">
+              <p className="[word-break:break-word] font-['Plus_Jakarta_Sans:Bold'] font-bold leading-[normal] relative shrink-0 text-[8px] text-[color:var(--colors\/foreground\/fg-white,white)] text-center whitespace-nowrap" data-node-id="I9405:724042;4916:411375">
+                PDF
+              </p>
+            </div>
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724043" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724044">
+                Tech requirements.pdf
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724045">
+                200 KB
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Payment method" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="1722:460113" data-name="Type=Payment method, Size=md, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0" data-node-id="9405:723797" data-name="Icon and text">
+          <div className="h-[32px] relative shrink-0 w-[46px]" data-node-id="1722:460274" data-name="Payment method icon">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPaymentMethodIcon} />
+          </div>
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1722:460116" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="1722:460117">
+                Visa ending in 1234
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="1722:460118">
+                Expiry 06/2025
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Payment method" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:724046" data-name="Type=Payment method, Size=sm, State=Hover/selected">
+        {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+        <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-node-id="9405:724048" data-name="Icon and text">
+          <PaymentMethodIcon className="h-[24px] relative shrink-0 w-[34px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:724050" data-name="Text and supporting text">
+            {leadText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:724051">
+                Visa ending in 1234
+              </p>
+            )}
+            {supportingText && (
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:724052">
+                Expiry 06/2025
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badge" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:158" data-name="Type=Badge, Size=md, State=Hover/selected">
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:226" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:226;3918:415771">
+            Active
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badge" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710514" data-name="Type=Badge, Size=sm, State=Hover/selected">
+        <div className="bg-[var(--component-colors\/utility\/success\/utility-success-50,#ecfdf3)] border border-[var(--component-colors\/utility\/success\/utility-success-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710515" data-name="Badge">
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/success\/utility-success-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710515;3918:415771">
+            Active
+          </p>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Select dropdown" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710009" data-name="Type=Select dropdown, Size=md, State=Hover/selected">
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9405:710010" data-name="Select">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I9405:710010;7953:158379" data-name="Input with label">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I9405:710010;7953:158384" data-name="Input">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I9405:710010;7953:158385" data-name="Content">
+                <Dot className="relative shrink-0 size-[10px]" />
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,14px)] text-left whitespace-nowrap" data-node-id="I9405:710010;7953:158387">
+                  In progress
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710010;7953:158389" data-name="chevron-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+    );
+  }
+  if (type === "Select dropdown" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[280px]"} data-node-id="9405:710516" data-name="Type=Select dropdown, Size=sm, State=Hover/selected">
+        <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="9405:710517" data-name="Select">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I9405:710517;7953:158379" data-name="Input with label">
+            <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-md,8px)] items-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="I9405:710517;7953:158384" data-name="Input">
+              <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I9405:710517;7953:158385" data-name="Content">
+                <Dot className="relative shrink-0 size-[10px]" />
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-md,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,14px)] text-left whitespace-nowrap" data-node-id="I9405:710517;7953:158387">
+                  In progress
+                </p>
+              </div>
+              <div className="relative shrink-0 size-[16px]" data-node-id="I9405:710517;7953:158389" data-name="chevron-down">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronDown} />
+              </div>
+            </div>
+          </div>
+        </button>
+      </div>
+    );
+  }
+  if (type === "Avatar group" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative w-[240px]"} data-node-id="1224:1341" data-name="Type=Avatar group, Size=md, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1224:1598">
+            10 users
+          </p>
+        )}
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="1274:1202" data-name="Avatar group">
+          <div className="content-stretch flex items-start relative shrink-0" data-node-id="I1274:1202;1274:784" data-name="Avatars">
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:786" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:788" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:790" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:792" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:794" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I1274:1202;1274:805" data-name="Avatar">
+              <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I1274:1202;1274:805;19:1261">
+                +5
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Avatar group" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-md,8px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[240px]"} data-node-id="9405:710518" data-name="Type=Avatar group, Size=sm, State=Hover/selected">
+        {supportingText && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710519">
+            10 users
+          </p>
+        )}
+        <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-start relative shrink-0" data-node-id="9405:710520" data-name="Avatar group">
+          <div className="content-stretch flex items-start relative shrink-0" data-node-id="I9405:710520;1274:784" data-name="Avatars">
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:786" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#cfcbdc] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:788" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d6cfb7] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar1} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:790" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d7e3e8] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar2} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:792" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#dadcd6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar3} />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[rgba(0,0,0,0.08)] border-solid mr-[-4px] relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:794" data-name="Avatar">
+              <div aria-hidden className="absolute inset-0 pointer-events-none rounded-[var(--radius-full,9999px)]">
+                <div className="absolute bg-[#d9d0e6] inset-0 rounded-[var(--radius-full,9999px)]" />
+                <img alt="" className="absolute max-w-none object-cover rounded-[var(--radius-full,9999px)] size-full" src={imgAvatar4} />
+              </div>
+            </div>
+            <div className="bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[0.5px] border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shadow-[0px_0px_0px_1.5px_var(--colors\/background\/bg-primary,white)] shrink-0 size-[24px]" data-node-id="I9405:710520;1274:805" data-name="Avatar">
+              <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-[length:var(--font-size\/text-xs,12px)] text-center top-[calc(50%-9px)] w-[24px]" data-node-id="I9405:710520;1274:805;19:1261">
+                +5
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badges multiple" && size === "md" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[72px] items-center max-h-[72px] px-[var(--spacing-3xl,24px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="1224:319" data-name="Type=Badges multiple, Size=md, State=Hover/selected">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="1224:320" data-name="Badges">
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:321" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:321;3918:405139">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:322" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:322;3918:417304">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:323" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:323;3918:409514">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="1224:326" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1224:326;3918:407462">
+              +4
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (type === "Badges multiple" && size === "sm" && state === "Hover/selected") {
+    return (
+      <div className={className || "bg-[var(--colors\\/background\\/bg-secondary,#fafafa)] border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative"} data-node-id="9405:710521" data-name="Type=Badges multiple, Size=sm, State=Hover/selected">
+        <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-start relative shrink-0" data-node-id="9405:710522" data-name="Badges">
+          <div className="bg-[var(--component-colors\/utility\/brand\/utility-brand-50,#ecfdf3)] border border-[var(--component-colors\/utility\/brand\/utility-brand-200,#abefc6)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710523" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/brand\/utility-brand-700,#067647)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710523;3918:405139">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/blue\/utility-blue-50,#eff8ff)] border border-[var(--component-colors\/utility\/blue\/utility-blue-200,#b2ddff)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710524" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/blue\/utility-blue-700,#175cd3)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710524;3918:417304">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/indigo\/utility-indigo-50,#eef4ff)] border border-[var(--component-colors\/utility\/indigo\/utility-indigo-200,#c7d7fe)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710525" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/indigo\/utility-indigo-700,#3538cd)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710525;3918:409514">
+              Label
+            </p>
+          </div>
+          <div className="bg-[var(--component-colors\/utility\/gray\/utility-gray-50,#fafafa)] border border-[var(--component-colors\/utility\/gray\/utility-gray-200,#e9eaeb)] border-solid content-stretch flex items-center px-[var(--spacing-md,8px)] py-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-full,9999px)] shrink-0" data-node-id="9405:710528" data-name="Badge">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--component-colors\/utility\/gray\/utility-gray-700,#414651)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I9405:710528;3918:407462">
+              +4
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className={className || "border-[var(--colors\\/border\\/border-secondary,#e9eaeb)] border-b border-solid content-stretch flex gap-[var(--spacing-lg,12px)] h-[64px] items-center max-h-[64px] px-[var(--spacing-2xl,20px)] py-[var(--spacing-xl,16px)] relative w-[320px]"} data-node-id="9405:710420" data-name="Type=Text, Size=sm, State=Default">
+      {leadAction && <TableCellLeadAction className="content-stretch flex items-start relative shrink-0" />}
+      <div className="[word-break:break-word] content-stretch flex flex-col items-start leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="9405:710422" data-name="Text and supporting text">
+        {leadText && (
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)]" data-node-id="9405:710423">
+            Diepreye Ọ̀rẹ̀kọ́yà
+          </p>
+        )}
+        {supportingText && (
+          <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]" data-node-id="9405:710424">
+            chioma@PansGPT.com
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

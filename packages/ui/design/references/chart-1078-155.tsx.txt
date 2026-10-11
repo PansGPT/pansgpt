@@ -1,0 +1,198 @@
+const imgRingOuter = "https://www.figma.com/api/mcp/asset/c934c5a5-4e37-4e63-9d10-b54d9ae1069f.svg";
+const imgRingMiddle = "https://www.figma.com/api/mcp/asset/c1728629-c5a6-4938-b63b-c48a7fb13ab2.svg";
+const imgRingInner = "https://www.figma.com/api/mcp/asset/e6accfbd-3d87-4ede-a68a-9e9cc8415761.svg";
+const imgRingOuter1 = "https://www.figma.com/api/mcp/asset/9fcb5c98-1e5a-467c-acf6-ec26b462116f.svg";
+const imgRingMiddle1 = "https://www.figma.com/api/mcp/asset/7185e8b6-c5b2-4fa7-bf39-fbf508d410b8.svg";
+const imgRingInner1 = "https://www.figma.com/api/mcp/asset/9a99f300-998f-4781-8601-21e76095bf88.svg";
+const imgRingOuter2 = "https://www.figma.com/api/mcp/asset/a2b41a46-eda1-48b9-bab6-5cd3e0c018ec.svg";
+const imgRingMiddle2 = "https://www.figma.com/api/mcp/asset/1c6e448a-68da-461a-9df1-0baab848b25e.svg";
+const imgRingInner2 = "https://www.figma.com/api/mcp/asset/13af2b78-0670-4e15-95a4-b99c688309f1.svg";
+const imgRingOuter3 = "https://www.figma.com/api/mcp/asset/1e5c33e3-424c-4cc1-83f1-59137626a2d2.svg";
+const imgRingMiddle3 = "https://www.figma.com/api/mcp/asset/4ae75d79-f81b-407a-a18c-a16664dd619f.svg";
+const imgRingInner3 = "https://www.figma.com/api/mcp/asset/4460fe00-a81a-4f9a-9d1e-cc5e8c3cadcf.svg";
+const imgColor = "https://www.figma.com/api/mcp/asset/4d633d37-ffca-416e-8428-aa6bb942fa8c.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/208141d4-8fd4-459a-a720-bf22b2a1855d.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/3b008e4a-fe14-4783-ac4c-1e10cf658c30.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/8e532dfd-121c-4df0-bf09-c03886d0ce8e.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/ba252beb-ee74-497b-acdd-1ba13e42778a.svg";
+const imgDot2 = "https://www.figma.com/api/mcp/asset/14d4e9bd-da2f-4aa1-bb06-8ce518519043.svg";
+
+type ActivityGaugeProps = {
+  className?: string;
+  label?: boolean;
+  size?: "xs" | "lg";
+};
+
+function ActivityGauge({ className, label = true, size = "xs" }: ActivityGaugeProps) {
+  const isLg = size === "lg";
+  const isXs = size === "xs";
+  return (
+    <div className={className || `relative ${isXs ? "size-[160px]" : "size-[280px]"}`} id={isXs ? "node-1076_4162" : "node-1076_4186"}>
+      <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isXs ? "size-[152px]" : "size-[262px]"}`} id={isXs ? "node-1076_4163" : "node-1076_4187"} data-name="Ring outer">
+        <div className={`absolute ${isXs ? "inset-[-2.63%]" : "inset-[-3.44%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isXs ? imgRingOuter1 : imgRingOuter} />
+        </div>
+      </div>
+      <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isXs ? "size-[128px]" : "size-[214px]"}`} id={isXs ? "node-1076_4166" : "node-1076_4190"} data-name="Ring middle">
+        <div className={`absolute ${isXs ? "inset-[-3.13%]" : "inset-[-4.21%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isXs ? imgRingMiddle1 : imgRingMiddle} />
+        </div>
+      </div>
+      <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isXs ? "size-[104px]" : "size-[166px]"}`} id={isXs ? "node-1076_4169" : "node-1076_4193"} data-name="Ring inner">
+        <div className={`absolute ${isXs ? "inset-[-3.85%]" : "inset-[-5.42%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isXs ? imgRingInner1 : imgRingInner} />
+        </div>
+      </div>
+      <div className="-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute content-stretch flex flex-col items-center leading-[0] left-1/2 text-center top-1/2" id={isXs ? "node-9332_577994" : "node-9332_577743"} data-name="Number and label">
+        {isLg && label && (
+          <div className="flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1076:4196">
+            <p className="leading-[var(--line-height\/text-sm,20px)]">Active users</p>
+          </div>
+        )}
+        {isLg && (
+          <div className="flex flex-col font-[family-name:var(--font-family\/font-family-display,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px] w-full" data-node-id="1076:4197">
+            <p className="leading-[var(--line-height\/display-md,44px)]">1,000</p>
+          </div>
+        )}
+        {isXs && label && (
+          <div className="flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium justify-center relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] w-full" data-node-id="1076:4172">
+            <p className="leading-[var(--line-height\/text-xs,18px)]">Active users</p>
+          </div>
+        )}
+        {isXs && (
+          <div className="flex flex-col font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] justify-center relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-xl,20px)] w-full" data-node-id="1076:4173">
+            <p className="leading-[var(--line-height\/text-xl,30px)]">1,000</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type ActivityGauge1Props = {
+  className?: string;
+  legend?: "False" | "Bottom" | "Right";
+  size?: "xs" | "sm" | "md" | "lg";
+};
+
+export default function ActivityGauge1({ className, legend = "False", size = "xs" }: ActivityGauge1Props) {
+  const isBottom = legend === "Bottom";
+  const isLgAndBottom = size === "lg" && legend === "Bottom";
+  const isLgAndFalse = size === "lg" && legend === "False";
+  const isLgAndIsBottomOrRight = size === "lg" && ["Bottom", "Right"].includes(legend);
+  const isLgAndRight = size === "lg" && legend === "Right";
+  const isMdAndBottom = size === "md" && legend === "Bottom";
+  const isMdAndRight = size === "md" && legend === "Right";
+  const isRight = legend === "Right";
+  const isSm = size === "sm";
+  const isSmAndBottom = size === "sm" && legend === "Bottom";
+  const isSmAndFalse = size === "sm" && legend === "False";
+  const isSmAndRight = size === "sm" && legend === "Right";
+  const isSmOrXs = ["sm", "xs"].includes(size);
+  const isXs = size === "xs";
+  const isXsAndBottom = size === "xs" && legend === "Bottom";
+  const isXsAndFalse = size === "xs" && legend === "False";
+  const isXsAndRight = size === "xs" && legend === "Right";
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-xl,16px)] relative ${isBottom ? "flex-col items-center" : "items-start"}`} id={isXsAndRight ? "node-1084_5127" : isSmAndRight ? "node-1084_4761" : isLgAndRight ? "node-1084_5499" : isMdAndRight ? "node-1078_272" : isXsAndBottom ? "node-1084_5135" : isSmAndBottom ? "node-1084_4764" : isLgAndBottom ? "node-1084_5509" : isMdAndBottom ? "node-1078_214" : isXsAndFalse ? "node-1084_5141" : isSmAndFalse ? "node-1084_4772" : isLgAndFalse ? "node-1084_5505" : "node-1078_156"}>
+      {((size === "md" && legend === "False") || isSmAndFalse || isXsAndFalse || isBottom || isRight) && (
+        <div className={`relative shrink-0 ${isLgAndIsBottomOrRight ? "size-[280px]" : isXs ? "size-[160px]" : isSm ? "size-[200px]" : "size-[240px]"}`} id={isXsAndRight ? "node-1084_5128" : isSmAndRight ? "node-1084_4762" : isLgAndRight ? "node-1084_5500" : isMdAndRight ? "node-1078_273" : isXsAndBottom ? "node-1084_5136" : isSmAndBottom ? "node-1084_4765" : isLgAndBottom ? "node-1084_5510" : isMdAndBottom ? "node-1078_215" : isXsAndFalse ? "node-1084_5142" : isSmAndFalse ? "node-1084_4773" : "node-1078_157"} data-name="_Activity gauge">
+          <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isLgAndIsBottomOrRight ? "size-[262px]" : isXs ? "size-[152px]" : isSm ? "size-[188px]" : "size-[224px]"}`} id={isXsAndRight ? "node-I1084_5128-1076_4163" : isSmAndRight ? "node-I1084_4762-1076_4090" : isLgAndRight ? "node-I1084_5500-1076_4187" : isMdAndRight ? "node-I1078_273-1076_4071" : isXsAndBottom ? "node-I1084_5136-1076_4163" : isSmAndBottom ? "node-I1084_4765-1076_4090" : isLgAndBottom ? "node-I1084_5510-1076_4187" : isMdAndBottom ? "node-I1078_215-1076_4071" : isXsAndFalse ? "node-I1084_5142-1076_4163" : isSmAndFalse ? "node-I1084_4773-1076_4090" : "node-I1078_157-1076_4071"} data-name="Ring outer">
+            <div className={`absolute ${isLgAndIsBottomOrRight ? "inset-[-3.44%]" : isXs ? "inset-[-2.63%]" : isSm ? "inset-[-3.19%]" : "inset-[-3.57%]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isLgAndIsBottomOrRight ? imgRingOuter : isXs ? imgRingOuter1 : isSm ? imgRingOuter3 : imgRingOuter2} />
+            </div>
+          </div>
+          <div className={`-translate-x-1/2 -translate-y-1/2 absolute ${isLgAndIsBottomOrRight ? "left-1/2 size-[214px] top-1/2" : isXs ? "left-1/2 size-[128px] top-1/2" : isSm ? "left-[calc(50%+1px)] size-[154px] top-[calc(50%+1px)]" : "left-1/2 size-[184px] top-1/2"}`} id={isXsAndRight ? "node-I1084_5128-1076_4166" : isSmAndRight ? "node-I1084_4762-1076_4093" : isLgAndRight ? "node-I1084_5500-1076_4190" : isMdAndRight ? "node-I1078_273-1076_4070" : isXsAndBottom ? "node-I1084_5136-1076_4166" : isSmAndBottom ? "node-I1084_4765-1076_4093" : isLgAndBottom ? "node-I1084_5510-1076_4190" : isMdAndBottom ? "node-I1078_215-1076_4070" : isXsAndFalse ? "node-I1084_5142-1076_4166" : isSmAndFalse ? "node-I1084_4773-1076_4093" : "node-I1078_157-1076_4070"} data-name="Ring middle">
+            <div className={`absolute ${isLgAndIsBottomOrRight ? "inset-[-4.21%]" : isXs ? "inset-[-3.13%]" : isSm ? "inset-[-3.9%]" : "inset-[-4.35%]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isLgAndIsBottomOrRight ? imgRingMiddle : isXs ? imgRingMiddle1 : isSm ? imgRingMiddle3 : imgRingMiddle2} />
+            </div>
+          </div>
+          <div className={`-translate-x-1/2 -translate-y-1/2 absolute ${isLgAndIsBottomOrRight ? "left-1/2 size-[166px] top-1/2" : isXs ? "left-1/2 size-[104px] top-1/2" : isSm ? "left-[calc(50%+1px)] size-[122px] top-[calc(50%+1px)]" : "left-1/2 size-[144px] top-1/2"}`} id={isXsAndRight ? "node-I1084_5128-1076_4169" : isSmAndRight ? "node-I1084_4762-1076_4096" : isLgAndRight ? "node-I1084_5500-1076_4193" : isMdAndRight ? "node-I1078_273-1076_4069" : isXsAndBottom ? "node-I1084_5136-1076_4169" : isSmAndBottom ? "node-I1084_4765-1076_4096" : isLgAndBottom ? "node-I1084_5510-1076_4193" : isMdAndBottom ? "node-I1078_215-1076_4069" : isXsAndFalse ? "node-I1084_5142-1076_4169" : isSmAndFalse ? "node-I1084_4773-1076_4096" : "node-I1078_157-1076_4069"} data-name="Ring inner">
+            <div className={`absolute ${isLgAndIsBottomOrRight ? "inset-[-5.42%]" : isXs ? "inset-[-3.85%]" : isSm ? "inset-[-4.92%]" : "inset-[-5.56%]"}`}>
+              <img alt="" className="block max-w-none size-full" src={isLgAndIsBottomOrRight ? imgRingInner : isXs ? imgRingInner1 : isSm ? imgRingInner3 : imgRingInner2} />
+            </div>
+          </div>
+          <div className={`-translate-x-1/2 -translate-y-1/2 [word-break:break-word] absolute content-stretch flex flex-col leading-[0] left-1/2 text-center top-1/2 ${isSmOrXs || isLgAndBottom || isLgAndRight ? "items-center" : "items-start"}`} id={isXsAndRight ? "node-I1084_5128-9332_577994" : isSmAndRight ? "node-I1084_4762-9332_577945" : isLgAndRight ? "node-I1084_5500-9332_577743" : isMdAndRight ? "node-I1078_273-9332_577780" : isXsAndBottom ? "node-I1084_5136-9332_577994" : isSmAndBottom ? "node-I1084_4765-9332_577945" : isLgAndBottom ? "node-I1084_5510-9332_577743" : isMdAndBottom ? "node-I1078_215-9332_577780" : isXsAndFalse ? "node-I1084_5142-9332_577994" : isSmAndFalse ? "node-I1084_4773-9332_577945" : "node-I1078_157-9332_577780"} data-name="Number and label">
+            <div className={`${String.raw`flex flex-col font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Medium")] font-medium justify-center relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] w-full `}${isSmOrXs ? String.raw`text-[length:var(--font-size\/text-xs,12px)]` : String.raw`text-[length:var(--font-size\/text-sm,14px)]`}`} id={isXsAndRight ? "node-I1084_5128-1076_4172" : isSmAndRight ? "node-I1084_4762-1076_4099" : isLgAndRight ? "node-I1084_5500-1076_4196" : isMdAndRight ? "node-I1078_273-1076_4072" : isXsAndBottom ? "node-I1084_5136-1076_4172" : isSmAndBottom ? "node-I1084_4765-1076_4099" : isLgAndBottom ? "node-I1084_5510-1076_4196" : isMdAndBottom ? "node-I1078_215-1076_4072" : isXsAndFalse ? "node-I1084_5142-1076_4172" : isSmAndFalse ? "node-I1084_4773-1076_4099" : "node-I1078_157-1076_4072"}>
+              <p className={isSmOrXs ? String.raw`leading-[var(--line-height\/text-xs,18px)]` : String.raw`leading-[var(--line-height\/text-sm,20px)]`}>Active users</p>
+            </div>
+            <div className={`${String.raw`flex flex-col font-[var(--font-weight\/semibold,normal)] justify-center relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] w-full `}${isLgAndIsBottomOrRight ? String.raw`font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] text-[length:var(--font-size\/display-md,36px)] tracking-[-0.72px]` : isXs ? String.raw`font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] text-[length:var(--font-size\/text-xl,20px)]` : isSm ? String.raw`font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] text-[length:var(--font-size\/display-xs,24px)]` : String.raw`font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] text-[length:var(--font-size\/display-sm,30px)]`}`} id={isXsAndRight ? "node-I1084_5128-1076_4173" : isSmAndRight ? "node-I1084_4762-1076_4100" : isLgAndRight ? "node-I1084_5500-1076_4197" : isMdAndRight ? "node-I1078_273-1076_3072" : isXsAndBottom ? "node-I1084_5136-1076_4173" : isSmAndBottom ? "node-I1084_4765-1076_4100" : isLgAndBottom ? "node-I1084_5510-1076_4197" : isMdAndBottom ? "node-I1078_215-1076_3072" : isXsAndFalse ? "node-I1084_5142-1076_4173" : isSmAndFalse ? "node-I1084_4773-1076_4100" : "node-I1078_157-1076_3072"}>
+              <p className={isLgAndIsBottomOrRight ? String.raw`leading-[var(--line-height\/display-md,44px)]` : isXs ? String.raw`leading-[var(--line-height\/text-xl,30px)]` : isSm ? String.raw`leading-[var(--line-height\/display-xs,32px)]` : String.raw`leading-[var(--line-height\/display-sm,38px)]`}>1,000</p>
+            </div>
+          </div>
+        </div>
+      )}
+      {["Bottom", "Right"].includes(legend) && (
+        <div className={`content-stretch flex items-start relative shrink-0 ${isRight ? "flex-col gap-[var(--spacing-xs,4px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isXsAndRight ? "node-1084_5129" : isSmAndRight ? "node-1084_4763" : isLgAndRight ? "node-1084_5501" : isMdAndRight ? "node-1078_274" : isXsAndBottom ? "node-1084_5137" : isSmAndBottom ? "node-1084_4766" : isLgAndBottom ? "node-1084_5511" : "node-1078_216"} data-name="_Legend">
+          <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isRight ? "items-start w-full" : "items-center"}`} id={isXsAndRight ? "node-I1084_5129-1067_4654" : isSmAndRight ? "node-I1084_4763-1067_4654" : isLgAndRight ? "node-I1084_5501-1067_4654" : isMdAndRight ? "node-I1078_274-1067_4654" : isXsAndBottom ? "node-I1084_5137-1067_6102" : isSmAndBottom ? "node-I1084_4766-1067_6102" : isLgAndBottom ? "node-I1084_5511-1067_6102" : "node-I1078_216-1067_6102"} data-name="Legend series">
+            {isBottom && (
+              <>
+                <div className="relative shrink-0 size-[8px]" id={isXsAndBottom ? "node-I1084_5137-1067_6103" : isSmAndBottom ? "node-I1084_4766-1067_6103" : isLgAndBottom ? "node-I1084_5511-1067_6103" : "node-I1078_216-1067_6103"} data-name="Color">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndBottom ? "node-I1084_5137-1067_6104" : isSmAndBottom ? "node-I1084_4766-1067_6104" : isLgAndBottom ? "node-I1084_5511-1067_6104" : "node-I1078_216-1067_6104"}>
+                  Series 1
+                </p>
+              </>
+            )}
+            {isRight && (
+              <>
+                <div className="h-[14px] relative shrink-0 w-[8px]" id={isXsAndRight ? "node-I1084_5129-1079_50479" : isSmAndRight ? "node-I1084_4763-1079_50479" : isLgAndRight ? "node-I1084_5501-1079_50479" : "node-I1078_274-1079_50479"} data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndRight ? "node-I1084_5129-1067_4656" : isSmAndRight ? "node-I1084_4763-1067_4656" : isLgAndRight ? "node-I1084_5501-1067_4656" : "node-I1078_274-1067_4656"}>
+                  Series 1
+                </p>
+              </>
+            )}
+          </div>
+          <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isRight ? "items-start w-full" : "items-center"}`} id={isXsAndRight ? "node-I1084_5129-1067_4876" : isSmAndRight ? "node-I1084_4763-1067_4876" : isLgAndRight ? "node-I1084_5501-1067_4876" : isMdAndRight ? "node-I1078_274-1067_4876" : isXsAndBottom ? "node-I1084_5137-1067_6405" : isSmAndBottom ? "node-I1084_4766-1067_6405" : isLgAndBottom ? "node-I1084_5511-1067_6405" : "node-I1078_216-1067_6405"} data-name="Legend series">
+            {isBottom && (
+              <>
+                <div className="relative shrink-0 size-[8px]" id={isXsAndBottom ? "node-I1084_5137-1067_6406" : isSmAndBottom ? "node-I1084_4766-1067_6406" : isLgAndBottom ? "node-I1084_5511-1067_6406" : "node-I1078_216-1067_6406"} data-name="Color">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndBottom ? "node-I1084_5137-1067_6407" : isSmAndBottom ? "node-I1084_4766-1067_6407" : isLgAndBottom ? "node-I1084_5511-1067_6407" : "node-I1078_216-1067_6407"}>
+                  Series 2
+                </p>
+              </>
+            )}
+            {isRight && (
+              <>
+                <div className="h-[14px] relative shrink-0 w-[8px]" id={isXsAndRight ? "node-I1084_5129-1079_50514" : isSmAndRight ? "node-I1084_4763-1079_50514" : isLgAndRight ? "node-I1084_5501-1079_50514" : "node-I1078_274-1079_50514"} data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndRight ? "node-I1084_5129-1067_4878" : isSmAndRight ? "node-I1084_4763-1067_4878" : isLgAndRight ? "node-I1084_5501-1067_4878" : "node-I1078_274-1067_4878"}>
+                  Series 2
+                </p>
+              </>
+            )}
+          </div>
+          <div className={`content-stretch flex gap-[var(--spacing-md,8px)] relative shrink-0 ${isRight ? "items-start w-full" : "items-center"}`} id={isXsAndRight ? "node-I1084_5129-1067_4987" : isSmAndRight ? "node-I1084_4763-1067_4987" : isLgAndRight ? "node-I1084_5501-1067_4987" : isMdAndRight ? "node-I1078_274-1067_4987" : isXsAndBottom ? "node-I1084_5137-1067_6708" : isSmAndBottom ? "node-I1084_4766-1067_6708" : isLgAndBottom ? "node-I1084_5511-1067_6708" : "node-I1078_216-1067_6708"} data-name="Legend series">
+            {isBottom && (
+              <>
+                <div className="relative shrink-0 size-[8px]" id={isXsAndBottom ? "node-I1084_5137-1067_6709" : isSmAndBottom ? "node-I1084_4766-1067_6709" : isLgAndBottom ? "node-I1084_5511-1067_6709" : "node-I1078_216-1067_6709"} data-name="Color">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndBottom ? "node-I1084_5137-1067_6710" : isSmAndBottom ? "node-I1084_4766-1067_6710" : isLgAndBottom ? "node-I1084_5511-1067_6710" : "node-I1078_216-1067_6710"}>
+                  Series 3
+                </p>
+              </>
+            )}
+            {isRight && (
+              <>
+                <div className="h-[14px] relative shrink-0 w-[8px]" id={isXsAndRight ? "node-I1084_5129-1079_50670" : isSmAndRight ? "node-I1084_4763-1079_50670" : isLgAndRight ? "node-I1084_5501-1079_50670" : "node-I1078_274-1079_50670"} data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot2} />
+                </div>
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" id={isXsAndRight ? "node-I1084_5129-1067_4989" : isSmAndRight ? "node-I1084_4763-1067_4989" : isLgAndRight ? "node-I1084_5501-1067_4989" : "node-I1078_274-1067_4989"}>
+                  Series 3
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {isLgAndFalse && <ActivityGauge className="relative shrink-0 size-[280px]" size="lg" />}
+    </div>
+  );
+}

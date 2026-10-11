@@ -1,0 +1,37 @@
+const imgStars02 = "https://www.figma.com/api/mcp/asset/c230a6f7-3fe0-44c7-ab26-84e8ce50989e.svg";
+const imgEdit04 = "https://www.figma.com/api/mcp/asset/859dfdec-eada-4668-9259-c3cd51c83673.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/4f8527ad-2ff5-4988-a1fa-61c0b659323d.svg";
+const imgRefreshCcw02 = "https://www.figma.com/api/mcp/asset/0e0c1115-13f3-4fba-8bec-5a19c154a5da.svg";
+const imgCopy01 = "https://www.figma.com/api/mcp/asset/e5fe503e-089e-4000-9056-027fef29dd36.svg";
+
+export default function MessageActionPanel({ className }: { className?: string }) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary_alt,#13161b)] content-stretch drop-shadow-[0px_20px_12px_var(--colors\\/effects\\/shadows\\/shadow-xl_01,rgba(255,255,255,0)),0px_8px_4px_var(--colors\\/effects\\/shadows\\/shadow-xl_02,rgba(255,255,255,0)),0px_3px_1.5px_var(--colors\\/effects\\/shadows\\/shadow-xl_03,rgba(255,255,255,0))] flex gap-[var(--spacing-sm,6px)] isolate items-start px-[var(--spacing-md,8px)] py-[var(--spacing-sm,6px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="9206:591554" data-name="_Message action panel">
+      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[4]" data-node-id="9206:591510" data-name="_Message action button">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I9206:591510;9206:591488" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgStars02} />
+        </div>
+      </div>
+      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[3]" data-node-id="9206:591517" data-name="_Message action button">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I9206:591517;9206:591497" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgEdit04} />
+        </div>
+        <div className="absolute bottom-[-9px] right-[-9px] size-[20px]" data-node-id="I9206:591517;9206:591520" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[2]" data-node-id="9206:591537" data-name="_Message action button">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I9206:591537;9206:591488" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgRefreshCcw02} />
+        </div>
+      </div>
+      <div className="content-stretch flex items-center p-[var(--spacing-xxs,2px)] relative rounded-[var(--radius-xs,6px)] shrink-0 z-[1]" data-node-id="9206:591541" data-name="_Message action button">
+        <div className="relative shrink-0 size-[16px]" data-node-id="I9206:591541;9206:591488" data-name="placeholder">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCopy01} />
+        </div>
+      </div>
+    </div>
+  );
+}

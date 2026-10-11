@@ -1,0 +1,101 @@
+const imgOpenFalseSupportingTextFalseTooltipTopNoArrow = "https://www.figma.com/api/mcp/asset/d2987acd-fbeb-4ad9-bf5e-5373c076a584.svg";
+const imgOpenTrueSupportingTextFalseTooltipTopNoArrow = "https://www.figma.com/api/mcp/asset/80adb473-3726-46e3-a3c2-8521898f9040.svg";
+const imgCursor = "https://www.figma.com/api/mcp/asset/0b25d51c-bf9b-4945-81e3-206f5e05fb24.svg";
+const imgArrowDown = "https://www.figma.com/api/mcp/asset/14f9069b-19ca-40f6-9b4a-0657f257256d.svg";
+const imgChevronSelectorVertical = "https://www.figma.com/api/mcp/asset/0c22dd3d-88dc-47a0-91bf-b9006343454f.svg";
+const imgArrowUp = "https://www.figma.com/api/mcp/asset/0a8d803e-b1b8-4409-afe1-ba7a51f51b09.svg";
+const imgArrowDown1 = "https://www.figma.com/api/mcp/asset/2671e82f-9ca0-4dd4-a19d-456fe4f0586a.svg";
+const imgChevronSelectorVertical1 = "https://www.figma.com/api/mcp/asset/63ea7ddd-cb5c-45fc-b13e-d0e9a2da49ef.svg";
+const imgArrowUp1 = "https://www.figma.com/api/mcp/asset/0a3bbb66-1743-4b7a-ac7a-9b7ce17fcfc8.svg";
+
+type TooltipProps = {
+  className?: string;
+  arrow?: "None";
+  supportingText?: "False";
+  text?: string;
+};
+
+function Tooltip({ className, arrow = "None", supportingText = "False", text = "This is a tooltip" }: TooltipProps) {
+  return (
+    <div className={className || "content-stretch drop-shadow-[0px_12px_8px_var(--colors\\/effects\\/shadows\\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\\/effects\\/shadows\\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\\/effects\\/shadows\\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center relative"} data-node-id="1052:587">
+      <div className="bg-[var(--colors\/background\/bg-primary-solid,#0a0d12)] content-stretch flex flex-col items-start px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="1052:588" data-name="Content">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="1052:589">
+          {text}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+type HelpIconProps = {
+  className?: string;
+  cursor?: boolean;
+  open?: boolean;
+  supportingText?: "False";
+  tooltip?: "Top no arrow";
+};
+
+function HelpIcon({ className, cursor = true, open = false, supportingText = "False", tooltip = "Top no arrow" }: HelpIconProps) {
+  const isOpenAndFalseAndTopNoArrow = open && supportingText === "False" && tooltip === "Top no arrow";
+  return (
+    <div className={className || "relative size-[16px]"} id={isOpenAndFalseAndTopNoArrow ? "node-1054_14" : "node-1054_7"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={isOpenAndFalseAndTopNoArrow ? imgOpenTrueSupportingTextFalseTooltipTopNoArrow : imgOpenFalseSupportingTextFalseTooltipTopNoArrow} />
+      {isOpenAndFalseAndTopNoArrow && <Tooltip className="-translate-x-1/2 absolute bottom-[20px] content-stretch drop-shadow-[0px_12px_8px_var(--colors\/effects\/shadows\/shadow-lg_01,rgba(10,13,18,0.08)),0px_4px_3px_var(--colors\/effects\/shadows\/shadow-lg_02,rgba(10,13,18,0.03)),0px_2px_1px_var(--colors\/effects\/shadows\/shadow-lg_03,rgba(10,13,18,0.04))] flex flex-col items-center left-[calc(50%-0.5px)]" />}
+      {isOpenAndFalseAndTopNoArrow && cursor && (
+        <div className="absolute bottom-[-75%] left-[37.5%] right-[-62.5%] top-1/2" data-node-id="1054:573" data-name="Cursor">
+          <div className="absolute inset-[0_-0.61%_-5.6%_0]">
+            <img alt="" className="block max-w-none size-full" src={imgCursor} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+type TableHeaderLabelProps = {
+  className?: string;
+  arrow?: "False" | "Chevron selector" | "Down" | "Up";
+  helpIcon?: boolean;
+  state?: "Default" | "Hover";
+};
+
+export default function TableHeaderLabel({ className, arrow = "False", helpIcon = false, state = "Default" }: TableHeaderLabelProps) {
+  const isHelpIconAndChevronSelectorAndDefault = helpIcon && arrow === "Chevron selector" && state === "Default";
+  const isHelpIconAndChevronSelectorAndHover = helpIcon && arrow === "Chevron selector" && state === "Hover";
+  const isHelpIconAndDownAndDefault = helpIcon && arrow === "Down" && state === "Default";
+  const isHelpIconAndDownAndHover = helpIcon && arrow === "Down" && state === "Hover";
+  const isHelpIconAndFalseAndDefault = helpIcon && arrow === "False" && state === "Default";
+  const isHelpIconAndFalseAndHover = helpIcon && arrow === "False" && state === "Hover";
+  const isHelpIconAndUpAndDefault = helpIcon && arrow === "Up" && state === "Default";
+  const isHelpIconAndUpAndHover = helpIcon && arrow === "Up" && state === "Hover";
+  const isNotHelpIconAndChevronSelectorAndDefault = !helpIcon && arrow === "Chevron selector" && state === "Default";
+  const isNotHelpIconAndChevronSelectorAndHover = !helpIcon && arrow === "Chevron selector" && state === "Hover";
+  const isNotHelpIconAndDownAndDefault = !helpIcon && arrow === "Down" && state === "Default";
+  const isNotHelpIconAndDownAndHover = !helpIcon && arrow === "Down" && state === "Hover";
+  const isNotHelpIconAndFalseAndHover = !helpIcon && arrow === "False" && state === "Hover";
+  const isNotHelpIconAndUpAndDefault = !helpIcon && arrow === "Up" && state === "Default";
+  const isNotHelpIconAndUpAndHover = !helpIcon && arrow === "Up" && state === "Hover";
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-center relative"} id={isHelpIconAndUpAndHover ? "node-1221_107017" : isHelpIconAndChevronSelectorAndHover ? "node-8050_166024" : isHelpIconAndDownAndHover ? "node-1221_106923" : isHelpIconAndUpAndDefault ? "node-1221_107021" : isHelpIconAndChevronSelectorAndDefault ? "node-8050_166020" : isHelpIconAndDownAndDefault ? "node-1221_106885" : isHelpIconAndFalseAndHover ? "node-1221_106917" : isHelpIconAndFalseAndDefault ? "node-1221_106789" : isNotHelpIconAndUpAndHover ? "node-1221_107025" : isNotHelpIconAndChevronSelectorAndHover ? "node-8050_165987" : isNotHelpIconAndDownAndHover ? "node-1221_106920" : isNotHelpIconAndUpAndDefault ? "node-1221_107035" : isNotHelpIconAndChevronSelectorAndDefault ? "node-8050_165984" : isNotHelpIconAndDownAndDefault ? "node-1221_106888" : isNotHelpIconAndFalseAndHover ? "node-1221_106927" : "node-1221_106787"}>
+      <p className={`${String.raw`[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[length:var(--font-size\/text-xs,12px)] whitespace-nowrap `}${state === "Hover" ? String.raw`text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)]` : String.raw`text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)]`}`} id={isHelpIconAndUpAndHover ? "node-1221_107018" : isHelpIconAndChevronSelectorAndHover ? "node-8050_166025" : isHelpIconAndDownAndHover ? "node-1221_106924" : isHelpIconAndUpAndDefault ? "node-1221_107022" : isHelpIconAndChevronSelectorAndDefault ? "node-8050_166021" : isHelpIconAndDownAndDefault ? "node-1221_106886" : isHelpIconAndFalseAndHover ? "node-1221_106918" : isHelpIconAndFalseAndDefault ? "node-1221_106790" : isNotHelpIconAndUpAndHover ? "node-1221_107026" : isNotHelpIconAndChevronSelectorAndHover ? "node-8050_165988" : isNotHelpIconAndDownAndHover ? "node-1221_106921" : isNotHelpIconAndUpAndDefault ? "node-1221_107036" : isNotHelpIconAndChevronSelectorAndDefault ? "node-8050_165985" : isNotHelpIconAndDownAndDefault ? "node-1221_106889" : isNotHelpIconAndFalseAndHover ? "node-1221_106928" : "node-1221_106781"}>
+        Company
+      </p>
+      {helpIcon && <HelpIcon className="relative shrink-0 size-[16px]" open={helpIcon && state === "Hover" ? true : undefined} />}
+      {arrow === "Down" && (
+        <div className="relative shrink-0 size-[12px]" id={isHelpIconAndDownAndHover ? "node-1221_106926" : isHelpIconAndDownAndDefault ? "node-1221_106894" : isNotHelpIconAndDownAndHover ? "node-1221_106922" : "node-1221_106890"} data-name="arrow-down">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={arrow === "Down" && state === "Hover" ? imgArrowDown1 : imgArrowDown} />
+        </div>
+      )}
+      {arrow === "Chevron selector" && (
+        <div className="relative shrink-0 size-[12px]" id={isHelpIconAndChevronSelectorAndHover ? "node-8050_166045" : isHelpIconAndChevronSelectorAndDefault ? "node-8050_166042" : isNotHelpIconAndChevronSelectorAndHover ? "node-8050_165989" : "node-8050_165986"} data-name="chevron-selector-vertical">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={arrow === "Chevron selector" && state === "Hover" ? imgChevronSelectorVertical1 : imgChevronSelectorVertical} />
+        </div>
+      )}
+      {arrow === "Up" && (
+        <div className="relative shrink-0 size-[12px]" id={isHelpIconAndUpAndHover ? "node-1221_107020" : isHelpIconAndUpAndDefault ? "node-1221_107024" : isNotHelpIconAndUpAndHover ? "node-1221_107027" : "node-1221_107037"} data-name="arrow-up">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={arrow === "Up" && state === "Hover" ? imgArrowUp1 : imgArrowUp} />
+        </div>
+      )}
+    </div>
+  );
+}

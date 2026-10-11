@@ -1,0 +1,118 @@
+const imgTypeCheckStatusIncompleteSizeSm = "https://www.figma.com/api/mcp/asset/51bac006-e720-4308-a4b6-7568a68c51d7.svg";
+const imgTypeCheckStatusIncompleteSizeMd = "https://www.figma.com/api/mcp/asset/ec3df1a3-2964-43ed-84c3-ca5f4228930e.svg";
+const imgCheck = "https://www.figma.com/api/mcp/asset/919a3245-886b-4d03-a7dc-21b9b82c7dfe.svg";
+const imgCheck1 = "https://www.figma.com/api/mcp/asset/23486a45-f9e5-40b9-b5e2-c0cc1637fe7d.svg";
+const imgTypeCheckStatusCurrentSizeSm = "https://www.figma.com/api/mcp/asset/50fdda95-7840-49b6-8a87-cf9fe4a1314c.svg";
+const imgTypeCheckStatusCurrentSizeMd = "https://www.figma.com/api/mcp/asset/49f193e1-c590-4453-a026-d419a1595a81.svg";
+
+type StepIconBaseProps = {
+  className?: string;
+  size?: "sm" | "md";
+  status?: "Incomplete" | "Current" | "Complete";
+  type?: "Check" | "Number";
+};
+
+function StepIconBase({ className, size = "sm", status = "Incomplete", type = "Check" }: StepIconBaseProps) {
+  const isCheckAndCompleteAndMd = type === "Check" && status === "Complete" && size === "md";
+  const isCheckAndCompleteAndSm = type === "Check" && status === "Complete" && size === "sm";
+  const isCheckAndCurrentAndMd = type === "Check" && status === "Current" && size === "md";
+  const isCheckAndIncompleteAndMd = type === "Check" && status === "Incomplete" && size === "md";
+  const isCompleteAndMd = status === "Complete" && size === "md";
+  const isNumberAndCompleteAndMd = type === "Number" && status === "Complete" && size === "md";
+  const isNumberAndCompleteAndSm = type === "Number" && status === "Complete" && size === "sm";
+  return (
+    <div className={className || `relative ${isNumberAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[32px]` : isCheckAndCompleteAndMd ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[32px]` : isNumberAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] overflow-clip rounded-[9999px] size-[24px]` : isCheckAndCompleteAndSm ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] overflow-clip rounded-[var(--radius-full,9999px)] size-[24px]` : type === "Check" && size === "md" && ["Incomplete", "Current"].includes(status) ? "size-[32px]" : "size-[24px]"}`} id={isCheckAndCurrentAndMd ? "node-1139_79863" : type === "Check" && status === "Current" && size === "sm" ? "node-1139_79866" : isNumberAndCompleteAndMd ? "node-9354_551777" : isCheckAndCompleteAndMd ? "node-1139_80061" : isNumberAndCompleteAndSm ? "node-9354_551774" : isCheckAndCompleteAndSm ? "node-1139_80037" : isCheckAndIncompleteAndMd ? "node-1139_80082" : "node-1139_80097"}>
+      {status === "Complete" && (
+        <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isCompleteAndMd ? "size-[16px]" : "size-[12px]"}`} id={isNumberAndCompleteAndMd ? "node-9354_551779" : isCheckAndCompleteAndMd ? "node-9354_551627" : isNumberAndCompleteAndSm ? "node-9354_551776" : "node-9354_551453"} data-name="check">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCompleteAndMd ? imgCheck1 : imgCheck} />
+        </div>
+      )}
+      {type === "Check" && status === "Incomplete" && <img alt="" className="absolute block inset-0 max-w-none size-full" src={isCheckAndIncompleteAndMd ? imgTypeCheckStatusIncompleteSizeMd : imgTypeCheckStatusIncompleteSizeSm} />}
+      {type === "Check" && status === "Current" && (
+        <div className={`absolute ${isCheckAndCurrentAndMd ? "inset-[-12.5%]" : "inset-[-16.67%]"}`}>
+          <img alt="" className="block max-w-none size-full" src={isCheckAndCurrentAndMd ? imgTypeCheckStatusCurrentSizeMd : imgTypeCheckStatusCurrentSizeSm} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+type ProgressStepsProgressMinimalIconsProps = {
+  className?: string;
+  breakpoint?: "Desktop" | "Mobile";
+  size?: "sm" | "md";
+  text?: boolean;
+  type?: "Check" | "Number";
+};
+
+export default function ProgressStepsProgressMinimalIcons({ className, breakpoint = "Desktop", size = "sm", text = true, type = "Check" }: ProgressStepsProgressMinimalIconsProps) {
+  const isCheck = type === "Check";
+  const isMd = size === "md";
+  const isMdAndCheck = size === "md" && type === "Check";
+  const isMdAndCheckAndDesktop = size === "md" && type === "Check" && breakpoint === "Desktop";
+  const isMdAndCheckAndMobile = size === "md" && type === "Check" && breakpoint === "Mobile";
+  const isMdAndNumber = size === "md" && type === "Number";
+  const isMdAndNumberAndDesktop = size === "md" && type === "Number" && breakpoint === "Desktop";
+  const isMdAndNumberAndMobile = size === "md" && type === "Number" && breakpoint === "Mobile";
+  const isNumber = type === "Number";
+  const isSmAndCheckAndMobile = size === "sm" && type === "Check" && breakpoint === "Mobile";
+  const isSmAndNumber = size === "sm" && type === "Number";
+  const isSmAndNumberAndDesktop = size === "sm" && type === "Number" && breakpoint === "Desktop";
+  const isSmAndNumberAndMobile = size === "sm" && type === "Number" && breakpoint === "Mobile";
+  return (
+    <div className={className || `content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-center relative ${breakpoint === "Mobile" ? "w-[343px]" : "w-[1280px]"}`} id={isMdAndNumberAndMobile ? "node-9367_556746" : isMdAndCheckAndMobile ? "node-1141_78957" : isSmAndNumberAndMobile ? "node-9367_556738" : isSmAndCheckAndMobile ? "node-1141_78989" : isMdAndNumberAndDesktop ? "node-9367_556730" : isMdAndCheckAndDesktop ? "node-1141_79045" : isSmAndNumberAndDesktop ? "node-9367_556722" : "node-1141_79061"}>
+      <div className={`content-stretch flex items-center relative shrink-0 ${isMd ? "gap-[var(--spacing-xl,16px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isMdAndNumberAndMobile ? "node-9367_556747" : isMdAndCheckAndMobile ? "node-1141_78958" : isSmAndNumberAndMobile ? "node-9367_556739" : isSmAndCheckAndMobile ? "node-1141_78990" : isMdAndNumberAndDesktop ? "node-9367_556731" : isMdAndCheckAndDesktop ? "node-1141_79046" : isSmAndNumberAndDesktop ? "node-9367_556723" : "node-1141_79062"} data-name="Content">
+        {text && (
+          <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="1141:79063">
+            Step 3 of 4
+          </p>
+        )}
+        <div className={`content-stretch flex items-center justify-center relative shrink-0 ${isMd ? "gap-[var(--spacing-xl,16px)]" : "gap-[var(--spacing-lg,12px)]"}`} id={isMdAndNumberAndMobile ? "node-9367_556749" : isMdAndCheckAndMobile ? "node-1141_78960" : isSmAndNumberAndMobile ? "node-9367_556741" : isSmAndCheckAndMobile ? "node-1141_78992" : isMdAndNumberAndDesktop ? "node-9367_556733" : isMdAndCheckAndDesktop ? "node-1141_79048" : isSmAndNumberAndDesktop ? "node-9367_556725" : "node-1141_79064"} data-name="Progress">
+          <StepIconBase className={`overflow-clip relative shrink-0 ${isMdAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[32px]` : isMdAndCheck ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[32px]` : isSmAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[24px]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[24px]`}`} size={isMd ? "md" : undefined} status="Complete" type={isNumber ? "Number" : undefined} />
+          <StepIconBase className={`overflow-clip relative shrink-0 ${isMdAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[32px]` : isMdAndCheck ? String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[32px]` : isSmAndNumber ? String.raw`bg-[var(--colors\/background\/bg-success-solid,#079455)] rounded-[9999px] size-[24px]` : String.raw`bg-[var(--colors\/background\/bg-brand-solid,#079455)] rounded-[var(--radius-full,9999px)] size-[24px]`}`} size={isMd ? "md" : undefined} status="Complete" type={isNumber ? "Number" : undefined} />
+          {isCheck && (
+            <>
+              <StepIconBase className={`relative shrink-0 ${isMdAndCheck ? "size-[32px]" : "size-[24px]"}`} size={isMdAndCheck ? "md" : undefined} status="Current" />
+              <StepIconBase className={`relative shrink-0 ${isMdAndCheck ? "size-[32px]" : "size-[24px]"}`} size={isMdAndCheck ? "md" : undefined} />
+            </>
+          )}
+          {isNumber && (
+            <>
+              <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 `}${isMdAndNumber ? "size-[32px]" : "size-[24px]"}`} id={isMdAndNumberAndMobile ? "node-9367_556752" : isSmAndNumberAndMobile ? "node-9367_556744" : isMdAndNumberAndDesktop ? "node-9367_556736" : "node-9367_556728"} data-name="_Step icon base">
+                <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-center whitespace-nowrap `}${isMdAndNumber ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]`}`} id={isMdAndNumberAndMobile ? "node-I9367_556752-9354_552136" : isSmAndNumberAndMobile ? "node-I9367_556744-9354_551817" : isMdAndNumberAndDesktop ? "node-I9367_556736-9354_552136" : "node-I9367_556728-9354_551817"}>
+                  3
+                </p>
+              </div>
+              <div className={`${String.raw`bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid overflow-clip relative rounded-[9999px] shrink-0 `}${isMdAndNumber ? "size-[32px]" : "size-[24px]"}`} id={isMdAndNumberAndMobile ? "node-9367_556753" : isSmAndNumberAndMobile ? "node-9367_556745" : isMdAndNumberAndDesktop ? "node-9367_556737" : "node-9367_556729"} data-name="_Step icon base">
+                <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] text-[color:var(--colors\/text\/text-disabled,#717680)] text-center whitespace-nowrap `}${isMdAndNumber ? String.raw`leading-[var(--line-height\/text-sm,20px)] left-[calc(50%-0.5px)] text-[length:var(--font-size\/text-sm,14px)] top-[calc(50%-10px)]` : String.raw`leading-[var(--line-height\/text-xs,18px)] left-[calc(50%+0.5px)] text-[length:var(--font-size\/text-xs,12px)] top-[calc(50%-9px)]`}`} id={isMdAndNumberAndMobile ? "node-I9367_556753-9354_552130" : isSmAndNumberAndMobile ? "node-I9367_556745-9354_551823" : isMdAndNumberAndDesktop ? "node-I9367_556737-9354_552130" : "node-I9367_556729-9354_551823"}>
+                  4
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Text sm/Medium: Font(family: "Font family/font-family-body", style: Font weight/medium, size: Font size/text-sm, weight: 500, lineHeight: Line height/text-sm, letterSpacing: 0), Focus rings/focus-ring: Effect(type: DROP_SHADOW, color: Colors/Effects/Focus rings/focus-ring, offset: (0, 0), radius: 0, spread: 4); Effect(type: DROP_SHADOW, color: Colors/Background/bg-primary, offset: (0, 0), radius: 0, spread: 2), Text xs/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-xs, weight: 600, lineHeight: Line height/text-xs, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## check
+**Node ID:** 3463:404964
+
+check, tick, confirm
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

@@ -1,0 +1,36 @@
+.p-color-swatch, .p-gradient-swatch { position: relative; border-radius: 20px; overflow: hidden; font-family: var(--font-body); }
+.p-color-swatch { width: 160px; }
+.p-color-swatch-fill { position: absolute; inset: 0 0 auto; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-secondary-alt); font: 500 18px/28px var(--font-body); }
+.p-color-swatch-copy { padding: 92px 12px 12px; box-shadow: inset 0 -1px var(--border-secondary), inset 1px 0 var(--border-secondary), inset -1px 0 var(--border-secondary); background: var(--bg-primary); border-radius: 20px; display: flex; flex-direction: column; }
+.p-color-swatch-copy > strong, .p-gradient-swatch-copy strong { font: 500 18px/28px var(--font-body); color: var(--text-primary-900); }
+.p-color-swatch-copy > span, .p-gradient-swatch-copy span { font: 400 16px/24px var(--font-body); color: var(--text-tertiary-600); }
+.p-gradient-swatch { width: 280px; }
+.p-gradient-swatch-artwork { position: absolute; inset: 0 0 auto; height: 200px; }
+.p-gradient-swatch-artwork > img { display: block; max-width: none; }
+.p-gradient-swatch-copy { display: flex; align-items: flex-end; gap: 16px; padding: 212px 12px 12px; background: var(--bg-primary); box-shadow: inset 0 -1px var(--border-secondary), inset 1px 0 var(--border-secondary), inset -1px 0 var(--border-secondary); border-radius: 20px; }
+.p-gradient-swatch-copy > div { flex: 1; display: flex; flex-direction: column; }
+.p-gradient-swatch-copy > div:last-child { text-align: right; }
+.p-type-specimen { width: 2240px; display: flex; flex-direction: column; gap: 32px; }
+.p-type-specimen-header { display: flex; justify-content: space-between; padding-bottom: 16px; box-shadow: inset 0 -1px var(--border-secondary); color: var(--text-tertiary-600); font: 400 16px/24px var(--font-body); }
+.p-type-specimen-header > strong { font-weight: 500; }
+.p-type-specimen-row { display: flex; gap: 32px; color: var(--text-primary-900); }
+.p-type-specimen-row > div { flex: 1; min-width: 0; }
+.p-foundation-effect-card { background: var(--bg-primary); border: 1px solid var(--border-primary); padding: 24px; color: var(--text-primary-900); font: 500 18px/28px var(--font-body); }
+.p-shadow-card { width: 256px; height: 240px; border-color: var(--border-secondary-alt); border-radius: 20px; }
+.p-focus-ring-card { width: 480px; height: 240px; border-radius: 20px; box-shadow: var(--effect-focus-ring); display: flex; flex-direction: column; justify-content: space-between; }
+.p-focus-ring-card > span:last-child { color: var(--text-tertiary-600); }
+.p-blur-card { width: 1008px; height: 320px; padding: 32px; border-radius: 20px; display: flex; justify-content: space-between; align-items: flex-start; background: var(--figma-component-colors-alpha-alpha-white-60); color: var(--text-primary-900); font: 500 30px/38px var(--font-display); }
+.p-blur-card-mode { display: flex; align-items: flex-start; gap: 12px; }
+.p-radius-card { width: 195.2px; height: 200px; box-shadow: var(--effect-shadow-xs); }
+.p-radius-example { position: relative; width: 128px; height: 40px; overflow: hidden; }
+.p-radius-example > div { position: absolute; top: 0; right: 0; width: 256px; height: 80px; background: var(--bg-brand-primary-alt); border: 2px solid var(--fg-brand-primary-600); }
+.p-container-specimen { width: 1280px; height: 768px; background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: 24px; display: flex; align-items: center; justify-content: center; }
+.p-container-specimen > div { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.p-container-specimen strong { color: var(--text-primary-900); font: 500 60px/72px var(--font-display); letter-spacing: -.02em; }
+.p-container-specimen-shortcut { display: flex; gap: 12px; align-items: center; color: var(--text-secondary-700); }
+.foundation-source-scroll { overflow: auto; padding: 24px 12px; }
+.foundation-source-grid { display: flex; gap: 48px; width: max-content; align-items: flex-start; }
+.foundation-source-grid > div { display: flex; flex: none; }
+.foundation-footer-brand { width: 139px; height: 32px; display: flex; align-items: center; gap: 19.5px; color: var(--text-primary-900); font: 600 18px/28px var(--font-body); }
+.foundation-footer-brand > img { width: 32px; height: 32px; object-fit: cover; }
+.foundation-header-mark { width: 36px; height: 36px; object-fit: cover; }

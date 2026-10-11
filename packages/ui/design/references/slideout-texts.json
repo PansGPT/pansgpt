@@ -1,0 +1,805 @@
+[
+  {
+    "id": "1240:137697",
+    "name": "Type=Placeholder, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:137702",
+        "name": "Text",
+        "text": "Label",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163494",
+        "name": "Supporting text",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Odio dictumst tempus magna elit cras posuere cursus pulvinar id. Facilisis at eu amet ornare enim arcu malesuada rutrum a.",
+        "width": 352,
+        "height": 80,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163498",
+        "name": "Text",
+        "text": "Label",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163499",
+        "name": "Supporting text",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Odio dictumst tempus magna elit cras posuere cursus pulvinar id. Facilisis at eu amet ornare enim arcu malesuada rutrum a.",
+        "width": 352,
+        "height": 80,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163503",
+        "name": "Text",
+        "text": "Label",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163504",
+        "name": "Supporting text",
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Odio dictumst tempus magna elit cras posuere cursus pulvinar id. Facilisis at eu amet ornare enim arcu malesuada rutrum a.",
+        "width": 352,
+        "height": 80,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1240:137858",
+    "name": "Type=Filters, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:137914",
+        "name": "Text",
+        "text": "Teams",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "1240:137938",
+        "name": "Text",
+        "text": "Role",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      }
+    ]
+  },
+  {
+    "id": "1240:164570",
+    "name": "Type=Notification settings checkboxes, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:168534",
+        "name": "Text",
+        "text": "In-app notifications ",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:168535",
+        "name": "Supporting text",
+        "text": "Select when you’ll be notified in-app.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:168675",
+        "name": "Text",
+        "text": "Email notifications ",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:168676",
+        "name": "Supporting text",
+        "text": "Select when you’ll be notified in-app.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1241:124989",
+    "name": "Type=Notification settings button groups, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1241:125221",
+        "name": "Text",
+        "text": "Message mentions",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125222",
+        "name": "Supporting text",
+        "text": "I’m mentioned in a message or comment.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125710",
+        "name": "Text",
+        "text": "Message replies",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125711",
+        "name": "Supporting text",
+        "text": "Someone replies to any message or comment.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125770",
+        "name": "Text",
+        "text": "New projects",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125771",
+        "name": "Supporting text",
+        "text": "New projects are created on my team.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125827",
+        "name": "Text",
+        "text": "Outstanding tasks",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125828",
+        "name": "Supporting text",
+        "text": "I’ve had outstanding tasks for more than.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125959",
+        "name": "Text",
+        "text": "New team members",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1241:125960",
+        "name": "Supporting text",
+        "text": "New users have been added to my team.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1240:175083",
+    "name": "Type=Project details, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:175609",
+        "name": "Text",
+        "text": "Share project",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:175663",
+        "name": "Text",
+        "text": "PansGPT.com/project/marketing-site",
+        "width": 330,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "1240:175563",
+        "name": "Text",
+        "text": "Team members",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:175564",
+        "name": "Supporting text",
+        "text": "The following are working on this project.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1251:11896",
+    "name": "Type=Order summary, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1251:12021",
+        "name": "Text",
+        "text": "$49.00",
+        "width": 73,
+        "height": 30,
+        "parent": "Row"
+      },
+      {
+        "id": "1251:11913",
+        "name": "Text",
+        "text": "Discount",
+        "width": 61,
+        "height": 20,
+        "parent": "Text and badge"
+      },
+      {
+        "id": "1251:11914",
+        "name": "Supporting text",
+        "text": "10% ($4.90)",
+        "width": 81,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1251:12122",
+        "name": "Text",
+        "text": "Express shipping",
+        "width": 114,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1251:12123",
+        "name": "Supporting text",
+        "text": "$3.99",
+        "width": 39,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1251:12125",
+        "name": "Text",
+        "text": "Subtotal",
+        "width": 58,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1251:12126",
+        "name": "Supporting text",
+        "text": "$48.09",
+        "width": 50,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1240:169904",
+    "name": "Type=Payment details, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:170369",
+        "name": "Text",
+        "text": "Billing contact",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:170370",
+        "name": "Supporting text",
+        "text": "Add a second billing contact email.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1240:170509",
+    "name": "Type=Payment method, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:170529",
+        "name": "Text",
+        "text": "Billing contact",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:170530",
+        "name": "Supporting text",
+        "text": "Add a second billing contact email.",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "1240:170914",
+    "name": "Type=Plan, Breakpoint=Desktop",
+    "texts": []
+  },
+  {
+    "id": "1240:171598",
+    "name": "Type=File upload, Breakpoint=Desktop",
+    "texts": []
+  },
+  {
+    "id": "1240:168901",
+    "name": "Type=Messages, Breakpoint=Desktop",
+    "texts": []
+  },
+  {
+    "id": "8017:533549",
+    "name": "Type=Calendar event, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "8017:534516",
+        "name": "Text",
+        "text": "Product demo",
+        "width": 352,
+        "height": 28,
+        "parent": "Date and text"
+      },
+      {
+        "id": "8017:534256",
+        "name": "Text",
+        "text": "Details",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "8017:534297",
+        "name": "Text",
+        "text": "Friday, Jan 10, 2025",
+        "width": 324,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "8017:534300",
+        "name": "Text",
+        "text": "1:30 PM - 3:30 PM",
+        "width": 324,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "8017:534303",
+        "name": "Text",
+        "text": "10 min before",
+        "width": 324,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "8017:534309",
+        "name": "Text",
+        "text": "Organizer",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "8017:534415",
+        "name": "Text",
+        "text": "Attendees",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "8017:534421",
+        "name": "Text",
+        "text": "6 guests",
+        "width": 57,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "8017:534423",
+        "name": "Supporting text",
+        "text": "5 yes",
+        "width": 35,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "8017:534425",
+        "name": "Supporting text",
+        "text": "1 awaiting",
+        "width": 64,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "8017:534564",
+        "name": "Text",
+        "text": "About this event",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "8017:534602",
+        "name": "Supporting text",
+        "text": "Sienna is inviting you to a scheduled Zoom meeting.\nTopic: Product demo for the new dashboard and Q&A session.\nJoin Zoom Meeting: https://us02web.zoom.us/j/86341969512\nMeeting ID: 863 4196 9512",
+        "width": 352,
+        "height": 162,
+        "parent": "Section"
+      },
+      {
+        "id": "8017:534622",
+        "name": "Text",
+        "text": "Going?",
+        "width": 149,
+        "height": 20,
+        "parent": "Content"
+      }
+    ]
+  },
+  {
+    "id": "1251:2998",
+    "name": "Type=Notifications, Breakpoint=Desktop",
+    "texts": []
+  },
+  {
+    "id": "1247:167",
+    "name": "Type=Message chat, Breakpoint=Desktop",
+    "texts": []
+  },
+  {
+    "id": "1240:164129",
+    "name": "Type=Labels, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:164136",
+        "name": "Text",
+        "text": "Custom labels",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      }
+    ]
+  },
+  {
+    "id": "1240:138404",
+    "name": "Type=Team members, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:138411",
+        "name": "Text",
+        "text": "Design",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "1240:138846",
+        "name": "Text",
+        "text": "Product",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "1240:138919",
+        "name": "Label",
+        "text": "Marketing",
+        "width": 304,
+        "height": 20,
+        "parent": "Section"
+      }
+    ]
+  },
+  {
+    "id": "1240:162455",
+    "name": "Type=User profile, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "1240:162675",
+        "name": "Text",
+        "text": "Diepreye Ọ̀rẹ̀kọ́yà",
+        "width": 158,
+        "height": 28,
+        "parent": "Text and online indicator"
+      },
+      {
+        "id": "1240:162676",
+        "name": "Supporting text",
+        "text": "chioma@PansGPT.com",
+        "width": 352,
+        "height": 24,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163429",
+        "name": "Text",
+        "text": "About",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163492",
+        "name": "Supporting text",
+        "text": "I'm a Designer based in Melbourne. I co-founded Layers Studio™ where we help early stage founders and startups take their product from 0→1.",
+        "width": 352,
+        "height": 60,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:134780",
+        "name": "Text",
+        "text": "Melbourne, Australia",
+        "width": 324,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "9230:134783",
+        "name": "Text",
+        "text": "layers.studio",
+        "width": 324,
+        "height": 20,
+        "parent": "Icon and text"
+      },
+      {
+        "id": "1240:163558",
+        "name": "Text",
+        "text": "Work experience",
+        "width": 352,
+        "height": 20,
+        "parent": "Section"
+      },
+      {
+        "id": "1240:163942",
+        "name": "Text",
+        "text": "Founder",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163943",
+        "name": "Supporting text",
+        "text": "Layers Studio™",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163945",
+        "name": "Dates",
+        "text": "May 2020 – Present",
+        "width": 292,
+        "height": 20,
+        "parent": "Content"
+      },
+      {
+        "id": "1240:163950",
+        "name": "Text",
+        "text": "UX Designer",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163951",
+        "name": "Supporting text",
+        "text": "Sisyphus",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163952",
+        "name": "Dates",
+        "text": "Jan 2018 – May 2020",
+        "width": 292,
+        "height": 20,
+        "parent": "Content"
+      },
+      {
+        "id": "1240:163957",
+        "name": "Text",
+        "text": "Visual Designer",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163958",
+        "name": "Supporting text",
+        "text": "Catalog",
+        "width": 292,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "1240:163959",
+        "name": "Dates",
+        "text": "Mar 2017 – Jan 2018",
+        "width": 292,
+        "height": 20,
+        "parent": "Content"
+      }
+    ]
+  },
+  {
+    "id": "9222:10419",
+    "name": "Type=A.I. assistant message, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "9220:53447",
+        "name": "Text",
+        "text": "Sync with Rhea move to 1:30 PM.",
+        "width": 256,
+        "height": 20,
+        "parent": "Text wrapper"
+      },
+      {
+        "id": "9220:53452",
+        "name": "Text",
+        "text": "Strategy session with Sienna move to Thursday at 3 PM.",
+        "width": 256,
+        "height": 40,
+        "parent": "Text wrapper"
+      }
+    ]
+  },
+  {
+    "id": "9222:10405",
+    "name": "Type=A.I. assistant intro, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "9220:39373",
+        "name": "Text",
+        "text": "Hi Olivia,",
+        "width": 352,
+        "height": 28,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9220:39538",
+        "name": "Supporting text",
+        "text": "Welcome back! How can I help?",
+        "width": 352,
+        "height": 28,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9220:39540",
+        "name": "Supporting text",
+        "text": "I’m here to help tackle your tasks. Choose from the prompts below or tell me what you need!",
+        "width": 352,
+        "height": 40,
+        "parent": "Text and supporting text"
+      }
+    ]
+  },
+  {
+    "id": "9230:140485",
+    "name": "Type=User settings, Breakpoint=Desktop",
+    "texts": [
+      {
+        "id": "9230:135456",
+        "name": "Text",
+        "text": "Fatimah Ọ̀ṣúntókun",
+        "width": 169,
+        "height": 28,
+        "parent": "Text and online indicator"
+      },
+      {
+        "id": "9230:138265",
+        "name": "Supporting text",
+        "text": "@siennahewitt",
+        "width": 352,
+        "height": 20,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135665",
+        "name": "Supporting text",
+        "text": "Followers",
+        "width": 56,
+        "height": 18,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135666",
+        "name": "Text",
+        "text": "32,086",
+        "width": 56,
+        "height": 24,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135669",
+        "name": "Supporting text",
+        "text": "Following",
+        "width": 56,
+        "height": 18,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135670",
+        "name": "Text",
+        "text": "4,698",
+        "width": 45,
+        "height": 24,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135673",
+        "name": "Supporting text",
+        "text": "Posts",
+        "width": 33,
+        "height": 18,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135674",
+        "name": "Text",
+        "text": "128",
+        "width": 26,
+        "height": 24,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135677",
+        "name": "Supporting text",
+        "text": "Collections",
+        "width": 66,
+        "height": 18,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135678",
+        "name": "Text",
+        "text": "24",
+        "width": 20,
+        "height": 24,
+        "parent": "Text and supporting text"
+      },
+      {
+        "id": "9230:135876",
+        "name": "Text",
+        "text": "Verified 2 Jan, 2025",
+        "width": 330,
+        "height": 18,
+        "parent": "Icon and text"
+      }
+    ]
+  }
+]

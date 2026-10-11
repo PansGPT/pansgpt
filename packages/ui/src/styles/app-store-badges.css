@@ -1,0 +1,23 @@
+.p-app-store-badge { position: relative; display: inline-flex; width: 135px; height: 40px; border-radius: 7px; flex: none; vertical-align: middle; }
+.p-app-store-badge[data-size="lg"] { width: 148.5px; height: 44px; border-radius: 8px; }
+.p-app-store-badge[data-store="appStore"] { width: 120px; }
+.p-app-store-badge[data-store="appStore"][data-size="lg"] { width: 132px; }
+.p-app-store-badge[data-store="macAppStore"] { width: 156px; }
+.p-app-store-badge[data-store="macAppStore"][data-size="lg"] { width: 172px; }
+.p-app-store-badge[data-store="galaxyStore"] { width: 147px; }
+.p-app-store-badge[data-store="galaxyStore"][data-size="lg"] { width: 161.7px; }
+.p-app-store-badge[data-store="appGallery"] { width: 133px; }
+.p-app-store-badge[data-store="appGallery"][data-size="lg"] { width: 146.3px; }
+.p-app-store-badge img { display: block; }
+.p-app-store-badge:focus-visible { outline: none; box-shadow: var(--effect-focus-ring); }
+.p-app-store-badge[href] { cursor: pointer; }
+.p-app-store-galaxy-artwork { position: absolute; inset: 0; border-radius: inherit; background: var(--figma-colors-base-black); box-shadow: inset 0 0 0 1px var(--app-store-badge-border); }
+.p-app-store-galaxy-artwork img { position: absolute; }
+.p-app-store-galaxy-name { left: 42.5px; top: 20px; }
+.p-app-store-galaxy-caption { left: 42.503597px; top: 8.398825px; }
+.p-app-store-galaxy-gradient { left: 9px; top: 7px; width: 26px; height: 26px; }
+.p-app-store-galaxy-bag { left: 15.138896px; top: 12.596787px; }
+.p-app-store-badge[data-size="lg"] .p-app-store-galaxy-name { left: 46.749996px; top: 22px; }
+.p-app-store-badge[data-size="lg"] .p-app-store-galaxy-caption { left: 46.753941px; top: 9.238705px; }
+.p-app-store-badge[data-size="lg"] .p-app-store-galaxy-gradient { left: 9.9px; top: 7.7px; width: 28.6px; height: 28.6px; }
+.p-app-store-badge[data-size="lg"] .p-app-store-galaxy-bag { left: 16.652763px; top: 13.856466px; }

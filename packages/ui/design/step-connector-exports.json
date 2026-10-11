@@ -1,0 +1,77 @@
+{
+  "reason": "Original individual connector graphics exported for live status selection and bitmap width adaptation; original combined SVG remains in source reference layouts.",
+  "exports": [
+    {
+      "id": "9364:556387",
+      "marker": "check",
+      "state": "complete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-check-complete.png"
+    },
+    {
+      "id": "9364:556388",
+      "marker": "check",
+      "state": "incomplete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-check-incomplete.png"
+    },
+    {
+      "id": "9364:556346",
+      "marker": "number",
+      "state": "complete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-number-complete.png"
+    },
+    {
+      "id": "9364:556349",
+      "marker": "number",
+      "state": "incomplete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-number-incomplete.png"
+    },
+    {
+      "id": "9364:556455",
+      "marker": "featured",
+      "state": "complete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-featured-complete.png"
+    },
+    {
+      "id": "9364:556456",
+      "marker": "featured",
+      "state": "incomplete",
+      "width": 256,
+      "height": 0,
+      "format": "PNG",
+      "scale": 1,
+      "pixelWidth": 258,
+      "pixelHeight": 2,
+      "path": "assets/step-connector-featured-incomplete.png"
+    }
+  ]
+}

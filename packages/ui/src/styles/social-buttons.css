@@ -1,0 +1,27 @@
+.p-social-button.p-button { height: 44px; padding: 10px 16px; gap: 12px; border-radius: var(--figma-radius-md); font: 600 16px/24px var(--font-body); background: var(--bg-primary); color: var(--text-secondary-700); box-shadow: var(--effect-shadow-xs-skeuomorphic); max-width: 100%; }
+.p-social-button.p-button .p-button-text { padding: 0; }
+.p-social-button.p-button[data-icon-only] { width: 44px; padding: 10px; aspect-ratio: auto; }
+.p-social-button .p-social-hover { display: none; }
+.p-social-button.p-button[data-social-theme="brand"]:not([data-platform="google"]) { background: var(--figma-colors-base-black); color: var(--text-white); }
+.p-social-button.p-button[data-social-theme="brand"][data-platform="facebook"] { background: #1877f2; }
+.p-social-button.p-button[data-social-theme="brand"][data-platform="dribbble"] { background: #ea4c89; }
+.p-social-button.p-button[data-social-theme="brand"]:not([data-platform="google"])::after { box-shadow: inset 0 0 0 2px rgb(255 255 255 / 12%); }
+.p-social-button.p-button:hover:not(:disabled):not([data-reference-state]),
+.p-social-button.p-button[data-reference-state="hover"] { background: var(--bg-primary-hover); color: var(--text-secondary-hover); }
+.p-social-button.p-button[data-social-theme="brand"]:not([data-platform="google"]):hover:not(:disabled):not([data-reference-state]),
+.p-social-button.p-button[data-social-theme="brand"]:not([data-platform="google"])[data-reference-state="hover"] { background: var(--figma-colors-base-black); color: var(--text-white); }
+.p-social-button.p-button[data-social-theme="brand"][data-platform="facebook"]:hover:not(:disabled):not([data-reference-state]),
+.p-social-button.p-button[data-social-theme="brand"][data-platform="facebook"][data-reference-state="hover"] { background: #0c63d4; }
+.p-social-button.p-button[data-social-theme="brand"][data-platform="dribbble"]:hover:not(:disabled):not([data-reference-state]),
+.p-social-button.p-button[data-social-theme="brand"][data-platform="dribbble"][data-reference-state="hover"] { background: #e62872; }
+.p-social-button[data-social-theme="gray"]:hover:not(:disabled):not([data-reference-state]) .p-social-normal,
+.p-social-button[data-social-theme="gray"][data-reference-state="hover"] .p-social-normal { display: none; }
+.p-social-button[data-social-theme="gray"]:hover:not(:disabled):not([data-reference-state]) .p-social-hover,
+.p-social-button[data-social-theme="gray"][data-reference-state="hover"] .p-social-hover { display: block; }
+.p-social-button.p-button:focus-visible:not([data-reference-state]),
+.p-social-button.p-button[data-reference-state="focused"] { outline: none; box-shadow: var(--effect-focus-ring-shadow-xs-skeuomorphic); }
+.p-social-button.p-button:disabled { opacity: .5; cursor: not-allowed; }
+.p-social-button-group { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 360px; max-width: 100%; }
+.p-social-button-group .p-social-button { width: 100%; min-width: 0; }
+.p-social-button-group[data-layout="icons"] { flex-direction: row; }
+.p-social-button-group[data-layout="icons"] .p-social-button { flex: 1; }

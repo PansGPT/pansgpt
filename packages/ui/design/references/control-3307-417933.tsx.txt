@@ -1,0 +1,36 @@
+const imgSizeSmOutlineFalse = "https://www.figma.com/api/mcp/asset/db965a61-d36f-4c38-88f6-99a72c41ff27.svg";
+
+type DotProps = {
+  className?: string;
+  outline?: "False";
+  size?: "sm";
+};
+
+function Dot({ className, outline = "False", size = "sm" }: DotProps) {
+  return (
+    <div className={className || "relative size-[8px]"} data-node-id="1046:12311">
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSizeSmOutlineFalse} />
+    </div>
+  );
+}
+
+type TagProps = {
+  className?: string;
+  action?: "Text only";
+  checkbox?: "False";
+  icon?: "Dot";
+  size?: "lg";
+};
+
+function Tag({ className, action = "Text only", checkbox = "False", icon = "Dot", size = "lg" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex items-center justify-center pl-[9px] pr-[10px] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3307:417933">
+      <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:406291" data-name="Content">
+        <Dot className="relative shrink-0 size-[8px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3307:417935">
+          Label
+        </p>
+      </div>
+    </div>
+  );
+}

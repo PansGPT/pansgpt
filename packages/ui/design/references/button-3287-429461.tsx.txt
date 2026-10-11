@@ -1,0 +1,54 @@
+const imgPlaceholder = "https://www.figma.com/api/mcp/asset/0c2da794-4522-4c56-999e-76fc95f13274.svg";
+const imgPlaceholder1 = "https://www.figma.com/api/mcp/asset/1dc7216b-9128-48d4-86ae-cb7a8839b153.svg";
+
+type ButtonsButtonDestructiveProps = {
+  className?: string;
+  hierarchy?: "Tertiary";
+  iconLeading?: boolean;
+  iconLeadingSwap?: React.ReactNode | null;
+  iconOnly?: "False";
+  iconTrailing?: boolean;
+  iconTrailingSwap?: React.ReactNode | null;
+  size?: "sm";
+  state?: "Disabled";
+};
+
+function ButtonsButtonDestructive({ className, hierarchy = "Tertiary", iconLeading = true, iconLeadingSwap = null, iconOnly = "False", iconTrailing = true, iconTrailingSwap = null, size = "sm", state = "Disabled" }: ButtonsButtonDestructiveProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)]"} data-node-id="3287:429461">
+      {iconLeading &&
+        (iconLeadingSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3468:596015" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+          </div>
+        ))}
+      <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="6421:296606" data-name="Text padding">
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-disabled,#a4a7ae)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="3287:433765">
+          Button CTA
+        </p>
+      </div>
+      {iconTrailing &&
+        (iconTrailingSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3470:596457" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+          </div>
+        ))}
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0).
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## placeholder
+**Node ID:** 3465:410042
+
+placeholder, circle
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

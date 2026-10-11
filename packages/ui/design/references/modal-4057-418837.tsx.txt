@@ -1,0 +1,118 @@
+const imgDividerWrap = "https://www.figma.com/api/mcp/asset/f6ea61ec-6fa5-45a0-81bb-3d5a1658c18a.svg";
+const imgSettings01 = "https://www.figma.com/api/mcp/asset/706db762-3c83-48cf-8c31-1772a1f6356e.svg";
+const imgContent = "https://www.figma.com/api/mcp/asset/3a45d3d9-9f74-4388-a212-f4e7cd87db56.svg";
+const imgContent1 = "https://www.figma.com/api/mcp/asset/32c5d7dc-0f6d-495a-8b89-098b5ecca279.svg";
+const imgTrash01 = "https://www.figma.com/api/mcp/asset/4a51bcd3-8852-416c-bac5-36911cdb883e.svg";
+const imgXClose = "https://www.figma.com/api/mcp/asset/3d480838-dcab-492a-8986-2dcb73fa84f8.svg";
+
+type ModalActionsProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  checkbox?: boolean;
+  destructive?: "True";
+  divider?: boolean;
+  tertiaryButton?: boolean;
+  type?: "Horizontal right aligned (checkbox)";
+};
+
+function ModalActions({ className, breakpoint = "Mobile", checkbox = true, destructive = "True", divider = true, tertiaryButton = true, type = "Horizontal right aligned (checkbox)" }: ModalActionsProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start justify-center pt-[var(--spacing-3xl,24px)] relative w-[343px]"} data-node-id="4057:414665">
+      {divider && (
+        <div className="h-[17px] relative shrink-0 w-full" data-node-id="4057:415167" data-name="Divider-wrap">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDividerWrap} />
+        </div>
+      )}
+      <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start pb-[var(--spacing-xl,16px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="4057:414783" data-name="Content">
+        <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="4057:414784" data-name="Buttons/Button destructive">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-error-solid,#d92d20)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414784;6421:296619" data-name="Text padding">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414784;3287:433493">
+              Delete
+            </p>
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip px-[var(--spacing-xl,16px)] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0 w-full" data-node-id="4057:414785" data-name="Buttons/Button">
+          <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+          <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:414785;6421:274451" data-name="Text padding">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:414785;3287:433081">
+              Cancel
+            </p>
+          </div>
+          <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center relative shrink-0 w-full" data-node-id="4057:415029" data-name="Checkbox and button">
+          {checkbox && (
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-start min-w-px relative" data-node-id="4057:415030" data-name="Checkbox">
+              <div className="content-stretch flex items-center justify-center pt-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I4057:415030;1097:63684" data-name="Input">
+                <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--spacing-xs,4px)] shrink-0 size-[16px]" data-node-id="I4057:415030;3281:386459" data-name="_Checkbox base" />
+              </div>
+              <div className="content-stretch flex flex-col items-start relative shrink-0" data-node-id="I4057:415030;1097:63686" data-name="Text and supporting text">
+                <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I4057:415030;1097:63687">
+                  Don’t show again
+                </p>
+              </div>
+            </div>
+          )}
+          {tertiaryButton && (
+            <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="4057:415031" data-name="Buttons/Button">
+              <div className="relative shrink-0 size-[20px]" data-node-id="I4057:415031;3468:423435" data-name="placeholder">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSettings01} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="I4057:415031;3287:433397">
+                Settings
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Destructive horizontal";
+};
+
+function Modal({ className, breakpoint = "Mobile", type = "Destructive horizontal" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[812px] items-center justify-end overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-xl,16px)] px-[var(--container-padding-mobile,16px)] relative w-[375px]"} data-node-id="4057:418837">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411403" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411403;4896:411044" data-name="Background overlay" />
+      </div>
+      <div className="bg-[var(--colors\/background\/bg-primary,white)] content-stretch flex flex-col items-center overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" data-node-id="4057:422437" data-name="Modal">
+        <div className="absolute left-[-128px] size-[336px] top-[-124px]" data-node-id="7449:110325" data-name="Background pattern decorative">
+          <div className="-translate-x-1/2 absolute left-1/2 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[336px_336px] size-[336px] top-0" data-node-id="I7449:110325;4947:374952" style={{ maskImage: `url("${imgContent}")` }} data-name="Content">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgContent1} />
+          </div>
+        </div>
+        <div className="content-stretch flex flex-col items-start relative shrink-0 w-full" data-node-id="4057:422438" data-name="_Modal header">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start pt-[var(--spacing-2xl,20px)] px-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="I4057:422438;4057:414525" data-name="Content">
+            <div className="bg-[var(--colors\/background\/bg-error-secondary,#fee4e2)] overflow-clip relative rounded-[var(--radius-full,9999px)] shrink-0 size-[48px]" data-node-id="I4057:422438;4057:414526" data-name="Featured icon">
+              <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="I4057:422438;4057:414526;3465:403915" data-name="check-circle">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgTrash01} />
+              </div>
+            </div>
+            <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xxs,2px)] items-start relative shrink-0 w-full" data-node-id="I4057:422438;4057:414527" data-name="Text and supporting text">
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="I4057:422438;4057:414528">
+                Delete blog post
+              </p>
+              <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="I4057:422438;4057:414529">
+                Are you sure you want to delete this post? This action cannot be undone.
+              </p>
+            </div>
+          </div>
+          <div className="absolute content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-md,8px)] right-[12px] rounded-[var(--radius-md,12px)] size-[44px] top-[12px]" data-node-id="I4057:422438;4055:413667" data-name="Buttons/Button close X">
+            <div className="relative shrink-0 size-[24px]" data-node-id="I4057:422438;4055:413667;2763:420143" data-name="x-close">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+            </div>
+          </div>
+        </div>
+        <ModalActions className="content-stretch flex flex-col items-start justify-center pt-[var(--spacing-3xl,24px)] relative shrink-0 w-full" divider={false} tertiaryButton={false} />
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,247 @@
+const imgColor = "https://www.figma.com/api/mcp/asset/c17fcfab-5485-4ffc-b3fc-ea447b3e55ee.svg";
+const imgColor1 = "https://www.figma.com/api/mcp/asset/9c7fecd9-8062-4a60-9f23-bf0523a1e1ab.svg";
+const imgColor2 = "https://www.figma.com/api/mcp/asset/3349f4f9-3b71-475d-a84c-c0504f673e16.svg";
+const imgDivider = "https://www.figma.com/api/mcp/asset/a1de78c5-3089-4e31-be82-15da79128dc5.svg";
+const imgChartBar = "https://www.figma.com/api/mcp/asset/0effb3cf-f760-4a5d-b374-d0fee832c5be.svg";
+const imgChartBar1 = "https://www.figma.com/api/mcp/asset/d9f590fa-e351-4060-9dd1-40b61fd1f7f3.svg";
+const imgChartBar2 = "https://www.figma.com/api/mcp/asset/5ad42551-4848-4c78-99d5-06cccf5d4fa6.svg";
+const imgChartBar3 = "https://www.figma.com/api/mcp/asset/d4bccd33-8db2-4842-81ed-42a55613b2dc.svg";
+const imgChartBar4 = "https://www.figma.com/api/mcp/asset/a46a44d5-00e3-490a-81e2-93c96b1ee0ac.svg";
+const imgChartBar5 = "https://www.figma.com/api/mcp/asset/4bf400bc-02b3-4ee2-aba4-e18bc8c29b96.svg";
+const imgChartBar6 = "https://www.figma.com/api/mcp/asset/5841d0fe-9787-4342-8eae-0185d7bad012.svg";
+const imgChartBar7 = "https://www.figma.com/api/mcp/asset/3d742178-2f19-43f1-9078-17d7ad957019.svg";
+
+type LineAndBarChartProps = {
+  className?: string;
+  axisLabels?: "True";
+  breakpoint?: "Desktop";
+  chartStyle?: "Bar";
+  legend?: "Top";
+};
+
+function LineAndBarChart({ className, axisLabels = "True", breakpoint = "Desktop", chartStyle = "Bar", legend = "Top" }: LineAndBarChartProps) {
+  return (
+    <div className={className || "h-[240px] relative w-[1216px]"} data-node-id="1063:68627">
+      <div className="absolute content-stretch flex gap-[var(--spacing-xs,4px)] inset-0 items-start" data-node-id="1063:68628" data-name="Axis">
+        <div className="content-stretch flex flex-col h-full items-start justify-center pb-[var(--spacing-3xl,24px)] relative shrink-0" data-node-id="1063:68629" data-name="_Y-axis label">
+          <div className="flex h-[70px] items-center justify-center relative shrink-0 w-[18px]" data-node-id="I1063:68629;1061:46580">
+            <div className="-rotate-90 flex-none">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap">Active users</p>
+            </div>
+          </div>
+        </div>
+        <div className="content-stretch flex flex-[1_0_0] flex-col h-full items-end min-w-px relative" data-node-id="1063:68630" data-name="Content">
+          <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="1063:68631" data-name="_Legend">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:68631;1067:6102" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:68631;1067:6103" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:68631;1067:6104">
+                Series 1
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:68631;1067:6405" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:68631;1067:6406" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor1} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:68631;1067:6407">
+                Series 2
+              </p>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center relative shrink-0" data-node-id="I1063:68631;1067:6708" data-name="Legend series">
+              <div className="relative shrink-0 size-[8px]" data-node-id="I1063:68631;1067:6709" data-name="Color">
+                <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgColor2} />
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1063:68631;1067:6710">
+                Series 3
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-[1_0_0] flex-col items-start justify-between min-h-px relative w-full" data-node-id="1067:3525" data-name="_Y-axis">
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[22px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:826" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:826;1061:46470">
+                1,000
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:826;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:826;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:827" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:827;1061:46470">
+                800
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:827;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:827;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:828" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:828;1061:46470">
+                600
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:828;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:828;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:829" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:829;1061:46470">
+                400
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:829;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:829;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:830" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:830;1061:46470">
+                200
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:830;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:830;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] h-[17px] items-center relative shrink-0 w-full" data-node-id="I1067:3525;1067:831" data-name="_Y-axis line">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-right w-[40px]" data-node-id="I1067:3525;1067:831;1061:46470">
+                0
+              </p>
+              <div className="flex-[1_0_0] h-px min-w-px relative" data-node-id="I1067:3525;1067:831;1076:3243" data-name="Divider">
+                <div className="absolute bottom-0 left-0 right-0 top-full" data-node-id="I1067:3525;1067:831;1076:1987" data-name="Divider">
+                  <div className="absolute inset-[-1px_0_0_0]">
+                    <img alt="" className="block max-w-none size-full" src={imgDivider} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="content-stretch flex flex-col items-start pl-[var(--spacing-6xl,48px)] relative shrink-0 w-full" data-node-id="6437:277322" data-name="X-axis">
+            <div className="[word-break:break-word] content-stretch flex font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal items-center justify-between leading-[var(--line-height\/text-xs,18px)] px-[var(--spacing-3xl,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center w-full whitespace-nowrap" data-node-id="6437:277323" data-name="_X-axis">
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46486">
+                Jan
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46487">
+                Feb
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46488">
+                Mar
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1063:47030">
+                Apr
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1063:47139">
+                May
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46489">
+                Jun
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46490">
+                Jul
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46491">
+                Aug
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46492">
+                Sep
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46493">
+                Oct
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46902">
+                Nov
+              </p>
+              <p className="relative shrink-0" data-node-id="I6437:277323;1061:46903">
+                Dec
+              </p>
+            </div>
+          </div>
+          <div className="content-stretch flex items-start justify-center pt-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="1063:68641" data-name="_X-axis label">
+            <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-xs,18px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-xs,12px)] text-center whitespace-nowrap" data-node-id="I1063:68641;1061:47226">
+              Month
+            </p>
+          </div>
+          <div className="absolute inset-[20px_0_52px_48px] overflow-clip" data-node-id="1063:68642" data-name="_Chart data">
+            <div className="absolute content-stretch flex inset-0 items-end justify-between overflow-clip px-[var(--spacing-2xl,20px)]" data-node-id="I1063:68642;1063:72834" data-name="Chart">
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72835" data-name="Bar">
+                <div className="absolute inset-[48px_0_0_0]" data-node-id="I1063:68642;3292:572453" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72837" data-name="Bar">
+                <div className="absolute inset-[16px_0_0_0]" data-node-id="I1063:68642;3292:573149" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar1} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72839" data-name="Bar">
+                <div className="absolute inset-[80px_0_0_0]" data-node-id="I1063:68642;3292:573213" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar2} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72841" data-name="Bar">
+                <div className="absolute inset-[40px_0_0_0]" data-node-id="I1063:68642;3292:572829" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar3} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72843" data-name="Bar">
+                <div className="absolute inset-[80px_0_0_0]" data-node-id="I1063:68642;3292:573021" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar4} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72845" data-name="Bar">
+                <div className="absolute inset-[24px_0_0_0]" data-node-id="I1063:68642;3292:572957" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar5} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72847" data-name="Bar">
+                <div className="absolute inset-[48px_0_0_0]" data-node-id="I1063:68642;3292:573085" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72849" data-name="Bar">
+                <div className="absolute inset-[40px_0_0_0]" data-node-id="I1063:68642;3292:572893" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar3} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72851" data-name="Bar">
+                <div className="absolute inset-[48px_0_0_0]" data-node-id="I1063:68642;3292:572765" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72853" data-name="Bar">
+                <div className="absolute inset-[32px_0_0_0]" data-node-id="I1063:68642;3292:572701" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar6} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72855" data-name="Bar">
+                <div className="absolute inset-[16px_0_0_0]" data-node-id="I1063:68642;3292:573397" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar1} />
+                </div>
+              </div>
+              <div className="h-full relative shrink-0 w-[32px]" data-node-id="I1063:68642;1063:72857" data-name="Bar">
+                <div className="absolute inset-[56px_0_0_0]" data-node-id="I1063:68642;3292:572637" data-name="Chart bar">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChartBar7} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

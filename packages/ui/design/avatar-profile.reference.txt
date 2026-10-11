@@ -1,0 +1,88 @@
+const imgSize2Xl = "https://www.figma.com/api/mcp/asset/65c4c871-0048-4833-a586-eee8ec7a9fcf.svg";
+const imgSize3Xl = "https://www.figma.com/api/mcp/asset/d61ea385-3c28-4964-ba0a-0f8210b544c5.svg";
+const imgSize4Xl = "https://www.figma.com/api/mcp/asset/f0557e81-4c8f-412a-8dc0-81c6df1d6c00.svg";
+const imgContent = "https://www.figma.com/api/mcp/asset/df53233e-d619-4eaa-a889-f500c1ba397c.png";
+const imgUser01 = "https://www.figma.com/api/mcp/asset/08e441a0-7ee5-45eb-a3f6-b34444a0e0fa.svg";
+const imgUser2 = "https://www.figma.com/api/mcp/asset/4e653b3c-f4ba-481d-b30b-355b75ff90fa.svg";
+const imgUser3 = "https://www.figma.com/api/mcp/asset/17b9f029-829f-47b4-a958-c010e4472b72.svg";
+
+type VerifiedTickProps = {
+  className?: string;
+  size?: "2xl" | "3xl" | "4xl";
+};
+
+function VerifiedTick({ className, size = "2xl" }: VerifiedTickProps) {
+  const is3Xl = size === "3xl";
+  const is4Xl = size === "4xl";
+  return (
+    <div className={className || `relative ${is4Xl ? "size-[32px]" : is3Xl ? "size-[24px]" : "size-[20px]"}`} id={is4Xl ? "node-3302_422487" : is3Xl ? "node-3302_422481" : "node-3302_420334"}>
+      <img alt="" className="absolute block inset-0 max-w-none size-full" src={is4Xl ? imgSize4Xl : is3Xl ? imgSize3Xl : imgSize2Xl} />
+    </div>
+  );
+}
+
+type AvatarProfilePhotoProps = {
+  className?: string;
+  placeholder?: boolean;
+  size?: "sm" | "md" | "lg";
+  text?: boolean;
+  verified?: boolean;
+};
+
+export default function AvatarProfilePhoto({ className, placeholder = false, size = "sm", text = false, verified = true }: AvatarProfilePhotoProps) {
+  const isMdAndIsNotTextOrPlaceholderAndText = size === "md" && (!text || (placeholder && text));
+  const isNotPlaceholderAndNotTextAndMd = !placeholder && !text && size === "md";
+  const isNotPlaceholderAndNotTextAndSm = !placeholder && !text && size === "sm";
+  const isPlaceholderAndLg = placeholder && size === "lg";
+  const isPlaceholderAndMd = placeholder && size === "md";
+  const isPlaceholderAndNotTextAndLg = placeholder && !text && size === "lg";
+  const isPlaceholderAndNotTextAndMd = placeholder && !text && size === "md";
+  const isPlaceholderAndNotTextAndSm = placeholder && !text && size === "sm";
+  const isPlaceholderAndTextAndLg = placeholder && text && size === "lg";
+  const isPlaceholderAndTextAndMd = placeholder && text && size === "md";
+  const isPlaceholderAndTextAndSm = placeholder && text && size === "sm";
+  const isSmAndIsNotTextOrPlaceholderAndText = size === "sm" && (!text || (placeholder && text));
+  return (
+    <div className={className || `relative rounded-[var(--radius-full,9999px)] ${isSmAndIsNotTextOrPlaceholderAndText ? "size-[72px]" : isMdAndIsNotTextOrPlaceholderAndText ? "size-[96px]" : "size-[160px]"}`} id={isPlaceholderAndTextAndSm ? "node-3307_408894" : isPlaceholderAndTextAndMd ? "node-1218_1072" : isPlaceholderAndTextAndLg ? "node-1217_108484" : isPlaceholderAndNotTextAndSm ? "node-3307_408890" : isPlaceholderAndNotTextAndMd ? "node-1218_1074" : isPlaceholderAndNotTextAndLg ? "node-1217_108478" : isNotPlaceholderAndNotTextAndSm ? "node-3307_408887" : isNotPlaceholderAndNotTextAndMd ? "node-1218_1076" : "node-1217_108476"}>
+      <div className={`${String.raw`absolute bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex items-center justify-center left-0 rounded-[var(--radius-full,9999px)] top-0 `}${isPlaceholderAndTextAndSm ? "p-[4px] size-[72px]" : isPlaceholderAndNotTextAndSm ? "overflow-clip p-[4px] size-[72px]" : isPlaceholderAndMd ? "p-[5px] size-[96px]" : isPlaceholderAndLg ? "p-[7px] size-[160px]" : isNotPlaceholderAndNotTextAndSm ? "p-[3px] size-[72px]" : isNotPlaceholderAndNotTextAndMd ? "p-[4px] size-[96px]" : "p-[6px] size-[160px]"}`} id={isPlaceholderAndTextAndSm ? "node-9100_551348" : isPlaceholderAndTextAndMd ? "node-9100_551344" : isPlaceholderAndTextAndLg ? "node-9100_551347" : isPlaceholderAndNotTextAndSm ? "node-9100_551138" : isPlaceholderAndNotTextAndMd ? "node-9100_551345" : isPlaceholderAndNotTextAndLg ? "node-9100_551342" : isNotPlaceholderAndNotTextAndSm ? "node-9100_551346" : isNotPlaceholderAndNotTextAndMd ? "node-9100_551343" : "node-9100_551341"} data-name="Wrapper">
+        <div className={`border border-solid flex-[1_0_0] h-full min-w-px relative rounded-[var(--radius-full,9999px)] ${placeholder && size === "sm" ? String.raw`bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] overflow-clip` : isPlaceholderAndMd ? String.raw`bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] overflow-clip shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]` : isPlaceholderAndLg ? String.raw`bg-[var(--colors\/background\/bg-tertiary,#f5f5f5)] border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] overflow-clip shadow-[0px_24px_48px_-12px_var(--colors\/effects\/shadows\/shadow-2xl_01,rgba(10,13,18,0.18)),0px_4px_4px_-2px_var(--colors\/effects\/shadows\/shadow-2xl_02,rgba(10,13,18,0.04))]` : isNotPlaceholderAndNotTextAndSm ? "border-[rgba(0,0,0,0.08)]" : isNotPlaceholderAndNotTextAndMd ? String.raw`border-[rgba(0,0,0,0.08)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))]` : String.raw`border-[rgba(0,0,0,0.08)] shadow-[0px_24px_48px_-12px_var(--colors\/effects\/shadows\/shadow-2xl_01,rgba(10,13,18,0.18)),0px_4px_4px_-2px_var(--colors\/effects\/shadows\/shadow-2xl_02,rgba(10,13,18,0.04))]`}`} id={isPlaceholderAndTextAndSm ? "node-3307_408895" : isPlaceholderAndTextAndMd ? "node-3302_422477" : isPlaceholderAndTextAndLg ? "node-3302_422475" : isPlaceholderAndNotTextAndSm ? "node-3307_408891" : isPlaceholderAndNotTextAndMd ? "node-3302_422476" : isPlaceholderAndNotTextAndLg ? "node-3302_422474" : isNotPlaceholderAndNotTextAndSm ? "node-3307_408888" : isNotPlaceholderAndNotTextAndMd ? "node-3302_422432" : "node-3302_422399"} data-name="Content">
+          {!placeholder && !text && <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none rounded-[var(--radius-full,9999px)] size-full" src={imgContent} />}
+          {placeholder && !text && (
+            <div className={`-translate-x-1/2 -translate-y-1/2 absolute left-1/2 top-1/2 ${isPlaceholderAndNotTextAndSm ? "size-[36px]" : isPlaceholderAndNotTextAndMd ? "size-[48px]" : "size-[72px]"}`} id={isPlaceholderAndNotTextAndSm ? "node-3307_408892" : isPlaceholderAndNotTextAndMd ? "node-1218_1078" : "node-1217_108479"} data-name="user-01">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={isPlaceholderAndNotTextAndSm ? imgUser3 : isPlaceholderAndNotTextAndMd ? imgUser2 : imgUser01} />
+            </div>
+          )}
+          {placeholder && text && (
+            <p className={`${String.raw`-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-display,"Plus_Jakarta_Sans:Semibold")] font-[var(--font-weight\/semibold,normal)] left-1/2 text-[color:var(--colors\/text\/text-quaternary-\(500\),#717680)] text-center `}${isPlaceholderAndTextAndSm ? String.raw`leading-[var(--line-height\/display-sm,38px)] text-[length:var(--font-size\/display-sm,30px)] top-[calc(50%-19px)] w-[72px]` : isPlaceholderAndTextAndMd ? String.raw`leading-[var(--line-height\/display-md,44px)] text-[length:var(--font-size\/display-md,36px)] top-[calc(50%-22px)] tracking-[-0.72px] w-[96px]` : String.raw`leading-[var(--line-height\/display-xl,72px)] text-[length:var(--font-size\/display-xl,60px)] top-[calc(50%-36px)] tracking-[-1.2px] w-[160px]`}`} id={isPlaceholderAndTextAndSm ? "node-3307_408896" : isPlaceholderAndTextAndMd ? "node-1218_1073" : "node-1217_108487"}>
+              OR
+            </p>
+          )}
+        </div>
+      </div>
+      {size === "lg" && (!text || (placeholder && text)) && verified && <VerifiedTick className="absolute bottom-[8px] right-[8px] size-[32px]" size="4xl" />}
+      {isMdAndIsNotTextOrPlaceholderAndText && verified && <VerifiedTick className="absolute bottom-[4px] right-[4px] size-[24px]" size="3xl" />}
+      {isSmAndIsNotTextOrPlaceholderAndText && verified && <VerifiedTick className="absolute bottom-[2px] right-[2px] size-[20px]" />}
+    </div>
+  );
+}
+
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+
+These styles are contained in the design: Avatar user square/Olivia Rhye: , Shadows/shadow-2xl: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-2xl_02, offset: (0, 4), radius: 4, spread: -2); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-2xl_01, offset: (0, 24), radius: 48, spread: -12), Shadows/shadow-xl: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_03, offset: (0, 3), radius: 3, spread: -1.5); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_02, offset: (0, 8), radius: 8, spread: -4); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_01, offset: (0, 20), radius: 24, spread: -4), Display xl/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-xl, weight: 600, lineHeight: Line height/display-xl, letterSpacing: -2), Display md/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-md, weight: 600, lineHeight: Line height/display-md, letterSpacing: -2), Display sm/Semibold: Font(family: "Font family/font-family-display", style: Font weight/semibold, size: Font size/display-sm, weight: 600, lineHeight: Line height/display-sm, letterSpacing: 0).
+
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## user-01
+**Node ID:** 3463:405657
+
+user, persona, account, person
+
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

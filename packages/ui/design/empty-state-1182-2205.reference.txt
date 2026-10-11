@@ -1,0 +1,130 @@
+const imgBackgroundCircle = "https://www.figma.com/api/mcp/asset/88cc8ae7-3c6c-491c-b5f4-32d5013ec832.svg";
+const imgCloud = "https://www.figma.com/api/mcp/asset/6c97c486-90d8-43ff-a93a-fbb0f4a21428.svg";
+const imgCircle = "https://www.figma.com/api/mcp/asset/70a90725-9b1d-4b93-b8bf-b61d21263e19.svg";
+const imgCircle1 = "https://www.figma.com/api/mcp/asset/cc63199b-d505-4fcc-9022-a1359530b845.svg";
+const imgCircle2 = "https://www.figma.com/api/mcp/asset/3e095e5a-6ed6-410b-97cc-57f219b07d15.svg";
+const imgSearchLg = "https://www.figma.com/api/mcp/asset/d7b1b443-0308-4f4a-95af-4f7c5637f730.svg";
+const imgContent = "https://www.figma.com/api/mcp/asset/556c1234-5f4c-4507-9227-133e343af1a0.svg";
+const imgVertical = "https://www.figma.com/api/mcp/asset/517760f7-3cfd-43b7-9849-3b109296e7fd.svg";
+const imgHorizontal = "https://www.figma.com/api/mcp/asset/f8815543-65c1-4294-bc73-8aa961457eb4.svg";
+const imgPlus = "https://www.figma.com/api/mcp/asset/8106184d-11e9-4825-8d27-33a6683393e0.svg";
+
+type IllustrationProps = {
+  className?: string;
+  size?: "sm";
+  style?: "Cloud";
+};
+
+function Illustration({ className, size = "sm", style = "Cloud" }: IllustrationProps) {
+  return (
+    <div className={className || "h-[118px] relative w-[152px]"} data-node-id="1182:1994">
+      <div className="absolute left-[24px] size-[104px] top-0" data-node-id="1182:1995" data-name="Background circle">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgBackgroundCircle} />
+      </div>
+      <div className="absolute inset-[13.56%_13.16%_32.2%_13.16%]" data-node-id="1182:1996" data-name="Cloud">
+        <div className="absolute inset-[-1.56%_-18.75%_-64.06%_-18.75%]">
+          <img alt="" className="block max-w-none size-full" src={imgCloud} />
+        </div>
+      </div>
+      <div className="absolute left-[16px] size-[10px] top-[14px]" data-node-id="1182:2004" data-name="Circle">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCircle} />
+      </div>
+      <div className="absolute left-[11px] size-[14px] top-[102px]" data-node-id="1182:2005" data-name="Circle">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCircle1} />
+      </div>
+      <div className="absolute left-[138px] size-[14px] top-[28px]" data-node-id="1182:2006" data-name="Circle">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCircle1} />
+      </div>
+      <div className="absolute left-[130px] size-[8px] top-[4px]" data-node-id="1182:2007" data-name="Circle">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgCircle2} />
+      </div>
+      <div className="absolute backdrop-blur-[4px] bg-[var(--component-colors\/alpha\/alpha-black-20,rgba(0,0,0,0.2))] left-[52px] overflow-clip rounded-[var(--radius-full,9999px)] size-[48px] top-[62px]" data-node-id="1182:2008" data-name="Featured icon">
+        <div className="absolute left-[12px] size-[24px] top-[12px]" data-node-id="I1182:2008;3465:402858" data-name="check-circle">
+          <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgSearchLg} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+type EmptyStateProps = {
+  className?: string;
+  icon?: "Illustration";
+  size?: "sm";
+};
+
+function EmptyState({ className, icon = "Illustration", size = "sm" }: EmptyStateProps) {
+  return (
+    <div className={className || "content-stretch flex items-center justify-center relative w-[512px]"} data-node-id="1182:2205">
+      <div className="-translate-x-1/2 absolute left-1/2 size-[480px] top-[-188px]" data-node-id="4945:373343" data-name="Background pattern decorative">
+        <div className="-translate-x-1/2 absolute left-1/2 mask-alpha mask-intersect mask-no-clip mask-no-repeat mask-size-[480px_480px] size-[480px] top-0" data-node-id="I4945:373343;4933:393986" style={{ maskImage: `url("${imgContent}")` }} data-name="Content">
+          <div className="absolute content-stretch flex flex-col items-start left-0 overflow-clip top-0" data-node-id="I4945:373343;4933:393987" data-name="Lines">
+            <div className="relative shrink-0 size-[480px]" data-node-id="I4945:373343;4933:393988" data-name="Vertical">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgVertical} />
+            </div>
+            <div className="absolute left-0 size-[480px] top-0" data-node-id="I4945:373343;4933:394005" data-name="Horizontal">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgHorizontal} />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="content-stretch flex flex-[1_0_0] flex-col gap-[var(--spacing-3xl,24px)] items-center min-w-px relative" data-node-id="1192:506" data-name="Empty state">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-center relative shrink-0 w-full" data-node-id="1182:2206" data-name="Content">
+          <Illustration className="h-[118px] relative shrink-0 w-[152px]" />
+          <div className="[word-break:break-word] content-stretch flex flex-col gap-[var(--spacing-xs,4px)] items-center max-w-[352px] relative shrink-0 text-center w-full" data-node-id="1182:2208" data-name="Text and supporting text">
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-[length:var(--font-size\/text-md,16px)] w-full" data-node-id="1182:2209">
+              No projects found
+            </p>
+            <p className="font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-tertiary-\(600\),#535862)] text-[length:var(--font-size\/text-sm,14px)] w-full" data-node-id="1182:2210">
+              Your search “Landing page design” did not match any projects. Please try again.
+            </p>
+          </div>
+        </div>
+        <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-start relative shrink-0" data-node-id="3293:435296" data-name="Actions">
+          <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3293:435297" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3293:435297;6421:279423" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:435297;3287:433113">
+                Clear search
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+          <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] shrink-0" data-node-id="3293:435298" data-name="Buttons/Button">
+            <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+            <div className="relative shrink-0 size-[20px]" data-node-id="I3293:435298;3466:410053" data-name="placeholder">
+              <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlus} />
+            </div>
+            <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3293:435298;6421:278974" data-name="Text padding">
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3293:435298;3287:432941">
+                New project
+              </p>
+            </div>
+            <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+SUPER CRITICAL: The generated React+Tailwind code MUST be converted to match the target project's technology stack and styling system.
+1. Analyze the target codebase to identify: technology stack, styling approach, component patterns, and design tokens
+2. Convert React syntax to the target framework/library
+3. Transform all Tailwind classes to the target styling system while preserving exact visual design
+4. Follow the project's existing patterns and conventions
+DO NOT install any Tailwind as a dependency unless the user instructs you to do so.
+
+Node ids have been added to the code as data attributes, e.g. `data-node-id="1:2"`.
+These styles are contained in the design: Shadows/shadow-xl: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_03, offset: (0, 3), radius: 3, spread: -1.5); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_02, offset: (0, 8), radius: 8, spread: -4); Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xl_01, offset: (0, 20), radius: 24, spread: -4), Backdrop blurs/backdrop-blur-sm: Effect(type: BACKGROUND_BLUR, radius: 8), Text md/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-md, weight: 600, lineHeight: Line height/text-md, letterSpacing: 0), Text sm/Regular: Font(family: "Font family/font-family-body", style: Font weight/regular, size: Font size/text-sm, weight: 400, lineHeight: Line height/text-sm, letterSpacing: 0), Text sm/Semibold: Font(family: "Font family/font-family-body", style: Font weight/semibold, size: Font size/text-sm, weight: 600, lineHeight: Line height/text-sm, letterSpacing: 0), Shadows/shadow-xs-skeuomorphic: Effect(type: DROP_SHADOW, color: Colors/Effects/Shadows/shadow-xs, offset: (0, 1), radius: 2, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner, offset: (0, -2), radius: 0, spread: 0); Effect(type: INNER_SHADOW, color: Colors/Effects/Shadows/shadow-skeumorphic-inner-border, offset: (0, 0), radius: 0, spread: 1), Gradient/skeuemorphic-gradient-border: .
+Component descriptions: The following components have usage descriptions or documentation links defined in Figma. These descriptions provide important context about the intended usage, best practices, and any constraints for each component. Follow these guidelines when implementing or using these components.
+
+## search-lg
+**Node ID:** 3463:405300
+
+search, search bar, searchbar, magnify, magnifying glass, filter
+
+## plus
+**Node ID:** 3463:405282
+
+plus, add, addition, calculate, mathematics
+Images and SVGs will be stored as constants, e.g. const image = 'https://www.figma.com/api/mcp/asset/550e8400-e29b-41d4-a716-446655440000.png'. These constants will be used in the code as the source for the image, ex: <img src={image} />. Image assets are stored on a remote server for 7 days and can be fetched using the provided URLs until they expire.

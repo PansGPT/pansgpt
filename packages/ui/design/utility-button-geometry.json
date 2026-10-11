@@ -1,0 +1,314 @@
+[
+  {
+    "id": "8003:526509",
+    "name": "Size=sm, Hierarchy=Tertiary, State=Default",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8014:532004",
+    "name": "Size=sm, Hierarchy=Tertiary, State=Disabled",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8003:526541",
+    "name": "Size=sm, Hierarchy=Secondary, State=Default",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8014:532051",
+    "name": "Size=sm, Hierarchy=Secondary, State=Disabled",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8014:532022",
+    "name": "Size=xs, Hierarchy=Secondary, State=Default",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "8014:532053",
+    "name": "Size=xs, Hierarchy=Secondary, State=Disabled",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "8003:526511",
+    "name": "Size=sm, Hierarchy=Tertiary, State=Focused",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 4,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8003:526543",
+    "name": "Size=sm, Hierarchy=Secondary, State=Focused",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  },
+  {
+    "id": "8014:532024",
+    "name": "Size=xs, Hierarchy=Secondary, State=Focused",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "8003:526513",
+    "name": "Size=sm, Hierarchy=Tertiary, State=Hover",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      },
+      {
+        "name": "Cursor",
+        "x": 18,
+        "y": 18,
+        "width": 20,
+        "height": 20
+      },
+      {
+        "name": "Tooltip",
+        "x": -16.5,
+        "y": -40,
+        "width": 65,
+        "height": 34
+      }
+    ]
+  },
+  {
+    "id": "8003:526545",
+    "name": "Size=sm, Hierarchy=Secondary, State=Hover",
+    "width": 32,
+    "height": 32,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 20,
+        "height": 20
+      },
+      {
+        "name": "Cursor",
+        "x": 18,
+        "y": 18,
+        "width": 20,
+        "height": 20
+      },
+      {
+        "name": "Tooltip",
+        "x": -16.5,
+        "y": -40,
+        "width": 65,
+        "height": 34
+      }
+    ]
+  },
+  {
+    "id": "8014:532026",
+    "name": "Size=xs, Hierarchy=Secondary, State=Hover",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 1,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "name": "Cursor",
+        "x": 18,
+        "y": 18,
+        "width": 20,
+        "height": 20
+      },
+      {
+        "name": "Tooltip",
+        "x": -16.5,
+        "y": -38,
+        "width": 65,
+        "height": 34
+      }
+    ]
+  },
+  {
+    "id": "7932:552045",
+    "name": "Size=xs, Hierarchy=Tertiary, State=Default",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 12,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "7932:552048",
+    "name": "Size=xs, Hierarchy=Tertiary, State=Disabled",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 12,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "7932:552047",
+    "name": "Size=xs, Hierarchy=Tertiary, State=Focused",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 12,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      }
+    ]
+  },
+  {
+    "id": "7932:552046",
+    "name": "Size=xs, Hierarchy=Tertiary, State=Hover",
+    "width": 28,
+    "height": 28,
+    "strokeWeight": 12,
+    "children": [
+      {
+        "name": "placeholder",
+        "x": 6,
+        "y": 6,
+        "width": 16,
+        "height": 16
+      },
+      {
+        "name": "Tooltip",
+        "x": -18.5,
+        "y": -38,
+        "width": 65,
+        "height": 34
+      },
+      {
+        "name": "Cursor",
+        "x": 18,
+        "y": 18,
+        "width": 20,
+        "height": 20
+      }
+    ]
+  }
+]

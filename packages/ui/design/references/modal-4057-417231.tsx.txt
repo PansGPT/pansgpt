@@ -1,0 +1,412 @@
+const imgChevronLeft = "https://www.figma.com/api/mcp/asset/08330c1b-a8f0-4f61-9512-1bfba05a3b6f.svg";
+const imgChevronRight = "https://www.figma.com/api/mcp/asset/eafa0eda-d494-44b6-aba5-c1f115be4114.svg";
+const imgDot = "https://www.figma.com/api/mcp/asset/887a98ec-fa96-46d9-b8e4-bcb8e668375f.svg";
+const imgConnectorRight = "https://www.figma.com/api/mcp/asset/d94d0d1d-5988-4b28-aa72-ac78e79e0977.svg";
+const imgConnectorLeft = "https://www.figma.com/api/mcp/asset/d4e2ca8a-82d2-4731-a6c8-5854a465a23a.svg";
+const imgDot1 = "https://www.figma.com/api/mcp/asset/79b8a7f4-0c3a-44dd-86eb-65ced6f77b3d.svg";
+
+type DatePickerMenuProps = {
+  className?: string;
+  actions?: boolean;
+  breakpoint?: "Mobile";
+  preSetRanges?: boolean;
+  type?: "Dual dates";
+};
+
+function DatePickerMenu({ className, actions = true, breakpoint = "Mobile", preSetRanges = true, type = "Dual dates" }: DatePickerMenuProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex items-start overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\\/effects\\/shadows\\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\\/effects\\/shadows\\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\\/effects\\/shadows\\/shadow-xl_03,rgba(10,13,18,0.04))] w-[328px]"} data-node-id="1150:1926">
+      <div className="content-stretch flex flex-[1_0_0] flex-col items-center min-w-px overflow-clip relative" data-node-id="1150:1936" data-name="Date picker">
+        <div className="content-stretch flex flex-col gap-[var(--spacing-xl,16px)] items-start px-[var(--spacing-3xl,24px)] py-[var(--spacing-2xl,20px)] relative shrink-0 w-full" data-node-id="1150:1937" data-name="Content">
+          <div className="content-stretch flex flex-col gap-[var(--spacing-lg,12px)] items-start relative shrink-0 w-full" data-node-id="1150:1938" data-name="Calendar">
+            <div className="content-stretch flex items-center justify-between relative shrink-0 w-full" data-node-id="1150:1939" data-name="Month">
+              <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[32px]" data-node-id="8006:531563" data-name="Buttons/Button utility">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I8006:531563;8003:526510" data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronLeft} />
+                </div>
+              </div>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="1150:1941">
+                January 2025
+              </p>
+              <div className="content-stretch flex items-center justify-center overflow-clip p-[var(--spacing-sm,6px)] relative rounded-[var(--radius-sm,8px)] shrink-0 size-[32px]" data-node-id="8006:531524" data-name="Buttons/Button utility">
+                <div className="relative shrink-0 size-[20px]" data-node-id="I8006:531524;8003:526510" data-name="placeholder">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgChevronRight} />
+                </div>
+              </div>
+            </div>
+            <div className="content-stretch flex gap-[var(--spacing-md,8px)] items-center justify-center relative shrink-0 w-full" data-node-id="3292:567311" data-name="Input fields">
+              <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="3292:567312" data-name="Input field">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3292:567312;3531:403017" data-name="Input with label">
+                  <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3292:567312;3531:403019" data-name="Input">
+                    <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3292:567312;3531:403020" data-name="Content">
+                      <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3292:567312;3531:403022">
+                        Jan 10, 2025
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+              <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] relative shrink-0 text-[color:var(--colors\/foreground\/fg-quaternary-\(400\),#a4a7ae)] text-[length:var(--font-size\/text-md,16px)] whitespace-nowrap" data-node-id="3292:567313">
+                –
+              </p>
+              <button className="content-stretch cursor-pointer flex flex-[1_0_0] flex-col gap-[var(--spacing-sm,6px)] items-start min-w-px relative" data-node-id="3292:567314" data-name="Input field">
+                <div className="content-stretch flex flex-col gap-[var(--spacing-sm,6px)] items-start relative shrink-0 w-full" data-node-id="I3292:567314;3531:403017" data-name="Input with label">
+                  <div className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch drop-shadow-[0px_1px_1px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))] flex gap-[var(--spacing-md,8px)] items-center px-[var(--spacing-lg,12px)] py-[var(--spacing-md,8px)] relative rounded-[var(--radius-md,12px)] shrink-0 w-full" data-node-id="I3292:567314;3531:403019" data-name="Input">
+                    <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-md,8px)] items-center min-w-px relative" data-node-id="I3292:567314;3531:403020" data-name="Content">
+                      <p className="[word-break:break-word] flex-[1_0_0] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-md,24px)] min-w-px overflow-hidden relative text-[16px] text-[color:var(--colors\/text\/text-primary-\(900\),#181d27)] text-ellipsis text-left whitespace-nowrap" data-node-id="I3292:567314;3531:403022">
+                        Jan 16, 2025
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+            {preSetRanges && (
+              <div className="content-stretch flex gap-[var(--spacing-lg,12px)] items-center justify-between pt-[var(--spacing-xs,4px)] px-[var(--spacing-md,8px)] relative shrink-0 w-full" data-node-id="1150:1943" data-name="Actions">
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1150:1945" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1150:1945;3287:433289">
+                    Last week
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1150:1946" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1150:1946;3287:433289">
+                    Last month
+                  </p>
+                </div>
+                <div className="content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative shrink-0" data-node-id="1150:1947" data-name="Buttons/Button">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-brand-secondary-\(700\),#067647)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I1150:1947;3287:433289">
+                    Last year
+                  </p>
+                </div>
+              </div>
+            )}
+            <div className="content-start flex flex-wrap gap-[4px_0px] items-start relative shrink-0 w-full" data-node-id="7365:75693" data-name="Dates">
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75694" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75694;7365:57926">
+                  Mo
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75695" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75695;7365:57926">
+                  Tu
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75696" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75696;7365:57926">
+                  We
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75697" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75697;7365:57926">
+                  Th
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75698" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75698;7365:57926">
+                  Fr
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75699" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75699;7365:57926">
+                  Sa
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75700" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75700;7365:57926">
+                  Su
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7991:7067" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7991:7067;7365:57971">
+                  30
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7991:7068" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7991:7068;7365:57971">
+                  31
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75701" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75701;7365:57926">
+                  1
+                </p>
+                <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="I7365:75701;7365:57927" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75702" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75702;7365:57926">
+                  2
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75703" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75703;7365:57926">
+                  3
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75704" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75704;7365:57926">
+                  4
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75705" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75705;7365:57926">
+                  5
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75706" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75706;7365:57926">
+                  6
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75707" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75707;7365:57926">
+                  7
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75708" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75708;7365:57926">
+                  8
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75709" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75709;7365:57926">
+                  9
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75710" data-name="_Calendar cell">
+                <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="I7365:75710;7365:58068" data-name="Connector right">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75710;7365:57945">
+                  10
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75711" data-name="_Calendar cell">
+                <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="I7365:75711;7365:58078" data-name="Connector right">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+                </div>
+                <div className="absolute left-[-20px] size-[40px] top-0" data-node-id="I7365:75711;7365:58079" data-name="Connector left">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorLeft} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75711;7365:57949">
+                  11
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75712" data-name="_Calendar cell">
+                <div className="absolute left-[-20px] size-[40px] top-0" data-node-id="I7365:75712;7365:58079" data-name="Connector left">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorLeft} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75712;7365:57949">
+                  12
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75713" data-name="_Calendar cell">
+                <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="I7365:75713;7365:58078" data-name="Connector right">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75713;7365:57949">
+                  13
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75714" data-name="_Calendar cell">
+                <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="I7365:75714;7365:58078" data-name="Connector right">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+                </div>
+                <div className="absolute left-[-20px] size-[40px] top-0" data-node-id="I7365:75714;7365:58079" data-name="Connector left">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorLeft} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75714;7365:57949">
+                  14
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75715" data-name="_Calendar cell">
+                <div className="absolute right-[-20px] size-[40px] top-0" data-node-id="I7365:75715;7365:58078" data-name="Connector right">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorRight} />
+                </div>
+                <div className="absolute left-[-20px] size-[40px] top-0" data-node-id="I7365:75715;7365:58079" data-name="Connector left">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgConnectorLeft} />
+                </div>
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75715;7365:57949">
+                  15
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-brand-solid,#079455)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75716" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75716;7365:57945">
+                  16
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75718" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75718;7365:57926">
+                  17
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7991:9665" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7991:9665;7365:57926">
+                  18
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75719" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75719;7365:57926">
+                  19
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75720" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75720;7365:57926">
+                  20
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75721" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75721;7365:57926">
+                  21
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75722" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75722;7365:57926">
+                  22
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75723" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75723;7365:57926">
+                  23
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75724" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75724;7365:57926">
+                  24
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75725" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75725;7365:57926">
+                  25
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75726" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75726;7365:57926">
+                  26
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75727" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75727;7365:57926">
+                  27
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75728" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75728;7365:57926">
+                  28
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75729" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75729;7365:57926">
+                  29
+                </p>
+              </div>
+              <div className="bg-[var(--colors\/background\/bg-active,#fafafa)] relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75730" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75730;7365:57931">
+                  30
+                </p>
+                <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="I7365:75730;7365:57932" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot} />
+                </div>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75731" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75731;7365:57926">
+                  31
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75732" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75732;7365:57971">
+                  1
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75733" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75733;7365:57971">
+                  2
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75734" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75734;7365:57971">
+                  3
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75735" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75735;7365:57971">
+                  4
+                </p>
+                <div className="-translate-x-1/2 absolute bottom-[4px] left-1/2 size-[5px]" data-node-id="I7365:75735;7365:57972" data-name="Dot">
+                  <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgDot1} />
+                </div>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75736" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75736;7365:57971">
+                  5
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75737" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75737;7365:57971">
+                  6
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75738" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75738;7365:57971">
+                  7
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75739" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75739;7365:57971">
+                  8
+                </p>
+              </div>
+              <div className="relative rounded-[var(--radius-full,9999px)] shrink-0 size-[40px]" data-node-id="7365:75740" data-name="_Calendar cell">
+                <p className="-translate-x-1/2 [word-break:break-word] absolute font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Regular')] font-normal leading-[var(--line-height\/text-sm,20px)] left-1/2 text-[color:var(--colors\/text\/text-disabled,#717680)] text-[length:var(--font-size\/text-sm,14px)] text-center top-[calc(50%-10px)] w-[24px]" data-node-id="I7365:75740;7365:57971">
+                  9
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {actions && (
+          <div className="border-[var(--colors\/border\/border-secondary,#e9eaeb)] border-solid border-t content-stretch flex gap-[var(--spacing-lg,12px)] items-start justify-end p-[var(--spacing-xl,16px)] relative shrink-0 w-full" data-node-id="1150:2383" data-name="Bottom panel">
+            <div className="content-stretch flex flex-[1_0_0] gap-[var(--spacing-lg,12px)] items-start min-w-px relative" data-node-id="1150:2384" data-name="Actions">
+              <div className="border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-xs,4px)] items-center justify-center min-w-px overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="3292:566831" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-primary,white)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:566831;6421:279423" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:566831;3287:433113">
+                    Cancel
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+              <div className="border-2 border-[rgba(255,255,255,0.12)] border-solid content-stretch flex flex-[1_0_0] gap-[var(--spacing-xs,4px)] items-center justify-center min-w-px overflow-clip px-[14px] py-[10px] relative rounded-[var(--radius-md,12px)] shadow-[0px_1px_2px_0px_var(--colors\/effects\/shadows\/shadow-xs,rgba(10,13,18,0.05))]" data-node-id="3292:566832" data-name="Buttons/Button">
+                <div aria-hidden className="absolute bg-[var(--colors\/background\/bg-brand-solid,#079455)] inset-0 pointer-events-none rounded-[var(--radius-md,12px)]" />
+                <div className="content-stretch flex items-center justify-center px-[var(--spacing-xxs,2px)] relative shrink-0" data-node-id="I3292:566832;6421:278974" data-name="Text padding">
+                  <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Semibold')] font-[var(--font-weight\/semibold,normal)] leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-white,white)] text-[length:var(--font-size\/text-sm,14px)] whitespace-nowrap" data-node-id="I3292:566832;3287:432941">
+                    Apply
+                  </p>
+                </div>
+                <div className="absolute inset-0 pointer-events-none rounded-[inherit] shadow-[inset_0px_0px_0px_1px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner-border,rgba(10,13,18,0.18)),inset_0px_-2px_0px_0px_var(--colors\/effects\/shadows\/shadow-skeumorphic-inner,rgba(10,13,18,0.05))]" />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+type ModalProps = {
+  className?: string;
+  breakpoint?: "Mobile";
+  type?: "Date picker";
+};
+
+function Modal({ className, breakpoint = "Mobile", type = "Date picker" }: ModalProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col h-[812px] items-center justify-end overflow-clip pb-[var(--spacing-7xl,64px)] pt-[var(--spacing-xl,16px)] px-[var(--container-padding-mobile,16px)] relative w-[375px]"} data-node-id="4057:417231">
+      <div className="absolute backdrop-blur-[8px] inset-0" data-node-id="4896:411399" data-name="Background overlay">
+        <div className="absolute bg-[var(--colors\/background\/bg-overlay,#0a0d12)] inset-0 opacity-70" data-node-id="I4896:411399;4896:411044" data-name="Background overlay" />
+      </div>
+      <DatePickerMenu className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-secondary_alt,rgba(0,0,0,0.08))] border-solid content-stretch flex items-start overflow-clip relative rounded-[var(--radius-2xl,24px)] shadow-[0px_20px_24px_-4px_var(--colors\/effects\/shadows\/shadow-xl_01,rgba(10,13,18,0.08)),0px_8px_8px_-4px_var(--colors\/effects\/shadows\/shadow-xl_02,rgba(10,13,18,0.03)),0px_3px_3px_-1.5px_var(--colors\/effects\/shadows\/shadow-xl_03,rgba(10,13,18,0.04))] shrink-0 w-full" />
+    </div>
+  );
+}

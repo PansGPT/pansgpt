@@ -1,0 +1,50 @@
+const imgXClose = "../assets/tag-close-imgXClose.svg";
+
+type TagCloseXProps = {
+  className?: string;
+  size?: "lg";
+  state?: "Default";
+};
+
+function TagCloseX({ className, size = "lg", state = "Default" }: TagCloseXProps) {
+  return (
+    <div className={className || "content-stretch flex flex-col items-start overflow-clip p-[3px] relative rounded-[3px]"} data-node-id="3307:417859">
+      <div className="relative shrink-0 size-[14px]" data-node-id="3307:417860" data-name="x-close">
+        <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgXClose} />
+      </div>
+    </div>
+  );
+}
+
+type TagCheckboxProps = {
+  className?: string;
+  checked?: boolean;
+  size?: "lg";
+  state?: "Default";
+};
+
+function TagCheckbox({ className, checked = false, size = "lg", state = "Default" }: TagCheckboxProps) {
+  return <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid overflow-clip relative rounded-[var(--radius-xs,6px)] size-[18px]"} data-node-id="3308:406768" />;
+}
+
+type TagProps = {
+  className?: string;
+  action?: "X close";
+  checkbox?: "True";
+  icon?: "False";
+  size?: "lg";
+};
+
+function Tag({ className, action = "X close", checkbox = "True", icon = "False", size = "lg" }: TagProps) {
+  return (
+    <div className={className || "bg-[var(--colors\\/background\\/bg-primary,white)] border border-[var(--colors\\/border\\/border-primary,#d5d7da)] border-solid content-stretch flex gap-[3px] items-center justify-center pl-[5px] pr-[var(--spacing-xs,4px)] py-[var(--spacing-xs,4px)] relative rounded-[var(--radius-sm,8px)]"} data-node-id="3309:407043">
+      <div className="content-stretch flex gap-[var(--spacing-sm,6px)] items-center relative shrink-0" data-node-id="3309:407044" data-name="Content">
+        <TagCheckbox className="bg-[var(--colors\/background\/bg-primary,white)] border border-[var(--colors\/border\/border-primary,#d5d7da)] border-solid relative rounded-[var(--radius-xs,6px)] shrink-0 size-[18px]" />
+        <p className="[word-break:break-word] font-[family-name:var(--font-family\/font-family-body,'Plus_Jakarta_Sans:Medium')] font-medium leading-[var(--line-height\/text-sm,20px)] relative shrink-0 text-[color:var(--colors\/text\/text-secondary-\(700\),#414651)] text-[length:var(--font-size\/text-sm,14px)] text-center whitespace-nowrap" data-node-id="3309:407045">
+          Label
+        </p>
+      </div>
+      <TagCloseX className="content-stretch flex flex-col items-start overflow-clip p-[3px] relative rounded-[3px] shrink-0" />
+    </div>
+  );
+}

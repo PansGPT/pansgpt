@@ -1,0 +1,36 @@
+const imgPlaceholder = "../assets/link-hover-imgPlaceholder.svg";
+const imgPlaceholder1 = "../assets/link-hover-imgPlaceholder1.svg";
+
+type ButtonsButtonProps = {
+  className?: string;
+  hierarchy?: "Link color";
+  iconLeading?: boolean;
+  iconLeadingSwap?: React.ReactNode | null;
+  iconOnly?: "False";
+  iconTrailing?: boolean;
+  iconTrailingSwap?: React.ReactNode | null;
+  size?: "md";
+  state?: "Hover";
+};
+
+function ButtonsButton({ className, hierarchy = "Link color", iconLeading = true, iconLeadingSwap = null, iconOnly = "False", iconTrailing = true, iconTrailingSwap = null, size = "md", state = "Hover" }: ButtonsButtonProps) {
+  return (
+    <div className={className || "content-stretch flex gap-[var(--spacing-xs,4px)] items-center justify-center overflow-clip relative"} data-node-id="3287:427391">
+      {iconLeading &&
+        (iconLeadingSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3468:535793" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder} />
+          </div>
+        ))}
+      <p className="[text-decoration-skip-ink:none] [text-underline-position:from-font] [word-break:break-word] decoration-from-font decoration-solid font-['Plus_Jakarta_Sans:SemiBold'] font-[var(--font-weight\/semibold,normal)] font-semibold leading-[20px] relative shrink-0 text-[14px] text-[color:var(--colors\/text\/text-brand-secondary_hover,#085d3a)] underline whitespace-nowrap" data-node-id="3287:433301">
+        Button CTA
+      </p>
+      {iconTrailing &&
+        (iconTrailingSwap || (
+          <div className="relative shrink-0 size-[20px]" data-node-id="3468:568324" data-name="placeholder">
+            <img alt="" className="absolute block inset-0 max-w-none size-full" src={imgPlaceholder1} />
+          </div>
+        ))}
+    </div>
+  );
+}
