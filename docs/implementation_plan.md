@@ -3160,6 +3160,12 @@ Every image encountered—whether a 200px inline diagram or a full scanned page�
 | **Diagram / Figure / Chemical Structure** | **Vision Description** | Descriptive markdown `[Visual Description: ...]` |
 | **Table** (bitmap or scanned table)       | **Stage 6**            | Structured markdown / JSON table                 |
 
+> [!NOTE] Two-Phase Robust Ingestion Pipeline [IMAGES PHASE]
+> Ingestion is divided into two resilient phases so upstream AI outages cannot drop a document:
+>
+> 1. **Phase 1 (Immediate Text & Embeddings)**: Extracts pages, native text, and structural tables; computes embeddings and writes chunks, segments, and pages immediately. All visual assets (embedded images and scanned canvases) are queued in `document_images` with status `pending`. The document is instantly marked `completed` and searchable.
+> 2. **Phase 2 (Resumable Background Vision)**: An asynchronous background task (`process_pending_images`) drains `document_images` using a 2.1s throttle and exponential backoffs. If 3 consecutive failures occur, processing pauses gracefully without data loss. Image descriptions and transcripts are atomically attached as elements and chunks upon success.
+
 #### Stage 5 — Text-Image Transcription (OCR-First $\rightarrow$ Vision Fallback)
 
 - **Clinical Safety Rule**: Content must be recovered **verbatim** (exact drug names, dosages, units, mechanisms). **No summarization or paraphrasing is permitted.**

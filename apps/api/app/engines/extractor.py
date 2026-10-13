@@ -60,6 +60,9 @@ class ExtractedPage:
     bounding_box: dict | None = None
 
 
+TEXT_LAYER_MIN_ALNUM: int = 10  # [IMAGES PHASE]
+
+
 class DocumentExtractor:
     """
     Unified multi-format document extraction engine:
@@ -70,6 +73,8 @@ class DocumentExtractor:
     - CSV / XLSX: Structured tabular row & column extraction
     """
 
+    _ocr_available: bool | None = None  # Class-level cache for PyMuPDF local OCR [IMAGES PHASE]
+
     def __init__(self):  # [IMAGE FIX]
         self.last_stats: ExtractionStats | None = None  # [IMAGE FIX]
 
@@ -78,7 +83,9 @@ class DocumentExtractor:
     # --------------------------------------------------------------------------
 
     def check_page_text_layer(
-        self, page: fitz.Page, min_char_threshold: int = 35
+        self,
+        page: fitz.Page,
+        min_char_threshold: int = TEXT_LAYER_MIN_ALNUM,  # [IMAGES PHASE]
     ) -> tuple[bool, str, str]:
         """
         Stage 2 + Local OCR-First Step:
@@ -93,15 +100,17 @@ class DocumentExtractor:
             return True, "native", text
 
         # Attempt Local OCR-first step ($0 cost) before falling back to Vision LLM
-        try:
-            textpage_ocr = page.get_textpage_ocr(language="eng", dpi=150)
-            ocr_text = textpage_ocr.extractText().strip()
-            ocr_alnum = sum(1 for c in ocr_text if c.isalnum())
-            if ocr_alnum >= min_char_threshold:
-                return True, "ocr", ocr_text
-        except Exception:
-            # Local OCR (Tesseract / language data) not available or failed
-            pass
+        if DocumentExtractor._ocr_available is not False:  # [IMAGES PHASE]
+            try:
+                textpage_ocr = page.get_textpage_ocr(language="eng", dpi=150)
+                DocumentExtractor._ocr_available = True  # [IMAGES PHASE]
+                ocr_text = textpage_ocr.extractText().strip()
+                ocr_alnum = sum(1 for c in ocr_text if c.isalnum())
+                if ocr_alnum >= min_char_threshold:
+                    return True, "ocr", ocr_text
+            except Exception:
+                # Local OCR (Tesseract / language data) not available or failed
+                DocumentExtractor._ocr_available = False  # [IMAGES PHASE]
 
         return False, "scanned_canvas", ""
 

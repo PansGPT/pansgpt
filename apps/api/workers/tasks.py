@@ -319,6 +319,19 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
             key=key_to_ingest,  # [OFFICE PDF FIX]
             success=success,  # [OFFICE PDF FIX]
         )  # [OFFICE PDF FIX]
+
+        # Enqueue Phase 2 describe_document_images_job if images are pending [IMAGES PHASE]
+        if success:  # [IMAGES PHASE]
+            image_status = await get_image_status(document_id)  # [IMAGES PHASE]
+            if image_status.get("pending", 0) > 0:  # [IMAGES PHASE]
+                redis_pool = ctx.get("redis") if isinstance(ctx, dict) else None  # [IMAGES PHASE]
+                if redis_pool and hasattr(redis_pool, "enqueue_job"):  # [IMAGES PHASE]
+                    await redis_pool.enqueue_job(  # [IMAGES PHASE]
+                        "describe_document_images_job",  # [IMAGES PHASE]
+                        document_id,  # [IMAGES PHASE]
+                        key_to_ingest,  # [IMAGES PHASE]
+                    )  # [IMAGES PHASE]
+
         return success
     except Exception as exc:
         logger.error(
@@ -344,3 +357,65 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
             await heartbeat_task
         except asyncio.CancelledError:
             pass
+
+
+async def get_image_status(document_id: str) -> dict[str, int]:  # [IMAGES PHASE]
+    """Helper returning counts of document_images by status."""  # [IMAGES PHASE]
+    if not settings.DATABASE_URL:  # [IMAGES PHASE]
+        return {}  # [IMAGES PHASE]
+    try:  # [IMAGES PHASE]
+        conn = await asyncpg.connect(
+            settings.DATABASE_URL, statement_cache_size=0
+        )  # [IMAGES PHASE]
+        rows = await conn.fetch(  # [IMAGES PHASE]
+            """
+            SELECT status, count(*)::int as count
+            FROM public.document_images
+            WHERE document_id = $1
+            GROUP BY status;
+            """,  # [IMAGES PHASE]
+            uuid.UUID(document_id),  # [IMAGES PHASE]
+        )  # [IMAGES PHASE]
+        await conn.close()  # [IMAGES PHASE]
+        return {r["status"]: r["count"] for r in rows}  # [IMAGES PHASE]
+    except Exception as e:  # [IMAGES PHASE]
+        logger.warning(
+            "get_image_status_failed", document_id=document_id, error=str(e)
+        )  # [IMAGES PHASE]
+        return {}  # [IMAGES PHASE]
+
+
+async def describe_document_images_job(  # [IMAGES PHASE]
+    ctx: dict,  # [IMAGES PHASE]
+    document_id: str,  # [IMAGES PHASE]
+    storage_key: str,  # [IMAGES PHASE]
+    max_consecutive_failures: int = 3,  # [IMAGES PHASE]
+) -> str:  # [IMAGES PHASE]
+    """
+    ARQ Background Job for Phase 2 image processing:
+    Runs process_pending_images; if the result is 'paused' with rows still pending,
+    raises Retry(defer=300), up to 6 tries.
+    """
+    job_try = ctx.get("job_try", 1) if isinstance(ctx, dict) else 1  # [IMAGES PHASE]
+    logger.info(  # [IMAGES PHASE]
+        "worker_starting_describe_images_job",  # [IMAGES PHASE]
+        document_id=document_id,  # [IMAGES PHASE]
+        attempt=job_try,  # [IMAGES PHASE]
+        key=storage_key,  # [IMAGES PHASE]
+    )  # [IMAGES PHASE]
+    result = await document_ingestion_engine.process_pending_images(  # [IMAGES PHASE]
+        document_id=document_id,  # [IMAGES PHASE]
+        storage_key=storage_key,  # [IMAGES PHASE]
+        max_consecutive_failures=max_consecutive_failures,  # [IMAGES PHASE]
+    )  # [IMAGES PHASE]
+    if result == "paused":  # [IMAGES PHASE]
+        counts = await get_image_status(document_id)  # [IMAGES PHASE]
+        if counts.get("pending", 0) > 0 and job_try < 6:  # [IMAGES PHASE]
+            logger.info(  # [IMAGES PHASE]
+                "worker_pausing_describe_images_job_retrying",  # [IMAGES PHASE]
+                document_id=document_id,  # [IMAGES PHASE]
+                attempt=job_try,  # [IMAGES PHASE]
+                pending=counts.get("pending", 0),  # [IMAGES PHASE]
+            )  # [IMAGES PHASE]
+            raise Retry(defer=300)  # [IMAGES PHASE]
+    return result  # [IMAGES PHASE]
