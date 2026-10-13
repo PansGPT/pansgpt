@@ -29,9 +29,7 @@ class QueryExpansionEngine:
     def __init__(self):
         self.groq_key = settings.GROQ_API_KEY
         self.gemini_key = settings.GEMINI_API_KEY
-        self.groq_expansion_model = getattr(
-            settings, "GROQ_EXPANSION_MODEL", "qwen/qwen3.8-27b"
-        )
+        self.groq_expansion_model = getattr(settings, "GROQ_EXPANSION_MODEL", "qwen/qwen3.8-27b")
         self.hyde_model = getattr(settings, "HYDE_GENERATION_MODEL", "gemma-4-31b-it")
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
         # Gemma via Google AI Studio needs ~800-1500ms.

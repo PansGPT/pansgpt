@@ -106,6 +106,10 @@ class DocumentIngestionEngine:
             count=total_images,  # [IMAGE FIX]
             document_id=document_id,  # [IMAGE FIX]
         )  # [IMAGE FIX]
+        images_sent = 0  # [VISION FIX]
+        images_ok = 0  # [VISION FIX]
+        images_skipped = 0  # [VISION FIX]
+        images_empty = 0  # [VISION FIX]
         images_processed_count = 0  # [IMAGE FIX]
         vision_start_time = time.monotonic()  # [IMAGE FIX]
 
@@ -229,23 +233,26 @@ class DocumentIngestionEngine:
                 )
 
             for img in images_to_process:
+                images_sent += 1  # [VISION FIX]
                 t0 = time.monotonic()  # [IMAGE FIX]
-                route, processed_content = await image_classifier.classify_and_process(  # [IMAGE FIX]
-                    img.image_bytes,  # [IMAGE FIX]
-                    mime_type=f"image/{img.format}",  # [IMAGE FIX]
-                )  # [IMAGE FIX]
+                (
+                    route,
+                    processed_content,
+                ) = await image_classifier.classify_and_process(  # [VISION FIX]
+                    img.image_bytes,  # [VISION FIX]
+                    mime_type=f"image/{img.format}",  # [VISION FIX]
+                    page_number=img.page_number,  # [VISION FIX]
+                )  # [VISION FIX]
                 img_duration = round(time.monotonic() - t0, 3)  # [IMAGE FIX]
                 images_processed_count += 1  # [IMAGE FIX]
 
-                if route is None:  # [IMAGE FIX]
-                    logger.warning(  # [IMAGE FIX]
-                        "vision_image_skipped",  # [IMAGE FIX]
-                        page=img.page_number,  # [IMAGE FIX]
-                        duration_s=img_duration,  # [IMAGE FIX]
-                        index=images_processed_count,  # [IMAGE FIX]
-                        total=total_images,  # [IMAGE FIX]
-                    )  # [IMAGE FIX]
+                if route is None:  # [VISION FIX]
+                    if processed_content == "":  # [VISION FIX]
+                        images_empty += 1  # [VISION FIX]
+                    else:  # [VISION FIX]
+                        images_skipped += 1  # [VISION FIX]
                 else:  # [IMAGE FIX]
+                    images_ok += 1  # [VISION FIX]
                     logger.info(  # [IMAGE FIX]
                         "vision_image_processed",  # [IMAGE FIX]
                         page=img.page_number,  # [IMAGE FIX]
@@ -283,7 +290,9 @@ class DocumentIngestionEngine:
                     pct = 10 + int(30 * (images_processed_count) / total_images)  # [IMAGE FIX]
                     await progress_callback(pct)  # [IMAGE FIX]
 
-                if VISION_REQUEST_THROTTLE_SECONDS > 0 and not settings.VISION_FAKE_MODE:  # [IMAGE FIX]
+                if (
+                    VISION_REQUEST_THROTTLE_SECONDS > 0 and not settings.VISION_FAKE_MODE
+                ):  # [IMAGE FIX]
                     await asyncio.sleep(VISION_REQUEST_THROTTLE_SECONDS)  # [IMAGE FIX]
 
         if progress_callback:  # [IMAGE FIX]
@@ -341,6 +350,29 @@ class DocumentIngestionEngine:
 
         if progress_callback:
             await progress_callback(80)
+
+        # Stage 8 end: pages without chunks & summary logging (Step 3e)  # [VISION FIX]
+        all_page_nums = [p.page_number for p in extracted_pages]  # [VISION FIX]
+        pages_with_chunks = {  # [VISION FIX]
+            p  # [VISION FIX]
+            for c in chunks_records  # [VISION FIX]
+            for p in range(c["page_start"], c["page_end"] + 1)  # [VISION FIX]
+        }  # [VISION FIX]
+        pages_without_chunks = [
+            p for p in all_page_nums if p not in pages_with_chunks
+        ]  # [VISION FIX]
+        elapsed_seconds = round(time.monotonic() - vision_start_time, 2)  # [VISION FIX]
+
+        logger.info(  # [VISION FIX]
+            "ingestion_end_of_run_summary",  # [VISION FIX]
+            document_id=document_id,  # [VISION FIX]
+            images_sent=images_sent,  # [VISION FIX]
+            images_ok=images_ok,  # [VISION FIX]
+            images_skipped=images_skipped,  # [VISION FIX]
+            images_empty=images_empty,  # [VISION FIX]
+            elapsed_seconds=elapsed_seconds,  # [VISION FIX]
+            pages_without_chunks=pages_without_chunks,  # [VISION FIX]
+        )  # [VISION FIX]
 
         logger.info(
             "ingestion_pipeline_completed",

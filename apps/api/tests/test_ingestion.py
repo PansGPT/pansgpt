@@ -100,11 +100,23 @@ def test_storage_key_generation():
     assert key == f"universities/{uni_id}/courses/pcl_401/original/{doc_id}.pdf"
 
 
-def test_converted_storage_key_format():
-    """Verify canonical converted Office-to-PDF path (Roadmap 5.1)."""
-    doc_id = "018f3a30-0001-7000-8000-000000000002"
-    key = build_converted_storage_key(doc_id)
-    assert key == f"converted/{doc_id}.pdf"
+def test_converted_storage_key_format():  # [VISION FIX]
+    """Verify canonical converted Office-to-PDF path requires university and course."""  # [VISION FIX]
+    import pytest  # [VISION FIX]
+
+    doc_id = "018f3a30-0001-7000-8000-000000000002"  # [VISION FIX]
+    uni_id = "018f3a10-0001-7000-8000-000000000001"  # [VISION FIX]
+    key = build_converted_storage_key(
+        doc_id, university_id=uni_id, course_code="PCL 411"
+    )  # [VISION FIX]
+    assert key == f"universities/{uni_id}/courses/pcl_411/converted/{doc_id}.pdf"  # [VISION FIX]
+
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id)  # [VISION FIX]
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id, university_id=uni_id)  # [VISION FIX]
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id, course_code="PCL 411")  # [VISION FIX]
 
 
 def test_artifact_storage_key_generation():

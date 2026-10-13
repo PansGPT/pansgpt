@@ -158,7 +158,7 @@ class Settings(BaseSettings):
     RERANKER_DEFAULT_TOP_K: int = 6
 
     # Multimodal Vision Settings (Roadmap 6B.14 & Section 7)
-    GEMINI_VISION_MODEL: str = "gemini-1.5-flash"
+    GEMINI_VISION_MODEL: str = "gemma-4-26b-a4b-it"  # [VISION FIX]
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
     GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload

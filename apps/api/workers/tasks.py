@@ -7,12 +7,12 @@ import asyncio
 import uuid
 
 import asyncpg
+import fitz  # PyMuPDF for reading real page count from PDF bytes  # [OFFICE PDF FIX]
 import structlog
 from arq import Retry
-import fitz  # PyMuPDF for reading real page count from PDF bytes  # [OFFICE PDF FIX]
 
 from app.core.config import settings
-from app.engines.converter import ConversionError, convert_office_to_pdf  # [OFFICE PDF FIX]
+from app.engines.converter import convert_office_to_pdf  # [OFFICE PDF FIX]
 from app.engines.ingestion import document_ingestion_engine
 from app.engines.storage import build_converted_storage_key, storage_engine  # [OFFICE PDF FIX]
 
@@ -106,7 +106,9 @@ async def _get_document_meta(document_id: str) -> dict | None:  # [OFFICE PDF FI
     if not settings.DATABASE_URL:  # [OFFICE PDF FIX]
         return None  # [OFFICE PDF FIX]
     try:  # [OFFICE PDF FIX]
-        conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)  # [OFFICE PDF FIX]
+        conn = await asyncpg.connect(
+            settings.DATABASE_URL, statement_cache_size=0
+        )  # [OFFICE PDF FIX]
         row = await conn.fetchrow(  # [OFFICE PDF FIX]
             """  # [OFFICE PDF FIX]
             SELECT id, storage_key, mime_type, converted_key, university_id, course_code, page_count  # [OFFICE PDF FIX]
@@ -118,18 +120,24 @@ async def _get_document_meta(document_id: str) -> dict | None:  # [OFFICE PDF FI
         await conn.close()  # [OFFICE PDF FIX]
         return dict(row) if row else None  # [OFFICE PDF FIX]
     except Exception as e:  # [OFFICE PDF FIX]
-        logger.warning("worker_get_document_meta_failed", document_id=document_id, error=str(e))  # [OFFICE PDF FIX]
+        logger.warning(
+            "worker_get_document_meta_failed", document_id=document_id, error=str(e)
+        )  # [OFFICE PDF FIX]
         return None  # [OFFICE PDF FIX]
 
 
 async def _update_document_converted_info(  # [OFFICE PDF FIX]
-    document_id: str, converted_key: str, page_count: int | None = None  # [OFFICE PDF FIX]
+    document_id: str,
+    converted_key: str,
+    page_count: int | None = None,  # [OFFICE PDF FIX]
 ) -> None:  # [OFFICE PDF FIX]
     """Updates documents.converted_key and optionally page_count."""  # [OFFICE PDF FIX]
     if not settings.DATABASE_URL:  # [OFFICE PDF FIX]
         return  # [OFFICE PDF FIX]
     try:  # [OFFICE PDF FIX]
-        conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)  # [OFFICE PDF FIX]
+        conn = await asyncpg.connect(
+            settings.DATABASE_URL, statement_cache_size=0
+        )  # [OFFICE PDF FIX]
         if page_count is not None:  # [OFFICE PDF FIX]
             await conn.execute(  # [OFFICE PDF FIX]
                 """  # [OFFICE PDF FIX]
@@ -153,7 +161,9 @@ async def _update_document_converted_info(  # [OFFICE PDF FIX]
             )  # [OFFICE PDF FIX]
         await conn.close()  # [OFFICE PDF FIX]
     except Exception as e:  # [OFFICE PDF FIX]
-        logger.warning("worker_update_converted_info_failed", document_id=document_id, error=str(e))  # [OFFICE PDF FIX]
+        logger.warning(
+            "worker_update_converted_info_failed", document_id=document_id, error=str(e)
+        )  # [OFFICE PDF FIX]
 
 
 async def ingest_document_job(  # [OFFICE PDF FIX]
@@ -200,7 +210,9 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
 
     try:
         # Determine if file is Office format (.doc, .docx, .ppt, .pptx)  # [OFFICE PDF FIX]
-        ext = storage_key.rsplit(".", 1)[-1].lower() if "." in storage_key else ""  # [OFFICE PDF FIX]
+        ext = (
+            storage_key.rsplit(".", 1)[-1].lower() if "." in storage_key else ""
+        )  # [OFFICE PDF FIX]
         doc_meta = await _get_document_meta(document_id)  # [OFFICE PDF FIX]
         mime_type = doc_meta.get("mime_type") if doc_meta else ""  # [OFFICE PDF FIX]
         university_id = doc_meta.get("university_id") if doc_meta else None  # [OFFICE PDF FIX]
@@ -211,10 +223,15 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
         is_office = ext in office_extensions  # [OFFICE PDF FIX]
         if not is_office and mime_type:  # [OFFICE PDF FIX]
             mime_lower = mime_type.lower()  # [OFFICE PDF FIX]
-            if any(m in mime_lower for m in ("wordprocessing", "msword", "officedocument.word")):  # [OFFICE PDF FIX]
+            if any(
+                m in mime_lower for m in ("wordprocessing", "msword", "officedocument.word")
+            ):  # [OFFICE PDF FIX]
                 is_office = True  # [OFFICE PDF FIX]
                 ext = ext or "docx"  # [OFFICE PDF FIX]
-            elif any(m in mime_lower for m in ("presentation", "powerpoint", "officedocument.presentation")):  # [OFFICE PDF FIX]
+            elif any(
+                m in mime_lower
+                for m in ("presentation", "powerpoint", "officedocument.presentation")
+            ):  # [OFFICE PDF FIX]
                 is_office = True  # [OFFICE PDF FIX]
                 ext = ext or "pptx"  # [OFFICE PDF FIX]
 
@@ -231,40 +248,62 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
                     reused = True  # [OFFICE PDF FIX]
 
             if not reused:  # [OFFICE PDF FIX]
-                original_bytes = await storage_engine.download_bytes(storage_key)  # [OFFICE PDF FIX]
+                original_bytes = await storage_engine.download_bytes(
+                    storage_key
+                )  # [OFFICE PDF FIX]
                 if not original_bytes:  # [OFFICE PDF FIX]
-                    raise FileNotFoundError(f"Original Office file '{storage_key}' not found in R2.")  # [OFFICE PDF FIX]
+                    raise FileNotFoundError(
+                        f"Original Office file '{storage_key}' not found in R2."
+                    )  # [OFFICE PDF FIX]
 
-                pdf_bytes = await convert_office_to_pdf(original_bytes, ext or "docx")  # [OFFICE PDF FIX]
+                pdf_bytes = await convert_office_to_pdf(
+                    original_bytes, ext or "docx"
+                )  # [OFFICE PDF FIX]
                 doc = fitz.open(stream=pdf_bytes, filetype="pdf")  # [OFFICE PDF FIX]
                 real_page_count = doc.page_count  # [OFFICE PDF FIX]
                 doc.close()  # [OFFICE PDF FIX]
 
-                target_converted_key = db_converted_key or build_converted_storage_key(  # [OFFICE PDF FIX]
-                    document_id,  # [OFFICE PDF FIX]
-                    university_id=str(university_id) if university_id else None,  # [OFFICE PDF FIX]
-                    course_code=course_code,  # [OFFICE PDF FIX]
-                )  # [OFFICE PDF FIX]
+                if not db_converted_key and (not university_id or not course_code):  # [VISION FIX]
+                    raise ValueError(  # [VISION FIX]
+                        f"Cannot convert Office document '{document_id}': "  # [VISION FIX]
+                        "missing university_id or course_code in database metadata."  # [VISION FIX]
+                    )  # [VISION FIX]
+                target_converted_key = (
+                    db_converted_key
+                    or build_converted_storage_key(  # [VISION FIX]
+                        document_id,  # [VISION FIX]
+                        university_id=str(university_id) if university_id else None,  # [VISION FIX]
+                        course_code=course_code,  # [VISION FIX]
+                    )
+                )  # [VISION FIX]
                 await storage_engine.upload_bytes(  # [OFFICE PDF FIX]
                     target_converted_key,  # [OFFICE PDF FIX]
                     pdf_bytes,  # [OFFICE PDF FIX]
                     content_type="application/pdf",  # [OFFICE PDF FIX]
                 )  # [OFFICE PDF FIX]
                 await _update_document_converted_info(  # [OFFICE PDF FIX]
-                    document_id, target_converted_key, page_count=real_page_count  # [OFFICE PDF FIX]
+                    document_id,
+                    target_converted_key,
+                    page_count=real_page_count,  # [OFFICE PDF FIX]
                 )  # [OFFICE PDF FIX]
                 key_to_ingest = target_converted_key  # [OFFICE PDF FIX]
             else:  # [OFFICE PDF FIX]
                 # Reused: ensure page_count is synchronized if not set  # [OFFICE PDF FIX]
                 if not doc_meta or not doc_meta.get("page_count"):  # [OFFICE PDF FIX]
                     try:  # [OFFICE PDF FIX]
-                        existing_pdf_bytes = await storage_engine.download_bytes(key_to_ingest)  # [OFFICE PDF FIX]
+                        existing_pdf_bytes = await storage_engine.download_bytes(
+                            key_to_ingest
+                        )  # [OFFICE PDF FIX]
                         if existing_pdf_bytes:  # [OFFICE PDF FIX]
-                            doc = fitz.open(stream=existing_pdf_bytes, filetype="pdf")  # [OFFICE PDF FIX]
+                            doc = fitz.open(
+                                stream=existing_pdf_bytes, filetype="pdf"
+                            )  # [OFFICE PDF FIX]
                             real_page_count = doc.page_count  # [OFFICE PDF FIX]
                             doc.close()  # [OFFICE PDF FIX]
                             await _update_document_converted_info(  # [OFFICE PDF FIX]
-                                document_id, key_to_ingest, page_count=real_page_count  # [OFFICE PDF FIX]
+                                document_id,
+                                key_to_ingest,
+                                page_count=real_page_count,  # [OFFICE PDF FIX]
                             )  # [OFFICE PDF FIX]
                     except Exception:  # [OFFICE PDF FIX]
                         pass  # [OFFICE PDF FIX]

@@ -3,145 +3,290 @@
 # Distinguishes text scans, pharmacology diagrams/pathways, and image tables
 # ==============================================================================
 
-import asyncio  # [IMAGE FIX]
-from typing import Literal  # [IMAGE FIX]
+import asyncio  # [VISION FIX]
+import hashlib  # [VISION FIX]
+from typing import Literal  # [VISION FIX]
 
-import structlog  # [IMAGE FIX]
+import structlog  # [VISION FIX]
 
-from app.core.config import settings  # [IMAGE FIX]
-from app.engines.embedder import _is_rate_limit, _parse_retry_delay  # [IMAGE FIX]
+from app.core.config import settings  # [VISION FIX]
+from app.engines.embedder import _is_rate_limit, _parse_retry_delay  # [VISION FIX]
 
-logger = structlog.get_logger(__name__)  # [IMAGE FIX]
+logger = structlog.get_logger(__name__)  # [VISION FIX]
 
-ImageRouteType = Literal["text_scan", "diagram", "table"]
+ImageRouteType = Literal["text_scan", "diagram", "table"]  # [VISION FIX]
 
-
-class VisionError(Exception):  # [IMAGE FIX]
-    """Raised when vision classification or description fails permanently."""  # [IMAGE FIX]
-
-    pass  # [IMAGE FIX]
+BACKOFF_5XX = [1.0, 2.0, 4.0, 8.0, 8.0]  # [VISION FIX]
+BACKOFF_CONN = [5.0, 10.0, 20.0, 40.0, 60.0]  # [VISION FIX]
 
 
-class ImageClassifier:
-    """Classifies embedded images and scanned page canvases into downstream pipelines."""
+def _is_connection_error(exc: Exception) -> bool:  # [VISION FIX]
+    try:  # [VISION FIX]
+        import aiohttp  # [VISION FIX]
 
-    def __init__(self):
-        self._api_key = settings.GEMINI_API_KEY
+        aio_types = (aiohttp.ClientConnectorError,)  # [VISION FIX]
+    except ImportError:  # [VISION FIX]
+        aio_types = ()  # [VISION FIX]
+    if isinstance(exc, (OSError, ConnectionError, *aio_types)):  # [VISION FIX]
+        return True  # [VISION FIX]
+    msg = str(exc).lower()  # [VISION FIX]
+    return (  # [VISION FIX]
+        "getaddrinfo failed" in msg  # [VISION FIX]
+        or "cannot connect to host" in msg  # [VISION FIX]
+        or "connection error" in msg  # [VISION FIX]
+        or "connection reset" in msg  # [VISION FIX]
+        or "network is unreachable" in msg  # [VISION FIX]
+    )  # [VISION FIX]
 
-    async def classify_and_process(  # [IMAGE FIX]
-        self,
-        image_bytes: bytes,
-        mime_type: str = "image/png",
-    ) -> tuple[ImageRouteType | None, str | None]:  # [IMAGE FIX]
-        """
-        Classifies image and extracts appropriate content:
+
+def _is_server_error_or_timeout(exc: Exception) -> bool:  # [VISION FIX]
+    if (
+        isinstance(exc, (TimeoutError, asyncio.TimeoutError)) or "timeout" in str(exc).lower()
+    ):  # [VISION FIX]
+        return True  # [VISION FIX]
+    code = getattr(exc, "code", None)  # [VISION FIX]
+    status = getattr(exc, "status", None)  # [VISION FIX]
+    if code is not None and 500 <= code < 600:  # [VISION FIX]
+        return True  # [VISION FIX]
+    if status in ("INTERNAL", "UNAVAILABLE", "DEADLINE_EXCEEDED"):  # [VISION FIX]
+        return True  # [VISION FIX]
+    msg = str(exc).lower()  # [VISION FIX]
+    return any(  # [VISION FIX]
+        x in msg  # [VISION FIX]
+        for x in [
+            "500",
+            "502",
+            "503",
+            "504",
+            "internal error",
+            "unavailable",
+            "server error",
+        ]  # [VISION FIX]
+    )  # [VISION FIX]
+
+
+def _is_400_invalid_image(exc: Exception) -> bool:  # [VISION FIX]
+    code = getattr(exc, "code", None)  # [VISION FIX]
+    status = getattr(exc, "status", None)  # [VISION FIX]
+    if code == 400 or status == "INVALID_ARGUMENT":  # [VISION FIX]
+        return True  # [VISION FIX]
+    msg = str(exc).lower()  # [VISION FIX]
+    return (  # [VISION FIX]
+        "400" in msg or "invalid_argument" in msg or "invalid argument" in msg  # [VISION FIX]
+    ) and (not _is_server_error_or_timeout(exc) and not _is_rate_limit(exc))  # [VISION FIX]
+
+
+class VisionError(Exception):  # [VISION FIX]
+    """Raised when vision classification or description fails permanently."""  # [VISION FIX]
+
+    pass  # [VISION FIX]
+
+
+class ImageClassifier:  # [VISION FIX]
+    """Classifies embedded images and scanned page canvases into downstream pipelines."""  # [VISION FIX]
+
+    def __init__(self):  # [VISION FIX]
+        self._api_key = settings.GEMINI_API_KEY  # [VISION FIX]
+
+    async def classify_and_process(  # [VISION FIX]
+        self,  # [VISION FIX]
+        image_bytes: bytes,  # [VISION FIX]
+        mime_type: str = "image/png",  # [VISION FIX]
+        page_number: int | None = None,  # [VISION FIX]
+    ) -> tuple[ImageRouteType | None, str | None]:  # [VISION FIX]
+        """Classifies image and extracts appropriate content:
         - 'text_scan': Verbatim text transcription (Clinical Safety Rule: NO summarization)
         - 'diagram': Descriptive markdown [Visual Description: ...]
         - 'table': Structured markdown rows & columns
-        """
-        if settings.VISION_FAKE_MODE:  # [IMAGE FIX]
-            return "diagram", "[Visual Description: Mock pharmacology diagram]"  # [IMAGE FIX]
+        """  # [VISION FIX]
+        if settings.VISION_FAKE_MODE:  # [VISION FIX]
+            return "diagram", "[Visual Description: Mock pharmacology diagram]"  # [VISION FIX]
 
-        api_key = self._api_key or settings.GEMINI_API_KEY  # [IMAGE FIX]
-        if not api_key:  # [IMAGE FIX]
-            raise VisionError("GEMINI_API_KEY not configured for vision processing")  # [IMAGE FIX]
+        api_key = self._api_key or settings.GEMINI_API_KEY  # [VISION FIX]
+        if not api_key:  # [VISION FIX]
+            raise VisionError("GEMINI_API_KEY not configured for vision processing")  # [VISION FIX]
 
-        from google import genai  # [IMAGE FIX]
-        from google.genai import types  # [IMAGE FIX]
+        from google import genai  # [VISION FIX]
+        from google.genai import types  # [VISION FIX]
 
-        client = genai.Client(api_key=api_key)  # [IMAGE FIX]
-        prompt = """
-You are an expert pharmacology and medical document processor.
-Analyze the provided image and perform two tasks:
-1. Determine the classification:
-   - TEXT_SCAN: If this is a page or snippet of printed/handwritten text or notes.
-   - TABLE: If this is a grid, matrix, or dosage/drug comparison table.
-   - DIAGRAM: If this is a chemical structure, biological pathway, chart, or clinical illustration.
+        client = genai.Client(api_key=api_key)  # [VISION FIX]
+        prompt = (  # [VISION FIX]
+            "/nothink\n"  # [VISION FIX]
+            "You are an expert pharmacology and medical document processor.\n"
+            "Analyze the provided image and perform two tasks:\n"
+            "1. Determine the classification:\n"
+            "   - TEXT_SCAN: If this is a page or snippet of printed/handwritten text or notes.\n"
+            "   - TABLE: If this is a grid, matrix, or dosage/drug comparison table.\n"
+            "   - DIAGRAM: If this is a chemical structure, biological pathway, chart, or clinical illustration.\n\n"
+            "2. Process the content according to its classification:\n"
+            "   - If TEXT_SCAN: Transcribe all visible text VERBATIM. Do NOT summarize or omit anything.\n"
+            "   - If TABLE: Output the table as clean, formatted Markdown table with headers and rows.\n"
+            "   - If DIAGRAM: Output a concise description starting with '[Visual Description: ' describing the structures, arrows, receptors, and pathways.\n\n"
+            "Format your exact response as:\n"
+            "CLASSIFICATION: <TEXT_SCAN|TABLE|DIAGRAM>\n"
+            "---CONTENT---\n"
+            "<Your processed output>\n"
+        )  # [VISION FIX]
 
-2. Process the content according to its classification:
-   - If TEXT_SCAN: Transcribe all visible text VERBATIM. Do NOT summarize or omit anything.
-   - If TABLE: Output the table as clean, formatted Markdown table with headers and rows.
-   - If DIAGRAM: Output a concise description starting with '[Visual Description: ' describing the structures, arrows, receptors, and pathways.
+        model_to_use = (
+            getattr(settings, "GEMINI_VISION_MODEL", None) or "gemma-4-26b-a4b-it"
+        )  # [VISION FIX]
+        hash_prefix = hashlib.md5(image_bytes).hexdigest()[:8]  # [VISION FIX]
+        max_attempts = 5  # [VISION FIX]
 
-Format your exact response as:
-CLASSIFICATION: <TEXT_SCAN|TABLE|DIAGRAM>
----CONTENT---
-<Your processed output>
-"""
-        max_attempts = 5  # [IMAGE FIX]
-        for attempt in range(max_attempts):  # [IMAGE FIX]
-            try:  # [IMAGE FIX]
-                part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)  # [IMAGE FIX]
-                response = await client.aio.models.generate_content(  # [IMAGE FIX]
-                    model=settings.GEMINI_PRIMARY_MODEL,  # [IMAGE FIX]
-                    contents=[part, prompt],  # [IMAGE FIX]
-                    config=types.GenerateContentConfig(  # [IMAGE FIX]
-                        automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [IMAGE FIX]
-                            disable=True  # [IMAGE FIX]
-                        )  # [IMAGE FIX]
-                    ),  # [IMAGE FIX]
-                )  # [IMAGE FIX]
-                raw = response.text.strip() if response.text else ""  # [IMAGE FIX]
+        for attempt in range(max_attempts):  # [VISION FIX]
+            try:  # [VISION FIX]
+                part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)  # [VISION FIX]
+                response = await client.aio.models.generate_content(  # [VISION FIX]
+                    model=model_to_use,  # [VISION FIX]
+                    contents=[part, prompt],  # [VISION FIX]
+                    config=types.GenerateContentConfig(  # [VISION FIX]
+                        max_output_tokens=1024,  # [VISION FIX]
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [VISION FIX]
+                            disable=True  # [VISION FIX]
+                        ),  # [VISION FIX]
+                    ),  # [VISION FIX]
+                )  # [VISION FIX]
+                raw = response.text.strip() if response.text else ""  # [VISION FIX]
 
-                route: ImageRouteType = "diagram"  # [IMAGE FIX]
-                content: str = ""  # [IMAGE FIX]
+                if not raw:  # [VISION FIX]
+                    # Retry once on empty model output (3d)  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_empty_retry",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                    )  # [VISION FIX]
+                    try:  # [VISION FIX]
+                        await asyncio.sleep(1.0)  # [VISION FIX]
+                        retry_response = await client.aio.models.generate_content(  # [VISION FIX]
+                            model=model_to_use,  # [VISION FIX]
+                            contents=[part, prompt],  # [VISION FIX]
+                            config=types.GenerateContentConfig(  # [VISION FIX]
+                                max_output_tokens=1024,  # [VISION FIX]
+                                automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [VISION FIX]
+                                    disable=True  # [VISION FIX]
+                                ),  # [VISION FIX]
+                            ),  # [VISION FIX]
+                        )  # [VISION FIX]
+                        raw = (
+                            retry_response.text.strip() if retry_response.text else ""
+                        )  # [VISION FIX]
+                    except Exception:  # [VISION FIX]
+                        pass  # [VISION FIX]
 
-                if "CLASSIFICATION: TEXT_SCAN" in raw:  # [IMAGE FIX]
-                    route = "text_scan"  # [IMAGE FIX]
-                elif "CLASSIFICATION: TABLE" in raw:  # [IMAGE FIX]
-                    route = "table"  # [IMAGE FIX]
-                elif "CLASSIFICATION: DIAGRAM" in raw:  # [IMAGE FIX]
-                    route = "diagram"  # [IMAGE FIX]
+                    if not raw:  # [VISION FIX]
+                        logger.warning(  # [VISION FIX]
+                            "vision_empty_result",  # [VISION FIX]
+                            page=page_number,  # [VISION FIX]
+                            hash_prefix=hash_prefix,  # [VISION FIX]
+                        )  # [VISION FIX]
+                        return None, ""  # [VISION FIX]
 
-                if "---CONTENT---" in raw:  # [IMAGE FIX]
-                    content = raw.split("---CONTENT---", 1)[1].strip()  # [IMAGE FIX]
-                else:  # [IMAGE FIX]
-                    content = raw  # [IMAGE FIX]
+                route: ImageRouteType = "diagram"  # [VISION FIX]
+                content: str = ""  # [VISION FIX]
 
-                return route, content  # [IMAGE FIX]
+                if "CLASSIFICATION: TEXT_SCAN" in raw:  # [VISION FIX]
+                    route = "text_scan"  # [VISION FIX]
+                elif "CLASSIFICATION: TABLE" in raw:  # [VISION FIX]
+                    route = "table"  # [VISION FIX]
+                elif "CLASSIFICATION: DIAGRAM" in raw:  # [VISION FIX]
+                    route = "diagram"  # [VISION FIX]
 
-            except Exception as exc:  # [IMAGE FIX]
-                if _is_rate_limit(exc):  # [IMAGE FIX]
-                    if attempt == max_attempts - 1:  # [IMAGE FIX]
-                        raise VisionError(f"Vision analysis rate limit exhausted: {exc}") from exc  # [IMAGE FIX]
-                    parsed_wait = _parse_retry_delay(exc)  # [IMAGE FIX]
-                    wait_base = parsed_wait if parsed_wait is not None else 60.0  # [IMAGE FIX]
-                    sleep_seconds = min(65.0, wait_base + 1.0)  # [IMAGE FIX]
-                    logger.warning(  # [IMAGE FIX]
-                        "vision_rate_limited",  # [IMAGE FIX]
-                        wait_seconds=sleep_seconds,  # [IMAGE FIX]
-                        attempt=attempt + 1,  # [IMAGE FIX]
-                    )  # [IMAGE FIX]
-                    await asyncio.sleep(sleep_seconds)  # [IMAGE FIX]
-                    continue  # [IMAGE FIX]
+                if "---CONTENT---" in raw:  # [VISION FIX]
+                    content = raw.split("---CONTENT---", 1)[1].strip()  # [VISION FIX]
+                else:  # [VISION FIX]
+                    content = raw  # [VISION FIX]
 
-                code = getattr(exc, "code", None)  # [IMAGE FIX]
-                status = getattr(exc, "status", None)  # [IMAGE FIX]
-                is_timeout = isinstance(exc, (TimeoutError, asyncio.TimeoutError)) or "timeout" in str(exc).lower()  # [IMAGE FIX]
-                is_5xx = (code is not None and 500 <= code < 600) or any(x in str(exc).lower() for x in ["500", "502", "503", "504", "unavailable", "server error"])  # [IMAGE FIX]
-                is_400 = (code == 400 or status == "INVALID_ARGUMENT" or "400" in str(exc) or "invalid argument" in str(exc).lower())  # [IMAGE FIX]
+                return route, content  # [VISION FIX]
 
-                if is_400 and not (is_5xx or is_timeout):  # [IMAGE FIX]
-                    logger.warning("vision_image_skipped", error=str(exc))  # [IMAGE FIX]
-                    return None, None  # [IMAGE FIX]
+            except Exception as exc:  # [VISION FIX]
+                is_final_attempt = attempt == max_attempts - 1  # [VISION FIX]
 
-                if is_5xx or is_timeout:  # [IMAGE FIX]
-                    if attempt == max_attempts - 1:  # [IMAGE FIX]
-                        raise VisionError(f"Vision analysis server error exhausted: {exc}") from exc  # [IMAGE FIX]
-                    delay = min(8.0, 1.0 * (2 ** attempt))  # [IMAGE FIX]
-                    logger.warning(  # [IMAGE FIX]
-                        "vision_transient_error",  # [IMAGE FIX]
-                        error=str(exc),  # [IMAGE FIX]
-                        attempt=attempt + 1,  # [IMAGE FIX]
-                        retry_delay=delay,  # [IMAGE FIX]
-                    )  # [IMAGE FIX]
-                    await asyncio.sleep(delay)  # [IMAGE FIX]
-                    continue  # [IMAGE FIX]
+                # 1. Connection / DNS error  # [VISION FIX]
+                if _is_connection_error(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision connection failed after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    conn_delay = BACKOFF_CONN[min(attempt, len(BACKOFF_CONN) - 1)]  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_connection_error",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        retry_delay=conn_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(conn_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
 
-                logger.warning("vision_image_skipped", error=str(exc))  # [IMAGE FIX]
-                return None, None  # [IMAGE FIX]
+                # 2. Rate limit (429 / RESOURCE_EXHAUSTED)  # [VISION FIX]
+                if _is_rate_limit(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision rate limit exhausted after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    parsed_wait = _parse_retry_delay(exc)  # [VISION FIX]
+                    wait_base = parsed_wait if parsed_wait is not None else 60.0  # [VISION FIX]
+                    rate_delay = min(65.0, wait_base + 1.0)  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_rate_limited",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        wait_seconds=rate_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(rate_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
 
-        raise VisionError(f"Vision analysis failed after {max_attempts} attempts")  # [IMAGE FIX]
+                # 3. HTTP 400 invalid image error -> skip only this image (3c)  # [VISION FIX]
+                if _is_400_invalid_image(exc):  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_image_skipped",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    return None, None  # [VISION FIX]
+
+                # 4. 5xx and timeouts  # [VISION FIX]
+                if _is_server_error_or_timeout(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision server error exhausted after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    server_delay = BACKOFF_5XX[min(attempt, len(BACKOFF_5XX) - 1)]  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_transient_error",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        retry_delay=server_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(server_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
+
+                # 5. Any other unexpected error -> NEVER skip, retry or raise VisionError  # [VISION FIX]
+                if is_final_attempt:  # [VISION FIX]
+                    raise VisionError(  # [VISION FIX]
+                        f"Vision analysis failed after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                    ) from exc  # [VISION FIX]
+                unknown_delay = BACKOFF_5XX[min(attempt, len(BACKOFF_5XX) - 1)]  # [VISION FIX]
+                logger.warning(  # [VISION FIX]
+                    "vision_unexpected_error",  # [VISION FIX]
+                    page=page_number,  # [VISION FIX]
+                    hash_prefix=hash_prefix,  # [VISION FIX]
+                    attempt=attempt + 1,  # [VISION FIX]
+                    retry_delay=unknown_delay,  # [VISION FIX]
+                    error=str(exc),  # [VISION FIX]
+                )  # [VISION FIX]
+                await asyncio.sleep(unknown_delay)  # [VISION FIX]
+                continue  # [VISION FIX]
+
+        raise VisionError(f"Vision analysis failed after {max_attempts} attempts")  # [VISION FIX]
 
 
-image_classifier = ImageClassifier()
+image_classifier = ImageClassifier()  # [VISION FIX]

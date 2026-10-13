@@ -34,20 +34,22 @@ def build_document_storage_key(
     return f"universities/{university_id}/courses/{clean_course}/original/{document_id}.{ext}"
 
 
-def build_converted_storage_key(
-    document_id: str,
-    university_id: str | None = None,
-    course_code: str | None = None,
-) -> str:
-    """
-    Construct canonical converted R2 key for Office documents converted to PDF:
+def build_converted_storage_key(  # [VISION FIX]
+    document_id: str,  # [VISION FIX]
+    university_id: str | None = None,  # [VISION FIX]
+    course_code: str | None = None,  # [VISION FIX]
+) -> str:  # [VISION FIX]
+    """Construct canonical converted R2 key for Office documents converted to PDF:
     universities/{university_id}/courses/{course_code}/converted/{document_id}.pdf
-    with fallback to converted/{document_id}.pdf if university/course not provided.
-    """
-    if university_id and course_code:
-        clean_course = sanitize_filename_part(course_code)
-        return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"
-    return f"converted/{document_id}.pdf"
+    Raises ValueError if university_id or course_code is missing.
+    """  # [VISION FIX]
+    if not university_id or not course_code:  # [VISION FIX]
+        raise ValueError(  # [VISION FIX]
+            f"Cannot build converted storage key for document '{document_id}': "  # [VISION FIX]
+            "both university_id and course_code are required."  # [VISION FIX]
+        )  # [VISION FIX]
+    clean_course = sanitize_filename_part(course_code)  # [VISION FIX]
+    return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"  # [VISION FIX]
 
 
 DEFAULT_UNIVERSITY_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"

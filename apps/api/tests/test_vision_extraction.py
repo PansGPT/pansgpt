@@ -12,9 +12,7 @@ from PIL import Image  # [IMAGE FIX]
 from app.core.config import settings  # [IMAGE FIX]
 from app.engines.classifier import VisionError, image_classifier  # [IMAGE FIX]
 from app.engines.extractor import (  # [IMAGE FIX]
-    MAX_ASPECT_RATIO,  # [IMAGE FIX]
     MAX_IMAGES_PER_PAGE,  # [IMAGE FIX]
-    MIN_IMAGE_SIDE,  # [IMAGE FIX]
     DocumentExtractor,  # [IMAGE FIX]
     ExtractionStats,  # [IMAGE FIX]
 )  # [IMAGE FIX]
@@ -135,13 +133,21 @@ def test_extract_embedded_images_deduplicates_by_md5():  # [IMAGE FIX]
     )  # [IMAGE FIX]
 
     res1 = extractor.extract_embedded_images(  # [IMAGE FIX]
-        mock_doc1, mock_page1, 1, seen_hashes=seen_hashes, stats=stats  # [IMAGE FIX]
+        mock_doc1,
+        mock_page1,
+        1,
+        seen_hashes=seen_hashes,
+        stats=stats,  # [IMAGE FIX]
     )  # [IMAGE FIX]
     assert len(res1) == 1  # [IMAGE FIX]
     assert stats.images_sent == 1  # [IMAGE FIX]
 
     res2 = extractor.extract_embedded_images(  # [IMAGE FIX]
-        mock_doc2, mock_page2, 2, seen_hashes=seen_hashes, stats=stats  # [IMAGE FIX]
+        mock_doc2,
+        mock_page2,
+        2,
+        seen_hashes=seen_hashes,
+        stats=stats,  # [IMAGE FIX]
     )  # [IMAGE FIX]
     assert len(res2) == 0  # [IMAGE FIX]
     assert stats.duplicates_skipped == 1  # [IMAGE FIX]
@@ -196,3 +202,220 @@ async def test_classifier_400_logs_warning_and_returns_none(monkeypatch):  # [IM
         route, content = await image_classifier.classify_and_process(png_data)  # [IMAGE FIX]
         assert route is None  # [IMAGE FIX]
         assert content is None  # [IMAGE FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_classifier_connection_error_retries_and_succeeds(monkeypatch):  # [VISION FIX]
+    """(a) a DNS/connection error retries with the backoff list and then succeeds."""  # [VISION FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [VISION FIX]
+
+    sleep_mock = AsyncMock()  # [VISION FIX]
+    monkeypatch.setattr(asyncio, "sleep", sleep_mock)  # [VISION FIX]
+
+    success_resp = MagicMock()  # [VISION FIX]
+    success_resp.text = (
+        "CLASSIFICATION: DIAGRAM\n---CONTENT---\n[Visual Description: cell pathway]"  # [VISION FIX]
+    )
+
+    mock_client = MagicMock()  # [VISION FIX]
+    mock_client.aio.models.generate_content = AsyncMock(  # [VISION FIX]
+        side_effect=[  # [VISION FIX]
+            OSError("getaddrinfo failed"),  # [VISION FIX]
+            ConnectionError("Cannot connect to host"),  # [VISION FIX]
+            success_resp,  # [VISION FIX]
+        ]  # [VISION FIX]
+    )  # [VISION FIX]
+
+    with patch("google.genai.Client", return_value=mock_client):  # [VISION FIX]
+        png_data = _create_png(150, 150)  # [VISION FIX]
+        route, content = await image_classifier.classify_and_process(
+            png_data, page_number=1
+        )  # [VISION FIX]
+        assert route == "diagram"  # [VISION FIX]
+        assert "cell pathway" in content  # [VISION FIX]
+        assert sleep_mock.call_count == 2  # [VISION FIX]
+        assert sleep_mock.call_args_list[0][0][0] == 5.0  # [VISION FIX]
+        assert sleep_mock.call_args_list[1][0][0] == 10.0  # [VISION FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_classifier_five_connection_errors_raise_vision_error(monkeypatch):  # [VISION FIX]
+    """(b) five connection errors raise VisionError and store nothing."""  # [VISION FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [VISION FIX]
+
+    sleep_mock = AsyncMock()  # [VISION FIX]
+    monkeypatch.setattr(asyncio, "sleep", sleep_mock)  # [VISION FIX]
+
+    mock_client = MagicMock()  # [VISION FIX]
+    mock_client.aio.models.generate_content = AsyncMock(  # [VISION FIX]
+        side_effect=ConnectionError("Cannot connect to host")  # [VISION FIX]
+    )  # [VISION FIX]
+
+    with patch("google.genai.Client", return_value=mock_client):  # [VISION FIX]
+        png_data = _create_png(150, 150)  # [VISION FIX]
+        with pytest.raises(VisionError) as exc_info:  # [VISION FIX]
+            await image_classifier.classify_and_process(png_data)  # [VISION FIX]
+        assert "connection failed after 5 attempts" in str(exc_info.value).lower()  # [VISION FIX]
+        assert sleep_mock.call_count == 4  # [VISION FIX]
+        assert [call[0][0] for call in sleep_mock.call_args_list] == [
+            5.0,
+            10.0,
+            20.0,
+            40.0,
+        ]  # [VISION FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_classifier_429_with_retry_delay_waits(monkeypatch):  # [VISION FIX]
+    """(c) a 429 with retryDelay waits that long + 1s."""  # [VISION FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [VISION FIX]
+
+    sleep_mock = AsyncMock()  # [VISION FIX]
+    monkeypatch.setattr(asyncio, "sleep", sleep_mock)  # [VISION FIX]
+
+    success_resp = MagicMock()  # [VISION FIX]
+    success_resp.text = (
+        "CLASSIFICATION: TEXT_SCAN\n---CONTENT---\nTranscribed notes"  # [VISION FIX]
+    )
+
+    mock_client = MagicMock()  # [VISION FIX]
+    mock_client.aio.models.generate_content = AsyncMock(  # [VISION FIX]
+        side_effect=[  # [VISION FIX]
+            Exception("429 RESOURCE_EXHAUSTED retryDelay: '15s'"),  # [VISION FIX]
+            success_resp,  # [VISION FIX]
+        ]  # [VISION FIX]
+    )  # [VISION FIX]
+
+    with patch("google.genai.Client", return_value=mock_client):  # [VISION FIX]
+        png_data = _create_png(150, 150)  # [VISION FIX]
+        route, content = await image_classifier.classify_and_process(png_data)  # [VISION FIX]
+        assert route == "text_scan"  # [VISION FIX]
+        assert "Transcribed notes" in content  # [VISION FIX]
+        assert sleep_mock.call_count == 1  # [VISION FIX]
+        assert sleep_mock.call_args_list[0][0][0] == 16.0  # 15s + 1s  # [VISION FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_classifier_empty_output_retries_once_then_skips(monkeypatch):  # [VISION FIX]
+    """(e) empty output retries once then skips with warning."""  # [VISION FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [VISION FIX]
+
+    sleep_mock = AsyncMock()  # [VISION FIX]
+    monkeypatch.setattr(asyncio, "sleep", sleep_mock)  # [VISION FIX]
+
+    empty_resp = MagicMock()  # [VISION FIX]
+    empty_resp.text = ""  # [VISION FIX]
+
+    mock_client = MagicMock()  # [VISION FIX]
+    mock_client.aio.models.generate_content = AsyncMock(return_value=empty_resp)  # [VISION FIX]
+
+    with patch("google.genai.Client", return_value=mock_client):  # [VISION FIX]
+        png_data = _create_png(150, 150)  # [VISION FIX]
+        route, content = await image_classifier.classify_and_process(
+            png_data, page_number=5
+        )  # [VISION FIX]
+        assert route is None  # [VISION FIX]
+        assert content == ""  # [VISION FIX]
+        assert (
+            mock_client.aio.models.generate_content.call_count == 2
+        )  # initial + 1 retry  # [VISION FIX]
+
+
+def test_table_empty_shell_dropped_real_kept():  # [VISION FIX]
+    """(g) an empty-shell table is dropped and a real table is kept."""  # [VISION FIX]
+    extractor = DocumentExtractor()  # [VISION FIX]
+
+    # Mock empty shell table (< 4 alnum cells)
+    mock_tab_shell = MagicMock()  # [VISION FIX]
+    mock_tab_shell.extract.return_value = [  # [VISION FIX]
+        ["", "•"],  # [VISION FIX]
+        ["-", ""],  # [VISION FIX]
+    ]  # [VISION FIX]
+    mock_tab_shell.bbox = (10, 10, 100, 100)  # [VISION FIX]
+
+    # Mock real table (>= 4 alnum cells)
+    mock_tab_real = MagicMock()  # [VISION FIX]
+    mock_tab_real.extract.return_value = [  # [VISION FIX]
+        ["Drug", "Dose"],  # [VISION FIX]
+        ["Amlodipine", "5mg"],  # [VISION FIX]
+    ]  # [VISION FIX]
+    mock_tab_real.bbox = (10, 110, 100, 200)  # [VISION FIX]
+
+    mock_finder = MagicMock()  # [VISION FIX]
+    mock_finder.tables = [mock_tab_shell, mock_tab_real]  # [VISION FIX]
+
+    mock_page = MagicMock()  # [VISION FIX]
+    mock_page.rect.width = 500.0  # [VISION FIX]
+    mock_page.rect.height = 700.0  # [VISION FIX]
+    mock_page.find_tables.return_value = mock_finder  # [VISION FIX]
+
+    tables = extractor.extract_tables_from_page(mock_page, 1)  # [VISION FIX]
+    assert len(tables) == 1  # [VISION FIX]
+    assert tables[0].headers == ["Drug", "Dose"]  # [VISION FIX]
+    assert "Amlodipine" in tables[0].markdown  # [VISION FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_classifier_thinking_off_and_model_passed(monkeypatch):  # [VISION FIX]
+    """(h) the thinking-off setting is passed on the vision call."""  # [VISION FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [VISION FIX]
+    monkeypatch.setattr(settings, "GEMINI_VISION_MODEL", "gemma-4-26b-a4b-it")  # [VISION FIX]
+
+    success_resp = MagicMock()  # [VISION FIX]
+    success_resp.text = (
+        "CLASSIFICATION: DIAGRAM\n---CONTENT---\n[Visual Description: ok]"  # [VISION FIX]
+    )
+
+    mock_client = MagicMock()  # [VISION FIX]
+    mock_client.aio.models.generate_content = AsyncMock(return_value=success_resp)  # [VISION FIX]
+
+    with patch("google.genai.Client", return_value=mock_client):  # [VISION FIX]
+        png_data = _create_png(150, 150)  # [VISION FIX]
+        await image_classifier.classify_and_process(png_data)  # [VISION FIX]
+
+        call_args = mock_client.aio.models.generate_content.call_args  # [VISION FIX]
+        assert call_args.kwargs["model"] == "gemma-4-26b-a4b-it"  # [VISION FIX]
+        contents = call_args.kwargs["contents"]  # [VISION FIX]
+        assert contents[1].startswith("/nothink\n")  # [VISION FIX]
+        config = call_args.kwargs["config"]  # [VISION FIX]
+        assert config.max_output_tokens == 1024  # [VISION FIX]
+
+
+@pytest.mark.asyncio  # [VISION FIX]
+async def test_end_of_run_summary_pages_without_chunks(monkeypatch):  # [VISION FIX]
+    """(f) the end-of-run summary lists pages_without_chunks correctly."""  # [VISION FIX]
+    from app.engines.extractor import ExtractedPage  # [VISION FIX]
+    from app.engines.ingestion import document_ingestion_engine  # [VISION FIX]
+
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", True)  # [VISION FIX]
+
+    # 3 pages: page 1 and page 2 have text, page 3 has no text and no images
+    page1 = ExtractedPage(
+        page_number=1, has_text_layer=True, native_text="Page 1 text content"
+    )  # [VISION FIX]
+    page2 = ExtractedPage(
+        page_number=2, has_text_layer=True, native_text="Page 2 text content"
+    )  # [VISION FIX]
+    page3 = ExtractedPage(page_number=3, has_text_layer=False, native_text="")  # [VISION FIX]
+
+    with (  # [VISION FIX]
+        patch(
+            "app.engines.extractor.document_extractor.process_document",
+            return_value=[page1, page2, page3],
+        ),  # [VISION FIX]
+        patch(
+            "app.engines.embedder.gemini_embedder.embed_batch",
+            return_value=[[0.1] * 1536, [0.2] * 1536],
+        ),  # [VISION FIX]
+    ):  # [VISION FIX]
+        res = await document_ingestion_engine.run_pipeline_on_bytes(
+            b"dummy", "doc-123", file_format="pdf"
+        )  # [VISION FIX]
+        assert len(res.chunks) > 0  # [VISION FIX]
+        chunk_pages = {c["page_start"] for c in res.chunks}  # [VISION FIX]
+        assert 3 not in chunk_pages  # Page 3 produced no chunks  # [VISION FIX]

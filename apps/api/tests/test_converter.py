@@ -5,8 +5,8 @@
 import asyncio  # [OFFICE PDF FIX]
 import io  # [OFFICE PDF FIX]
 import os  # [OFFICE PDF FIX]
-from pathlib import Path  # [OFFICE PDF FIX]
 import unittest.mock  # [OFFICE PDF FIX]
+from pathlib import Path  # [OFFICE PDF FIX]
 
 import fitz  # [OFFICE PDF FIX]
 import pytest  # [OFFICE PDF FIX]
@@ -15,7 +15,6 @@ from arq import Retry  # [OFFICE PDF FIX]
 from app.engines.converter import (  # [OFFICE PDF FIX]
     ConversionError,  # [OFFICE PDF FIX]
     convert_office_to_pdf,  # [OFFICE PDF FIX]
-    find_soffice_binary,  # [OFFICE PDF FIX]
 )  # [OFFICE PDF FIX]
 from workers.tasks import ingest_document_job  # [OFFICE PDF FIX]
 
@@ -36,7 +35,9 @@ def _create_minimal_pdf_bytes(page_count: int = 1) -> bytes:  # [OFFICE PDF FIX]
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
 async def test_converter_returns_bytes_on_success(monkeypatch):  # [OFFICE PDF FIX]
     """(a) Test converter returns valid PDF bytes on subprocess success."""  # [OFFICE PDF FIX]
-    monkeypatch.setattr("app.engines.converter.find_soffice_binary", lambda: "/usr/bin/soffice")  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "app.engines.converter.find_soffice_binary", lambda: "/usr/bin/soffice"
+    )  # [OFFICE PDF FIX]
 
     expected_pdf = _create_minimal_pdf_bytes(1)  # [OFFICE PDF FIX]
 
@@ -59,16 +60,24 @@ async def test_converter_returns_bytes_on_success(monkeypatch):  # [OFFICE PDF F
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
 async def test_converter_soffice_missing_raises_conversion_error(monkeypatch):  # [OFFICE PDF FIX]
     """(b) Test converter raises ConversionError when soffice executable is not found."""  # [OFFICE PDF FIX]
-    monkeypatch.setattr("app.engines.converter.find_soffice_binary", lambda: None)  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "app.engines.converter.find_soffice_binary", lambda: None
+    )  # [OFFICE PDF FIX]
 
-    with pytest.raises(ConversionError, match="LibreOffice soffice executable not found"):  # [OFFICE PDF FIX]
+    with pytest.raises(
+        ConversionError, match="LibreOffice soffice executable not found"
+    ):  # [OFFICE PDF FIX]
         await convert_office_to_pdf(b"dummy office bytes", "pptx")  # [OFFICE PDF FIX]
 
 
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
-async def test_converter_timeout_kills_process_and_raises_conversion_error(monkeypatch):  # [OFFICE PDF FIX]
+async def test_converter_timeout_kills_process_and_raises_conversion_error(
+    monkeypatch,
+):  # [OFFICE PDF FIX]
     """(c) Test converter kills subprocess and raises ConversionError upon timeout."""  # [OFFICE PDF FIX]
-    monkeypatch.setattr("app.engines.converter.find_soffice_binary", lambda: "/usr/bin/soffice")  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "app.engines.converter.find_soffice_binary", lambda: "/usr/bin/soffice"
+    )  # [OFFICE PDF FIX]
 
     mock_proc = unittest.mock.AsyncMock()  # [OFFICE PDF FIX]
     mock_proc.kill = unittest.mock.MagicMock()  # [OFFICE PDF FIX]
@@ -103,14 +112,20 @@ async def test_converter_timeout_kills_process_and_raises_conversion_error(monke
 # 2. Worker Office Conversion Flow Tests  # [OFFICE PDF FIX]
 # ------------------------------------------------------------------------------  # [OFFICE PDF FIX]
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
-async def test_worker_converts_office_doc_and_ingests_converted_key(monkeypatch):  # [OFFICE PDF FIX]
+async def test_worker_converts_office_doc_and_ingests_converted_key(
+    monkeypatch,
+):  # [OFFICE PDF FIX]
     """(d) The worker converts an Office document, stores converted_key, and ingests the converted key."""  # [OFFICE PDF FIX]
     doc_id = "0851a9c3-a5d9-4969-870d-08849802f93c"  # [OFFICE PDF FIX]
     orig_key = "universities/uni1/courses/pcl/original/lecture.docx"  # [OFFICE PDF FIX]
     converted_pdf_bytes = _create_minimal_pdf_bytes(page_count=3)  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr("workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True))  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._update_document_status", unittest.mock.AsyncMock())  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
+    )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._update_document_status", unittest.mock.AsyncMock()
+    )  # [OFFICE PDF FIX]
 
     mock_meta = {  # [OFFICE PDF FIX]
         "id": doc_id,  # [OFFICE PDF FIX]
@@ -121,18 +136,24 @@ async def test_worker_converts_office_doc_and_ingests_converted_key(monkeypatch)
         "course_code": "pcl",  # [OFFICE PDF FIX]
         "page_count": None,  # [OFFICE PDF FIX]
     }  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta))  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta)
+    )  # [OFFICE PDF FIX]
 
     updated_converted_info = []  # [OFFICE PDF FIX]
 
     async def mock_update_converted(doc_id_arg, key_arg, page_count=None):  # [OFFICE PDF FIX]
         updated_converted_info.append((doc_id_arg, key_arg, page_count))  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr("workers.tasks._update_document_converted_info", mock_update_converted)  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._update_document_converted_info", mock_update_converted
+    )  # [OFFICE PDF FIX]
 
     from app.engines.storage import storage_engine  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr(storage_engine, "download_bytes", unittest.mock.AsyncMock(return_value=b"fake docx"))  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        storage_engine, "download_bytes", unittest.mock.AsyncMock(return_value=b"fake docx")
+    )  # [OFFICE PDF FIX]
     uploaded_files = []  # [OFFICE PDF FIX]
 
     async def mock_upload(key, data, content_type="application/pdf"):  # [OFFICE PDF FIX]
@@ -153,12 +174,16 @@ async def test_worker_converts_office_doc_and_ingests_converted_key(monkeypatch)
         ingested_keys.append((document_id, storage_key))  # [OFFICE PDF FIX]
         return True  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr(document_ingestion_engine, "ingest_document_from_r2", mock_ingest_r2)  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        document_ingestion_engine, "ingest_document_from_r2", mock_ingest_r2
+    )  # [OFFICE PDF FIX]
 
     success = await ingest_document_job({}, doc_id, orig_key)  # [OFFICE PDF FIX]
     assert success is True  # [OFFICE PDF FIX]
 
-    expected_converted_key = f"universities/uni1/courses/pcl/converted/{doc_id}.pdf"  # [OFFICE PDF FIX]
+    expected_converted_key = (
+        f"universities/uni1/courses/pcl/converted/{doc_id}.pdf"  # [OFFICE PDF FIX]
+    )
     assert len(uploaded_files) == 1  # [OFFICE PDF FIX]
     assert uploaded_files[0][0] == expected_converted_key  # [OFFICE PDF FIX]
     assert uploaded_files[0][1] == converted_pdf_bytes  # [OFFICE PDF FIX]
@@ -172,13 +197,19 @@ async def test_worker_converts_office_doc_and_ingests_converted_key(monkeypatch)
 
 
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
-async def test_worker_conversion_error_does_not_fallback_to_original(monkeypatch):  # [OFFICE PDF FIX]
+async def test_worker_conversion_error_does_not_fallback_to_original(
+    monkeypatch,
+):  # [OFFICE PDF FIX]
     """(e) ConversionError fails or retries the job and NEVER falls back to ingesting the original Office file."""  # [OFFICE PDF FIX]
     doc_id = "14778083-f526-4fc9-9116-ca9b37ed5944"  # [OFFICE PDF FIX]
     orig_key = "universities/uni1/courses/pcl/original/slides.pptx"  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr("workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True))  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._update_document_status", unittest.mock.AsyncMock())  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
+    )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._update_document_status", unittest.mock.AsyncMock()
+    )  # [OFFICE PDF FIX]
 
     mock_meta = {  # [OFFICE PDF FIX]
         "id": doc_id,  # [OFFICE PDF FIX]
@@ -189,15 +220,21 @@ async def test_worker_conversion_error_does_not_fallback_to_original(monkeypatch
         "course_code": "pcl",  # [OFFICE PDF FIX]
         "page_count": None,  # [OFFICE PDF FIX]
     }  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta))  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta)
+    )  # [OFFICE PDF FIX]
 
     from app.engines.storage import storage_engine  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr(storage_engine, "download_bytes", unittest.mock.AsyncMock(return_value=b"fake pptx"))  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        storage_engine, "download_bytes", unittest.mock.AsyncMock(return_value=b"fake pptx")
+    )  # [OFFICE PDF FIX]
 
     monkeypatch.setattr(  # [OFFICE PDF FIX]
         "workers.tasks.convert_office_to_pdf",  # [OFFICE PDF FIX]
-        unittest.mock.AsyncMock(side_effect=ConversionError("LibreOffice crashed")),  # [OFFICE PDF FIX]
+        unittest.mock.AsyncMock(
+            side_effect=ConversionError("LibreOffice crashed")
+        ),  # [OFFICE PDF FIX]
     )  # [OFFICE PDF FIX]
 
     ingested_calls = []  # [OFFICE PDF FIX]
@@ -207,13 +244,17 @@ async def test_worker_conversion_error_does_not_fallback_to_original(monkeypatch
     monkeypatch.setattr(  # [OFFICE PDF FIX]
         document_ingestion_engine,  # [OFFICE PDF FIX]
         "ingest_document_from_r2",  # [OFFICE PDF FIX]
-        unittest.mock.AsyncMock(side_effect=lambda *a, **kw: ingested_calls.append(a)),  # [OFFICE PDF FIX]
+        unittest.mock.AsyncMock(
+            side_effect=lambda *a, **kw: ingested_calls.append(a)
+        ),  # [OFFICE PDF FIX]
     )  # [OFFICE PDF FIX]
 
     with pytest.raises(Retry):  # [OFFICE PDF FIX]
         await ingest_document_job({"job_try": 1}, doc_id, orig_key)  # [OFFICE PDF FIX]
 
-    assert len(ingested_calls) == 0, "Ingestion must NOT run on original file when conversion fails!"  # [OFFICE PDF FIX]
+    assert len(ingested_calls) == 0, (
+        "Ingestion must NOT run on original file when conversion fails!"
+    )  # [OFFICE PDF FIX]
 
 
 @pytest.mark.asyncio  # [OFFICE PDF FIX]
@@ -222,8 +263,12 @@ async def test_worker_plain_pdf_ingested_unchanged(monkeypatch):  # [OFFICE PDF 
     doc_id = "e7a6a964-d4d2-4a97-a721-72494cbd08a7"  # [OFFICE PDF FIX]
     orig_key = "universities/uni1/courses/pcl/original/handout.pdf"  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr("workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True))  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._update_document_status", unittest.mock.AsyncMock())  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
+    )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._update_document_status", unittest.mock.AsyncMock()
+    )  # [OFFICE PDF FIX]
 
     mock_meta = {  # [OFFICE PDF FIX]
         "id": doc_id,  # [OFFICE PDF FIX]
@@ -234,12 +279,16 @@ async def test_worker_plain_pdf_ingested_unchanged(monkeypatch):  # [OFFICE PDF 
         "course_code": "pcl",  # [OFFICE PDF FIX]
         "page_count": 5,  # [OFFICE PDF FIX]
     }  # [OFFICE PDF FIX]
-    monkeypatch.setattr("workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta))  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        "workers.tasks._get_document_meta", unittest.mock.AsyncMock(return_value=mock_meta)
+    )  # [OFFICE PDF FIX]
 
     convert_called = []  # [OFFICE PDF FIX]
     monkeypatch.setattr(  # [OFFICE PDF FIX]
         "workers.tasks.convert_office_to_pdf",  # [OFFICE PDF FIX]
-        unittest.mock.AsyncMock(side_effect=lambda *a, **kw: convert_called.append(a)),  # [OFFICE PDF FIX]
+        unittest.mock.AsyncMock(
+            side_effect=lambda *a, **kw: convert_called.append(a)
+        ),  # [OFFICE PDF FIX]
     )  # [OFFICE PDF FIX]
 
     ingested_keys = []  # [OFFICE PDF FIX]
@@ -250,11 +299,15 @@ async def test_worker_plain_pdf_ingested_unchanged(monkeypatch):  # [OFFICE PDF 
         ingested_keys.append((document_id, storage_key))  # [OFFICE PDF FIX]
         return True  # [OFFICE PDF FIX]
 
-    monkeypatch.setattr(document_ingestion_engine, "ingest_document_from_r2", mock_ingest)  # [OFFICE PDF FIX]
+    monkeypatch.setattr(
+        document_ingestion_engine, "ingest_document_from_r2", mock_ingest
+    )  # [OFFICE PDF FIX]
 
     success = await ingest_document_job({}, doc_id, orig_key)  # [OFFICE PDF FIX]
     assert success is True  # [OFFICE PDF FIX]
-    assert len(convert_called) == 0, "Plain PDF must not invoke Office converter!"  # [OFFICE PDF FIX]
+    assert len(convert_called) == 0, (
+        "Plain PDF must not invoke Office converter!"
+    )  # [OFFICE PDF FIX]
     assert len(ingested_keys) == 1  # [OFFICE PDF FIX]
     assert ingested_keys[0] == (doc_id, orig_key)  # [OFFICE PDF FIX]
 

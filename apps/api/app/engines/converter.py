@@ -4,9 +4,9 @@
 
 import asyncio  # [OFFICE PDF FIX]
 import os  # [OFFICE PDF FIX]
-from pathlib import Path  # [OFFICE PDF FIX]
 import shutil  # [OFFICE PDF FIX]
 import tempfile  # [OFFICE PDF FIX]
+from pathlib import Path  # [OFFICE PDF FIX]
 
 import structlog  # [OFFICE PDF FIX]
 
@@ -17,6 +17,7 @@ logger = structlog.get_logger(__name__)  # [OFFICE PDF FIX]
 
 class ConversionError(Exception):  # [OFFICE PDF FIX]
     """Raised when Office document to PDF conversion fails."""  # [OFFICE PDF FIX]
+
     pass  # [OFFICE PDF FIX]
 
 
@@ -26,7 +27,9 @@ _CONVERSION_SEMAPHORE = asyncio.Semaphore(1)  # [OFFICE PDF FIX]
 def find_soffice_binary() -> str | None:  # [OFFICE PDF FIX]
     """Auto-detects LibreOffice soffice executable across configured path, PATH, and system defaults."""  # [OFFICE PDF FIX]
     # 1. Explicit setting in config  # [OFFICE PDF FIX]
-    if getattr(settings, "SOFFICE_PATH", None) and settings.SOFFICE_PATH.strip():  # [OFFICE PDF FIX]
+    if (
+        getattr(settings, "SOFFICE_PATH", None) and settings.SOFFICE_PATH.strip()
+    ):  # [OFFICE PDF FIX]
         configured = settings.SOFFICE_PATH.strip()  # [OFFICE PDF FIX]
         if os.path.exists(configured):  # [OFFICE PDF FIX]
             return configured  # [OFFICE PDF FIX]
@@ -66,13 +69,15 @@ def find_soffice_binary() -> str | None:  # [OFFICE PDF FIX]
 
 
 async def convert_office_to_pdf(file_bytes: bytes, extension: str) -> bytes:  # [OFFICE PDF FIX]
-    """  # [OFFICE PDF FIX]
+    """# [OFFICE PDF FIX]
     Converts Office documents (.docx, .doc, .pptx, .ppt) to faithful visual PDF bytes via LibreOffice.  # [OFFICE PDF FIX]
     Runs soffice in headless mode with an isolated per-call profile under a module-level concurrency semaphore.  # [OFFICE PDF FIX]
     """  # [OFFICE PDF FIX]
     ext = (extension or "").lower().lstrip(".")  # [OFFICE PDF FIX]
     if not ext:  # [OFFICE PDF FIX]
-        raise ConversionError("File extension must be specified for Office conversion.")  # [OFFICE PDF FIX]
+        raise ConversionError(
+            "File extension must be specified for Office conversion."
+        )  # [OFFICE PDF FIX]
     if not file_bytes:  # [OFFICE PDF FIX]
         raise ConversionError("Input file bytes are empty.")  # [OFFICE PDF FIX]
 
@@ -114,11 +119,15 @@ async def convert_office_to_pdf(file_bytes: bytes, extension: str) -> bytes:  # 
                     stderr=asyncio.subprocess.PIPE,  # [OFFICE PDF FIX]
                 )  # [OFFICE PDF FIX]
             except Exception as exc:  # [OFFICE PDF FIX]
-                raise ConversionError(f"Failed to execute LibreOffice subprocess: {exc}") from exc  # [OFFICE PDF FIX]
+                raise ConversionError(
+                    f"Failed to execute LibreOffice subprocess: {exc}"
+                ) from exc  # [OFFICE PDF FIX]
 
             try:  # [OFFICE PDF FIX]
-                stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=180.0)  # [OFFICE PDF FIX]
-            except asyncio.TimeoutError:  # [OFFICE PDF FIX]
+                stdout, stderr = await asyncio.wait_for(
+                    proc.communicate(), timeout=180.0
+                )  # [OFFICE PDF FIX]
+            except TimeoutError:  # [OFFICE PDF FIX]
                 try:  # [OFFICE PDF FIX]
                     proc.kill()  # [OFFICE PDF FIX]
                     await proc.wait()  # [OFFICE PDF FIX]

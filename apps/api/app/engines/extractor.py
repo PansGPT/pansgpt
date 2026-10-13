@@ -105,57 +105,77 @@ class DocumentExtractor:
 
         return False, "scanned_canvas", ""
 
-    def extract_tables_from_page(self, page: fitz.Page, page_number: int) -> list[ExtractedTable]:
-        """Stage 6 Native Path: PyMuPDF cell geometry extraction."""
-        tables = []
-        try:
-            tab_finder = page.find_tables()
-            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0
-            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0
-            for tab in tab_finder.tables:
-                extracted = tab.extract()
-                if not extracted or len(extracted) < 2:
-                    continue
+    def extract_tables_from_page(
+        self, page: fitz.Page, page_number: int
+    ) -> list[ExtractedTable]:  # [VISION FIX]
+        """Stage 6 Native Path: PyMuPDF cell geometry extraction with junk filtering."""  # [VISION FIX]
+        tables = []  # [VISION FIX]
+        try:  # [VISION FIX]
+            tab_finder = page.find_tables()  # [VISION FIX]
+            p_w = float(page.rect.width) if page.rect.width > 0 else 1.0  # [VISION FIX]
+            p_h = float(page.rect.height) if page.rect.height > 0 else 1.0  # [VISION FIX]
+            for tab in tab_finder.tables:  # [VISION FIX]
+                extracted = tab.extract()  # [VISION FIX]
+                if not extracted or len(extracted) < 2:  # [VISION FIX]
+                    continue  # [VISION FIX]
 
-                headers = [str(col).strip() if col is not None else "" for col in extracted[0]]
-                rows = [
-                    [str(val).strip() if val is not None else "" for val in row]
-                    for row in extracted[1:]
-                ]
+                n_rows = len(extracted)  # [VISION FIX]
+                n_cols = max(len(r) for r in extracted) if extracted else 0  # [VISION FIX]
+                if n_rows < 2 or n_cols < 2:  # [VISION FIX]
+                    continue  # [VISION FIX]
 
-                header_line = "| " + " | ".join(headers) + " |"
-                separator_line = "| " + " | ".join(["---"] * len(headers)) + " |"
-                row_lines = ["| " + " | ".join(r) + " |" for r in rows]
-                markdown = "\n".join([header_line, separator_line] + row_lines)
+                # Count cells with at least 2 alphanumeric characters each  # [VISION FIX]
+                valid_cell_count = sum(  # [VISION FIX]
+                    1  # [VISION FIX]
+                    for row in extracted  # [VISION FIX]
+                    for cell in row  # [VISION FIX]
+                    if cell is not None
+                    and sum(1 for c in str(cell) if c.isalnum()) >= 2  # [VISION FIX]
+                )  # [VISION FIX]
+                if valid_cell_count < 4:  # [VISION FIX]
+                    continue  # [VISION FIX]
 
-                t_bbox = getattr(tab, "bbox", (0, 0, 0, 0))
-                norm_bbox = [
-                    round(t_bbox[0] / p_w, 4),
-                    round(t_bbox[1] / p_h, 4),
-                    round(t_bbox[2] / p_w, 4),
-                    round(t_bbox[3] / p_h, 4),
-                ]
-                bbox_data = {
-                    "page": page_number,
-                    "page_width": p_w,
-                    "page_height": p_h,
-                    "bbox": norm_bbox,
-                    "rects": [norm_bbox],
-                }
+                headers = [
+                    str(col).strip() if col is not None else "" for col in extracted[0]
+                ]  # [VISION FIX]
+                rows = [  # [VISION FIX]
+                    [str(val).strip() if val is not None else "" for val in row]  # [VISION FIX]
+                    for row in extracted[1:]  # [VISION FIX]
+                ]  # [VISION FIX]
 
-                tables.append(
-                    ExtractedTable(
-                        page_number=page_number,
-                        markdown=markdown,
-                        headers=headers,
-                        rows=rows,
-                        is_native=True,
-                        bounding_box=bbox_data,
-                    )
-                )
-        except Exception:
-            pass
-        return tables
+                header_line = "| " + " | ".join(headers) + " |"  # [VISION FIX]
+                separator_line = "| " + " | ".join(["---"] * len(headers)) + " |"  # [VISION FIX]
+                row_lines = ["| " + " | ".join(r) + " |" for r in rows]  # [VISION FIX]
+                markdown = "\n".join([header_line, separator_line] + row_lines)  # [VISION FIX]
+
+                t_bbox = getattr(tab, "bbox", (0, 0, 0, 0))  # [VISION FIX]
+                norm_bbox = [  # [VISION FIX]
+                    round(t_bbox[0] / p_w, 4),  # [VISION FIX]
+                    round(t_bbox[1] / p_h, 4),  # [VISION FIX]
+                    round(t_bbox[2] / p_w, 4),  # [VISION FIX]
+                    round(t_bbox[3] / p_h, 4),  # [VISION FIX]
+                ]  # [VISION FIX]
+                bbox_data = {  # [VISION FIX]
+                    "page": page_number,  # [VISION FIX]
+                    "page_width": p_w,  # [VISION FIX]
+                    "page_height": p_h,  # [VISION FIX]
+                    "bbox": norm_bbox,  # [VISION FIX]
+                    "rects": [norm_bbox],  # [VISION FIX]
+                }  # [VISION FIX]
+
+                tables.append(  # [VISION FIX]
+                    ExtractedTable(  # [VISION FIX]
+                        page_number=page_number,  # [VISION FIX]
+                        markdown=markdown,  # [VISION FIX]
+                        headers=headers,  # [VISION FIX]
+                        rows=rows,  # [VISION FIX]
+                        is_native=True,  # [VISION FIX]
+                        bounding_box=bbox_data,  # [VISION FIX]
+                    )  # [VISION FIX]
+                )  # [VISION FIX]
+        except Exception:  # [VISION FIX]
+            pass  # [VISION FIX]
+        return tables  # [VISION FIX]
 
     def extract_embedded_images(  # [IMAGE FIX]
         self,  # [IMAGE FIX]
@@ -193,6 +213,7 @@ class DocumentExtractor:
                 height = base_image.get("height", 0)  # [IMAGE FIX]
                 if width == 0 or height == 0:  # [IMAGE FIX]
                     from PIL import Image  # [IMAGE FIX]
+
                     pil_img = Image.open(io.BytesIO(image_bytes))  # [IMAGE FIX]
                     width, height = pil_img.width, pil_img.height  # [IMAGE FIX]
 
@@ -202,7 +223,9 @@ class DocumentExtractor:
                     continue  # [IMAGE FIX]
 
                 aspect_ratio = width / height if height > 0 else 0.0  # [IMAGE FIX]
-                if aspect_ratio > MAX_ASPECT_RATIO or aspect_ratio < (1.0 / MAX_ASPECT_RATIO):  # [IMAGE FIX]
+                if aspect_ratio > MAX_ASPECT_RATIO or aspect_ratio < (
+                    1.0 / MAX_ASPECT_RATIO
+                ):  # [IMAGE FIX]
                     if stats is not None:  # [IMAGE FIX]
                         stats.filtered_out += 1  # [IMAGE FIX]
                     continue  # [IMAGE FIX]
@@ -262,7 +285,11 @@ class DocumentExtractor:
             if has_text:  # [IMAGE FIX]
                 tables = self.extract_tables_from_page(page, page_num)  # [IMAGE FIX]
                 embedded_images = self.extract_embedded_images(  # [IMAGE FIX]
-                    doc, page, page_num, seen_hashes=seen_hashes, stats=stats  # [IMAGE FIX]
+                    doc,
+                    page,
+                    page_num,
+                    seen_hashes=seen_hashes,
+                    stats=stats,  # [IMAGE FIX]
                 )  # [IMAGE FIX]
 
                 line_rects = []
@@ -607,7 +634,9 @@ class DocumentExtractor:
             # PyMuPDF convert_to_pdf is prohibited for Office documents to avoid layout collapse.  # [OFFICE PDF FIX]
             # Delegate to LibreOffice converter or raise clear error in async loops.  # [OFFICE PDF FIX]
             import asyncio  # [OFFICE PDF FIX]
+
             from app.engines.converter import convert_office_to_pdf  # [OFFICE PDF FIX]
+
             try:  # [OFFICE PDF FIX]
                 loop = asyncio.get_running_loop()  # [OFFICE PDF FIX]
             except RuntimeError:  # [OFFICE PDF FIX]
