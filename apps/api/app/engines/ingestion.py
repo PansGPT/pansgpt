@@ -563,7 +563,7 @@ class DocumentIngestionEngine:
     async def process_pending_images(  # [IMAGES PHASE]
         self,  # [IMAGES PHASE]
         document_id: str,  # [IMAGES PHASE]
-        storage_key: str,  # [IMAGES PHASE]
+        storage_key: str | None = None,  # [IMAGES PHASE]
         max_consecutive_failures: int = 3,  # [IMAGES PHASE]
     ) -> str:  # [IMAGES PHASE]
         """# [IMAGES PHASE]
@@ -586,12 +586,16 @@ class DocumentIngestionEngine:
             settings.DATABASE_URL, statement_cache_size=0
         )  # [IMAGES PHASE]
         try:  # [IMAGES PHASE]
-            # Check if converted_key should be preferred for Office documents  # [IMAGES PHASE]
+            # Check if converted_key or storage_key should be used  # [IMAGES PHASE]
             doc_row = await conn.fetchrow(  # [IMAGES PHASE]
-                "SELECT id, converted_key, embedding_status FROM public.documents WHERE id = $1;",  # [IMAGES PHASE]
+                "SELECT id, storage_key, converted_key, embedding_status FROM public.documents WHERE id = $1;",  # [IMAGES PHASE]
                 uuid.UUID(document_id),  # [IMAGES PHASE]
             )  # [IMAGES PHASE]
-            if doc_row and doc_row["converted_key"]:  # [IMAGES PHASE]
+            if not storage_key and doc_row:  # [IMAGES PHASE]
+                storage_key = (
+                    doc_row["converted_key"] or doc_row["storage_key"] or ""
+                )  # [IMAGES PHASE]
+            elif doc_row and doc_row["converted_key"]:  # [IMAGES PHASE]
                 storage_key = doc_row["converted_key"]  # [IMAGES PHASE]
 
             # Re-open PDF from R2  # [IMAGES PHASE]
