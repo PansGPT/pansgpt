@@ -101,69 +101,75 @@ async def _heartbeat_loop(document_id: str, worker_id: uuid.UUID, interval: int 
             logger.warning("worker_heartbeat_failed", document_id=document_id, error=str(e))
 
 
-async def _get_document_meta(document_id: str) -> dict | None:  # [OFFICE PDF FIX]
-    """Fetches document metadata including storage_key, mime_type, and converted_key."""  # [OFFICE PDF FIX]
-    if not settings.DATABASE_URL:  # [OFFICE PDF FIX]
-        return None  # [OFFICE PDF FIX]
-    try:  # [OFFICE PDF FIX]
-        conn = await asyncpg.connect(
-            settings.DATABASE_URL, statement_cache_size=0
-        )  # [OFFICE PDF FIX]
-        row = await conn.fetchrow(  # [OFFICE PDF FIX]
-            """  # [OFFICE PDF FIX]
-            SELECT id, storage_key, mime_type, converted_key, university_id, course_code, page_count  # [OFFICE PDF FIX]
-            FROM public.documents  # [OFFICE PDF FIX]
-            WHERE id = $1;  # [OFFICE PDF FIX]
-            """,  # [OFFICE PDF FIX]
-            uuid.UUID(document_id),  # [OFFICE PDF FIX]
-        )  # [OFFICE PDF FIX]
-        await conn.close()  # [OFFICE PDF FIX]
-        return dict(row) if row else None  # [OFFICE PDF FIX]
-    except Exception as e:  # [OFFICE PDF FIX]
-        logger.warning(
-            "worker_get_document_meta_failed", document_id=document_id, error=str(e)
-        )  # [OFFICE PDF FIX]
-        return None  # [OFFICE PDF FIX]
+async def _get_document_meta(document_id: str) -> dict | None:  # [WORKER FIX]
+    """Fetches document metadata including storage_key, mime_type, and converted_key."""  # [WORKER FIX]
+    if not settings.DATABASE_URL:  # [WORKER FIX]
+        return None  # [WORKER FIX]
+    try:  # [WORKER FIX]
+        conn = await asyncpg.connect(  # [WORKER FIX]
+            settings.DATABASE_URL,
+            statement_cache_size=0,  # [WORKER FIX]
+        )  # [WORKER FIX]
+        row = await conn.fetchrow(  # [WORKER FIX]
+            """
+            SELECT id, storage_key, mime_type, converted_key, university_id, course_code, page_count
+            FROM public.documents
+            WHERE id = $1;
+            """,
+            uuid.UUID(document_id),  # [WORKER FIX]
+        )  # [WORKER FIX]
+        await conn.close()  # [WORKER FIX]
+        return dict(row) if row else None  # [WORKER FIX]
+    except Exception as e:  # [WORKER FIX]
+        logger.warning(  # [WORKER FIX]
+            "worker_get_document_meta_failed",
+            document_id=document_id,
+            error=str(e),  # [WORKER FIX]
+        )  # [WORKER FIX]
+        return None  # [WORKER FIX]
 
 
-async def _update_document_converted_info(  # [OFFICE PDF FIX]
-    document_id: str,
-    converted_key: str,
-    page_count: int | None = None,  # [OFFICE PDF FIX]
-) -> None:  # [OFFICE PDF FIX]
-    """Updates documents.converted_key and optionally page_count."""  # [OFFICE PDF FIX]
-    if not settings.DATABASE_URL:  # [OFFICE PDF FIX]
-        return  # [OFFICE PDF FIX]
-    try:  # [OFFICE PDF FIX]
-        conn = await asyncpg.connect(
-            settings.DATABASE_URL, statement_cache_size=0
-        )  # [OFFICE PDF FIX]
-        if page_count is not None:  # [OFFICE PDF FIX]
-            await conn.execute(  # [OFFICE PDF FIX]
-                """  # [OFFICE PDF FIX]
-                UPDATE public.documents  # [OFFICE PDF FIX]
-                SET converted_key = $1, page_count = $2, updated_at = NOW()  # [OFFICE PDF FIX]
-                WHERE id = $3;  # [OFFICE PDF FIX]
-                """,  # [OFFICE PDF FIX]
-                converted_key,  # [OFFICE PDF FIX]
-                page_count,  # [OFFICE PDF FIX]
-                uuid.UUID(document_id),  # [OFFICE PDF FIX]
-            )  # [OFFICE PDF FIX]
-        else:  # [OFFICE PDF FIX]
-            await conn.execute(  # [OFFICE PDF FIX]
-                """  # [OFFICE PDF FIX]
-                UPDATE public.documents  # [OFFICE PDF FIX]
-                SET converted_key = $1, updated_at = NOW()  # [OFFICE PDF FIX]
-                WHERE id = $2;  # [OFFICE PDF FIX]
-                """,  # [OFFICE PDF FIX]
-                converted_key,  # [OFFICE PDF FIX]
-                uuid.UUID(document_id),  # [OFFICE PDF FIX]
-            )  # [OFFICE PDF FIX]
-        await conn.close()  # [OFFICE PDF FIX]
-    except Exception as e:  # [OFFICE PDF FIX]
-        logger.warning(
-            "worker_update_converted_info_failed", document_id=document_id, error=str(e)
-        )  # [OFFICE PDF FIX]
+async def _update_document_converted_info(  # [WORKER FIX]
+    document_id: str,  # [WORKER FIX]
+    converted_key: str,  # [WORKER FIX]
+    page_count: int | None = None,  # [WORKER FIX]
+) -> None:  # [WORKER FIX]
+    """Updates documents.converted_key and optionally page_count."""  # [WORKER FIX]
+    if not settings.DATABASE_URL:  # [WORKER FIX]
+        return  # [WORKER FIX]
+    try:  # [WORKER FIX]
+        conn = await asyncpg.connect(  # [WORKER FIX]
+            settings.DATABASE_URL,
+            statement_cache_size=0,  # [WORKER FIX]
+        )  # [WORKER FIX]
+        if page_count is not None:  # [WORKER FIX]
+            await conn.execute(  # [WORKER FIX]
+                """
+                UPDATE public.documents
+                SET converted_key = $1, page_count = $2, updated_at = NOW()
+                WHERE id = $3;
+                """,
+                converted_key,  # [WORKER FIX]
+                page_count,  # [WORKER FIX]
+                uuid.UUID(document_id),  # [WORKER FIX]
+            )  # [WORKER FIX]
+        else:  # [WORKER FIX]
+            await conn.execute(  # [WORKER FIX]
+                """
+                UPDATE public.documents
+                SET converted_key = $1, updated_at = NOW()
+                WHERE id = $2;
+                """,
+                converted_key,  # [WORKER FIX]
+                uuid.UUID(document_id),  # [WORKER FIX]
+            )  # [WORKER FIX]
+        await conn.close()  # [WORKER FIX]
+    except Exception as e:  # [WORKER FIX]
+        logger.warning(  # [WORKER FIX]
+            "worker_update_converted_info_failed",
+            document_id=document_id,
+            error=str(e),  # [WORKER FIX]
+        )  # [WORKER FIX]
 
 
 async def ingest_document_job(  # [OFFICE PDF FIX]
