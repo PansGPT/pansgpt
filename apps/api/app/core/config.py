@@ -161,6 +161,7 @@ class Settings(BaseSettings):
     GEMINI_VISION_MODEL: str = "gemma-4-26b-a4b-it"  # [VISION FIX]
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
     GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
+    VISION_MAX_OUTPUT_TOKENS: int = 1024  # [PHASE2 FIX]
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
     VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
     VISION_OVERALL_TIMEOUT_SECONDS: float = 25.0  # 25s global pipeline timeout

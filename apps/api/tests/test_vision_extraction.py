@@ -319,7 +319,7 @@ async def test_classifier_empty_output_retries_once_then_skips(monkeypatch):  # 
             png_data, page_number=5
         )  # [VISION FIX]
         assert route is None  # [VISION FIX]
-        assert content == ""  # [VISION FIX]
+        assert content == "empty:UNKNOWN"  # [PHASE2 FIX]
         assert (
             mock_client.aio.models.generate_content.call_count == 2
         )  # initial + 1 retry  # [VISION FIX]

@@ -399,6 +399,12 @@ class DocumentIngestionEngine:
             try:
                 conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)
                 async with conn.transaction():
+                    # 0. Delete existing document_images for this document on re-run [PHASE2 FIX]
+                    await conn.execute(  # [PHASE2 FIX]
+                        "DELETE FROM public.document_images WHERE document_id = $1;",  # [PHASE2 FIX]
+                        uuid.UUID(document_id),  # [PHASE2 FIX]
+                    )  # [PHASE2 FIX]
+
                     # 1. Batch Insert Pages
                     if result.pages:
                         pages_args = [
@@ -647,6 +653,30 @@ class DocumentIngestionEngine:
 
             consecutive_failures = 0  # [IMAGES PHASE]
 
+            async def _ensure_db() -> asyncpg.Connection:  # [PHASE2 FIX]
+                nonlocal conn  # [PHASE2 FIX]
+                is_alive = False  # [PHASE2 FIX]
+                if conn is not None and not (  # [PHASE2 FIX]
+                    callable(getattr(conn, "is_closed", None)) and conn.is_closed()  # [PHASE2 FIX]
+                ):  # [PHASE2 FIX]
+                    try:  # [PHASE2 FIX]
+                        await asyncio.wait_for(
+                            conn.fetchval("SELECT 1;"), timeout=3.0
+                        )  # [PHASE2 FIX]
+                        is_alive = True  # [PHASE2 FIX]
+                    except Exception:  # [PHASE2 FIX]
+                        try:  # [PHASE2 FIX]
+                            await conn.close()  # [PHASE2 FIX]
+                        except Exception:  # [PHASE2 FIX]
+                            pass  # [PHASE2 FIX]
+                        conn = None  # [PHASE2 FIX]
+                if not is_alive or conn is None:  # [PHASE2 FIX]
+                    conn = await asyncpg.connect(  # [PHASE2 FIX]
+                        settings.DATABASE_URL,  # [PHASE2 FIX]
+                        statement_cache_size=0,  # [PHASE2 FIX]
+                    )  # [PHASE2 FIX]
+                return conn  # [PHASE2 FIX]
+
             for row in rows:  # [IMAGES PHASE]
                 row_id = row["id"]  # [IMAGES PHASE]
                 page_num = row["page_number"]  # [IMAGES PHASE]
@@ -695,6 +725,7 @@ class DocumentIngestionEngine:
                                 break  # [IMAGES PHASE]
 
                 if not image_bytes:  # [IMAGES PHASE]
+                    await _ensure_db()  # [PHASE2 FIX]
                     await conn.execute(  # [IMAGES PHASE]
                         """
                         UPDATE public.document_images
@@ -726,6 +757,7 @@ class DocumentIngestionEngine:
                     new_attempts = row["attempts"] + 1  # [IMAGES PHASE]
                     new_status = "failed" if new_attempts >= 5 else "pending"  # [IMAGES PHASE]
                     err_msg = str(exc)[:500]  # [IMAGES PHASE]
+                    await _ensure_db()  # [PHASE2 FIX]
                     await conn.execute(  # [IMAGES PHASE]
                         """
                         UPDATE public.document_images
@@ -747,30 +779,41 @@ class DocumentIngestionEngine:
                         break  # [IMAGES PHASE]
                     continue  # [IMAGES PHASE]
 
-                # Route is None handling: empty output vs HTTP 400  # [IMAGES PHASE]
-                if route is None:  # [IMAGES PHASE]
-                    consecutive_failures = 0  # [IMAGES PHASE]
-                    if processed_content == "":  # [IMAGES PHASE]
-                        # Empty output on successful call -> skipped with last_error 'empty'  # [IMAGES PHASE]
-                        await conn.execute(  # [IMAGES PHASE]
-                            """
-                            UPDATE public.document_images
-                            SET attempts = attempts + 1, status = 'skipped', last_error = 'empty', updated_at = now()
-                            WHERE id = $1;
-                            """,  # [IMAGES PHASE]
-                            row_id,  # [IMAGES PHASE]
-                        )  # [IMAGES PHASE]
-                    else:  # [IMAGES PHASE]
-                        # HTTP 400 invalid image -> status 'skipped' with last_error  # [IMAGES PHASE]
-                        await conn.execute(  # [IMAGES PHASE]
+                # Route is None handling: empty output, blocked, or invalid image [PHASE2 FIX]
+                if route is None:  # [PHASE2 FIX]
+                    consecutive_failures = 0  # [PHASE2 FIX]
+                    await _ensure_db()  # [PHASE2 FIX]
+                    if (
+                        processed_content is None or processed_content == "invalid image (HTTP 400)"
+                    ):  # [PHASE2 FIX]
+                        await conn.execute(  # [PHASE2 FIX]
                             """
                             UPDATE public.document_images
                             SET attempts = attempts + 1, status = 'skipped', last_error = 'invalid image (HTTP 400)', updated_at = now()
                             WHERE id = $1;
-                            """,  # [IMAGES PHASE]
-                            row_id,  # [IMAGES PHASE]
-                        )  # [IMAGES PHASE]
-                    continue  # [IMAGES PHASE]
+                            """,  # [PHASE2 FIX]
+                            row_id,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                    elif processed_content == "":  # [PHASE2 FIX]
+                        await conn.execute(  # [PHASE2 FIX]
+                            """
+                            UPDATE public.document_images
+                            SET attempts = attempts + 1, status = 'skipped', last_error = 'empty', updated_at = now()
+                            WHERE id = $1;
+                            """,  # [PHASE2 FIX]
+                            row_id,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                    else:  # [PHASE2 FIX]
+                        await conn.execute(  # [PHASE2 FIX]
+                            """
+                            UPDATE public.document_images
+                            SET attempts = attempts + 1, status = 'skipped', last_error = $2, updated_at = now()
+                            WHERE id = $1;
+                            """,  # [PHASE2 FIX]
+                            row_id,  # [PHASE2 FIX]
+                            processed_content,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                    continue  # [PHASE2 FIX]
 
                 # Success! In ONE transaction: insert element, chunks with embeddings, mark done, update total_chunks  # [IMAGES PHASE]
                 consecutive_failures = 0  # [IMAGES PHASE]
@@ -785,6 +828,7 @@ class DocumentIngestionEngine:
                 el_id = uuid.uuid4()  # [IMAGES PHASE]
                 seg_id = get_segment_id_for_page(page_num)  # [IMAGES PHASE]
 
+                await _ensure_db()  # [PHASE2 FIX]
                 async with conn.transaction():  # [IMAGES PHASE]
                     max_el_order = await conn.fetchval(  # [IMAGES PHASE]
                         "SELECT COALESCE(MAX(order_index), 0) FROM public.document_elements WHERE document_id = $1;",  # [IMAGES PHASE]
@@ -890,6 +934,7 @@ class DocumentIngestionEngine:
             doc.close()  # [IMAGES PHASE]
 
             # Final status counts and summary logging  # [IMAGES PHASE]
+            await _ensure_db()  # [PHASE2 FIX]
             counts_rows = await conn.fetch(  # [IMAGES PHASE]
                 """
                 SELECT status, count(*)::int as count
@@ -904,6 +949,7 @@ class DocumentIngestionEngine:
 
             # If no pending rows left, ensure document embedding_status is completed  # [IMAGES PHASE]
             if pending_left == 0:  # [IMAGES PHASE]
+                await _ensure_db()  # [PHASE2 FIX]
                 await conn.execute(  # [IMAGES PHASE]
                     """
                     UPDATE public.documents
@@ -932,7 +978,14 @@ class DocumentIngestionEngine:
                 return "paused"  # [IMAGES PHASE]
             return "completed"  # [IMAGES PHASE]
         finally:  # [IMAGES PHASE]
-            await conn.close()  # [IMAGES PHASE]
+            if conn is not None:  # [PHASE2 FIX]
+                try:  # [PHASE2 FIX]
+                    if not (
+                        callable(getattr(conn, "is_closed", None)) and conn.is_closed()
+                    ):  # [PHASE2 FIX]
+                        await conn.close()  # [PHASE2 FIX]
+                except Exception:  # [PHASE2 FIX]
+                    pass  # [PHASE2 FIX]
 
 
 document_ingestion_engine = DocumentIngestionEngine()

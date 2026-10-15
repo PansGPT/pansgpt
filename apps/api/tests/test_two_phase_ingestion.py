@@ -628,3 +628,374 @@ async def test_vision_fake_mode_still_works(monkeypatch):  # [IMAGES PHASE]
     ]  # [IMAGES PHASE]
     assert len(done_updates) == 1  # [IMAGES PHASE]
     assert "Mock pharmacology diagram" in done_updates[0][2]  # [IMAGES PHASE]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_describe_document_images_job_returns_completed(monkeypatch):  # [PHASE2 FIX]
+    """(a) describe_document_images_job returns 'completed'."""  # [PHASE2 FIX]
+    from workers.tasks import describe_document_images_job  # [PHASE2 FIX]
+
+    with patch.object(  # [PHASE2 FIX]
+        document_ingestion_engine,  # [PHASE2 FIX]
+        "process_pending_images",  # [PHASE2 FIX]
+        new_callable=AsyncMock,  # [PHASE2 FIX]
+        return_value="completed",  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        res = await describe_document_images_job({}, str(uuid.uuid4()), "dummy.pdf")  # [PHASE2 FIX]
+        assert res == "completed"  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_describe_document_images_job_raises_retry_on_paused(monkeypatch):  # [PHASE2 FIX]
+    """(b) it raises Retry(defer=300) when process_pending_images returns 'paused' with pending rows and job_try < 6."""  # [PHASE2 FIX]
+    from arq import Retry  # [PHASE2 FIX]
+
+    from workers.tasks import describe_document_images_job  # [PHASE2 FIX]
+
+    with (  # [PHASE2 FIX]
+        patch.object(  # [PHASE2 FIX]
+            document_ingestion_engine,  # [PHASE2 FIX]
+            "process_pending_images",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value="paused",  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.get_image_status",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={"pending": 2},  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        with pytest.raises(Retry) as exc_info:  # [PHASE2 FIX]
+            await describe_document_images_job(  # [PHASE2 FIX]
+                {"job_try": 2},
+                str(uuid.uuid4()),
+                "dummy.pdf",  # [PHASE2 FIX]
+            )  # [PHASE2 FIX]
+        assert exc_info.value.defer_score in (300, 300000)  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_enqueue_passes_converted_key_and_skips_when_no_pending(monkeypatch):  # [PHASE2 FIX]
+    """(c) the enqueue after phase 1 passes the CONVERTED key for an Office document and is skipped when no images are pending."""  # [PHASE2 FIX]
+    from workers.tasks import ingest_document_job  # [PHASE2 FIX]
+
+    doc_id = str(uuid.uuid4())  # [PHASE2 FIX]
+    conv_key = f"universities/1/courses/c1/converted/{doc_id}.pdf"  # [PHASE2 FIX]
+
+    # Subcase 1: With pending images -> enqueues converted key
+    mock_redis = MagicMock()  # [PHASE2 FIX]
+    mock_redis.enqueue_job = AsyncMock(return_value="job-1")  # [PHASE2 FIX]
+    ctx = {"redis": mock_redis}  # [PHASE2 FIX]
+
+    with (  # [PHASE2 FIX]
+        patch(
+            "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
+        ),  # [PHASE2 FIX]
+        patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(
+            "workers.tasks.storage_engine.object_exists", new_callable=AsyncMock, return_value=True
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks._get_document_meta",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={  # [PHASE2 FIX]
+                "mime_type": (  # [PHASE2 FIX]
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"  # [PHASE2 FIX]
+                ),  # [PHASE2 FIX]
+                "converted_key": conv_key,  # [PHASE2 FIX]
+                "page_count": 10,  # [PHASE2 FIX]
+            },  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.document_ingestion_engine.ingest_document_from_r2",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value=True,  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.get_image_status",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={"pending": 3},  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        await ingest_document_job(ctx, doc_id, "original.docx")  # [PHASE2 FIX]
+        mock_redis.enqueue_job.assert_awaited_once_with(  # [PHASE2 FIX]
+            "describe_document_images_job",
+            doc_id,
+            conv_key,  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+
+    # Subcase 2: When no images are pending -> skipped
+    mock_redis_empty = MagicMock()  # [PHASE2 FIX]
+    mock_redis_empty.enqueue_job = AsyncMock()  # [PHASE2 FIX]
+    with (  # [PHASE2 FIX]
+        patch(
+            "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
+        ),  # [PHASE2 FIX]
+        patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(
+            "workers.tasks.storage_engine.object_exists", new_callable=AsyncMock, return_value=True
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks._get_document_meta",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={  # [PHASE2 FIX]
+                "mime_type": (  # [PHASE2 FIX]
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"  # [PHASE2 FIX]
+                ),  # [PHASE2 FIX]
+                "converted_key": conv_key,  # [PHASE2 FIX]
+                "page_count": 10,  # [PHASE2 FIX]
+            },  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.document_ingestion_engine.ingest_document_from_r2",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value=True,  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.get_image_status",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={"pending": 0},  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        await ingest_document_job(
+            {"redis": mock_redis_empty}, doc_id, "original.docx"
+        )  # [PHASE2 FIX]
+        mock_redis_empty.enqueue_job.assert_not_called()  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_failed_enqueue_logs_error_and_does_not_fail_phase1(monkeypatch):  # [PHASE2 FIX]
+    """(d) a failed enqueue logs phase2_enqueue_failed and does not fail phase 1."""  # [PHASE2 FIX]
+    from workers.tasks import ingest_document_job  # [PHASE2 FIX]
+
+    doc_id = str(uuid.uuid4())  # [PHASE2 FIX]
+    mock_redis = MagicMock()  # [PHASE2 FIX]
+    mock_redis.enqueue_job = AsyncMock(  # [PHASE2 FIX]
+        side_effect=RuntimeError("Redis connection dropped")  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+
+    with (  # [PHASE2 FIX]
+        patch(
+            "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
+        ),  # [PHASE2 FIX]
+        patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(
+            "workers.tasks._get_document_meta", new_callable=AsyncMock, return_value=None
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.document_ingestion_engine.ingest_document_from_r2",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value=True,  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch(  # [PHASE2 FIX]
+            "workers.tasks.get_image_status",  # [PHASE2 FIX]
+            new_callable=AsyncMock,  # [PHASE2 FIX]
+            return_value={"pending": 2},  # [PHASE2 FIX]
+        ),  # [PHASE2 FIX]
+        patch("workers.tasks.logger.error") as mock_log_err,  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        success = await ingest_document_job(  # [PHASE2 FIX]
+            {"redis": mock_redis},
+            doc_id,
+            "mock.pdf",  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        assert success is True  # Phase 1 does not fail  # [PHASE2 FIX]
+        assert any(  # [PHASE2 FIX]
+            call.args[0] == "phase2_enqueue_failed"
+            for call in mock_log_err.call_args_list  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+
+
+def test_worker_settings_registers_describe_job():  # [PHASE2 FIX]
+    """(e) WorkerSettings registers describe_document_images_job with timeout >= 3600."""  # [PHASE2 FIX]
+    from workers.settings import WorkerSettings  # [PHASE2 FIX]
+
+    job_names = [  # [PHASE2 FIX]
+        getattr(f, "name", getattr(f, "__name__", str(f)))  # [PHASE2 FIX]
+        for f in WorkerSettings.functions  # [PHASE2 FIX]
+    ]  # [PHASE2 FIX]
+    assert "describe_document_images_job" in job_names  # [PHASE2 FIX]
+
+    for f in WorkerSettings.functions:  # [PHASE2 FIX]
+        if getattr(f, "name", None) == "describe_document_images_job":  # [PHASE2 FIX]
+            assert getattr(f, "timeout_s", 0) >= 3600  # [PHASE2 FIX]
+            assert getattr(f, "max_tries", 0) == 8  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_rerunning_phase1_deletes_existing_document_images(monkeypatch):  # [PHASE2 FIX]
+    """(f) re-running phase 1 on a document that already has document_images rows replaces them."""  # [PHASE2 FIX]
+    pdf_bytes = _create_test_pdf_with_image()  # [PHASE2 FIX]
+    doc_id = str(uuid.uuid4())  # [PHASE2 FIX]
+    mock_db = MockDBConnection()  # [PHASE2 FIX]
+
+    async def mock_connect(*args, **kwargs):  # [PHASE2 FIX]
+        return mock_db  # [PHASE2 FIX]
+
+    monkeypatch.setattr("asyncpg.connect", mock_connect)  # [PHASE2 FIX]
+    monkeypatch.setattr(  # [PHASE2 FIX]
+        settings,
+        "DATABASE_URL",
+        "postgresql://mock:mock@localhost/mock",  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    monkeypatch.setattr(  # [PHASE2 FIX]
+        "app.engines.ingestion.storage_engine.download_bytes",  # [PHASE2 FIX]
+        AsyncMock(return_value=pdf_bytes),  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+
+    success = await document_ingestion_engine.ingest_document_from_r2(  # [PHASE2 FIX]
+        doc_id,
+        "mock.pdf",  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    assert success is True  # [PHASE2 FIX]
+
+    # Verify DELETE FROM public.document_images was executed inside transaction
+    delete_calls = [  # [PHASE2 FIX]
+        args  # [PHASE2 FIX]
+        for q, args in mock_db.execute_calls  # [PHASE2 FIX]
+        if "DELETE FROM public.document_images WHERE document_id = $1" in q  # [PHASE2 FIX]
+    ]  # [PHASE2 FIX]
+    assert len(delete_calls) == 1  # [PHASE2 FIX]
+    assert delete_calls[0][0] == uuid.UUID(doc_id)  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_max_tokens_escalation(monkeypatch):  # [PHASE2 FIX]
+    """(g) MAX_TOKENS escalates to 4096 then 8192."""  # [PHASE2 FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [PHASE2 FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-key")  # [PHASE2 FIX]
+    token_limits_seen = []  # [PHASE2 FIX]
+
+    def mock_resp(max_tok):  # [PHASE2 FIX]
+        cand = MagicMock()  # [PHASE2 FIX]
+        cand.finish_reason = "MAX_TOKENS"  # [PHASE2 FIX]
+        resp = MagicMock()  # [PHASE2 FIX]
+        resp.candidates = [cand]  # [PHASE2 FIX]
+        resp.prompt_feedback = None  # [PHASE2 FIX]
+        resp.usage_metadata = MagicMock(  # [PHASE2 FIX]
+            prompt_token_count=100,  # [PHASE2 FIX]
+            candidates_token_count=max_tok,  # [PHASE2 FIX]
+            thoughts_token_count=200,  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        resp.text = ""  # [PHASE2 FIX]
+        return resp  # [PHASE2 FIX]
+
+    async def mock_generate_content(*args, **kwargs):  # [PHASE2 FIX]
+        config = kwargs.get("config")  # [PHASE2 FIX]
+        max_tok = getattr(config, "max_output_tokens", None)  # [PHASE2 FIX]
+        token_limits_seen.append(max_tok)  # [PHASE2 FIX]
+        return mock_resp(max_tok)  # [PHASE2 FIX]
+
+    mock_client = MagicMock()  # [PHASE2 FIX]
+    mock_client.aio.models.generate_content = mock_generate_content  # [PHASE2 FIX]
+
+    with (  # [PHASE2 FIX]
+        patch("google.genai.Client", return_value=mock_client),  # [PHASE2 FIX]
+        patch("asyncio.sleep", AsyncMock()),  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        route, content = await image_classifier.classify_and_process(  # [PHASE2 FIX]
+            b"fake_image_bytes",
+            page_number=1,  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        assert route is None  # [PHASE2 FIX]
+        assert content == "empty:MAX_TOKENS"  # [PHASE2 FIX]
+        assert token_limits_seen == [1024, 4096, 8192]  # [PHASE2 FIX]
+
+
+@pytest.mark.asyncio  # [PHASE2 FIX]
+async def test_safety_block_skipped_without_retry(monkeypatch):  # [PHASE2 FIX]
+    """(h) a SAFETY block is skipped without retry and stores 'blocked:...'; stores in last_error."""  # [PHASE2 FIX]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [PHASE2 FIX]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-key")  # [PHASE2 FIX]
+    call_count = 0  # [PHASE2 FIX]
+
+    def mock_safety_resp():  # [PHASE2 FIX]
+        nonlocal call_count  # [PHASE2 FIX]
+        call_count += 1  # [PHASE2 FIX]
+        cand = MagicMock()  # [PHASE2 FIX]
+        cand.finish_reason = "SAFETY"  # [PHASE2 FIX]
+        resp = MagicMock()  # [PHASE2 FIX]
+        resp.candidates = [cand]  # [PHASE2 FIX]
+        resp.prompt_feedback = MagicMock(block_reason="SAFETY")  # [PHASE2 FIX]
+        resp.usage_metadata = MagicMock(  # [PHASE2 FIX]
+            prompt_token_count=50,  # [PHASE2 FIX]
+            candidates_token_count=0,  # [PHASE2 FIX]
+            thoughts_token_count=0,  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        resp.text = ""  # [PHASE2 FIX]
+        return resp  # [PHASE2 FIX]
+
+    mock_client = MagicMock()  # [PHASE2 FIX]
+    mock_client.aio.models.generate_content = AsyncMock(  # [PHASE2 FIX]
+        side_effect=lambda *args, **kwargs: mock_safety_resp()  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+
+    with (  # [PHASE2 FIX]
+        patch("google.genai.Client", return_value=mock_client),  # [PHASE2 FIX]
+        patch("asyncio.sleep", AsyncMock()) as mock_sleep,  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        route, content = await image_classifier.classify_and_process(  # [PHASE2 FIX]
+            b"fake_image_bytes",
+            page_number=1,  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        assert route is None  # [PHASE2 FIX]
+        assert content == "blocked:SAFETY"  # [PHASE2 FIX]
+        assert call_count == 1  # No retry!  # [PHASE2 FIX]
+        mock_sleep.assert_not_called()  # [PHASE2 FIX]
+
+    # Test that process_pending_images stores 'blocked:SAFETY' in last_error
+    pdf_bytes = _create_test_pdf_with_image()  # [PHASE2 FIX]
+    doc = fitz.open(stream=pdf_bytes, filetype="pdf")  # [PHASE2 FIX]
+    raw_img = doc.extract_image(doc[0].get_image_info(xrefs=True)[0]["xref"])[
+        "image"
+    ]  # [PHASE2 FIX]
+    content_hash = hashlib.md5(raw_img).hexdigest()  # [PHASE2 FIX]
+    doc.close()  # [PHASE2 FIX]
+
+    doc_id = str(uuid.uuid4())  # [PHASE2 FIX]
+    row_id = uuid.uuid4()  # [PHASE2 FIX]
+    pending_row = {  # [PHASE2 FIX]
+        "id": row_id,  # [PHASE2 FIX]
+        "page_number": 1,  # [PHASE2 FIX]
+        "content_hash": content_hash,  # [PHASE2 FIX]
+        "source": "embedded",  # [PHASE2 FIX]
+        "width": 300,  # [PHASE2 FIX]
+        "height": 300,  # [PHASE2 FIX]
+        "status": "pending",  # [PHASE2 FIX]
+        "attempts": 0,  # [PHASE2 FIX]
+    }  # [PHASE2 FIX]
+    mock_db = MockDBConnection(pending_rows=[pending_row])  # [PHASE2 FIX]
+
+    async def mock_connect(*args, **kwargs):  # [PHASE2 FIX]
+        return mock_db  # [PHASE2 FIX]
+
+    monkeypatch.setattr("asyncpg.connect", mock_connect)  # [PHASE2 FIX]
+    monkeypatch.setattr(  # [PHASE2 FIX]
+        settings,
+        "DATABASE_URL",
+        "postgresql://mock:mock@localhost/mock",  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    monkeypatch.setattr(  # [PHASE2 FIX]
+        "app.engines.ingestion.storage_engine.download_bytes",  # [PHASE2 FIX]
+        AsyncMock(return_value=pdf_bytes),  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+
+    with patch.object(  # [PHASE2 FIX]
+        image_classifier,  # [PHASE2 FIX]
+        "classify_and_process",  # [PHASE2 FIX]
+        new_callable=AsyncMock,  # [PHASE2 FIX]
+        return_value=(None, "blocked:SAFETY"),  # [PHASE2 FIX]
+    ):  # [PHASE2 FIX]
+        res = await document_ingestion_engine.process_pending_images(  # [PHASE2 FIX]
+            doc_id,
+            "mock.pdf",  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        assert res == "completed"  # [PHASE2 FIX]
+
+    skipped_updates = [  # [PHASE2 FIX]
+        args  # [PHASE2 FIX]
+        for q, args in mock_db.execute_calls  # [PHASE2 FIX]
+        if "status = 'skipped'" in q and "last_error = $2" in q  # [PHASE2 FIX]
+    ]  # [PHASE2 FIX]
+    assert len(skipped_updates) == 1  # [PHASE2 FIX]
+    assert skipped_updates[0][1] == "blocked:SAFETY"  # [PHASE2 FIX]
