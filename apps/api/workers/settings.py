@@ -22,11 +22,11 @@ def get_redis_settings() -> RedisSettings:
 class WorkerSettings:
     """Configuration class for arq worker process: `arq workers.settings.WorkerSettings`."""
 
-    functions = [
-        ingest_document_job,
+    functions = [  # [WORKER FIX 4]
+        func(ingest_document_job, timeout=1800),  # [WORKER FIX 4]
         func(describe_document_images_job, timeout=7200, max_tries=8),  # [PHASE2 FIX]
-    ]  # [PHASE2 FIX]
+    ]  # [WORKER FIX 4]
     redis_settings = get_redis_settings()
     max_jobs = 3  # Free tier single-worker concurrency limit
-    job_timeout = 600  # 10 minutes maximum per monograph ingestion
+    job_timeout = 1800  # 30 minutes maximum per monograph ingestion [WORKER FIX 4]
     keep_result = 3600  # Retain job results for 1 hour

@@ -607,3 +607,25 @@ async def test_escalation_400_with_503_in_message_not_retried(monkeypatch):  # [
         assert "non-retriable error" in str(exc_info.value)  # [WORKER FIX 3]
         # Must be called exactly once for 1024 and once for 4096 (no retry on 400 despite "503" in text)  # [WORKER FIX 3]
         assert call_history == [1024, 4096]  # [WORKER FIX 3]
+
+
+# ------------------------------------------------------------------------------
+# 10. Worker Settings Timeouts Invariant Test [WORKER FIX 4]
+# ------------------------------------------------------------------------------
+def test_worker_functions_registered_timeouts():  # [WORKER FIX 4]
+    """Verify ingest_document_job is registered with timeout=1800 and describe_document_images_job with timeout=7200."""  # [WORKER FIX 4]
+    from workers.settings import WorkerSettings  # [WORKER FIX 4]
+
+    func_map = {  # [WORKER FIX 4]
+        getattr(f, "name", getattr(f, "__name__", str(f))): f  # [WORKER FIX 4]
+        for f in WorkerSettings.functions  # [WORKER FIX 4]
+    }  # [WORKER FIX 4]
+
+    assert "ingest_document_job" in func_map  # [WORKER FIX 4]
+    assert "describe_document_images_job" in func_map  # [WORKER FIX 4]
+
+    ingest_func = func_map["ingest_document_job"]  # [WORKER FIX 4]
+    describe_func = func_map["describe_document_images_job"]  # [WORKER FIX 4]
+
+    assert getattr(ingest_func, "timeout_s", None) == 1800  # [WORKER FIX 4]
+    assert getattr(describe_func, "timeout_s", None) == 7200  # [WORKER FIX 4]
