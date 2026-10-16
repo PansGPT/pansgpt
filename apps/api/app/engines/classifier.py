@@ -10,7 +10,7 @@ from typing import Any, Literal  # [PHASE2 FIX]
 import structlog  # [VISION FIX]
 
 from app.core.config import settings  # [VISION FIX]
-from app.engines.embedder import _is_rate_limit, _parse_retry_delay  # [VISION FIX]
+from app.engines.embedder import _parse_retry_delay  # [WORKER FIX 3]
 
 logger = structlog.get_logger(__name__)  # [VISION FIX]
 
@@ -18,6 +18,30 @@ ImageRouteType = Literal["text_scan", "diagram", "table"]  # [VISION FIX]
 
 BACKOFF_5XX = [1.0, 2.0, 4.0, 8.0, 8.0]  # [VISION FIX]
 BACKOFF_CONN = [5.0, 10.0, 20.0, 40.0, 60.0]  # [VISION FIX]
+
+
+def _extract_status_code(exc: Exception) -> int | None:  # [WORKER FIX 3]
+    """Extract numeric HTTP status / error code from exception attributes."""  # [WORKER FIX 3]
+    for attr in ("code", "status_code"):  # [WORKER FIX 3]
+        val = getattr(exc, attr, None)  # [WORKER FIX 3]
+        if val is not None:  # [WORKER FIX 3]
+            try:  # [WORKER FIX 3]
+                return int(val)  # [WORKER FIX 3]
+            except (ValueError, TypeError):  # [WORKER FIX 3]
+                pass  # [WORKER FIX 3]
+    return None  # [WORKER FIX 3]
+
+
+def _is_rate_limit(exc: Exception) -> bool:  # [WORKER FIX 3]
+    """Determine if exception is a 429 / RESOURCE_EXHAUSTED error."""  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        return code == 429  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status == "RESOURCE_EXHAUSTED":  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    return "429" in msg or "resource_exhausted" in msg  # [WORKER FIX 3]
 
 
 def _is_connection_error(exc: Exception) -> bool:  # [VISION FIX]
@@ -39,41 +63,44 @@ def _is_connection_error(exc: Exception) -> bool:  # [VISION FIX]
     )  # [VISION FIX]
 
 
-def _is_server_error_or_timeout(exc: Exception) -> bool:  # [VISION FIX]
-    if (
-        isinstance(exc, (TimeoutError, asyncio.TimeoutError)) or "timeout" in str(exc).lower()
-    ):  # [VISION FIX]
-        return True  # [VISION FIX]
-    code = getattr(exc, "code", None)  # [VISION FIX]
-    status = getattr(exc, "status", None)  # [VISION FIX]
-    if code is not None and 500 <= code < 600:  # [VISION FIX]
-        return True  # [VISION FIX]
-    if status in ("INTERNAL", "UNAVAILABLE", "DEADLINE_EXCEEDED"):  # [VISION FIX]
-        return True  # [VISION FIX]
-    msg = str(exc).lower()  # [VISION FIX]
-    return any(  # [VISION FIX]
-        x in msg  # [VISION FIX]
-        for x in [
-            "500",
-            "502",
-            "503",
-            "504",
-            "internal error",
-            "unavailable",
-            "server error",
-        ]  # [VISION FIX]
-    )  # [VISION FIX]
+def _is_server_error_or_timeout(exc: Exception) -> bool:  # [WORKER FIX 3]
+    if isinstance(exc, (TimeoutError, asyncio.TimeoutError)):  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        # Decide by numeric code first: only 5xx is server error, 4xx is NOT  # [WORKER FIX 3]
+        return 500 <= code < 600  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status in ("INTERNAL", "UNAVAILABLE", "DEADLINE_EXCEEDED"):  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    if "timeout" in msg:  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    return any(  # [WORKER FIX 3]
+        x in msg  # [WORKER FIX 3]
+        for x in [  # [WORKER FIX 3]
+            "500",  # [WORKER FIX 3]
+            "502",  # [WORKER FIX 3]
+            "503",  # [WORKER FIX 3]
+            "504",  # [WORKER FIX 3]
+            "internal error",  # [WORKER FIX 3]
+            "unavailable",  # [WORKER FIX 3]
+            "server error",  # [WORKER FIX 3]
+        ]  # [WORKER FIX 3]
+    )  # [WORKER FIX 3]
 
 
-def _is_400_invalid_image(exc: Exception) -> bool:  # [VISION FIX]
-    code = getattr(exc, "code", None)  # [VISION FIX]
-    status = getattr(exc, "status", None)  # [VISION FIX]
-    if code == 400 or status == "INVALID_ARGUMENT":  # [VISION FIX]
-        return True  # [VISION FIX]
-    msg = str(exc).lower()  # [VISION FIX]
-    return (  # [VISION FIX]
-        "400" in msg or "invalid_argument" in msg or "invalid argument" in msg  # [VISION FIX]
-    ) and (not _is_server_error_or_timeout(exc) and not _is_rate_limit(exc))  # [VISION FIX]
+def _is_400_invalid_image(exc: Exception) -> bool:  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        return code == 400  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status == "INVALID_ARGUMENT":  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    return (  # [WORKER FIX 3]
+        "400" in msg or "invalid_argument" in msg or "invalid argument" in msg  # [WORKER FIX 3]
+    ) and (not _is_server_error_or_timeout(exc) and not _is_rate_limit(exc))  # [WORKER FIX 3]
 
 
 class VisionError(Exception):  # [VISION FIX]

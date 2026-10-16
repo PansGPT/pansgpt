@@ -78,16 +78,24 @@ def test_no_hash_comments_in_sql_strings():  # [WORKER FIX 2]
                                     s not in ALLOWED_HARMLESS_STRINGS
                                     and s.strip() not in ALLOWED_HARMLESS_STRINGS
                                 ):  # [WORKER FIX 2]
-                                    rel_path = os.path.relpath(file_path, root_dir)
-                                    violating_strings.append(
-                                        (rel_path, node.lineno, s)
-                                    )  # [WORKER FIX 2]
+                                    rel_path = os.path.relpath(
+                                        file_path, root_dir
+                                    )  # [WORKER FIX 3]
+                                    for offset, line_text in enumerate(
+                                        s.splitlines()
+                                    ):  # [WORKER FIX 3]
+                                        if "#" in line_text:  # [WORKER FIX 3]
+                                            line_no = node.lineno + offset  # [WORKER FIX 3]
+                                            violating_strings.append(  # [WORKER FIX 3]
+                                                f"- {rel_path}:{line_no}: {line_text.strip()!r}"  # [WORKER FIX 3]
+                                            )  # [WORKER FIX 3]
                 except Exception as exc:
                     pytest.fail(f"AST parse failed on {file_path}: {exc}")
 
-    assert len(violating_strings) == 0, (
-        f"Found SQL strings containing '#' comments: {violating_strings}"
-    )
+    assert len(violating_strings) == 0, (  # [WORKER FIX 3]
+        "Found SQL strings containing '#' comments:\n"  # [WORKER FIX 3]
+        + "\n".join(violating_strings)  # [WORKER FIX 3]
+    )  # [WORKER FIX 3]
 
 
 # ------------------------------------------------------------------------------
@@ -551,3 +559,51 @@ async def test_escalation_three_503s_stops_after_three_calls(monkeypatch):  # [W
         )  # [WORKER FIX 2]
         # 1024 (initial attempt) + 4096 (3 retry attempts) = 4 total calls  # [WORKER FIX 2]
         assert call_history == [1024, 4096, 4096, 4096]  # [WORKER FIX 2]
+
+
+# ------------------------------------------------------------------------------
+# 9. Escalation Error Tests: 400 error with "503" in message is NOT retried [WORKER FIX 3]
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio  # [WORKER FIX 3]
+async def test_escalation_400_with_503_in_message_not_retried(monkeypatch):  # [WORKER FIX 3]
+    """A 400 error whose message text contains '503' is determined by numeric code and not retried."""  # [WORKER FIX 3]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [WORKER FIX 3]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [WORKER FIX 3]
+
+    call_history = []  # [WORKER FIX 3]
+
+    async def mock_generate_content(*args, **kwargs):  # [WORKER FIX 3]
+        config = kwargs.get("config")  # [WORKER FIX 3]
+        max_tok = getattr(config, "max_output_tokens", None)  # [WORKER FIX 3]
+        call_history.append(max_tok)  # [WORKER FIX 3]
+
+        if max_tok == 1024:  # [WORKER FIX 3]
+            return _make_mock_response(  # [WORKER FIX 3]
+                text="",  # [WORKER FIX 3]
+                finish_reason="MAX_TOKENS",  # [WORKER FIX 3]
+                p_tok=100,  # [WORKER FIX 3]
+                c_tok=0,  # [WORKER FIX 3]
+                th_tok=1024,  # [WORKER FIX 3]
+            )  # [WORKER FIX 3]
+        elif max_tok == 4096:  # [WORKER FIX 3]
+            # 400 code but text explicitly mentions "503 Service Unavailable"  # [WORKER FIX 3]
+            err = Exception("400 Bad Request: upstream service 503 unavailable")  # [WORKER FIX 3]
+            err.code = 400  # [WORKER FIX 3]
+            raise err  # [WORKER FIX 3]
+        return _make_mock_response()  # [WORKER FIX 3]
+
+    mock_client = MagicMock()  # [WORKER FIX 3]
+    mock_client.aio.models.generate_content = mock_generate_content  # [WORKER FIX 3]
+
+    with (  # [WORKER FIX 3]
+        patch("google.genai.Client", return_value=mock_client),  # [WORKER FIX 3]
+        patch("asyncio.sleep", AsyncMock()),  # [WORKER FIX 3]
+    ):  # [WORKER FIX 3]
+        with pytest.raises(VisionError) as exc_info:  # [WORKER FIX 3]
+            await image_classifier.classify_and_process(  # [WORKER FIX 3]
+                b"fake_image_bytes",
+                page_number=12,  # [WORKER FIX 3]
+            )  # [WORKER FIX 3]
+        assert "non-retriable error" in str(exc_info.value)  # [WORKER FIX 3]
+        # Must be called exactly once for 1024 and once for 4096 (no retry on 400 despite "503" in text)  # [WORKER FIX 3]
+        assert call_history == [1024, 4096]  # [WORKER FIX 3]
