@@ -20,15 +20,43 @@ from app.engines.classifier import VisionError, image_classifier
 from app.engines.ingestion import document_ingestion_engine
 from workers.tasks import _get_document_meta, _update_document_converted_info
 
-
 # ------------------------------------------------------------------------------
 # 1. AST Guard Test: No SQL Strings with '#' Comments
 # ------------------------------------------------------------------------------
-def test_no_hash_comments_in_sql_strings():  # [WORKER FIX]
-    """AST guard: fails if any SQL-looking string constant contains a '#' comment tag."""
+# Harmless strings in apps/api that contain a '#' and SQL keywords, allowed by exact value with a one-line reason:  # [WORKER FIX 2]
+ALLOWED_HARMLESS_STRINGS = {  # [WORKER FIX 2]
+    # CSS hex colour codes (#15803d, #ffffff, #6b7280) in admin invite HTML template in app/routers/admin.py (matches 'with')  # [WORKER FIX 2]
+    '" style="background-color: #15803d; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">\n                                Accept Faculty Invitation\n                            </a>\n                        </p>\n                        <p style="color: #6b7280; font-size: 14px;">This invitation link will expire in accordance with institutional policy.</p>\n                    </div>\n                    ',  # [WORKER FIX 2]
+    # Docstring for convert_office_to_pdf in app/engines/converter.py (contains English word 'with' and doc tag)  # [WORKER FIX 2]
+    "# [OFFICE PDF FIX]\n    Converts Office documents (.docx, .doc, .pptx, .ppt) to faithful visual PDF bytes via LibreOffice.  # [OFFICE PDF FIX]\n    Runs soffice in headless mode with an isolated per-call profile under a module-level concurrency semaphore.  # [OFFICE PDF FIX]\n    ",  # [WORKER FIX 2]
+    # Docstring for DocumentIngestionEngine in app/engines/ingestion.py (contains English word 'with' and doc tag)  # [WORKER FIX 2]
+    "\n    Executes the 8-stage document processing pipeline:\n    1. Upload & Immutable R2 Storage (Retrieved via storage_engine)\n    2. Per-Page Text Layer Check (zero-cost check)\n    3a. Native Text Extraction + Image Scan\n    3b. Scanned Canvas Render (Image route with local OCR-first)\n    4. Universal Image Classifier (Text Scan / Diagram / Table)\n    5. Text-Image Verbatim Transcription (Clinical Safety Rule)\n    6. Dual-Path Table Extraction (Structural geometry vs Vision)\n    7. Hierarchy & Segmentation (Single pass with explicit/synthesized/inherited titles)\n    8. Semantic Chunking & 1536d Vector Embeddings  # [DIM 1536]\n    ",  # [WORKER FIX 2]
+    # Docstring for process_pending_images in app/engines/ingestion.py (contains English word 'from' and doc tag)  # [WORKER FIX 2]
+    "# [IMAGES PHASE]\n        Phase 2: Resumable background processor for pending document images and scanned canvases.  # [IMAGES PHASE]\n        Re-extracts images from the PDF in R2, classifies via throttled vision cascade,  # [IMAGES PHASE]\n        and commits elements, chunks, and embeddings atomically per successful image.  # [IMAGES PHASE]\n        Returns 'completed' if all pending rows are processed, or 'paused' after 3 consecutive failures.  # [IMAGES PHASE]\n        ",  # [WORKER FIX 2]
+    # Docstring for RAGRetrievalEngine in app/engines/rag.py (contains English word 'with' and doc tag)  # [WORKER FIX 2]
+    "\n    3-Pool Hybrid RAG Retrieval Engine:\n    - Normalizes medical abbreviations with 200+ term clinical dictionary\n    - Multi-Query decomposition & HyDE hypothetical document generation\n    - Computes 1536d dense vector embeddings via Gemini  # [DIM 1536]\n    - Executes PostgreSQL 3-Pool Hybrid Search (Vector + FTS + Trigram) with RRF (k=60)\n    - Multi-factor candidate re-ranking (Dense + RRF + Lexical Overlap + Metadata)\n    - Absence Policy automated web search fallback for low/empty confidence\n    - Sibling & Full-Segment expansion for complete pharmacological contexts\n    - Returns structured citations with page coordinates and assembled markdown context\n    ",  # [WORKER FIX 2]
+    # Docstring for chat SSE endpoint in app/routers/chat.py (contains English word 'with' and doc tag)  # [WORKER FIX 2]
+    "\n    Core Server-Sent Events (SSE) endpoint:\n    1. Pre-LLM Prompt Injection & Policy Guard\n    2. Medical Acronym Normalizer\n    3. RAG Retrieval via Supabase RPC (1536d dense vectors + sibling & segment expansion)  # [DIM 1536]\n    4. Multi-turn Agentic Tool Loop & Multi-tier LLM inference\n    5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort\n    6. Asynchronous persistence of user and assistant messages + telemetry\n    ",  # [WORKER FIX 2]
+    # Docstring for ingest_document_job in workers/tasks.py (contains English word 'with' and doc tag)  # [WORKER FIX 2]
+    "\n    ARQ Background Job:\n    1. Claims document concurrency lock via `claim_document_ingestion`\n    2. Transitions status to 'processing'\n    3. Spawns 30s heartbeat loop\n    4. Converts Office files (.doc, .docx, .ppt, .pptx) to faithful visual PDF via LibreOffice  # [OFFICE PDF FIX]\n    5. Runs full 8-stage extraction, chunking, and 1536d vector pipeline on the PDF  # [DIM 1536]\n    6. Retries with exponential backoff on transient errors (30s, 60s, 120s)\n    7. Transitions status to 'completed' (or 'failed' if retries exhausted)\n    ",  # [WORKER FIX 2]
+    # Docstring for test_no_hash_comments_in_sql_strings in tests/test_worker_guards.py (explains hash checks)  # [WORKER FIX 2]
+    "AST guard: fails if any SQL-looking string constant contains any hash character.  # [WORKER FIX 2]\n\n    PostgreSQL does not support hash comments (only '--' and '/* */').  # [WORKER FIX 2]\n    Any hash comment symbol inside a SQL string passed to asyncpg causes:  # [WORKER FIX 2]\n        PostgresSyntaxError: syntax error at or near hash  # [WORKER FIX 2]\n    This guard catches ALL hash comment occurrences in SQL strings (SELECT, INSERT, UPDATE, DELETE, CREATE, WITH, FROM).  # [WORKER FIX 2]\n    Harmless strings (like colour codes) are explicitly allowed by exact value above.  # [WORKER FIX 2]\n    ",  # [WORKER FIX 2]
+}  # [WORKER FIX 2]
+
+
+def test_no_hash_comments_in_sql_strings():  # [WORKER FIX 2]
+    """AST guard: fails if any SQL-looking string constant contains any hash character.  # [WORKER FIX 2]
+
+    PostgreSQL does not support hash comments (only '--' and '/* */').  # [WORKER FIX 2]
+    Any hash comment symbol inside a SQL string passed to asyncpg causes:  # [WORKER FIX 2]
+        PostgresSyntaxError: syntax error at or near hash  # [WORKER FIX 2]
+    This guard catches ALL hash comment occurrences in SQL strings (SELECT, INSERT, UPDATE, DELETE, CREATE, WITH, FROM).  # [WORKER FIX 2]
+    Harmless strings (like colour codes) are explicitly allowed by exact value above.  # [WORKER FIX 2]
+    """  # [WORKER FIX 2]
     root_dir = Path(__file__).resolve().parent.parent  # apps/api
-    sql_keywords = re.compile(r"\b(SELECT|INSERT|UPDATE|DELETE|CREATE)\b", re.IGNORECASE)
-    comment_pattern = re.compile(r"#\s*\[")
+    sql_keywords = re.compile(
+        r"\b(SELECT|INSERT|UPDATE|DELETE|CREATE|WITH|FROM)\b", re.IGNORECASE
+    )  # [WORKER FIX 2]
 
     violating_strings = []
     for root, dirs, files in os.walk(root_dir):
@@ -45,9 +73,15 @@ def test_no_hash_comments_in_sql_strings():  # [WORKER FIX]
                     for node in ast.walk(tree):
                         if isinstance(node, ast.Constant) and isinstance(node.value, str):
                             s = node.value
-                            if sql_keywords.search(s) and comment_pattern.search(s):
-                                rel_path = os.path.relpath(file_path, root_dir)
-                                violating_strings.append((rel_path, node.lineno, s))
+                            if sql_keywords.search(s) and "#" in s:  # [WORKER FIX 2]
+                                if (
+                                    s not in ALLOWED_HARMLESS_STRINGS
+                                    and s.strip() not in ALLOWED_HARMLESS_STRINGS
+                                ):  # [WORKER FIX 2]
+                                    rel_path = os.path.relpath(file_path, root_dir)
+                                    violating_strings.append(
+                                        (rel_path, node.lineno, s)
+                                    )  # [WORKER FIX 2]
                 except Exception as exc:
                     pytest.fail(f"AST parse failed on {file_path}: {exc}")
 
@@ -360,3 +394,160 @@ async def test_escalation_true_max_tokens_at_8192_skips(monkeypatch):  # [WORKER
         assert route is None
         assert content == "empty:MAX_TOKENS"
         assert call_history == [1024, 4096, 8192]
+
+
+# ------------------------------------------------------------------------------
+# 6. Escalation Error Tests: 400 -> called once, then fails [WORKER FIX 2]
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio  # [WORKER FIX 2]
+async def test_escalation_400_called_once_then_fails(monkeypatch):  # [WORKER FIX 2]
+    """400 client error during token escalation must not retry: called once, then raises VisionError."""  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [WORKER FIX 2]
+
+    call_history = []  # [WORKER FIX 2]
+
+    async def mock_generate_content(*args, **kwargs):  # [WORKER FIX 2]
+        config = kwargs.get("config")  # [WORKER FIX 2]
+        max_tok = getattr(config, "max_output_tokens", None)  # [WORKER FIX 2]
+        call_history.append(max_tok)  # [WORKER FIX 2]
+
+        if max_tok == 1024:  # [WORKER FIX 2]
+            return _make_mock_response(  # [WORKER FIX 2]
+                text="",
+                finish_reason="MAX_TOKENS",
+                p_tok=100,
+                c_tok=0,
+                th_tok=1024,  # [WORKER FIX 2]
+            )  # [WORKER FIX 2]
+        elif max_tok == 4096:  # [WORKER FIX 2]
+            # 400 client error -> should not be retried  # [WORKER FIX 2]
+            err = Exception("400 Bad Request")  # [WORKER FIX 2]
+            err.code = 400  # [WORKER FIX 2]
+            raise err  # [WORKER FIX 2]
+        return _make_mock_response()  # [WORKER FIX 2]
+
+    mock_client = MagicMock()  # [WORKER FIX 2]
+    mock_client.aio.models.generate_content = mock_generate_content  # [WORKER FIX 2]
+
+    with (  # [WORKER FIX 2]
+        patch("google.genai.Client", return_value=mock_client),  # [WORKER FIX 2]
+        patch("asyncio.sleep", AsyncMock()),  # [WORKER FIX 2]
+    ):  # [WORKER FIX 2]
+        with pytest.raises(VisionError) as exc_info:  # [WORKER FIX 2]
+            await image_classifier.classify_and_process(
+                b"fake_image_bytes", page_number=12
+            )  # [WORKER FIX 2]
+        assert "non-retriable error" in str(exc_info.value)  # [WORKER FIX 2]
+        # Must be called exactly once for 1024 and once for 4096 (no retry on 400)  # [WORKER FIX 2]
+        assert call_history == [1024, 4096]  # [WORKER FIX 2]
+
+
+# ------------------------------------------------------------------------------
+# 7. Escalation Error Tests: 429 then success -> works [WORKER FIX 2]
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio  # [WORKER FIX 2]
+async def test_escalation_429_then_success(monkeypatch):  # [WORKER FIX 2]
+    """429 rate limit error during token escalation retries with wait and succeeds."""  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [WORKER FIX 2]
+
+    call_history = []  # [WORKER FIX 2]
+
+    async def mock_generate_content(*args, **kwargs):  # [WORKER FIX 2]
+        config = kwargs.get("config")  # [WORKER FIX 2]
+        max_tok = getattr(config, "max_output_tokens", None)  # [WORKER FIX 2]
+        call_history.append(max_tok)  # [WORKER FIX 2]
+
+        if max_tok == 1024:  # [WORKER FIX 2]
+            return _make_mock_response(  # [WORKER FIX 2]
+                text="",
+                finish_reason="MAX_TOKENS",
+                p_tok=100,
+                c_tok=0,
+                th_tok=1024,  # [WORKER FIX 2]
+            )  # [WORKER FIX 2]
+        elif max_tok == 4096:  # [WORKER FIX 2]
+            return _make_mock_response(  # [WORKER FIX 2]
+                text="",
+                finish_reason="MAX_TOKENS",
+                p_tok=100,
+                c_tok=0,
+                th_tok=4096,  # [WORKER FIX 2]
+            )  # [WORKER FIX 2]
+        elif max_tok == 8192:  # [WORKER FIX 2]
+            if call_history.count(8192) == 1:  # [WORKER FIX 2]
+                err = Exception("429 RESOURCE_EXHAUSTED: Rate limit exceeded")  # [WORKER FIX 2]
+                err.code = 429  # [WORKER FIX 2]
+                raise err  # [WORKER FIX 2]
+            return _make_mock_response(  # [WORKER FIX 2]
+                text="CLASSIFICATION: TABLE\n---CONTENT---\n[Table: Drug interactions]",  # [WORKER FIX 2]
+                finish_reason="STOP",  # [WORKER FIX 2]
+                p_tok=100,  # [WORKER FIX 2]
+                c_tok=200,  # [WORKER FIX 2]
+                th_tok=5000,  # [WORKER FIX 2]
+            )  # [WORKER FIX 2]
+        return _make_mock_response()  # [WORKER FIX 2]
+
+    mock_client = MagicMock()  # [WORKER FIX 2]
+    mock_client.aio.models.generate_content = mock_generate_content  # [WORKER FIX 2]
+
+    with (  # [WORKER FIX 2]
+        patch("google.genai.Client", return_value=mock_client),  # [WORKER FIX 2]
+        patch("asyncio.sleep", AsyncMock()),  # [WORKER FIX 2]
+    ):  # [WORKER FIX 2]
+        route, content = await image_classifier.classify_and_process(  # [WORKER FIX 2]
+            b"fake_image_bytes",
+            page_number=12,  # [WORKER FIX 2]
+        )  # [WORKER FIX 2]
+        assert route == "table"  # [WORKER FIX 2]
+        assert "[Table: Drug interactions]" in content  # [WORKER FIX 2]
+        assert call_history == [1024, 4096, 8192, 8192]  # [WORKER FIX 2]
+
+
+# ------------------------------------------------------------------------------
+# 8. Escalation Error Tests: three 503s -> stops after 3 calls [WORKER FIX 2]
+# ------------------------------------------------------------------------------
+@pytest.mark.asyncio  # [WORKER FIX 2]
+async def test_escalation_three_503s_stops_after_three_calls(monkeypatch):  # [WORKER FIX 2]
+    """Three consecutive 503 service unavailable errors in escalation stop after 3 attempts."""  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "VISION_FAKE_MODE", False)  # [WORKER FIX 2]
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", "mock-test-key")  # [WORKER FIX 2]
+
+    call_history = []  # [WORKER FIX 2]
+
+    async def mock_generate_content(*args, **kwargs):  # [WORKER FIX 2]
+        config = kwargs.get("config")  # [WORKER FIX 2]
+        max_tok = getattr(config, "max_output_tokens", None)  # [WORKER FIX 2]
+        call_history.append(max_tok)  # [WORKER FIX 2]
+
+        if max_tok == 1024:  # [WORKER FIX 2]
+            return _make_mock_response(  # [WORKER FIX 2]
+                text="",
+                finish_reason="MAX_TOKENS",
+                p_tok=100,
+                c_tok=0,
+                th_tok=1024,  # [WORKER FIX 2]
+            )  # [WORKER FIX 2]
+        elif max_tok == 4096:  # [WORKER FIX 2]
+            err = Exception("503 Service Unavailable")  # [WORKER FIX 2]
+            err.code = 503  # [WORKER FIX 2]
+            raise err  # [WORKER FIX 2]
+        return _make_mock_response()  # [WORKER FIX 2]
+
+    mock_client = MagicMock()  # [WORKER FIX 2]
+    mock_client.aio.models.generate_content = mock_generate_content  # [WORKER FIX 2]
+
+    with (  # [WORKER FIX 2]
+        patch("google.genai.Client", return_value=mock_client),  # [WORKER FIX 2]
+        patch("asyncio.sleep", AsyncMock()),  # [WORKER FIX 2]
+    ):  # [WORKER FIX 2]
+        with pytest.raises(VisionError) as exc_info:  # [WORKER FIX 2]
+            await image_classifier.classify_and_process(
+                b"fake_image_bytes", page_number=12
+            )  # [WORKER FIX 2]
+        assert "Vision escalation to 4096 tokens failed after 3 attempts" in str(
+            exc_info.value
+        )  # [WORKER FIX 2]
+        # 1024 (initial attempt) + 4096 (3 retry attempts) = 4 total calls  # [WORKER FIX 2]
+        assert call_history == [1024, 4096, 4096, 4096]  # [WORKER FIX 2]
