@@ -717,12 +717,15 @@ async def test_enqueue_passes_converted_key_and_skips_when_no_pending(monkeypatc
             return_value={"pending": 3},  # [PHASE2 FIX]
         ),  # [PHASE2 FIX]
     ):  # [PHASE2 FIX]
-        await ingest_document_job(ctx, doc_id, "original.docx")  # [PHASE2 FIX]
-        mock_redis.enqueue_job.assert_awaited_once_with(  # [PHASE2 FIX]
-            "describe_document_images_job",
-            doc_id,
-            conv_key,  # [PHASE2 FIX]
-        )  # [PHASE2 FIX]
+        from workers.settings import PICTURE_QUEUE_NAME  # [QUEUE SPLIT]
+
+        await ingest_document_job(ctx, doc_id, "original.docx")  # [QUEUE SPLIT]
+        mock_redis.enqueue_job.assert_awaited_once_with(  # [QUEUE SPLIT]
+            "describe_document_images_job",  # [QUEUE SPLIT]
+            doc_id,  # [QUEUE SPLIT]
+            conv_key,  # [QUEUE SPLIT]
+            _queue_name=PICTURE_QUEUE_NAME,  # [QUEUE SPLIT]
+        )  # [QUEUE SPLIT]
 
     # Subcase 2: When no images are pending -> skipped
     mock_redis_empty = MagicMock()  # [PHASE2 FIX]
@@ -806,20 +809,29 @@ async def test_failed_enqueue_logs_error_and_does_not_fail_phase1(monkeypatch): 
         )  # [PHASE2 FIX]
 
 
-def test_worker_settings_registers_describe_job():  # [PHASE2 FIX]
-    """(e) WorkerSettings registers describe_document_images_job with timeout >= 3600."""  # [PHASE2 FIX]
-    from workers.settings import WorkerSettings  # [PHASE2 FIX]
+def test_worker_settings_registers_describe_job():  # [QUEUE SPLIT]
+    """(e) PictureWorkerSettings registers describe_document_images_job with timeout >= 3600 and max_tries=8."""  # [QUEUE SPLIT]
+    from workers.settings import PictureWorkerSettings, WorkerSettings  # [QUEUE SPLIT]
 
-    job_names = [  # [PHASE2 FIX]
-        getattr(f, "name", getattr(f, "__name__", str(f)))  # [PHASE2 FIX]
-        for f in WorkerSettings.functions  # [PHASE2 FIX]
-    ]  # [PHASE2 FIX]
-    assert "describe_document_images_job" in job_names  # [PHASE2 FIX]
+    # Main worker settings does NOT list picture job [QUEUE SPLIT]
+    main_job_names = [  # [QUEUE SPLIT]
+        getattr(f, "name", getattr(f, "__name__", str(f)))  # [QUEUE SPLIT]
+        for f in WorkerSettings.functions  # [QUEUE SPLIT]
+    ]  # [QUEUE SPLIT]
+    assert "describe_document_images_job" not in main_job_names  # [QUEUE SPLIT]
 
-    for f in WorkerSettings.functions:  # [PHASE2 FIX]
-        if getattr(f, "name", None) == "describe_document_images_job":  # [PHASE2 FIX]
-            assert getattr(f, "timeout_s", 0) >= 3600  # [PHASE2 FIX]
-            assert getattr(f, "max_tries", 0) == 8  # [PHASE2 FIX]
+    # Picture worker settings lists only describe_document_images_job [QUEUE SPLIT]
+    pic_job_names = [  # [QUEUE SPLIT]
+        getattr(f, "name", getattr(f, "__name__", str(f)))  # [QUEUE SPLIT]
+        for f in PictureWorkerSettings.functions  # [QUEUE SPLIT]
+    ]  # [QUEUE SPLIT]
+    assert "describe_document_images_job" in pic_job_names  # [QUEUE SPLIT]
+    assert len(pic_job_names) == 1  # [QUEUE SPLIT]
+
+    for f in PictureWorkerSettings.functions:  # [QUEUE SPLIT]
+        if getattr(f, "name", None) == "describe_document_images_job":  # [QUEUE SPLIT]
+            assert getattr(f, "timeout_s", 0) >= 3600  # [QUEUE SPLIT]
+            assert getattr(f, "max_tries", 0) == 8  # [QUEUE SPLIT]
 
 
 @pytest.mark.asyncio  # [PHASE2 FIX]

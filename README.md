@@ -89,6 +89,17 @@ pnpm dev --filter=@pansgpt/web    # Next.js at http://localhost:3000
 pnpm dev --filter=@pansgpt/api    # FastAPI at http://localhost:8000
 ```
 
+### 5. Running Background Workers <!-- [QUEUE SPLIT] -->
+
+```bash
+# Main document ingestion worker (always-on, tuned poll delay):
+python -m arq workers.settings.WorkerSettings
+
+# Picture worker (on-demand, burst mode):
+# The picture worker is started by hand when pictures are waiting and stops by itself; it can run on a local computer.
+python -m arq workers.settings.PictureWorkerSettings
+```
+
 ---
 
 ## 🧪 Testing Strategy
