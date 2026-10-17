@@ -34,7 +34,7 @@ class QueryExpansionEngine:
         # Separate timeouts per provider. Groq Llama-8B needs ~500-800ms cold start;
         # Gemma via Google AI Studio needs ~800-1500ms.
         self.groq_timeout = getattr(settings, "QUERY_EXPANSION_GROQ_TIMEOUT_SECONDS", 5.0)
-        self.hyde_timeout = getattr(settings, "QUERY_EXPANSION_HYDE_TIMEOUT_SECONDS", 10.0)
+        self.hyde_timeout = settings.HYDE_TIMEOUT_S  # [CHAT FIX]
         self.circuit_breaker_timeout = self.groq_timeout  # legacy alias kept
 
     def should_bypass_expansion(self, query: str) -> bool:
@@ -189,7 +189,12 @@ class QueryExpansionEngine:
                 return None
             return response.text.strip() if response.text else None
         except Exception as exc:
-            logger.debug("hyde_generation_failed", error=str(exc))
+            logger.warning(  # [CHAT FIX]
+                "hyde_generation_failed",  # [CHAT FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX]
+                error=f"{type(exc).__name__}: {exc!s}" if str(exc) else repr(exc),  # [CHAT FIX]
+                timeout_s=self.hyde_timeout,  # [CHAT FIX]
+            )  # [CHAT FIX]
             return None
 
     async def expand_multi_query(self, query: str) -> list[str]:
@@ -239,11 +244,19 @@ Structure with exact headings:
 Keep it factual, dense, and between 100-140 words. Do NOT include conversational greetings."""
 
         try:
-            passage = await self._call_hyde_generation(prompt)
+            passage = await asyncio.wait_for(  # [CHAT FIX]
+                self._call_hyde_generation(prompt),  # [CHAT FIX]
+                timeout=settings.HYDE_TIMEOUT_S,  # [CHAT FIX]
+            )  # [CHAT FIX]
             if passage and len(passage) > 80:
                 return passage
         except Exception as exc:
-            logger.debug("hyde_generation_circuit_breaker_tripped", error=str(exc))
+            logger.warning(  # [CHAT FIX]
+                "hyde_generation_failed",  # [CHAT FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX]
+                error=f"{type(exc).__name__}: {exc!s}" if str(exc) else repr(exc),  # [CHAT FIX]
+                timeout_s=settings.HYDE_TIMEOUT_S,  # [CHAT FIX]
+            )  # [CHAT FIX]
 
         return self.generate_heuristic_hyde(norm_query)
 

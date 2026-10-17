@@ -129,17 +129,25 @@ def test_artifact_storage_key_generation():
         file_extension="pptx",
         artifact_id=art_id,
         university_id=uni_id,
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
-    assert key == f"universities/{uni_id}/artifacts/pptx/{art_id}.pptx"
+    assert (  # [CHAT FIX]
+        key  # [CHAT FIX]
+        == f"artifacts/{uni_id}/018f3a10-0001-7000-8000-000000000001/pptx/{art_id}.pptx"  # [CHAT FIX]
+    )  # [CHAT FIX]
 
-    # Default fallback when university_id is None
+    # An explicit default university still requires an owner. [CHAT FIX]
     default_key = build_artifact_storage_key(
         format_type="pdf",
         file_extension="pdf",
         artifact_id=art_id,
-        university_id=None,
+        university_id=DEFAULT_UNIVERSITY_ID,  # [CHAT FIX]
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
-    assert default_key == f"universities/{DEFAULT_UNIVERSITY_ID}/artifacts/pdf/{art_id}.pdf"
+    assert (  # [CHAT FIX]
+        default_key  # [CHAT FIX]
+        == f"artifacts/{DEFAULT_UNIVERSITY_ID}/018f3a10-0001-7000-8000-000000000001/pdf/{art_id}.pdf"  # [CHAT FIX]
+    )  # [CHAT FIX]
 
 
 # ------------------------------------------------------------------------------

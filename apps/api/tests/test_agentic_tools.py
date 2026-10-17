@@ -64,11 +64,12 @@ async def test_skill_create_doc_generates_valid_docx():
             }
         ],
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_doc"
     assert payload.file_extension == "docx"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/docs/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/docs/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".docx")
     assert payload.download_url is not None
@@ -81,11 +82,12 @@ async def test_skill_create_pdf_generates_valid_pdf():
         title="Antimicrobial Susceptibility Pocket Guide",
         content="Beta-lactams inhibit peptidoglycan transpeptidase cell wall cross-linking.",
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_pdf"
     assert payload.file_extension == "pdf"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pdf/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/pdf/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".pdf")
     assert payload.download_url is not None
@@ -104,11 +106,12 @@ async def test_skill_create_pptx_generates_valid_presentation():
             }
         ],
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_pptx"
     assert payload.file_extension == "pptx"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pptx/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/pptx/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".pptx")
     assert payload.download_url is not None
@@ -116,15 +119,24 @@ async def test_skill_create_pptx_generates_valid_presentation():
 
 @pytest.mark.asyncio
 async def test_skill_default_fallback_university_artifacts():
-    """Verify that when no university_id is provided, storage key falls back to UNIJOS tenant UUID."""
+    """Reject implicit tenant defaults; retain explicit university artifact assertions. [CHAT FIX]"""
+    with pytest.raises(ValueError, match="University and owner are required"):  # [CHAT FIX]
+        await skill_engine.execute_create_md(  # [CHAT FIX]
+            "Missing tenant",  # [CHAT FIX]
+            "Offline",  # [CHAT FIX]
+            user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
+        )  # [CHAT FIX]
     payload = await skill_engine.execute_create_md(
         title="Pharmacokinetics Overview",
         markdown_content="ADME processes overview.",
-        university_id=None,
+        university_id=DEFAULT_UNIVERSITY_ID,  # [CHAT FIX]
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_md"
     assert payload.file_extension == "md"
-    assert payload.storage_key.startswith(f"universities/{DEFAULT_UNIVERSITY_ID}/artifacts/md/")
+    assert payload.storage_key.startswith(  # [CHAT FIX]
+        f"artifacts/{DEFAULT_UNIVERSITY_ID}/018f3a10-0001-7000-8000-000000000001/md/"  # [CHAT FIX]
+    )  # [CHAT FIX]
     assert payload.storage_key.endswith(".md")
     assert payload.download_url is not None
 

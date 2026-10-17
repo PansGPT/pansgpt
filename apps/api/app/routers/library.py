@@ -233,26 +233,45 @@ async def confirm_document_upload(
 # ------------------------------------------------------------------------------
 @router.get(
     "/artifacts/download",
-    summary="Alias: Download artifact directly as an attachment",
+    summary="Download an owned generated artifact as an attachment",  # [CHAT FIX]
 )
 async def download_document_or_artifact(
     key: str = Query(..., description="Cloudflare R2 storage key"),
     filename: str | None = Query(
         default=None, description="Override download filename (without extension)"
     ),
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [CHAT FIX]
 ):
-    """
-    Streams any university asset or student artifact directly to the browser as an
-    attachment download. Never redirects to a presigned URL — this prevents browsers
-    from opening the file in Microsoft Office Online or other online viewers.
-    """
-    if ".." in key or key.startswith("/"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid storage key",
-        )
+    """Serve generated artifacts only to their verified owner or a super admin. [CHAT FIX]"""
+    parts = key.split("/")  # [CHAT FIX]
+    if (  # [CHAT FIX]
+        len(parts) != 5  # [CHAT FIX]
+        or parts[0] != "artifacts"  # [CHAT FIX]
+        or ".." in key  # [CHAT FIX]
+        or "\\" in key  # [CHAT FIX]
+        or parts[3] not in {"docs", "pdf", "pptx", "md"}  # [CHAT FIX]
+        or not parts[4]  # [CHAT FIX]
+        or any(  # [CHAT FIX]
+            c  # [CHAT FIX]
+            not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-"  # [CHAT FIX]
+            for c in parts[4]  # [CHAT FIX]
+        )  # [CHAT FIX]
+    ):  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
+    try:  # [CHAT FIX]
+        university_id, owner_id = uuid.UUID(parts[1]), uuid.UUID(parts[2])  # [CHAT FIX]
+    except ValueError as exc:  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [CHAT FIX]
+    is_super_admin = "super_admin" in (set(auth_user.roles) | {auth_user.role})  # [CHAT FIX]
+    if not is_super_admin and (  # [CHAT FIX]
+        owner_id != auth_user.id or university_id != auth_user.university_id  # [CHAT FIX]
+    ):  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
+    return await _download_storage_file(key, filename)  # [CHAT FIX]
 
+
+async def _download_storage_file(key: str, filename: str | None) -> Response:  # [CHAT FIX]
+    """Serve bytes after the calling route has checked authorization. [CHAT FIX]"""
     ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
     media_types = {
         "pdf": "application/pdf",
@@ -284,8 +303,8 @@ async def download_document_or_artifact(
     except Exception as exc:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Storage object not found: {str(exc)}",
-        )
+            detail="File not found.",  # [CHAT FIX]
+        ) from exc  # [CHAT FIX]
 
 
 @router.get(  # [TENANT FIX 2]
@@ -323,10 +342,9 @@ async def download_library_document(  # [TENANT FIX 2]
     if document["status"] != "active" and not (is_super_admin or is_tenant_admin):  # [TENANT FIX 2]
         raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
     try:  # [TENANT FIX 2]
-        return await download_document_or_artifact(  # [TENANT FIX 2]
+        return await _download_storage_file(  # [CHAT FIX]
             key=key,  # [TENANT FIX 2]
             filename=filename,  # [TENANT FIX 2]
-            auth_user=current_user,  # [TENANT FIX 2]
         )  # [TENANT FIX 2]
     except HTTPException as exc:  # [TENANT FIX 2]
         raise HTTPException(status_code=404, detail="File not found.") from exc  # [TENANT FIX 2]

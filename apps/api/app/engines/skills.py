@@ -252,6 +252,7 @@ class SkillExecutionEngine:
         title: str,
         sections: list[dict[str, Any]],
         university_id: str | None = None,
+        user_id: str | None = None,  # [CHAT FIX]
     ) -> ArtifactReadyPayload:
         """Generates a styled .docx document."""
         doc = Document()
@@ -274,6 +275,7 @@ class SkillExecutionEngine:
             format_type="docs",
             file_extension="docx",
             university_id=university_id,
+            user_id=user_id,  # [CHAT FIX]
         )
         key, url = await self._safe_r2_upload(
             storage_key,
@@ -297,6 +299,7 @@ class SkillExecutionEngine:
         content: str,
         author: str = "PansGPT Academic Assistant",
         university_id: str | None = None,
+        user_id: str | None = None,  # [CHAT FIX]
     ) -> ArtifactReadyPayload:
         """Generates a formatted PDF using PyMuPDF."""
         pdf_doc = pymupdf.open()
@@ -319,6 +322,7 @@ class SkillExecutionEngine:
             format_type="pdf",
             file_extension="pdf",
             university_id=university_id,
+            user_id=user_id,  # [CHAT FIX]
         )
         key, url = await self._safe_r2_upload(storage_key, data, "application/pdf", title=title)
         return ArtifactReadyPayload(
@@ -337,6 +341,7 @@ class SkillExecutionEngine:
         slides: list[dict[str, Any]],
         subtitle: str | None = None,
         university_id: str | None = None,
+        user_id: str | None = None,  # [CHAT FIX]
     ) -> ArtifactReadyPayload:
         """Generates a PowerPoint presentation using python-pptx."""
         prs = Presentation()
@@ -368,6 +373,7 @@ class SkillExecutionEngine:
             format_type="pptx",
             file_extension="pptx",
             university_id=university_id,
+            user_id=user_id,  # [CHAT FIX]
         )
         key, url = await self._safe_r2_upload(
             storage_key,
@@ -390,6 +396,7 @@ class SkillExecutionEngine:
         title: str,
         markdown_content: str,
         university_id: str | None = None,
+        user_id: str | None = None,  # [CHAT FIX]
     ) -> ArtifactReadyPayload:
         """Generates a Markdown file note."""
         full_text = f"# {title}\n\n{markdown_content}\n"
@@ -398,6 +405,7 @@ class SkillExecutionEngine:
             format_type="md",
             file_extension="md",
             university_id=university_id,
+            user_id=user_id,  # [CHAT FIX]
         )
         key, url = await self._safe_r2_upload(storage_key, data, "text/markdown", title=title)
         return ArtifactReadyPayload(
@@ -491,6 +499,7 @@ class SkillExecutionEngine:
                 title=arguments.get("title", "Clinical Summary"),
                 sections=arguments.get("sections", []),
                 university_id=university_id,
+                user_id=user_id,  # [CHAT FIX]
             )
         elif skill_name == "create_pdf":
             return await self.execute_create_pdf(
@@ -498,6 +507,7 @@ class SkillExecutionEngine:
                 content=arguments.get("content", ""),
                 author=arguments.get("author", "PansGPT Academic Assistant"),
                 university_id=university_id,
+                user_id=user_id,  # [CHAT FIX]
             )
         elif skill_name == "create_pptx":
             return await self.execute_create_pptx(
@@ -505,12 +515,14 @@ class SkillExecutionEngine:
                 slides=arguments.get("slides", []),
                 subtitle=arguments.get("subtitle"),
                 university_id=university_id,
+                user_id=user_id,  # [CHAT FIX]
             )
         elif skill_name == "create_md":
             return await self.execute_create_md(
                 title=arguments.get("title", "Study Notes"),
                 markdown_content=arguments.get("markdown_content", ""),
                 university_id=university_id,
+                user_id=user_id,  # [CHAT FIX]
             )
         elif skill_name == "plot_graph":
             return await self.execute_plot_graph(

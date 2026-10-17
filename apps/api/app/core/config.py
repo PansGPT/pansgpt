@@ -151,6 +151,10 @@ class Settings(BaseSettings):
 
     # Purpose-Driven Token Ceilings (Section 6.5.3)
     TEXT_CHAT_MAX_TOKENS: int = 4096
+    CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
+    CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
+    CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
+    HYDE_TIMEOUT_S: float = Field(default=8, gt=0)  # [CHAT FIX]
     VISION_REPLY_MAX_TOKENS: int = 2048
     VISION_EXTRACTION_MAX_TOKENS: int = 768
 

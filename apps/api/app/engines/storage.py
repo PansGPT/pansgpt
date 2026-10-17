@@ -60,21 +60,19 @@ def build_artifact_storage_key(
     file_extension: str,
     artifact_id: str | None = None,
     university_id: str | None = None,
+    user_id: str | None = None,  # [CHAT FIX]
 ) -> str:
     """
-    Construct canonical artifact R2 key nested directly under university:
-    universities/{university_id}/artifacts/{format_type}/{artifact_id}.{ext}
-    Defaults university_id to DEFAULT_UNIVERSITY_ID (UNIJOS) if None/empty.
+    Owner-scoped generated artifacts: artifacts/{university}/{user}/{format}/{id}.{ext}. [CHAT FIX]
     """
-    clean_uni = (
-        sanitize_filename_part(university_id)
-        if university_id and university_id != "default"
-        else DEFAULT_UNIVERSITY_ID
-    )
+    if not university_id or not user_id:  # [CHAT FIX]
+        raise ValueError("University and owner are required for generated artifacts.")  # [CHAT FIX]
+    clean_uni = str(uuid.UUID(university_id))  # [CHAT FIX]
+    owner = str(uuid.UUID(user_id))  # [CHAT FIX]
     clean_fmt = sanitize_filename_part(format_type)
     ext = file_extension.lstrip(".").lower()
     art_id = artifact_id or str(uuid.uuid4())
-    return f"universities/{clean_uni}/artifacts/{clean_fmt}/{art_id}.{ext}"
+    return f"artifacts/{clean_uni}/{owner}/{clean_fmt}/{art_id}.{ext}"  # [CHAT FIX]
 
 
 class R2StorageEngine:

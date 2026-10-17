@@ -2,6 +2,7 @@
 # PansGPT 2.0 AI / Chat & RAG Streaming API Router (Phase 6)
 # ==============================================================================
 
+import asyncio  # [CHAT FIX]
 import json
 import time
 import uuid
@@ -488,6 +489,9 @@ async def stream_chat_session(
                 elif event_type == "artifact_ready":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     yield f"event: artifact_ready\ndata: {json.dumps(dumped)}\n\n"
+                elif event_type == "error":  # [CHAT FIX]
+                    yield f"event: error\ndata: {json.dumps(data)}\n\n"  # [CHAT FIX]
+                    return  # [CHAT FIX]
 
         except Exception as exc:
             logger.error("stream_chat_unhandled_failure", error=str(exc))
@@ -530,8 +534,24 @@ async def stream_chat_session(
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
+    async def bounded_sse_events() -> AsyncGenerator[str, None]:  # [CHAT FIX]
+        try:  # [CHAT FIX]
+            async with asyncio.timeout(settings.CHAT_TOTAL_TIMEOUT_S):  # [CHAT FIX]
+                async for event in sse_event_generator():  # [CHAT FIX]
+                    yield event  # [CHAT FIX]
+        except TimeoutError as exc:  # [CHAT FIX]
+            logger.warning(  # [CHAT FIX]
+                "chat_request_deadline_exceeded",  # [CHAT FIX]
+                deadline="total",  # [CHAT FIX]
+                timeout_s=settings.CHAT_TOTAL_TIMEOUT_S,  # [CHAT FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX]
+                error=repr(exc),  # [CHAT FIX]
+            )  # [CHAT FIX]
+            message = {"error": "The answer timed out. Please try again."}  # [CHAT FIX]
+            yield f"event: error\ndata: {json.dumps(message)}\n\n"  # [CHAT FIX]
+
     return StreamingResponse(
-        sse_event_generator(),
+        bounded_sse_events(),  # [CHAT FIX]
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
