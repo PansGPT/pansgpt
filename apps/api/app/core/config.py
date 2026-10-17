@@ -12,6 +12,19 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Application Mode
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
+    LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
+    MAX_UPLOAD_MB: int = Field(default=50, ge=1)  # [PRELAUNCH FIX]
+
+    @property  # [PRELAUNCH FIX]
+    def local_dev_enabled(self) -> bool:  # [PRELAUNCH FIX]
+        return self.ENVIRONMENT == "development" and self.LOCAL_DEV_MODE  # [PRELAUNCH FIX]
+
+    def validate_local_dev_mode(self) -> None:  # [PRELAUNCH FIX]
+        if self.LOCAL_DEV_MODE and self.ENVIRONMENT != "development":  # [PRELAUNCH FIX]
+            raise ValueError(  # [PRELAUNCH FIX]
+                "LOCAL_DEV_MODE is only allowed in local development."  # [PRELAUNCH FIX]
+            )  # [PRELAUNCH FIX]
+
     PROJECT_NAME: str = "PansGPT 2.0 Core Engine"
     API_V1_PREFIX: str = "/api/v1"
 
@@ -223,6 +236,7 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_environment_requirements(self) -> "Settings":
         """Fail-fast validation enforcing mandatory secrets on staging and production."""
+        self.validate_local_dev_mode()  # [PRELAUNCH FIX]
         if self.ENVIRONMENT in ("staging", "production"):
             missing = []
             for field_name in (

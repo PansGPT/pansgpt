@@ -220,7 +220,10 @@ async def test_agentic_chat_streaming_tool_events(  # [TENANT FIX]
 # 5. Voice Transcription STT Endpoint
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_voice_transcription_endpoint(client: AsyncClient):
+async def test_voice_transcription_endpoint(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify POST /ai/chat/transcribe endpoint processes uploaded audio."""
     fake_audio = io.BytesIO(b"RIFF\x24\x00\x00\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00")
     files = {"file": ("mic_input.wav", fake_audio, "audio/wav")}

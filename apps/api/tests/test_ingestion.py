@@ -311,9 +311,13 @@ async def test_full_8stage_pipeline_execution():
 
 
 @pytest.mark.asyncio
-async def test_upload_endpoint_generates_presigned_url(client, monkeypatch):
+async def test_upload_endpoint_generates_presigned_url(  # [PRELAUNCH FIX]
+    client,  # [PRELAUNCH FIX]
+    monkeypatch,  # [PRELAUNCH FIX]
+    mock_upload_services,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify POST /api/v1/library/upload and aliased /api/v1/documents/upload generate 201 Created."""
-    monkeypatch.setattr("app.routers.library.settings.DATABASE_URL", "")
+    monkeypatch.setattr("app.routers.library.settings.LOCAL_DEV_MODE", True)  # [PRELAUNCH FIX]
     payload = {
         "title": "Adrenergic Pharmacology Lecture 1",
         "course_code": "PCL 401",
@@ -350,8 +354,9 @@ async def test_upload_endpoint_generates_presigned_url(client, monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_rbac_upload_security_guard(client):
+async def test_rbac_upload_security_guard(client, monkeypatch):  # [PRELAUNCH FIX]
     """Verify students cannot initiate uploads (Roadmap 5.10 RBAC requirement)."""
+    monkeypatch.setattr("app.routers.library.settings.LOCAL_DEV_MODE", True)  # [PRELAUNCH FIX]
     payload = {
         "title": "Unauthorized Student Upload",
         "course_code": "PCL 401",

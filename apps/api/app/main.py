@@ -45,6 +45,7 @@ if settings.SENTRY_DSN:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    settings.validate_local_dev_mode()  # [PRELAUNCH FIX]
     # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
     await prewarm_jwks_cache()

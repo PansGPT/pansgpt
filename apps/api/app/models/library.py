@@ -6,6 +6,14 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+UPLOAD_MIME_TYPES: dict[str, str] = {  # [PRELAUNCH FIX]
+    "pdf": "application/pdf",  # [PRELAUNCH FIX]
+    "doc": "application/msword",  # [PRELAUNCH FIX]
+    "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # [PRELAUNCH FIX]
+    "ppt": "application/vnd.ms-powerpoint",  # [PRELAUNCH FIX]
+    "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",  # [PRELAUNCH FIX]
+}  # [PRELAUNCH FIX]
+
 
 class DocumentUploadRequest(BaseModel):
     title: str = Field(..., min_length=2, max_length=255, description="Document title")
@@ -21,8 +29,25 @@ class DocumentUploadRequest(BaseModel):
     file_name: str = Field(
         ..., min_length=1, description="Original filename (e.g. pharmacology_lecture_1.pdf)"
     )
-    mime_type: str = Field(default="application/pdf", description="application/pdf or office docs")
+    mime_type: str = Field(  # [PRELAUNCH FIX]
+        default="application/pdf",  # [PRELAUNCH FIX]
+        description="Matching PDF, DOC, DOCX, PPT or PPTX MIME type",  # [PRELAUNCH FIX]
+    )  # [PRELAUNCH FIX]
     file_size_bytes: int = Field(default=0, ge=0, description="File size in bytes")
+
+    def upload_extension(self) -> str:  # [PRELAUNCH FIX]
+        extension = (  # [PRELAUNCH FIX]
+            self.file_name.rsplit(".", 1)[-1].lower()  # [PRELAUNCH FIX]
+            if "." in self.file_name  # [PRELAUNCH FIX]
+            else ""  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
+        if extension not in UPLOAD_MIME_TYPES:  # [PRELAUNCH FIX]
+            raise ValueError(  # [PRELAUNCH FIX]
+                "Allowed file types are pdf, doc, docx, ppt and pptx."  # [PRELAUNCH FIX]
+            )  # [PRELAUNCH FIX]
+        if self.mime_type != UPLOAD_MIME_TYPES[extension]:  # [PRELAUNCH FIX]
+            raise ValueError("The MIME type must match the file extension.")  # [PRELAUNCH FIX]
+        return extension  # [PRELAUNCH FIX]
 
 
 class DocumentUploadResponse(BaseModel):

@@ -15,6 +15,7 @@ from app.core.dependencies import (  # [TENANT FIX]
     UserContext,  # [TENANT FIX]
     get_current_user,  # [TENANT FIX]
     require_admin_or_super_admin,  # [TENANT FIX]
+    require_lecturer,  # [PRELAUNCH FIX]
 )  # [TENANT FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
 from app.engines.storage import (
@@ -46,15 +47,23 @@ router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
 )
 async def initialize_document_upload(
     payload: DocumentUploadRequest,
-    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
-):
+    auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
+) -> DocumentUploadResponse:  # [PRELAUNCH FIX]
     """
     Stage 1: Generates an immutable Cloudflare R2 path and a time-limited presigned PUT URL.
     The client streams the PDF directly to R2 edge storage ($0 egress).
     """
     university_id = str(require_university(auth_user))  # [TENANT FIX]
     doc_id = str(uuid.uuid4())
-    ext = payload.file_name.split(".")[-1] if "." in payload.file_name else "pdf"
+    try:  # [PRELAUNCH FIX]
+        ext = payload.upload_extension()  # [PRELAUNCH FIX]
+    except ValueError as exc:  # [PRELAUNCH FIX]
+        raise HTTPException(status_code=400, detail=str(exc)) from exc  # [PRELAUNCH FIX]
+    if payload.file_size_bytes > settings.MAX_UPLOAD_MB * 1024 * 1024:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=413,  # [PRELAUNCH FIX]
+            detail=f"File exceeds the {settings.MAX_UPLOAD_MB} MB upload limit.",  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
 
     storage_key = build_document_storage_key(
         university_id=university_id,
@@ -63,50 +72,79 @@ async def initialize_document_upload(
         file_extension=ext,
     )
 
-    if storage_engine.is_configured:
-        try:
-            presigned_url = await storage_engine.generate_presigned_put_url(
-                key=storage_key,
-                content_type=payload.mime_type,
-                expires_in=900,
-            )
-        except Exception:
-            presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_token"
-    else:
-        presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_dev_token"
-
-    if settings.DATABASE_URL:
-        try:
-            conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
-            await conn.execute(
-                """
-                INSERT INTO public.documents (
-                    id, university_id, title, course_code, course_title,
-                    topic, lecturer_name, storage_key, file_size_bytes,
-                    mime_type, status, target_levels, academic_session,
-                    semester, embedding_status
-                ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'active',
-                    $11, $12, $13, 'pending'
-                ) ON CONFLICT (id) DO NOTHING;
-                """,
-                uuid.UUID(doc_id),
-                uuid.UUID(university_id),
-                payload.title,
-                payload.course_code.upper().strip(),
-                payload.course_title.strip(),
-                payload.topic,
-                payload.lecturer_name,
-                storage_key,
-                payload.file_size_bytes,
-                payload.mime_type,
-                payload.target_levels,
-                payload.academic_session,
-                payload.semester,
-            )
-            await conn.close()
-        except Exception:
-            pass
+    if not settings.DATABASE_URL:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=503,  # [PRELAUNCH FIX]
+            detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
+    document_status = (  # [PRELAUNCH FIX]
+        "active"  # [PRELAUNCH FIX]
+        if (set(auth_user.roles) | {auth_user.role})  # [PRELAUNCH FIX]
+        & {"university_admin", "super_admin"}  # [PRELAUNCH FIX]
+        else "pending_review"  # [PRELAUNCH FIX]
+    )  # [PRELAUNCH FIX]
+    conn = None  # [PRELAUNCH FIX]
+    try:  # [PRELAUNCH FIX]
+        conn = await asyncpg.connect(  # [PRELAUNCH FIX]
+            settings.DATABASE_URL,  # [PRELAUNCH FIX]
+            timeout=3.0,  # [PRELAUNCH FIX]
+            statement_cache_size=0,  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
+        async with conn.transaction():  # [PRELAUNCH FIX]
+            # A link failure rolls the inserted document back before returning an error. [PRELAUNCH FIX]
+            inserted = await conn.execute(  # [PRELAUNCH FIX]
+                "INSERT INTO public.documents ("  # [PRELAUNCH FIX]
+                "id, university_id, title, course_code, course_title, topic, lecturer_name, "  # [PRELAUNCH FIX]
+                "storage_key, file_size_bytes, mime_type, target_levels, academic_session, "  # [PRELAUNCH FIX]
+                "semester, status, embedding_status) VALUES ("  # [PRELAUNCH FIX]
+                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending');",  # [PRELAUNCH FIX]
+                uuid.UUID(doc_id),  # [PRELAUNCH FIX]
+                uuid.UUID(university_id),  # [PRELAUNCH FIX]
+                payload.title,  # [PRELAUNCH FIX]
+                payload.course_code.upper().strip(),  # [PRELAUNCH FIX]
+                payload.course_title.strip(),  # [PRELAUNCH FIX]
+                payload.topic,  # [PRELAUNCH FIX]
+                payload.lecturer_name,  # [PRELAUNCH FIX]
+                storage_key,  # [PRELAUNCH FIX]
+                payload.file_size_bytes,  # [PRELAUNCH FIX]
+                payload.mime_type,  # [PRELAUNCH FIX]
+                payload.target_levels,  # [PRELAUNCH FIX]
+                payload.academic_session,  # [PRELAUNCH FIX]
+                payload.semester,  # [PRELAUNCH FIX]
+                document_status,  # [PRELAUNCH FIX]
+            )  # [PRELAUNCH FIX]
+            if inserted != "INSERT 0 1":  # [PRELAUNCH FIX]
+                raise HTTPException(  # [PRELAUNCH FIX]
+                    status_code=503,  # [PRELAUNCH FIX]
+                    detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+                )  # [PRELAUNCH FIX]
+            try:  # [PRELAUNCH FIX]
+                if not storage_engine.is_configured:  # [PRELAUNCH FIX]
+                    raise OSError("Upload storage is not configured.")  # [PRELAUNCH FIX]
+                presigned_url = await storage_engine.generate_presigned_put_url(  # [PRELAUNCH FIX]
+                    key=storage_key,  # [PRELAUNCH FIX]
+                    content_type=payload.mime_type,  # [PRELAUNCH FIX]
+                    expires_in=900,  # [PRELAUNCH FIX]
+                )  # [PRELAUNCH FIX]
+                if not presigned_url:  # [PRELAUNCH FIX]
+                    raise OSError("Upload storage returned no link.")  # [PRELAUNCH FIX]
+            except Exception as exc:  # [PRELAUNCH FIX]
+                if not settings.local_dev_enabled:  # [PRELAUNCH FIX]
+                    raise HTTPException(  # [PRELAUNCH FIX]
+                        status_code=503,  # [PRELAUNCH FIX]
+                        detail="Upload storage is unavailable.",  # [PRELAUNCH FIX]
+                    ) from exc  # [PRELAUNCH FIX]
+                presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_dev_token"  # [PRELAUNCH FIX]
+    except HTTPException:  # [PRELAUNCH FIX]
+        raise  # [PRELAUNCH FIX]
+    except Exception as exc:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=503,  # [PRELAUNCH FIX]
+            detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+        ) from exc  # [PRELAUNCH FIX]
+    finally:  # [PRELAUNCH FIX]
+        if conn is not None:  # [PRELAUNCH FIX]
+            await conn.close()  # [PRELAUNCH FIX]
 
     return DocumentUploadResponse(
         document_id=doc_id,
@@ -133,7 +171,7 @@ async def initialize_document_upload(
 )
 async def confirm_document_upload(
     document_id: str,
-    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """
@@ -622,6 +660,12 @@ async def list_documents(
                 WHERE university_id = $1 AND deleted_at IS NULL
             """
             params = [uuid.UUID(target_uni)]
+            if not (set(auth_user.roles) | {auth_user.role}) & {  # [PRELAUNCH FIX]
+                "lecturer",  # [PRELAUNCH FIX]
+                "university_admin",  # [PRELAUNCH FIX]
+                "super_admin",  # [PRELAUNCH FIX]
+            }:  # [PRELAUNCH FIX]
+                query += " AND status = 'active'"  # [PRELAUNCH FIX]
             if course_code:
                 query += " AND course_code = $2"
                 params.append(course_code.upper().strip())

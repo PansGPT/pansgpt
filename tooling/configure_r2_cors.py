@@ -1,4 +1,5 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
+# UTF-8 without a BOM keeps the shebang at byte zero. [PRELAUNCH FIX]
 """
 Automated Cloudflare R2 CORS Configuration Script (Roadmap 5.1).
 Sets CORS rules on the R2 bucket to allow web frontend direct PUT/GET uploads.
@@ -9,7 +10,12 @@ import os
 import sys
 
 # Ensure apps/api is on sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "apps", "api")))
+sys.path.insert(  # [PRELAUNCH FIX]
+    0,  # [PRELAUNCH FIX]
+    os.path.abspath(  # [PRELAUNCH FIX]
+        os.path.join(os.path.dirname(__file__), "..", "apps", "api")  # [PRELAUNCH FIX]
+    ),  # [PRELAUNCH FIX]
+)  # [PRELAUNCH FIX]
 
 from app.core.config import settings
 from app.engines.storage import storage_engine
