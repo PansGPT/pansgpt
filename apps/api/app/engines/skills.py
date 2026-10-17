@@ -234,7 +234,7 @@ class SkillExecutionEngine:
                 params = f"key={urllib.parse.quote(key, safe='')}"
                 if title:
                     params += f"&filename={urllib.parse.quote(title, safe='')}"
-                return key, f"/api/v1/library/documents/download?{params}"
+                return key, f"/api/v1/library/artifacts/download?{params}"  # [TENANT FIX 2]
             except Exception as exc:
                 logger.warning(
                     "artifact_r2_upload_failed",
@@ -245,7 +245,7 @@ class SkillExecutionEngine:
         params = f"key={urllib.parse.quote(key, safe='')}"
         if title:
             params += f"&filename={urllib.parse.quote(title, safe='')}"
-        return key, f"/api/v1/library/documents/download?{params}"
+        return key, f"/api/v1/library/artifacts/download?{params}"  # [TENANT FIX 2]
 
     async def execute_create_doc(
         self,

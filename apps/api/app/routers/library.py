@@ -10,6 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 
 from app.core.authorization import require_scoped_document, require_university  # [TENANT FIX]
 from app.core.config import settings
+from app.core.database import get_db_connection  # [TENANT FIX 2]
 from app.core.dependencies import (  # [TENANT FIX]
     UserContext,  # [TENANT FIX]
     get_current_user,  # [TENANT FIX]
@@ -193,10 +194,6 @@ async def confirm_document_upload(
 # Must be defined BEFORE /documents/{document_id} to prevent path collision
 # ------------------------------------------------------------------------------
 @router.get(
-    "/documents/download",
-    summary="Download artifact or document as a direct byte stream with forced attachment",
-)
-@router.get(
     "/artifacts/download",
     summary="Alias: Download artifact directly as an attachment",
 )
@@ -251,6 +248,50 @@ async def download_document_or_artifact(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Storage object not found: {str(exc)}",
         )
+
+
+@router.get(  # [TENANT FIX 2]
+    "/documents/download",  # [TENANT FIX 2]
+    summary="Download a library document after verifying access",  # [TENANT FIX 2]
+)  # [TENANT FIX 2]
+async def download_library_document(  # [TENANT FIX 2]
+    key: str = Query(..., description="Cloudflare R2 document storage key"),  # [TENANT FIX 2]
+    filename: str | None = Query(None, description="Override download filename"),  # [TENANT FIX 2]
+    current_user: UserContext = Depends(get_current_user),  # [TENANT FIX 2]
+) -> Response:  # [TENANT FIX 2]
+    if not key or ".." in key or key.startswith("/"):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    document: asyncpg.Record | None = None  # [TENANT FIX 2]
+    try:  # [TENANT FIX 2]
+        async with get_db_connection() as conn:  # [TENANT FIX 2]
+            if conn is not None:  # [TENANT FIX 2]
+                document = await conn.fetchrow(  # [TENANT FIX 2]
+                    "SELECT university_id, status, deleted_at FROM public.documents "  # [TENANT FIX 2]
+                    "WHERE storage_key = $1 OR converted_key = $1 LIMIT 1;",  # [TENANT FIX 2]
+                    key,  # [TENANT FIX 2]
+                )  # [TENANT FIX 2]
+    except Exception as exc:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [TENANT FIX 2]
+    if document is None or document["deleted_at"] is not None:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    roles = set(current_user.roles) | {current_user.role}  # [TENANT FIX 2]
+    is_super_admin = "super_admin" in roles  # [TENANT FIX 2]
+    if not is_super_admin and (  # [TENANT FIX 2]
+        current_user.university_id is None  # [TENANT FIX 2]
+        or document["university_id"] != current_user.university_id  # [TENANT FIX 2]
+    ):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    is_tenant_admin = bool(roles & {"university_admin", "admin"})  # [TENANT FIX 2]
+    if document["status"] != "active" and not (is_super_admin or is_tenant_admin):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    try:  # [TENANT FIX 2]
+        return await download_document_or_artifact(  # [TENANT FIX 2]
+            key=key,  # [TENANT FIX 2]
+            filename=filename,  # [TENANT FIX 2]
+            auth_user=current_user,  # [TENANT FIX 2]
+        )  # [TENANT FIX 2]
+    except HTTPException as exc:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [TENANT FIX 2]
 
 
 # ------------------------------------------------------------------------------
