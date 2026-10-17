@@ -106,7 +106,7 @@ services:
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    dockerCommand: python -m arq workers.tasks.WorkerSettings
+    dockerCommand: python -m arq workers.settings.WorkerSettings # [QUEUE SPLIT 2]
     autoDeploy: true
     envVars:
       - key: ENVIRONMENT
@@ -250,7 +250,7 @@ services:
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    dockerCommand: python -m arq workers.tasks.WorkerSettings
+    dockerCommand: python -m arq workers.settings.WorkerSettings # [QUEUE SPLIT 2]
     autoDeploy: false
     envVars:
       - key: ENVIRONMENT

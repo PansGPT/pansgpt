@@ -15,10 +15,14 @@ PICTURE_QUEUE_NAME = "arq:picture_queue"  # [QUEUE SPLIT]
 def get_redis_settings() -> RedisSettings:
     """Parse Upstash Redis DSN for ARQ worker queue."""
     url = settings.redis_connection_url
-    if url:
-        return RedisSettings.from_dsn(url)
-    # Default localhost for local test workers
-    return RedisSettings(host="localhost", port=6379)
+    if url:  # [QUEUE SPLIT 2]
+        redis_settings = RedisSettings.from_dsn(url)  # [QUEUE SPLIT 2]
+    else:  # [QUEUE SPLIT 2]
+        redis_settings = RedisSettings(host="localhost", port=6379)  # [QUEUE SPLIT 2]
+    redis_settings.conn_timeout = 10  # [QUEUE SPLIT 2]
+    redis_settings.conn_retries = 5  # [QUEUE SPLIT 2]
+    redis_settings.conn_retry_delay = 2  # [QUEUE SPLIT 2]
+    return redis_settings  # [QUEUE SPLIT 2]
 
 
 class WorkerSettings:  # [QUEUE SPLIT]

@@ -651,6 +651,22 @@ def test_worker_functions_registered_timeouts():  # [QUEUE SPLIT]
 # ------------------------------------------------------------------------------
 # 11. AST Guard: describe_document_images_job must enqueue with PICTURE_QUEUE_NAME [QUEUE SPLIT]
 # ------------------------------------------------------------------------------
+@pytest.mark.parametrize("redis_url", ["", "rediss://localhost:6380/1"])  # [QUEUE SPLIT 2]
+def test_redis_connection_settings(  # [QUEUE SPLIT 2]
+    monkeypatch: pytest.MonkeyPatch,  # [QUEUE SPLIT 2]
+    redis_url: str,  # [QUEUE SPLIT 2]
+) -> None:  # [QUEUE SPLIT 2]
+    """Keep connection retries tolerant for both DSN and local workers."""  # [QUEUE SPLIT 2]
+    from workers.settings import get_redis_settings, settings  # [QUEUE SPLIT 2]
+
+    monkeypatch.setattr(settings, "REDIS_URL", redis_url)  # [QUEUE SPLIT 2]
+    monkeypatch.setattr(settings, "UPSTASH_REDIS_URL", "")  # [QUEUE SPLIT 2]
+    redis_settings = get_redis_settings()  # [QUEUE SPLIT 2]
+    assert redis_settings.conn_timeout == 10  # [QUEUE SPLIT 2]
+    assert redis_settings.conn_retries == 5  # [QUEUE SPLIT 2]
+    assert redis_settings.conn_retry_delay == 2  # [QUEUE SPLIT 2]
+
+
 def test_guard_describe_images_job_requires_picture_queue():  # [QUEUE SPLIT]
     """Guard: any enqueue of describe_document_images_job must specify _queue_name=PICTURE_QUEUE_NAME."""  # [QUEUE SPLIT]
     repo_api_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))  # [QUEUE SPLIT]
