@@ -368,7 +368,7 @@ async def test_rbac_upload_security_guard(client):
 
 @pytest.mark.asyncio
 async def test_confirm_upload_endpoints(  # [TENANT FIX]
-    client: AsyncClient,
+    client: AsyncClient,  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
     """Verify confirm-upload transitions and returns 202 Accepted, 404, or 500 (offline DB)."""
@@ -386,7 +386,7 @@ async def test_confirm_upload_endpoints(  # [TENANT FIX]
 
 @pytest.mark.asyncio
 async def test_pdf_stream_url_endpoint(  # [TENANT FIX]
-    client: AsyncClient,
+    client: AsyncClient,  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/{id}/pdf-url returns valid streaming URL."""
@@ -401,7 +401,7 @@ async def test_pdf_stream_url_endpoint(  # [TENANT FIX]
 
 @pytest.mark.asyncio
 async def test_get_single_document_endpoint(  # [TENANT FIX]
-    client: AsyncClient,
+    client: AsyncClient,  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/documents/{id} handles non-existent gracefully."""
@@ -444,7 +444,7 @@ async def test_patch_document_endpoint(  # [TENANT FIX]
 
 @pytest.mark.asyncio
 async def test_delete_document_endpoint(  # [TENANT FIX]
-    client: AsyncClient,
+    client: AsyncClient,  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
     """Verify DELETE /api/v1/library/documents/{id} soft-deletes returning 204."""
