@@ -70,7 +70,7 @@ class RagRetrievalEngine:
         self,
         query: str,
         document_id: str | None = None,
-        university_id: str | None = "01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        university_id: str | None = None,  # [TENANT FIX]
         course_code: str | None = None,
         match_count: int = 4,
         match_threshold: float = 0.25,
@@ -83,6 +83,21 @@ class RagRetrievalEngine:
         Supports contextual history rewriting for follow-up questions with pronouns.
         Returns: (assembled_context_markdown, list_of_citations)
         """
+        if university_id is None:  # [TENANT FIX]
+            raise ValueError("university_id is required for document retrieval.")  # [TENANT FIX]
+        filter_uni_uuid = uuid.UUID(university_id)  # [TENANT FIX]
+        if document_id:  # [TENANT FIX]
+            async with get_db_connection() as scope_conn:  # [TENANT FIX]
+                if scope_conn is None:  # [TENANT FIX]
+                    return None, []  # [TENANT FIX]
+                allowed = await scope_conn.fetchval(  # [TENANT FIX]
+                    "SELECT id FROM public.documents WHERE id = $1 AND university_id = $2 "  # [TENANT FIX]
+                    "AND status = 'active' AND deleted_at IS NULL;",  # [TENANT FIX]
+                    uuid.UUID(document_id),  # [TENANT FIX]
+                    filter_uni_uuid,  # [TENANT FIX]
+                )  # [TENANT FIX]
+                if allowed is None:  # [TENANT FIX]
+                    return None, []  # [TENANT FIX]
         # 1. Acronym Normalization (e.g., CVS -> Cardiovascular System, HCTZ -> Hydrochlorothiazide)
         normalized_query = policy_guard.normalize_medical_acronyms(query)
 
@@ -176,14 +191,14 @@ class RagRetrievalEngine:
                     raise ValueError("Database connection or vector unavailable for hybrid RAG")
 
                 # 4. Try Primary: 3-Pool Hybrid Search RPC (Vector + FTS + Trigram with RRF k=60)
-                filter_uni_uuid = uuid.UUID(university_id) if university_id else None
                 filter_doc_uuids = [uuid.UUID(document_id)] if document_id else None
 
                 # If course_code is provided without a document_id, resolve docs for that course
                 if not filter_doc_uuids and course_code:
                     course_doc_rows = await conn.fetch(
-                        "SELECT id FROM public.documents WHERE course_code = $1 AND deleted_at IS NULL",
+                        "SELECT id FROM public.documents WHERE course_code = $1 AND university_id = $2 AND status = 'active' AND deleted_at IS NULL",  # [TENANT FIX]
                         course_code.upper().strip(),
+                        filter_uni_uuid,  # [TENANT FIX]
                     )
                     if course_doc_rows:
                         filter_doc_uuids = [r["id"] for r in course_doc_rows]
@@ -215,6 +230,8 @@ class RagRetrievalEngine:
                         filter_doc_ids := $6
                     ) m
                     LEFT JOIN public.documents d ON d.id = m.document_id
+                    WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
+                      AND ($6::uuid[] IS NULL OR d.id = ANY($6)) -- [TENANT FIX]
                     ORDER BY m.rrf_score DESC;
                 """
                 try:
@@ -249,6 +266,7 @@ class RagRetrievalEngine:
                                 d.course_code
                             FROM public.match_document_chunks($1::vector, $2, $3, $4) m
                             LEFT JOIN public.documents d ON d.id = m.document_id
+                            WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
                             ORDER BY m.similarity DESC;
                         """
                         rows = await conn.fetch(
@@ -257,17 +275,13 @@ class RagRetrievalEngine:
                             float(match_threshold),
                             int(match_count * 2),
                             uuid.UUID(document_id),
+                            filter_uni_uuid,  # [TENANT FIX]
                         )
                     else:
                         candidate_docs = filter_doc_uuids
                         if not candidate_docs:
-                            doc_filter_sql = (
-                                "SELECT id FROM public.documents WHERE deleted_at IS NULL"
-                            )
-                            params: list = []
-                            if filter_uni_uuid:
-                                doc_filter_sql += " AND university_id = $1"
-                                params.append(filter_uni_uuid)
+                            doc_filter_sql = "SELECT id FROM public.documents WHERE deleted_at IS NULL AND status = 'active' AND university_id = $1"  # [TENANT FIX]
+                            params: list[uuid.UUID] = [filter_uni_uuid]  # [TENANT FIX]
                             doc_rows = await conn.fetch(doc_filter_sql, *params)
                             candidate_docs = [r["id"] for r in doc_rows]
 
@@ -292,6 +306,8 @@ class RagRetrievalEngine:
                                     d.course_code
                                 FROM public.match_documents_global($1::vector, $2, $3, $4::uuid[]) m
                                 LEFT JOIN public.documents d ON d.id = m.document_id
+                                WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
+                                  AND d.id = ANY($4) -- [TENANT FIX]
                                 ORDER BY m.similarity DESC;
                             """
                             rows = await conn.fetch(
@@ -300,6 +316,7 @@ class RagRetrievalEngine:
                                 float(match_threshold),
                                 int(match_count * 2),
                                 candidate_docs,
+                                filter_uni_uuid,  # [TENANT FIX]
                             )
 
                 for r in rows:
@@ -479,10 +496,16 @@ class RagRetrievalEngine:
                             seg_sql = """
                                 SELECT content
                                 FROM public.document_chunks
-                                WHERE document_id = $1 AND segment_id = $2
+                                WHERE document_id = $1 AND segment_id = $2 -- [TENANT FIX]
+                                  AND EXISTS (SELECT 1 FROM public.documents d WHERE d.id = document_id AND d.university_id = $3 AND d.status = 'active' AND d.deleted_at IS NULL) -- [TENANT FIX]
                                 ORDER BY chunk_index ASC;
                             """
-                            seg_rows = await conn.fetch(seg_sql, doc_uuid, uuid.UUID(seg_id))
+                            seg_rows = await conn.fetch(  # [TENANT FIX]
+                                seg_sql,  # [TENANT FIX]
+                                doc_uuid,  # [TENANT FIX]
+                                uuid.UUID(seg_id),  # [TENANT FIX]
+                                filter_uni_uuid,  # [TENANT FIX]
+                            )  # [TENANT FIX]
                             if seg_rows:
                                 top_chunk["expanded_content"] = "\n\n".join(
                                     r["content"].strip() for r in seg_rows
@@ -491,11 +514,16 @@ class RagRetrievalEngine:
                             sibling_sql = """
                                 SELECT id, document_id, content, page_start, page_end, chunk_index
                                 FROM public.document_chunks
-                                WHERE document_id = $1 AND chunk_index IN ($2, $3)
+                                WHERE document_id = $1 AND chunk_index IN ($2, $3) -- [TENANT FIX]
+                                  AND EXISTS (SELECT 1 FROM public.documents d WHERE d.id = document_id AND d.university_id = $4 AND d.status = 'active' AND d.deleted_at IS NULL) -- [TENANT FIX]
                                 ORDER BY chunk_index ASC;
                             """
                             siblings = await conn.fetch(
-                                sibling_sql, doc_uuid, max(0, c_idx - 1), c_idx + 1
+                                sibling_sql,  # [TENANT FIX]
+                                doc_uuid,  # [TENANT FIX]
+                                max(0, c_idx - 1),  # [TENANT FIX]
+                                c_idx + 1,  # [TENANT FIX]
+                                filter_uni_uuid,  # [TENANT FIX]
                             )
                             before_text = ""
                             after_text = ""

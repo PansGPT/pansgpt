@@ -1,7 +1,6 @@
 # ==============================================================================
 # Phase 6B: Dynamic AI Skills, Agentic Tools & Whisper STT Verification Suite
 # ==============================================================================
-
 import io
 import unittest.mock
 
@@ -14,6 +13,7 @@ from app.engines.rag import rag_engine
 from app.engines.skills import skill_engine
 from app.engines.storage import DEFAULT_UNIVERSITY_ID
 from app.engines.tools import tool_engine
+from tests.conftest import TenantTestState  # [TENANT FIX]
 
 
 @pytest.fixture(autouse=True)
@@ -40,6 +40,7 @@ async def test_hybrid_rag_acronym_and_fallback_retrieval():
     """Verify hybrid RAG retrieval normalizes acronyms and returns structured citations."""
     context, citations = await rag_engine.retrieve_context(
         query="What is the MOA of HCTZ in HTN?",
+        university_id=DEFAULT_UNIVERSITY_ID,  # [TENANT FIX]
         match_count=2,
     )
     # Even if database is empty/offline in test, query normalization and function exit cleanly
@@ -188,7 +189,10 @@ async def test_tool_dispatcher_invalid_tool():
 # 4. Agentic SSE Stream with Tool Invocations
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
+async def test_agentic_chat_streaming_tool_events(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify SSE streaming produces tool_start, artifact_ready, and tool_end events."""
     session_id = "018f3a30-0001-7000-8000-000000000002"
     payload = {
@@ -200,7 +204,6 @@ async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
     response = await client.post(
         f"/api/v1/ai/chat/sessions/{session_id}/stream",
         json=payload,
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert response.status_code == 200
     text = response.text

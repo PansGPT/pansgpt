@@ -14,7 +14,6 @@ from fastapi import (
     BackgroundTasks,
     Depends,
     File,
-    Header,
     HTTPException,
     Query,
     Request,
@@ -23,6 +22,11 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 
+from app.core.authorization import (  # [TENANT FIX]
+    check_document_scope,  # [TENANT FIX]
+    require_owned_session,  # [TENANT FIX]
+    require_university,  # [TENANT FIX]
+)  # [TENANT FIX]
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
@@ -43,21 +47,6 @@ from app.models.chat import (
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/ai/chat", tags=["AI & Chat Engine"])
-
-# Default mock user ID for unauthenticated dev/testing sessions
-DEV_DEFAULT_USER_ID = "018f3a10-0001-7000-8000-000000000001"
-DEV_DEFAULT_UNI_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
-
-
-def _extract_user_id(x_user_id: str | None = None) -> str:
-    """Extracts or assigns user ID for the active request."""
-    if x_user_id:
-        try:
-            uuid.UUID(x_user_id)
-            return x_user_id
-        except ValueError:
-            pass
-    return DEV_DEFAULT_USER_ID
 
 
 async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
@@ -94,7 +83,11 @@ async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
         ) from exc
 
 
-async def _auto_generate_session_title(session_id: str, message: str) -> None:
+async def _auto_generate_session_title(  # [TENANT FIX]
+    session_id: str,  # [TENANT FIX]
+    message: str,  # [TENANT FIX]
+    user_id: str,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Background task to set session title from user prompt if still default."""
     try:
         words = message.strip().split()
@@ -109,10 +102,11 @@ async def _auto_generate_session_title(session_id: str, message: str) -> None:
                     UPDATE public.chat_sessions
                     SET title = CASE WHEN title = 'New Chat' THEN $2 ELSE title END,
                         updated_at = now()
-                    WHERE id = $1;
+                    WHERE id = $1 AND user_id = $3; -- [TENANT FIX]
                     """,
                     uuid.UUID(session_id),
                     title,
+                    uuid.UUID(user_id),  # [TENANT FIX]
                 )
     except Exception as exc:
         logger.warning("background_title_update_failed", error=str(exc))
@@ -126,13 +120,19 @@ async def _auto_generate_session_title(session_id: str, message: str) -> None:
 )
 async def create_chat_session(
     payload: ChatSessionCreateRequest,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Creates a new chat session thread for the authenticated student."""
-    user_id = x_user_id or str(current_user.id)
+    user_id = str(current_user.id)  # [TENANT FIX]
+    require_university(current_user)  # [TENANT FIX]
     session_id = str(uuid.uuid4())
-    doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None
+    doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None  # [TENANT FIX]
+    if payload.document_id:  # [TENANT FIX]
+        await check_document_scope(  # [TENANT FIX]
+            payload.document_id,  # [TENANT FIX]
+            current_user,  # [TENANT FIX]
+            active_only=True,  # [TENANT FIX]
+        )  # [TENANT FIX]
     title = payload.title or "New Chat"
 
     now_str = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -174,12 +174,12 @@ async def create_chat_session(
     summary="List student's active chat sessions",
 )
 async def list_chat_sessions(
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     limit: int = Query(default=30, ge=1, le=100),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Returns a list of conversation threads for the student."""
-    user_id = x_user_id or str(current_user.id)
+    user_id = str(current_user.id)  # [TENANT FIX]
+    require_university(current_user)  # [TENANT FIX]
     sessions: list[ChatSessionResponse] = []
 
     async with get_db_connection() as conn:
@@ -218,11 +218,11 @@ async def list_chat_sessions(
 )
 async def get_chat_session_details(
     session_id: str,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Retrieves session details and its active message tree."""
-    user_id = x_user_id or str(current_user.id)
+    require_university(current_user)  # [TENANT FIX]
+    await require_owned_session(session_id, current_user)  # [TENANT FIX]
     session_data: dict | None = None
     messages: list[ChatMessageResponse] = []
 
@@ -234,9 +234,10 @@ async def get_chat_session_details(
                     SELECT id, user_id, document_id, title, summary,
                            created_at::text, updated_at::text
                     FROM public.chat_sessions
-                    WHERE id = $1 AND deleted_at IS NULL;
+                    WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL; -- [TENANT FIX]
                     """,
                     uuid.UUID(session_id),
+                    current_user.id,  # [TENANT FIX]
                 )
                 if s_row:
                     session_data = {
@@ -286,16 +287,8 @@ async def get_chat_session_details(
             except Exception as exc:
                 logger.warning("get_chat_session_details_db_failed", error=str(exc))
 
-    if not session_data:
-        session_data = {
-            "id": session_id,
-            "user_id": user_id,
-            "title": "Pharmacology Chat",
-            "document_id": None,
-            "summary": None,
-            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        }
+    if not session_data:  # [TENANT FIX]
+        raise HTTPException(status_code=404, detail="Conversation not found.")  # [TENANT FIX]
 
     return {
         "session": session_data,
@@ -312,8 +305,6 @@ async def stream_chat_session(
     session_id: str,
     payload: StreamChatRequest,
     background_tasks: BackgroundTasks,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
-    x_university_id: str | None = Header(None, alias="X-University-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """
@@ -325,12 +316,15 @@ async def stream_chat_session(
     5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort
     6. Asynchronous persistence of user and assistant messages + telemetry
     """
-    user_id = x_user_id or str(current_user.id)
-    university_id = (
-        x_university_id
-        or (str(current_user.university_id) if current_user.university_id else None)
-        or DEV_DEFAULT_UNI_ID
-    )
+    user_id = str(current_user.id)  # [TENANT FIX]
+    university_id = str(require_university(current_user))  # [TENANT FIX]
+    await require_owned_session(session_id, current_user, payload.parent_message_id)  # [TENANT FIX]
+    if payload.document_id:  # [TENANT FIX]
+        await check_document_scope(  # [TENANT FIX]
+            payload.document_id,  # [TENANT FIX]
+            current_user,  # [TENANT FIX]
+            active_only=True,  # [TENANT FIX]
+        )  # [TENANT FIX]
     user_message_id = str(uuid.uuid4())
     assistant_message_id = str(uuid.uuid4())
 
@@ -338,7 +332,12 @@ async def stream_chat_session(
         await _deduct_user_credit(user_id, assistant_message_id)
 
     # Queue background operations
-    background_tasks.add_task(_auto_generate_session_title, session_id, payload.message)
+    background_tasks.add_task(  # [TENANT FIX]
+        _auto_generate_session_title,  # [TENANT FIX]
+        session_id,  # [TENANT FIX]
+        payload.message,  # [TENANT FIX]
+        user_id,  # [TENANT FIX]
+    )  # [TENANT FIX]
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
         last_heartbeat = time.time()

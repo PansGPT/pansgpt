@@ -8,8 +8,13 @@ import uuid
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 
+from app.core.authorization import require_scoped_document, require_university  # [TENANT FIX]
 from app.core.config import settings
-from app.core.dependencies import get_current_user, require_admin_or_super_admin
+from app.core.dependencies import (  # [TENANT FIX]
+    UserContext,  # [TENANT FIX]
+    get_current_user,  # [TENANT FIX]
+    require_admin_or_super_admin,  # [TENANT FIX]
+)  # [TENANT FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
 from app.engines.storage import (
     DEFAULT_UNIVERSITY_ID,
@@ -40,16 +45,13 @@ router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
 )
 async def initialize_document_upload(
     payload: DocumentUploadRequest,
-    university_id: str | None = Query(
-        default="01a07664-7a69-7ce0-ad6a-b219462cbde3",
-        description="University ID (scoped to active tenant, defaults to UNIJOS)",
-    ),
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
 ):
     """
     Stage 1: Generates an immutable Cloudflare R2 path and a time-limited presigned PUT URL.
     The client streams the PDF directly to R2 edge storage ($0 egress).
     """
+    university_id = str(require_university(auth_user))  # [TENANT FIX]
     doc_id = str(uuid.uuid4())
     ext = payload.file_name.split(".")[-1] if "." in payload.file_name else "pdf"
 
@@ -130,7 +132,8 @@ async def initialize_document_upload(
 )
 async def confirm_document_upload(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
@@ -260,7 +263,8 @@ async def download_document_or_artifact(
 )
 async def get_single_document(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Fetch metadata and embedding status for a specific document."""
     try:
@@ -364,7 +368,8 @@ async def get_single_document(
 async def update_document_metadata(
     document_id: str,
     payload: DocumentPatchRequest,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
@@ -414,7 +419,7 @@ async def update_document_metadata(
             detail=f"Database update error: {e!s}",
         )
 
-    return await get_single_document(document_id)
+    return await get_single_document(document_id, auth_user=auth_user)  # [TENANT FIX]
 
 
 # ------------------------------------------------------------------------------
@@ -427,7 +432,8 @@ async def update_document_metadata(
 )
 async def soft_delete_document(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Marks document as deleted (deleted_at = now()). Chunks remain for audit until hard purged."""
     if not settings.DATABASE_URL:
@@ -462,7 +468,8 @@ async def soft_delete_document(
 )
 async def get_document_segments(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Returns the ordered hierarchical chapter and topic segments of a document."""
     if not settings.DATABASE_URL:
@@ -510,7 +517,8 @@ async def get_document_segments(
 )
 async def get_document_pdf_stream_url(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     storage_key = None
     if settings.DATABASE_URL:
@@ -555,18 +563,10 @@ async def get_document_pdf_stream_url(
     summary="List course documents scoped to university and level",
 )
 async def list_documents(
-    university_id: str | None = Query(
-        default=None,
-        description="Filter by university ID (defaults to user's university or UNIJOS)",
-    ),
     course_code: str | None = Query(None, description="Optional course code filter (e.g. PCL 401)"),
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
 ):
-    target_uni = university_id or (
-        str(auth_user.get("university_id"))
-        if auth_user.get("university_id")
-        else "01a07664-7a69-7ce0-ad6a-b219462cbde3"
-    )
+    target_uni = str(require_university(auth_user))  # [TENANT FIX]
     results: list[DocumentDetailResponse] = []
     if settings.DATABASE_URL:
         try:
@@ -628,7 +628,8 @@ async def list_documents(
 )
 async def reembed_document(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     if settings.DATABASE_URL:
         try:

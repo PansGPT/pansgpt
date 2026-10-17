@@ -1,7 +1,6 @@
 # ==============================================================================
 # Phase 5 Document Ingestion Engine Full Verification Suite (Roadmap 5.11)
 # ==============================================================================
-
 import io
 import unittest.mock
 import uuid
@@ -11,6 +10,7 @@ import fitz  # PyMuPDF
 import pptx
 import pytest
 from arq import Retry  # [DIM 1536]
+from httpx import AsyncClient  # [TENANT FIX]
 
 from app.core.config import settings  # [DIM 1536]
 from app.engines.chunker import semantic_chunker
@@ -23,6 +23,7 @@ from app.engines.storage import (
     build_converted_storage_key,
     build_document_storage_key,
 )
+from tests.conftest import TenantTestState  # [TENANT FIX]
 from workers.tasks import _claim_document, _update_document_status, ingest_document_job
 
 
@@ -366,8 +367,13 @@ async def test_rbac_upload_security_guard(client):
 
 
 @pytest.mark.asyncio
-async def test_confirm_upload_endpoints(client):
+async def test_confirm_upload_endpoints(  # [TENANT FIX]
+    client: AsyncClient,
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify confirm-upload transitions and returns 202 Accepted, 404, or 500 (offline DB)."""
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
     random_doc_id = str(uuid.uuid4())
     # 1. Primary path
     resp1 = await client.post(f"/api/v1/library/{random_doc_id}/confirm-upload")
@@ -379,7 +385,10 @@ async def test_confirm_upload_endpoints(client):
 
 
 @pytest.mark.asyncio
-async def test_pdf_stream_url_endpoint(client):
+async def test_pdf_stream_url_endpoint(  # [TENANT FIX]
+    client: AsyncClient,
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/{id}/pdf-url returns valid streaming URL."""
     test_id = "018f3a30-0001-7000-8000-000000000001"
     response = await client.get(f"/api/v1/library/{test_id}/pdf-url")
@@ -391,7 +400,10 @@ async def test_pdf_stream_url_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_get_single_document_endpoint(client):
+async def test_get_single_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/documents/{id} handles non-existent gracefully."""
     random_id = str(uuid.uuid4())
     response = await client.get(f"/api/v1/library/documents/{random_id}")
@@ -399,9 +411,25 @@ async def test_get_single_document_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_patch_document_endpoint(client):
+async def test_patch_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+    monkeypatch: pytest.MonkeyPatch,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify PATCH /api/v1/library/documents/{id} requires valid fields."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
+    monkeypatch.setattr(  # [TENANT FIX]
+        "app.routers.library.asyncpg.connect",  # [TENANT FIX]
+        unittest.mock.AsyncMock(  # [TENANT FIX]
+            side_effect=ConnectionError("Offline database fixture")  # [TENANT FIX]
+        ),  # [TENANT FIX]
+    )  # [TENANT FIX]
     # Empty body -> 422
     resp_empty = await client.patch(f"/api/v1/library/documents/{random_id}", json={})
     assert resp_empty.status_code == 422
@@ -415,17 +443,33 @@ async def test_patch_document_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_delete_document_endpoint(client):
+async def test_delete_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify DELETE /api/v1/library/documents/{id} soft-deletes returning 204."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
     response = await client.delete(f"/api/v1/library/documents/{random_id}")
     assert response.status_code in (204, 500)
 
 
 @pytest.mark.asyncio
-async def test_get_document_segments_endpoint(client):
+async def test_get_document_segments_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/documents/{id}/segments returns list."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
     response = await client.get(f"/api/v1/library/documents/{random_id}/segments")
     assert response.status_code in (200, 500)
     if response.status_code == 200:
