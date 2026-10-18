@@ -17,6 +17,7 @@ from app.core.dependencies import (  # [TENANT FIX]
     require_admin_or_super_admin,  # [TENANT FIX]
     require_lecturer,  # [PRELAUNCH FIX]
 )  # [TENANT FIX]
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
 from app.engines.storage import (
     DEFAULT_UNIVERSITY_ID,
@@ -54,7 +55,7 @@ async def initialize_document_upload(
     The client streams the PDF directly to R2 edge storage ($0 egress).
     """
     university_id = str(require_university(auth_user))  # [TENANT FIX]
-    doc_id = str(uuid.uuid4())
+    doc_id = str(uuid7())  # [LEFTOVER FIX]
     try:  # [PRELAUNCH FIX]
         ext = payload.upload_extension()  # [PRELAUNCH FIX]
     except ValueError as exc:  # [PRELAUNCH FIX]

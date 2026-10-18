@@ -692,6 +692,11 @@ async def test_enqueue_passes_converted_key_and_skips_when_no_pending(monkeypatc
             "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
         ),  # [PHASE2 FIX]
         patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            new_callable=AsyncMock,  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
         patch(
             "workers.tasks.storage_engine.object_exists", new_callable=AsyncMock, return_value=True
         ),  # [PHASE2 FIX]
@@ -735,6 +740,11 @@ async def test_enqueue_passes_converted_key_and_skips_when_no_pending(monkeypatc
             "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
         ),  # [PHASE2 FIX]
         patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            new_callable=AsyncMock,  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
         patch(
             "workers.tasks.storage_engine.object_exists", new_callable=AsyncMock, return_value=True
         ),  # [PHASE2 FIX]
@@ -782,6 +792,11 @@ async def test_failed_enqueue_logs_error_and_does_not_fail_phase1(monkeypatch): 
             "workers.tasks._claim_document", new_callable=AsyncMock, return_value=True
         ),  # [PHASE2 FIX]
         patch("workers.tasks._update_document_status", new_callable=AsyncMock),  # [PHASE2 FIX]
+        patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            new_callable=AsyncMock,  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
         patch(
             "workers.tasks._get_document_meta", new_callable=AsyncMock, return_value=None
         ),  # [PHASE2 FIX]

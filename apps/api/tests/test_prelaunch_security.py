@@ -24,6 +24,18 @@ UNI_B = "01a07664-7a69-7ce0-ad6a-b219462cbde4"  # [PRELAUNCH FIX]
 USER_ID = "018f3a10-0001-7000-8000-000000000001"  # [PRELAUNCH FIX]
 
 
+def test_new_upload_document_id_is_uuid7(upload_state: "UploadState") -> None:  # [LEFTOVER FIX]
+    response = TestClient(app).post(  # [LEFTOVER FIX]
+        "/api/v1/library/upload",  # [LEFTOVER FIX]
+        json=upload_payload(),  # [LEFTOVER FIX]
+    )  # [LEFTOVER FIX]
+    assert response.status_code == 201  # [LEFTOVER FIX]
+    document_id = uuid.UUID(response.json()["document_id"])  # [LEFTOVER FIX]
+    assert document_id.version == 7  # [LEFTOVER FIX]
+    assert str(document_id) in upload_state.rows  # [LEFTOVER FIX]
+    assert str(document_id) in response.json()["storage_key"]  # [LEFTOVER FIX]
+
+
 def local_mode(monkeypatch: pytest.MonkeyPatch, enabled: bool) -> None:  # [PRELAUNCH FIX]
     monkeypatch.setitem(settings.__dict__, "LOCAL_DEV_MODE", enabled)  # [PRELAUNCH FIX]
 

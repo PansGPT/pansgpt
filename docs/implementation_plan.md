@@ -2987,17 +2987,23 @@ To prevent mid-sentence answer truncation and eliminate vision OCR bottlenecks d
 # ---------------------------------------------------------------------------
 # Purpose-Driven Token Ceilings
 # ---------------------------------------------------------------------------
-TEXT_CHAT_MAX_TOKENS = 4096         # Full-depth conversational and essay explanations
-VISION_REPLY_MAX_TOKENS = 2048      # High-quality multimodal reasoning answer ceiling
-VISION_EXTRACTION_MAX_TOKENS = 768  # Dense slide / diagram background OCR extraction budget
+TEXT_CHAT_MAX_TOKENS = (  # [LEFTOVER FIX]
+    4096  # Full-depth conversational and essay explanations  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
+VISION_REPLY_MAX_TOKENS = (  # [LEFTOVER FIX]
+    2048  # High-quality multimodal reasoning answer ceiling  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
+VISION_EXTRACTION_MAX_TOKENS = (  # [LEFTOVER FIX]
+    768  # Dense slide / diagram background OCR extraction budget  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
 
 # ---------------------------------------------------------------------------
 # Dedicated Background OCR Extraction Cascade (Fastest OCR First for RAG)
 # ---------------------------------------------------------------------------
 VISION_EXTRACTION_CASCADE = [
     "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",  # OpenRouter (Ultra-fast MoE Omni)
-    "nvidia/nemotron-nano-12b-v2-vl:free",               # OpenRouter (Lightweight 12B VL)
-    "gemma-4-26b-a4b-it",                                  # Google AI Studio (Fallback)
+    "nvidia/nemotron-nano-12b-v2-vl:free",  # OpenRouter (Lightweight 12B VL)  # [LEFTOVER FIX]
+    "gemma-4-26b-a4b-it",  # Google AI Studio (Fallback)  # [LEFTOVER FIX]
 ]
 ```
 
@@ -4907,7 +4913,10 @@ Accessible during examination periods and within the Timetable Modal:
 The AI Engine injects **both** schedules into the system prompt:
 
 ```python
-async def get_cached_student_schedule(level: str, current_user: Optional[User] = None) -> str:
+async def get_cached_student_schedule(  # [LEFTOVER FIX]
+    level: str,  # [LEFTOVER FIX]
+    current_user: Optional[User] = None,  # [LEFTOVER FIX]
+) -> str:  # [LEFTOVER FIX]
     """
     Fetches university-scoped class timetable AND exam timetable,
     formatting both into an optimized structured context block.
@@ -6663,6 +6672,7 @@ import time, uuid, structlog
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
+
 class ObservabilityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         req_id = request.headers.get("X-Request-ID") or f"req_{uuid.uuid4().hex[:12]}"
@@ -6675,21 +6685,28 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             user = getattr(request.state, "user", None)
 
             logger = structlog.get_logger("http.access")
-            logger.info("http_request_finished",
+            logger.info(  # [LEFTOVER FIX]
+                "http_request_finished",  # [LEFTOVER FIX]
                 request_id=req_id,
                 method=request.method,
                 path=request.url.path,
                 status_code=response.status_code,
                 duration_ms=round(elapsed_ms, 2),
-                user_id=getattr(user, "id", "anonymous") if user else "anonymous"
+                user_id=getattr(user, "id", "anonymous")  # [LEFTOVER FIX]
+                if user  # [LEFTOVER FIX]
+                else "anonymous",  # [LEFTOVER FIX]
             )
             response.headers["X-Request-ID"] = req_id
             return response
         except Exception as exc:
             elapsed_ms = (time.perf_counter() - start_time) * 1000
-            structlog.get_logger("http.access").error("http_request_failed",
-                request_id=req_id, method=request.method, path=request.url.path,
-                duration_ms=round(elapsed_ms, 2), error=str(exc)
+            structlog.get_logger("http.access").error(  # [LEFTOVER FIX]
+                "http_request_failed",  # [LEFTOVER FIX]
+                request_id=req_id,  # [LEFTOVER FIX]
+                method=request.method,  # [LEFTOVER FIX]
+                path=request.url.path,  # [LEFTOVER FIX]
+                duration_ms=round(elapsed_ms, 2),  # [LEFTOVER FIX]
+                error=str(exc),  # [LEFTOVER FIX]
             )
             raise exc
 ```
@@ -6725,6 +6742,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
 ```python
 # backend/services/canary_guard.py
 import secrets
+
 
 class CanaryGuard:
     @staticmethod

@@ -518,6 +518,10 @@ async def test_worker_failure_status_transition():
             side_effect=RuntimeError("Simulated pipeline failure"),
         ),
         unittest.mock.patch("workers.tasks._claim_document", return_value=True),
+        unittest.mock.patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
     ):
         with pytest.raises(RuntimeError):
             await ingest_document_job(
@@ -547,6 +551,10 @@ async def test_worker_embedding_error_retry_and_failure():  # [DIM 1536]
             side_effect=EmbeddingError("Simulated embedding failure"),  # [DIM 1536]
         ),  # [DIM 1536]
         unittest.mock.patch("workers.tasks._claim_document", return_value=True),  # [DIM 1536]
+        unittest.mock.patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
         unittest.mock.patch(
             "workers.tasks._update_document_status", side_effect=mock_status
         ),  # [DIM 1536]

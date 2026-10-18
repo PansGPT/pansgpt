@@ -19,6 +19,7 @@ from app.core.dependencies import (
     UserContext,
     require_admin_or_super_admin,
 )
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.core.rate_limit import limiter
 
 logger = structlog.get_logger(__name__)
@@ -133,7 +134,7 @@ async def create_lecturer_invite(
         uni_uuid = uuid.UUID(target_uni_id)
     except ValueError as exc:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail=f"Invalid target university UUID format: {target_uni_id}",
         ) from exc
 
@@ -151,7 +152,7 @@ async def create_lecturer_invite(
     now = datetime.now(UTC)
     expires_at = now + timedelta(days=payload.expires_in_days)
     invite_token = secrets.token_hex(24)
-    invite_id = uuid.uuid4()
+    invite_id = uuid7()  # [LEFTOVER FIX]
     app_base_url = "https://pansgpt.com"
     invite_url = f"{app_base_url}/signup?invite={invite_token}"
 

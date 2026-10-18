@@ -17,6 +17,7 @@ import structlog
 
 from app.core.config import settings
 from app.core.database import get_db_connection
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.guard import policy_guard
 from app.engines.skills import SKILL_TOOL_DEFINITIONS, skill_engine
 from app.engines.thinking import ThinkingStreamParser, strip_thinking_tokens  # [CHAT FIX]
@@ -147,7 +148,7 @@ class MultiTierLlmEngine:
                 """
                 await conn.execute(
                     sql,
-                    uuid.uuid4(),
+                    uuid7(),  # [LEFTOVER FIX]
                     u_uuid,
                     uni_uuid,
                     db_provider,

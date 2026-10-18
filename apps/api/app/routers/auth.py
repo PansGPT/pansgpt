@@ -175,14 +175,14 @@ async def complete_onboarding(
     # 1. Mandatory Terms check
     if not payload.terms_accepted:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail="Mandatory agreement to Terms of Service and Privacy Policy is required to activate your account.",
         )
 
     # 2. Academic Level validation
     if payload.current_level not in VALID_ACADEMIC_LEVELS:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail=f"Invalid academic level '{payload.current_level}'. Must be one of: {', '.join(sorted(VALID_ACADEMIC_LEVELS))}.",
         )
 
@@ -191,7 +191,7 @@ async def complete_onboarding(
         uni_uuid = uuid.UUID(payload.university_id)
     except ValueError as exc:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail=f"Invalid university_id format: {payload.university_id}",
         ) from exc
 

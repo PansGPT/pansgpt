@@ -31,6 +31,7 @@ from app.core.authorization import (  # [TENANT FIX]
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
@@ -126,7 +127,7 @@ async def create_chat_session(
     """Creates a new chat session thread for the authenticated student."""
     user_id = str(current_user.id)  # [TENANT FIX]
     require_university(current_user)  # [TENANT FIX]
-    session_id = str(uuid.uuid4())
+    session_id = str(uuid7())  # [LEFTOVER FIX]
     doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None  # [TENANT FIX]
     if payload.document_id:  # [TENANT FIX]
         await check_document_scope(  # [TENANT FIX]
@@ -326,8 +327,8 @@ async def stream_chat_session(
             current_user,  # [TENANT FIX]
             active_only=True,  # [TENANT FIX]
         )  # [TENANT FIX]
-    user_message_id = str(uuid.uuid4())
-    assistant_message_id = str(uuid.uuid4())
+    user_message_id = str(uuid7())  # [LEFTOVER FIX]
+    assistant_message_id = str(uuid7())  # [LEFTOVER FIX]
 
     if not current_user.dev_bypass:
         await _deduct_user_credit(user_id, assistant_message_id)
@@ -592,7 +593,7 @@ async def transcribe_voice_audio(
 
     if len(audio_bytes) > settings.WHISPER_MAX_FILE_SIZE_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,  # [LEFTOVER FIX]
             detail=f"Audio file exceeds maximum allowed size of {settings.WHISPER_MAX_FILE_SIZE_BYTES // (1024 * 1024)}MB.",
         )
 

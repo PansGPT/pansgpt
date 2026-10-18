@@ -19,6 +19,7 @@ import fitz  # [IMAGES PHASE]
 import structlog
 
 from app.core.config import settings
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.chunker import DocumentChunkItem, semantic_chunker
 from app.engines.classifier import image_classifier
 from app.engines.embedder import gemini_embedder
@@ -114,7 +115,7 @@ class DocumentIngestionEngine:
 
         # Stage 7 Preparation: Hierarchy & Topic Segmentation
         segments: list[dict] = []
-        default_seg_id = str(uuid.uuid4())
+        default_seg_id = str(uuid7())  # [LEFTOVER FIX]
         segments.append(
             {
                 "id": default_seg_id,
@@ -150,7 +151,7 @@ class DocumentIngestionEngine:
                 # Check first lines for uppercase / title-case heading
                 if lines and len(lines[0]) < 80 and (lines[0].isupper() or lines[0].istitle()):
                     heading_title = lines[0]
-                    new_seg_id = str(uuid.uuid4())
+                    new_seg_id = str(uuid7())  # [LEFTOVER FIX]
                     segments.append(
                         {
                             "id": new_seg_id,
@@ -170,7 +171,7 @@ class DocumentIngestionEngine:
                         and active_seg_id == default_seg_id
                         and len(segments) > 1
                     ):
-                        cont_seg_id = str(uuid.uuid4())
+                        cont_seg_id = str(uuid7())  # [LEFTOVER FIX]
                         segments.append(
                             {
                                 "id": cont_seg_id,
@@ -185,7 +186,7 @@ class DocumentIngestionEngine:
                         active_seg_id = cont_seg_id
 
                 # Native text element
-                el_id = str(uuid.uuid4())
+                el_id = str(uuid7())  # [LEFTOVER FIX]
                 elements_records.append(
                     {
                         "id": el_id,
@@ -203,7 +204,7 @@ class DocumentIngestionEngine:
 
             # Stage 6 Native Tables
             for tab in page.tables:
-                el_id = str(uuid.uuid4())
+                el_id = str(uuid7())  # [LEFTOVER FIX]
                 elements_records.append(
                     {
                         "id": el_id,
@@ -296,7 +297,7 @@ class DocumentIngestionEngine:
                 vec = embeddings[idx]  # [EMBED FIX]
                 chunks_records.append(  # [EMBED FIX]
                     {  # [EMBED FIX]
-                        "id": str(uuid.uuid4()),  # [EMBED FIX]
+                        "id": str(uuid7()),  # [EMBED FIX] [LEFTOVER FIX]
                         "document_id": document_id,  # [EMBED FIX]
                         "segment_id": item.segment_id,  # [EMBED FIX]
                         "element_id": item.element_id,  # [EMBED FIX]
@@ -825,7 +826,7 @@ class DocumentIngestionEngine:
                 ctype = (
                     "text" if route == "text_scan" else ("table" if route == "table" else "diagram")
                 )  # [IMAGES PHASE]
-                el_id = uuid.uuid4()  # [IMAGES PHASE]
+                el_id = uuid7()  # [IMAGES PHASE] [LEFTOVER FIX]
                 seg_id = get_segment_id_for_page(page_num)  # [IMAGES PHASE]
 
                 await _ensure_db()  # [PHASE2 FIX]
@@ -874,7 +875,7 @@ class DocumentIngestionEngine:
                         )  # [IMAGES PHASE]
                         chunks_args = []  # [IMAGES PHASE]
                         for c_idx, chk in enumerate(chunk_items):  # [IMAGES PHASE]
-                            chk_uuid = uuid.uuid4()  # [IMAGES PHASE]
+                            chk_uuid = uuid7()  # [IMAGES PHASE] [LEFTOVER FIX]
                             chk_index = (max_chunk_idx or -1) + 1 + c_idx  # [IMAGES PHASE]
                             vec_str = (
                                 "[" + ",".join(str(x) for x in embeddings[c_idx]) + "]"

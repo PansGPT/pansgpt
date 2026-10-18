@@ -19,6 +19,10 @@ from app.engines.storage import build_converted_storage_key, storage_engine  # [
 logger = structlog.get_logger(__name__)
 
 
+class StoredUploadError(ValueError):  # [LEFTOVER FIX]
+    """A missing or oversized original cannot be processed or retried. [LEFTOVER FIX]"""
+
+
 async def _claim_document(document_id: str, worker_id: uuid.UUID | None = None) -> bool:
     """
     Attempts to atomically claim a document for ingestion using the DB RPC function.
@@ -215,6 +219,13 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
     heartbeat_task = asyncio.create_task(_heartbeat_loop(document_id, worker_id, interval=30))
 
     try:
+        stored_size = await storage_engine.get_object_size(storage_key)  # [LEFTOVER FIX]
+        if stored_size is None:  # [LEFTOVER FIX]
+            raise StoredUploadError("Original upload was not found in storage.")  # [LEFTOVER FIX]
+        if stored_size > settings.MAX_UPLOAD_MB * 1024 * 1024:  # [LEFTOVER FIX]
+            raise StoredUploadError(  # [LEFTOVER FIX]
+                f"Stored file exceeds the {settings.MAX_UPLOAD_MB} MB upload limit."  # [LEFTOVER FIX]
+            )  # [LEFTOVER FIX]
         # Determine if file is Office format (.doc, .docx, .ppt, .pptx)  # [OFFICE PDF FIX]
         ext = (
             storage_key.rsplit(".", 1)[-1].lower() if "." in storage_key else ""
@@ -361,6 +372,14 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
                         )  # [PHASE2 FIX]
 
         return success
+    except StoredUploadError as exc:  # [LEFTOVER FIX]
+        await _update_document_status(document_id, status="failed", progress=0)  # [LEFTOVER FIX]
+        logger.error(  # [LEFTOVER FIX]
+            "worker_rejected_stored_upload",  # [LEFTOVER FIX]
+            document_id=document_id,  # [LEFTOVER FIX]
+            error=str(exc),  # [LEFTOVER FIX]
+        )  # [LEFTOVER FIX]
+        raise  # [LEFTOVER FIX]
     except Exception as exc:
         logger.error(
             "worker_failed_ingest_job",

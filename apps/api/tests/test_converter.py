@@ -123,6 +123,10 @@ async def test_worker_converts_office_doc_and_ingests_converted_key(
     monkeypatch.setattr(
         "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
     )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(  # [LEFTOVER FIX]
+        "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+        unittest.mock.AsyncMock(return_value=1024),  # [LEFTOVER FIX]
+    )  # [LEFTOVER FIX]
     monkeypatch.setattr(
         "workers.tasks._update_document_status", unittest.mock.AsyncMock()
     )  # [OFFICE PDF FIX]
@@ -207,6 +211,10 @@ async def test_worker_conversion_error_does_not_fallback_to_original(
     monkeypatch.setattr(
         "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
     )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(  # [LEFTOVER FIX]
+        "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+        unittest.mock.AsyncMock(return_value=1024),  # [LEFTOVER FIX]
+    )  # [LEFTOVER FIX]
     monkeypatch.setattr(
         "workers.tasks._update_document_status", unittest.mock.AsyncMock()
     )  # [OFFICE PDF FIX]
@@ -266,6 +274,10 @@ async def test_worker_plain_pdf_ingested_unchanged(monkeypatch):  # [OFFICE PDF 
     monkeypatch.setattr(
         "workers.tasks._claim_document", unittest.mock.AsyncMock(return_value=True)
     )  # [OFFICE PDF FIX]
+    monkeypatch.setattr(  # [LEFTOVER FIX]
+        "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+        unittest.mock.AsyncMock(return_value=1024),  # [LEFTOVER FIX]
+    )  # [LEFTOVER FIX]
     monkeypatch.setattr(
         "workers.tasks._update_document_status", unittest.mock.AsyncMock()
     )  # [OFFICE PDF FIX]

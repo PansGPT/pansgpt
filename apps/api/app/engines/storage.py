@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 import aioboto3
 from botocore.config import Config
+from botocore.exceptions import ClientError  # [LEFTOVER FIX]
 
 from app.core.config import settings
 
@@ -166,6 +167,24 @@ class R2StorageEngine:
                 Body=data,
                 ContentType=content_type,
             )
+
+    async def get_object_size(self, key: str) -> int | None:  # [LEFTOVER FIX]
+        """Return stored bytes from HEAD; only a missing object returns None. [LEFTOVER FIX]"""
+        try:  # [LEFTOVER FIX]
+            async with self.get_client() as s3:  # [LEFTOVER FIX]
+                response = await s3.head_object(  # [LEFTOVER FIX]
+                    Bucket=settings.r2_bucket_name,  # [LEFTOVER FIX]
+                    Key=key,  # [LEFTOVER FIX]
+                )  # [LEFTOVER FIX]
+                return int(response["ContentLength"])  # [LEFTOVER FIX]
+        except ClientError as exc:  # [LEFTOVER FIX]
+            if exc.response.get("Error", {}).get("Code") in {  # [LEFTOVER FIX]
+                "404",  # [LEFTOVER FIX]
+                "NoSuchKey",  # [LEFTOVER FIX]
+                "NotFound",  # [LEFTOVER FIX]
+            }:  # [LEFTOVER FIX]
+                return None  # [LEFTOVER FIX]
+            raise  # [LEFTOVER FIX]
 
     async def object_exists(self, key: str) -> bool:
         """Check if an object exists in the active bucket."""
