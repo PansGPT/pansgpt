@@ -3,16 +3,19 @@
 # ==============================================================================
 import io
 import unittest.mock
+import uuid  # [CHAT FIX 2]
+from contextlib import asynccontextmanager  # [CHAT FIX 2]
 
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, Response  # [CHAT FIX 2]
 
 from app.engines.guard import STUDY_DISCLAIMER, policy_guard
 from app.engines.llm import MultiTierLlmEngine
 from app.engines.rag import rag_engine
 from app.engines.skills import skill_engine
-from app.engines.storage import DEFAULT_UNIVERSITY_ID
+from app.engines.storage import DEFAULT_UNIVERSITY_ID, storage_engine  # [CHAT FIX 2]
 from app.engines.tools import tool_engine
+from app.engines.web_search import web_search_engine  # [CHAT FIX 2]
 from tests.conftest import TenantTestState  # [TENANT FIX]
 
 
@@ -23,6 +26,11 @@ def mock_r2_artifact_upload(monkeypatch):
         "app.engines.skills.r2_storage.upload_bytes",
         unittest.mock.AsyncMock(return_value="https://mock-r2-url/test"),
     )
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        type(storage_engine),  # [CHAT FIX 2]
+        "is_configured",  # [CHAT FIX 2]
+        property(lambda _: True),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
 
 
 # ------------------------------------------------------------------------------
@@ -183,8 +191,28 @@ async def test_skill_chemical_structure():
 # 3. Core AI Tools Execution Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_tool_web_search_biomedical():
+async def test_tool_web_search_biomedical(monkeypatch: pytest.MonkeyPatch) -> None:  # [CHAT FIX 2]
     """Verify web search returns biomedical literature results."""
+    monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
+    monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        AsyncClient,  # [CHAT FIX 2]
+        "post",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            return_value=Response(  # [CHAT FIX 2]
+                200,  # [CHAT FIX 2]
+                json={  # [CHAT FIX 2]
+                    "results": [  # [CHAT FIX 2]
+                        {  # [CHAT FIX 2]
+                            "title": "Published research",  # [CHAT FIX 2]
+                            "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",  # [CHAT FIX 2]
+                            "content": "Real upstream result mocked for the unit test.",  # [CHAT FIX 2]
+                        }  # [CHAT FIX 2]
+                    ]  # [CHAT FIX 2]
+                },  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     result = await tool_engine.execute_web_search("Amoxicillin renal adjustment")
     assert "results" in result
     assert len(result["results"]) > 0
@@ -344,8 +372,30 @@ def test_candidate_reranking_scoring_and_ordering():
 # 9. Absence Policy & Autonomous Web Search Fallback Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_absence_policy_triggers_web_search_fallback():
+async def test_absence_policy_triggers_web_search_fallback(  # [CHAT FIX 2]
+    monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
+) -> None:  # [CHAT FIX 2]
     """Verify that low/empty syllabus confidence autonomously triggers web search fallback."""
+    monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
+    monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        AsyncClient,  # [CHAT FIX 2]
+        "post",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            return_value=Response(  # [CHAT FIX 2]
+                200,  # [CHAT FIX 2]
+                json={  # [CHAT FIX 2]
+                    "results": [  # [CHAT FIX 2]
+                        {  # [CHAT FIX 2]
+                            "title": "Published research",  # [CHAT FIX 2]
+                            "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",  # [CHAT FIX 2]
+                            "content": "Real upstream result mocked for the unit test.",  # [CHAT FIX 2]
+                        }  # [CHAT FIX 2]
+                    ]  # [CHAT FIX 2]
+                },  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     context, citations = await rag_engine.retrieve_context(
         query="What is the novel mechanism of Teclistamab in relapsed myeloma?",
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
@@ -401,10 +451,54 @@ async def test_multi_tier_failover_http_429_to_groq(monkeypatch):
 # 11. Multi-Tenant Cross-University Isolation Test
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_rag_cross_university_tenant_isolation():
+async def test_rag_cross_university_tenant_isolation(monkeypatch):  # [CHAT FIX 2]
     """Verify RAG retrieval cleanly enforces university tenant boundary."""
     uni_a = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
     uni_b = "01a07664-7a69-7ce0-ad6a-b219462cbde4"
+
+    from app.engines import rag as rag_module  # [CHAT FIX 2]
+
+    async def fetch(sql, *args):  # [CHAT FIX 2]
+        if "match_documents_hybrid" not in sql:  # [CHAT FIX 2]
+            return []  # [CHAT FIX 2]
+        assert "d.university_id = $5" in sql  # [CHAT FIX 2]
+        assert "d.status = 'active'" in sql and "d.deleted_at IS NULL" in sql  # [CHAT FIX 2]
+        return [  # [CHAT FIX 2]
+            dict(  # [CHAT FIX 2]
+                chunk_id=args[4],  # [CHAT FIX 2]
+                document_id=args[4],  # [CHAT FIX 2]
+                content=str(args[4]),  # [CHAT FIX 2]
+                page_start=1,  # [CHAT FIX 2]
+                page_end=1,  # [CHAT FIX 2]
+                chunk_index=0,  # [CHAT FIX 2]
+                dense_score=0.9,  # [CHAT FIX 2]
+                fts_score=0.5,  # [CHAT FIX 2]
+                trgm_score=0.5,  # [CHAT FIX 2]
+                rrf_score=0.04,  # [CHAT FIX 2]
+                segment_id=None,  # [CHAT FIX 2]
+                bounding_box=None,  # [CHAT FIX 2]
+                doc_title="Verified lecture",  # [CHAT FIX 2]
+                course_code="PCL 401",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ]  # [CHAT FIX 2]
+
+    @asynccontextmanager  # [CHAT FIX 2]
+    async def connection():  # [CHAT FIX 2]
+        yield unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            fetch=unittest.mock.AsyncMock(side_effect=fetch)  # [CHAT FIX 2]
+        )  # [CHAT FIX 2]
+
+    async def rerank(query, candidates, **kwargs):  # [CHAT FIX 2]
+        return [dict(row, rerank_score=0.9) for row in candidates]  # [CHAT FIX 2]
+
+    monkeypatch.setattr(rag_module, "get_db_connection", connection)  # [CHAT FIX 2]
+    monkeypatch.setattr(rag_module.settings, "ENABLE_QUERY_EXPANSION", False)  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        rag_module.gemini_embedder,  # [CHAT FIX 2]
+        "embed_batch",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(return_value=[[0.0] * 1536]),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
+    monkeypatch.setattr(rag_module.candidate_reranker, "rerank", rerank)  # [CHAT FIX 2]
 
     ctx_a, cits_a = await rag_engine.retrieve_context(
         query="Pharmacokinetics of digoxin in heart failure",
@@ -416,3 +510,5 @@ async def test_rag_cross_university_tenant_isolation():
     )
     assert ctx_a is not None
     assert ctx_b is not None
+    assert [citation.document_id for citation in cits_a] == [str(uuid.UUID(uni_a))]  # [CHAT FIX 2]
+    assert [citation.document_id for citation in cits_b] == [str(uuid.UUID(uni_b))]  # [CHAT FIX 2]

@@ -184,6 +184,7 @@ class Settings(BaseSettings):
     VISION_OVERALL_TIMEOUT_SECONDS: float = 25.0  # 25s global pipeline timeout
 
     # Web Search Quotas & Caching (Roadmap 6B.13 & Section 8)
+    WEB_SEARCH_ENABLED: bool = True  # [CHAT FIX 2]
     WEB_SEARCH_DAILY_LIMIT_STUDENT: int = 5
     WEB_SEARCH_DAILY_LIMIT_PRO: int = 25
     WEB_SEARCH_DAILY_LIMIT_STAFF: int = 50

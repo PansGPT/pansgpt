@@ -9,6 +9,7 @@ from typing import Any
 import pymupdf
 import structlog
 from docx import Document
+from fastapi import HTTPException  # [CHAT FIX 2]
 from pptx import Presentation
 
 from app.core.config import settings
@@ -242,6 +243,16 @@ class SkillExecutionEngine:
                     error=str(exc),
                     error_type=type(exc).__name__,
                 )
+                if not settings.local_dev_enabled:  # [CHAT FIX 2]
+                    raise HTTPException(  # [CHAT FIX 2]
+                        status_code=503,  # [CHAT FIX 2]
+                        detail="Artifact storage is unavailable.",  # [CHAT FIX 2]
+                    ) from exc  # [CHAT FIX 2]
+        if not settings.local_dev_enabled:  # [CHAT FIX 2]
+            raise HTTPException(  # [CHAT FIX 2]
+                status_code=503,  # [CHAT FIX 2]
+                detail="Artifact storage is unavailable.",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
         params = f"key={urllib.parse.quote(key, safe='')}"
         if title:
             params += f"&filename={urllib.parse.quote(title, safe='')}"

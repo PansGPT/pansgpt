@@ -471,7 +471,12 @@ class PolicyGuardEngine:
         )
 
         if rag_context and rag_context.strip():
-            base += f"\n--- VERIFIED COURSE MATERIAL CHUNKS ---\n{rag_context}\n--- END COURSE MATERIALS ---\n"
+            label = (  # [CHAT FIX 2]
+                "EXTERNAL WEB RESULTS — OUTSIDE THE LECTURE MATERIALS"  # [CHAT FIX 2]
+                if "Outside the lecture materials" in rag_context  # [CHAT FIX 2]
+                else "VERIFIED COURSE MATERIAL CHUNKS"  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+            base += f"\n--- {label} ---\n{rag_context}\n--- END SOURCES ---\n"  # [CHAT FIX 2]
         else:
             base += "\n(No specific lecture monograph chunks were retrieved for this question. Answer generally based on standard pharmacology principles while reminding the student to verify with their official course slides.)\n"
 

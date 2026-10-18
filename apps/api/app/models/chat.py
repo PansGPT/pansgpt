@@ -3,7 +3,7 @@
 # ==============================================================================
 
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal  # [CHAT FIX 2]
 
 from pydantic import BaseModel, Field
 
@@ -60,12 +60,14 @@ class BoundingBoxCoordinates(BaseModel):
 class CitationItem(BaseModel):
     """Verifiable clinical citation referencing course monograph chunk."""
 
-    chunk_id: str
-    document_id: str
+    chunk_id: str | None = None  # [CHAT FIX 2]
+    document_id: str | None = None  # [CHAT FIX 2]
+    source_type: Literal["document", "web"] = "document"  # [CHAT FIX 2]
+    url: str | None = None  # [CHAT FIX 2]
     title: str = "Course Material"
     course_code: str | None = None
-    page_start: int = 1
-    page_end: int = 1
+    page_start: int | None = 1  # [CHAT FIX 2]
+    page_end: int | None = 1  # [CHAT FIX 2]
     similarity: float = Field(default=0.5, ge=0.0, le=1.0)
     snippet: str
     dense_score: float | None = None

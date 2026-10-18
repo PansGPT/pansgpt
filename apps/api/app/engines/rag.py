@@ -7,6 +7,7 @@ import json
 import re
 import uuid
 from typing import Any
+from urllib.parse import urlsplit  # [CHAT FIX 2]
 
 import structlog
 
@@ -19,6 +20,9 @@ from app.engines.reranker import candidate_reranker
 from app.models.chat import CitationItem
 
 logger = structlog.get_logger(__name__)
+ABSENCE_NOTICE = (  # [CHAT FIX 2]
+    "This topic was not found in your course materials. No external web sources are available."  # [CHAT FIX 2]
+)  # [CHAT FIX 2]
 
 
 class RagRetrievalEngine:
@@ -65,6 +69,50 @@ class RagRetrievalEngine:
         Executes candidate re-ranking (heuristic pass for synchronous callers).
         """
         return candidate_reranker.fallback_heuristic_scoring(query, candidates)[:top_k]
+
+    @staticmethod  # [CHAT FIX 2]
+    async def _keyword_search(  # [CHAT FIX 2]
+        conn: Any,  # [CHAT FIX 2]
+        university: uuid.UUID,  # [CHAT FIX 2]
+        documents: list[uuid.UUID] | None,  # [CHAT FIX 2]
+        course: str | None,  # [CHAT FIX 2]
+        query: str,  # [CHAT FIX 2]
+        limit: int,  # [CHAT FIX 2]
+    ) -> list:  # [CHAT FIX 2]
+        sql = """ -- [CHAT FIX 2]
+            WITH eligible AS ( -- [CHAT FIX 2]
+                SELECT c.*, d.title AS doc_title, d.course_code -- [CHAT FIX 2]
+                FROM public.document_chunks c -- [CHAT FIX 2]
+                JOIN public.documents d ON d.id = c.document_id -- [CHAT FIX 2]
+                WHERE d.university_id = $1 AND d.status = 'active' AND d.deleted_at IS NULL -- [CHAT FIX 2]
+                  AND ($2::uuid[] IS NULL OR d.id = ANY($2)) -- [CHAT FIX 2]
+                  AND ($3::text IS NULL OR d.course_code = $3) -- [CHAT FIX 2]
+            ), fts AS ( -- [CHAT FIX 2]
+                SELECT id, ts_rank_cd(content_fts, websearch_to_tsquery('english', $4)) AS score, -- [CHAT FIX 2]
+                       row_number() OVER (ORDER BY ts_rank_cd(content_fts, websearch_to_tsquery('english', $4)) DESC) AS rank -- [CHAT FIX 2]
+                FROM eligible WHERE content_fts @@ websearch_to_tsquery('english', $4) -- [CHAT FIX 2]
+            ), trgm AS ( -- [CHAT FIX 2]
+                SELECT id, word_similarity($4, content) AS score, -- [CHAT FIX 2]
+                       row_number() OVER (ORDER BY word_similarity($4, content) DESC) AS rank -- [CHAT FIX 2]
+                FROM eligible WHERE word_similarity($4, content) > 0.35 -- [CHAT FIX 2]
+            ) -- [CHAT FIX 2]
+            SELECT e.id AS chunk_id, e.document_id, e.content, e.chunk_index, e.page_start, -- [CHAT FIX 2]
+                   e.page_end, e.segment_id, e.bounding_box, e.doc_title, e.course_code, -- [CHAT FIX 2]
+                   0.0::float8 AS dense_score, COALESCE(f.score, 0.0) AS fts_score, -- [CHAT FIX 2]
+                   COALESCE(t.score, 0.0) AS trgm_score, -- [CHAT FIX 2]
+                   (COALESCE(1.0 / (60 + f.rank), 0.0) + COALESCE(1.0 / (60 + t.rank), 0.0)) AS rrf_score -- [CHAT FIX 2]
+            FROM eligible e LEFT JOIN fts f ON f.id = e.id LEFT JOIN trgm t ON t.id = e.id -- [CHAT FIX 2]
+            WHERE f.id IS NOT NULL OR t.id IS NOT NULL -- [CHAT FIX 2]
+            ORDER BY rrf_score DESC LIMIT $5; -- [CHAT FIX 2]
+        """  # [CHAT FIX 2]
+        return await conn.fetch(  # [CHAT FIX 2]
+            sql,  # [CHAT FIX 2]
+            university,  # [CHAT FIX 2]
+            documents,  # [CHAT FIX 2]
+            course.upper().strip() if course else None,  # [CHAT FIX 2]
+            query,  # [CHAT FIX 2]
+            limit,  # [CHAT FIX 2]
+        )  # [CHAT FIX 2]
 
     async def retrieve_context(
         self,
@@ -170,9 +218,10 @@ class RagRetrievalEngine:
                 )  # [EMBED FIX]
                 embeddings.extend(hyde_embeddings)  # [EMBED FIX]
         except Exception as exc:  # [EMBED FIX]
-            logger.error(  # [EMBED FIX]
+            logger.warning(  # [CHAT FIX 2]
                 "query_batch_embedding_failed_dense_retrieval_skipped",  # [EMBED FIX]
-                error=str(exc),  # [EMBED FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX 2]
+                error=str(exc) or repr(exc),  # [CHAT FIX 2]
                 msg="Dense vector retrieval skipped due to embedding failure; proceeding with FTS/trigram only",  # [EMBED FIX]
             )  # [EMBED FIX]
             embeddings = []  # [EMBED FIX]
@@ -187,8 +236,8 @@ class RagRetrievalEngine:
 
         async with get_db_connection() as conn:
             try:
-                if not conn or not vector_str:
-                    raise ValueError("Database connection or vector unavailable for hybrid RAG")
+                if not conn:  # [CHAT FIX 2]
+                    raise ValueError("Database connection unavailable for RAG")  # [CHAT FIX 2]
 
                 # 4. Try Primary: 3-Pool Hybrid Search RPC (Vector + FTS + Trigram with RRF k=60)
                 filter_doc_uuids = [uuid.UUID(document_id)] if document_id else None
@@ -235,16 +284,28 @@ class RagRetrievalEngine:
                     ORDER BY m.rrf_score DESC;
                 """
                 try:
-                    rows = await conn.fetch(
-                        hybrid_sql,
-                        normalized_query,
-                        vector_str,
-                        float(match_threshold),
-                        int(match_count * 2),
-                        filter_uni_uuid,
-                        filter_doc_uuids,
-                    )
+                    if not vector_str:  # [CHAT FIX 2]
+                        rows = await self._keyword_search(  # [CHAT FIX 2]
+                            conn,  # [CHAT FIX 2]
+                            filter_uni_uuid,  # [CHAT FIX 2]
+                            filter_doc_uuids,  # [CHAT FIX 2]
+                            course_code,  # [CHAT FIX 2]
+                            normalized_query,  # [CHAT FIX 2]
+                            match_count * 2,  # [CHAT FIX 2]
+                        )  # [CHAT FIX 2]
+                    else:  # [CHAT FIX 2]
+                        rows = await conn.fetch(  # [CHAT FIX 2]
+                            hybrid_sql,  # [CHAT FIX 2]
+                            normalized_query,  # [CHAT FIX 2]
+                            vector_str,  # [CHAT FIX 2]
+                            float(match_threshold),  # [CHAT FIX 2]
+                            int(match_count * 2),  # [CHAT FIX 2]
+                            filter_uni_uuid,  # [CHAT FIX 2]
+                            filter_doc_uuids,  # [CHAT FIX 2]
+                        )  # [CHAT FIX 2]
                 except Exception as hybrid_exc:
+                    if not vector_str:  # [CHAT FIX 2]
+                        raise  # [CHAT FIX 2]
                     logger.info("match_documents_hybrid_rpc_fallback", error=str(hybrid_exc))
                     # Fallback to legacy RPC if hybrid RPC is not present
                     if document_id:
@@ -440,18 +501,27 @@ class RagRetrievalEngine:
                 is_empty_or_low = True
 
         if is_empty_or_low:
+            if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
+                return ABSENCE_NOTICE, []  # [CHAT FIX 2]
             logger.info("absence_policy_triggered_invoking_web_search", query=query)
             from app.engines.tools import tool_engine
 
             web_res = await tool_engine.execute_web_search(query=normalized_query, num_results=3)
-            web_results = web_res.get("results", [])
+            web_results = [  # [CHAT FIX 2]
+                item  # [CHAT FIX 2]
+                for item in web_res.get("results", [])  # [CHAT FIX 2]
+                if isinstance(item.get("url"), str)  # [CHAT FIX 2]
+                and urlsplit(item["url"]).scheme in {"https", "http"}  # [CHAT FIX 2]
+                and urlsplit(item["url"]).netloc  # [CHAT FIX 2]
+                and isinstance(item.get("content"), str)  # [CHAT FIX 2]
+                and item["content"].strip()  # [CHAT FIX 2]
+            ]  # [CHAT FIX 2]
             if web_results:
                 web_citations: list[CitationItem] = []
                 web_blocks: list[str] = [
                     "> [!NOTE]\n"
-                    "> **Absence Policy Notice**: This pharmacological topic was not found with sufficient confidence "
-                    "in your university syllabus lecture slides. Verified biomedical literature (PubMed / DailyMed / BNF) "
-                    "has been retrieved as an authoritative fallback to prevent hallucination."
+                    "> **Absence Policy Notice**: This topic was not found in your course materials. "  # [CHAT FIX 2]
+                    "**Outside the lecture materials**: the following real web search results are external references."  # [CHAT FIX 2]
                 ]
                 for w_idx, item in enumerate(web_results):
                     w_title = item.get("title", "Biomedical Literature Reference")
@@ -459,12 +529,12 @@ class RagRetrievalEngine:
                     w_url = item.get("url", "")
                     web_citations.append(
                         CitationItem(
-                            chunk_id=str(uuid.uuid4()),
-                            document_id=str(uuid.uuid4()),
+                            source_type="web",  # [CHAT FIX 2]
+                            url=w_url,  # [CHAT FIX 2]
                             title=w_title,
                             course_code="WEB-REF",
-                            page_start=1,
-                            page_end=1,
+                            page_start=None,  # [CHAT FIX 2]
+                            page_end=None,  # [CHAT FIX 2]
                             similarity=0.75,
                             snippet=w_snippet[:200] + "..." if len(w_snippet) > 200 else w_snippet,
                             dense_score=0.75,
@@ -476,11 +546,11 @@ class RagRetrievalEngine:
                         )
                     )
                     web_blocks.append(
-                        f"[External Verified Source {w_idx + 1}: {w_title}]({w_url})\n{w_snippet}"
+                        f"[External Web Source {w_idx + 1}: {w_title}]({w_url})\n{w_snippet}"  # [CHAT FIX 2]
                     )
                 return "\n\n".join(web_blocks), web_citations
 
-            return None, []
+            return None, []  # [CHAT FIX 2]
 
         # 7. Sibling or Full-Segment Expansion for Top Match
         if reranked_matches and (expand_full_segment or expand_siblings):

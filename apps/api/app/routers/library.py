@@ -467,7 +467,6 @@ async def update_document_metadata(
     document_id: str,
     payload: DocumentPatchRequest,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
-    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
@@ -476,9 +475,13 @@ async def update_document_metadata(
             detail="Database connection is not configured.",
         )
 
+    roles = set(auth_user.roles) | {auth_user.role}  # [CHAT FIX 2]
+    university_id = (  # [CHAT FIX 2]
+        None if "super_admin" in roles else require_university(auth_user)  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     updates = []
-    values = []
-    idx = 2
+    values = [university_id]  # [CHAT FIX 2]
+    idx = 3  # [CHAT FIX 2]
 
     for field, val in payload.model_dump(exclude_unset=True).items():
         if val is not None:
@@ -492,11 +495,16 @@ async def update_document_metadata(
             detail="No valid fields provided for update.",
         )
 
+    if payload.status == "active":  # [CHAT FIX 2]
+        updates.append(f"reviewed_by = ${idx}")  # [CHAT FIX 2]
+        values.append(auth_user.id)  # [CHAT FIX 2]
+        updates.append("reviewed_at = now()")  # [CHAT FIX 2]
     updates.append("updated_at = now()")
     query = f"""
         UPDATE public.documents
         SET {", ".join(updates)}
         WHERE id = $1 AND deleted_at IS NULL
+          AND ($2::uuid IS NULL OR university_id = $2) -- [CHAT FIX 2]
         RETURNING id;
     """
 
@@ -633,6 +641,11 @@ async def get_document_pdf_stream_url(
             pass
 
     if not storage_key:
+        if not settings.local_dev_enabled:  # [CHAT FIX 2]
+            raise HTTPException(  # [CHAT FIX 2]
+                status_code=503,  # [CHAT FIX 2]
+                detail="Document storage is unavailable.",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
         storage_key = (
             f"universities/{DEFAULT_UNIVERSITY_ID}/courses/general/original/{document_id}.pdf"
         )
@@ -640,9 +653,21 @@ async def get_document_pdf_stream_url(
     if storage_engine.is_configured:
         try:
             url = await storage_engine.generate_presigned_get_url(storage_key, expires_in=900)
-        except Exception:
+            if not url:  # [CHAT FIX 2]
+                raise OSError("Storage returned no download link.")  # [CHAT FIX 2]
+        except Exception as exc:  # [CHAT FIX 2]
+            if not settings.local_dev_enabled:  # [CHAT FIX 2]
+                raise HTTPException(  # [CHAT FIX 2]
+                    status_code=503,  # [CHAT FIX 2]
+                    detail="Document storage is unavailable.",  # [CHAT FIX 2]
+                ) from exc  # [CHAT FIX 2]
             url = f"https://cdn.pansgpt.com/{storage_key}?sig=mock_token"
     else:
+        if not settings.local_dev_enabled:  # [CHAT FIX 2]
+            raise HTTPException(  # [CHAT FIX 2]
+                status_code=503,  # [CHAT FIX 2]
+                detail="Document storage is unavailable.",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
         url = f"https://cdn.pansgpt.com/{storage_key}?sig=mock_dev_token"
 
     return PdfUrlResponse(

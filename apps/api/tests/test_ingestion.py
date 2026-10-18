@@ -401,9 +401,22 @@ async def test_confirm_upload_endpoints(  # [TENANT FIX]
 async def test_pdf_stream_url_endpoint(  # [TENANT FIX]
     client: AsyncClient,  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
+    monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
 ) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/{id}/pdf-url returns valid streaming URL."""
     test_id = "018f3a30-0001-7000-8000-000000000001"
+    from app.engines.storage import storage_engine  # [CHAT FIX 2]
+
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        type(storage_engine),  # [CHAT FIX 2]
+        "is_configured",  # [CHAT FIX 2]
+        property(lambda _: True),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        storage_engine,  # [CHAT FIX 2]
+        "generate_presigned_get_url",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(return_value="https://storage.invalid/verified"),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     response = await client.get(f"/api/v1/library/{test_id}/pdf-url")
     assert response.status_code == 200
     data = response.json()

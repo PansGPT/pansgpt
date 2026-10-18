@@ -35,7 +35,7 @@ from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
-from app.engines.rag import rag_engine
+from app.engines.rag import ABSENCE_NOTICE, rag_engine  # [CHAT FIX 2]
 from app.engines.thinking import strip_thinking_tokens
 from app.models.chat import (
     ChatMessageResponse,
@@ -341,7 +341,10 @@ async def stream_chat_session(
         user_id,  # [TENANT FIX]
     )  # [TENANT FIX]
 
+    model_started = False  # [CHAT FIX 2]
+
     async def sse_event_generator() -> AsyncGenerator[str, None]:
+        nonlocal model_started  # [CHAT FIX 2]
         last_heartbeat = time.time()
 
         # 1. Yield init event
@@ -444,6 +447,18 @@ async def stream_chat_session(
             yield f"event: citations\ndata: {json.dumps(cits_data)}\n\n"
 
         # 5. Build Clinical System Prompt Grounded in Course Chunks
+        if (  # [CHAT FIX 2]
+            classification.requires_rag  # [CHAT FIX 2]
+            and not citations  # [CHAT FIX 2]
+            and (  # [CHAT FIX 2]
+                not rag_context  # [CHAT FIX 2]
+                or "not found in your course materials" in rag_context  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ):  # [CHAT FIX 2]
+            rag_context = ABSENCE_NOTICE  # [CHAT FIX 2]
+            yield f"event: text_chunk\ndata: {json.dumps({'token': rag_context, 'delta': rag_context, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
+            yield f"event: done\ndata: {json.dumps({'full_text': rag_context, 'citations_count': 0, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
+            return  # [CHAT FIX 2]
         system_prompt = policy_guard.build_system_prompt(rag_context)
 
         # 6. Stream tokens and agentic events from Multi-tier LLM Engine with full history
@@ -452,6 +467,7 @@ async def stream_chat_session(
         last_provider = "google"
 
         try:
+            model_started = True  # [CHAT FIX 2]
             async for event_type, data, provider in llm_engine.stream_agentic_chat(
                 system_prompt=system_prompt,
                 user_message=payload.message,
@@ -491,8 +507,10 @@ async def stream_chat_session(
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     yield f"event: artifact_ready\ndata: {json.dumps(dumped)}\n\n"
                 elif event_type == "error":  # [CHAT FIX]
-                    yield f"event: error\ndata: {json.dumps(data)}\n\n"  # [CHAT FIX]
-                    return  # [CHAT FIX]
+                    yield f"event: error\ndata: {json.dumps(data)}\n\n"  # [CHAT FIX 2]
+                    if data.get("code"):  # [CHAT FIX 2]
+                        yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens), 'citations_count': len(citations), 'provider': provider})}\n\n"  # [CHAT FIX 2]
+                    return  # [CHAT FIX 2]
 
         except Exception as exc:
             logger.error("stream_chat_unhandled_failure", error=str(exc))
@@ -548,8 +566,12 @@ async def stream_chat_session(
                 error_type=type(exc).__name__,  # [CHAT FIX]
                 error=repr(exc),  # [CHAT FIX]
             )  # [CHAT FIX]
-            message = {"error": "The answer timed out. Please try again."}  # [CHAT FIX]
+            message = {"error": "The answer timed out. Please try again."}  # [CHAT FIX 2]
+            if model_started:  # [CHAT FIX 2]
+                message.update(code="TIMEOUT", retryable=True)  # [CHAT FIX 2]
             yield f"event: error\ndata: {json.dumps(message)}\n\n"  # [CHAT FIX]
+            if model_started:  # [CHAT FIX 2]
+                yield f"event: done\ndata: {json.dumps({'full_text': '', 'citations_count': 0})}\n\n"  # [CHAT FIX 2]
 
     return StreamingResponse(
         bounded_sse_events(),  # [CHAT FIX]
