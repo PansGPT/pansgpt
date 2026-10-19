@@ -1,3 +1,5 @@
+import asyncio  # [CHAT FIX 2]
+import socket  # [CHAT FIX 2]
 import uuid  # [TENANT FIX]
 from collections.abc import AsyncIterator, Iterator  # [TENANT FIX]
 from contextlib import asynccontextmanager  # [TENANT FIX]
@@ -7,20 +9,91 @@ from unittest.mock import AsyncMock, MagicMock  # [TENANT FIX]
 import pytest
 from httpx import ASGITransport, AsyncClient
 
+from tests import offline_bootstrap as _offline_bootstrap  # noqa: F401  # [CHAT FIX 2]
+
+# isort: split
+# [CHAT FIX 2] The bootstrap must run before any app singleton reads .env.
 from app.core.config import settings  # [EMBED FIX]
 from app.core.dependencies import UserContext, get_current_user  # [TENANT FIX]
 from app.engines.llm import llm_engine
+from app.engines.query_expansion import query_expansion_engine  # [CHAT FIX 2]
+from app.engines.reranker import CandidateReranker  # [CHAT FIX 2]
 from app.main import app
 
 
 @pytest.fixture(autouse=True)
-def mock_offline_llm_defaults(monkeypatch):
+def mock_offline_llm_defaults(
+    monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
+) -> None:
     """Ensure all test cases run fast and offline by default without network calls."""
+    if request.node.get_closest_marker("live") and request.config.getoption(
+        "--allow-live-services"
+    ):
+        return
     monkeypatch.setattr(settings, "EMBEDDER_FAKE_MODE", True)  # [EMBED FIX]
     monkeypatch.setattr(settings, "VISION_FAKE_MODE", True)  # [IMAGE FIX]
+    for field in ("GEMINI_API_KEY", "GROQ_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):
+        monkeypatch.setattr(settings, field, "test-mock-key")  # [CHAT FIX 2]
     monkeypatch.setattr(llm_engine, "gemini_key", "test-mock-key")
     monkeypatch.setattr(llm_engine, "groq_key", "test-mock-key")
     monkeypatch.setattr(llm_engine, "openrouter_key", "test-mock-key")
+    monkeypatch.setattr(query_expansion_engine, "gemini_key", "test-mock-key")  # [CHAT FIX 2]
+    monkeypatch.setattr(query_expansion_engine, "groq_key", "test-mock-key")
+    # [CHAT FIX 2] Local ONNX inference also consumes AI budget; unit tests use heuristics.
+    monkeypatch.setattr(CandidateReranker, "_get_flashrank_client", lambda self: None)
+    monkeypatch.setattr(settings, "COHERE_API_KEY", None)
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:  # [CHAT FIX 2]
+    parser.addoption(
+        "--allow-live-services",
+        action="store_true",
+        default=False,
+        help="Allow network only for explicitly marked live tests; may use external quotas.",
+    )
+
+
+@pytest.fixture(autouse=True)  # [CHAT FIX 2]
+def block_unit_test_network(
+    monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
+) -> None:
+    """Tests must mock services rather than reaching credentials loaded from .env."""
+    if request.node.get_closest_marker("live") and request.config.getoption(
+        "--allow-live-services"
+    ):
+        return
+    original_connect = socket.socket.connect
+
+    def connect(sock: socket.socket, address: object) -> None:
+        # Windows' asyncio wakeup sockets are created through socket.socketpair.
+        # They need a local connection; every service connection is denied.
+        import sys
+
+        frame = sys._getframe(1)
+        if (
+            frame.f_code.co_name in {"socketpair", "_fallback_socketpair"}
+            and frame.f_globals.get("__name__") == "socket"
+        ):
+            return original_connect(sock, address)
+        raise OSError("Network disabled in unit tests; mock the service explicitly.")
+
+    monkeypatch.setattr(socket.socket, "connect", connect)
+    monkeypatch.setattr(socket.socket, "connect_ex", connect)
+
+    # [CHAT FIX 2] Windows Proactor uses native ConnectEx, bypassing socket.connect.
+    async def async_connect(*args: object, **kwargs: object) -> None:
+        raise OSError("Network disabled in unit tests; mock the service explicitly.")
+
+    monkeypatch.setattr(asyncio.BaseEventLoop, "create_connection", async_connect)
+    from asyncio import proactor_events, selector_events
+
+    monkeypatch.setattr(proactor_events.BaseProactorEventLoop, "sock_connect", async_connect)
+    monkeypatch.setattr(selector_events.BaseSelectorEventLoop, "sock_connect", async_connect)
+
+    def deny_dns(*args: object, **kwargs: object) -> None:
+        raise OSError("Network disabled in unit tests; mock the service explicitly.")
+
+    monkeypatch.setattr(socket, "getaddrinfo", deny_dns)
 
 
 @pytest.fixture

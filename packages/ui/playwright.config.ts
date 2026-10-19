@@ -16,9 +16,12 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: compiled ? "pnpm preview:serve" : "pnpm preview:dev",
+    // [CHAT FIX 2] Own Vite directly so Windows cleanup can stop the actual server.
+    command: compiled
+      ? "node node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4174 --strictPort"
+      : "node node_modules/vite/bin/vite.js",
     url: baseURL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false, // [CHAT FIX 2] Do not test against an unrelated stale preview.
     timeout: 60000,
   },
   reporter: "list",

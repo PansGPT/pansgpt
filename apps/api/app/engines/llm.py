@@ -119,6 +119,40 @@ class MultiTierLlmEngine:
             return False
         return True
 
+    @staticmethod
+    def _log_provider_usage(provider: str, model: str, usage: Any) -> None:  # [CHAT FIX 2]
+        """Log reported token counts only; absent provider measurements remain unknown."""
+        if usage is None:
+            return
+
+        def field(value: Any, name: str) -> Any:
+            return value.get(name) if isinstance(value, dict) else getattr(value, name, None)
+
+        def count(*names: str) -> int | None:
+            for name in names:
+                value = field(usage, name)
+                if type(value) is int and value >= 0:
+                    return value
+            return None
+
+        thinking = count("thoughts_token_count")
+        details = field(usage, "completion_tokens_details")
+        if thinking is None and details is not None:
+            reported = field(details, "reasoning_tokens")
+            if type(reported) is int and reported >= 0:
+                thinking = reported
+        prompt = count("prompt_token_count", "prompt_tokens")
+        completion = count("candidates_token_count", "completion_tokens")
+        if any(value is not None for value in (prompt, completion, thinking)):
+            logger.info(
+                "chat_provider_usage",
+                provider=provider,
+                model=model,
+                prompt_tokens=prompt,
+                completion_tokens=completion,
+                thinking_tokens=thinking,
+            )
+
     async def _record_telemetry(
         self,
         provider: str,
@@ -240,6 +274,9 @@ class MultiTierLlmEngine:
                 raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
 
             calls = []
+            self._log_provider_usage(
+                "google", model_name, getattr(resp, "usage_metadata", None)
+            )  # [CHAT FIX 2]
             if hasattr(resp, "function_calls") and resp.function_calls:
                 for fc in resp.function_calls:
                     calls.append(
@@ -308,6 +345,9 @@ class MultiTierLlmEngine:
         first_chunk_text: str | None = None
         try:
             async for _first in response_stream:
+                self._log_provider_usage(
+                    "google", model_name, getattr(_first, "usage_metadata", None)
+                )  # [CHAT FIX 2]
                 first_chunk_text = _first.text if _first.text else ""
                 break  # Only the first chunk; rest stays buffered in the stream
         except GoogleServerError as gse:
@@ -323,6 +363,9 @@ class MultiTierLlmEngine:
             # gracefully (re-raising would break the open SSE connection).
             try:
                 async for chunk in response_stream:
+                    self._log_provider_usage(
+                        "google", model_name, getattr(chunk, "usage_metadata", None)
+                    )  # [CHAT FIX 2]
                     if chunk.text:
                         yield chunk.text
             except GoogleServerError as gse:
@@ -411,6 +454,9 @@ class MultiTierLlmEngine:
                     raise
 
             choice = resp.choices[0]
+            self._log_provider_usage(
+                "groq", self.groq_model, getattr(resp, "usage", None)
+            )  # [CHAT FIX 2]
             calls = []
             if choice.message.tool_calls:
                 for tc in choice.message.tool_calls:
@@ -483,6 +529,10 @@ class MultiTierLlmEngine:
 
         async def _stream_gen():
             async for chunk in stream:
+                usage = getattr(chunk, "usage", None)  # [CHAT FIX 2]
+                if usage is None:
+                    usage = getattr(getattr(chunk, "x_groq", None), "usage", None)
+                self._log_provider_usage("groq", self.groq_model, usage)
                 delta = chunk.choices[0].delta if chunk.choices else None
                 if delta:
                     # Stream reasoning chunks
@@ -529,6 +579,9 @@ class MultiTierLlmEngine:
             if resp.status_code != 200:
                 raise ValueError(f"OpenRouter returned HTTP {resp.status_code}: {resp.text}")
             data = resp.json()
+            self._log_provider_usage(
+                "openrouter", self.openrouter_model, data.get("usage")
+            )  # [CHAT FIX 2]
             return data["choices"][0]["message"]["content"]
 
     def classify_intent(self, query: str) -> tuple[str | None, dict[str, Any] | None]:

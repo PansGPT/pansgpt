@@ -2,6 +2,7 @@ import uuid  # [CHAT FIX 2]
 from collections.abc import AsyncIterator  # [CHAT FIX 2]
 from contextlib import asynccontextmanager  # [CHAT FIX 2]
 from types import SimpleNamespace  # [CHAT FIX 2]
+from typing import Any  # [CHAT FIX 2]
 from unittest.mock import AsyncMock, MagicMock  # [CHAT FIX 2]
 
 import pytest  # [CHAT FIX 2]
@@ -46,7 +47,7 @@ def retrieval_probe(monkeypatch: pytest.MonkeyPatch) -> SimpleNamespace:  # [CHA
         web=AsyncMock(return_value={"results": []}),  # [CHAT FIX 2]
     )  # [CHAT FIX 2]
 
-    async def fetch(sql: str, *args: object) -> list[dict]:  # [CHAT FIX 2]
+    async def fetch(sql: str, *args: object) -> list[dict[str, Any]]:  # [CHAT FIX 2]
         state.queries.append((sql, args))  # [CHAT FIX 2]
         if "websearch_to_tsquery" in sql and "word_similarity" in sql:  # [CHAT FIX 2]
             return state.rows  # [CHAT FIX 2]
@@ -60,9 +61,9 @@ def retrieval_probe(monkeypatch: pytest.MonkeyPatch) -> SimpleNamespace:  # [CHA
 
     async def rerank(  # [CHAT FIX 2]
         query: str,  # [CHAT FIX 2]
-        candidates: list[dict],  # [CHAT FIX 2]
+        candidates: list[dict[str, Any]],  # [CHAT FIX 2]
         **kwargs: object,  # [CHAT FIX 2]
-    ) -> list[dict]:  # [CHAT FIX 2]
+    ) -> list[dict[str, Any]]:  # [CHAT FIX 2]
         return [  # [CHAT FIX 2]
             dict(item, confidence="HIGH", rerank_score=0.9)  # [CHAT FIX 2]
             for item in candidates  # [CHAT FIX 2]

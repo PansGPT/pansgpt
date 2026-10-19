@@ -3,7 +3,7 @@ name = "pansgpt-api"
 version = "0.1.0"
 description = "PansGPT 2.0 Core Backend Engine (FastAPI)"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12" # [CHAT FIX 2]
 dependencies = [
     "fastapi>=0.115.8",
     "uvicorn[standard]>=0.34.0",
@@ -40,7 +40,7 @@ dev = [
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "py312" # [CHAT FIX 2]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP"]

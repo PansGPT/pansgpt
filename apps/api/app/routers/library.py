@@ -177,53 +177,75 @@ async def confirm_document_upload(
 ):
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
-    Transitions status to 'pending' and enqueues the background ingestion job via ARQ.
+    Active documents enter ingestion; pending reviews wait for verified approval. [CHAT FIX 2]
     """
     storage_key = None
+    conn = None  # [CHAT FIX 2]
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
             row = await conn.fetchrow(
-                "SELECT storage_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",
+                "SELECT storage_key, status FROM public.documents "  # [CHAT FIX 2]
+                "WHERE id = $1 AND deleted_at IS NULL;",
                 uuid.UUID(document_id),
             )
             if not row:
-                await conn.close()
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Document {document_id} not found",
                 )
             storage_key = row["storage_key"]
 
-            await conn.execute(
+            if row["status"] == "pending_review":  # [CHAT FIX 2]
+                return ConfirmUploadResponse(
+                    document_id=document_id,
+                    mode="awaiting_approval",
+                    message="Upload received. Processing will start after approval.",
+                )
+            if row["status"] != "active":  # [CHAT FIX 2]
+                raise HTTPException(
+                    status_code=409, detail="Only approved documents can be processed."
+                )
+
+            confirmed = await conn.fetchrow(  # [CHAT FIX 2]
                 """
                 UPDATE public.documents
                 SET embedding_status = 'pending', updated_at = now()
-                WHERE id = $1;
+                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL
+                RETURNING storage_key; -- [CHAT FIX 2]
                 """,
                 uuid.UUID(document_id),
             )
-            await conn.close()
+            if not confirmed:
+                raise HTTPException(
+                    status_code=409, detail="Document approval changed. Retry confirmation."
+                )
         except HTTPException:
             raise
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Database connection error: {e!s}",
-            )
+                detail="Unable to confirm the document upload.",  # [CHAT FIX 2]
+            ) from e
+        finally:  # [CHAT FIX 2]
+            if conn is not None:
+                await conn.close()
 
     if not storage_key:
-        storage_key = (
-            f"universities/{DEFAULT_UNIVERSITY_ID}/courses/general/original/{document_id}.pdf"
-        )
+        raise HTTPException(
+            status_code=503, detail="Document storage metadata is unavailable."
+        )  # [CHAT FIX 2]
 
     job_id = await enqueue_ingestion_job(document_id, storage_key)
-    mode = "queued" if job_id else ("sync" if settings.DATABASE_URL else "no_db")
+    if not job_id:  # [CHAT FIX 2] There is no synchronous fallback when the queue fails.
+        raise HTTPException(
+            status_code=503, detail="Processing could not be queued. Retry confirmation."
+        )
 
     return ConfirmUploadResponse(
         document_id=document_id,
         job_id=job_id,
-        mode=mode,
+        mode="queued",
         message="Document upload confirmed. Background processing pipeline dispatched.",
     )
 
@@ -505,7 +527,7 @@ async def update_document_metadata(
         SET {", ".join(updates)}
         WHERE id = $1 AND deleted_at IS NULL
           AND ($2::uuid IS NULL OR university_id = $2) -- [CHAT FIX 2]
-        RETURNING id;
+        RETURNING id, storage_key, embedding_status; -- [CHAT FIX 2]
     """
 
     try:
@@ -525,6 +547,22 @@ async def update_document_metadata(
             detail=f"Database update error: {e!s}",
         )
 
+    # [CHAT FIX 2] Approval may precede upload completion; confirmation queues it later.
+    if payload.status == "active" and res.get("embedding_status") == "pending":
+        try:  # [CHAT FIX 2] A missing upload may wait; a storage outage must be reported.
+            stored_size = await storage_engine.get_object_size(res["storage_key"])
+        except Exception as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="Document approved, but upload storage could not be checked. Please retry approval.",
+            ) from exc
+        if stored_size is not None:
+            job_id = await enqueue_ingestion_job(document_id, res["storage_key"])
+            if not job_id:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Document approved, but processing could not be queued. Please retry approval.",
+                )
     return await get_single_document(document_id, auth_user=auth_user)  # [TENANT FIX]
 
 

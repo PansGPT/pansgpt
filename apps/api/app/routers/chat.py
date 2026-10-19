@@ -343,6 +343,34 @@ async def stream_chat_session(
 
     model_started = False  # [CHAT FIX 2]
 
+    async def save_assistant_message(  # [CHAT FIX 2]
+        text: str, citations: list[CitationItem], thinking: str | None = None
+    ) -> None:
+        """Persist retrieval notices and model answers through the same path."""
+        async with get_db_connection() as conn:
+            if conn:
+                try:
+                    await conn.execute(
+                        """
+                        INSERT INTO public.chat_messages (
+                            id, session_id, parent_message_id, role, content, citations, thinking_text
+                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
+                        ON CONFLICT (id) DO NOTHING;
+                        """,
+                        uuid.UUID(assistant_message_id),
+                        uuid.UUID(session_id),
+                        uuid.UUID(user_message_id),
+                        text,
+                        json.dumps([c.model_dump() for c in citations]) if citations else None,
+                        thinking,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "save_assistant_message_failed",
+                        error_type=type(exc).__name__,
+                        error=repr(exc),
+                    )
+
     async def sse_event_generator() -> AsyncGenerator[str, None]:
         nonlocal model_started  # [CHAT FIX 2]
         last_heartbeat = time.time()
@@ -457,6 +485,7 @@ async def stream_chat_session(
         ):  # [CHAT FIX 2]
             rag_context = ABSENCE_NOTICE  # [CHAT FIX 2]
             yield f"event: text_chunk\ndata: {json.dumps({'token': rag_context, 'delta': rag_context, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
+            await save_assistant_message(rag_context, [])  # [CHAT FIX 2]
             yield f"event: done\ndata: {json.dumps({'full_text': rag_context, 'citations_count': 0, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
             return  # [CHAT FIX 2]
         system_prompt = policy_guard.build_system_prompt(rag_context)
@@ -527,28 +556,9 @@ async def stream_chat_session(
         full_thinking_text = "".join(collected_thinking).strip() or None
 
         # 7. Asynchronously save assistant message to DB
-        async with get_db_connection() as conn:
-            if conn:
-                try:
-                    cits_json = (
-                        json.dumps([c.model_dump() for c in citations]) if citations else None
-                    )
-                    await conn.execute(
-                        """
-                        INSERT INTO public.chat_messages (
-                            id, session_id, parent_message_id, role, content, citations, thinking_text
-                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
-                        ON CONFLICT (id) DO NOTHING;
-                        """,
-                        uuid.UUID(assistant_message_id),
-                        uuid.UUID(session_id),
-                        uuid.UUID(user_message_id),
-                        full_response_text,
-                        cits_json,
-                        full_thinking_text,
-                    )
-                except Exception as exc:
-                    logger.warning("save_assistant_message_failed", error=str(exc))
+        await save_assistant_message(
+            full_response_text, citations, full_thinking_text
+        )  # [CHAT FIX 2]
 
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"

@@ -35,7 +35,7 @@ export const AI_MODELS = {
   EMBEDDING: "gemini-embedding-2", // [EMBED FIX]
   EMBEDDING_DIMENSIONS: 1536, // [DIM 1536]
   GROQ_FALLBACK: "openai/gpt-oss-120b",
-  OPENROUTER_FALLBACK: "google/gemma-2-27b-it",
+  OPENROUTER_FALLBACK: "nvidia/nemotron-3-ultra-550b-a55b:free", // [CHAT FIX 2] Match backend metadata.
 } as const;
 
 /**

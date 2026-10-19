@@ -99,7 +99,7 @@ class DocumentDetailResponse(BaseModel):
 class ConfirmUploadResponse(BaseModel):
     document_id: str
     job_id: str | None = None
-    mode: Literal["queued", "sync", "no_db"]
+    mode: Literal["queued", "sync", "no_db", "awaiting_approval"]  # [CHAT FIX 2]
     message: str
 
 
