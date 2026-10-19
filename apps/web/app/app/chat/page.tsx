@@ -81,9 +81,7 @@ export default function ChatPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-          "X-User-Id": userId,
-          "X-University-Id": profile?.university_id || "",
+          Authorization: `Bearer ${session.access_token}`, // [DEPS FIX]
         },
         body: JSON.stringify({
           title: "Pharmacology Study Session",
@@ -99,7 +97,7 @@ export default function ChatPage() {
       console.error("Failed to create chat session", err);
     }
     return null;
-  }, [sessionId, session, userId, profile]);
+  }, [sessionId, session]); // [DEPS FIX]
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -150,9 +148,7 @@ export default function ChatPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token || ""}`,
-          "X-User-Id": userId,
-          "X-University-Id": profile?.university_id || "",
+          Authorization: `Bearer ${session?.access_token || ""}`, // [DEPS FIX]
         },
         body: JSON.stringify({
           message: prompt,

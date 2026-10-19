@@ -6,9 +6,9 @@
  * Standard HTTP header keys used across Web, Mobile, Desktop and API.
  */
 export const AUTH_HEADERS = {
+  // [DEPS FIX] Verified login supplies caller identity.
   API_KEY: "x-api-key",
   CLIENT_ID: "x-client-id",
-  UNIVERSITY_ID: "x-university-id",
   REQUEST_ID: "x-request-id",
 } as const;
 
