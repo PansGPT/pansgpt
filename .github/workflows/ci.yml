@@ -89,6 +89,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RLS_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      WORKER_TEST_REDIS_URL: redis://127.0.0.1:6379
+    services:
+      worker-redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -110,7 +121,7 @@ jobs:
           pnpm exec supabase db reset --local
       - name: Execute database RLS and privilege contracts
         working-directory: apps/api
-        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py --allow-live-services -q
+        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py tests/test_worker_verification_live.py --allow-live-services -q
       - name: Compare committed contracts with the migrated catalog
         run: uv run --project apps/api python tooling/check-db-contracts.py
       - name: Generate actual database types
