@@ -183,3 +183,14 @@ async def test_web_search_quota_stops_at_the_database_limit(
         )
         == 2
     )
+
+
+async def test_hybrid_retrieval_runs_for_the_service_role_without_a_tenant_leak(
+    database: asyncpg.Connection,
+) -> None:
+    await database.execute("SET LOCAL ROLE service_role")
+    rows = await database.fetch(
+        "SELECT * FROM public.match_documents_hybrid('migration', $1::vector)",
+        "[" + ",".join(["0.01"] * 1536) + "]",
+    )
+    assert rows == []

@@ -1,4 +1,7 @@
 BEGIN;
+-- Hosted postgres is not a superuser. Load pg_trgm before PostgreSQL validates
+-- the function's SET clause; an unloaded extension GUC is only a placeholder.
+SELECT public.word_similarity('migration', 'migration');
 CREATE OR REPLACE FUNCTION public.match_documents_hybrid( -- [DIM 1536]
     query_text text, -- [DIM 1536]
     query_embedding vector(1536), -- [DIM 1536]
