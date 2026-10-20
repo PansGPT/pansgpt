@@ -25,8 +25,8 @@ The user supplied the connected agent's receipt confirming that the database ses
 
 ## New staging deployment preparation - pending synchronization
 
-- API deployment and remote worker execution are now authorized. Render integration was discovered but is not yet confirmed installed/connected. Worker host selection is pending.
+- API deployment and remote worker execution are now authorized. Render integration was discovered but is not yet confirmed installed/connected. The user selected GitHub Actions staging checks now and Oracle hosting later; see the worker follow-up below.
 - Added infrastructure-only hosting health while preserving full privacy-blocked readiness; dependency failures remain failures and independent probes run concurrently.
-- Local API suite: 405 passed, 12 skipped. Added Docker/LibreOffice image verification to CI; actual CI/deployment results must be recorded before marking those steps verified.
-- Read-only checks reached Postgres, Redis and R2. No live AI calls and no hosted schema/data changes occurred in this deployment preparation.
+- Local API suite: 405 passed, 12 skipped. Docker/LibreOffice image verification and all six CI jobs passed at `e5345b6fabd2a9940290921d5f1a213f95ddd56e` ([run](https://github.com/PansGPT/pansgpt/actions/runs/39430512919)). Actual deployment remains pending.
+- Read-only checks reached Postgres, Redis and R2; local staging-configured infrastructure health returned 200 while full readiness stayed 503 with both AI capabilities blocked. No live AI calls and no hosted schema/data changes occurred in this deployment preparation.
 - Keep overall phases Testing. Do not claim API deployment or worker recovery until the staging deployment record contains actual evidence.

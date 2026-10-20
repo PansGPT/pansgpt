@@ -8,6 +8,8 @@
 
 > **2026-10-20 database verification:** All 31 migrations and seed replayed in disposable Supabase; staging received its 15 pending migrations through the CLI. Generated types, 50 table contracts, 18 RPC declarations, RLS/grants, UUIDv7 and scheduled jobs are verified. Existing 4 documents and 275 chunks retained identical checksums. [Evidence and upgrade fixes](database-verification-2026-10-20.md). Application deployment, provider eligibility and device journeys remain release gates; phases 0-7 are not universally certified complete.
 
+> **Worker hosting decision (2026-10-20):** Use operator-triggered GitHub Actions for bounded staging worker verification now; defer Oracle Linux hosting. Actions must not host ongoing application queue consumers. All provider flags remain false, and verification uses temporary queues with no inference credentials or application-job consumption. [Runbook and evidence](worker-verification-2026-10-20.md). This supersedes the historical same-Render-worker topology.
+
 > **Staging deployment amendment:** Host health uses `/health/infrastructure` for required database/Redis/R2 connectivity; `/health/ready` additionally enforces provider eligibility and remains 503 under a privacy hold. Independent probes run concurrently with bounded waits. The $0 pilot still requires an operator-managed worker host; Render background workers are not provisioned as free services. [Deployment record](staging-deployment-2026-10-20.md).
 
 ---
@@ -1201,7 +1203,7 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 | Web Frontend | **Vercel** (free)               | Vercel Pro              | Best Next.js deployment, zero config                |
 | Mobile App   | **EAS** (free builds)           | EAS Production          | Cloud builds + OTA + App Store / Play Store         |
 | Backend API  | **Render** (free)               | Render paid / Railway   | Free web service + keep-alive strategy              |
-| Task Workers | **Render** (free, same service) | Separate worker service | ARQ workers run in same Render service at bootstrap |
+| Task Workers | **Operator-managed Linux** (Oracle deferred) | Separate worker service | GitHub Actions currently runs staging checks only; ongoing consumers await a host |
 | Redis        | **Upstash** (free)              | Upstash paid            | 10,000 commands/day free, serverless                |
 | File Storage | **Cloudflare R2** (free 10GB)   | R2 paid                 | As decided above                                    |
 | Database     | **Supabase** (free)             | Supabase Pro            | As decided above                                    |
@@ -1226,7 +1228,7 @@ cron-job.org (free) → pings GET /health every 10 minutes
 - Ping the `/health` endpoint we will build into the new FastAPI backend
 - Works reliably — standard practice for thousands of bootstrapped apps
 
-**Important constraint:** 750 hrs/month shared across all free services on your Render account. Keep **1 service on the free tier** per account (or use multiple accounts). If you run API + Worker as two services, you’ll exhaust the hours.
+**Worker constraint:** Render Free does not provide a background-worker service. The staging API uses its own Docker web service; ongoing queue consumers need a separately verified Linux host. GitHub Actions is currently limited to operator-triggered staging verification.
 
 ---
 
@@ -1602,7 +1604,7 @@ flowchart TD
 flowchart TD
     API["FastAPI (Producer)"]
     Queue[("Upstash Redis\n(ARQ Job Queue)")]
-    Worker["ARQ Worker (Consumer)\n(Same Render instance)"]
+    Worker["ARQ Worker (Consumer)\n(Operator-managed Linux; Oracle deferred)"]
 
     subgraph JobTypes["Job Handlers"]
         direction TB

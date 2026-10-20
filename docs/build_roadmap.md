@@ -20,11 +20,13 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 - [x] Replay all 31 migrations and seed in disposable Supabase; 12 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39423479706).
 - [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
 - [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
+- [ ] Complete the operator-triggered GitHub Actions worker verification described in [the worker runbook](worker-verification-2026-10-20.md); Oracle hosting is deferred. This does not certify application ingestion or continuous worker availability.
 - [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
 - [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
 - [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
 - [x] Earlier remediation entries synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
-- [ ] Synchronize the new database verification results into Notion; phases remain Testing while release gates are pending.
+- [x] Database verification synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
+- [ ] Synchronize the new staging deployment and worker verification follow-ups; phases remain Testing while release gates are pending.
 
 No new phase 8?17 feature expansion or phase 0?7 completion certification until the applicable gates pass. Existing walking-skeleton code remains available for verification.
 

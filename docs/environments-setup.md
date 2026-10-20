@@ -7,7 +7,7 @@ Canonical execution order: [build roadmap](build_roadmap.md) and [implementation
 | Environment | API                                | Database                                | Workers                                                    |
 | ----------- | ---------------------------------- | --------------------------------------- | ---------------------------------------------------------- |
 | Development | Local FastAPI                      | Local Supabase CLI/Docker               | Local ARQ during development                               |
-| Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Operator-managed remote host; selection and access pending |
+| Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Actions staging checks now; Oracle worker host deferred |
 | Production  | Provision and verify before launch | Separate hosted Supabase project        | Separate host/configuration before launch                  |
 
 The staging database is migrated and verified. The documented custom domains and previous Render deployment records do not certify that the current API revision is deployed. Production is outside this staging action.
@@ -43,7 +43,9 @@ uv run arq workers.settings.PictureWorkerSettings
 
 The main worker initializes a small Postgres pool, reconciles the durable outbox and schedules cleanup. The picture worker drains its separate queue and exits. Do not grant provider eligibility just to make a worker health check pass. Privacy-blocked ingestion stays durable until its dependencies and eligible provider are available.
 
-No continuously available $0 worker service is promised. Operator-triggered remote batch execution is an alternative if the user selects it and the account's free limits permit it; credentials, log privacy and run limits must be configured before using it with staging data.
+The user selected GitHub Actions now and Oracle later. [Staging Worker Verification](../.github/workflows/staging-workers.yml) runs finite checks on isolated temporary queues, with retry/restart probes, R2 HEAD access and before/after row fingerprints. It never consumes application queues or runs storage deletion. See [the worker runbook](worker-verification-2026-10-20.md) for execution, secret scope and evidence.
+
+GitHub Actions is used for development/testing, not ongoing application hosting ([service terms](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features#actions)). No continuously available worker is provisioned. Oracle remains deferred; application ingestion stays pending while provider privacy and hosting gates are open.
 
 ## Database governance
 
