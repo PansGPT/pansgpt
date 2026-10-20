@@ -8,6 +8,8 @@
 
 > **2026-10-20 database verification:** All 31 migrations and seed replayed in disposable Supabase; staging received its 15 pending migrations through the CLI. Generated types, 50 table contracts, 18 RPC declarations, RLS/grants, UUIDv7 and scheduled jobs are verified. Existing 4 documents and 275 chunks retained identical checksums. [Evidence and upgrade fixes](database-verification-2026-10-20.md). Application deployment, provider eligibility and device journeys remain release gates; phases 0-7 are not universally certified complete.
 
+> **Staging deployment amendment:** Host health uses `/health/infrastructure` for required database/Redis/R2 connectivity; `/health/ready` additionally enforces provider eligibility and remains 503 under a privacy hold. Independent probes run concurrently with bounded waits. The $0 pilot still requires an operator-managed worker host; Render background workers are not provisioned as free services. [Deployment record](staging-deployment-2026-10-20.md).
+
 ---
 
 ## PHASE 0 — What PansGPT Currently Is (Audit)
@@ -6566,7 +6568,7 @@ CREATE TABLE IF NOT EXISTS user_email_preferences (
 ```mermaid
 flowchart TD
     subgraph CI_Quality_Gates ["GitHub Actions CI Quality Gates"]
-        be_gate["Backend Gate: Python 3.11 + Ruff + Pyright + Pytest (80%+)"]
+        be_gate["Backend Gate: Python 3.12 + Ruff + Pyright + Pytest (80%+)"]
         fe_gate["Frontend Gate: Node 20 + ESLint + tsc --noEmit + Next Build"]
         sec_gate["Security Gate: Gitleaks + SQL Migration Fluff"]
     end
@@ -6593,7 +6595,7 @@ flowchart TD
 
 ```dockerfile
 # Stage 1: Builder
-FROM python:3.11-slim-bookworm AS builder
+FROM python:3.12-slim-bookworm AS builder
 WORKDIR /build
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl && rm -rf /var/lib/apt/lists/*
@@ -6601,7 +6603,7 @@ COPY requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /build/wheels -r requirements.txt
 
 # Stage 2: Hardened Runtime
-FROM python:3.11-slim-bookworm AS runner
+FROM python:3.12-slim-bookworm AS runner
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PORT=8000 HOME=/home/appuser
 

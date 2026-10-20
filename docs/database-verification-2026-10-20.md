@@ -4,16 +4,16 @@ Status: disposable replay, generated types and staging migration checks passed. 
 
 ## Executed verification
 
-| Check                 | Result                                                                                                                                                                                  |
-| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CI revision           | `7d13d4a63277ad73087b898f7987004a3cfde85f`, isolated branch `verify/phase-0-7-database-20261020`                                                                                        |
-| CI run                | [All five jobs passed](https://github.com/PansGPT/pansgpt/actions/runs/39411357108)                                                                                                     |
-| Disposable Supabase   | CLI start, all 31 migrations, CLI local reset and seed passed                                                                                                                           |
-| Database contracts    | 11 passed: tenant/RLS isolation, client mutation and RPC restrictions, UUIDv7, credit idempotency/refunds, durable re-embed preservation, quota limit and service-role hybrid retrieval |
-| API suite             | 400 passed, 11 skipped, two dependency deprecation warnings. Nine live database tests are executed separately in the database job; live embeddings and LibreOffice remain skipped       |
-| Generated types       | Imported the successful CI-generated `packages/types/src/supabase.ts`; generation normalizes the final newline and writes atomically                                                    |
-| Catalog and consumers | 50 public table/column contracts and 18 public RPC argument contracts matched; all six TypeScript workspace checks passed                                                               |
-| Other CI gates        | Workspace lint, API lint/format, web SSE tests/build, desktop OAuth protocol tests, migration mirror and secret scans passed                                                            |
+| Check                 | Result                                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CI revision           | `536d00483ce944c2d93a2f574ee4481e6365e006`, isolated branch `verify/phase-0-7-database-20261020`                                                                                                                                   |
+| CI run                | [All five jobs passed](https://github.com/PansGPT/pansgpt/actions/runs/39423479706)                                                                                                                                                |
+| Disposable Supabase   | CLI start, all 31 migrations, CLI local reset and seed passed                                                                                                                                                                      |
+| Database contracts    | 12 passed: tenant/RLS isolation, client mutation and RPC restrictions, UUIDv7, credit idempotency/refunds, durable re-embed preservation, quota limit, service-role hybrid retrieval and inactive unsupported skills after seeding |
+| API suite             | 400 passed, 12 skipped, two dependency deprecation warnings. Ten live database tests are executed separately in the database job; live embeddings and LibreOffice remain skipped                                                   |
+| Generated types       | Imported the successful CI-generated `packages/types/src/supabase.ts`; generation normalizes the final newline and writes atomically                                                                                               |
+| Catalog and consumers | 50 public table/column contracts and 18 public RPC argument contracts matched; all six TypeScript workspace checks passed                                                                                                          |
+| Other CI gates        | Workspace lint, API lint/format, web SSE tests/build, desktop OAuth protocol tests, migration mirror and secret scans passed                                                                                                       |
 
 The local Windows host has no container runtime. Disposable execution used GitHub Actions rather than installing a large local runtime on a host with limited free storage. No hosted data was used by the disposable tests.
 

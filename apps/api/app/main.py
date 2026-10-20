@@ -5,6 +5,7 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import TypedDict
 
 import structlog
 from fastapi import FastAPI
@@ -90,12 +91,17 @@ async def liveness_check() -> dict[str, str]:
     return {"status": "ok", "environment": settings.ENVIRONMENT, "service": "api"}
 
 
-_readiness_cache: tuple[float, dict[str, object]] | None = None
+class ReadinessPayload(TypedDict):
+    status: str
+    environment: str
+    engines: dict[str, str]
 
 
-@app.get("/health/ready", tags=["Health"])
-async def readiness_check() -> JSONResponse:
-    """Cache lightweight capability probes; a missing required engine is not ready."""
+_readiness_cache: tuple[float, ReadinessPayload] | None = None
+
+
+async def _readiness_payload() -> ReadinessPayload:
+    """Cache dependency probes independently of which readiness view consumes them."""
     import time
 
     from app.engines.storage import storage_engine
@@ -103,8 +109,7 @@ async def readiness_check() -> JSONResponse:
     global _readiness_cache
     now = time.monotonic()
     if _readiness_cache is not None and now - _readiness_cache[0] < 30:
-        payload = _readiness_cache[1]
-        return JSONResponse(status_code=200 if payload["status"] == "ok" else 503, content=payload)
+        return _readiness_cache[1]
     engines = {
         "api": "operational",
         "database": "error",
@@ -113,14 +118,6 @@ async def readiness_check() -> JSONResponse:
         "chat": "disabled",
         "embeddings": "disabled",
     }
-    try:
-        from app.core.database import get_db_connection
-
-        async with get_db_connection(timeout=3) as conn:
-            if conn is not None and await conn.fetchval("SELECT 1") == 1:
-                engines["database"] = "ok"
-    except Exception:
-        pass
     if settings.ENABLE_AI:
         eligible = bool(
             (settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED)
@@ -132,10 +129,25 @@ async def readiness_check() -> JSONResponse:
         engines.update(redis="error", storage="error", embeddings="blocked")
         if settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED:
             engines["embeddings"] = "ready"
-        if settings.redis_connection_url:
-            try:
-                import redis.asyncio as aioredis
 
+    async def probe_database() -> None:
+        from app.core.database import get_db_connection
+
+        try:
+            async with asyncio.timeout(4):
+                async with get_db_connection(timeout=3) as conn:
+                    if conn is not None and await conn.fetchval("SELECT 1") == 1:
+                        engines["database"] = "ok"
+        except Exception:
+            pass
+
+    async def probe_redis() -> None:
+        if not settings.ENABLE_INGESTION or not settings.redis_connection_url:
+            return
+        try:
+            import redis.asyncio as aioredis
+
+            async with asyncio.timeout(4):
                 redis = aioredis.from_url(
                     settings.redis_connection_url, socket_connect_timeout=2, socket_timeout=2
                 )
@@ -144,21 +156,51 @@ async def readiness_check() -> JSONResponse:
                         engines["redis"] = "ok"
                 finally:
                     await redis.aclose()
-            except Exception:
-                pass
-        if storage_engine.is_configured:
-            try:
-                async with asyncio.timeout(3):
-                    async with storage_engine.get_client() as client:
-                        await client.head_bucket(Bucket=settings.r2_bucket_name)
-                engines["storage"] = "ok"
-            except Exception:
-                pass
+        except Exception:
+            pass
+
+    async def probe_storage() -> None:
+        if not settings.ENABLE_INGESTION or not storage_engine.is_configured:
+            return
+        try:
+            async with asyncio.timeout(4):
+                async with storage_engine.get_client() as client:
+                    await client.head_bucket(Bucket=settings.r2_bucket_name)
+            engines["storage"] = "ok"
+        except Exception:
+            pass
+
+    # Render expects health responses within five seconds. Bound the probes and
+    # run independent dependencies concurrently rather than adding their waits.
+    await asyncio.gather(probe_database(), probe_redis(), probe_storage())
     ready = all(value in {"operational", "ok", "ready", "disabled"} for value in engines.values())
-    payload = {
+    payload: ReadinessPayload = {
         "status": "ok" if ready else "degraded",
         "environment": settings.ENVIRONMENT,
         "engines": engines,
     }
     _readiness_cache = (now, payload)
+    return payload
+
+
+@app.get("/health/ready", tags=["Health"])
+async def readiness_check() -> JSONResponse:
+    """Full product readiness includes required provider privacy eligibility."""
+    payload = await _readiness_payload()
+    return JSONResponse(status_code=200 if payload["status"] == "ok" else 503, content=payload)
+
+
+@app.get("/health/infrastructure", tags=["Health"])
+async def infrastructure_check() -> JSONResponse:
+    """Hosting health requires dependencies; provider eligibility stays in full readiness."""
+    capabilities = await _readiness_payload()
+    engines = {
+        name: capabilities["engines"][name] for name in ("api", "database", "redis", "storage")
+    }
+    ready = all(value in {"operational", "ok", "disabled"} for value in engines.values())
+    payload: ReadinessPayload = {
+        "status": "ok" if ready else "degraded",
+        "environment": capabilities["environment"],
+        "engines": engines,
+    }
     return JSONResponse(status_code=200 if ready else 503, content=payload)

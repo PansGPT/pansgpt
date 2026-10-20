@@ -45,8 +45,9 @@ From `apps/web`, `pnpm test` runs the SSE parser regressions without starting an
 calling a model. The tests require Node.js 22 with TypeScript stripping support or newer.
 
 The `database-contracts` CI job starts disposable Supabase, replays the full migration
-history and seed, executes real RLS/grants/credit/re-embed contracts, checks the 50-table
-snapshot against the catalog, regenerates types, and typechecks consumers. When a test
+history and seed, executes real RLS/grants/credit/re-embed/quota/registry contracts,
+compares 50 public tables and 18 RPC declarations with the catalog, regenerates
+authoritative types, and typechecks consumers. When a test
 database URL is supplied, connection or schema failure fails the job instead of skipping.
 Run `python tooling/check-migrations.py` at the root to check mirrored SQL and immediate RLS.
 After database startup, run `uv run --project apps/api python tooling/check-db-contracts.py`.
@@ -56,3 +57,7 @@ Web lint scope is verified by `node tooling/check-lint-scope.mjs`. Run native pr
 with `pnpm --filter=@pansgpt/desktop test`; actual device OAuth/refresh/logout remains a
 separate integration check. Strict privacy attestations are simulated only for mocked unit
 tests. See [the privacy register](provider-privacy.md) before enabling any live provider.
+
+The completed disposable replay and staging CLI verification, including preserved data
+checksums and remaining release gates, are recorded in
+[database-verification-2026-10-20.md](database-verification-2026-10-20.md).

@@ -17,7 +17,7 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 
 - [x] Implement source corrections and explicit unavailable behavior for unsupported clinical handlers.
 - [x] Enforce strict ZDR with every unverified provider blocked; the pilot may remain unavailable.
-- [x] Replay all 31 migrations and seed in disposable Supabase; 11 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39411357108).
+- [x] Replay all 31 migrations and seed in disposable Supabase; 12 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39423479706).
 - [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
 - [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
 - [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
@@ -144,7 +144,7 @@ PR reviewed + CI green → merged to main
 | **1**  | Monorepo Scaffold + CI        | Source fixes; live gates pending | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
 | **2**  | Secrets + Config              | Source fixes; live gates pending | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
 | **3**  | Environments Wired            | Source fixes; live gates pending | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           | Source fixes; live gates pending | All migrations, RLS policies, enums, indexes, seed data, 50 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **4**  | Database Foundation           |     Testing; DB gates passed     | All migrations, RLS policies, enums, indexes, seed data, 50 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
 | **5**  | Document Ingestion Engine     | Source fixes; live gates pending | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
 | **6A** | AI Engine Foundation          | Source fixes; live gates pending | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
 | **6B** | AI Engine Advanced            | Source fixes; live gates pending | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
@@ -480,37 +480,37 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Database Foundation
 
-- [x] Create `universities` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `academic_terms` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `users` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `invitations` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `documents` table | file: supabase/migrations/20260906090002_core_schema.sql
+- [x] Create `universities` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `academic_terms` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `users` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `invitations` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `documents` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
 - [x] Create `document_chunks` table (migrated to 1536d) | file: supabase/migrations/20261010030000_embedding_1536.sql <!-- [DIM 1536] -->
-- [x] Create `document_sections` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_notes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_highlights` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `study_progress` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quizzes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_questions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_attempts` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_generation_jobs` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_learn_progress` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_learn_pending_retests` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `ai_skills` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `chat_sessions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `chat_messages` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `ai_telemetry` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `timetables` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `student_tasks` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `course_knowledge` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `exam_restrictions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `general_notes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `system_settings` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `system_settings_history` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `audit_logs` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_pages` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_segments` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_elements` table | file: supabase/migrations/20260906090002_core_schema.sql
+- [x] Create `document_sections` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `document_notes` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `document_highlights` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `study_progress` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quizzes` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_questions` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_attempts` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_generation_jobs` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `document_learn_progress` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `document_learn_pending_retests` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `ai_skills` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `chat_sessions` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `chat_messages` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `ai_telemetry` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `timetables` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `student_tasks` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `course_knowledge` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `exam_restrictions` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `general_notes` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `system_settings` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `system_settings_history` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `audit_logs` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `document_pages` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
+- [x] Create `document_segments` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
+- [x] Create `document_elements` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
 - [x] Create `flashcards` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `subscriptions` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `user_credits` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
@@ -527,6 +527,11 @@ PR reviewed + CI green → merged to main
 - [x] Create `email_logs` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `email_suppressions` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `user_email_preferences` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Create `background_jobs` table | file: supabase/migrations/20261020091000_durable_ingestion.sql
+- [x] Create `document_images` table | file: supabase/migrations/20261013233000_document_images.sql
+- [x] Create `invitation_redemptions` table | file: supabase/migrations/20261020095000_invitation_redemption.sql
+- [x] Create `storage_cleanup_jobs` table | file: supabase/migrations/20261020101000_retention_jobs.sql
+- [x] Create `web_search_usage` table | file: supabase/migrations/20260922000004_create_web_search_usage.sql
 
 ### 4.3 RLS Policies
 

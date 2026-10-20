@@ -1,5 +1,5 @@
 # ==============================================================================
-# PansGPT 2.0 Render Staging & Production Blueprint (Phase 3 Spec)
+# PansGPT 2.0 Render Staging API Blueprint
 # FastAPI API templates; operator-managed ARQ workers for the $0 pilot
 # ==============================================================================
 
@@ -15,7 +15,7 @@ services:
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    healthCheckPath: /health/ready
+    healthCheckPath: /health/infrastructure
     autoDeploy: true
     envVars:
       - key: OPENROUTER_ZDR_CONFIRMED
@@ -118,7 +118,7 @@ services:
     rootDir: apps/api
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    healthCheckPath: /health/ready
+    healthCheckPath: /health/infrastructure
     autoDeploy: false
     envVars:
       - key: OPENROUTER_ZDR_CONFIRMED
@@ -209,7 +209,3 @@ services:
         sync: false
       - key: X_API_KEY_DESKTOP
         sync: false
-
-  # ----------------------------------------------------------------------------
-  # 4. Production: ARQ Background Task Worker
-  # ----------------------------------------------------------------------------
