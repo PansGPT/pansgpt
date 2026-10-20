@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 type Source = [string, string, number, number, [string, number, number, number, number][]];
 const buttons = JSON.parse(
@@ -11,7 +12,7 @@ const layouts = JSON.parse(
 ) as Source[];
 
 test("all 72 tab-button states and 40 horizontal layouts match source bounds", async ({ page }) => {
-  await page.goto("/?section=tabs");
+  await openPreview(page, "/?section=tabs");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".tab-button-fixture")).toHaveCount(72);
   await expect(page.locator(".horizontal-tab-fixture")).toHaveCount(40);
@@ -110,7 +111,7 @@ test("all 72 tab-button states and 40 horizontal layouts match source bounds", a
 test("automatic and manual tabs retain selection across keyboard, themes and mobile", async ({
   page,
 }) => {
-  await page.goto("/?section=tabs");
+  await openPreview(page, "/?section=tabs");
   const demo = page.getByRole("group", { name: "Interactive horizontal tabs" });
   const automatic = demo.getByRole("tablist", { name: "Study sections" });
   const overview = automatic.getByRole("tab", { name: "Overview" });

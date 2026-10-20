@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { slideoutSources } from "../preview/slideout-source-data";
 import { slideoutLayoutSources } from "../preview/slideout-layout-source-data";
 
 test("all four slideout header frames preserve native artwork and tab behavior", async ({
   page,
 }) => {
-  await page.goto("/?section=slideouts");
+  await openPreview(page, "/?section=slideouts");
   await page.evaluate(() => document.fonts.ready);
   const mismatches: string[] = [];
   for (const source of slideoutSources[0].variants) {
@@ -62,7 +63,7 @@ test("all four slideout header frames preserve native artwork and tab behavior",
 test("modal slideout traps focus, scrolls its body, closes and restores trigger focus", async ({
   page,
 }) => {
-  await page.goto("/?section=slideouts");
+  await openPreview(page, "/?section=slideouts");
   const trigger = page.getByRole("button", { name: "Open study settings" });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Study settings" });
@@ -98,7 +99,7 @@ test("modal slideout traps focus, scrolls its body, closes and restores trigger 
 test("application slideouts preserve original artwork and caller-owned interactions", async ({
   page,
 }) => {
-  await page.goto("/?section=slideouts");
+  await openPreview(page, "/?section=slideouts");
   const errors = await page.evaluate(async () => {
     const results = await Promise.all(
       [...document.querySelectorAll<HTMLImageElement>('.slideout-source-grid img[src$=".svg"]')]

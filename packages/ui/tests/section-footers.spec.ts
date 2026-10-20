@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("footer source frames, original assets and responsive actions remain correct", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 2100, height: 1100 });
-  await page.goto("/?section=sectionfooters");
+  await openPreview(page, "/?section=sectionfooters");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-source-id]")).toHaveCount(8);
   for (const source of await page.locator("[data-source-id]").all()) {

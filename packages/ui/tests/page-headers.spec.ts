@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("twelve page headers match source frame dimensions and preserve navigation and search", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 2100, height: 1000 });
-  await page.goto("/?section=pageheaders");
+  await openPreview(page, "/?section=pageheaders");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-source-id]")).toHaveCount(12);
   for (const source of await page.locator("[data-source-id]").all()) {

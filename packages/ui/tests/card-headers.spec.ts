@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("card headers preserve all four source frames and responsive action/menu behavior", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1800, height: 1100 });
-  await page.goto("/?section=cardheaders");
+  await openPreview(page, "/?section=cardheaders");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-source-id]")).toHaveCount(4);
   for (const [id, width, height, avatarSize] of [

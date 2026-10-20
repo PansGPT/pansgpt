@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = {
   name: string;
   width: number;
@@ -13,7 +14,7 @@ const sources = JSON.parse(
 test("all sixteen utility references preserve source geometry and original artwork", async ({
   page,
 }) => {
-  await page.goto("/?section=close");
+  await openPreview(page, "/?section=close");
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].map((image) => image.decode()));
@@ -68,7 +69,7 @@ test("all sixteen utility references preserve source geometry and original artwo
     .screenshot({ path: "test-results/utility-buttons-source.png" });
 });
 test("utility controls retain native actions and keyboard tooltip behavior", async ({ page }) => {
-  await page.goto("/?section=close");
+  await openPreview(page, "/?section=close");
   const demo = page.getByRole("group", { name: "Interactive utility buttons" });
   const action = demo.getByRole("button", { name: "Utility action", exact: true });
   await action.scrollIntoViewIfNeeded();

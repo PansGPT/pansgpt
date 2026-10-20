@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { inlineCTASources } from "../preview/inline-cta-source-data";
 
 test("all fourteen inline CTA layouts preserve source frames and native SVGs", async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 1100 });
-  await page.goto("/?section=inlinectas");
+  await openPreview(page, "/?section=inlinectas");
   await page.evaluate(() => document.fonts.ready);
   await page.addStyleTag({ content: ".preview { max-width: none; }" });
   for (const [id, type, breakpoint, width, height] of inlineCTASources) {
@@ -32,7 +33,7 @@ test("all fourteen inline CTA layouts preserve source frames and native SVGs", a
 test("email capture validates, submits, preserves responsive state and respects pending/disabled controls", async ({
   page,
 }) => {
-  await page.goto("/?section=inlinectas");
+  await openPreview(page, "/?section=inlinectas");
   const live = page.getByTestId("live-inline-cta");
   const email = live.getByRole("textbox", { name: "Subscribe to updates" });
   const submit = live.getByRole("button", { name: "Subscribe", exact: true });

@@ -1,13 +1,14 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Layer = [string, number, number, number, number];
 type Source = { id: string; width: number; height: number; layers: Layer[] };
 const geometry = JSON.parse(
   readFileSync(resolve(__dirname, "../design/slider-geometry.json"), "utf8")
 ) as { variants: Source[] }[];
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=sliders");
+  await openPreview(page, "/?section=sliders");
   await expect(page.getByRole("heading", { name: "Sliders and control handles" })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 });

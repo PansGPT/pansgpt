@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Tip = { x: number; y: number; w: number; h: number };
 type Bar = [string, string, number, number, number, number, Tip | null];
 type Circle = {
@@ -24,7 +25,7 @@ const loading = JSON.parse(
   readFileSync(resolve(__dirname, "../design/loading-geometry.json"), "utf8")
 ) as Loading[];
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=indicators");
+  await openPreview(page, "/?section=indicators");
   await page.evaluate(() => document.fonts.ready);
 });
 

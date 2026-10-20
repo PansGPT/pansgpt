@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { illustrationSources } from "../preview/illustration-source-data";
 
 test("twelve illustration variants preserve native frames, visible source slots and local artwork", async ({
   page,
 }) => {
-  await page.goto("/?section=empty");
+  await openPreview(page, "/?section=empty");
   await expect(page.locator(".illustration-source-grid [data-source-id]")).toHaveCount(12);
   await page.evaluate(async (sources) => {
     const near = (actual: number, expected: number, label: string): void => {

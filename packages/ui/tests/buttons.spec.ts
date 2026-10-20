@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { buttonSources } from "../preview/button-source-data";
 test("all 300 standard and destructive button variants retain source frames and native glyphs", async ({
   page,
 }) => {
-  await page.goto("/?section=buttons");
+  await openPreview(page, "/?section=buttons");
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].map((image) => image.decode()));
@@ -50,7 +51,7 @@ test("all 300 standard and destructive button variants retain source frames and 
 test("button keyboard actions work and loading prevents duplicate submission without disabled styling", async ({
   page,
 }) => {
-  await page.goto("/?section=buttons");
+  await openPreview(page, "/?section=buttons");
   const live = page.getByTestId("live-button-states");
   await live.getByRole("button", { name: "Continue", exact: true }).focus();
   await page.keyboard.press("Enter");

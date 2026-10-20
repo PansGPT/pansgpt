@@ -186,6 +186,15 @@ jobs:
         run: pnpm --filter @pansgpt/ui exec playwright install --with-deps chromium
       - name: Build a fresh preview and verify shared UI contracts
         run: pnpm --filter @pansgpt/ui test --global-timeout=900000
+      - name: Preserve failed fixture traces for diagnosis
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shared-ui-failure-traces
+          retention-days: 1
+          path: |
+            packages/ui/test-results/**/trace.zip
+            packages/ui/test-results/**/error-context.md
 
   build-web:
     name: Web Smoke Build Check

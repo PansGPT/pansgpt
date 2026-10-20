@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = {
   name: string;
   width: number;
@@ -11,7 +12,7 @@ const geometry = JSON.parse(
   readFileSync(resolve(__dirname, "../design/verification-code-geometry.json"), "utf8")
 ) as { variants: Source[] }[];
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=codes");
+  await openPreview(page, "/?section=codes");
   await expect(page.getByRole("heading", { name: "Verification code inputs" })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 });

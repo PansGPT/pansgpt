@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { metricCardSources } from "../preview/metric-source-data";
 
 test("all thirty-six metric layouts, mini charts and change indicators retain source geometry", async ({
@@ -6,7 +7,7 @@ test("all thirty-six metric layouts, mini charts and change indicators retain so
 }) => {
   test.setTimeout(90000);
   await page.setViewportSize({ width: 1900, height: 1100 });
-  await page.goto("/?section=metrics");
+  await openPreview(page, "/?section=metrics");
   await page.evaluate(() => document.fonts.ready);
   await page.addStyleTag({ content: ".preview { max-width: none; }" });
   await page.evaluate(async () => {
@@ -53,7 +54,7 @@ test("all thirty-six metric layouts, mini charts and change indicators retain so
 test("metric menus, report actions, chart controls and actual data work across breakpoints", async ({
   page,
 }) => {
-  await page.goto("/?section=metrics");
+  await openPreview(page, "/?section=metrics");
   const source = page.locator('[data-metric-source-id="1561:262223"]');
   await source.getByRole("button", { name: "View report" }).click();
   await expect(page.getByTestId("metric-selection")).toHaveText("1561:262223: View report");

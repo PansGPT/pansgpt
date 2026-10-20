@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=groups");
+  await openPreview(page, "/?section=groups");
   await expect(page.getByRole("heading", { name: "Foundations & controls" })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 });

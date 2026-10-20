@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { controlLayouts } from "../preview/control-layout-data";
 import { tagSources } from "../preview/tag-source-data";
 test("all 270 checkbox, toggle, textarea and select-row specimens retain source frames and native assets", async ({
   page,
 }) => {
-  await page.goto("/?section=controls");
+  await openPreview(page, "/?section=controls");
   await expect(page.locator("[data-control-source-id]")).toHaveCount(270);
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -57,7 +58,7 @@ test("all 270 checkbox, toggle, textarea and select-row specimens retain source 
 test("native radios skip disabled choices and multiline tag entry submits committed values", async ({
   page,
 }) => {
-  await page.goto("/?section=controls");
+  await openPreview(page, "/?section=controls");
   const form = page.getByRole("form", { name: "Native radio choices" });
   await form.getByRole("radio", { name: "First choice" }).focus();
   await page.keyboard.press("ArrowDown");
@@ -79,7 +80,7 @@ test("native radios skip disabled choices and multiline tag entry submits commit
 test("all 72 tag combinations preserve source sizes and selection/dismissal semantics", async ({
   page,
 }) => {
-  await page.goto("/?section=tags");
+  await openPreview(page, "/?section=tags");
   await expect(page.locator("[data-tag-source-id]")).toHaveCount(72);
   await page.evaluate(async () => {
     await document.fonts.ready;

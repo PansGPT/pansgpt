@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { snippetSources } from "../preview/snippet-source-data";
 
 test("code snippet source layouts, six tab states, monospace metrics and original assets match Figma", async ({
   page,
 }) => {
-  await page.goto("/?section=snippets");
+  await openPreview(page, "/?section=snippets");
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate((sources) => {
     const near = (actual: number, expected: number, label: string): void => {
@@ -74,7 +75,7 @@ test("snippet tabs, full-content copying, expansion, literal text and disabled k
   context,
 }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  await page.goto("/?section=snippets");
+  await openPreview(page, "/?section=snippets");
   const demo = page.getByTestId("snippet-demo");
   await expect(demo.locator(".p-code-line")).toHaveCount(4);
   await demo.getByRole("button", { name: "Copy code" }).click();

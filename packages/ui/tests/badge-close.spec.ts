@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 test("all forty-eight badge close states retain native artwork and source geometry", async ({
   page,
 }) => {
-  await page.goto("/?section=badgegroups");
+  await openPreview(page, "/?section=badgegroups");
   await expect(page.locator(".badge-close-fixture")).toHaveCount(48);
   await page.locator(".badge-close-fixture").evaluateAll(async (fixtures) => {
     for (const fixture of fixtures) {
@@ -46,7 +47,7 @@ test("all forty-eight badge close states retain native artwork and source geomet
 test("close action dismisses a caller-owned badge by keyboard and honors disabled state", async ({
   page,
 }) => {
-  await page.goto("/?section=badgegroups");
+  await openPreview(page, "/?section=badgegroups");
   const demo = page.getByRole("group", { name: "Interactive badge close actions" });
   const close = demo.getByRole("button", { name: "Remove selected badge" });
   await close.scrollIntoViewIfNeeded();

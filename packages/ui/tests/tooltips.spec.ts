@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 type SourceChild = { name: string; x: number; y: number; width: number; height: number };
 type SourceVariant = {
@@ -15,7 +16,7 @@ const geometry = JSON.parse(
 ) as { name: string; variants: SourceVariant[] }[];
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=tooltips");
+  await openPreview(page, "/?section=tooltips");
   await page.evaluate(() => document.fonts.ready);
 });
 

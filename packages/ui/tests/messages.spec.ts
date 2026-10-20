@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { messageSources } from "../preview/message-source-data";
 import { messagePrimitiveSources } from "../preview/message-primitive-source-data";
 
@@ -6,7 +7,7 @@ test("all 47 messaging specimens preserve Figma frames and native SVG geometry",
   page,
 }) => {
   await page.setViewportSize({ width: 1800, height: 1100 });
-  await page.goto("/?section=messages");
+  await openPreview(page, "/?section=messages");
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(async () => {
     await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)));
@@ -58,7 +59,7 @@ test("all 47 messaging specimens preserve Figma frames and native SVG geometry",
 test("message sending, failure recovery, replies and reactions support keyboard use", async ({
   page,
 }) => {
-  await page.goto("/?section=messages");
+  await openPreview(page, "/?section=messages");
   const live = page.getByRole("textbox", { name: "Live message", exact: true });
   const log = page.getByRole("log", { name: "Sent messages" });
   await live.fill("   ");
@@ -108,7 +109,7 @@ test("message sending, failure recovery, replies and reactions support keyboard 
 test("native audio playback, seek, completion and media error remain truthful", async ({
   page,
 }) => {
-  await page.goto("/?section=messages");
+  await openPreview(page, "/?section=messages");
   const wav = Buffer.alloc(44 + 44100 * 2 * 2);
   wav.write("RIFF", 0);
   wav.writeUInt32LE(wav.length - 8, 4);

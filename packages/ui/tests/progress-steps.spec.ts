@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = [string, string, number, number, [string, number, number, number, number][]];
 const families = JSON.parse(
   readFileSync(resolve(__dirname, "../design/step-geometry.json"), "utf8")
@@ -11,7 +12,7 @@ const layers = JSON.parse(
 test("all forty-two progress step layouts match text, icon and connector bounds", async ({
   page,
 }) => {
-  await page.goto("/?section=steps");
+  await openPreview(page, "/?section=steps");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".step-base-source-grid .p-progress-step")).toHaveCount(42);
   await page.evaluate(
@@ -94,7 +95,7 @@ test("all forty-two progress step layouts match text, icon and connector bounds"
 test("all twelve progress step icons preserve native artwork and number geometry", async ({
   page,
 }) => {
-  await page.goto("/?section=steps");
+  await openPreview(page, "/?section=steps");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".step-icon-source-grid .p-step-icon")).toHaveCount(12);
   await page.evaluate(async (sources) => {

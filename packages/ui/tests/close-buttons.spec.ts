@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 test("all eighteen close-button references retain source frames, glyphs and states", async ({
   page,
 }) => {
-  await page.goto("/?section=close");
+  await openPreview(page, "/?section=close");
   await expect(page.getByRole("heading", { name: "Close buttons" })).toBeVisible();
   await expect(page.locator(".close-button-fixture")).toHaveCount(18);
   await page.locator(".close-button-fixture").evaluateAll(async (fixtures) => {
@@ -42,7 +43,7 @@ test("all eighteen close-button references retain source frames, glyphs and stat
 test("native close actions support pointer, keyboard, focus and disabled state", async ({
   page,
 }) => {
-  await page.goto("/?section=close");
+  await openPreview(page, "/?section=close");
   const demo = page.getByRole("group", { name: "Interactive close buttons" });
   const action = demo.getByRole("button", { name: "Dismiss sample" });
   await action.click();

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 type SourceVariant = {
   name: string;
@@ -24,7 +25,7 @@ const sourceType: Record<string, string> = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=notifications");
+  await openPreview(page, "/?section=notifications");
   await page.evaluate(() => document.fonts.ready);
 });
 
