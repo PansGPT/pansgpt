@@ -17,15 +17,16 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 
 - [x] Implement source corrections and explicit unavailable behavior for unsupported clinical handlers.
 - [x] Enforce strict ZDR with every unverified provider blocked; the pilot may remain unavailable.
-- [ ] Replay migrations in disposable Supabase and pass grants/RLS/RPC/contract tests. Docker is unavailable in the current workspace; CI now supplies this gate.
-- [ ] Regenerate types from the migrated database, review the CI artifact and commit the authoritative output. The current 50-table snapshot is not a hosted generation claim.
+- [x] Replay all 31 migrations and seed in disposable Supabase; 11 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39411357108).
+- [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
+- [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
 - [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
 - [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
 - [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
-- [ ] Synchronize the prepared Notion change/decision/roadmap entries after connecting the workspace.
+- [x] Earlier remediation entries synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
+- [ ] Synchronize the new database verification results into Notion; phases remain Testing while release gates are pending.
 
 No new phase 8?17 feature expansion or phase 0?7 completion certification until the applicable gates pass. Existing walking-skeleton code remains available for verification.
-
 
 ---
 
@@ -61,7 +62,7 @@ For PansGPT:
 
 | Priority | Platform                  | Decision                                                                                   |
 | :------: | ------------------------- | ------------------------------------------------------------------------------------------ |
-| **1st**  | **Web (Next.js 16.3.8)**      | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
+| **1st**  | **Web (Next.js 16.3.8)**  | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
 | **2nd**  | **Mobile (Expo SDK 52+)** | Students are mobile-heavy for daily study. Built once web features are stable.             |
 | **3rd**  | **Desktop (Electron 33)** | Offline-first power users. ~90% code share with web. Sequenced last.                       |
 
@@ -137,39 +138,39 @@ PR reviewed + CI green → merged to main
 
 ## 📋 Phase Overview
 
-|   #    | Phase                         |      Status      | What Gets Built                                                                                          | Gate Before Continuing                                                         |
-| :----: | ----------------------------- | :--------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+|   #    | Phase                         |              Status              | What Gets Built                                                                                          | Gate Before Continuing                                                         |
+| :----: | ----------------------------- | :------------------------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | **0**  | Local Dev Environment         | Source fixes; live gates pending | Every developer runs the full stack locally                                                              | All services start without errors                                              |
 | **1**  | Monorepo Scaffold + CI        | Source fixes; live gates pending | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
 | **2**  | Secrets + Config              | Source fixes; live gates pending | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
 | **3**  | Environments Wired            | Source fixes; live gates pending | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           | Source fixes; live gates pending | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **4**  | Database Foundation           | Source fixes; live gates pending | All migrations, RLS policies, enums, indexes, seed data, 50 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
 | **5**  | Document Ingestion Engine     | Source fixes; live gates pending | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
 | **6A** | AI Engine Foundation          | Source fixes; live gates pending | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
 | **6B** | AI Engine Advanced            | Source fixes; live gates pending | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend                  | Source fixes; live gates pending | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI       | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
-| **9**  | Design System + App Shell     |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
-| **10** | PDF Reader (Web)              |    ⏳ Pending    | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
-| **11** | AI Chat Interface (Web)       |    ⏳ Pending    | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
-| **12** | Learn Mode (Web)              |    ⏳ Pending    | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
-| **13** | Quiz System (Web)             |    ⏳ Pending    | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
-| **14** | Notes (Web)                   |    ⏳ Pending    | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
-| **15** | Timetable + Dashboard (Web)   |    ⏳ Pending    | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
-| **16** | Portals                       |    ⏳ Pending    | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
-| **17** | Settings + Profile + Feedback |    ⏳ Pending    | Profile, preferences, session management, CSAT, feedback triage                                          | Student updates profile and theme; feedback lands in admin                     |
-| **18** | Credits + Payments            |    ⏳ Pending    | Double-entry credit ledger, Paystack, Flutterwave                                                        | Student purchases credits and spends them on AI                                |
-| **19** | Email System                  |    ⏳ Pending    | Resend, React Email templates, ARQ worker queue                                                          | Welcome email arrives after signup                                             |
-| **20** | Mobile (Expo)                 |    ⏳ Pending    | Auth, PDF reader, chat, quiz, notes, timetable, widgets                                                  | Full student journey works on iOS + Android                                    |
-| **21** | Desktop (Electron)            |    ⏳ Pending    | Offline SQLite, PDF cache, background sync, auto-updater                                                 | Full offline study session works without internet                              |
-| **22** | PWA + Offline (Web)           |    ⏳ Pending    | `@serwist/next`, caching tiers, IndexedDB outbox                                                         | Web app installs and key flows work offline                                    |
-| **23** | Public Pages + SEO            |    ⏳ Pending    | Landing, pricing, about, JSON-LD, Open Graph, sitemap                                                    | Public pages indexed by Google with correct metadata                           |
-| **24** | Security Hardening            |    ⏳ Pending    | CORS, headers, rate limits, NDPA 2023, dependency scan                                                   | Security checklist cleared                                                     |
-| **25** | Observability + Monitoring    |    ⏳ Pending    | Sentry, PostHog, Better Uptime, structlog, keep-alive                                                    | Errors visible, events tracked, uptime alerting live                           |
-| **26** | Performance + Load Testing    |    ⏳ Pending    | Lighthouse, k6, EXPLAIN ANALYZE                                                                          | p95 API < 500ms; Lighthouse performance > 90                                   |
-| **27** | Pre-Launch Checklist          |    ⏳ Pending    | Full checklist verification                                                                              | Every item checked                                                             |
-| **28** | Production Launch 🚀          |    ⏳ Pending    | DNS live, migrations applied, smoke tested                                                               | Real students using the app                                                    |
-| **29** | Post-Launch Iteration         |    ⏳ Pending    | Feature flags, DORA metrics, incident process                                                            | Sustainable delivery culture active                                            |
+| **8**  | Walking Skeleton Web UI       |         ✅ **Core Done**         | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
+| **9**  | Design System + App Shell     |            ⏳ Pending            | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
+| **10** | PDF Reader (Web)              |            ⏳ Pending            | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
+| **11** | AI Chat Interface (Web)       |            ⏳ Pending            | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
+| **12** | Learn Mode (Web)              |            ⏳ Pending            | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
+| **13** | Quiz System (Web)             |            ⏳ Pending            | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
+| **14** | Notes (Web)                   |            ⏳ Pending            | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
+| **15** | Timetable + Dashboard (Web)   |            ⏳ Pending            | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
+| **16** | Portals                       |            ⏳ Pending            | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
+| **17** | Settings + Profile + Feedback |            ⏳ Pending            | Profile, preferences, session management, CSAT, feedback triage                                          | Student updates profile and theme; feedback lands in admin                     |
+| **18** | Credits + Payments            |            ⏳ Pending            | Double-entry credit ledger, Paystack, Flutterwave                                                        | Student purchases credits and spends them on AI                                |
+| **19** | Email System                  |            ⏳ Pending            | Resend, React Email templates, ARQ worker queue                                                          | Welcome email arrives after signup                                             |
+| **20** | Mobile (Expo)                 |            ⏳ Pending            | Auth, PDF reader, chat, quiz, notes, timetable, widgets                                                  | Full student journey works on iOS + Android                                    |
+| **21** | Desktop (Electron)            |            ⏳ Pending            | Offline SQLite, PDF cache, background sync, auto-updater                                                 | Full offline study session works without internet                              |
+| **22** | PWA + Offline (Web)           |            ⏳ Pending            | `@serwist/next`, caching tiers, IndexedDB outbox                                                         | Web app installs and key flows work offline                                    |
+| **23** | Public Pages + SEO            |            ⏳ Pending            | Landing, pricing, about, JSON-LD, Open Graph, sitemap                                                    | Public pages indexed by Google with correct metadata                           |
+| **24** | Security Hardening            |            ⏳ Pending            | CORS, headers, rate limits, NDPA 2023, dependency scan                                                   | Security checklist cleared                                                     |
+| **25** | Observability + Monitoring    |            ⏳ Pending            | Sentry, PostHog, Better Uptime, structlog, keep-alive                                                    | Errors visible, events tracked, uptime alerting live                           |
+| **26** | Performance + Load Testing    |            ⏳ Pending            | Lighthouse, k6, EXPLAIN ANALYZE                                                                          | p95 API < 500ms; Lighthouse performance > 90                                   |
+| **27** | Pre-Launch Checklist          |            ⏳ Pending            | Full checklist verification                                                                              | Every item checked                                                             |
+| **28** | Production Launch 🚀          |            ⏳ Pending            | DNS live, migrations applied, smoke tested                                                               | Real students using the app                                                    |
+| **29** | Post-Launch Iteration         |            ⏳ Pending            | Feature flags, DORA metrics, incident process                                                            | Sustainable delivery culture active                                            |
 
 ---
 
@@ -216,8 +217,8 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Local Dev Environment
 
-- [x] Pin Python version to 3.11 | file: apps/api/.python-version
-- [x] Align Python version with roadmap spec (`>=3.11` compatible across 3.11 and 3.12) | file: apps/api/pyproject.toml
+- [x] Pin Python version to 3.12 | file: apps/api/.python-version
+- [x] Require Python 3.12+ and verify the API under Python 3.12 | file: apps/api/pyproject.toml
 - [x] Install Python dependency manifests for FastAPI | file: apps/api/requirements.txt, apps/api/pyproject.toml
 - [x] Generate and commit `uv.lock` dependency lockfile via `uv lock` | file: apps/api/uv.lock
 
@@ -225,7 +226,8 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Local Dev Environment
 
-- [x] Install Docker Desktop and Supabase CLI (Configured remote hosted Supabase DB)
+- [x] Install and verify Supabase CLI 2.116.0.
+- [ ] Install a local container runtime on this developer host; disposable Docker execution is verified in CI.
 - [x] Configure local Supabase Docker infrastructure | file: supabase/config.toml
 - [x] Configure local Supabase UNIJOS seed data | file: supabase/seed.sql
 
@@ -437,7 +439,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Environments Wired
 
-- [ ] Wire and confirm Staging Supabase hosted database is reachable | verified live via pooler port 5432 ? current deployment must be reverified
+- [x] Confirm staging Supabase is reachable through pooler port 5432; CLI migrations and read-only catalog/data checks passed on 2026-10-20. Application deployment remains separate.
 
 ### 3.6 Production Provisioning
 
@@ -532,7 +534,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Create `uni_select` policy on `universities`
 - [x] Create `users_select_self` policy on `users`
-- [x] Create `users_update_self` policy on `users`
+- [x] Revoke client profile mutations and remove `users_update_self`; privileged API writes own profile/role changes | file: supabase/migrations/20261020090000_authorization_boundaries.sql
 - [x] Create `documents_select_student` policy on `documents`
 - [x] Create `documents_admin_all` policy on `documents`
 - [x] Create `chunks_select` policy on `document_chunks`
@@ -568,7 +570,7 @@ PR reviewed + CI green → merged to main
 - [x] Create Admin write policies for `ai_skills` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create Admin write policies for `system_settings` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create Admin write policies for `academic_terms` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
-- [x] Create User registration INSERT policy on `users` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Remove direct client user INSERT policy; Auth trigger/API own registration | file: supabase/migrations/20261020090000_authorization_boundaries.sql
 - [x] Create complete tenant-isolation and owner RLS policies across all 14 new Phase 4 tables | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 
 ### 4.4 Indexes
@@ -616,7 +618,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Seed initial university for University of Jos (UNIJOS) | file: supabase/seed.sql
 - [x] Seed default `system_settings` configuration | file: supabase/seed.sql
-- [x] Seed core AI skills (`dosage_calculator`, `drug_interaction_checker`, `chemical_drawer`) | file: supabase/seed.sql
+- [x] Preserve unsupported clinical skill registry rows as inactive in both migration and seed; allow only implemented backend handlers | files: supabase/seed.sql, supabase/migrations/20261020092000_skill_registry.sql
 - [x] Fix `supabase/seed.sql` with clean schema-aligned columns and ON CONFLICT handling | file: supabase/seed.sql
 - [x] Fix `course_knowledge` seed to match the actual schema | file: supabase/seed.sql
 - [x] Seed sample documents and institutions with multi-tenant isolation support | file: supabase/seed.sql
@@ -626,7 +628,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Database Foundation
 
 - [x] Create type generation script: `tooling/gen-types.sh`
-- [x] Regenerate `packages/types/src/supabase.ts` against actual migrations and live Staging DB across all 45 tables and RPCs | file: packages/types/src/supabase.ts
+- [x] Generate `packages/types/src/supabase.ts` from the disposable migrated database; compare 50 table contracts and 18 RPC declarations against both disposable and staging catalogs | file: packages/types/src/supabase.ts
 
 ---
 
@@ -1846,7 +1848,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Layer             | Technology                                                   |
 | ----------------- | ------------------------------------------------------------ |
 | Monorepo          | Turborepo + pnpm workspaces                                  |
-| Web Framework     | Next.js 16.3.8, App Router, React 19, TypeScript strict          |
+| Web Framework     | Next.js 16.3.8, App Router, React 19, TypeScript strict      |
 | Web Styling       | Tailwind CSS v4, OKLCH tokens, Framer Motion                 |
 | Web PDF           | `pdfjs-dist` + TanStack Virtual                              |
 | Web Chat UI       | `@assistant-ui/react`                                        |
@@ -1882,7 +1884,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Error Tracking    | Sentry (all 4 apps — separate DSNs)                          |
 | Analytics         | PostHog (web + mobile, feature flags, session replay)        |
 | Uptime            | Better Uptime                                                |
-| Payments          | Paystack + Flutterwave (credit debit/refund journal)          |
+| Payments          | Paystack + Flutterwave (credit debit/refund journal)         |
 | Testing (Backend) | pytest + HTTPX                                               |
 | Testing (Web)     | Vitest + React Testing Library + Playwright E2E              |
 | Testing (Mobile)  | Jest + React Native Testing Library + Maestro E2E            |

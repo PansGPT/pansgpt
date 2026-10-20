@@ -194,3 +194,15 @@ async def test_hybrid_retrieval_runs_for_the_service_role_without_a_tenant_leak(
         "[" + ",".join(["0.01"] * 1536) + "]",
     )
     assert rows == []
+
+
+async def test_unsupported_clinical_handlers_stay_disabled_after_seed(
+    database: asyncpg.Connection,
+) -> None:
+    unsupported = {"dosage_calculator", "drug_interaction_checker", "chemical_drawer"}
+    rows = await database.fetch(
+        "SELECT slug,is_active FROM public.ai_skills WHERE slug=ANY($1::text[])",
+        list(unsupported),
+    )
+    assert {row["slug"] for row in rows} == unsupported
+    assert all(row["is_active"] is False for row in rows)

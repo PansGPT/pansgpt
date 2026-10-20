@@ -6,6 +6,7 @@
 
 > **2026-10-20 implementation amendment:** The [phase 0?7 remediation record](phase-0-7-remediation-2026-10-20.md) governs current implementation status and supersedes conflicting historical descriptions. The original feature inventory remains historical. Phase 8 expansion is gated on migrated-database contracts, privacy eligibility, and the staging journey. Offline tests do not establish hosted readiness.
 
+> **2026-10-20 database verification:** All 31 migrations and seed replayed in disposable Supabase; staging received its 15 pending migrations through the CLI. Generated types, 50 table contracts, 18 RPC declarations, RLS/grants, UUIDv7 and scheduled jobs are verified. Existing 4 documents and 275 chunks retained identical checksums. [Evidence and upgrade fixes](database-verification-2026-10-20.md). Application deployment, provider eligibility and device journeys remain release gates; phases 0-7 are not universally certified complete.
 
 ---
 
@@ -921,7 +922,7 @@ pansgpt/
 
 | Decision             | Choice                                                       | Why                                                                                                                                                              |
 | -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework            | **Next.js 16.3.8 (App Router)**                                  | App Router is mature, RSC reduces bundle size, streaming built-in                                                                                                |
+| Framework            | **Next.js 16.3.8 (App Router)**                              | App Router is mature, RSC reduces bundle size, streaming built-in                                                                                                |
 | Language             | **TypeScript (strict mode)**                                 | No `any`, no vibe coding. Strict mode catches real bugs                                                                                                          |
 | Styling              | **Tailwind CSS v4**                                          | CSS-native, no config file, fastest option, same utility classes as mobile                                                                                       |
 | Animation            | **Framer Motion**                                            | Best-in-class for the interactions PansGPT needs                                                                                                                 |
@@ -2936,20 +2937,20 @@ Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast infe
 
 #### 6.5.1 Model Inventory Roster
 
-| Model ID                                             | Provider         | Type       | Modality         | Context    | Latency        | Reasoning Support         | Tool Calling Support          | Role                            |
-| ---------------------------------------------------- | ---------------- | ---------- | ---------------- | ---------- | -------------- | ------------------------- | ----------------------------- | ------------------------------- |
-| `gemma-4-31b-it`                                     | Google AI Studio | Dense 31B  | Text + Image     | 256K       | ~1.5s – 2.5s   | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Chat & Deep Study**   |
-| `gemma-4-26b-a4b-it`                                 | Google AI Studio | MoE (A4B)  | Text + Image     | 256K       | ~800ms – 1.5s  | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Fast Chat & OCR**     |
-| `gemini-embedding-2`                                 | Google AI Studio | Embedding  | Text             | 8K (1536d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**    | <!-- [DIM 1536] --> |
+| Model ID                                             | Provider         | Type       | Modality         | Context    | Latency        | Reasoning Support         | Tool Calling Support          | Role                                             |
+| ---------------------------------------------------- | ---------------- | ---------- | ---------------- | ---------- | -------------- | ------------------------- | ----------------------------- | ------------------------------------------------ |
+| `gemma-4-31b-it`                                     | Google AI Studio | Dense 31B  | Text + Image     | 256K       | ~1.5s – 2.5s   | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Chat & Deep Study**                    |
+| `gemma-4-26b-a4b-it`                                 | Google AI Studio | MoE (A4B)  | Text + Image     | 256K       | ~800ms – 1.5s  | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Fast Chat & OCR**                      |
+| `gemini-embedding-2`                                 | Google AI Studio | Embedding  | Text             | 8K (1536d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**                     | <!-- [DIM 1536] --> |
 | `openai/gpt-oss-120b`                                | Groq             | MoE 120B   | Text-only        | 128K       | ~300ms – 600ms | Yes (Configurable CoT)    | Yes (Native Function Calling) | Optional catalog entry; not the default fallback |
-| `qwen/qwen3.6-27b`                                   | Groq             | Dense 27B  | Text + Image     | 128K       | ~250ms – 500ms | Yes (Thinking Mode)       | Yes (Native Function Calling) | **Fast Multimodal Fallback**    |
-| `whisper-large-v3-turbo`                             | Groq             | STT        | Audio-only       | ~25s chunk | ~200ms – 400ms | N/A                       | N/A                           | **Voice Input (Primary)**       |
-| `whisper-large-v3`                                   | Groq             | STT        | Audio-only       | ~25s chunk | ~400ms – 800ms | N/A                       | N/A                           | **Voice Input (Fallback)**      |
-| `nvidia/nemotron-3-ultra-550b-a55b:free`             | OpenRouter       | MoE 550B   | Text-only        | 1M         | ~1.5s – 3.0s   | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Complex Reasoning Fallback**  |
-| `nvidia/nemotron-3-super-120b-a12b:free`             | OpenRouter       | MoE 120B   | Text-only        | 1M         | ~600ms – 1.2s  | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **General Fallback**            |
-| `nvidia/nemotron-3-nano-30b-a3b:free`                | OpenRouter       | MoE 30B    | Text-only        | 128K       | ~200ms – 500ms | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Small Task Fallback**         |
-| `nvidia/nemotron-nano-12b-v2-vl:free`                | OpenRouter       | Vision 12B | Text+Image+Video | 128K       | ~400ms – 800ms | Yes (Visual Reasoning)    | Yes (Tool Calling)            | **Vision Fallback**             |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | OpenRouter       | Omni 30B   | Text+Image+Audio | 128K       | ~500ms – 1.0s  | Yes (Omni Reasoning)      | Yes (Multimodal Tools)        | **Omni Fallback**               |
+| `qwen/qwen3.6-27b`                                   | Groq             | Dense 27B  | Text + Image     | 128K       | ~250ms – 500ms | Yes (Thinking Mode)       | Yes (Native Function Calling) | **Fast Multimodal Fallback**                     |
+| `whisper-large-v3-turbo`                             | Groq             | STT        | Audio-only       | ~25s chunk | ~200ms – 400ms | N/A                       | N/A                           | **Voice Input (Primary)**                        |
+| `whisper-large-v3`                                   | Groq             | STT        | Audio-only       | ~25s chunk | ~400ms – 800ms | N/A                       | N/A                           | **Voice Input (Fallback)**                       |
+| `nvidia/nemotron-3-ultra-550b-a55b:free`             | OpenRouter       | MoE 550B   | Text-only        | 1M         | ~1.5s – 3.0s   | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Complex Reasoning Fallback**                   |
+| `nvidia/nemotron-3-super-120b-a12b:free`             | OpenRouter       | MoE 120B   | Text-only        | 1M         | ~600ms – 1.2s  | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **General Fallback**                             |
+| `nvidia/nemotron-3-nano-30b-a3b:free`                | OpenRouter       | MoE 30B    | Text-only        | 128K       | ~200ms – 500ms | Yes (Controllable Budget) | Yes (OpenAI-compatible)       | **Small Task Fallback**                          |
+| `nvidia/nemotron-nano-12b-v2-vl:free`                | OpenRouter       | Vision 12B | Text+Image+Video | 128K       | ~400ms – 800ms | Yes (Visual Reasoning)    | Yes (Tool Calling)            | **Vision Fallback**                              |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | OpenRouter       | Omni 30B   | Text+Image+Audio | 128K       | ~500ms – 1.0s  | Yes (Omni Reasoning)      | Yes (Multimodal Tools)        | **Omni Fallback**                                |
 
 #### 6.5.2 Model Rate Limits & Quotas (Free Tier)
 
@@ -7072,7 +7073,6 @@ flowchart TB
 - **Testing Pyramid**:
   - Unit/Component: **Jest** + **React Native Testing Library**.
   - E2E Automation: **Maestro** cross-platform mobile automation suite.
-
 
 ### Phase 0?7 implementation contract amendment (2026-10-20)
 
