@@ -1784,7 +1784,9 @@ A non-developer can sign up, upload a PDF, send a chat message, and read an AI-g
 
 ---
 
-### 29.1 Why Design System First
+### 29.1 Existing Library and Product Integration
+
+The Figma-derived core library is already present in `packages/ui` from commit `ad88683` (11 October 2026). Maintain and verify that library while hosted gates remain open; app-shell and new product-screen work still follows the staging journey. [The 21 October follow-up](design-system/verification-2026-10-21.md) records browser-test stabilization and source-backed roadmap reconciliation.
 
 Every screen shares tokens, components, and layouts. Building it once prevents divergence. Once the skeleton works, dress it properly before building individual screens.
 
@@ -1799,7 +1801,7 @@ Every screen shares tokens, components, and layouts. Building it once prevents d
 
 ### 29.3 Atomic Component Library (packages/ui)
 
-- Button (variants: primary, secondary, ghost, destructive; sizes: sm, md, lg)
+- Existing Figma Button: primary, secondary, tertiary, link-color and link-gray; destructive option; sm/md/lg/xl sizes. Reuse the inherited typed API.
 - Input, Textarea, Select, Checkbox, RadioGroup
 - Card, Sheet, Dialog/Modal
 - Avatar (initials-based, with Supabase avatar URL fallback)
@@ -1818,13 +1820,13 @@ Every screen shares tokens, components, and layouts. Building it once prevents d
 
 ### 29.5 Typography Scale
 
-- **Font**: Inter (body), Geist Mono (code blocks)
+- **Font**: locally hosted Plus Jakarta Sans Variable for body/display, with 44 archived Figma text styles; locally hosted Roboto Mono for code snippets. The inherited implementation supersedes the earlier Inter/Geist proposal.
 - **Scale**: xs/sm/base/lg/xl/2xl/3xl using
   em units
 
 ### 29.6 Icon System & Animation
 
-- **Icon System**: Lucide React — list which icons are used for navigation, actions, status
+- **Icon System**: original archived Figma icons through the shared package; Lucide React remains available for additional icons. Existing page exclusions and original asset dimensions remain authoritative.
 - **Animation**: CSS transitions for theme switching, Framer Motion for page transitions
 
 ### 29.7 Verification Gate

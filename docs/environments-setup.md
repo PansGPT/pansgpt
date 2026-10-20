@@ -7,7 +7,7 @@ Canonical execution order: [build roadmap](build_roadmap.md) and [implementation
 | Environment | API                                | Database                                | Workers                                                    |
 | ----------- | ---------------------------------- | --------------------------------------- | ---------------------------------------------------------- |
 | Development | Local FastAPI                      | Local Supabase CLI/Docker               | Local ARQ during development                               |
-| Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Actions staging checks now; Oracle worker host deferred |
+| Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Actions disposable checks; Oracle worker host deferred |
 | Production  | Provision and verify before launch | Separate hosted Supabase project        | Separate host/configuration before launch                  |
 
 The staging database is migrated and verified. The documented custom domains and previous Render deployment records do not certify that the current API revision is deployed. Production is outside this staging action.

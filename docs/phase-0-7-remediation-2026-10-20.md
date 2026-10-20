@@ -72,3 +72,10 @@ The disposable Supabase/type-generation workflow follows [Supabase?s CI guidance
 ## Subsequent database verification
 
 [All five CI jobs passed](https://github.com/PansGPT/pansgpt/actions/runs/39423479706): 400 API tests passed with 12 skips; the separate database job passed all 12 selected tests. All 31 migrations and seed replayed, authoritative types were imported, and both disposable and staging catalogs matched 50 table contracts and 18 RPC declarations. Staging received all 15 pending migrations through the CLI; full-row checksums preserved all 4 documents and 275 chunks. The UUIDv7 extension-path defect and hosted trigram initialization defect discovered during execution are fixed. [Full evidence, limits and remaining gates](database-verification-2026-10-20.md).
+
+
+## Subsequent worker verification - 21 October 2026
+
+The user selected GitHub Actions now and Oracle later, then preferred avoiding any risky upload of existing access keys. We used disposable Supabase/Redis without exporting staging credentials. [The manual worker run passed 24 checks](https://github.com/PansGPT/pansgpt/actions/runs/39512003760), including real ARQ deferred delivery across worker-instance restart, cancellation cleanup and preservation of disposable row/queue sentinels. The complete source CI also passed: 427 API tests with 14 skips and 14 separate database/worker contracts. [Runbook, exact revisions and remaining limits](worker-verification-2026-10-20.md).
+
+This narrows the worker execution gap but does not close actual hosted ingestion, document lease/heartbeat/process-kill recovery, R2 deletion or continuous availability. GitHub is used for development/testing only; ongoing worker hosting remains deferred to Oracle. No new migration, hosted data change, AI call or paid service was introduced in this follow-up. Overall phases remain Testing, and the Notion handoff is ready for the connected agent.

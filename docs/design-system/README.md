@@ -45,7 +45,7 @@ pnpm --filter @pansgpt/ui test
 pnpm --filter @pansgpt/ui preview:build
 ```
 
-The isolated preview runs at `http://127.0.0.1:4173`. It is a component workbench and does not add product routes. Playwright verifies form semantics, keyboard interactions, dialog focus containment/restoration, persistence, mobile overflow, reduced motion, local asset loading, default geometry, and typography metrics. Browser installation is a one-time requirement: `pnpm --filter @pansgpt/ui exec playwright install chromium`.
+The normal `test` command first builds a fresh static preview, then runs Playwright against `http://127.0.0.1:4174`. This keeps cold Vite transformation of thousands of archived assets outside browser navigation deadlines. Test filters and Playwright options can follow the command, for example `pnpm --filter @pansgpt/ui test activity-feeds.spec.ts`. The development preview still runs at `http://127.0.0.1:4173`. It is a component workbench and does not add product routes. Playwright verifies form semantics, keyboard interactions, dialog focus containment/restoration, persistence, mobile overflow, reduced motion, local asset loading, default geometry, and typography metrics. Browser installation is a one-time requirement: `pnpm --filter @pansgpt/ui exec playwright install chromium`.
 
 Regenerate foundations with `tokens:generate` and `typography:generate`. Regenerate the ledger with `coverage:generate` after updating its implementation mapping. Lint checks that generated files match their source archives. Hand-edit project theme extensions and control styles, not generated tokens.
 

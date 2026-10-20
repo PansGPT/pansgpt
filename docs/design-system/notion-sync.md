@@ -114,3 +114,30 @@ Pending decision - 2026-10-10: Leave Press logo, Logomark, Logo and Company logo
 Pending session/change entry - 2026-10-11: Complete native badge, button, field, tag and selectable-card matrices; correct compiled source-asset checks and calendar date boundaries. Area: Shared UI. Files touched: packages/ui components/styles/preview/tests/scripts/design/assets; docs/design-system. Verified: core badge/button/field/control/tag checks pass; all 13 card/date/calendar checks pass; strict UI TypeScript and lint/source-integrity gates pass. Full-suite and modal-composition audit continue. Notion connector unavailable; synchronization queued.
 
 Pending decision - 2026-10-11: Use native radio/form semantics for standalone cards, Radix roving groups with synchronous arrow selection, and separate actionable links. Preserve exact original assets and source-specific spacings; keep product integration outside library verification. Alternatives: nested buttons, static click-only cards, deferred keyboard selection, or changing the existing candidate navigation/logo. Roadmap: Design System remains In progress; 189 registered reusable families, 0 unstarted families, 1,173 asset-ready icons, 559 excluded families. Modal compositions remain to be completed; no Knowledge Base update required.
+
+
+## Follow-up - 21 October 2026 (pending synchronization)
+
+Read `docs/design-system/verification-2026-10-21.md` for actual completion evidence
+before setting Verified. Session / Change Log: **Stabilize existing design-system
+browser checks and reconcile roadmap**; Area: **Shared UI & CI**. Files: UI test
+driver/package script, browser readiness checks, CI workflow, canonical roadmap/
+implementation plan and design-system verification/testing docs.
+
+Decision: test the freshly compiled preview instead of cold development-server
+transforms. Rationale: 5,083 resource requests caused the first feed navigation to
+exceed its 60-second deadline; the unchanged compiled feed checks passed. Alternatives:
+raise timeouts, remove assertions, or rely on a warmed/stale server. Preserve all
+source geometry, keyboard/accessibility checks, individual deadlines and traces.
+
+Update Phase 9 to recognize the inherited core library while keeping app-shell
+integration gated on the staging journey. Record actual Plus Jakarta Sans/Roboto
+Mono typography and the inherited Button API. Keep generic Card, shared initials
+avatar extraction, Sonner wrapper, Skeleton, ErrorBoundary, profile-synced themes
+and SSR theme bootstrap open. Phase 8 remains Testing while its hosted slice is
+unverified. No new product screens or provider approvals are included.
+
+The full suite and CI are in progress; do not mark them passed from the two feed
+checks alone. Knowledge Base does not need a routine testing-fix update; the runtime
+stack and architectural boundaries are unchanged. Report any later full-suite result
+and its exact CI revision/link from the verification record.

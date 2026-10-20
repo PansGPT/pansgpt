@@ -16,7 +16,7 @@ Status: deployment candidate verified; actual Render deployment awaits account a
 
 - No Render API credential or deployment hook was found in the configured local environment. GitHub repository/staging environment secret names did not include deployment credentials.
 - Render integration discovery found the integration available but not installed. Installation/account authorization is pending; its connection is not assumed.
-- The user selected GitHub Actions staging checks now and Oracle Linux hosting later. Actions is limited to development/testing, not ongoing queue consumers. No paid Render worker has been provisioned.
+- The user selected GitHub Actions checks now and Oracle Linux hosting later. After the credential-risk explanation, we chose disposable Supabase/Redis checks without uploading existing staging keys. Actions is limited to development/testing, not ongoing queue consumers. Full CI, including both worker integration tests, passed at `e6d2a204ea20bd239749339673eea7fdb6729307`; the separate manual workflow passed 24 checks on the same revision. See [worker evidence](worker-verification-2026-10-20.md). No paid Render worker has been provisioned.
 - Initial HTTP probes of the documented API domains timed out or failed to resolve. GitHub's last successful Render staging deployment record points to `https://pansgpt-api-staging.onrender.com`, service `srv-dahesc15efls73dpl5ug`, at older revision `b3ee1f4f326023526852f2721fab3756b23ec495`. The verified candidate has not been deployed.
 - Oracle account verification, capacity and ARM compatibility remain deferred. No Oracle resources have been created.
 

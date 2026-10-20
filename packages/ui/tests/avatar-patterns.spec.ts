@@ -18,6 +18,13 @@ test("three avatar stacks, twelve add-button states and sixteen label groups mat
   await expect(page.locator(".avatar-add-fixture")).toHaveCount(12);
   await expect(page.locator(".avatar-label-fixture")).toHaveCount(16);
   await page.evaluate(async (geometry) => {
+    await Promise.all(
+      Array.from(
+        document.querySelectorAll<HTMLImageElement>(
+          ".avatar-group-fixture img,.avatar-add-fixture img,.avatar-label-fixture img"
+        )
+      ).map((image) => image.decode())
+    );
     const near = (a: number, b: number, name: string): void => {
       if (Math.abs(a - b) > 0.5) throw new Error(`${name}: ${a} instead of ${b}`);
     };
@@ -80,7 +87,6 @@ test("three avatar stacks, twelve add-button states and sixteen label groups mat
     for (const image of document.querySelectorAll<HTMLImageElement>(
       ".avatar-group-fixture img,.avatar-add-fixture img,.avatar-label-fixture img"
     )) {
-      await image.decode();
       if (!image.src.startsWith(location.origin) || image.naturalWidth === 0)
         throw new Error("Missing local artwork");
       if (image.src.endsWith(".svg")) {

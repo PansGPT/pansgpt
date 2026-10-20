@@ -61,3 +61,26 @@ tests. See [the privacy register](provider-privacy.md) before enabling any live 
 The completed disposable replay and staging CLI verification, including preserved data
 checksums and remaining release gates, are recorded in
 [database-verification-2026-10-20.md](database-verification-2026-10-20.md).
+
+
+## Shared design-system browser contracts
+
+Run `pnpm --filter @pansgpt/ui test` to build the preview and execute the existing
+Playwright suite. The portable Node driver forwards test filters/options and fails
+on either a build failure or a test failure. Tests use a fresh compiled preview on
+loopback port 4174; `preview:dev` remains the interactive Vite workbench on 4173.
+No database, hosted credentials or external AI calls are required.
+
+A cold development-server feed run requested 5,083 resources and exceeded its
+60-second navigation deadline. Both unchanged feed tests passed against the
+compiled preview. Individual test/assertion timeouts, traces, source-geometry
+checks and accessibility assertions remain intact. See
+[the verification follow-up](design-system/verification-2026-10-21.md) for the
+complete-suite result and practical limits.
+
+The `shared-ui` CI job installs Chromium and its Linux dependencies, builds the
+fresh preview and runs the same suite with a 15-minute global deadline. This
+checks the existing shared library; it does not verify hosted product integration.
+On Windows use a terminal permitted to launch and clean up native browser/server
+processes. Run `pnpm.cmd` if PowerShell blocks the `pnpm.ps1` shim; no execution-policy
+change is required.

@@ -20,7 +20,7 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 - [x] Replay all 31 migrations and seed in disposable Supabase; 12 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39423479706).
 - [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
 - [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
-- [ ] Complete the operator-triggered GitHub Actions worker verification described in [the worker runbook](worker-verification-2026-10-20.md); Oracle hosting is deferred. This does not certify application ingestion or continuous worker availability.
+- [x] Verify ARQ retries/restarts and cancellation on disposable GitHub Actions services: [24 checks passed](https://github.com/PansGPT/pansgpt/actions/runs/39512003760). No staging keys uploaded; Oracle hosting remains deferred. This does not certify hosted document ingestion or continuous worker availability.
 - [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
 - [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
 - [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
@@ -151,8 +151,8 @@ PR reviewed + CI green → merged to main
 | **6A** | AI Engine Foundation          | Source fixes; live gates pending | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
 | **6B** | AI Engine Advanced            | Source fixes; live gates pending | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend                  | Source fixes; live gates pending | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI       |         ✅ **Core Done**         | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
-| **9**  | Design System + App Shell     |            ⏳ Pending            | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
+| **8**  | Walking Skeleton Web UI       | Testing: staging slice pending | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
+| **9**  | Design System + App Shell     | Library available; app integration gated | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
 | **10** | PDF Reader (Web)              |            ⏳ Pending            | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
 | **11** | AI Chat Interface (Web)       |            ⏳ Pending            | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
 | **12** | Learn Mode (Web)              |            ⏳ Pending            | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
@@ -1189,25 +1189,29 @@ PR reviewed + CI green → merged to main
 
 > Now apply real design on top of a proven working system. Design tokens are established **before** scaffolding any feature screens.
 
-### 9.1 Design Token Freeze (`packages/ui`)
+### 9.1 Existing Design Foundations (`packages/ui`)
 
-- [ ] **3-theme OKLCH color system**:
-  - Light — default academic clean
-  - OLED Dark — true black (AMOLED-safe, no dark grey compromise)
-  - Sepia Warm — low-fatigue long reading sessions
-- [ ] Typography scale (font sizes, line heights, weights) as CSS custom properties
-- [ ] Spacing scale (4px base unit)
-- [ ] All tokens consumed by Tailwind v4 via CSS variables
+The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checklist below records source presence; verification status is recorded separately and full-suite work is currently in progress.
 
-### 9.2 Atomic Component Library (Web — `packages/ui`)
+- [ ] Verify existing three-theme OKLCH foundations: Light, true-black OLED Dark and Sepia. | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
+- [ ] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
+- [ ] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
+- [ ] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
 
-- [ ] `Button` — variants: primary, secondary, ghost, destructive; sizes: sm, md, lg
-- [ ] `Input`, `Textarea`, `Select` — with label, error state, helper text
-- [ ] `Modal` / `Dialog` — Radix Dialog, accessible, focus-trapped
-- [ ] `Card`, `Badge`, `<UserInitialsAvatar />`
-- [ ] `Toast` — Sonner wrapper
-- [ ] `Spinner` / `Skeleton` — loading states
-- [ ] `ErrorBoundary` — catches React render errors, shows friendly fallback, reports to Sentry
+### 9.2 Existing Atomic Component Library (Web - `packages/ui`)
+
+- [ ] Verify `Button`: primary, secondary, tertiary and link variants; destructive option; sm/md/lg/xl sizes. The inherited minimal appearance is named `tertiary`; preserve that API. | file: `packages/ui/src/components/button.tsx`
+- [ ] Verify `Input`, `Textarea`, `Select`: label, error state and helper text. | files: `packages/ui/src/components/field.tsx`, `packages/ui/src/components/select.tsx`
+- [ ] Verify Radix `Dialog`: accessible keyboard behavior and focus containment/restoration. | file: `packages/ui/src/components/dialog.tsx`
+- [ ] Verify existing `Badge`, `Tag` and `Avatar` with initials fallback. | files: `packages/ui/src/components/badge.tsx`, `packages/ui/src/components/avatar.tsx`
+- [ ] Verify existing `Spinner` and progress indicators. | file: `packages/ui/src/components/progress.tsx`
+- [ ] Generic app `Card` primitive; selection cards and card headers already exist.
+- [ ] Extract the existing web `<UserInitialsAvatar />` into the shared package when product integration proceeds.
+- [ ] `Toast`: Sonner wrapper; existing notification controls do not establish this integration.
+- [ ] `Skeleton`: loading placeholders.
+- [ ] `ErrorBoundary`: friendly render-error fallback and Sentry reporting.
+
+Product integration remains gated by the staging journey. The library's theme provider persists locally; profile synchronization and an SSR theme bootstrap remain open.
 
 ### 9.3 Web App Shell
 

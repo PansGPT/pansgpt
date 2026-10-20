@@ -15,7 +15,7 @@
     "preview:dev": "vite",
     "preview:build": "vite build",
     "preview:serve": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
-    "test": "playwright test",
+    "test": "node scripts/test.mjs",
     "lint": "eslint src preview tests --ext .ts,.tsx && node scripts/generate-tokens.mjs --check && node scripts/generate-typography.mjs --check && node scripts/generate-coverage.mjs --check && node scripts/check-css-references.mjs && node scripts/check-paint-styles.mjs && node scripts/generate-icons.mjs --check && node scripts/check-section-assets.mjs",
     "icons:generate": "node scripts/generate-icons.mjs",
     "coverage:generate": "node scripts/generate-coverage.mjs",
