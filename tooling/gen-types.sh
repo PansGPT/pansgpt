@@ -22,5 +22,7 @@ else
 fi
 
 test -s "$TEMP_OUTPUT"
+# Keep the CLI's generated contract with a single final newline for Git hygiene.
+node -e 'const fs = require("node:fs"); const file = process.argv[1]; fs.writeFileSync(file, fs.readFileSync(file, "utf8").trimEnd() + "\n");' "$TEMP_OUTPUT"
 mv "$TEMP_OUTPUT" "$OUTPUT"
 echo "TypeScript types successfully generated at packages/types/src/supabase.ts"

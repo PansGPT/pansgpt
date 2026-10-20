@@ -165,3 +165,21 @@ async def test_uuid_v7_defaults_work_with_restricted_caller_search_path(
     assert len(set(identifiers)) == 256
     assert all(identifier.version == 7 for identifier in identifiers)
     assert all(identifier.variant == uuid.RFC_4122 for identifier in identifiers)
+
+
+async def test_web_search_quota_stops_at_the_database_limit(
+    database: asyncpg.Connection,
+) -> None:
+    user = await make_user(database, await make_university(database))
+    outcomes = [
+        await database.fetchval("SELECT public.reserve_web_search_quota($1, CURRENT_DATE, 2)", user)
+        for _ in range(4)
+    ]
+    assert outcomes == [1, 2, None, None]
+    assert (
+        await database.fetchval(
+            "SELECT count FROM public.web_search_usage WHERE user_id=$1 AND date=CURRENT_DATE",
+            user,
+        )
+        == 2
+    )

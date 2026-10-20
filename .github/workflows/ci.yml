@@ -113,12 +113,13 @@ jobs:
         run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py --allow-live-services -q
       - name: Compare committed contracts with the migrated catalog
         run: uv run --project apps/api python tooling/check-db-contracts.py
-      - name: Generate actual database types and verify consumers
-        run: |
-          bash tooling/gen-types.sh local
-          pnpm typecheck
+      - name: Generate actual database types
+        id: database-types
+        run: bash tooling/gen-types.sh local
+      - name: Verify generated-type consumers
+        run: pnpm typecheck
       - name: Preserve generated types for review
-        if: always()
+        if: always() && steps.database-types.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: migrated-database-types
