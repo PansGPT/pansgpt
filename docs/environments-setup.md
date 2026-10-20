@@ -43,7 +43,7 @@ uv run arq workers.settings.PictureWorkerSettings
 
 The main worker initializes a small Postgres pool, reconciles the durable outbox and schedules cleanup. The picture worker drains its separate queue and exits. Do not grant provider eligibility just to make a worker health check pass. Privacy-blocked ingestion stays durable until its dependencies and eligible provider are available.
 
-The user selected GitHub Actions now and Oracle later. [Staging Worker Verification](../.github/workflows/staging-workers.yml) runs finite checks on isolated temporary queues, with retry/restart probes, R2 HEAD access and before/after row fingerprints. It never consumes application queues or runs storage deletion. See [the worker runbook](worker-verification-2026-10-20.md) for execution, secret scope and evidence.
+The user selected GitHub Actions now and Oracle later. [Worker Verification (Disposable Services)](../.github/workflows/worker-verification.yml) runs finite checks on a disposable local Supabase database and Redis inside the GitHub runner. It verifies isolated queue retries/restarts and cancellation without receiving existing staging credentials. It never connects to hosted staging data or R2. See [the worker runbook](worker-verification-2026-10-20.md) for execution and evidence.
 
 GitHub Actions is used for development/testing, not ongoing application hosting ([service terms](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features#actions)). No continuously available worker is provisioned. Oracle remains deferred; application ingestion stays pending while provider privacy and hosting gates are open.
 

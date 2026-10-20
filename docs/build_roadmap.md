@@ -422,7 +422,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Write multi-stage production `Dockerfile` | file: apps/api/Dockerfile
 - [x] Create Render infrastructure blueprint for staging web service (`pansgpt-api-staging`) | file: render.yaml
-- [x] Define ARQ main/picture settings and isolated Actions verification; ongoing Linux worker hosting remains deferred. | files: `apps/api/workers/settings.py`, `.github/workflows/staging-workers.yml`
+- [x] Define ARQ main/picture settings and isolated Actions verification; ongoing Linux worker hosting remains deferred. | files: `apps/api/workers/settings.py`, `.github/workflows/worker-verification.yml`
 - [x] Use Docker build instruction (`env: docker`) in `render.yaml` instead of raw Python pip | file: render.yaml
 - [x] Add missing environment variable declarations to `render.yaml` | file: render.yaml
 - [ ] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md ? current deployment must be reverified
