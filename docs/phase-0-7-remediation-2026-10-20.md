@@ -65,6 +65,6 @@ Release order:
 4. Record privacy evidence and enable only eligible providers. If none qualify at $0, keep the capability blocked and retain the pilot hold.
 5. Verify approved upload → review → ingestion → retrieval/chat and native OAuth/refresh/logout journeys. Record results before marking phase 0–7 complete.
 
-The Notion integration is not installed/connected. Concise synchronization entries are prepared in [notion-sync-2026-10-20.md](notion-sync-2026-10-20.md); no remote gallery was updated.
+The user supplied a synchronization receipt from their Notion-connected agent: phases 0?7 are Testing, decisions and knowledge-base patterns are synchronized, and the session remains Verified: false. This session has not independently read back those pages. The receipt and pending verification follow-up are recorded in [notion-sync-2026-10-20.md](notion-sync-2026-10-20.md).
 
 The disposable Supabase/type-generation workflow follows [Supabase?s CI guidance](https://supabase.com/docs/guides/deployment/ci/generating-types). The embedding application budget is consistent with the [documented embedding input ceiling](https://ai.google.dev/gemini-api/docs/embeddings); actual endpoint eligibility remains blocked until privacy verification.

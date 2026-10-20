@@ -14,3 +14,10 @@ Target: Project Overview → Engineering. The Notion connector is unavailable; t
 | Knowledge Base             | Update core patterns: API-authoritative roles; signing-key cache only; strict provider eligibility; durable ingestion/storage cleanup outboxes; partial image completeness; idempotent credit reservations/refunds; local Supabase plus Redis; migrated schema CI. Link remediation and provider privacy records.                                                                                                                                                                                                                                                                                                                  |
 
 The synchronization uses structured gallery rows, not long documentation prose. Check Verified only for the specific local checks actually completed; do not imply live closure.
+
+## Verification follow-up in progress
+
+- Disposable migration replay and database contracts now run on the isolated GitHub verification branch because this host has no container runtime.
+- Read-only inspection identified staging as `nrzbjhqtcxlfiyvoeanb`, PostgreSQL 17.6, with 16 recorded migrations, four documents and 275 existing 1536-dimensional chunks.
+- The pending dimension migration now preserves an already-correct index and refuses a populated legacy index. No hosted migration has been applied during this inspection.
+- Update the remote session and roadmap only after recording the actual CI and staging results; these follow-up entries have not been synchronized by this session.

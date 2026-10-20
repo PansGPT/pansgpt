@@ -152,3 +152,16 @@ async def test_reembed_preserves_chunks_and_records_a_durable_job(
         )
         == job["id"]
     )
+
+
+async def test_uuid_v7_defaults_work_with_restricted_caller_search_path(
+    database: asyncpg.Connection,
+) -> None:
+    await database.execute("SET LOCAL search_path = pg_catalog")
+    generated = await database.fetch(
+        "SELECT public.uuid_generate_v7() AS id FROM generate_series(1, 256)"
+    )
+    identifiers = [row["id"] for row in generated]
+    assert len(set(identifiers)) == 256
+    assert all(identifier.version == 7 for identifier in identifiers)
+    assert all(identifier.variant == uuid.RFC_4122 for identifier in identifiers)
