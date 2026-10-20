@@ -28,9 +28,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Create non-root secure user
 RUN groupadd -r appgroup && useradd -r -g appgroup -d /app -s /sbin/nologin appuser
 
-# Copy installed python packages from builder
-COPY --from=builder /root/.local /home/appuser/.local
-ENV PATH=/home/appuser/.local/bin:$PATH
+# [CHAT FIX 2] Keep Python's user site under appuser's configured home (/app).
+COPY --from=builder /root/.local /app/.local
+ENV PATH=/app/.local/bin:$PATH
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
@@ -43,6 +43,8 @@ USER appuser
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3     CMD curl -f http://localhost:8000/health/live || exit 1
+# [CHAT FIX 2] Python is present in the runtime image; builder-only curl is not.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/live', timeout=4)"]
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
