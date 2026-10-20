@@ -1,10 +1,9 @@
 # ==============================================================================
 # PansGPT 2.0 Multi-Tier Resilient LLM Engine (Phase 6)
 # Primary: Google AI Studio Gemma 4 (31B & 26B)
-# Fast Fallback: Groq (openai/gpt-oss-120b & qwen3.6-27b)
+# Fast Fallback: Groq (llama-3.3-70b-versatile & qwen3.8-27b)
 # Safety Net: OpenRouter (Nemotron 3 Ultra & Super)
 # ==============================================================================
-
 import asyncio
 import json
 import time
@@ -12,7 +11,6 @@ import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable  # [CHAT FIX]
 from typing import Any
 
-import httpx
 import structlog
 
 from app.core.config import settings
@@ -25,6 +23,7 @@ from app.engines.tools import CORE_TOOL_DEFINITIONS, tool_engine
 from app.models.chat import (
     ToolCallPayload,
     ToolResultPayload,
+    VoiceTranscribeResponse,
 )
 
 logger = structlog.get_logger(__name__)
@@ -100,7 +99,10 @@ class MultiTierLlmEngine:
         msgs.extend(agent_turns)
         return msgs
 
-    def __init__(self):
+    def __init__(self) -> None:
+        from app.engines.circuit import ModelCircuits
+
+        self.circuits = ModelCircuits()
         self.gemini_key = settings.GEMINI_API_KEY
         self.primary_model = settings.GEMINI_PRIMARY_MODEL
         self.secondary_model = settings.GEMINI_SECONDARY_MODEL
@@ -184,10 +186,10 @@ class MultiTierLlmEngine:
                     INSERT INTO public.ai_telemetry (
                         id, user_id, university_id, provider, model_id,
                         request_type, prompt_tokens, completion_tokens,
-                        latency_ms, status, error_message
+                        latency_ms, status, error_message, usage_source
                     ) VALUES (
                         $1, $2, $3, $4::ai_provider, $5,
-                        'chat', $6, $7, $8, $9, $10
+                        'chat', $6, $7, $8, $9, $10, 'estimated'
                     );
                 """
                 await conn.execute(
@@ -211,378 +213,24 @@ class MultiTierLlmEngine:
         model_name: str,
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
-    ) -> tuple[list[dict[str, Any]], AsyncGenerator[str, None] | None]:
-        """
-        Executes a turn via Google AI Studio Gemma.
-        Returns (tool_calls, text_stream).
+    ) -> tuple[list[dict[str, Any]], AsyncIterator[str]]:
+        from app.engines.provider_adapters import google_turn
 
-        Resilience note: generate_content_stream() is a lazy async generator
-        that does not contact Google's backend until the first chunk is iterated.
-        A 500 ServerError therefore surfaces during iteration — which in the
-        original code happened after turn_handled=True, bypassing all fallback
-        tiers.  Fix: eagerly consume the first chunk here so any backend error
-        fires inside our own try/except before the generator is returned.
-        """
-        from google import genai
-        from google.genai import types
-        from google.genai.errors import ServerError as GoogleServerError
-
-        client = genai.Client(
-            api_key=self.gemini_key,
-            http_options=types.HttpOptions(
-                headers={"X-Data-Retention": "false", "User-Agent": "PansGPT/2.0-ZeroRetention"}
-            ),
-        )
-        prompt_parts = []
-        for m in messages:
-            role = m.get("role", "user")
-            content = m.get("content", "")
-            if role == "system":
-                prompt_parts.append(f"System Instructions:\n{content}")
-            elif role == "user":
-                prompt_parts.append(f"Student Query:\n{content}")
-            elif role == "assistant":
-                if m.get("tool_calls"):
-                    calls_desc = ", ".join(
-                        f"{tc['function']['name']}({tc['function'].get('arguments', '')})"
-                        for tc in m["tool_calls"]
-                    )
-                    prompt_parts.append(f"Assistant: (Executed tools: {calls_desc})")
-                elif content:
-                    prompt_parts.append(f"Assistant:\n{content}")
-            elif role == "tool":
-                prompt_parts.append(f"Tool Output ({m.get('name', 'tool')}):\n{content}")
-
-        full_prompt = "\n\n".join(prompt_parts)
-
-        # Non-streaming path: tools inspection via generate_content
-        if tools:
-            try:
-                resp = await asyncio.wait_for(
-                    client.aio.models.generate_content(
-                        model=model_name,
-                        contents=full_prompt,
-                        config=types.GenerateContentConfig(
-                            automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                                disable=True
-                            )
-                        ),
-                    ),
-                    timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-                )
-            except GoogleServerError as gse:
-                raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
-
-            calls = []
-            self._log_provider_usage(
-                "google", model_name, getattr(resp, "usage_metadata", None)
-            )  # [CHAT FIX 2]
-            if hasattr(resp, "function_calls") and resp.function_calls:
-                for fc in resp.function_calls:
-                    calls.append(
-                        {
-                            "id": f"call_{uuid.uuid4().hex[:8]}",
-                            "name": fc.name,
-                            "arguments": fc.args if isinstance(fc.args, dict) else {},
-                        }
-                    )
-
-            # Check for thinking or preamble text in candidates
-            thought_text = ""
-            visible_text = ""
-            if hasattr(resp, "candidates") and resp.candidates:
-                for cand in resp.candidates:
-                    if cand.content and cand.content.parts:
-                        for part in cand.content.parts:
-                            if getattr(part, "thought", False) and getattr(part, "text", None):
-                                thought_text += part.text + " "
-                            elif getattr(part, "text", None) and not getattr(
-                                part, "function_call", None
-                            ):
-                                visible_text += part.text + " "
-            elif hasattr(resp, "text") and resp.text:
-                visible_text = resp.text
-
-            full_extracted = ""
-            if thought_text.strip():
-                full_extracted += f"<think>{thought_text.strip()}</think>\n"
-            if visible_text.strip():
-                full_extracted += visible_text.strip()
-
-            text_gen = None
-            if full_extracted.strip():
-
-                async def _gemma_text_gen():
-                    for word in full_extracted.split(" "):
-                        yield word + " "
-                        await asyncio.sleep(0.005)
-
-                text_gen = _gemma_text_gen()
-
-            return calls, text_gen
-
-        # Streaming path (no tools)
-        # generate_content_stream() is lazy — a ServerError only fires on the
-        # first iteration, not when the coroutine is awaited.  To make it
-        # catchable by the tier try/except (before turn_handled is set), we
-        # eagerly await the first chunk here and re-raise any ServerError.
-        try:
-            response_stream = await asyncio.wait_for(
-                client.aio.models.generate_content_stream(
-                    model=model_name,
-                    contents=full_prompt,
-                    config=types.GenerateContentConfig(
-                        automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                            disable=True
-                        )
-                    ),
-                ),
-                timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-            )
-        except GoogleServerError as gse:
-            raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
-
-        first_chunk_text: str | None = None
-        try:
-            async for _first in response_stream:
-                self._log_provider_usage(
-                    "google", model_name, getattr(_first, "usage_metadata", None)
-                )  # [CHAT FIX 2]
-                first_chunk_text = _first.text if _first.text else ""
-                break  # Only the first chunk; rest stays buffered in the stream
-        except GoogleServerError as gse:
-            # 500 on first token — re-raise before turn_handled is set so the
-            # tier loop falls through to Groq.
-            raise RuntimeError(f"Google backend error (ServerError): {gse}") from gse
-
-        async def _stream_gen():
-            # Re-emit the first chunk we already consumed above
-            if first_chunk_text:
-                yield first_chunk_text
-            # Stream the remainder; mid-stream errors are logged and stopped
-            # gracefully (re-raising would break the open SSE connection).
-            try:
-                async for chunk in response_stream:
-                    self._log_provider_usage(
-                        "google", model_name, getattr(chunk, "usage_metadata", None)
-                    )  # [CHAT FIX 2]
-                    if chunk.text:
-                        yield chunk.text
-            except GoogleServerError as gse:
-                logger.warning("gemma_stream_mid_error", error=str(gse))
-                raise  # [CHAT FIX]
-
-        return [], _stream_gen()
+        return await google_turn(self.gemini_key, model_name, messages, tools)
 
     async def _call_groq_turn(
         self,
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
-    ) -> tuple[list[dict[str, Any]], AsyncGenerator[str, None] | None]:
-        """
-        Executes a turn via Groq API.
-        Returns (tool_calls, text_stream).
-        """
-        from groq import AsyncGroq
+        model_name: str | None = None,
+    ) -> tuple[list[dict[str, Any]], AsyncIterator[str]]:
+        from app.engines.provider_adapters import groq_turn
 
-        client = AsyncGroq(
-            api_key=self.groq_key,
-            max_retries=0,  # [CHAT FIX]
-            default_headers={
-                "X-Data-Retention": "false",
-                "HTTP-Referer": "https://pansgpt.com",
-                "X-Title": "PansGPT 2.0",
-            },
-        )
-        # Format messages for Groq OpenAI schema
-        groq_msgs = []
-        for m in messages:
-            r = m.get("role", "user")
-            c = m.get("content")
-            if r in ("system", "user"):
-                groq_msgs.append({"role": r, "content": c or ""})
-            elif r == "assistant":
-                msg: dict[str, Any] = {"role": "assistant"}
-                if c:
-                    msg["content"] = c
-                if m.get("tool_calls"):
-                    msg["tool_calls"] = m["tool_calls"]
-                if "content" not in msg and "tool_calls" not in msg:
-                    msg["content"] = ""
-                groq_msgs.append(msg)
-            elif r == "tool":
-                groq_msgs.append(
-                    {
-                        "role": "tool",
-                        "tool_call_id": m.get("tool_call_id", "call_default"),
-                        "name": m.get("name", "tool"),
-                        "content": c or "",
-                    }
-                )
-
-        kwargs: dict[str, Any] = {
-            "model": self.groq_model,
-            "messages": groq_msgs,
-            "temperature": 0.2,
-            "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
-        }
-        if tools:
-            kwargs["tools"] = tools
-            kwargs["tool_choice"] = "auto"
-
-            try:
-                # Groq reasoning models require reasoning_format="parsed" or "hidden" when tools are enabled
-                kwargs["reasoning_format"] = "parsed"
-                resp = await asyncio.wait_for(
-                    client.chat.completions.create(**kwargs),  # [CHAT FIX]
-                    timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-                )
-            except Exception as exc:
-                # Fallback if specific Groq model/client doesn't accept reasoning_format
-                err_str = str(exc).lower()
-                if (
-                    "reasoning_format" in err_str
-                    or "extra_forbidden" in err_str
-                    or "unexpected" in err_str
-                ):
-                    kwargs.pop("reasoning_format", None)
-                    resp = await asyncio.wait_for(
-                        client.chat.completions.create(**kwargs),  # [CHAT FIX]
-                        timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-                    )
-                else:
-                    raise
-
-            choice = resp.choices[0]
-            self._log_provider_usage(
-                "groq", self.groq_model, getattr(resp, "usage", None)
-            )  # [CHAT FIX 2]
-            calls = []
-            if choice.message.tool_calls:
-                for tc in choice.message.tool_calls:
-                    args = {}
-                    try:
-                        args = json.loads(tc.function.arguments) if tc.function.arguments else {}
-                    except Exception:
-                        args = {}
-                    calls.append(
-                        {
-                            "id": tc.id,
-                            "name": tc.function.name,
-                            "arguments": args,
-                        }
-                    )
-
-            # Capture reasoning and content emitted alongside tool calls
-            thought_text = (
-                getattr(choice.message, "reasoning", None)
-                or getattr(choice.message, "reasoning_content", None)
-                or ""
-            )
-            content_text = choice.message.content or ""
-
-            full_extracted = ""
-            if thought_text.strip():
-                full_extracted += f"<think>{thought_text.strip()}</think>\n"
-            if content_text.strip():
-                full_extracted += content_text.strip()
-
-            text_gen = None
-            if full_extracted.strip():
-
-                async def _text_gen():
-                    for word in full_extracted.split(" "):
-                        yield word + " "
-                        await asyncio.sleep(0.005)
-
-                text_gen = _text_gen()
-
-            return calls, text_gen
-
-        stream_kwargs = {
-            "model": self.groq_model,
-            "messages": groq_msgs,
-            "stream": True,
-            "temperature": 0.2,
-            "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
-        }
-        try:
-            stream_kwargs["reasoning_format"] = "parsed"
-            stream = await asyncio.wait_for(
-                client.chat.completions.create(**stream_kwargs),
-                timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-            )
-        except Exception as exc:
-            err_str = str(exc).lower()
-            if (
-                "reasoning_format" in err_str
-                or "extra_forbidden" in err_str
-                or "unexpected" in err_str
-            ):
-                stream_kwargs.pop("reasoning_format", None)
-                stream = await asyncio.wait_for(
-                    client.chat.completions.create(**stream_kwargs),
-                    timeout=settings.CHAT_FIRST_CHUNK_TIMEOUT_S,  # [CHAT FIX]
-                )
-            else:
-                raise
-
-        async def _stream_gen():
-            async for chunk in stream:
-                usage = getattr(chunk, "usage", None)  # [CHAT FIX 2]
-                if usage is None:
-                    usage = getattr(getattr(chunk, "x_groq", None), "usage", None)
-                self._log_provider_usage("groq", self.groq_model, usage)
-                delta = chunk.choices[0].delta if chunk.choices else None
-                if delta:
-                    # Stream reasoning chunks
-                    thought_chunk = getattr(delta, "reasoning", None) or getattr(
-                        delta, "reasoning_content", None
-                    )
-                    if thought_chunk:
-                        yield f"<think>{thought_chunk}</think>"
-                    token = delta.content
-                    if token:
-                        yield token
-
-        return [], _stream_gen()
+        return await groq_turn(self.groq_key, model_name or self.groq_model, messages, tools)
 
     async def _call_openrouter(self, messages: list[dict[str, Any]]) -> str:
-        """Executes fallback generation via OpenRouter API with ZDR headers."""
-        headers = {
-            "Authorization": f"Bearer {self.openrouter_key}",
-            "HTTP-Referer": "https://pansgpt.com",
-            "X-Title": "PansGPT 2.0",
-            "X-Data-Retention": "false",
-        }
-        or_messages = []
-        for m in messages:
-            r = m.get("role", "user")
-            c = m.get("content")
-            if r in ("system", "user", "assistant") and c:
-                or_messages.append({"role": r, "content": str(c)})
-        if not or_messages:
-            or_messages = [{"role": "user", "content": "Hello"}]
-
-        payload = {
-            "model": self.openrouter_model,
-            "messages": or_messages,
-            "max_tokens": 1500,
-            "temperature": 0.2,
-        }
-        async with httpx.AsyncClient(timeout=15.0) as client:
-            resp = await client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers=headers,
-                json=payload,
-            )
-            if resp.status_code != 200:
-                raise ValueError(f"OpenRouter returned HTTP {resp.status_code}: {resp.text}")
-            data = resp.json()
-            self._log_provider_usage(
-                "openrouter", self.openrouter_model, data.get("usage")
-            )  # [CHAT FIX 2]
-            return data["choices"][0]["message"]["content"]
+        calls, stream = await self._openrouter_turn(messages)
+        return "".join([chunk async for chunk in stream])
 
     def classify_intent(self, query: str) -> tuple[str | None, dict[str, Any] | None]:
         """Classifies user query intent for dynamic skills and structured tool generation."""
@@ -694,6 +342,8 @@ class MultiTierLlmEngine:
         user_id: str | None = None,  # [CHAT FIX]
         university_id: str | None = None,  # [CHAT FIX]
         enable_tools: bool = True,  # [CHAT FIX]
+        role: str = "student",
+        levels: list[str] | None = None,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:  # [CHAT FIX]
         attempt_state = {"model": "unknown"}  # [CHAT FIX]
         try:  # [CHAT FIX]
@@ -706,9 +356,12 @@ class MultiTierLlmEngine:
                     university_id,  # [CHAT FIX]
                     enable_tools,  # [CHAT FIX]
                     attempt_state,  # [CHAT FIX]
+                    role,
+                    levels,
                 ):  # [CHAT FIX]
                     yield event  # [CHAT FIX]
         except TimeoutError as exc:  # [CHAT FIX]
+            self.circuits.failed(attempt_state["model"])
             logger.warning(  # [CHAT FIX]
                 "chat_model_deadline_exceeded",  # [CHAT FIX]
                 model=attempt_state["model"],  # [CHAT FIX]
@@ -729,6 +382,7 @@ class MultiTierLlmEngine:
             )  # [CHAT FIX]
 
         except Exception as exc:  # [CHAT FIX 2]
+            self.circuits.failed(attempt_state["model"])
             code = self._stream_error_code(exc)  # [CHAT FIX 2]
             logger.warning(  # [CHAT FIX 2]
                 "chat_stream_failed_after_start",  # [CHAT FIX 2]
@@ -849,16 +503,17 @@ class MultiTierLlmEngine:
 
         return calls, forward()  # [CHAT FIX 2]
 
-    async def _openrouter_turn(  # [CHAT FIX]
-        self,  # [CHAT FIX]
-        messages: list[dict[str, Any]],  # [CHAT FIX]
-    ) -> tuple[list[dict[str, Any]], AsyncGenerator[str, None]]:  # [CHAT FIX]
-        text = await self._call_openrouter(messages)  # [CHAT FIX]
+    async def _openrouter_turn(
+        self,
+        messages: list[dict[str, Any]],
+        tools: list[dict[str, Any]] | None = None,
+        model_name: str | None = None,
+    ) -> tuple[list[dict[str, Any]], AsyncIterator[str]]:
+        from app.engines.provider_adapters import openrouter_turn
 
-        async def stream() -> AsyncGenerator[str, None]:  # [CHAT FIX]
-            yield text  # [CHAT FIX]
-
-        return [], stream()  # [CHAT FIX]
+        return await openrouter_turn(
+            self.openrouter_key, model_name or self.openrouter_model, messages, tools
+        )
 
     async def _stream_agentic_chat(  # [CHAT FIX]
         self,
@@ -869,6 +524,8 @@ class MultiTierLlmEngine:
         university_id: str | None = None,
         enable_tools: bool = True,
         attempt_state: dict[str, str] | None = None,  # [CHAT FIX]
+        role: str = "student",
+        levels: list[str] | None = None,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:
         """
         Multi-turn Agentic Chat Streamer (max 5 turns):
@@ -890,7 +547,17 @@ class MultiTierLlmEngine:
 
         agent_tool_messages: list[dict[str, Any]] = []
         active_prompt_tokens = (len(system_prompt) + len(user_message)) // 4
-        active_tools = ALL_TOOL_DEFINITIONS if enable_tools else None
+        active_tools = None
+        if enable_tools:
+            if any(
+                self._is_live_key(key)
+                for key in (self.gemini_key, self.groq_key, self.openrouter_key)
+            ):
+                from app.engines.skill_registry import available_tools
+
+                active_tools = await available_tools(levels)
+            else:
+                active_tools = ALL_TOOL_DEFINITIONS
 
         for turn in range(MAX_AGENT_TURNS):
             turn_handled = False
@@ -899,157 +566,59 @@ class MultiTierLlmEngine:
             # Allow up to 2 tool execution turns; from turn 2 onwards force text synthesis
             tools_for_turn = active_tools if (turn < 2) else None
 
-            # ------------------------------------------------------------------
-            # TIER 1: Google AI Studio Gemma 4 31B (13K History Budget)
-            # ------------------------------------------------------------------
-            if self._is_live_key(self.gemini_key):
-                try:
-                    logger.info("llm_agent_turn_tier1_gemma_31b", turn=turn)
-                    active_provider = "google"
-                    active_model = self.primary_model
-                    gemma_msgs = self._build_provider_messages(
-                        system_prompt,
-                        user_message,
-                        history,
-                        agent_tool_messages,
-                        MAX_HISTORY_TOKENS_GOOGLE,
-                    )
-                    active_prompt_tokens = (
-                        sum(len(str(m.get("content") or "")) for m in gemma_msgs) // 4
-                    )
-                    tool_calls, text_gen = await self._bounded_model_turn(  # [CHAT FIX]
-                        self.primary_model,  # [CHAT FIX]
-                        lambda: self._call_gemma_turn(  # [CHAT FIX]
-                            self.primary_model,  # [CHAT FIX]
-                            gemma_msgs,  # [CHAT FIX]
-                            tools_for_turn,  # [CHAT FIX]
-                        ),  # [CHAT FIX]
-                        attempt_state,  # [CHAT FIX]
-                    )  # [CHAT FIX]
-                    turn_handled = True
-                except Exception as e1:
-                    err_desc = self._format_error(e1)
-                    logger.warning("tier1_gemma_failed_failing_over", error=err_desc)
-                    await self._record_telemetry(
-                        "google",
-                        self.primary_model,
-                        int((time.time() - start_time) * 1000),
-                        active_prompt_tokens,
-                        0,
-                        "failover",
-                        user_id,
-                        university_id,
-                        err_desc,
-                    )
+            candidates = [
+                ("google", self.primary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                ("google", self.secondary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                ("groq", self.groq_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                ("groq", self.groq_secondary_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                (
+                    "openrouter",
+                    self.openrouter_model,
+                    self.openrouter_key,
+                    MAX_HISTORY_TOKENS_OPENROUTER,
+                ),
+                (
+                    "openrouter",
+                    settings.OPENROUTER_FAST_MODEL,
+                    self.openrouter_key,
+                    MAX_HISTORY_TOKENS_OPENROUTER,
+                ),
+            ]
+            for provider, model, key, budget in candidates:
+                if not self._is_live_key(key) or not self.circuits.available(model):
+                    continue
+                active_provider, active_model = provider, model
+                messages = self._build_provider_messages(
+                    system_prompt, user_message, history, agent_tool_messages, budget
+                )
 
-            # ------------------------------------------------------------------
-            # TIER 1b: Google AI Studio Gemma 4 26B MoE (13K History Budget)
-            # ------------------------------------------------------------------
-            if not turn_handled and self._is_live_key(self.gemini_key):
-                try:
-                    logger.info("llm_agent_turn_tier1b_gemma_26b", turn=turn)
-                    active_provider = "google"
-                    active_model = self.secondary_model
-                    gemma_msgs = self._build_provider_messages(
-                        system_prompt,
-                        user_message,
-                        history,
-                        agent_tool_messages,
-                        MAX_HISTORY_TOKENS_GOOGLE,
-                    )
-                    active_prompt_tokens = (
-                        sum(len(str(m.get("content") or "")) for m in gemma_msgs) // 4
-                    )
-                    tool_calls, text_gen = await self._bounded_model_turn(  # [CHAT FIX]
-                        self.secondary_model,  # [CHAT FIX]
-                        lambda: self._call_gemma_turn(  # [CHAT FIX]
-                            self.secondary_model,  # [CHAT FIX]
-                            gemma_msgs,  # [CHAT FIX]
-                            tools_for_turn,  # [CHAT FIX]
-                        ),  # [CHAT FIX]
-                        attempt_state,  # [CHAT FIX]
-                    )  # [CHAT FIX]
-                    turn_handled = True
-                except Exception as e1b:
-                    err_desc = self._format_error(e1b)
-                    logger.warning("tier1b_gemma_failed_failing_over", error=err_desc)
-                    await self._record_telemetry(
-                        "google",
-                        self.secondary_model,
-                        int((time.time() - start_time) * 1000),
-                        active_prompt_tokens,
-                        0,
-                        "failover",
-                        user_id,
-                        university_id,
-                        err_desc,
-                    )
+                async def create() -> tuple[list[dict[str, Any]], AsyncIterator[str] | None]:
+                    if provider == "google":
+                        return await self._call_gemma_turn(model, messages, tools_for_turn)
+                    if provider == "groq":
+                        if model == self.groq_model:
+                            return await self._call_groq_turn(messages, tools_for_turn)
+                        return await self._call_groq_turn(
+                            messages, tools_for_turn, model_name=model
+                        )
+                    return await self._openrouter_turn(messages, tools_for_turn, model_name=model)
 
-            # ------------------------------------------------------------------
-            # TIER 2: Groq Fast Fallback (5K History Budget - Safe for 8K TPM)
-            # ------------------------------------------------------------------
-            if not turn_handled and self._is_live_key(self.groq_key):
                 try:
-                    logger.info("llm_agent_turn_tier2_groq", turn=turn)
-                    active_provider = "groq"
-                    active_model = self.groq_model
-                    groq_msgs = self._build_provider_messages(
-                        system_prompt,
-                        user_message,
-                        history,
-                        agent_tool_messages,
-                        MAX_HISTORY_TOKENS_GROQ,
+                    tool_calls, text_gen = await self._bounded_model_turn(
+                        model, create, attempt_state
                     )
-                    active_prompt_tokens = (
-                        sum(len(str(m.get("content") or "")) for m in groq_msgs) // 4
-                    )
-                    tool_calls, text_gen = await self._bounded_model_turn(  # [CHAT FIX]
-                        self.groq_model,  # [CHAT FIX]
-                        lambda: self._call_groq_turn(groq_msgs, tools_for_turn),  # [CHAT FIX]
-                        attempt_state,  # [CHAT FIX]
-                    )  # [CHAT FIX]
+                    if text_gen is None:
+                        self.circuits.succeeded(model)
                     turn_handled = True
-                except Exception as e2:
-                    err_desc = self._format_error(e2)
-                    logger.warning("tier2_groq_failed_failing_over", error=err_desc)
-                    await self._record_telemetry(
-                        "groq",
-                        self.groq_model,
-                        int((time.time() - start_time) * 1000),
-                        active_prompt_tokens,
-                        0,
-                        "failover",
-                        user_id,
-                        university_id,
-                        err_desc,
+                    break
+                except Exception as exc:
+                    self.circuits.failed(model)
+                    logger.warning(
+                        "model_failover",
+                        provider=provider,
+                        model=model,
+                        error_type=type(exc).__name__,
                     )
-
-            # ------------------------------------------------------------------
-            # TIER 3: OpenRouter Safety Net (24K History Budget - 1M Context Window)
-            # ------------------------------------------------------------------
-            if not turn_handled and self._is_live_key(self.openrouter_key):
-                try:
-                    logger.info("llm_agent_turn_tier3_openrouter", turn=turn)
-                    active_provider = "openrouter"
-                    active_model = self.openrouter_model
-                    or_msgs = self._build_provider_messages(
-                        system_prompt,
-                        user_message,
-                        history,
-                        agent_tool_messages,
-                        MAX_HISTORY_TOKENS_OPENROUTER,
-                    )
-                    active_prompt_tokens = (
-                        sum(len(str(m.get("content") or "")) for m in or_msgs) // 4
-                    )
-                    tool_calls, text_gen = await self._bounded_model_turn(  # [CHAT FIX]
-                        self.openrouter_model,  # [CHAT FIX]
-                        lambda: self._openrouter_turn(or_msgs),  # [CHAT FIX]
-                        attempt_state,  # [CHAT FIX]
-                    )  # [CHAT FIX]
-                    turn_handled = True
-                except Exception as e3:
-                    logger.error("tier3_openrouter_failed", error=self._format_error(e3))
 
             # ------------------------------------------------------------------
             # OFFLINE DETERMINISTIC AGENT FALLBACK
@@ -1073,6 +642,8 @@ class MultiTierLlmEngine:
                         "error",  # [CHAT FIX]
                     )  # [CHAT FIX]
                     return  # [CHAT FIX]
+                if settings.ENVIRONMENT != "development" or not settings.EMBEDDER_FAKE_MODE:
+                    raise RuntimeError("No privacy-eligible AI provider is available")
                 active_provider = "google"
                 active_model = "gemma-offline-mock"
 
@@ -1123,7 +694,7 @@ class MultiTierLlmEngine:
                         "bioavailability, metabolism, and therapeutic monitoring. Please refer to your lecture monograph for exact clinical dosing."
                     )
 
-                    async def _mock_gen():
+                    async def _mock_gen() -> AsyncGenerator[str, None]:
                         for word in mock_reply.split(" "):
                             yield word + " "
                             await asyncio.sleep(0.002)
@@ -1135,6 +706,33 @@ class MultiTierLlmEngine:
             # ------------------------------------------------------------------
             # PROCESS AGENT TURN RESULTS
             # ------------------------------------------------------------------
+            if text_gen:
+                from app.engines.stream_guard import StreamGuard
+
+                output_guard = StreamGuard()
+                parser = ThinkingStreamParser()
+                async for chunk in text_gen:
+                    visible, thought = parser.feed(output_guard.feed(chunk))
+                    if thought:
+                        yield (
+                            "thinking_chunk",
+                            {"delta": thought, "token": thought},
+                            active_provider,
+                        )
+                    if visible:
+                        collected_tokens.append(visible)
+                        yield "text_chunk", {"delta": visible, "token": visible}, active_provider
+                tail_visible, tail_thought = parser.feed(output_guard.flush())
+                self.circuits.succeeded(active_model)
+                visible, thought = parser.flush()
+                visible = tail_visible + visible
+                thought = tail_thought + thought
+                if thought:
+                    yield "thinking_chunk", {"delta": thought, "token": thought}, active_provider
+                if visible:
+                    collected_tokens.append(visible)
+                    yield "text_chunk", {"delta": visible, "token": visible}, active_provider
+                text_gen = None
             if tool_calls:
                 # 1. Stream any reasoning or preamble text emitted prior to tool execution
                 turn_visible_tokens: list[str] = []
@@ -1225,7 +823,13 @@ class MultiTierLlmEngine:
                         active_provider,
                     )
 
-                    if t_name in SKILL_NAMES:
+                    allowed_names = {tool["function"]["name"] for tool in tools_for_turn or []}
+                    if t_name not in allowed_names:
+                        tool_res = {
+                            "status": "error",
+                            "error": "This tool is not available for this request.",
+                        }
+                    elif t_name in SKILL_NAMES:
                         artifact = await skill_engine.dispatch_skill(
                             t_name, t_args, user_id=user_id, university_id=university_id
                         )
@@ -1240,7 +844,12 @@ class MultiTierLlmEngine:
                         }
                     else:
                         tool_res = await tool_engine.dispatch_tool(
-                            t_name, t_args, university_id=university_id, user_id=user_id
+                            t_name,
+                            t_args,
+                            university_id=university_id,
+                            user_id=user_id,
+                            role=role,
+                            levels=levels,
                         )
 
                     yield (
@@ -1292,47 +901,10 @@ class MultiTierLlmEngine:
                     # In live mode, loop to next turn so the LLM receives the tool results and generates synthesis!
                     continue
 
-            elif text_gen:
-                parser = ThinkingStreamParser()
-                async for chunk in text_gen:
-                    sanitized = policy_guard.filter_credential_leaks(chunk)
-                    visible_chunk, thinking_chunk = parser.feed(sanitized)
-
-                    if thinking_chunk:
-                        yield (
-                            "thinking_chunk",
-                            {"delta": thinking_chunk, "token": thinking_chunk},
-                            active_provider,
-                        )
-                    if visible_chunk:
-                        collected_tokens.append(visible_chunk)
-                        yield (
-                            "text_chunk",
-                            {"delta": visible_chunk, "token": visible_chunk},
-                            active_provider,
-                        )
-
-                # Flush any held buffer at end of stream
-                rem_vis, rem_think = parser.flush()
-                if rem_think:
-                    yield (
-                        "thinking_chunk",
-                        {"delta": rem_think, "token": rem_think},
-                        active_provider,
-                    )
-                if rem_vis:
-                    collected_tokens.append(rem_vis)
-                    yield (
-                        "text_chunk",
-                        {"delta": rem_vis, "token": rem_vis},
-                        active_provider,
-                    )
-
-                if not collected_tokens:  # [CHAT FIX 2]
-                    raise RuntimeError(  # [CHAT FIX 2]
-                        "The model returned thinking without a visible answer."  # [CHAT FIX 2]
-                    )  # [CHAT FIX 2]
-                generation_successful = True  # [CHAT FIX 2]
+            else:
+                if not collected_tokens:
+                    raise RuntimeError("The model returned thinking without a visible answer.")
+                generation_successful = True
                 break
 
         # Record final telemetry
@@ -1377,7 +949,7 @@ class MultiTierLlmEngine:
         filename: str = "recording.webm",
         mime_type: str = "audio/webm",
         language: str = "en",
-    ):
+    ) -> VoiceTranscribeResponse:
         """
         Delegates audio transcription to AudioTranscriptionEngine (Roadmap 6B.23).
         """

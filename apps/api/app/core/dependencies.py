@@ -77,8 +77,8 @@ class UserContext(dict):
         terms_accepted_at: str | None = None,
         client_type: str = "web",
         dev_bypass: bool = False,
-        **kwargs,
-    ):
+        **kwargs: object,
+    ) -> None:
         u_id = uuid.UUID(str(id)) if isinstance(id, (str, uuid.UUID)) else id
         uni_uuid = (
             uuid.UUID(str(university_id))
@@ -166,7 +166,7 @@ async def invalidate_user_role_cache(user_id: str | uuid.UUID) -> None:
             import redis.asyncio as aioredis
 
             r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
-            await r.delete(f"auth:role:{uid_str}")
+            await r.delete(f"auth:role:v2:{uid_str}")
             await r.aclose()
         except Exception:
             pass
@@ -187,7 +187,7 @@ async def _get_cached_role(user_id: str) -> dict | None:
             import redis.asyncio as aioredis
 
             r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
-            raw = await r.get(f"auth:role:{user_id}")
+            raw = await r.get(f"auth:role:v2:{user_id}")
             await r.aclose()
             if raw:
                 data = json.loads(raw)
@@ -208,7 +208,7 @@ async def _set_cached_role(user_id: str, data: dict) -> None:
 
             r = aioredis.from_url(settings.redis_connection_url, socket_timeout=1.0)
             await r.set(
-                f"auth:role:{user_id}",
+                f"auth:role:v2:{user_id}",
                 json.dumps(data),
                 ex=settings.ROLE_CACHE_TTL_SECONDS,
             )
@@ -225,69 +225,48 @@ async def _lookup_user_profile(
 ) -> tuple[list[str], str, uuid.UUID | None, str | None, str | None, str | None, str | None]:
     """
     Resolves roles and university_id for a verified JWT subject.
-    Performs cached lookup (5 min TTL) against DB public.users with claims fallback.
+    Reads authoritative public.users on every request; cached roles never grant authority.
     Returns: (roles, role, university_id, first_name, last_name, current_level, terms_accepted_at)
     """
-    cached = await _get_cached_role(user_id)
-    if cached:
-        uni_id = uuid.UUID(cached["university_id"]) if cached.get("university_id") else None
-        return (
-            cached.get("roles", ["student"]),
-            cached.get("role", "student"),
-            uni_id,
-            cached.get("first_name"),
-            cached.get("last_name"),
-            cached.get("current_level"),
-            cached.get("terms_accepted_at"),
-        )
-
-    # Fallback to claims metadata if DB is offline/unreachable
-    metadata = claims.get("user_metadata", {}) or {}
-    roles = metadata.get("roles")
-    if not roles:
-        single_role = metadata.get("role") or claims.get("role") or "student"
-        roles = [single_role]
-    primary_role = roles[0] if roles else "student"
-    uni_str = metadata.get("university_id")
-    uni_id = uuid.UUID(uni_str) if uni_str else None
-    first_name = metadata.get("first_name")
-    last_name = metadata.get("last_name")
-    current_level = metadata.get("current_level")
-    terms_accepted_at = metadata.get("terms_accepted_at")
-
-    if settings.DATABASE_URL:
-        try:
-            async with get_db_connection(timeout=3.0) as conn:
-                if conn:
-                    row = await conn.fetchrow(
-                        """
-                        SELECT roles, university_id, first_name, last_name, current_level, terms_accepted_at::text, deleted_at
-                        FROM public.users
-                        WHERE id = $1;
-                        """,
-                        uuid.UUID(user_id),
-                    )
-                    if row:
-                        if row["deleted_at"] is not None:
-                            raise HTTPException(
-                                status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail="User account has been deactivated.",
-                            )
-                        db_roles = [str(r) for r in row["roles"]] if row["roles"] else ["student"]
-                        roles = db_roles
-                        for hr in ["super_admin", "university_admin", "lecturer", "student"]:
-                            if hr in roles:
-                                primary_role = hr
-                                break
-                        uni_id = row["university_id"]
-                        first_name = row["first_name"]
-                        last_name = row["last_name"]
-                        current_level = row["current_level"]
-                        terms_accepted_at = row["terms_accepted_at"]
-        except HTTPException:
-            raise
-        except Exception as exc:
-            logger.warning("auth_db_profile_lookup_failed", error=str(exc))
+    # JWT user_metadata is editable by the caller and never grants authority.
+    roles = ["student"]
+    primary_role = "student"
+    uni_id = None
+    first_name = None
+    last_name = None
+    current_level = None
+    terms_accepted_at = None
+    try:
+        async with get_db_connection(timeout=3.0) as conn:
+            if conn is None:
+                raise HTTPException(status_code=503, detail="Authorization store is unavailable.")
+            row = await conn.fetchrow(
+                "SELECT roles, university_id, first_name, last_name, current_level, "
+                "terms_accepted_at::text, deleted_at FROM public.users WHERE id = $1;",
+                uuid.UUID(user_id),
+            )
+        if row:
+            if row["deleted_at"] is not None:
+                raise HTTPException(status_code=401, detail="User account has been deactivated.")
+            roles = [str(role) for role in row["roles"]] or ["student"]
+            primary_role = next(
+                (
+                    role
+                    for role in ("super_admin", "university_admin", "lecturer", "student")
+                    if role in roles
+                ),
+                "student",
+            )
+            uni_id = row["university_id"]
+            first_name = row["first_name"]
+            last_name = row["last_name"]
+            current_level = row["current_level"]
+            terms_accepted_at = row["terms_accepted_at"]
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("auth_db_profile_lookup_failed", error_type=type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Authorization store is unavailable.") from exc
 
     profile_data = {
         "roles": roles,
@@ -305,115 +284,38 @@ async def _lookup_user_profile(
 # ------------------------------------------------------------------------------
 # 4. Token & API Key Verification
 # ------------------------------------------------------------------------------
-_VERIFIED_TOKEN_CACHE: dict[str, tuple[dict, float]] = {}
-
-
 def _verify_token(token: str) -> dict:
-    """Verifies RS256/HS256/ES256 JWT signature using Supabase secret, JWKS, or Auth API gateway."""
-    now = time.time()
-    if token in _VERIFIED_TOKEN_CACHE:
-        cached_claims, exp = _VERIFIED_TOKEN_CACHE[token]
-        if now < exp:
-            return cached_claims
-
+    """Validate every token's claims; cache signing keys, never authorization success."""
     try:
         header = jwt.get_unverified_header(token)
-    except Exception as exc:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid token header: {exc}",
-        ) from exc
-
-    alg = header.get("alg", "HS256")
-
-    # 1. HS256 local verification if SUPABASE_JWT_SECRET is configured
-    if alg == "HS256" and settings.SUPABASE_JWT_SECRET:
-        try:
-            claims = jwt.decode(
-                token,
-                settings.SUPABASE_JWT_SECRET,
-                algorithms=["HS256"],
-                options={"verify_aud": False},
-            )
-            _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
-            return claims
-        except ExpiredSignatureError as exc:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token has expired.",
-            ) from exc
-        except InvalidTokenError as exc:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail=f"Invalid token signature: {exc}",
-            ) from exc
-
-    # 2. RS256 / ES256 verification via JWKS
-    client = get_jwks_client()
-    if client and alg in ("RS256", "ES256"):
-        try:
-            signing_key = client.get_signing_key_from_jwt(token)
-            claims = jwt.decode(
-                token,
-                signing_key.key,
-                algorithms=["RS256", "ES256"],
-                options={"verify_aud": False},
-            )
-            _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
-            return claims
-        except ExpiredSignatureError as exc:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token has expired.",
-            ) from exc
-        except (InvalidTokenError, PyJWKClientError):
-            pass
-
-    # 3. Supabase Auth API Fallback (Verifies tokens with the project gateway)
-    if settings.SUPABASE_URL and settings.SUPABASE_ANON_KEY:
-        try:
-            import httpx
-
-            auth_url = f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/user"
-            with httpx.Client(timeout=4.0) as http_client:
-                resp = http_client.get(
-                    auth_url,
-                    headers={
-                        "Authorization": f"Bearer {token}",
-                        "apikey": settings.SUPABASE_ANON_KEY,
-                    },
-                )
-            if resp.status_code == 200:
-                user_data = resp.json()
-                claims = {
-                    "sub": user_data["id"],
-                    "id": user_data["id"],
-                    "email": user_data.get("email", ""),
-                    "user_metadata": user_data.get("user_metadata", {}),
-                    "role": user_data.get("role", "authenticated"),
-                }
-                _VERIFIED_TOKEN_CACHE[token] = (claims, now + 300)
-                return claims
-            elif resp.status_code == 401:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="Token rejected by Supabase Auth (expired or invalid).",
-                )
-        except HTTPException:
-            raise
-        except Exception as exc:
-            logger.warning("supabase_auth_gateway_verification_failed", error=str(exc))
-
-    if alg == "HS256" and not settings.SUPABASE_JWT_SECRET:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="HS256 token verification failed. Please configure SUPABASE_JWT_SECRET in .env.",
+        algorithm = header.get("alg")
+        issuer = f"{(settings.SUPABASE_URL or '').rstrip('/')}/auth/v1"
+        options = {"require": ["exp", "sub", "iss", "aud"], "verify_aud": True}
+        if algorithm == "HS256" and settings.SUPABASE_JWT_SECRET:
+            key = settings.SUPABASE_JWT_SECRET
+        elif algorithm in ("RS256", "ES256"):
+            client = get_jwks_client()
+            if client is None:
+                raise HTTPException(status_code=503, detail="Signing keys are unavailable.")
+            key = client.get_signing_key_from_jwt(token).key
+        else:
+            raise HTTPException(status_code=401, detail="Unsupported token signing algorithm.")
+        claims = jwt.decode(
+            token,
+            key,
+            algorithms=[algorithm],
+            issuer=issuer,
+            audience="authenticated",
+            options=options,
         )
-
-    raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Token verification failed.",
-    )
+        uuid.UUID(claims["sub"])
+        return claims
+    except ExpiredSignatureError as exc:
+        raise HTTPException(status_code=401, detail="Token has expired.") from exc
+    except (InvalidTokenError, ValueError, TypeError, KeyError) as exc:
+        raise HTTPException(status_code=401, detail="Invalid token or required claims.") from exc
+    except PyJWKClientError as exc:
+        raise HTTPException(status_code=503, detail="Signing keys are unavailable.") from exc
 
 
 def _verify_api_key(api_key: str | None) -> str | None:
@@ -470,7 +372,7 @@ async def get_current_user(
     # 1. Bearer JWT validation
     if auth_str and auth_str.startswith("Bearer "):
         token = auth_str.split(" ", 1)[1].strip()
-        claims = _verify_token(token)
+        claims = await asyncio.to_thread(_verify_token, token)
         sub = claims.get("sub") or claims.get("id")
         if not sub:
             raise HTTPException(

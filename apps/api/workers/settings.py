@@ -3,10 +3,12 @@
 # Background job runner connected to Upstash Redis queue
 # ==============================================================================
 
-from arq import func  # [PHASE2 FIX]
+from arq import cron, func  # [PHASE2 FIX]
 from arq.connections import RedisSettings
 
 from app.core.config import settings
+from app.engines.job_outbox import reconcile_jobs
+from workers.maintenance import cleanup_storage, shutdown, startup
 from workers.tasks import describe_document_images_job, ingest_document_job  # [PHASE2 FIX]
 
 PICTURE_QUEUE_NAME = "arq:picture_queue"  # [QUEUE SPLIT]
@@ -28,6 +30,16 @@ def get_redis_settings() -> RedisSettings:
 class WorkerSettings:  # [QUEUE SPLIT]
     """Configuration class for main arq worker process: `python -m arq workers.settings.WorkerSettings`."""  # [QUEUE SPLIT]
 
+    on_startup = startup
+    on_shutdown = shutdown
+    cron_jobs = [
+        cron(reconcile_jobs, second={0}),
+        cron(
+            cleanup_storage,
+            minute={0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55},
+            run_at_startup=True,
+        ),
+    ]
     functions = [  # [QUEUE SPLIT]
         func(ingest_document_job, timeout=1800),  # [QUEUE SPLIT]
     ]  # [QUEUE SPLIT]
@@ -41,6 +53,8 @@ class WorkerSettings:  # [QUEUE SPLIT]
 class PictureWorkerSettings:  # [QUEUE SPLIT]
     """Configuration class for on-demand picture worker process: `python -m arq workers.settings.PictureWorkerSettings`."""  # [QUEUE SPLIT]
 
+    on_startup = startup
+    on_shutdown = shutdown
     queue_name = PICTURE_QUEUE_NAME  # [QUEUE SPLIT]
     functions = [  # [QUEUE SPLIT]
         func(describe_document_images_job, timeout=7200, max_tries=8),  # [QUEUE SPLIT]

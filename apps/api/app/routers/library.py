@@ -3,6 +3,7 @@
 # Multi-endpoint, Dual-Mounting Alias, Complete CRUD & Segment Inspection
 # ==============================================================================
 
+import json
 import uuid
 
 import asyncpg
@@ -97,8 +98,8 @@ async def initialize_document_upload(
                 "INSERT INTO public.documents ("  # [PRELAUNCH FIX]
                 "id, university_id, title, course_code, course_title, topic, lecturer_name, "  # [PRELAUNCH FIX]
                 "storage_key, file_size_bytes, mime_type, target_levels, academic_session, "  # [PRELAUNCH FIX]
-                "semester, status, embedding_status) VALUES ("  # [PRELAUNCH FIX]
-                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending');",  # [PRELAUNCH FIX]
+                "semester, status, embedding_status, uploaded_by) VALUES ("  # [PRELAUNCH FIX]
+                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending', $15);",  # [PRELAUNCH FIX]
                 uuid.UUID(doc_id),  # [PRELAUNCH FIX]
                 uuid.UUID(university_id),  # [PRELAUNCH FIX]
                 payload.title,  # [PRELAUNCH FIX]
@@ -113,6 +114,7 @@ async def initialize_document_upload(
                 payload.academic_session,  # [PRELAUNCH FIX]
                 payload.semester,  # [PRELAUNCH FIX]
                 document_status,  # [PRELAUNCH FIX]
+                auth_user.id,
             )  # [PRELAUNCH FIX]
             if inserted != "INSERT 0 1":  # [PRELAUNCH FIX]
                 raise HTTPException(  # [PRELAUNCH FIX]
@@ -174,7 +176,7 @@ async def confirm_document_upload(
     document_id: str,
     auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> ConfirmUploadResponse:
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
     Active documents enter ingestion; pending reviews wait for verified approval. [CHAT FIX 2]
@@ -211,14 +213,15 @@ async def confirm_document_upload(
                 """
                 UPDATE public.documents
                 SET embedding_status = 'pending', updated_at = now()
-                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL
+                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL AND embedding_status='pending'
                 RETURNING storage_key; -- [CHAT FIX 2]
                 """,
                 uuid.UUID(document_id),
             )
             if not confirmed:
                 raise HTTPException(
-                    status_code=409, detail="Document approval changed. Retry confirmation."
+                    status_code=409,
+                    detail="Document is no longer awaiting ingestion. Use re-embed for a replacement run.",
                 )
         except HTTPException:
             raise
@@ -264,7 +267,7 @@ async def download_document_or_artifact(
         default=None, description="Override download filename (without extension)"
     ),
     auth_user: UserContext = Depends(get_current_user),  # [CHAT FIX]
-):
+) -> Response:
     """Serve generated artifacts only to their verified owner or a super admin. [CHAT FIX]"""
     parts = key.split("/")  # [CHAT FIX]
     if (  # [CHAT FIX]
@@ -385,7 +388,7 @@ async def get_single_document(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> DocumentDetailResponse:
     """Fetch metadata and embedding status for a specific document."""
     try:
         doc_uuid = uuid.UUID(document_id)
@@ -409,7 +412,9 @@ async def get_single_document(
                    topic, lecturer_name, storage_key, page_count, file_size_bytes,
                    mime_type, status, embedding_status, embedding_progress,
                    total_chunks, target_levels, academic_session, semester,
-                   created_at::text
+                   created_at::text,
+                   (SELECT COALESCE(jsonb_object_agg(status,n),'{}'::jsonb)
+                    FROM (SELECT status,count(*)::int AS n FROM public.document_images WHERE document_id=$1 GROUP BY status) image_totals) AS image_counts
             FROM public.documents
             WHERE id = $1 AND deleted_at IS NULL;
             """,
@@ -445,6 +450,19 @@ async def get_single_document(
             )
             for s in segments_rows
         ]
+        counts = row.get("image_counts")
+        if isinstance(counts, str):
+            counts = json.loads(counts)
+        completeness = "unknown"
+        if counts is not None:
+            if row["embedding_status"] == "failed":
+                completeness = "failed"
+            elif row["embedding_status"] != "completed":
+                completeness = "pending"
+            elif any(counts.get(key, 0) for key in ("pending", "failed", "skipped")):
+                completeness = "partial"
+            else:
+                completeness = "complete"
 
         return DocumentDetailResponse(
             id=str(row["id"]),
@@ -467,6 +485,8 @@ async def get_single_document(
             semester=row["semester"],
             created_at=row["created_at"],
             segments=segments,
+            image_counts=counts,
+            ingestion_completeness=completeness,
         )
     except HTTPException:
         raise
@@ -489,7 +509,7 @@ async def update_document_metadata(
     document_id: str,
     payload: DocumentPatchRequest,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
-):
+) -> dict[str, str]:
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
         raise HTTPException(
@@ -578,7 +598,7 @@ async def soft_delete_document(
     document_id: str,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> None:
     """Marks document as deleted (deleted_at = now()). Chunks remain for audit until hard purged."""
     if not settings.DATABASE_URL:
         return None
@@ -614,7 +634,7 @@ async def get_document_segments(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> list[DocumentSegmentResponse]:
     """Returns the ordered hierarchical chapter and topic segments of a document."""
     if not settings.DATABASE_URL:
         return []
@@ -663,7 +683,7 @@ async def get_document_pdf_stream_url(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> PdfUrlResponse:
     storage_key = None
     if settings.DATABASE_URL:
         try:
@@ -726,7 +746,7 @@ async def get_document_pdf_stream_url(
 async def list_documents(
     course_code: str | None = Query(None, description="Optional course code filter (e.g. PCL 401)"),
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
-):
+) -> list[DocumentDetailResponse]:
     target_uni = str(require_university(auth_user))  # [TENANT FIX]
     results: list[DocumentDetailResponse] = []
     if settings.DATABASE_URL:
@@ -791,13 +811,13 @@ async def list_documents(
 # ------------------------------------------------------------------------------
 @router.post(
     "/{document_id}/reembed",
-    summary="Flush existing chunks and re-run ingestion pipeline",
+    summary="Queue replacement ingestion while preserving the searchable index",
 )
 async def reembed_document(
     document_id: str,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> dict[str, str]:
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
@@ -812,7 +832,7 @@ async def reembed_document(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to queue re-embedding: {e!s}",
             )
-    return {"status": "ok", "message": "Simulated re-embedding queued (no database configured)"}
+    raise HTTPException(status_code=503, detail="Job storage is unavailable.")
 
 
 # ------------------------------------------------------------------------------

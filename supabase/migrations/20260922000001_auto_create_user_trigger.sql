@@ -18,7 +18,7 @@ BEGIN
     NEW.raw_user_meta_data->>'name',
     split_part(NEW.email, '@', 1)
   );
-  
+
   IF position(' ' in v_full_name) > 0 THEN
     v_first_name := split_part(v_full_name, ' ', 1);
     v_last_name := substring(v_full_name from position(' ' in v_full_name) + 1);

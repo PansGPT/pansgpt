@@ -7,6 +7,8 @@ from typing import Any, Literal  # [CHAT FIX 2]
 
 from pydantic import BaseModel, Field
 
+from app.core.schemas import StrictRequest
+
 
 class IntentType(StrEnum):
     """Categorized student query intent."""
@@ -78,7 +80,7 @@ class CitationItem(BaseModel):
     bounding_box: BoundingBoxCoordinates | dict[str, Any] | None = None
 
 
-class ChatSessionCreateRequest(BaseModel):
+class ChatSessionCreateRequest(StrictRequest):
     """Payload to create a new chat conversation thread."""
 
     title: str | None = Field(default="New Chat", max_length=120)
@@ -127,7 +129,7 @@ class ChatMessageResponse(BaseModel):
     created_at: str
 
 
-class StreamChatRequest(BaseModel):
+class StreamChatRequest(StrictRequest):
     """Payload for POST /api/v1/ai/chat/sessions/{id}/stream."""
 
     message: str = Field(..., min_length=1, max_length=10000)

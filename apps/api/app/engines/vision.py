@@ -304,6 +304,8 @@ class VisionAnalysisEngine:
                 mime_type=mime_type,
                 byte_len=len(image_bytes),
             )
+            if settings.ENVIRONMENT != "development" or not settings.VISION_FAKE_MODE:
+                raise RuntimeError("No privacy-eligible vision provider is available")
             used_provider = "deterministic_fallback"
 
         duration_ms = (time.perf_counter() - start_time) * 1000
@@ -348,12 +350,12 @@ class VisionAnalysisEngine:
         from google import genai
         from google.genai import types
 
+        settings.require_provider_privacy("google")
         client = genai.Client(
             api_key=self.gemini_key,
             http_options=types.HttpOptions(
                 headers={
-                    "X-Data-Retention": "false",
-                    "User-Agent": "PansGPT/2.0-ZeroRetention",
+                    "User-Agent": "PansGPT/2.0",
                 }
             ),
         )
@@ -382,15 +384,16 @@ class VisionAnalysisEngine:
         system_instructions: str,
     ) -> str:
         """Invokes OpenRouter Multimodal Vision endpoint."""
+        settings.require_provider_privacy("openrouter")
         b64_str = base64.b64encode(image_bytes).decode("utf-8")
         headers = {
             "Authorization": f"Bearer {self.openrouter_key}",
             "HTTP-Referer": "https://pansgpt.com",
             "X-Title": "PansGPT 2.0",
-            "X-Data-Retention": "false",
         }
         payload = {
             "model": settings.OPENROUTER_VISION_MODEL,
+            "provider": {"zdr": True, "data_collection": "deny"},
             "messages": [
                 {"role": "system", "content": system_instructions},
                 {
@@ -429,10 +432,10 @@ class VisionAnalysisEngine:
         from groq import AsyncGroq
 
         b64_str = base64.b64encode(image_bytes).decode("utf-8")
+        settings.require_provider_privacy("groq")
         client = AsyncGroq(
             api_key=self.groq_key,
             default_headers={
-                "X-Data-Retention": "false",
                 "HTTP-Referer": "https://pansgpt.com",
                 "X-Title": "PansGPT 2.0",
             },

@@ -15,10 +15,10 @@ PansGPT 2.0 is built under an **Engine-First** methodology: all core backend eng
 ```
 pansgpt/
 ├── apps/
-│   ├── web/        ← Next.js 15 App Router, React 19, Tailwind v4
+│   ├── web/        ← Next.js 16.3.8 App Router, React 19, Tailwind v4
 │   ├── mobile/     ← Expo SDK 52+, React Native New Architecture
 │   ├── desktop/    ← Electron 33, local SQLite, offline-first
-│   └── api/        ← FastAPI, Python 3.11+, Pydantic v2, ARQ
+│   └── api/        ← FastAPI, Python 3.12, Pydantic v2, ARQ
 └── packages/
     ├── database/   ← Supabase PostgreSQL migrations, RLS, seed data
     ├── ui/         ← Design system primitives, OKLCH theme tokens
@@ -32,8 +32,8 @@ pansgpt/
 | Layer               | Technology                            | Cost / Strategy                     |
 | :------------------ | :------------------------------------ | :---------------------------------- |
 | **Monorepo**        | Turborepo + pnpm workspaces           | Zero build overhead, remote caching |
-| **API Engine**      | FastAPI (Python 3.11+) + Pydantic v2  | Render Free Web Service ($0)        |
-| **Web Frontend**    | Next.js 15, React 19, Tailwind CSS v4 | Vercel Hobby ($0)                   |
+| **API Engine**      | FastAPI (Python 3.12) + Pydantic v2  | Render Free Web Service ($0)        |
+| **Web Frontend**    | Next.js 16.3.8, React 19, Tailwind CSS v4 | Vercel Hobby ($0)                   |
 | **Mobile App**      | Expo SDK 52+, React Native            | EAS Free Tier ($0)                  |
 | **Desktop App**     | Electron 33, better-sqlite3           | GitHub Releases packaging ($0)      |
 | **Database**        | Supabase PostgreSQL + pgvector        | Free Tier ($0) with UUIDv7 + HNSW   |
@@ -113,3 +113,5 @@ python -m arq workers.settings.PictureWorkerSettings
 ## 📜 License
 
 MIT License. Copyright (c) 2026 PansGPT Team.
+
+Current implementation status and release gates: [phase 0?7 remediation](docs/phase-0-7-remediation-2026-10-20.md). Local Postgres/Auth use Supabase CLI; Compose supplies Redis only.

@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     # Application Mode
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
+    ENABLE_AI: bool = True
+    ENABLE_INGESTION: bool = True
     MAX_UPLOAD_MB: int = Field(default=50, ge=1)  # [PRELAUNCH FIX]
 
     @property  # [PRELAUNCH FIX]
@@ -105,6 +107,26 @@ class Settings(BaseSettings):
 
     # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 1536d embedding  # [DIM 1536]
     GEMINI_API_KEY: str | None = None
+    GOOGLE_ZDR_CONFIRMED: bool = False
+    GROQ_ZDR_CONFIRMED: bool = False
+    OPENAI_ZDR_CONFIRMED: bool = False
+    OPENROUTER_ZDR_CONFIRMED: bool = False
+    TAVILY_ZDR_CONFIRMED: bool = False
+    COHERE_ZDR_CONFIRMED: bool = False
+
+    def require_provider_privacy(self, provider: str) -> None:
+        """Account attestations are required; a custom HTTP header is not consent."""
+        verified = {
+            "google": self.GOOGLE_ZDR_CONFIRMED,
+            "groq": self.GROQ_ZDR_CONFIRMED,
+            "openai": self.OPENAI_ZDR_CONFIRMED,
+            "openrouter": self.OPENROUTER_ZDR_CONFIRMED,
+            "tavily": self.TAVILY_ZDR_CONFIRMED,
+            "cohere": self.COHERE_ZDR_CONFIRMED,
+        }
+        if not verified.get(provider, False):
+            raise RuntimeError(f"Provider {provider} is blocked: ZDR has not been verified.")
+
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
     GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 1536d, Google AI Studio  # [DIM 1536]
@@ -116,7 +138,7 @@ class Settings(BaseSettings):
     VISION_FAKE_MODE: bool = False  # [IMAGE FIX]
 
     GROQ_API_KEY: str | None = None
-    GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_FALLBACK_MODEL: str = "llama-3.3-70b-versatile"
     GROQ_SECONDARY_MODEL: str = "qwen/qwen3.8-27b"
     GROQ_EXPANSION_MODEL: str = "qwen/qwen3.8-27b"
     WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
@@ -177,7 +199,7 @@ class Settings(BaseSettings):
     # Multimodal Vision Settings (Roadmap 6B.14 & Section 7)
     GEMINI_VISION_MODEL: str = "gemma-4-26b-a4b-it"  # [VISION FIX]
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
-    GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
+    GROQ_VISION_MODEL: str = "qwen/qwen3.8-27b"
     VISION_MAX_OUTPUT_TOKENS: int = 1024  # [PHASE2 FIX]
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
     VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
@@ -231,7 +253,7 @@ class Settings(BaseSettings):
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
-    def assemble_cors_origins(cls, v):
+    def assemble_cors_origins(cls, v: list[str] | str) -> list[str] | str:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
         elif isinstance(v, (list, str)):
@@ -253,6 +275,29 @@ class Settings(BaseSettings):
                 val = getattr(self, field_name)
                 if not val or "placeholder" in str(val).lower() or "example" in str(val).lower():
                     missing.append(field_name)
+            if self.EMBEDDER_FAKE_MODE or self.VISION_FAKE_MODE:
+                raise ValueError("Fake engines are forbidden in hosted environments")
+            if self.ENABLE_AI and not any(
+                (self.GEMINI_API_KEY, self.GROQ_API_KEY, self.OPENROUTER_API_KEY)
+            ):
+                missing.append("AI provider credential")
+            if self.ENABLE_INGESTION:
+                for name, value in (
+                    ("GEMINI_API_KEY", self.GEMINI_API_KEY),
+                    ("R2_ENDPOINT", self.r2_endpoint_url),
+                    ("R2_ACCESS_KEY", self.r2_access_key),
+                    ("R2_SECRET_KEY", self.r2_secret_key),
+                    ("REDIS_URL", self.redis_connection_url),
+                ):
+                    if not value or any(
+                        marker in str(value).lower()
+                        for marker in ("placeholder", "your-", "your_", "dummy", "example")
+                    ):
+                        missing.append(name)
+            if self.OPENROUTER_API_KEY and not self.OPENROUTER_FALLBACK_MODEL.endswith(":free"):
+                raise ValueError("The zero-budget OpenRouter fallback must use a :free model")
+            if self.OPENROUTER_API_KEY and not self.OPENROUTER_FAST_MODEL.endswith(":free"):
+                raise ValueError("The zero-budget OpenRouter secondary must use a :free model")
             if missing:
                 raise ValueError(
                     f"CRITICAL: Missing or invalid required environment variables for {self.ENVIRONMENT}: {', '.join(missing)}"
@@ -262,7 +307,7 @@ class Settings(BaseSettings):
             object.__setattr__(
                 self,
                 "DATABASE_URL",
-                "postgresql://postgres:postgres@127.0.0.1:5432/postgres",
+                "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
             )
         return self
 

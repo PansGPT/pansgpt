@@ -2,8 +2,8 @@
 # PansGPT 2.0 Thinking Token Stream Parser Engine (Phase 6)
 # High-precision FSM for separating chain-of-thought tokens from visible text
 # ==============================================================================
-
 import re
+from collections.abc import Iterator
 
 # Matches opening tag: <think>, <thinking>, <thought>, <scratchpad> with optional attributes
 _OPEN_TAG_RE = re.compile(
@@ -34,7 +34,7 @@ class ThinkingStripResult(str):
         result.thinking_text = thinking_text
         return result
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[str]:
         yield str(self)
         yield self.thinking_text
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { env } from "@/env";
+
 import React, { useState } from "react";
 import { FileText, Download, Presentation, FileCode, Loader2 } from "lucide-react";
 import { ArtifactItem } from "@/lib/sse-parser";
@@ -34,7 +36,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({ artifact }) => {
       // Always go through our own API endpoint — never a raw presigned URL.
       // The API streams bytes with Content-Disposition: attachment, so no
       // browser redirect to Office Online or any external viewer.
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiBase = env.NEXT_PUBLIC_API_URL;
 
       // Resolve the canonical storage key from artifact metadata or download_url
       let storageKey = artifact.storage_key;

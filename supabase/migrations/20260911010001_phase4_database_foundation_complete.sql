@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- Migration: 20260911010001_phase4_database_foundation_complete.sql
--- Purpose: Complete Phase 4 Database Foundation (tables, RLS policies, 
+-- Purpose: Complete Phase 4 Database Foundation (tables, RLS policies,
 --          extensions, updated_at triggers, 3-pool hybrid search, and credit RPCs).
 -- ==============================================================================
 
@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS public.flashcards (
     created_at      timestamptz NOT NULL DEFAULT now(),
     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.flashcards ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_flashcards_user_review ON public.flashcards(user_id, next_review_at) WHERE deleted_at IS NULL;
 CREATE INDEX IF NOT EXISTS idx_flashcards_doc ON public.flashcards(document_id);
@@ -59,6 +60,7 @@ CREATE TABLE IF NOT EXISTS public.user_credits (
     created_at      timestamptz NOT NULL DEFAULT now(),
     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.user_credits ENABLE ROW LEVEL SECURITY;
 
 -- Credit Ledger (Double-Entry Audit Journal)
 CREATE TABLE IF NOT EXISTS public.credit_ledger (
@@ -71,6 +73,7 @@ CREATE TABLE IF NOT EXISTS public.credit_ledger (
     metadata        jsonb DEFAULT '{}'::jsonb,
     created_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.credit_ledger ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_credit_ledger_user ON public.credit_ledger(user_id, created_at DESC);
 
@@ -82,6 +85,7 @@ CREATE TABLE IF NOT EXISTS public.credit_pricing (
     is_active       boolean NOT NULL DEFAULT true,
     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.credit_pricing ENABLE ROW LEVEL SECURITY;
 
 -- Insert Default Credit Pricing Actions
 INSERT INTO public.credit_pricing (action_key, credit_cost, description, is_active)
@@ -112,6 +116,7 @@ CREATE TABLE IF NOT EXISTS public.credit_purchases (
     created_at          timestamptz NOT NULL DEFAULT now(),
     completed_at        timestamptz
 );
+ALTER TABLE public.credit_purchases ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_credit_purchases_user ON public.credit_purchases(user_id);
 CREATE INDEX IF NOT EXISTS idx_credit_purchases_ref ON public.credit_purchases(transaction_ref);
@@ -130,6 +135,7 @@ CREATE TABLE IF NOT EXISTS public.exam_timetables (
     created_at      timestamptz NOT NULL DEFAULT now(),
     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.exam_timetables ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_exam_timetables_uni_level ON public.exam_timetables(university_id, target_level, exam_date);
 
@@ -144,6 +150,7 @@ CREATE TABLE IF NOT EXISTS public.user_preferences (
     created_at          timestamptz NOT NULL DEFAULT now(),
     updated_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.user_preferences ENABLE ROW LEVEL SECURITY;
 
 -- Academic Level History
 CREATE TABLE IF NOT EXISTS public.academic_level_history (
@@ -153,6 +160,7 @@ CREATE TABLE IF NOT EXISTS public.academic_level_history (
     level               public.university_level NOT NULL,
     promoted_at         timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.academic_level_history ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_academic_level_history_user ON public.academic_level_history(user_id);
 
@@ -167,6 +175,7 @@ CREATE TABLE IF NOT EXISTS public.support_tickets (
     created_at      timestamptz NOT NULL DEFAULT now(),
     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.support_tickets ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_support_tickets_user ON public.support_tickets(user_id);
 
@@ -178,6 +187,7 @@ CREATE TABLE IF NOT EXISTS public.support_ticket_replies (
     is_internal_note    boolean NOT NULL DEFAULT false,
     created_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.support_ticket_replies ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_ticket_replies_ticket ON public.support_ticket_replies(ticket_id);
 
@@ -189,6 +199,7 @@ CREATE TABLE IF NOT EXISTS public.csat_survey_responses (
     feature_area    text NOT NULL,
     created_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.csat_survey_responses ENABLE ROW LEVEL SECURITY;
 
 -- Email Logs & Suppressions
 CREATE TABLE IF NOT EXISTS public.email_logs (
@@ -201,12 +212,14 @@ CREATE TABLE IF NOT EXISTS public.email_logs (
     error_message       text,
     created_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.email_logs ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE IF NOT EXISTS public.email_suppressions (
     email       text PRIMARY KEY,
     reason      text NOT NULL CHECK (reason IN ('bounce', 'spam_complaint', 'manual_unsubscribe')),
     created_at  timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.email_suppressions ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE IF NOT EXISTS public.user_email_preferences (
     user_id             uuid PRIMARY KEY REFERENCES public.users(id) ON DELETE CASCADE,
@@ -217,6 +230,7 @@ CREATE TABLE IF NOT EXISTS public.user_email_preferences (
     created_at          timestamptz NOT NULL DEFAULT now(),
     updated_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.user_email_preferences ENABLE ROW LEVEL SECURITY;
 
 -- Trigram Index for Fast Fuzzy Search on Document Chunks
 CREATE INDEX IF NOT EXISTS idx_document_chunks_trgm ON public.document_chunks USING gin (content gin_trgm_ops);

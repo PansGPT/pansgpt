@@ -1,6 +1,9 @@
 "use client";
 
+import { env } from "@/env";
+
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { desktopAuth } from "./desktop-auth";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
 
@@ -36,68 +39,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = useCallback(
-    async (token: string, userId?: string): Promise<UserProfile | null> => {
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-        const res = await fetch(`${apiUrl}/api/v1/auth/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const fetchProfile = useCallback(async (token: string): Promise<UserProfile | null> => {
+    try {
+      const apiUrl = env.NEXT_PUBLIC_API_URL;
+      const res = await fetch(`${apiUrl}/api/v1/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (res.ok) {
-          const data = await res.json();
-          setProfile(data);
-          return data;
-        }
-      } catch {
-        // Backend offline or unreachable; fall back to direct Supabase query
+      if (res.ok) {
+        const data = await res.json();
+        setProfile(data);
+        return data;
       }
+    } catch {
+      // The API remains the authority; never bypass a failed authorization request.
+    }
 
-      try {
-        const targetId = userId || session?.user?.id;
-        if (targetId) {
-          const { data: dbUser } = await (supabase as any)
-            .from("users")
-            .select(
-              "id, email, first_name, last_name, university_id, current_level, terms_accepted_at, roles"
-            )
-            .eq("id", targetId)
-            .maybeSingle();
-
-          if (dbUser) {
-            const isOnboarded = Boolean(
-              dbUser.university_id && dbUser.current_level && dbUser.terms_accepted_at
-            );
-            const fallbackProfile: UserProfile = {
-              id: dbUser.id,
-              email: dbUser.email,
-              first_name: dbUser.first_name,
-              last_name: dbUser.last_name,
-              role: (dbUser.roles && dbUser.roles[0]) || "student",
-              university_id: dbUser.university_id,
-              current_level: dbUser.current_level,
-              terms_accepted_at: dbUser.terms_accepted_at,
-              is_onboarded: isOnboarded,
-              is_active: true,
-            };
-            setProfile(fallbackProfile);
-            return fallbackProfile;
-          }
-        }
-      } catch {
-        // Ignore fallback error
-      }
-
-      return null;
-    },
-    [supabase, session?.user?.id]
-  );
+    setProfile(null);
+    return null;
+  }, []);
 
   const refreshProfile = useCallback(async () => {
     if (!session?.access_token) return null;
-    return await fetchProfile(session.access_token, session.user?.id);
+    return await fetchProfile(session.access_token);
   }, [session, fetchProfile]);
 
   useEffect(() => {
@@ -105,6 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     async function initSession() {
       try {
+        const nativeSession = await desktopAuth()?.getSession();
+        if (nativeSession) await supabase.auth.setSession(nativeSession);
         const {
           data: { session: currentSession },
         } = await supabase.auth.getSession();
@@ -114,7 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(currentSession?.user ?? null);
 
         if (currentSession?.access_token) {
-          await fetchProfile(currentSession.access_token, currentSession.user?.id);
+          await fetchProfile(currentSession.access_token);
         }
       } catch (err) {
         console.error("Failed to initialize session", err);
@@ -123,7 +91,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    initSession();
+    void initSession();
+    const stopNative = desktopAuth()?.onOAuthSuccess((tokens) => {
+      void supabase.auth.setSession(tokens);
+    });
+    const refreshNative = setInterval(() => {
+      void desktopAuth()
+        ?.getSession()
+        .then((tokens) => {
+          if (tokens) void supabase.auth.setSession(tokens);
+        })
+        .catch(() => {
+          void supabase.auth.signOut();
+        });
+    }, 45_000);
 
     const {
       data: { subscription },
@@ -133,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(newSession?.user ?? null);
 
       if (newSession?.access_token) {
-        await fetchProfile(newSession.access_token, newSession.user?.id);
+        await fetchProfile(newSession.access_token);
       } else {
         setProfile(null);
       }
@@ -141,13 +122,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => {
+      stopNative?.();
+      clearInterval(refreshNative);
       mounted = false;
       subscription.unsubscribe();
     };
   }, [supabase, fetchProfile]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await desktopAuth()?.signOut();
+    } finally {
+      await supabase.auth.signOut();
+    }
     setUser(null);
     setSession(null);
     setProfile(null);

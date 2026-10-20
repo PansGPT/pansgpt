@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS public.timetables (
   updated_at    timestamptz NOT NULL DEFAULT now(),
   UNIQUE (university_id, level, day, time_slot, course_code)
 );
+ALTER TABLE public.timetables ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_timetables_lookup ON public.timetables(university_id, level, day);
 
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS public.student_tasks (
   title                 text NOT NULL,
   subtitle              text,
   course_code           text,
-  task_type             text NOT NULL DEFAULT 'custom' 
+  task_type             text NOT NULL DEFAULT 'custom'
                         CHECK (task_type IN ('class', 'reading', 'assignment', 'lab', 'presentation', 'meeting', 'custom')),
   due_date              date NOT NULL,
   due_time              time,
@@ -46,6 +47,7 @@ CREATE TABLE IF NOT EXISTS public.student_tasks (
   created_at            timestamptz NOT NULL DEFAULT now(),
   updated_at            timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.student_tasks ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_student_tasks_active ON public.student_tasks(user_id, due_date ASC) WHERE is_completed IS FALSE;
 CREATE INDEX IF NOT EXISTS idx_student_tasks_user ON public.student_tasks(user_id, created_at DESC);
@@ -64,6 +66,7 @@ CREATE TABLE IF NOT EXISTS public.course_knowledge (
   created_at    timestamptz NOT NULL DEFAULT now(),
   updated_at    timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.course_knowledge ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_course_knowledge_lookup ON public.course_knowledge(university_id, level);
 
@@ -83,6 +86,7 @@ CREATE TABLE IF NOT EXISTS public.exam_restrictions (
   updated_at    timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT chk_exam_time CHECK (end_time > start_time)
 );
+ALTER TABLE public.exam_restrictions ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_exam_restrictions_window ON public.exam_restrictions(university_id, level, start_time, end_time);
 
@@ -97,6 +101,7 @@ CREATE TABLE IF NOT EXISTS public.general_notes (
   created_at  timestamptz NOT NULL DEFAULT now(),
   updated_at  timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.general_notes ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_general_notes_user ON public.general_notes(user_id, updated_at DESC);
 
@@ -115,6 +120,7 @@ CREATE TABLE IF NOT EXISTS public.system_settings (
   updated_by          uuid REFERENCES public.users(id),
   updated_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE IF NOT EXISTS public.system_settings_history (
   id                  uuid PRIMARY KEY DEFAULT public.uuid_generate_v7(),
@@ -127,6 +133,7 @@ CREATE TABLE IF NOT EXISTS public.system_settings_history (
   change_reason       text NOT NULL,
   created_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.system_settings_history ENABLE ROW LEVEL SECURITY;
 
 CREATE TABLE IF NOT EXISTS public.audit_logs (
   id            uuid PRIMARY KEY DEFAULT public.uuid_generate_v7(),
@@ -140,6 +147,7 @@ CREATE TABLE IF NOT EXISTS public.audit_logs (
   metadata      jsonb NOT NULL DEFAULT '{}'::jsonb,
   created_at    timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_audit_logs_actor ON public.audit_logs(actor_user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_uni ON public.audit_logs(university_id, created_at DESC);

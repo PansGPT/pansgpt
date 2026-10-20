@@ -63,14 +63,18 @@ async def get_db_connection(
         yield None
         return
 
-    # 1. Acquire from global pool if active
+    # Catch acquisition errors only. Exceptions raised by the caller must propagate.
     if _db_pool is not None:
         try:
-            async with _db_pool.acquire(timeout=timeout) as pooled_conn:
-                yield pooled_conn
-                return
+            pooled_conn = await _db_pool.acquire(timeout=timeout)
         except Exception as exc:
             logger.warning("pooled_connection_acquire_failed_falling_back", error=str(exc))
+        else:
+            try:
+                yield pooled_conn
+            finally:
+                await _db_pool.release(pooled_conn)
+            return
 
     # 2. Transient single-connection fallback
     conn: asyncpg.Connection | None = None
@@ -79,10 +83,13 @@ async def get_db_connection(
             asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0),
             timeout=timeout,
         )
-        yield conn
     except Exception as exc:
         logger.warning("database_connection_failed", error=str(exc))
+    if conn is None:
         yield None
+        return
+    try:
+        yield conn
     finally:
         if conn:
             try:

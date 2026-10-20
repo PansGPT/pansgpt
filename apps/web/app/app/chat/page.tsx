@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { env } from "@/env";
+
+import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
 import { UserInitialsAvatar } from "@/components/UserInitialsAvatar";
@@ -40,7 +41,6 @@ interface MessageItem {
 }
 
 export default function ChatPage() {
-  const router = useRouter();
   const { user, session, profile, loading: authLoading } = useAuth();
 
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -58,19 +58,24 @@ export default function ChatPage() {
 
   const userId = user?.id || profile?.id || "anonymous";
 
-  // Check disclaimer acceptance on mount
-  useEffect(() => {
-    if (userId !== "anonymous") {
+  const disclaimerAccepted = useSyncExternalStore(
+    (notify) => {
+      window.addEventListener("storage", notify);
+      window.addEventListener("pansgpt-disclaimer", notify);
+      return () => {
+        window.removeEventListener("storage", notify);
+        window.removeEventListener("pansgpt-disclaimer", notify);
+      };
+    },
+    () => {
       try {
-        const accepted = localStorage.getItem(`pansgpt_disclaimer_accepted_${userId}`);
-        if (!accepted) {
-          setIsDisclaimerOpen(true);
-        }
+        return Boolean(localStorage.getItem(`pansgpt_disclaimer_accepted_${userId}`));
       } catch {
-        // localStorage fallback
+        return false;
       }
-    }
-  }, [userId]);
+    },
+    () => true
+  );
 
   // Ensure a chat session exists
   const ensureSession = useCallback(async (): Promise<string | null> => {
@@ -78,7 +83,7 @@ export default function ChatPage() {
     if (!session?.access_token) return null;
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = env.NEXT_PUBLIC_API_URL;
       const res = await fetch(`${apiUrl}/api/v1/ai/chat/sessions`, {
         method: "POST",
         headers: {
@@ -142,7 +147,7 @@ export default function ChatPage() {
         throw new Error("Unable to establish chat session with AI engine.");
       }
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = env.NEXT_PUBLIC_API_URL;
       const controller = new AbortController();
       abortControllerRef.current = controller;
 
@@ -553,9 +558,12 @@ export default function ChatPage() {
 
       {/* Mandatory Disclaimer Modal */}
       <FirstChatDisclaimerModal
-        isOpen={isDisclaimerOpen}
+        isOpen={isDisclaimerOpen || (userId !== "anonymous" && !disclaimerAccepted)}
         userId={userId}
-        onAccept={() => setIsDisclaimerOpen(false)}
+        onAccept={() => {
+          setIsDisclaimerOpen(false);
+          window.dispatchEvent(new Event("pansgpt-disclaimer"));
+        }}
       />
     </div>
   );

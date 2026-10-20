@@ -34,7 +34,8 @@ function writeStore(data: Record<string, string>): void {
     }
     fs.writeFileSync(storePath, JSON.stringify(data, null, 2), "utf-8");
   } catch (err) {
-    console.error("Failed to write secure token store:", err);
+    console.error("Failed to write secure token store");
+    throw err;
   }
 }
 

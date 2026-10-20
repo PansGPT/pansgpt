@@ -34,6 +34,7 @@ class WebSearchEngine:
     """Manages Tavily web search with per-user daily rate limits and 1-hour MD5 caching."""
 
     def __init__(self) -> None:
+        self._quota_lock = asyncio.Lock()
         self.tavily_key = settings.TAVILY_API_KEY
         self._result_cache: dict[str, tuple[float, list[dict[str, Any]]]] = {}
         self._cache_ttl_seconds: float = float(settings.WEB_SEARCH_CACHE_TTL_SECONDS)
@@ -134,6 +135,46 @@ class WebSearchEngine:
 
         return new_count
 
+    async def reserve_daily_usage(self, user_id: str, limit: int) -> tuple[bool, int]:
+        if settings.ENVIRONMENT != "development":
+            import uuid
+
+            from app.core.database import get_db_connection
+
+            async with get_db_connection() as conn:
+                if conn is None:
+                    raise RuntimeError("Search quota storage is unavailable")
+                count = await conn.fetchval(
+                    "SELECT public.reserve_web_search_quota($1,$2,$3);",
+                    uuid.UUID(user_id),
+                    datetime.now(UTC).date(),
+                    limit,
+                )
+                return count is not None, int(count) if count is not None else limit
+        if settings.redis_connection_url:
+            import redis.asyncio as aioredis
+
+            redis = aioredis.from_url(
+                settings.redis_connection_url, socket_connect_timeout=1, socket_timeout=1
+            )
+            try:
+                script = "local n=tonumber(redis.call('GET',KEYS[1]) or '0'); if n>=tonumber(ARGV[1]) then return -1 end; n=redis.call('INCR',KEYS[1]); redis.call('EXPIRE',KEYS[1],172800); return n"
+                count = int(
+                    await redis.eval(
+                        script, 1, f"web_search:daily:{user_id}:{self._utc_today()}", limit
+                    )
+                )
+                return count != -1, count if count != -1 else limit
+            except Exception:
+                pass  # The database is the shared authoritative fallback.
+            finally:
+                await redis.aclose()
+        async with self._quota_lock:
+            current = await self.get_daily_usage(user_id)
+            if current >= limit:
+                return False, current
+            return True, await self.increment_daily_usage(user_id)
+
     async def _persist_db_usage(self, user_id: str, today: str) -> None:
         """Background persistence of daily usage to Supabase."""
         try:
@@ -173,6 +214,8 @@ class WebSearchEngine:
         Executes web search with MD5 caching and per-user daily quota enforcement.
         """
         norm_query = " ".join(query.strip().split())
+        if settings.ENVIRONMENT != "development" and not user_id:
+            return {"status": "unavailable", "results": [], "source": "identity_required"}
         if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
             return {"results": [], "source": "disabled", "status": "success"}  # [CHAT FIX 2]
         if not norm_query:
@@ -185,7 +228,7 @@ class WebSearchEngine:
         if query_hash in self._result_cache:
             ts, cached_results = self._result_cache[query_hash]
             if now - ts < self._cache_ttl_seconds:
-                logger.info("web_search_cache_hit", query_hash=query_hash, query=norm_query[:50])
+                logger.info("web_search_cache_hit")
                 return {
                     "status": "success",
                     "results": cached_results,
@@ -198,8 +241,11 @@ class WebSearchEngine:
         limit = self.get_user_daily_limit(role)
         current_count = 0
         if user_id:
-            current_count = await self.get_daily_usage(user_id)
-            if current_count >= limit:
+            try:
+                allowed, current_count = await self.reserve_daily_usage(user_id, limit)
+            except Exception:
+                return {"status": "unavailable", "results": [], "source": "quota_unavailable"}
+            if not allowed:
                 logger.warning(
                     "web_search_quota_exceeded",
                     user_id=user_id,
@@ -227,6 +273,7 @@ class WebSearchEngine:
             p in self.tavily_key.lower() for p in ["placeholder", "dummy", "test"]
         ):
             try:
+                settings.require_provider_privacy("tavily")
                 async with httpx.AsyncClient(timeout=settings.WEB_SEARCH_TIMEOUT_SECONDS) as client:
                     resp = await client.post(
                         "https://api.tavily.com/search",
@@ -266,8 +313,7 @@ class WebSearchEngine:
 
         # Step 5: Increment User Quota (only for real, non-cached searches)
         new_count = current_count
-        if user_id:
-            new_count = await self.increment_daily_usage(user_id)
+        # Reservation already consumed this attempt atomically.
 
         return {
             "status": "success",

@@ -2,7 +2,30 @@
 
 > **Source of Truth**: Every decision in this roadmap is drawn directly from [`implementation_plan.md`](implementation_plan.md).
 > **Core Philosophy**: Engines are built and verified first via API tests. UI is built last, on top of proven infrastructure.
-> **Budget**: $0. Every tool listed below has a free tier that works at launch.
+> **Budget**: $0 pilot with operator-managed workers. Provider privacy eligibility and account compute allocation must be verified before hosted use.
+
+## Phase 0?7 remediation gate ? 20 October 2026
+
+The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediation record](phase-0-7-remediation-2026-10-20.md) maps each finding to its fix and remaining verification.
+
+1. Authorization and token verification, SQL grants/RLS boundaries, and honest persistence results.
+2. Strict provider privacy, configuration and actual CI coverage.
+3. Durable ingestion delivery, lease-safe retries/replacement and visible image completeness.
+4. Provider-native streaming/tools, grounded retrieval, quotas, safe output and credit recovery.
+5. Invitation redemption, retention, native authentication lifecycle and contract synchronization.
+6. Run offline gates, replay the complete Supabase history/seed and real DB contracts, then verify approved providers and the staging journey.
+
+- [x] Implement source corrections and explicit unavailable behavior for unsupported clinical handlers.
+- [x] Enforce strict ZDR with every unverified provider blocked; the pilot may remain unavailable.
+- [ ] Replay migrations in disposable Supabase and pass grants/RLS/RPC/contract tests. Docker is unavailable in the current workspace; CI now supplies this gate.
+- [ ] Regenerate types from the migrated database, review the CI artifact and commit the authoritative output. The current 50-table snapshot is not a hosted generation claim.
+- [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
+- [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
+- [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
+- [ ] Synchronize the prepared Notion change/decision/roadmap entries after connecting the workspace.
+
+No new phase 8?17 feature expansion or phase 0?7 completion certification until the applicable gates pass. Existing walking-skeleton code remains available for verification.
+
 
 ---
 
@@ -38,7 +61,7 @@ For PansGPT:
 
 | Priority | Platform                  | Decision                                                                                   |
 | :------: | ------------------------- | ------------------------------------------------------------------------------------------ |
-| **1st**  | **Web (Next.js 15)**      | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
+| **1st**  | **Web (Next.js 16.3.8)**      | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
 | **2nd**  | **Mobile (Expo SDK 52+)** | Students are mobile-heavy for daily study. Built once web features are stable.             |
 | **3rd**  | **Desktop (Electron 33)** | Offline-first power users. ~90% code share with web. Sequenced last.                       |
 
@@ -116,15 +139,15 @@ PR reviewed + CI green → merged to main
 
 |   #    | Phase                         |      Status      | What Gets Built                                                                                          | Gate Before Continuing                                                         |
 | :----: | ----------------------------- | :--------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **0**  | Local Dev Environment         |   ✅ **Done**    | Every developer runs the full stack locally                                                              | All services start without errors                                              |
-| **1**  | Monorepo Scaffold + CI        |   ✅ **Done**    | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
-| **2**  | Secrets + Config              |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired            |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine     |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
-| **6A** | AI Engine Foundation          |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
-| **6B** | AI Engine Advanced            |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
-| **7**  | Auth Backend                  |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| **0**  | Local Dev Environment         | Source fixes; live gates pending | Every developer runs the full stack locally                                                              | All services start without errors                                              |
+| **1**  | Monorepo Scaffold + CI        | Source fixes; live gates pending | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
+| **2**  | Secrets + Config              | Source fixes; live gates pending | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
+| **3**  | Environments Wired            | Source fixes; live gates pending | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
+| **4**  | Database Foundation           | Source fixes; live gates pending | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **5**  | Document Ingestion Engine     | Source fixes; live gates pending | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
+| **6A** | AI Engine Foundation          | Source fixes; live gates pending | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
+| **6B** | AI Engine Advanced            | Source fixes; live gates pending | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **7**  | Auth Backend                  | Source fixes; live gates pending | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8**  | Walking Skeleton Web UI       | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
 | **9**  | Design System + App Shell     |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
 | **10** | PDF Reader (Web)              |    ⏳ Pending    | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
@@ -152,7 +175,7 @@ PR reviewed + CI green → merged to main
 
 ## ⚙️ PHASES 0–6 — Exhaustive Build Checklist
 
-> Every item below is an atomic buildable task. [x] = built & verified in code. [ ] = specced but not yet built. [~] = partially implemented.
+> Every item below is an atomic buildable task. [x] records source implementation or historical evidence; it does not certify current deployment. [ ] = outstanding verification or work. [~] = partial. The remediation gate below controls phase sign-off.
 > For design decisions and technical detail on any item, see [implementation_plan.md](implementation_plan.md).
 
 # PansGPT — Roadmap Phases 0–6
@@ -175,7 +198,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Section 1 — Stack Decisions (L379)
 
 - [x] Read and understand Section 1 (Stack Decisions) in full before any setup
-- [x] Confirm chosen stack: Next.js 15, Expo SDK 52, Electron 33, FastAPI, Supabase, Cloudflare R2, Upstash Redis
+- [x] Confirm chosen stack: Next.js 16.3.8, Expo SDK 52, Electron 33, FastAPI, Supabase, Cloudflare R2, Upstash Redis
 - [x] Confirm AI providers: Gemma 4 (Google AI Studio), Groq, OpenRouter, Gemini Embedding 2 (1536d) <!-- [DIM 1536] -->
 - [x] Confirm all third-party services have free-tier accounts created: Supabase, Render, Vercel, Cloudflare R2, Upstash Redis, Google AI Studio, Groq, OpenRouter, Tavily, Paystack, Resend, Sentry, PostHog
 
@@ -250,7 +273,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Monorepo Scaffold + CI
 
-- [x] Scaffold Next.js 15 App Router web application workspace (`@pansgpt/web`) | file: apps/web/package.json
+- [x] Scaffold Next.js 16.3.8 App Router web application workspace (`@pansgpt/web`) | file: apps/web/package.json
 - [x] Scaffold Expo SDK 52 mobile application workspace (`@pansgpt/mobile`) | file: apps/mobile/package.json
 - [x] Scaffold Electron 33 desktop application workspace (`@pansgpt/desktop`) | file: apps/desktop/package.json
 - [x] Scaffold FastAPI Python backend service workspace (`pansgpt-api`) | file: apps/api/pyproject.toml
@@ -398,8 +421,8 @@ PR reviewed + CI green → merged to main
 - [x] Add Render background worker service spec in `render.yaml` | file: render.yaml
 - [x] Use Docker build instruction (`env: docker`) in `render.yaml` instead of raw Python pip | file: render.yaml
 - [x] Add missing environment variable declarations to `render.yaml` | file: render.yaml
-- [x] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md
-- [x] Verify public reachable Staging API Render URL (`https://pansgpt-api-staging.onrender.com`) | docs: docs/environments-setup.md
+- [ ] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md ? current deployment must be reverified
+- [ ] Verify public reachable Staging API Render URL (`https://pansgpt-api-staging.onrender.com`) | docs: docs/environments-setup.md ? current deployment must be reverified
 
 ### 3.4 Staging: Web (Vercel)
 
@@ -408,13 +431,13 @@ PR reviewed + CI green → merged to main
 - [x] Configure Next.js Vercel monorepo build | file: apps/web/vercel.json
 - [x] Configure Vercel GitHub connection for automated PR preview deployments | docs: docs/environments-setup.md
 - [x] Set Staging environment variables in Vercel Preview and Render dashboards | docs: docs/environments-setup.md
-- [x] Verify public reachable Vercel Preview URL (Next.js 16.3.4 build verified) | docs: docs/environments-setup.md
+- [ ] Verify public reachable Vercel Preview URL (Next.js 16.3.8 local build; hosted verification pending) | docs: docs/environments-setup.md ? current deployment must be reverified
 
 ### 3.5 Staging: Supabase
 
 > 📖 See implementation_plan.md § Environments Wired
 
-- [x] Wire and confirm Staging Supabase hosted database is reachable | verified live via pooler port 5432
+- [ ] Wire and confirm Staging Supabase hosted database is reachable | verified live via pooler port 5432 ? current deployment must be reverified
 
 ### 3.6 Production Provisioning
 
@@ -577,7 +600,7 @@ PR reviewed + CI green → merged to main
 - [x] Create `purge_soft_deleted_records()` function
 - [x] Create `prepare_document_reembed()` function
 - [x] Create `match_documents_hybrid()` function (3-pool dense + FTS + trigram with RRF k=60) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
-- [x] Create `deduct_user_credits()` function (Atomic balance verification & double-entry credit ledger logging) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Create `deduct_user_credits()` function (Atomic balance verification, idempotent debit journal, compensating refunds and reconciliation) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 
 ### 4.6 Triggers
 
@@ -679,10 +702,10 @@ PR reviewed + CI green → merged to main
 
 - [x] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
 - [x] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
-- [x] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
+- [x] Implement Recursive Text Splitting (512 max tokens with 51-token overlap (approximately 10%))
 - [x] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
-- [x] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
-- [x] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
+- [x] Implement deterministic page-heading segmentation (Stage 7); LLM semantic topic-shift detection is deferred until a benchmark and privacy-eligible provider justify it
+- [x] Continue unheaded pages in the open segment; use explicit heading titles or a synthesized default, without inventing extra inherited segments
 
 ### 5.7 Embedding (Gemini 1536d) <!-- [DIM 1536] -->
 
@@ -848,11 +871,12 @@ PR reviewed + CI green → merged to main
 - [x] Refactor Google AI Studio calls to use native token streaming (`client.aio.models.generate_content_stream`) instead of simulated word-splitting
 - [x] Refactor OpenRouter to use true streaming instead of non-streaming `httpx.AsyncClient` post
 
-### 6B.2 Zero Data Retention (ZDR) Headers
+### 6B.2 Strict Provider Privacy Eligibility
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Pass Zero Data Retention headers/parameters to all upstream AI providers
+- [x] Block every provider without an explicit verified account/endpoint attestation; enforce OpenRouter ZDR routing parameters in addition to verification
+- [ ] Verify provider account settings and policies; retain evidence in `docs/provider-privacy.md` before enabling any integration
 
 ### 6B.3 FTS Retrieval Pool (websearch_to_tsquery)
 
@@ -1046,8 +1070,8 @@ PR reviewed + CI green → merged to main
 - [x] Create `UserContext` structure with id, email, role, roles, university_id, client_type | file: apps/api/app/core/dependencies.py
 - [x] Subclass `dict` on `UserContext` for backward compatibility with `auth_user["role"]` | file: apps/api/app/core/dependencies.py
 - [x] Database lookup of user roles from `public.users` table in Postgres | file: apps/api/app/core/dependencies.py
-- [x] Cache resolved roles in Redis with 5-minute TTL (`ROLE_CACHE_TTL_SECONDS = 300`) | file: apps/api/app/core/dependencies.py
-- [x] In-memory role cache fallback when Redis is absent or offline | file: apps/api/app/core/dependencies.py
+- [x] Read roles and tenancy from Postgres on every authenticated request; Redis profile copies never grant authority | file: apps/api/app/core/dependencies.py
+- [x] Fail closed on authorization database outages; metadata and stale caches cannot substitute for authoritative roles | file: apps/api/app/core/dependencies.py
 - [x] Immediate rejection of deactivated users where `deleted_at IS NOT NULL` | file: apps/api/app/core/dependencies.py
 - [x] Default fallback to student role when no elevated role record exists | file: apps/api/app/core/dependencies.py
 - [x] Development environment bypass granting super_admin context when unauthenticated | file: apps/api/app/core/dependencies.py
@@ -1125,7 +1149,7 @@ PR reviewed + CI green → merged to main
 - [x] Integration test: `require_api_key` accepts valid client key and identifies client_type | file: apps/api/tests/test_auth.py
 - [x] Integration test: `require_api_key` rejects invalid/missing key with 401 Unauthorized | file: apps/api/tests/test_auth.py
 - [x] Integration test: Dev bypass returns super_admin context in development environment | file: apps/api/tests/test_auth.py
-- [x] Integration test: 5-minute role cache stores and retrieves profile without redundant DB hits | file: apps/api/tests/test_auth.py
+- [x] Regression tests: JWT expiry and required claims checked on every verification; role metadata cannot grant access | file: apps/api/tests/test_auth.py
 - [x] Full regression suite passes across all 63 backend tests | file: apps/api/tests/
 
 ---
@@ -1629,7 +1653,7 @@ _(Full architecture documented in `credits_pricing_architecture.md` — pricing 
 - [ ] Blog / Changelog (MDX-powered)
 - [ ] Legal: Privacy Policy, Terms of Service
 - [ ] Download page: PWA install, Electron download, iOS App Store, Google Play
-- [ ] Next.js 15 Metadata API: `title`, `description`, `canonical`, `robots` on every public page
+- [ ] Next.js 16.3.8 Metadata API: `title`, `description`, `canonical`, `robots` on every public page
 - [ ] Dynamic Open Graph images via `@vercel/og` for blog posts + quiz share cards
 - [ ] JSON-LD structured data: `SoftwareApplication`, `EducationalOrganization`, `Article`
 - [ ] Auto-generated `sitemap.ts` (all public pages + blog posts)
@@ -1822,7 +1846,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Layer             | Technology                                                   |
 | ----------------- | ------------------------------------------------------------ |
 | Monorepo          | Turborepo + pnpm workspaces                                  |
-| Web Framework     | Next.js 15, App Router, React 19, TypeScript strict          |
+| Web Framework     | Next.js 16.3.8, App Router, React 19, TypeScript strict          |
 | Web Styling       | Tailwind CSS v4, OKLCH tokens, Framer Motion                 |
 | Web PDF           | `pdfjs-dist` + TanStack Virtual                              |
 | Web Chat UI       | `@assistant-ui/react`                                        |
@@ -1858,7 +1882,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Error Tracking    | Sentry (all 4 apps — separate DSNs)                          |
 | Analytics         | PostHog (web + mobile, feature flags, session replay)        |
 | Uptime            | Better Uptime                                                |
-| Payments          | Paystack + Flutterwave (double-entry credit ledger)          |
+| Payments          | Paystack + Flutterwave (credit debit/refund journal)          |
 | Testing (Backend) | pytest + HTTPX                                               |
 | Testing (Web)     | Vitest + React Testing Library + Playwright E2E              |
 | Testing (Mobile)  | Jest + React Native Testing Library + Maestro E2E            |

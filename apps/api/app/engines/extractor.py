@@ -75,7 +75,7 @@ class DocumentExtractor:
 
     _ocr_available: bool | None = None  # Class-level cache for PyMuPDF local OCR [IMAGES PHASE]
 
-    def __init__(self):  # [IMAGE FIX]
+    def __init__(self) -> None:  # [IMAGE FIX]
         self.last_stats: ExtractionStats | None = None  # [IMAGE FIX]
 
     # --------------------------------------------------------------------------
@@ -302,6 +302,8 @@ class DocumentExtractor:
                 )  # [IMAGE FIX]
 
                 line_rects = []
+                text_lines = []
+                text_cursor = 0
                 try:
                     text_dict = page.get_text("dict")
                     for block in text_dict.get("blocks", []):
@@ -309,6 +311,28 @@ class DocumentExtractor:
                             for line in block.get("lines", []):
                                 lb = line.get("bbox")
                                 if lb:
+                                    line_text = "".join(
+                                        span.get("text", "") for span in line.get("spans", [])
+                                    )
+                                    text_at = (
+                                        text_content.find(line_text, text_cursor)
+                                        if line_text and method == "native"
+                                        else -1
+                                    )
+                                    if text_at >= 0:
+                                        text_lines.append(
+                                            {
+                                                "start": text_at,
+                                                "end": text_at + len(line_text),
+                                                "bbox": [
+                                                    round(lb[0] / p_w, 4),
+                                                    round(lb[1] / p_h, 4),
+                                                    round(lb[2] / p_w, 4),
+                                                    round(lb[3] / p_h, 4),
+                                                ],
+                                            }
+                                        )
+                                        text_cursor = text_at + len(line_text)
                                     line_rects.append(
                                         [
                                             round(lb[0] / p_w, 4),
@@ -333,7 +357,9 @@ class DocumentExtractor:
                     "page_width": p_w,
                     "page_height": p_h,
                     "bbox": page_bbox,
-                    "rects": line_rects[:30],
+                    "rects": line_rects,
+                    "lines": text_lines,
+                    "precision": "page",
                 }
 
                 pages.append(

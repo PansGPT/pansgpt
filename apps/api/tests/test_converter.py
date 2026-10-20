@@ -174,7 +174,7 @@ async def test_worker_converts_office_doc_and_ingests_converted_key(
 
     from app.engines.ingestion import document_ingestion_engine  # [OFFICE PDF FIX]
 
-    async def mock_ingest_r2(document_id, storage_key):  # [OFFICE PDF FIX]
+    async def mock_ingest_r2(document_id, storage_key, worker_id=None):  # [OFFICE PDF FIX]
         ingested_keys.append((document_id, storage_key))  # [OFFICE PDF FIX]
         return True  # [OFFICE PDF FIX]
 
@@ -307,7 +307,7 @@ async def test_worker_plain_pdf_ingested_unchanged(monkeypatch):  # [OFFICE PDF 
 
     from app.engines.ingestion import document_ingestion_engine  # [OFFICE PDF FIX]
 
-    async def mock_ingest(document_id, storage_key):  # [OFFICE PDF FIX]
+    async def mock_ingest(document_id, storage_key, worker_id=None):  # [OFFICE PDF FIX]
         ingested_keys.append((document_id, storage_key))  # [OFFICE PDF FIX]
         return True  # [OFFICE PDF FIX]
 

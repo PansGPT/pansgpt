@@ -1,6 +1,7 @@
 // ==============================================================================
 // PansGPT 2.0 Supabase Database TypeScript Definitions
-// Auto-generated & Verified against Staging Database (45 Tables)
+// Schema contract snapshot; catalog verification runs against disposable Supabase in CI.
+// Refresh with tooling/gen-types.sh after applying migrations; no hosted verification is implied.
 // ==============================================================================
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
@@ -28,6 +29,115 @@ export type UserRole = "student" | "lecturer" | "university_admin" | "super_admi
 export interface Database {
   public: {
     Tables: {
+      document_images: {
+        Row: {
+          id: string;
+          document_id: string;
+          page_number: number;
+          content_hash: string;
+          source: string;
+          width: number | null;
+          height: number | null;
+          status: string;
+          attempts: number;
+          route: string | null;
+          description: string | null;
+          last_error: string | null;
+          element_id: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          document_id: string;
+          page_number: number;
+          content_hash: string;
+          source: string;
+          width?: number | null;
+          height?: number | null;
+          status?: string;
+          attempts?: number;
+          route?: string | null;
+          description?: string | null;
+          last_error?: string | null;
+          element_id?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["document_images"]["Insert"]>;
+      };
+      web_search_usage: {
+        Row: {
+          user_id: string;
+          date: string;
+          created_at: string;
+          count: number;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          date?: string;
+          created_at?: string;
+          count?: number;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["web_search_usage"]["Insert"]>;
+      };
+      background_jobs: {
+        Row: {
+          id: string;
+          document_id: string;
+          job_name: string;
+          storage_key: string;
+          status: string;
+          dispatched_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          document_id: string;
+          job_name: string;
+          storage_key: string;
+          status?: string;
+          dispatched_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["background_jobs"]["Insert"]>;
+      };
+      invitation_redemptions: {
+        Row: {
+          id: string;
+          invitation_id: string;
+          user_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          invitation_id: string;
+          user_id: string;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["invitation_redemptions"]["Insert"]>;
+      };
+      storage_cleanup_jobs: {
+        Row: {
+          id: string;
+          object_key: string;
+          is_prefix: boolean;
+          attempts: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          object_key: string;
+          is_prefix?: boolean;
+          attempts?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["storage_cleanup_jobs"]["Insert"]>;
+      };
       academic_level_history: {
         Row: {
           id: string;
@@ -95,6 +205,7 @@ export interface Database {
       };
       ai_telemetry: {
         Row: {
+          usage_source: string;
           id: string;
           user_id: string | null;
           university_id: string | null;
@@ -110,6 +221,7 @@ export interface Database {
           created_at: string;
         };
         Insert: {
+          usage_source?: string;
           id?: string;
           user_id?: string | null;
           university_id?: string | null;
@@ -328,6 +440,7 @@ export interface Database {
       };
       document_chunks: {
         Row: {
+          bounding_box: Json | null;
           id: string;
           document_id: string;
           content: string;
@@ -335,12 +448,13 @@ export interface Database {
           page_start: number | null;
           page_end: number | null;
           chunk_index: number;
-          embedding: number[];
+          embedding: string;
           created_at: string;
           segment_id: string | null;
           element_id: string | null;
         };
         Insert: {
+          bounding_box?: Json | null;
           id?: string;
           document_id: string;
           content: string;
@@ -348,7 +462,7 @@ export interface Database {
           page_start?: number | null;
           page_end?: number | null;
           chunk_index: number;
-          embedding: number[];
+          embedding: string;
           created_at?: string;
           segment_id?: string | null;
           element_id?: string | null;
@@ -357,6 +471,7 @@ export interface Database {
       };
       document_elements: {
         Row: {
+          bounding_box: Json | null;
           id: string;
           segment_id: string;
           document_id: string;
@@ -369,6 +484,7 @@ export interface Database {
           created_at: string;
         };
         Insert: {
+          bounding_box?: Json | null;
           id?: string;
           segment_id: string;
           document_id: string;
@@ -654,7 +770,7 @@ export interface Database {
         Row: {
           id: string;
           university_id: string;
-          created_by: string;
+          created_by: string | null;
           title: string;
           course_code: string | null;
           level: UniversityLevel;
@@ -668,7 +784,7 @@ export interface Database {
         Insert: {
           id?: string;
           university_id: string;
-          created_by: string;
+          created_by?: string | null;
           title: string;
           course_code?: string | null;
           level: UniversityLevel;
@@ -775,7 +891,7 @@ export interface Database {
           id: string;
           token: string;
           university_id: string;
-          issued_by: string;
+          issued_by: string | null;
           grant_roles: UserRole[];
           target_level: UniversityLevel | null;
           max_uses: number;
@@ -788,7 +904,7 @@ export interface Database {
           id?: string;
           token?: string;
           university_id: string;
-          issued_by: string;
+          issued_by?: string | null;
           grant_roles?: UserRole[];
           target_level?: UniversityLevel | null;
           max_uses?: number;
@@ -1217,33 +1333,49 @@ export interface Database {
     Functions: {
       match_documents_hybrid: {
         Args: {
-          query_embedding: number[];
           query_text: string;
-          p_university_id: string;
+          query_embedding: string;
+          match_threshold?: number;
           match_count?: number;
-          rrf_k?: number;
+          filter_university_id?: string;
+          filter_levels?: UniversityLevel[];
+          filter_doc_ids?: string[];
         };
         Returns: {
           chunk_id: string;
           document_id: string;
-          document_title: string;
-          course_code: string;
-          content: string;
-          page_start: number | null;
-          page_end: number | null;
           chunk_index: number;
-          combined_score: number;
+          content: string;
+          content_type: string;
+          page_start: number;
+          page_end: number;
+          bounding_box: Json;
+          section_id: string;
+          segment_id: string;
+          dense_score: number;
+          fts_score: number;
+          trgm_score: number;
+          rrf_score: number;
         }[];
       };
       deduct_user_credits: {
         Args: {
           p_user_id: string;
-          p_amount: number;
-          p_tx_type: CreditTxType;
-          p_description?: string;
+          p_action_key: string;
+          p_reference_id?: string;
           p_metadata?: Json;
         };
-        Returns: boolean;
+        Returns: number;
+      };
+      prepare_document_reembed: { Args: { doc_id: string }; Returns: undefined };
+      refund_chat_credit: {
+        Args: { p_user_id: string; p_reference_id: string };
+        Returns: undefined;
+      };
+      reconcile_chat_credits: { Args: Record<PropertyKey, never>; Returns: undefined };
+      reserve_web_search_quota: {
+        Args: { p_user_id: string; p_date: string; p_limit: number };
+        Returns: number;
       };
       match_document_chunks: {
         Args: {

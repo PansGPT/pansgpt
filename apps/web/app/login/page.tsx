@@ -1,5 +1,6 @@
 "use client";
 
+import { desktopAuth } from "@/lib/desktop-auth";
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -19,21 +20,19 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextUrl = searchParams.get("next") || "/app";
+  const requestedNext = searchParams.get("next") || "/app";
+  const nextUrl =
+    requestedNext.startsWith("/") &&
+    !requestedNext.startsWith("//") &&
+    !requestedNext.includes("\\")
+      ? requestedNext
+      : "/app";
   const urlError = searchParams.get("error");
 
-  const [authError, setAuthError] = useState<string | null>(
-    urlError ? decodeURIComponent(urlError) : null
-  );
+  const [authError, setAuthError] = useState<string | null>(urlError);
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-
-  React.useEffect(() => {
-    if (urlError) {
-      setAuthError(decodeURIComponent(urlError));
-    }
-  }, [urlError]);
 
   const supabase = createClient();
 
@@ -78,6 +77,11 @@ function LoginFormContent() {
     setAuthError(null);
 
     try {
+      const native = desktopAuth();
+      if (native) {
+        await native.beginOAuth(provider);
+        return;
+      }
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const { error } = await supabase.auth.signInWithOAuth({
         provider,

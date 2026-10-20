@@ -1,8 +1,11 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
 > **Status**: ✅ Section 1 Complete — Stack Decisions Locked.
-> **Approach**: No code changes. No deletions. Plan everything first.
+> **Approach**: Engine-first implementation; completion requires executable verification, not design approval.
 > **Budget**: Bootstrapped — $0. Every decision must have a free tier that works.
+
+> **2026-10-20 implementation amendment:** The [phase 0?7 remediation record](phase-0-7-remediation-2026-10-20.md) governs current implementation status and supersedes conflicting historical descriptions. The original feature inventory remains historical. Phase 8 expansion is gated on migrated-database contracts, privacy eligibility, and the staging journey. Offline tests do not establish hosted readiness.
+
 
 ---
 
@@ -415,7 +418,7 @@ Before running any project-specific commands, the host machine must have:
 
 ### Tool Choices & Rationale
 
-- **Node.js (v20 LTS)**: Stable, long-term support version suitable for Next.js 15 and Expo SDK 52. Managed via `.nvmrc` to prevent version drift.
+- **Node.js 22.22.2**: Repository baseline for Next.js 16.3.8, pnpm 11.9.0, and the native workspaces. Managed via `.nvmrc` to prevent version drift.
 - **pnpm**: Fast, disk-efficient package manager for monorepos. Chosen over npm/yarn for strict hoisting and workspace support.
 - **Python (3.12)**: Latest stable Python release with major performance improvements. Managed via pyenv.
 - **uv**: Extremely fast Python package installer and resolver written in Rust. Replaces pip/poetry for lightning-fast dependency syncs and strict lockfile (`uv.lock`) enforcement.
@@ -845,7 +848,7 @@ Create a dedicated package (`packages/config` or `@pansgpt/env`) to house shared
 
 - **Supabase**: Provision Hosted Project #1 exclusively for Staging.
 - **Render Web Service**: Define the staging API in `render.yaml` using `env: docker` and referencing `apps/api/Dockerfile` (do not use raw `env: python`). Pass all required environment variables via the Render dashboard. Enable auto-deploy from the `main` branch.
-- **Render Background Worker**: Expand `render.yaml` to include a separate worker service running the ARQ worker process (e.g., `startCommand: arq app.worker.WorkerSettings`).
+- **Pilot workers ($0)**: Run `uv run arq workers.settings.WorkerSettings` on an operator-managed machine and `uv run arq workers.settings.PictureWorkerSettings` for picture bursts. Render free compute does not provide background workers. A continuously available hosted worker requires a separate budget decision; never declare `plan: free` for a worker.
 - **Vercel Staging**: Connect the GitHub repository to a Vercel project with the root directory set appropriately. Configure Preview environment variables.
 - **Migration Workflow**: Ensure `supabase db push --linked` is run to apply migrations to the Staging project _before_ the application code is deployed.
 - **Health Checks**: Verify that `GET /health/live` and `GET /health/ready` return `HTTP 200 OK` from the public staging API URL.
@@ -853,19 +856,19 @@ Create a dedicated package (`packages/config` or `@pansgpt/env`) to house shared
 ### Production Environment Setup
 
 - **Supabase**: Provision Hosted Project #2 exclusively for Production. **Never share databases between environments.**
-- **Render Production Service**: Add production service definitions (web and worker) to `render.yaml` corresponding to the production environment, tracking stable release tags or a dedicated `production` branch.
+- **Render Production Service**: Keep the production API web-service template in `render.yaml`; provision production only after release approval. Operator-managed workers share the complete validated API environment corresponding to the production environment, tracking stable release tags or a dedicated `production` branch.
 - **Vercel Production**: Bind the custom domain (`pansgpt.com`) to the production deployment and supply production-grade environment variables.
 
 ### Monitoring and Keep-Alive Strategy
 
-- **Render Keep-Alive**: Since Render free tier spins down after 15 minutes of inactivity, configure **cron-job.org** to issue an HTTP GET to `/health/ready` every 10 minutes to prevent cold starts.
+- **Render Keep-Alive**: Since Render free tier spins down after 15 minutes of inactivity, configure the repository keep-alive workflow with `STAGING_API_HEALTH_URL` (ending in `/health/ready`) and `STAGING_WEB_URL`. It runs every 10 minutes, fails on missing configuration or non-2xx responses, and makes no AI requests. Scheduled CI timing is best-effort, not an uptime guarantee.
 - **Uptime Monitoring**: Configure **Better Uptime** to monitor both the API (`/health/live`) and the Web URL, dispatching alerts to email/Slack upon downtime.
 - **GitHub Actions**: Implement a `.github/workflows/keep_alive.yml` workflow as a secondary mechanism to ping the application endpoints periodically.
 
 ### Free Tier Constraints & Management
 
 - **Supabase ($0)**: Keep an eye on the 500MB database limit and project pause rules (projects pause after 7 days of inactivity). Use regular staging tests or keep-alive pings to prevent unprompted pausing on the staging DB.
-- **Render ($0)**: The free tier allocates 750 instance hours per month. Running multiple services (API + Worker) across the same account will exhaust this limit quickly. Keep track of usage and consider isolating the staging worker or upgrading to the first paid tier when necessary.
+- **Render ($0)**: The free tier allocates 750 instance hours per month. Two always-running API web services cannot be assumed to fit one account's free allocation. Staging and production templates do not certify simultaneous $0 availability; schedule staging use and review account allocation before launch. Background workers are operator-managed. Keep track of usage and consider isolating the staging worker or upgrading to the first paid tier when necessary.
 
 ### Verification Gate
 
@@ -918,7 +921,7 @@ pansgpt/
 
 | Decision             | Choice                                                       | Why                                                                                                                                                              |
 | -------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework            | **Next.js 15 (App Router)**                                  | App Router is mature, RSC reduces bundle size, streaming built-in                                                                                                |
+| Framework            | **Next.js 16.3.8 (App Router)**                                  | App Router is mature, RSC reduces bundle size, streaming built-in                                                                                                |
 | Language             | **TypeScript (strict mode)**                                 | No `any`, no vibe coding. Strict mode catches real bugs                                                                                                          |
 | Styling              | **Tailwind CSS v4**                                          | CSS-native, no config file, fastest option, same utility classes as mobile                                                                                       |
 | Animation            | **Framer Motion**                                            | Best-in-class for the interactions PansGPT needs                                                                                                                 |
@@ -1256,7 +1259,7 @@ cron-job.org (free) → pings GET /health every 10 minutes
 ```
 Monorepo (Turborepo)
 │
-├── apps/web/          ← Next.js 15, React 19, TypeScript, Tailwind v4, Framer Motion, Tiptap, @serwist/next
+├── apps/web/          ← Next.js 16.3.8, React 19, TypeScript, Tailwind v4, Framer Motion, Tiptap, @serwist/next
 ├── apps/mobile/       ← Expo, React Native, NativeWind v4, Expo Router, @10play/tentap-editor, MMKV
 ├── apps/desktop/      ← Electron (offline-first, SQLite, 90% offline, Tiptap)
 ├── apps/api/          ← FastAPI, Python 3.12, Pydantic v2, Uvicorn + Gunicorn, ARQ
@@ -1286,7 +1289,7 @@ Auth
 
 
 LLM Engine (Tiered Failover, All Free Tier)
-├── openai/gpt-oss-120b              (Groq)
+├── llama-3.3-70b-versatile              (Groq)
 ├── qwen/qwen3.6-27b                 (Groq)
 ├── whisper-large-v3-turbo           (Groq)
 ├── whisper-large-v3                 (Groq)
@@ -1462,7 +1465,7 @@ flowchart TD
     end
 
     ModelTier{"4. LLM Routing\n(Tiered Failover)"}
-    Primary["Primary (e.g., gpt-oss-120b)"]
+    Primary["Primary (e.g., llama-3.3-70b-versatile)"]
     Secondary["Secondary Fallback"]
     Tertiary["Tertiary Fallback"]
     Quaternary["Quaternary Fallback"]
@@ -2801,7 +2804,7 @@ erDiagram
 >
 > - Credit bundles & pricing in Naira (Starter, Semester Standard, Exam Warrior, Institutional)
 > - Dynamic per-action credit costs (`credit_pricing`)
-> - Fast denormalized balances (`user_credits`) & double-entry immutable ledger (`credit_ledger`)
+> - Fast denormalized balances (`user_credits`) & idempotent debit/refund journal (`credit_ledger`); true double-entry accounting remains a payments-phase design task
 > - Fiat payment reconciliation via Paystack/Flutterwave (`credit_purchases`)
 > - Atomic balance checking and deduction stored procedures (`deduct_user_credits`)
 
@@ -2938,7 +2941,7 @@ Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast infe
 | `gemma-4-31b-it`                                     | Google AI Studio | Dense 31B  | Text + Image     | 256K       | ~1.5s – 2.5s   | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Chat & Deep Study**   |
 | `gemma-4-26b-a4b-it`                                 | Google AI Studio | MoE (A4B)  | Text + Image     | 256K       | ~800ms – 1.5s  | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Fast Chat & OCR**     |
 | `gemini-embedding-2`                                 | Google AI Studio | Embedding  | Text             | 8K (1536d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**    | <!-- [DIM 1536] --> |
-| `openai/gpt-oss-120b`                                | Groq             | MoE 120B   | Text-only        | 128K       | ~300ms – 600ms | Yes (Configurable CoT)    | Yes (Native Function Calling) | **Fast Fallback & Quiz Engine** |
+| `openai/gpt-oss-120b`                                | Groq             | MoE 120B   | Text-only        | 128K       | ~300ms – 600ms | Yes (Configurable CoT)    | Yes (Native Function Calling) | Optional catalog entry; not the default fallback |
 | `qwen/qwen3.6-27b`                                   | Groq             | Dense 27B  | Text + Image     | 128K       | ~250ms – 500ms | Yes (Thinking Mode)       | Yes (Native Function Calling) | **Fast Multimodal Fallback**    |
 | `whisper-large-v3-turbo`                             | Groq             | STT        | Audio-only       | ~25s chunk | ~200ms – 400ms | N/A                       | N/A                           | **Voice Input (Primary)**       |
 | `whisper-large-v3`                                   | Groq             | STT        | Audio-only       | ~25s chunk | ~400ms – 800ms | N/A                       | N/A                           | **Voice Input (Fallback)**      |
@@ -3013,7 +3016,7 @@ VISION_EXTRACTION_CASCADE = [
 
 1. **Unified High-Quality Reasoning Topology (No "Fast Mode")**:
    - Primary: Google AI Studio (`gemma-4-31b-it` / `gemma-4-26b-a4b-it`)
-   - Secondary (on 429 / 503 / timeout): Groq (`openai/gpt-oss-120b` / `qwen/qwen3.6-27b`)
+   - Secondary (on 429 / 503 / timeout): Groq (`llama-3.3-70b-versatile` / `qwen/qwen3.8-27b`)
    - Tertiary (safety net): OpenRouter (`nvidia/nemotron-3-ultra-550b-a55b:free` / `nvidia/nemotron-3-super-120b-a12b:free`)
    - _Note_: The platform operates on a single unified high-quality reasoning pipeline. There is no degraded "fast mode" toggle.
 2. **Structured Output Resilience (Tagged XML & Schema Fallbacks)**:
@@ -3028,7 +3031,7 @@ VISION_EXTRACTION_CASCADE = [
 2. **Post-LLM System Leak Check**: Evaluates generated stream chunks to prevent internal prompts or schema leakage.
 3. **Mandatory Educational / Clinical Disclaimer**: Injected as a standardized footnote on all clinical, dosing, and medical questions:  
    `> ⚠️ Educational Study Aid: PansGPT is designed for academic revision. Always verify clinical calculations with official departmental guidelines.`
-4. **Zero Data Retention (ZDR)**: All upstream model requests use ZDR API flags to guarantee that student data and lecture notes are never used for model training.
+4. **Strict Zero Data Retention (ZDR)**: Every external AI/search provider is blocked until account and endpoint privacy evidence has been reviewed and its explicit `*_ZDR_CONFIRMED` attestation enabled. A custom header cannot establish ZDR, and no-training alone is not equivalent to no-retention. OpenRouter additionally requires `provider: {zdr: true, data_collection: "deny"}` on every text/vision request. No eligible endpoint means capability unavailable; never relax privacy to obtain a response. See [provider privacy register](provider-privacy.md).
 
 ---
 
@@ -3123,7 +3126,7 @@ flowchart TD
     S4 -- "Table (Image or Native)" --> S6["Stage 6: Dual-Path Table Extraction\n• Native: Cell Geometry (Exact, $0)\n• Image: Vision Structured Output"]
 
     %% Stage 7
-    S3A --> S7["Stage 7: AI Hierarchy & Segmentation\n(Single Pass, Reading Order, Title Sources)"]
+    S3A --> S7["Stage 7: Heading Segmentation\n(Deterministic, Reading Order, Title Sources)"]
     S5 --> S7
     S4D --> S7
     S6 --> S7
@@ -3169,7 +3172,7 @@ Every image encountered—whether a 200px inline diagram or a full scanned page�
 > [!NOTE] Two-Phase Robust Ingestion Pipeline [IMAGES PHASE]
 > Ingestion is divided into two resilient phases so upstream AI outages cannot drop a document:
 >
-> 1. **Phase 1 (Immediate Text & Embeddings)**: Extracts pages, native text, and structural tables; computes embeddings and writes chunks, segments, and pages immediately. All visual assets (embedded images and scanned canvases) are queued in `document_images` with status `pending`. The document is instantly marked `completed` and searchable.
+> 1. **Phase 1 (Immediate Text & Embeddings)**: Extracts pages, native text, and structural tables; computes embeddings and writes chunks, segments, and pages immediately. All visual assets (embedded images and scanned canvases) are queued in `document_images` with status `pending`. Text-bearing documents become searchable after a successful atomic write; image-only documents remain processing until vision produces searchable content. `embedding_status` describes the text phase, while `image_counts` and `ingestion_completeness` explicitly expose pending, failed, skipped, partial and complete outcomes.
 > 2. **Phase 2 (Resumable Background Vision)**: An asynchronous background task (`process_pending_images`) drains `document_images` using a 2.1s throttle and exponential backoffs. If 3 consecutive failures occur, processing pauses gracefully without data loss. Image descriptions and transcripts are atomically attached as elements and chunks upon success.
 
 #### Stage 5 — Text-Image Transcription (OCR-First $\rightarrow$ Vision Fallback)
@@ -3197,8 +3200,8 @@ A single AI pass evaluates all extracted elements (native text, transcribed text
 **Segmentation Logic & Title Sources**:
 
 - **Explicit Heading Found** $\rightarrow$ Creates new segment; `title_source = 'explicit'`.
-- **Topic Shift Detected (No Heading)** $\rightarrow$ Creates new segment; `title_source = 'synthesized'`.
-- **No Heading, No Topic Shift** $\rightarrow$ Appends content to the currently open segment; `title_source = 'inherited'`.
+- **No recognizable heading** $\rightarrow$ Keep the open segment; use the synthesized default when no explicit segment exists.
+- **Continuation** $\rightarrow$ Append to the currently open segment; do not create a duplicate inherited segment.
 
 **Cross-Page Continuity**: Cross-page topics (e.g. _Sulfonamides_ discussed across pages 3, 4, and 12) are **not** linked with brittle ingestion-time pointers. Instead, cross-page topic continuity is dynamically reconstructed at query time using **Hybrid Retrieval** (keyword BM25 + 1536d vector search + re-ranking). <!-- [DIM 1536] -->
 
@@ -3288,7 +3291,7 @@ Ingestion is executed asynchronously using **ARQ (Async Redis Queue)**:
   - `60% – 80%`: AI Hierarchy pass and segment creation.
   - `80% – 100%`: 512-token chunking, `gemini-embedding-2` batch embeddings, HNSW index insertion. <!-- [EMBED FIX] -->
 - **Heartbeat & Deadlock Recovery**: 30-second worker heartbeats prevent abandoned jobs from blocking the queue.
-- **Re-Embedding RPC (`prepare_document_reembed`)**: Atomically flushes chunks and elements for instant vector re-indexing upon model updates.
+- **Re-Embedding RPC (`prepare_document_reembed`)**: Atomically records a durable replacement request and resets the lease. The old index stays searchable until the new pipeline commits all replacement rows in one transaction. Redis outages defer delivery; they do not discard the request.
 
 ---
 
@@ -7069,3 +7072,19 @@ flowchart TB
 - **Testing Pyramid**:
   - Unit/Component: **Jest** + **React Native Testing Library**.
   - E2E Automation: **Maestro** cross-platform mobile automation suite.
+
+
+### Phase 0?7 implementation contract amendment (2026-10-20)
+
+- Every token verification checks expiry, issuer, authenticated audience and UUID subject. Signing keys may be cached; successful authorization is never cached. Database roles and tenant membership are authoritative.
+- Profile mutations and credit/quota/re-embed RPCs are server-only. New tables enable RLS immediately. Historical CREATE statements now enable RLS for clean installs; existing installations receive forward authorization migrations. Both migration directories must match byte-for-byte.
+- Durable Postgres outbox rows carry stable ARQ job IDs. Workers release only their own lease before retry, fence replacement writes, reconcile undelivered jobs, and expose image completeness separately. Supabase owns local Postgres/Auth; Compose supplies Redis.
+- Text chunks are at most 512 tokenizer tokens with 51-token overlap; atomic tables/diagrams over the 8192-token application budget fail visibly. Native PDF citation geometry selects overlapping text lines; OCR falls back to explicitly marked page precision. Exact word highlights remain a reader-phase requirement.
+- Retrieval requires a tenant, respects document/course/level scope in dense and keyword fallback paths, and bounds siblings to a segment. Hosted search quotas use a single atomic Postgres authority. Local caches and process-local model circuit breakers are optimizations, not distributed guarantees.
+- Registry activation, descriptions, instructions and target levels apply only to an allowlist of supported handlers. Model calls cannot execute unadvertised tools. The seeded dosage calculator, drug-interaction checker and chemical-drawer slugs remain disabled pending separately validated clinical implementations. Artifact chemical structure drawing is a distinct supported handler.
+- Provider adapters stream native events and preserve function calls/results and output ceilings. Output redaction spans chunk boundaries. Independent SSE heartbeats run during stalls; cancellation propagates to producers and unused credit reservations are refunded. Provider token measurements are logged only when supplied; journal estimates carry `usage_source=estimated`.
+- Credit accounting currently uses a balance plus debit/refund journal with idempotent operations and stale reservation reconciliation. This is not certified double-entry accounting. Payments-phase work must add balancing accounts and payment-webhook idempotency.
+- Invitations grant lecturer roles and increment use counts in one locked, idempotent redemption transaction; profile setup cannot change established tenancy. Expired soft deletes use daily database scheduling and a durable R2 cleanup queue; full DSAR workflows remain in phase 24.
+- CI must run actual web lint scope, TS, Python lint/format/annotations, offline pytest, web/desktop regressions, the production build, and disposable Supabase migration/RLS/RPC/type-contract gates. Generated type artifacts and deployment/native evidence remain required before certification. See the remediation record for exact evidence and outstanding checks.
+
+Provider catalog quota/latency figures above are historical planning estimates, not verified account limits. Active chat fallback defaults to Groq `llama-3.3-70b-versatile` as required by AGENTS.md; the secondary/vision route uses `qwen/qwen3.8-27b`. Verify models and actual free-account limits before activation; privacy attestations remain false.

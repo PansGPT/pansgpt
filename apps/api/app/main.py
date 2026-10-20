@@ -1,13 +1,13 @@
 # ==============================================================================
 # PansGPT 2.0 FastAPI Core Engine Entrypoint
 # ==============================================================================
-
 import asyncio
 import logging
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 import structlog
-from fastapi import FastAPI, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
@@ -44,7 +44,7 @@ if settings.SENTRY_DSN:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings.validate_local_dev_mode()  # [PRELAUNCH FIX]
     # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
@@ -85,58 +85,80 @@ app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/health/live", tags=["Health"])
-async def liveness_check():
+async def liveness_check() -> dict[str, str]:
     """Quick endpoint for keep-alive pingers to prevent host sleep."""
     return {"status": "ok", "environment": settings.ENVIRONMENT, "service": "api"}
 
 
+_readiness_cache: tuple[float, dict[str, object]] | None = None
+
+
 @app.get("/health/ready", tags=["Health"])
-async def readiness_check():
-    """Comprehensive readiness probe verifying database and downstream engines."""
-    db_status = "unconfigured"
-    db_details = None
+async def readiness_check() -> JSONResponse:
+    """Cache lightweight capability probes; a missing required engine is not ready."""
+    import time
 
-    if settings.DATABASE_URL:
-        try:
-            import asyncpg
+    from app.engines.storage import storage_engine
 
-            # Clean connection with statement_cache_size=0 for Supabase pooler compatibility
-            conn = await asyncio.wait_for(
-                asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0),
-                timeout=5.0,
-            )
-            val = await conn.fetchval("SELECT 1;")
-            await conn.close()
-            db_status = "ok" if val == 1 else "unexpected_result"
-        except Exception as e:
-            db_status = "error"
-            db_details = str(e)
+    global _readiness_cache
+    now = time.monotonic()
+    if _readiness_cache is not None and now - _readiness_cache[0] < 30:
+        payload = _readiness_cache[1]
+        return JSONResponse(status_code=200 if payload["status"] == "ok" else 503, content=payload)
+    engines = {
+        "api": "operational",
+        "database": "error",
+        "redis": "disabled",
+        "storage": "disabled",
+        "chat": "disabled",
+        "embeddings": "disabled",
+    }
+    try:
+        from app.core.database import get_db_connection
 
-    redis_status = "unconfigured"
-    if settings.redis_connection_url:
-        try:
-            import redis.asyncio as aioredis
+        async with get_db_connection(timeout=3) as conn:
+            if conn is not None and await conn.fetchval("SELECT 1") == 1:
+                engines["database"] = "ok"
+    except Exception:
+        pass
+    if settings.ENABLE_AI:
+        eligible = bool(
+            (settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED)
+            or (settings.GROQ_API_KEY and settings.GROQ_ZDR_CONFIRMED)
+            or (settings.OPENROUTER_API_KEY and settings.OPENROUTER_ZDR_CONFIRMED)
+        )
+        engines["chat"] = "ready" if eligible else "blocked"
+    if settings.ENABLE_INGESTION:
+        engines.update(redis="error", storage="error", embeddings="blocked")
+        if settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED:
+            engines["embeddings"] = "ready"
+        if settings.redis_connection_url:
+            try:
+                import redis.asyncio as aioredis
 
-            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=3.0)
-            pong = await r.ping()
-            await r.aclose()
-            redis_status = "ok" if pong else "error"
-        except Exception:
-            redis_status = "error"
-
-    is_ready = db_status in ["ok", "unconfigured"]
-    status_code = status.HTTP_200_OK if is_ready else status.HTTP_503_SERVICE_UNAVAILABLE
-
-    return JSONResponse(
-        status_code=status_code,
-        content={
-            "status": "ok" if is_ready else "degraded",
-            "environment": settings.ENVIRONMENT,
-            "engines": {
-                "api": "operational",
-                "database": db_status,
-                "redis": redis_status,
-            },
-            **({"db_error": db_details} if db_details else {}),
-        },
-    )
+                redis = aioredis.from_url(
+                    settings.redis_connection_url, socket_connect_timeout=2, socket_timeout=2
+                )
+                try:
+                    if await redis.ping():
+                        engines["redis"] = "ok"
+                finally:
+                    await redis.aclose()
+            except Exception:
+                pass
+        if storage_engine.is_configured:
+            try:
+                async with asyncio.timeout(3):
+                    async with storage_engine.get_client() as client:
+                        await client.head_bucket(Bucket=settings.r2_bucket_name)
+                engines["storage"] = "ok"
+            except Exception:
+                pass
+    ready = all(value in {"operational", "ok", "ready", "disabled"} for value in engines.values())
+    payload = {
+        "status": "ok" if ready else "degraded",
+        "environment": settings.ENVIRONMENT,
+        "engines": engines,
+    }
+    _readiness_cache = (now, payload)
+    return JSONResponse(status_code=200 if ready else 503, content=payload)

@@ -23,7 +23,7 @@ def rsa_key_pair():
 
 
 @pytest.fixture
-def mock_jwks(monkeypatch, rsa_key_pair):
+def mock_jwks(monkeypatch, rsa_key_pair, authoritative_auth_store):
     _, public_key = rsa_key_pair
 
     class MockSigningKey:
@@ -57,7 +57,11 @@ def make_token(
     now = int(time.time())
     user_id = sub or str(uuid.uuid4())
     user_email = email or f"{role}_{user_id[:8]}@unijos.edu.ng"
+    from tests.auth_support import register_profile
+
+    register_profile(user_id, roles or [role], None)
     payload = {
+        "iss": f"{settings.SUPABASE_URL}/auth/v1",
         "sub": user_id,
         "email": user_email,
         "aud": "authenticated",
@@ -72,7 +76,7 @@ def make_token(
 
 
 @pytest.mark.asyncio
-async def test_get_universities_returns_active_institutions():
+async def test_get_universities_returns_active_institutions(authoritative_auth_store):
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         resp = await client.get("/api/v1/auth/universities")
         assert resp.status_code == 200

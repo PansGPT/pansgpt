@@ -1,5 +1,7 @@
 "use client";
 
+import { env } from "@/env";
+
 import React, { useState } from "react";
 import { Upload, X, AlertCircle, FileText, CheckCircle2, Loader2, Info } from "lucide-react";
 
@@ -56,7 +58,7 @@ export function DocumentUploadModal({
     setError(null);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = env.NEXT_PUBLIC_API_URL;
 
       // Stage 1: Request presigned upload URL or initiate upload
       const initRes = await fetch(`${apiUrl}/api/v1/library/upload`, {

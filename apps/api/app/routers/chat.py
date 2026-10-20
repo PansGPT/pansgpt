@@ -56,7 +56,7 @@ async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
     try:
         async with get_db_connection(timeout=3.0) as conn:
             if not conn:
-                return None
+                raise HTTPException(status_code=503, detail="Credit storage is unavailable.")
 
             return await conn.fetchval(
                 """
@@ -123,7 +123,7 @@ async def _auto_generate_session_title(  # [TENANT FIX]
 async def create_chat_session(
     payload: ChatSessionCreateRequest,
     current_user: UserContext = Depends(get_current_user),
-):
+) -> ChatSessionResponse:
     """Creates a new chat session thread for the authenticated student."""
     user_id = str(current_user.id)  # [TENANT FIX]
     require_university(current_user)  # [TENANT FIX]
@@ -140,6 +140,8 @@ async def create_chat_session(
     now_str = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
     async with get_db_connection() as conn:
+        if conn is None and not current_user.dev_bypass:
+            raise HTTPException(status_code=503, detail="Conversation storage is unavailable.")
         if conn:
             try:
                 sql = """
@@ -159,6 +161,9 @@ async def create_chat_session(
                     now_str = row["created_at"]
             except Exception as exc:
                 logger.warning("create_chat_session_db_failed", error=str(exc))
+                raise HTTPException(
+                    status_code=503, detail="The conversation could not be saved."
+                ) from exc
 
     return ChatSessionResponse(
         id=session_id,
@@ -178,7 +183,7 @@ async def create_chat_session(
 async def list_chat_sessions(
     limit: int = Query(default=30, ge=1, le=100),
     current_user: UserContext = Depends(get_current_user),
-):
+) -> ChatSessionListResponse:
     """Returns a list of conversation threads for the student."""
     user_id = str(current_user.id)  # [TENANT FIX]
     require_university(current_user)  # [TENANT FIX]
@@ -221,7 +226,7 @@ async def list_chat_sessions(
 async def get_chat_session_details(
     session_id: str,
     current_user: UserContext = Depends(get_current_user),
-):
+) -> dict[str, Any]:
     """Retrieves session details and its active message tree."""
     require_university(current_user)  # [TENANT FIX]
     await require_owned_session(session_id, current_user)  # [TENANT FIX]
@@ -308,7 +313,7 @@ async def stream_chat_session(
     payload: StreamChatRequest,
     background_tasks: BackgroundTasks,
     current_user: UserContext = Depends(get_current_user),
-):
+) -> StreamingResponse:
     """
     Core Server-Sent Events (SSE) endpoint:
     1. Pre-LLM Prompt Injection & Policy Guard
@@ -330,8 +335,11 @@ async def stream_chat_session(
     user_message_id = str(uuid7())  # [LEFTOVER FIX]
     assistant_message_id = str(uuid7())  # [LEFTOVER FIX]
 
-    if not current_user.dev_bypass:
+    credit_reserved = False
+    credit_settled = False
+    if not current_user.dev_bypass and policy_guard.check_prompt_safety(payload.message)[0]:
         await _deduct_user_credit(user_id, assistant_message_id)
+        credit_reserved = True
 
     # Queue background operations
     background_tasks.add_task(  # [TENANT FIX]
@@ -348,6 +356,10 @@ async def stream_chat_session(
     ) -> None:
         """Persist retrieval notices and model answers through the same path."""
         async with get_db_connection() as conn:
+            if conn is None:
+                if current_user.dev_bypass:
+                    return
+                raise RuntimeError("Message storage is unavailable")
             if conn:
                 try:
                     await conn.execute(
@@ -370,9 +382,10 @@ async def stream_chat_session(
                         error_type=type(exc).__name__,
                         error=repr(exc),
                     )
+                    raise
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
-        nonlocal model_started  # [CHAT FIX 2]
+        nonlocal model_started, credit_settled  # [CHAT FIX 2]
         last_heartbeat = time.time()
 
         # 1. Yield init event
@@ -431,6 +444,7 @@ async def stream_chat_session(
                     )
                 except Exception as exc:
                     logger.warning("save_user_message_failed", error=str(exc))
+                    raise
 
         # 3b. Intent & Complexity Classification (Fast Path vs. Complex Path)
         classification = intent_classifier.classify(
@@ -465,6 +479,9 @@ async def stream_chat_session(
                     expand_siblings=True,
                     expand_full_segment=payload.expand_full_segment,
                     conversation_history=history_turns,
+                    user_id=user_id,
+                    role=current_user.role,
+                    levels=[current_user.current_level] if current_user.current_level else None,
                 )
             except Exception as exc:
                 logger.warning("rag_pipeline_execution_error", error=str(exc))
@@ -504,6 +521,8 @@ async def stream_chat_session(
                 user_id=user_id,
                 university_id=university_id,
                 enable_tools=classification.requires_tools,
+                role=current_user.role,
+                levels=[current_user.current_level] if current_user.current_level else None,
             ):
                 # Check client disconnect abort
                 if await request.is_disconnected():
@@ -545,6 +564,8 @@ async def stream_chat_session(
             logger.error("stream_chat_unhandled_failure", error=str(exc))
             err_msg = "An unexpected error occurred while generating your answer. Please try again."
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
+            yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens)})}\n\n"
+            return
 
         raw_response_text = "".join(collected_tokens)
         clean_visible, residual_thinking = strip_thinking_tokens(raw_response_text)
@@ -560,6 +581,8 @@ async def stream_chat_session(
             full_response_text, citations, full_thinking_text
         )  # [CHAT FIX 2]
 
+        credit_settled = True
+        await _finish_chat_credit(user_id, assistant_message_id, refund=False)
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
@@ -583,8 +606,48 @@ async def stream_chat_session(
             if model_started:  # [CHAT FIX 2]
                 yield f"event: done\ndata: {json.dumps({'full_text': '', 'citations_count': 0})}\n\n"  # [CHAT FIX 2]
 
+    async def transport_events() -> AsyncGenerator[str, None]:
+        queue: asyncio.Queue[str | None] = asyncio.Queue(maxsize=8)
+
+        async def produce() -> None:
+            try:
+                async for event in bounded_sse_events():
+                    await queue.put(event)
+            except Exception:
+                logger.exception("chat_stream_producer_failed")
+                await queue.put(
+                    'event: error\ndata: {"error":"The answer could not be saved. Please retry."}\n\n'
+                )
+            else:
+                await queue.put(None)
+                return
+            await queue.put(None)
+
+        producer = asyncio.create_task(produce())
+        last_ping = time.monotonic()
+        try:
+            while True:
+                if await request.is_disconnected():
+                    return
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=1)
+                except TimeoutError:
+                    if time.monotonic() - last_ping >= 15:
+                        yield ": keep-alive\n\n"
+                        last_ping = time.monotonic()
+                    continue
+                if event is None:
+                    return
+                yield event
+                last_ping = time.monotonic()
+        finally:
+            producer.cancel()
+            await asyncio.gather(producer, return_exceptions=True)
+            if credit_reserved and not credit_settled:
+                await _finish_chat_credit(user_id, assistant_message_id, refund=True)
+
     return StreamingResponse(
-        bounded_sse_events(),  # [CHAT FIX]
+        transport_events(),  # [CHAT FIX]
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
@@ -604,7 +667,7 @@ async def transcribe_voice_audio(
     file: UploadFile | None = File(None),
     audio: UploadFile | None = File(None),
     current_user: UserContext = Depends(get_current_user),
-):
+) -> VoiceTranscribeResponse:
     """
     Transcribes student microphone audio to text using Groq Whisper.
     Supports both 'file' and 'audio' multipart form fields with full validation.
@@ -648,3 +711,22 @@ async def transcribe_voice_audio(
         mime_type=content_type,
         language="en",
     )
+
+
+async def _finish_chat_credit(user_id: str, reference: str, refund: bool) -> None:
+    try:
+        async with get_db_connection() as conn:
+            if conn is None:
+                return  # The durable reconciliation job handles a missed finalization.
+            if refund:
+                await conn.execute(
+                    "SELECT public.refund_chat_credit($1,$2);", uuid.UUID(user_id), reference
+                )
+            else:
+                await conn.execute(
+                    "UPDATE public.credit_ledger SET metadata=metadata || '{\"state\":\"settled\"}'::jsonb WHERE user_id=$1 AND reference_id=$2 AND tx_type='ai_chat';",
+                    uuid.UUID(user_id),
+                    reference,
+                )
+    except Exception as exc:
+        logger.warning("credit_finalization_deferred", error_type=type(exc).__name__)

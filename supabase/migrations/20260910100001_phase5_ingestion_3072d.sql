@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.document_pages (
   created_at      timestamptz NOT NULL DEFAULT now(),
   UNIQUE (document_id, page_number)
 );
+ALTER TABLE public.document_pages ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_pages_lookup ON public.document_pages(document_id, page_number);
 
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.document_segments (
   order_index     integer NOT NULL,
   created_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_segments ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_segments_lookup ON public.document_segments(document_id, order_index);
 
@@ -44,6 +46,7 @@ CREATE TABLE IF NOT EXISTS public.document_elements (
   order_index       integer NOT NULL,
   created_at        timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_elements ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_elements_segment ON public.document_elements(segment_id, order_index);
 

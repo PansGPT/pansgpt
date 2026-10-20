@@ -313,18 +313,24 @@ class SkillExecutionEngine:
         user_id: str | None = None,  # [CHAT FIX]
     ) -> ArtifactReadyPayload:
         """Generates a formatted PDF using PyMuPDF."""
-        pdf_doc = pymupdf.open()
-        page = pdf_doc.new_page(width=595, height=842)  # A4
+        # Paginate by measured line width; never ignore insert_textbox overflow.
+        from xml.sax.saxutils import escape
 
-        # Header
-        page.insert_text((50, 60), title, fontsize=18, fontname="helv", color=(0.1, 0.2, 0.4))
-        page.insert_text(
-            (50, 85), f"Prepared by: {author}", fontsize=10, fontname="helv", color=(0.4, 0.4, 0.4)
+        story = pymupdf.Story(
+            html=f"<h1>{escape(title)}</h1><p>Prepared by: {escape(author)}</p><p>{escape(content).replace(chr(10), '<br>')}</p>"
         )
-
-        # Body
-        rect = pymupdf.Rect(50, 110, 545, 800)
-        page.insert_textbox(rect, content, fontsize=11, fontname="helv", color=(0.15, 0.15, 0.15))
+        output = io.BytesIO()
+        writer = pymupdf.DocumentWriter(output)
+        more = True
+        try:
+            while more:
+                device = writer.begin_page(pymupdf.Rect(0, 0, 595, 842))
+                more, _ = story.place(pymupdf.Rect(50, 50, 545, 792))
+                story.draw(device)
+                writer.end_page()
+        finally:
+            writer.close()
+        pdf_doc = pymupdf.open(stream=output.getvalue(), filetype="pdf")
 
         data = pdf_doc.write()
         pdf_doc.close()

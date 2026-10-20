@@ -138,6 +138,9 @@ class ToolExecutionEngine:
         course_code: str | None = None,
         match_count: int = 4,
         university_id: str | None = None,
+        user_id: str | None = None,
+        role: str = "student",
+        levels: list[str] | None = None,
     ) -> dict[str, Any]:
         """Executes 3-pool hybrid RAG search against course notes."""
         context, citations = await rag_engine.retrieve_context(
@@ -146,7 +149,10 @@ class ToolExecutionEngine:
             university_id=university_id,
             course_code=course_code,
             match_count=min(max(match_count, 1), 8),
+            user_id=user_id,
+            role=role,
             expand_siblings=True,
+            levels=levels,
         )
         return {
             "found_chunks": len(citations),
@@ -256,9 +262,10 @@ class ToolExecutionEngine:
         university_id: str | None = None,
         user_id: str | None = None,
         role: str = "student",
+        levels: list[str] | None = None,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
-        logger.info("tool_dispatch_requested", tool_name=tool_name, arguments=arguments)
+        logger.info("tool_dispatch_requested", tool_name=tool_name)
         try:
             if tool_name == "rag_search":
                 return await self.execute_rag_search(
@@ -267,6 +274,9 @@ class ToolExecutionEngine:
                     course_code=arguments.get("course_code"),
                     match_count=arguments.get("match_count", 4),
                     university_id=university_id,
+                    user_id=user_id,
+                    role=role,
+                    levels=levels,
                 )
             elif tool_name == "read_document":
                 return await self.execute_read_document(

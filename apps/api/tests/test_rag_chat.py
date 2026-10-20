@@ -121,6 +121,9 @@ async def test_multi_tier_llm_failover_mechanism():
 
 @pytest.mark.asyncio
 async def test_multi_tier_llm_failover_cascades_to_openrouter_on_double_429():
+    async def fallback():
+        yield "OpenRouter emergency safety net response."
+
     """Verify cascading failover from Gemma (429) -> Groq (429) -> OpenRouter Tier 3."""
     engine = MultiTierLlmEngine()
     engine.gemini_key = "AIzaSyD_SimulatedLiveKeyGoogle429"
@@ -138,8 +141,8 @@ async def test_multi_tier_llm_failover_cascades_to_openrouter_on_double_429():
         with patch.object(engine, "_call_groq_turn", side_effect=groq_429) as mock_groq:
             with patch.object(
                 engine,
-                "_call_openrouter",
-                new=AsyncMock(return_value="OpenRouter emergency safety net response."),
+                "_openrouter_turn",
+                new=AsyncMock(side_effect=lambda *args, **kwargs: ([], fallback())),
             ) as mock_openrouter:
                 tokens = []
                 providers = []
@@ -151,7 +154,7 @@ async def test_multi_tier_llm_failover_cascades_to_openrouter_on_double_429():
                     providers.append(provider)
 
                 assert mock_gemma.call_count == 2
-                assert mock_groq.call_count == 1
+                assert mock_groq.call_count == 2
                 assert mock_openrouter.call_count == 1
                 assert all(p == "openrouter" for p in providers)
                 assert "OpenRouter emergency safety net" in "".join(tokens)

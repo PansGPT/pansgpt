@@ -1,9 +1,10 @@
 "use client";
 
+import { env } from "@/env";
+
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { createClient } from "@/lib/supabase/client";
 import { GraduationCap, Building2, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 
 interface UniversityItem {
@@ -25,17 +26,21 @@ const ACADEMIC_LEVELS = [
 export default function OnboardingPage() {
   const router = useRouter();
   const { session, profile, refreshProfile, loading: authLoading } = useAuth();
-  const [supabase] = useState(() => createClient());
 
   const [universities, setUniversities] = useState<UniversityItem[]>([]);
   const [loadingUniversities, setLoadingUniversities] = useState(true);
 
   // Form State - IMPORTANT: universityId defaults to "" (NO DEFAULT UNIVERSITY)
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [universityId, setUniversityId] = useState("");
-  const [currentLevel, setCurrentLevel] = useState("");
-  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [firstNameDraft, setFirstName] = useState<string | null>(null);
+  const [lastNameDraft, setLastName] = useState<string | null>(null);
+  const [universityDraft, setUniversityId] = useState<string | null>(null);
+  const [levelDraft, setCurrentLevel] = useState<string | null>(null);
+  const [termsDraft, setTermsAccepted] = useState<boolean | null>(null);
+  const firstName = firstNameDraft ?? profile?.first_name ?? "";
+  const lastName = lastNameDraft ?? profile?.last_name ?? "";
+  const universityId = universityDraft ?? profile?.university_id ?? "";
+  const currentLevel = levelDraft ?? profile?.current_level ?? "";
+  const termsAccepted = termsDraft ?? Boolean(profile?.terms_accepted_at);
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +49,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     async function loadUniversities() {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+        const apiUrl = env.NEXT_PUBLIC_API_URL;
         const res = await fetch(`${apiUrl}/api/v1/auth/universities`);
         if (res.ok) {
           const data = await res.json();
@@ -54,47 +59,18 @@ export default function OnboardingPage() {
           }
         }
       } catch {
-        // Backend offline, fallback to Supabase query
+        // The API is the authority for the university list.
       }
 
-      try {
-        const { data } = await (supabase as any)
-          .from("universities")
-          .select("id, name, short_name, slug")
-          .eq("status", "active")
-          .order("name", { ascending: true });
-
-        if (data && data.length > 0) {
-          setUniversities(data);
-          return;
-        }
-      } catch {
-        // Ignore
-      }
-
-      // Default seeded institution fallback
-      setUniversities([
-        {
-          id: "01a07664-7a69-7ce0-ad6a-b219462cbde3",
-          name: "University of Jos",
-          short_name: "UNIJOS",
-          slug: "unijos",
-        },
-      ]);
+      setError("Universities could not be loaded. Please reload to retry.");
     }
 
     loadUniversities().finally(() => setLoadingUniversities(false));
-  }, [supabase]);
+  }, []);
 
   // Pre-fill existing profile fields if available
   useEffect(() => {
     if (profile) {
-      if (profile.first_name) setFirstName(profile.first_name);
-      if (profile.last_name) setLastName(profile.last_name);
-      if (profile.university_id) setUniversityId(profile.university_id);
-      if (profile.current_level) setCurrentLevel(profile.current_level);
-      if (profile.terms_accepted_at) setTermsAccepted(true);
-
       // If user is already fully onboarded, redirect straight to /app
       if (profile.is_onboarded) {
         router.replace("/app");
@@ -131,51 +107,39 @@ export default function OnboardingPage() {
     setSubmitting(true);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = env.NEXT_PUBLIC_API_URL;
       const token = session?.access_token;
 
-      let onboarded = false;
-      try {
-        const res = await fetch(`${apiUrl}/api/v1/auth/onboard`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token || ""}`,
-          },
-          body: JSON.stringify({
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
-            university_id: universityId,
-            current_level: currentLevel,
-            terms_accepted: termsAccepted,
-          }),
-        });
-
-        if (res.ok) {
-          onboarded = true;
-        }
-      } catch {
-        // Backend offline, will use Supabase direct update below
+      if (!token) throw new Error("Please sign in again.");
+      const invite = new URLSearchParams(window.location.search).get("invite");
+      if (invite) {
+        const redeemed = await fetch(
+          `${apiUrl}/api/v1/auth/invites/${encodeURIComponent(invite)}/redeem`,
+          {
+            method: "POST",
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        if (!redeemed.ok)
+          throw new Error(
+            "This invitation could not be accepted. Please contact your university administrator."
+          );
       }
-
-      if (!onboarded && session?.user?.id) {
-        const { error: updateError } = await (supabase as any)
-          .from("users")
-          .update({
-            first_name: firstName.trim(),
-            last_name: lastName.trim(),
-            university_id: universityId,
-            current_level: currentLevel,
-            terms_accepted_at: new Date().toISOString(),
-          })
-          .eq("id", session.user.id);
-
-        if (updateError) {
-          throw new Error(updateError.message || "Failed to update profile.");
-        }
-      }
-
-      await refreshProfile();
+      const res = await fetch(`${apiUrl}/api/v1/auth/onboard`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          first_name: firstName.trim(),
+          last_name: lastName.trim(),
+          university_id: universityId,
+          current_level: currentLevel,
+          terms_accepted: termsAccepted,
+        }),
+      });
+      if (!res.ok) throw new Error("Your profile could not be saved. Please retry.");
+      const confirmedProfile = await refreshProfile();
+      if (!confirmedProfile?.is_onboarded)
+        throw new Error("Your profile could not be verified. Please retry.");
       router.push("/app");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "An unexpected error occurred.";

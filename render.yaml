@@ -1,6 +1,6 @@
 # ==============================================================================
 # PansGPT 2.0 Render Staging & Production Blueprint (Phase 3 Spec)
-# Multi-Stage Docker Build with FastAPI Web Engine & ARQ Background Workers
+# FastAPI API templates; operator-managed ARQ workers for the $0 pilot
 # ==============================================================================
 
 services:
@@ -18,6 +18,18 @@ services:
     healthCheckPath: /health/ready
     autoDeploy: true
     envVars:
+      - key: OPENROUTER_ZDR_CONFIRMED
+        value: "false"
+      - key: GOOGLE_ZDR_CONFIRMED
+        value: "false"
+      - key: GROQ_ZDR_CONFIRMED
+        value: "false"
+      - key: OPENAI_ZDR_CONFIRMED
+        value: "false"
+      - key: TAVILY_ZDR_CONFIRMED
+        value: "false"
+      - key: COHERE_ZDR_CONFIRMED
+        value: "false"
       - key: ENVIRONMENT
         value: staging
       - key: PROJECT_NAME
@@ -47,11 +59,11 @@ services:
       - key: GROQ_API_KEY
         sync: false
       - key: GROQ_FALLBACK_MODEL
-        value: openai/gpt-oss-120b
+        value: llama-3.3-70b-versatile
       - key: OPENROUTER_API_KEY
         sync: false
       - key: OPENROUTER_FALLBACK_MODEL
-        value: google/gemma-2-27b-it
+        value: nvidia/nemotron-3-ultra-550b-a55b:free
       - key: TAVILY_API_KEY
         sync: false
       - key: REDIS_URL
@@ -96,60 +108,7 @@ services:
         sync: false
 
   # ----------------------------------------------------------------------------
-  # 2. Staging: ARQ Background Task Worker
-  # ----------------------------------------------------------------------------
-  - type: worker
-    name: pansgpt-worker-staging
-    env: docker
-    region: frankfurt
-    plan: free
-    rootDir: apps/api
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    dockerCommand: python -m arq workers.settings.WorkerSettings # [QUEUE SPLIT 2]
-    autoDeploy: true
-    envVars:
-      - key: ENVIRONMENT
-        value: staging
-      - key: DATABASE_URL
-        sync: false
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: GEMINI_PRIMARY_MODEL
-        value: gemma-4-31b-it
-      - key: GEMINI_SECONDARY_MODEL
-        value: gemma-4-26b-a4b-it
-      - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2 # [EMBED FIX]
-      - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "1536" # [DIM 1536]
-      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
-        value: "false" # [EMBED FIX]
-      - key: REDIS_URL
-        sync: false
-      - key: UPSTASH_REDIS_URL
-        sync: false
-      - key: CLOUDFLARE_R2_ACCOUNT_ID
-        sync: false
-      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
-        sync: false
-      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: CLOUDFLARE_R2_ENDPOINT
-        sync: false
-      - key: CLOUDFLARE_R2_BUCKET_STAGING
-        value: pansgpt-library-staging
-      - key: RESEND_API_KEY
-        sync: false
-      - key: SENTRY_DSN
-        sync: false
-
-  # ----------------------------------------------------------------------------
-  # 3. Production: FastAPI Core Engine Web Service
+  # 2. Production: FastAPI template (provisioning and allocation unverified)
   # ----------------------------------------------------------------------------
   - type: web
     name: pansgpt-api-production
@@ -162,6 +121,18 @@ services:
     healthCheckPath: /health/ready
     autoDeploy: false
     envVars:
+      - key: OPENROUTER_ZDR_CONFIRMED
+        value: "false"
+      - key: GOOGLE_ZDR_CONFIRMED
+        value: "false"
+      - key: GROQ_ZDR_CONFIRMED
+        value: "false"
+      - key: OPENAI_ZDR_CONFIRMED
+        value: "false"
+      - key: TAVILY_ZDR_CONFIRMED
+        value: "false"
+      - key: COHERE_ZDR_CONFIRMED
+        value: "false"
       - key: ENVIRONMENT
         value: production
       - key: PROJECT_NAME
@@ -191,11 +162,11 @@ services:
       - key: GROQ_API_KEY
         sync: false
       - key: GROQ_FALLBACK_MODEL
-        value: openai/gpt-oss-120b
+        value: llama-3.3-70b-versatile
       - key: OPENROUTER_API_KEY
         sync: false
       - key: OPENROUTER_FALLBACK_MODEL
-        value: google/gemma-2-27b-it
+        value: nvidia/nemotron-3-ultra-550b-a55b:free
       - key: TAVILY_API_KEY
         sync: false
       - key: REDIS_URL
@@ -242,52 +213,3 @@ services:
   # ----------------------------------------------------------------------------
   # 4. Production: ARQ Background Task Worker
   # ----------------------------------------------------------------------------
-  - type: worker
-    name: pansgpt-worker-production
-    env: docker
-    region: frankfurt
-    plan: free
-    rootDir: apps/api
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    dockerCommand: python -m arq workers.settings.WorkerSettings # [QUEUE SPLIT 2]
-    autoDeploy: false
-    envVars:
-      - key: ENVIRONMENT
-        value: production
-      - key: DATABASE_URL
-        sync: false
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
-      - key: GEMINI_API_KEY
-        sync: false
-      - key: GEMINI_PRIMARY_MODEL
-        value: gemma-4-31b-it
-      - key: GEMINI_SECONDARY_MODEL
-        value: gemma-4-26b-a4b-it
-      - key: GEMINI_EMBEDDING_MODEL
-        value: gemini-embedding-2 # [EMBED FIX]
-      - key: GEMINI_EMBEDDING_DIMENSIONS
-        value: "1536" # [DIM 1536]
-      - key: EMBEDDER_FAKE_MODE # [EMBED FIX]
-        value: "false" # [EMBED FIX]
-      - key: REDIS_URL
-        sync: false
-      - key: UPSTASH_REDIS_URL
-        sync: false
-      - key: CLOUDFLARE_R2_ACCOUNT_ID
-        sync: false
-      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
-        sync: false
-      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: CLOUDFLARE_R2_ENDPOINT
-        sync: false
-      - key: CLOUDFLARE_R2_BUCKET_PRODUCTION
-        value: pansgpt-library-production
-      - key: RESEND_API_KEY
-        sync: false
-      - key: SENTRY_DSN
-        sync: false

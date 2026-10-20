@@ -21,11 +21,10 @@ async def _get_live_test_connection() -> asyncpg.Connection | None:
         )
         if not table_exists:
             await conn.close()
-            return None
+            pytest.fail("Configured RLS database has no migrated universities table")
         return conn
     except Exception as e:
-        print(f"Live DB connection skipped or failed: {e}")
-        return None
+        pytest.fail(f"Configured disposable RLS database is unreachable: {type(e).__name__}")
 
 
 @pytest.mark.live  # [CHAT FIX 2] Requires a dedicated disposable test database.

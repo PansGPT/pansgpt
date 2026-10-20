@@ -1,5 +1,7 @@
 "use client";
 
+import { env } from "@/env";
+
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -36,40 +38,31 @@ interface DocumentItem {
 
 export default function AppHomePage() {
   const router = useRouter();
-  const { user, session, profile, loading: authLoading, signOut } = useAuth();
+  const { user, session, profile, loading: authLoading, signOut, refreshProfile } = useAuth();
 
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
-  const [loadingDocs, setLoadingDocs] = useState(false);
+  const [loadingDocs, setLoadingDocs] = useState(true);
   const [backendOffline, setBackendOffline] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   const fetchDocuments = useCallback(async () => {
     if (!session?.access_token) return;
-    setLoadingDocs(true);
-    setBackendOffline(false);
 
-    try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-      const res = await fetch(`${apiUrl}/api/v1/library/documents`, {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
-
-      if (res.ok) {
-        const data = await res.json();
+    const apiUrl = env.NEXT_PUBLIC_API_URL;
+    return fetch(`${apiUrl}/api/v1/library/documents`, {
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Documents could not be loaded");
+        const data: DocumentItem[] = await res.json();
         setDocuments(data);
         setBackendOffline(false);
-      } else {
+      })
+      .catch(() => {
+        setBackendOffline(true);
         setDocuments([]);
-      }
-    } catch {
-      // Backend is unreachable or not started yet on port 8000
-      setBackendOffline(true);
-      setDocuments([]);
-    } finally {
-      setLoadingDocs(false);
-    }
+      })
+      .finally(() => setLoadingDocs(false));
   }, [session]);
 
   useEffect(() => {
@@ -94,6 +87,17 @@ export default function AppHomePage() {
       <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950">
         <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
+    );
+  }
+
+  if (session && !profile) {
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6">
+        <p>Your profile could not be verified. Please retry.</p>
+        <button type="button" onClick={() => void refreshProfile()}>
+          Retry
+        </button>
+      </main>
     );
   }
 
@@ -256,7 +260,10 @@ export default function AppHomePage() {
               </p>
             </div>
             <button
-              onClick={fetchDocuments}
+              onClick={() => {
+                setLoadingDocs(true);
+                void fetchDocuments();
+              }}
               disabled={loadingDocs}
               className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800 transition-colors"
             >
@@ -283,7 +290,10 @@ export default function AppHomePage() {
                   to connect library materials.
                 </p>
                 <button
-                  onClick={fetchDocuments}
+                  onClick={() => {
+                    setLoadingDocs(true);
+                    void fetchDocuments();
+                  }}
                   className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 transition-colors"
                 >
                   <RefreshCw className="h-3.5 w-3.5" />
@@ -360,7 +370,10 @@ export default function AppHomePage() {
       <DocumentUploadModal
         isOpen={isUploadOpen}
         onClose={() => setIsUploadOpen(false)}
-        onUploadSuccess={fetchDocuments}
+        onUploadSuccess={() => {
+          setLoadingDocs(true);
+          void fetchDocuments();
+        }}
         userRole={userRole}
         token={session?.access_token}
       />

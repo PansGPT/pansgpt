@@ -1,5 +1,6 @@
 "use client";
 
+import { desktopAuth } from "@/lib/desktop-auth";
 import React, { useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -25,21 +26,16 @@ type SignupFormValues = z.infer<typeof signupSchema>;
 function SignupFormContent() {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+  const invite = searchParams.get("invite");
+  const afterSignup = invite ? `/onboarding?invite=${encodeURIComponent(invite)}` : "/onboarding";
 
-  const [authError, setAuthError] = useState<string | null>(
-    urlError ? decodeURIComponent(urlError) : null
-  );
+  const [authError, setAuthError] = useState<string | null>(urlError);
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  React.useEffect(() => {
-    if (urlError) {
-      setAuthError(decodeURIComponent(urlError));
-    }
-  }, [urlError]);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const supabase = createClient();
@@ -67,7 +63,7 @@ function SignupFormContent() {
         email: values.email,
         password: values.password,
         options: {
-          emailRedirectTo: `${origin}/auth/callback?next=/onboarding`,
+          emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(afterSignup)}`,
         },
       });
 
@@ -90,11 +86,16 @@ function SignupFormContent() {
     setAuthError(null);
 
     try {
+      const native = desktopAuth();
+      if (native) {
+        await native.beginOAuth(provider);
+        return;
+      }
       const origin = typeof window !== "undefined" ? window.location.origin : "";
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${origin}/auth/callback?next=/onboarding`,
+          redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(afterSignup)}`,
         },
       });
 
