@@ -134,7 +134,7 @@ PR reviewed + CI green → merged to main
 - 750 free instance hours/month (exact 24/7 for one service)
 - **Sleeps after 15 minutes of inactivity** — cold start delay ~1 minute
 - **Keep-alive strategy**: cron-job.org (free) pings `GET /health/ready` every 10 minutes
-- Keep to **1 free service** per Render account — API + Worker running simultaneously burns both services' hours
+- Render Free hosts the API only; background workers need a separate eligible host. Actions currently runs isolated staging checks, with Oracle hosting deferred.
 
 ---
 
@@ -422,7 +422,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Write multi-stage production `Dockerfile` | file: apps/api/Dockerfile
 - [x] Create Render infrastructure blueprint for staging web service (`pansgpt-api-staging`) | file: render.yaml
-- [x] Add Render background worker service spec in `render.yaml` | file: render.yaml
+- [x] Define ARQ main/picture settings and isolated Actions verification; ongoing Linux worker hosting remains deferred. | files: `apps/api/workers/settings.py`, `.github/workflows/staging-workers.yml`
 - [x] Use Docker build instruction (`env: docker`) in `render.yaml` instead of raw Python pip | file: render.yaml
 - [x] Add missing environment variable declarations to `render.yaml` | file: render.yaml
 - [ ] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md ? current deployment must be reverified

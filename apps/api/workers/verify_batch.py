@@ -134,7 +134,15 @@ async def verify_queue(redis: ArqRedis, settings_class: type, label: str) -> Non
         for attempt in (1, 2):
             worker = create_worker(
                 settings_class,
-                functions=[func(transport_probe, timeout=10, keep_result=60, max_tries=3)],
+                functions=[
+                    func(
+                        transport_probe,
+                        name="transport_probe",
+                        timeout=10,
+                        keep_result=60,
+                        max_tries=3,
+                    )
+                ],
                 queue_name=queue,
                 cron_jobs=[],
                 burst=True,

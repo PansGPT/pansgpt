@@ -18,6 +18,8 @@ The user selected GitHub Actions now and Oracle later. Actions is limited to on-
 
 Configure only these encrypted environment secrets: `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `UPSTASH_REDIS_URL`, `CLOUDFLARE_R2_ACCOUNT_ID`, `CLOUDFLARE_R2_ACCESS_KEY_ID`, `CLOUDFLARE_R2_SECRET_ACCESS_KEY`. The Supabase public/service keys satisfy the existing hosted settings validator; the checks use Postgres directly. No provider, payment, email, Render or GitHub account credential is passed to the worker process.
 
+Hosted credential setup is pending explicit user approval; no secrets were uploaded by the rejected setup action. The keys are powerful and R2 permission scope has not been independently certified as staging-only.
+
 Secrets belong only to `staging-workers`, restricted to `main` and `ops/staging-worker-check/*`. Do not enable Actions debug logging or publish raw exception traces. The workflow passes secrets only to the verification step, after dependency installation.
 
 ## Running a check

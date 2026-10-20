@@ -80,7 +80,6 @@ async def test_real_cancellation_removes_only_canary_keys(
         started.set()
         await asyncio.Event().wait()
 
-    blocked.__name__ = "transport_probe"
     monkeypatch.setattr(verify_batch, "transport_probe", blocked)
     task = asyncio.create_task(verify_batch.verify_queue(redis, WorkerSettings, "cancel"))
     try:
