@@ -95,9 +95,7 @@
   opacity: 0.6;
   animation: auth-trace 18s linear infinite;
 }
-[data-motion-paused="true"] .auth-art-glow {
-  animation-play-state: paused;
-}
+
 .auth-story-copy {
   position: relative;
   z-index: 1;
@@ -135,19 +133,7 @@
   font-size: 15px;
   line-height: 1.8;
 }
-.auth-motion-control {
-  margin: 20px 0 0;
-  border: 0;
-  padding: 8px 0;
-  min-height: 40px;
-  background: transparent;
-  font: inherit;
-  font-size: 11px;
-  color: var(--text-tertiary-600);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-}
+
 .auth-workspace {
   min-width: 0;
   display: flex;
@@ -757,9 +743,6 @@
   .auth-root[data-mobile-entry] .auth-main {
     animation: none;
   }
-  .auth-motion-control {
-    display: none;
-  }
 }
 
 /* Preserve the existing green hero artwork; layer the legacy tracing mark over it. */
@@ -812,19 +795,42 @@
   font-size: 12px;
   opacity: 0.8;
 }
-.auth-story-bottom {
-  position: relative;
-  z-index: 1;
+
+/* Give the copy room across the wider canvas, with supporting text below it. */
+.auth-story {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.auth-story-copy {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  font-size: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-block: 64px;
 }
-.auth-story-bottom > span {
-  opacity: 0.8;
+.auth-story h2 {
+  max-width: 760px;
+  font-size: clamp(36px, 4.2vw, 62px);
+  letter-spacing: -1.7px;
 }
-.auth-story-bottom .auth-motion-control {
+
+@media (max-width: 860px) {
+  .auth-story {
+    display: none;
+  }
+}
+
+.auth-story-copy p {
+  max-width: 510px;
   margin: 0;
   color: inherit;
+  opacity: 0.86;
+  font-size: 15px;
+  line-height: 1.8;
+}
+.auth-story-copy .auth-story-rule {
+  margin-block: 24px 18px;
 }

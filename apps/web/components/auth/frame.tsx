@@ -13,11 +13,12 @@ export function AuthBrand(): React.ReactElement {
   );
 }
 export function AuthAppearance(): React.ReactElement {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, ready } = useTheme();
   return (
     <label className="auth-appearance">
       Appearance
       <select
+        disabled={!ready}
         value={theme}
         onChange={(event) => {
           if (isThemeName(event.target.value)) setTheme(event.target.value);
@@ -46,7 +47,6 @@ export function AuthFrame({
   mobileInitiallyOpen?: boolean;
 }): React.ReactElement {
   const titleId = useId();
-  const [paused, setPaused] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(mobileInitiallyOpen || mobileEntry !== "login");
   const mainRef = useRef<HTMLElement>(null);
   const welcomeActionRef = useRef<HTMLButtonElement>(null);
@@ -55,12 +55,7 @@ export function AuthFrame({
       mainRef.current?.focus();
   }, [mobileEntry, mobileOpen]);
   return (
-    <div
-      className="auth-root"
-      data-motion-paused={paused}
-      data-mobile-entry={mobileEntry}
-      data-mobile-open={mobileOpen}
-    >
+    <div className="auth-root" data-mobile-entry={mobileEntry} data-mobile-open={mobileOpen}>
       <a
         className="auth-skip"
         href="#auth-content"
@@ -82,26 +77,13 @@ export function AuthFrame({
         <div className="auth-story-copy">
           <span className="auth-eyebrow">A LITTLE FOCUS. A LITTLE PROGRESS.</span>
           <h2>
-            Your next
-            <br />
-            study session
+            Your next study session
             <br />
             starts here.
           </h2>
           <p>A calmer space to build your understanding of pharmacy, one session at a time.</p>
           <div className="auth-story-rule" aria-hidden="true" />
           <span className="auth-story-note">Made for pharmacy students.</span>
-        </div>
-        <div className="auth-story-bottom">
-          <span>Learn with intention.</span>
-          <button
-            type="button"
-            className="auth-motion-control"
-            aria-pressed={paused}
-            onClick={() => setPaused((value) => !value)}
-          >
-            {paused ? "Resume animation" : "Pause animation"}
-          </button>
         </div>
       </aside>
       <div className="auth-workspace">
@@ -131,14 +113,6 @@ export function AuthFrame({
                 <br />
                 and everything you are working towards.
               </p>
-              <button
-                type="button"
-                className="auth-motion-control"
-                aria-pressed={paused}
-                onClick={() => setPaused((value) => !value)}
-              >
-                {paused ? "Resume animation" : "Pause animation"}
-              </button>
             </div>
             <div className="auth-welcome-actions">
               {mobileEntry === "signup" ? (

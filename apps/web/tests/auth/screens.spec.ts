@@ -1,4 +1,26 @@
 import { test, expect } from "@playwright/test";
+test("theme selection waits for hydration and survives a reload", async ({ page }) => {
+  let release = (): void => undefined;
+  const scriptsReady = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route(/\/_next\/static\/.*\.js(?:\?.*)?$/, async (route) => {
+    await scriptsReady;
+    await route.continue();
+  });
+  try {
+    await page.goto("/login", { waitUntil: "commit" });
+    await expect(page.getByLabel("Appearance")).toBeDisabled();
+  } finally {
+    release();
+  }
+  await expect(page.getByLabel("Appearance")).toBeEnabled();
+  await page.getByLabel("Appearance").selectOption("sepia");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
+  await page.reload();
+  await expect(page.getByLabel("Appearance")).toHaveValue("sepia");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
+});
 for (const width of [375, 1440]) {
   for (const theme of ["Light", "OLED Dark", "Sepia"]) {
     test(`${width}px ${theme}: auth screens, validation and theme persistence`, async ({
@@ -7,6 +29,10 @@ for (const width of [375, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/login");
       await page.getByLabel("Appearance").selectOption({ label: theme });
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-theme",
+        theme === "Light" ? "light" : theme === "Sepia" ? "sepia" : "dark"
+      );
       if (width === 375) {
         await expect(page.getByRole("region", { name: "Welcome to PansGPT" })).toBeVisible();
         await page.screenshot({
@@ -32,11 +58,6 @@ for (const width of [375, 1440]) {
             .locator(".auth-story")
             .evaluate((element) => getComputedStyle(element, "::after").content)
         ).toBe("none");
-        await page.getByRole("button", { name: "Pause animation", exact: true }).click();
-        await expect(
-          page.getByRole("button", { name: "Resume animation", exact: true })
-        ).toHaveAttribute("aria-pressed", "true");
-        await page.getByRole("button", { name: "Resume animation", exact: true }).click();
       }
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
       const palette = await page.locator(".auth-card").evaluate((element) => {
