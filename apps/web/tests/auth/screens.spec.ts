@@ -1,38 +1,26 @@
 import { test, expect } from "@playwright/test";
-test("theme selection waits for hydration and survives a reload", async ({ page }) => {
-  let release = (): void => undefined;
-  const scriptsReady = new Promise<void>((resolve) => {
-    release = resolve;
-  });
-  await page.route(/\/_next\/static\/.*\.js(?:\?.*)?$/, async (route) => {
-    await scriptsReady;
-    await route.continue();
-  });
-  try {
-    await page.goto("/login", { waitUntil: "commit" });
-    await expect(page.getByLabel("Appearance")).toBeDisabled();
-  } finally {
-    release();
+test("auth stays green and white without changing saved app preferences", async ({ page }) => {
+  for (const saved of ["light", "dark", "sepia"]) {
+    await page.goto("/login");
+    await page.evaluate((value) => localStorage.setItem("pansgpt-theme", value), saved);
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-auth-theme", "brand");
+    await expect(page.getByLabel("Appearance")).toHaveCount(0);
+    expect(await page.evaluate(() => localStorage.getItem("pansgpt-theme"))).toBe(saved);
   }
-  await expect(page.getByLabel("Appearance")).toBeEnabled();
-  await page.getByLabel("Appearance").selectOption("sepia");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
-  await page.reload();
-  await expect(page.getByLabel("Appearance")).toHaveValue("sepia");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
 });
 for (const width of [375, 1440]) {
-  for (const theme of ["Light", "OLED Dark", "Sepia"]) {
-    test(`${width}px ${theme}: auth screens, validation and theme persistence`, async ({
+  for (const theme of ["Brand"]) {
+    test(`${width}px ${theme}: green and white auth screens, validation and navigation`, async ({
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
+      const savedTheme = "light";
+      await page.addInitScript((value) => localStorage.setItem("pansgpt-theme", value), savedTheme);
+      await page.emulateMedia({ reducedMotion: "reduce" });
       await page.goto("/login");
-      await page.getByLabel("Appearance").selectOption({ label: theme });
-      await expect(page.locator("html")).toHaveAttribute(
-        "data-theme",
-        theme === "Light" ? "light" : theme === "Sepia" ? "sepia" : "dark"
-      );
+      await expect(page.getByLabel("Appearance")).toHaveCount(0);
+      await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
       if (width === 375) {
         await expect(page.getByRole("region", { name: "Welcome to PansGPT" })).toBeVisible();
         await page.screenshot({
@@ -48,16 +36,23 @@ for (const width of [375, 1440]) {
             .locator(".auth-card")
             .evaluate((element) => getComputedStyle(element).borderRadius)
         ).toBe("0px");
-        const hero = await page.getByRole("complementary", { name: "About PansGPT" }).boundingBox();
-        const mark = await page.locator(".auth-story > .auth-brand-art").boundingBox();
-        if (!hero || !mark) throw new Error("The desktop artwork is missing.");
-        expect(mark.x + mark.width).toBeGreaterThan(hero.x + hero.width);
-        expect(mark.y + mark.height).toBeGreaterThan(hero.y + hero.height);
-        expect(
-          await page
-            .locator(".auth-story")
-            .evaluate((element) => getComputedStyle(element, "::after").content)
-        ).toBe("none");
+        await expect(page.locator(".auth-desktop-art .auth-brand-art")).toBeVisible();
+        const hero = await page.locator(".auth-story").boundingBox();
+        const artwork = await page.locator(".auth-desktop-art .auth-brand-art").boundingBox();
+        if (!hero || !artwork) throw new Error("The artwork area is missing.");
+        expect(Math.abs(artwork.x + artwork.width / 2 - hero.x - hero.width / 2)).toBeLessThan(1);
+        expect(artwork.y + artwork.height / 2).toBeGreaterThan(hero.y + hero.height / 2);
+        expect(artwork.y + artwork.height / 2).toBeLessThan(hero.y + hero.height * 0.65);
+        await expect(page.getByRole("button", { name: "Show welcome message 2" })).toHaveAttribute(
+          "aria-pressed",
+          "false"
+        );
+        await page.getByRole("button", { name: "Show welcome message 2" }).click();
+        await expect(page.getByRole("button", { name: "Show welcome message 2" })).toHaveAttribute(
+          "aria-pressed",
+          "true"
+        );
+        await page.getByRole("button", { name: "Show welcome message 1" }).click();
       }
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
       const palette = await page.locator(".auth-card").evaluate((element) => {
@@ -83,9 +78,7 @@ for (const width of [375, 1440]) {
       });
       expect(palette.actual).toEqual(palette.token);
       expect(palette.font).toContain("Plus Jakarta Sans");
-      if (theme === "OLED Dark") expect(palette.actual.slice(0, 3)).toEqual([0, 0, 0]);
-      if (theme === "Light") expect(palette.actual.slice(0, 3)).toEqual([255, 255, 255]);
-      if (theme === "Sepia") expect(palette.actual[0]!).toBeGreaterThan(palette.actual[2]!);
+      expect(palette.actual.slice(0, 3)).toEqual([255, 255, 255]);
       const signIn = page.getByRole("button", { name: "Sign in", exact: true });
       expect(
         await signIn.evaluate((element) => {
@@ -125,9 +118,7 @@ for (const width of [375, 1440]) {
       await expect(page.getByLabel(/^Password\s*\*?$/)).toHaveAttribute("type", "password");
       await page.getByRole("link", { name: "Create an account" }).click();
       await expect(page.getByRole("heading", { name: "Create your account" })).toBeVisible();
-      await expect(page.getByLabel("Appearance")).toHaveValue(
-        theme === "Light" ? "light" : theme === "Sepia" ? "sepia" : "dark"
-      );
+      await expect(page.locator("html")).toHaveAttribute("data-theme", savedTheme);
       await page.screenshot({
         path: `test-results/signup-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
@@ -235,7 +226,7 @@ test("mobile welcome opens a sheet, preserves input on cancel and respects reduc
   await expect(page.getByRole("heading", { name: "Welcome back" })).not.toBeVisible();
   expect(
     await page
-      .locator(".auth-mobile-art .auth-art-glow")
+      .locator(".auth-mobile-art .auth-line-glow")
       .evaluateAll((elements) =>
         elements.every((element) => getComputedStyle(element).animationName === "none")
       )
@@ -253,7 +244,13 @@ test("mobile welcome opens a sheet, preserves input on cancel and respects reduc
   await page.setViewportSize({ width: 375, height: 500 });
   await page.getByRole("button", { name: "Sign in", exact: true }).scrollIntoViewIfNeeded();
   await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeInViewport();
-  await page.goto("/signup");
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.getByRole("link", { name: "Sign up", exact: true }).click();
+  await expect(page).toHaveURL(/\/signup$/);
+  await expect(
+    page.getByRole("heading", { name: "Create your account", exact: true })
+  ).toBeVisible();
   await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await page.getByRole("link", { name: "Log in", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Welcome back", exact: true })).toBeVisible();

@@ -65,7 +65,7 @@
   width: 27px;
   height: 30px;
   flex: none;
-  color: var(--text-brand-secondary-700);
+  color: var(--fg-brand-primary-600);
 }
 .auth-brand-art {
   position: absolute;
@@ -101,10 +101,7 @@
   z-index: 1;
   margin-top: auto;
   max-width: 530px;
-  padding-top: 430px;
-  padding-bottom: 4px;
-  margin-block: auto;
-  padding-block: 70px;
+  padding-bottom: 48px;
 }
 .auth-pharmacy-badge {
   display: inline-block;
@@ -153,23 +150,6 @@
 .auth-mobile-welcome,
 .auth-sheet-top {
   display: none;
-}
-.auth-appearance {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--text-tertiary-600);
-}
-.auth-appearance select {
-  min-height: 36px;
-  max-width: 130px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-primary);
-  border-radius: var(--figma-radius-sm);
-  background: var(--bg-primary);
-  color: var(--text-primary-900);
-  font: inherit;
 }
 .auth-main {
   flex: 1;
@@ -333,9 +313,6 @@
   align-items: center;
   gap: 16px;
   padding: 26px clamp(20px, 4vw, 56px);
-}
-.onboarding-toolbar > .auth-appearance {
-  justify-self: end;
 }
 .onboarding-back {
   display: inline-flex;
@@ -537,17 +514,36 @@
   }
   .auth-workspace {
     border: 0;
-    background: var(--bg-secondary);
+    background: var(--figma-colors-brand-700);
+  }
+  .auth-workspace .auth-toolbar .auth-wordmark,
+  .auth-workspace .auth-toolbar .auth-brand-mark {
+    color: var(--text-white);
+  }
+  .auth-root:not([data-mobile-entry]) .auth-main {
+    margin-top: 28px;
+    background: var(--bg-primary);
+    border-radius: 28px 28px 0 0;
   }
   .auth-toolbar {
-    justify-content: space-between;
-    padding: 20px 24px;
+    position: relative;
+    z-index: 1;
+    justify-content: flex-start;
+    padding: 56px 28px 0;
+  }
+  .auth-root[data-mobile-open="true"] .auth-toolbar {
+    padding-top: 28px;
   }
   .auth-mobile-brand {
     display: block;
   }
   .auth-mobile-brand .auth-wordmark {
-    font-size: 22px;
+    font-size: 18px;
+    gap: 10px;
+  }
+  .auth-mobile-brand .auth-brand-mark {
+    width: 24px;
+    height: 26px;
   }
   .auth-main {
     justify-content: flex-start;
@@ -558,59 +554,48 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    overflow: hidden;
   }
   .auth-mobile-art {
     position: absolute;
-    inset: 0 0 auto;
-    height: 48svh;
+    inset: -90px 0 0;
     overflow: hidden;
+    pointer-events: none;
   }
-  .auth-mobile-art .auth-brand-art {
-    width: 88%;
-    left: 6%;
-    top: -12%;
-  }
-  .auth-mobile-art::after {
-    content: "";
-    position: absolute;
-    inset: 50% 0 0;
-    background: linear-gradient(transparent, var(--bg-secondary));
+  .auth-mobile-lines {
+    width: 100%;
+    height: 100%;
   }
   .auth-welcome-copy {
     position: relative;
-    padding: clamp(180px, 32svh, 340px) 28px 28px;
-    margin-top: auto;
+    padding: 48px 28px;
+    margin-block: auto;
   }
-  .auth-welcome-copy h1 {
-    margin: 20px 0 12px;
-    font-size: clamp(28px, 7vw, 38px);
-    line-height: 1.2;
-    letter-spacing: -1.1px;
+  .auth-welcome-copy .auth-legacy-message {
+    min-height: 144px;
+    margin: 20px 0 0;
+    max-width: 420px;
+    font-size: 18px;
     font-weight: 500;
-  }
-  .auth-welcome-copy p {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.8;
-    color: var(--text-tertiary-600);
+    line-height: 1.7;
+    color: var(--text-white);
   }
   .auth-welcome-actions {
     position: relative;
     display: grid;
     gap: 10px;
     padding: 16px;
-    margin: 0 16px calc(env(safe-area-inset-bottom) + 20px);
-    border: 1px solid var(--border-secondary);
-    border-radius: 26px;
+    margin: 0 16px calc(env(safe-area-inset-bottom) + 24px);
+    border: 1px solid var(--border-primary);
+    border-radius: 32px;
     background: var(--bg-primary);
+    color: var(--text-primary-900);
   }
   .auth-welcome-actions > :is(a, button) {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 48px;
-    border-radius: 12px;
+    border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
@@ -681,18 +666,6 @@
   }
 }
 @media (max-width: 480px) {
-  .auth-toolbar {
-    padding: 18px 20px;
-    gap: 10px;
-  }
-  .auth-appearance {
-    font-size: 10px;
-    gap: 5px;
-  }
-  .auth-appearance select {
-    max-width: 112px;
-    padding: 6px 8px;
-  }
   .onboarding-toolbar {
     padding: 18px 16px;
     gap: 10px;
@@ -704,14 +677,6 @@
   .onboarding-toolbar .auth-brand-mark {
     width: 21px;
     height: 24px;
-  }
-  .onboarding-toolbar .auth-appearance {
-    font-size: 0;
-    gap: 0;
-  }
-  .onboarding-toolbar .auth-appearance select {
-    font-size: 11px;
-    max-width: 104px;
   }
   .onboarding-main {
     padding: 24px 24px 40px;
@@ -745,92 +710,171 @@
   }
 }
 
-/* Preserve the existing green hero artwork; layer the legacy tracing mark over it. */
-
-.auth-story .auth-wordmark,
-.auth-story .auth-brand-mark {
-  color: inherit;
+/* Legacy desktop artwork: centered tracing mark, lowered above the bottom copy. */
+.auth-desktop-art {
+  position: absolute;
+  top: 57%;
+  left: 50%;
+  width: min(84%, 720px);
+  aspect-ratio: 827.58 / 887.58;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  pointer-events: none;
 }
-.auth-story-brand {
-  position: relative;
-  z-index: 1;
+.auth-desktop-art .auth-brand-art {
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
-.auth-story-brand > span {
-  display: block;
-  margin-top: 3px;
-  font-size: 9px;
+.auth-desktop-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    transparent 0%,
+    transparent 38%,
+    var(--figma-colors-brand-700) 72%,
+    var(--figma-colors-brand-700) 100%
+  );
+}
+.auth-art-base {
+  stroke-width: 2;
+  opacity: 0.28;
+}
+.auth-art-glow {
+  stroke-width: 3;
+  stroke-dasharray: 360 1840;
+  animation-duration: 6s;
+  filter: drop-shadow(0 0 4px var(--fg-brand-primary-600));
+}
+.auth-story-copy .auth-legacy-message {
+  max-width: 448px;
+  min-height: 96px;
+  margin: 20px 0 0;
+  font-size: 18px;
   font-weight: 500;
-  letter-spacing: 1.7px;
+  line-height: 1.7;
+  color: var(--text-white);
 }
-.auth-story > .auth-brand-art {
-  width: clamp(720px, 78vw, 1120px);
-  top: auto;
-  left: auto;
-  right: -280px;
-  bottom: -340px;
+.auth-message-selectors {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.auth-message-selectors button {
+  display: flex;
+  align-items: center;
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.auth-message-selectors button::after {
+  content: "";
+  width: 32px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border-primary);
+}
+.auth-message-selectors button[aria-pressed="true"]::after {
+  background: var(--fg-brand-primary-600);
+}
+.auth-line-base,
+.auth-line-glow {
+  fill: none;
+  stroke: var(--border-primary);
+  stroke-width: 1;
   opacity: 0.5;
 }
-.auth-story .auth-art-base {
-  stroke: rgb(255 255 255 / 0.22);
+.auth-line-glow {
+  stroke: var(--fg-brand-primary-600);
+  stroke-width: 1.5;
+  stroke-dasharray: 60 2000;
+  animation: auth-line-travel 10s ease-in-out infinite;
 }
-.auth-story .auth-art-glow {
-  stroke: var(--text-white);
-  opacity: 0.65;
+.auth-typing-cursor {
+  display: inline-block;
+  height: 16px;
+  width: 2px;
+  margin-left: 3px;
+  vertical-align: middle;
+  background: var(--fg-brand-primary-600);
+  animation: auth-cursor 1s steps(2, jump-none) infinite;
 }
-
-.auth-story .auth-eyebrow {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 1.6px;
-}
-
-.auth-story-rule {
-  width: 48px;
+.auth-sr-only {
+  position: absolute;
+  width: 1px;
   height: 1px;
-  background: currentColor;
-  opacity: 0.4;
-  margin-block: 30px 20px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
-.auth-story-note {
-  font-size: 12px;
-  opacity: 0.8;
+@keyframes auth-line-travel {
+  0% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.28;
+  }
+  88% {
+    opacity: 0.2;
+  }
+  100% {
+    stroke-dashoffset: -2200;
+    opacity: 0;
+  }
 }
-
-/* Give the copy room across the wider canvas, with supporting text below it. */
-.auth-story {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+@keyframes auth-cursor {
+  50% {
+    opacity: 0;
+  }
 }
-.auth-story-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-self: stretch;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding-block: 64px;
-}
-.auth-story h2 {
-  max-width: 760px;
-  font-size: clamp(36px, 4.2vw, 62px);
-  letter-spacing: -1.7px;
-}
-
-@media (max-width: 860px) {
-  .auth-story {
+@media (prefers-reduced-motion: reduce) {
+  .auth-line-glow {
+    animation: none;
+    opacity: 0.15;
+  }
+  .auth-typing-cursor {
     display: none;
   }
 }
 
-.auth-story-copy p {
-  max-width: 510px;
-  margin: 0;
-  color: inherit;
-  opacity: 0.86;
-  font-size: 15px;
-  line-height: 1.8;
+/* Contrast the original legacy artwork against a green canvas and white forms. */
+.auth-story .auth-wordmark,
+.auth-story .auth-brand-mark {
+  color: var(--text-white);
 }
-.auth-story-copy .auth-story-rule {
-  margin-block: 24px 18px;
+.auth-story .auth-pharmacy-badge,
+.auth-welcome-copy .auth-pharmacy-badge {
+  color: var(--text-white);
+  background: rgb(255 255 255 / 0.08);
+  border-color: rgb(255 255 255 / 0.35);
+}
+.auth-story .auth-art-base {
+  stroke: var(--text-white);
+  opacity: 0.18;
+}
+.auth-story .auth-art-glow {
+  stroke: var(--text-white);
+  filter: drop-shadow(0 0 4px rgb(255 255 255 / 0.4));
+}
+.auth-story .auth-message-selectors button::after {
+  background: rgb(255 255 255 / 0.3);
+}
+.auth-story .auth-message-selectors button[aria-pressed="true"]::after {
+  background: var(--text-white);
+}
+.auth-mobile-art .auth-line-base {
+  stroke: var(--text-white);
+  opacity: 0.16;
+}
+.auth-mobile-art .auth-line-glow,
+.auth-welcome-copy .auth-typing-cursor {
+  stroke: var(--text-white);
+  background: var(--text-white);
 }

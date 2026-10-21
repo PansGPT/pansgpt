@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, type ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
-import { AuthAppearance, AuthBrand } from "./frame";
+import { AuthBrand } from "./frame";
 export const ONBOARDING_STEPS = ["Your name", "University", "Academic level", "Review"] as const;
 export function OnboardingFrame({
   step,
@@ -40,7 +40,7 @@ export function OnboardingFrame({
           Back
         </button>
         <AuthBrand />
-        <AuthAppearance />
+        <span aria-hidden="true" />
       </header>
       <main id="onboarding-content" className="onboarding-main" tabIndex={-1}>
         <div className="onboarding-content">

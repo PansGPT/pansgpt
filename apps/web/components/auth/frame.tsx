@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { Button, isThemeName, useTheme } from "@pansgpt/ui/auth";
-import { BrandArt, BrandMark } from "./brand-art";
+import { Button } from "@pansgpt/ui/auth";
+import { BrandArt, BrandMark, MobileLines } from "./brand-art";
+import { LegacyWelcomeCopy } from "./legacy-welcome-copy";
 
 export function AuthBrand(): React.ReactElement {
   return (
@@ -10,25 +11,6 @@ export function AuthBrand(): React.ReactElement {
       <BrandMark />
       <span>PansGPT</span>
     </Link>
-  );
-}
-export function AuthAppearance(): React.ReactElement {
-  const { theme, setTheme, ready } = useTheme();
-  return (
-    <label className="auth-appearance">
-      Appearance
-      <select
-        disabled={!ready}
-        value={theme}
-        onChange={(event) => {
-          if (isThemeName(event.target.value)) setTheme(event.target.value);
-        }}
-      >
-        <option value="light">Light</option>
-        <option value="dark">OLED Dark</option>
-        <option value="sepia">Sepia</option>
-      </select>
-    </label>
   );
 }
 export function AuthFrame({
@@ -71,27 +53,17 @@ export function AuthFrame({
       <aside className="auth-story" aria-label="About PansGPT">
         <div className="auth-story-brand">
           <AuthBrand />
-          <span>PHARMACY STUDY COMPANION</span>
         </div>
-        <BrandArt />
-        <div className="auth-story-copy">
-          <span className="auth-eyebrow">A LITTLE FOCUS. A LITTLE PROGRESS.</span>
-          <h2>
-            Your next study session
-            <br />
-            starts here.
-          </h2>
-          <p>A calmer space to build your understanding of pharmacy, one session at a time.</p>
-          <div className="auth-story-rule" aria-hidden="true" />
-          <span className="auth-story-note">Made for pharmacy students.</span>
+        <div className="auth-desktop-art">
+          <BrandArt />
         </div>
+        <LegacyWelcomeCopy />
       </aside>
       <div className="auth-workspace">
         <header className="auth-toolbar">
           <div className="auth-mobile-brand">
             <AuthBrand />
           </div>
-          <AuthAppearance />
         </header>
         {mobileEntry && (
           <section
@@ -100,20 +72,9 @@ export function AuthFrame({
             inert={mobileOpen}
           >
             <div className="auth-mobile-art">
-              <BrandArt />
+              <MobileLines />
             </div>
-            <div className="auth-welcome-copy">
-              <span className="auth-pharmacy-badge">Built for Pharmacy School</span>
-              <h1>
-                Your pharmacy journey.
-                <br />A little more connected.
-              </h1>
-              <p>
-                A space for the concepts, the revision,
-                <br />
-                and everything you are working towards.
-              </p>
-            </div>
+            <LegacyWelcomeCopy mobile />
             <div className="auth-welcome-actions">
               {mobileEntry === "signup" ? (
                 <Button

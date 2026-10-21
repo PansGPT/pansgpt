@@ -56,8 +56,8 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
     ).toHaveCount(1);
     for (const width of [375, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const theme of ["Light", "OLED Dark", "Sepia"]) {
-        await page.getByLabel("Appearance").selectOption({ label: theme });
+      for (const theme of ["Brand"]) {
+        await expect(page.getByLabel("Appearance")).toHaveCount(0);
         expect(
           await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
         ).toBe(true);
@@ -135,8 +135,8 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await expect(page.getByRole("heading", { name: "Choose a new password" })).toBeVisible();
   for (const width of [375, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const theme of ["Light", "OLED Dark", "Sepia"]) {
-      await page.getByLabel("Appearance").selectOption({ label: theme });
+    for (const theme of ["Brand"]) {
+      await expect(page.getByLabel("Appearance")).toHaveCount(0);
       await expect(page.getByLabel(/^New password\s*\*?$/)).toBeVisible();
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)

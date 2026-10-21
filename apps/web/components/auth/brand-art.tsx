@@ -36,3 +36,32 @@ export function BrandArt(): React.ReactElement {
     </svg>
   );
 }
+
+// Original MobileAuthLayout diagonal geometry, using shared palette tokens.
+export function MobileLines(): React.ReactElement {
+  const lines = [
+    { x1: 20, y1: -20, x2: 250, y2: 864 },
+    { x1: -30, y1: 300, x2: 420, y2: 580 },
+    { x1: 100, y1: -20, x2: 320, y2: 864 },
+  ];
+  return (
+    <svg
+      viewBox="0 0 390 844"
+      preserveAspectRatio="xMidYMid slice"
+      className="auth-mobile-lines"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {lines.map((line, index) => (
+        <g key={index}>
+          <line {...line} className="auth-line-base" />
+          <line
+            {...line}
+            className="auth-line-glow"
+            style={{ animationDelay: `${index * -3.3}s` }}
+          />
+        </g>
+      ))}
+    </svg>
+  );
+}
