@@ -1838,6 +1838,8 @@ All 3 themes apply correctly, keyboard nav works on all components, Storybook (o
 
 > **Auth UI refinement (21 October 2026):** Existing web entry points remain `/login`, `/signup`, `/forgot-password` and `/onboarding`; `/update-password` completes the PKCE recovery callback. Shared UI components supply the three-theme presentation. FastAPI remains authoritative for roles, tenancy and onboarding. See [implementation and verification limits](auth-refresh-2026-10-21.md). This work precedes Phase 9.3 and does not implement the app shell.
 
+The subsequent [guided-onboarding revision](auth-guided-onboarding-2026-10-21.md) presents name, university, academic level and review/agreement as separate full-page steps. Drafts remain in component memory across Back/Edit navigation; only final confirmation calls the existing onboarding API. Mobile auth uses the original legacy diagonal animation/typing welcome composition on a green canvas, with white sliding forms. Desktop uses a green artwork panel with a horizontally centered, lowered tracing logo and a stronger bottom fade, plus a flat white form area. Appearance controls are omitted; the fixed auth palette preserves saved app theme preferences.
+
 ### 3.1 Auth Strategy Overview
 
 Auth is handled entirely by **Supabase Auth**. No custom auth server. No rolling our own JWT signing.

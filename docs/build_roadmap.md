@@ -1225,7 +1225,11 @@ The user authorized recovery completion, the existing auth-screen refresh and jo
 - [x] Refresh the existing login, signup/confirmation, forgot-password, reset-password and onboarding screens using the shared design system.
 - [x] Pass all 11 disposable auth browser checks, including real email links, API onboarding/retries, password replacement, mobile/desktop and all three themes. Hosted/provider/native limits remain in the verification record.
 
+User follow-up: restore the original legacy welcome composition with local assets, a centered/lowered tracing logo on the green desktop artwork panel, a stronger bottom fade and a flat white form area. Mobile uses the legacy diagonal animation/typing copy on green and white sliding forms. Appearance controls are removed. Keep the four-step full-page onboarding flow. [Latest implementation and verification](auth-guided-onboarding-2026-10-21.md). All eight jobs and nine auth browser checks passed at `65a63f6` in [run 39571319509](https://github.com/PansGPT/pansgpt/actions/runs/39571319509). The user then authorized Phase 9.3 after the auth push.
+
 ### 9.3 Web App Shell
+
+User-selected desktop sidebar/dashboard and mobile activity references are recorded in [app-shell design direction](design-system/app-shell-direction-2026-10-21.md). Use our existing palette. Reconcile the top-navigation/sidebar overlap and mobile fixed actions before implementation; all gates below remain open.
 
 - [ ] **Top segmented navigation**: `[Avatar] | [🏠 Home] | [📄 Documents] | [💬 Chat] | [🧠 Quiz] | [📝 Notes]`
 - [ ] Avatar → profile drawer (student name, university, level, credits)
