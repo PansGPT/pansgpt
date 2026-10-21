@@ -32,3 +32,5 @@ Actual document history uses owner study progress joined to active, undeleted do
 The user-selected sidebar replaces the former top segmented navigation. The bottom-right logo shortcut/mobile composer replace the former three-action bottom bar. Use the actual `/app` layout and `user_preferences.theme` table, mapping UI `dark` to database `oled_dark`. Keep appearance controls in the profile drawer, outside auth.
 
 Phase 9.3 provides navigation, guards, profile/theme controls, loading/error recovery and reference-shaped preview content. Phase 10's aggregate API, complete widgets, realtime credit updates, offline cache and performance gates remain separate work.
+
+The latest surface adjustment swaps the sidebar and Home backgrounds: the sidebar uses `--bg-primary`, while Home uses `--bg-secondary`. Home cards, the activity panel and mobile composer use `--bg-primary` to preserve separation. This uses semantic tokens across Light, OLED Dark and Sepia; other content routes retain their own canvas.

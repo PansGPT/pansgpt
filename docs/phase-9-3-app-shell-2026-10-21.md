@@ -28,3 +28,5 @@ Pending final branch CI and screenshot review. The real disposable auth journey 
 The in-app browser tool remains unavailable before setup (`missing field sandboxPolicy`). Repository Playwright tests and artifacts are the browser verification surface. The shared port-3000 server is left running; a separate preview is used for checks.
 
 Hosted deployment, native-device journeys, provider attestations and Phase 10's remaining data/performance/offline gates are not certified here.
+
+The latest surface adjustment swaps the sidebar and Home backgrounds: the sidebar uses `--bg-primary`, while Home uses `--bg-secondary`. Home cards, the activity panel and mobile composer use `--bg-primary` to preserve separation. This uses semantic tokens across Light, OLED Dark and Sepia; other content routes retain their own canvas.

@@ -42,7 +42,7 @@
   top: 0;
   height: 100dvh;
   border-right: 1px solid var(--border-secondary);
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   min-width: 0;
 }
 .shell-sidebar > .p-app-nav-panel {
@@ -1694,4 +1694,26 @@
     padding-top: 16px;
     border-top: 1px solid var(--border-secondary);
   }
+}
+
+/* The user-selected Home surface reverses the previous sidebar/canvas contrast. */
+.app-shell[data-home="true"] .shell-workspace {
+  background: var(--bg-secondary);
+}
+.app-shell[data-home="true"]
+  :is(
+    .dashboard-recent-card,
+    .dashboard-learn-card,
+    .dashboard-events,
+    .dashboard-file-icon,
+    .dashboard-region-empty,
+    .shell-mobile-composer
+  ) {
+  background: var(--bg-primary);
+}
+.app-shell[data-home="true"] .dashboard-recent-card:nth-child(2n) .dashboard-recent-cover {
+  background: color-mix(in srgb, var(--fg-brand-primary-600) 12%, var(--bg-primary));
+}
+.app-shell[data-home="true"] .dashboard-recent-card:nth-child(3n) .dashboard-recent-cover {
+  background: color-mix(in srgb, var(--fg-brand-primary-600) 22%, var(--bg-primary));
 }
