@@ -1,6 +1,6 @@
 # Phase 9.3 - authenticated app shell
 
-Status: implementation under verification. User authorized starting after the completed auth push. Auth evidence is preserved at source `65a63f6`, CI run 39571319509, and documentation commit `5cc49a5` on `verify/auth-guided-onboarding-20261021`.
+Status: local implementation verified; hosted rollout remains pending. User authorized starting after the completed auth push. Auth evidence is preserved at source `65a63f6`, CI run 39571319509, and documentation commit `5cc49a5` on `verify/auth-guided-onboarding-20261021`.
 
 ## Scope
 
@@ -23,10 +23,12 @@ No database migration, hosted credential upload, provider privacy change, merge 
 
 ## Verification
 
-Pending final branch CI and screenshot review. The real disposable auth journey and a dedicated shell journey cover verified profile gates, profile data, local/account theme persistence and retries, desktop/mobile navigation, keyboard search/focus, library failure recovery and logout/deep-link protection. Dashboard screenshots exercise the actual Sample fallback for a new account; identity, onboarding, owned conversation creation/history reads and preference writes use real disposable services. No live AI call is made. Covers use distinct local SVG illustrations rather than the reference photographs.
+All eight jobs passed at source `d4f626f3a9012801b816948402da4fd8b220cf95` in [CI run 39596053267](https://github.com/PansGPT/pansgpt/actions/runs/39596053267), including all ten disposable auth/shell browser checks. The user reverted the later background-swap experiment; application and test sources were compared through Git with that passing source after restoration. No additional application behavior remains from the experiment. Final screenshots were reviewed at 1764px desktop and 375px mobile, with Light and Sepia evidence also retained in [the screenshot directory](design-system/app-shell/). The real disposable auth journey and a dedicated shell journey cover verified profile gates, profile data, local/account theme persistence and retries, desktop/mobile navigation, keyboard search/focus, library failure recovery and logout/deep-link protection. Dashboard screenshots exercise the actual Sample fallback for a new account; identity, onboarding, owned conversation creation/history reads and preference writes use real disposable services. No live AI call is made. Covers use distinct local SVG illustrations rather than the reference photographs.
+
+Eight public auth browser checks also passed locally using installed Chrome; the two real-service journeys ran in CI. A Chromium download stalled locally, so it was stopped and existing Chrome was used.
 
 The in-app browser tool remains unavailable before setup (`missing field sandboxPolicy`). Repository Playwright tests and artifacts are the browser verification surface. The shared port-3000 server is left running; a separate preview is used for checks.
 
 Hosted deployment, native-device journeys, provider attestations and Phase 10's remaining data/performance/offline gates are not certified here.
 
-The latest surface adjustment swaps the sidebar and Home backgrounds: the sidebar uses `--bg-primary`, while Home uses `--bg-secondary`. Following the next refinement, dark Home cards and the activity panel use the lighter `--bg-tertiary` shade, rather than black. Light/Sepia cards and the mobile composer retain `--bg-primary` to preserve separation. This uses semantic tokens across Light, OLED Dark and Sepia; other content routes retain their own canvas.
+The user reverted the background-swap experiment. Keep the original surfaces: Home uses `--bg-primary`; the sidebar and cards use `--bg-secondary`. The account menu, streak heatmap and other approved layout changes remain part of this design.
