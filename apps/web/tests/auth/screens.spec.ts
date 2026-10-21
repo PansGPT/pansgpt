@@ -12,6 +12,7 @@ for (const width of [375, 1440]) {
         await page.screenshot({
           path: `test-results/welcome-${width}-${theme.replaceAll(" ", "-")}.png`,
           fullPage: true,
+          animations: "disabled",
         });
         await page.getByRole("button", { name: "Log in", exact: true }).click();
       } else {
@@ -25,6 +26,7 @@ for (const width of [375, 1440]) {
         await expect(
           page.getByRole("button", { name: "Resume animation", exact: true })
         ).toHaveAttribute("aria-pressed", "true");
+        await page.getByRole("button", { name: "Resume animation", exact: true }).click();
       }
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
       const signIn = page.getByRole("button", { name: "Sign in", exact: true });
@@ -54,6 +56,7 @@ for (const width of [375, 1440]) {
       await page.screenshot({
         path: `test-results/login-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
+        animations: "disabled",
       });
       await page.getByRole("button", { name: "Sign in", exact: true }).click();
       await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
@@ -71,6 +74,7 @@ for (const width of [375, 1440]) {
       await page.screenshot({
         path: `test-results/signup-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
+        animations: "disabled",
       });
       await page.getByLabel("Email address").fill("student@example.test");
       await page.getByLabel(/^Password\s*\*?$/).fill("short");
@@ -86,6 +90,7 @@ for (const width of [375, 1440]) {
       await page.screenshot({
         path: `test-results/auth-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
+        animations: "disabled",
       });
     });
   }

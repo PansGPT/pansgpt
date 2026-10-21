@@ -64,6 +64,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
         await page.screenshot({
           path: `test-results/onboarding-step-${step}-${width}-${theme.replaceAll(" ", "-")}.png`,
           fullPage: true,
+          animations: "disabled",
         });
       }
     }
@@ -143,6 +144,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
       await page.screenshot({
         path: `test-results/update-password-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
+        animations: "disabled",
       });
     }
   }

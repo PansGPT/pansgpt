@@ -2,7 +2,7 @@
 .auth-root {
   min-height: 100svh;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(440px, 0.62fr);
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
   background: var(--bg-secondary);
   color: var(--text-primary-900);
   font: 400 14px/1.6 var(--font-body);
@@ -40,13 +40,23 @@
   min-height: 100svh;
   padding: 44px clamp(32px, 4.5vw, 72px);
   overflow: hidden;
+  background: var(--figma-colors-brand-700);
+  color: var(--text-white);
+  justify-content: space-between;
 }
 .auth-story::after {
   content: "";
   position: absolute;
-  inset: 40% 0 0;
-  background: linear-gradient(transparent, var(--bg-secondary) 75%);
   pointer-events: none;
+  inset: auto -190px -320px auto;
+  width: 480px;
+  height: 480px;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 50%;
+  background: transparent;
+  box-shadow:
+    0 0 0 64px rgb(255 255 255 / 0.04),
+    0 0 0 128px rgb(255 255 255 / 0.025);
 }
 .auth-root .auth-wordmark {
   display: inline-flex;
@@ -106,6 +116,8 @@
   max-width: 530px;
   padding-top: 430px;
   padding-bottom: 4px;
+  margin-block: auto;
+  padding-block: 70px;
 }
 .auth-pharmacy-badge {
   display: inline-block;
@@ -120,18 +132,19 @@
   text-transform: uppercase;
 }
 .auth-story h2 {
-  margin: 23px 0 16px;
-  font-size: clamp(32px, 3.3vw, 48px);
-  line-height: 1.2;
-  letter-spacing: -1.7px;
-  font-weight: 500;
+  margin: 24px 0;
+  font-size: clamp(36px, 4.2vw, 58px);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -2px;
 }
 .auth-story-copy p {
-  max-width: 410px;
   margin: 0;
+  max-width: 310px;
+  color: inherit;
+  opacity: 0.86;
   font-size: 15px;
   line-height: 1.8;
-  color: var(--text-tertiary-600);
 }
 .auth-motion-control {
   margin: 20px 0 0;
@@ -761,22 +774,7 @@
 }
 
 /* Preserve the existing green hero artwork; layer the legacy tracing mark over it. */
-.auth-story {
-  background: var(--figma-colors-brand-700);
-  color: var(--text-white);
-  justify-content: space-between;
-}
-.auth-story::after {
-  inset: auto -190px -320px auto;
-  width: 480px;
-  height: 480px;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  border-radius: 50%;
-  background: transparent;
-  box-shadow:
-    0 0 0 64px rgb(255 255 255 / 0.04),
-    0 0 0 128px rgb(255 255 255 / 0.025);
-}
+
 .auth-story .auth-wordmark,
 .auth-story .auth-brand-mark {
   color: inherit;
@@ -805,29 +803,13 @@
   stroke: var(--text-white);
   opacity: 0.65;
 }
-.auth-story-copy {
-  margin-block: auto;
-  padding-block: 70px;
-}
+
 .auth-story .auth-eyebrow {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 1.6px;
 }
-.auth-story h2 {
-  margin: 24px 0;
-  font-size: clamp(36px, 4.2vw, 58px);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -2px;
-}
-.auth-story-copy p {
-  max-width: 310px;
-  color: inherit;
-  opacity: 0.86;
-  font-size: 15px;
-  line-height: 1.8;
-}
+
 .auth-story-rule {
   width: 48px;
   height: 1px;
