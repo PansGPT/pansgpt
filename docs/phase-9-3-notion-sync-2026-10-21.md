@@ -12,6 +12,6 @@ No callable Notion connection is available in this session. Apply only final evi
 
 ## Follow-up: chat reference refinement
 
-- Session: Restyle the existing chat from the user-selected `PansGPT Dark Study Dashboard.png`; Area Web / Chat; Files `apps/web/app/app/chat`, `components/chat`, shell draft/sidebar/layout integration and browser checks. Verified pending final evidence in [the chat record](chat-design-2026-10-21.md).
+- Session: Restyle the existing chat from the user-selected `PansGPT Dark Study Dashboard.png`; Area Web / Chat; Files `apps/web/app/app/chat`, `components/chat`, shell draft/sidebar/layout integration and browser checks. Verified: true for the local/disposable CI scope in [the chat record](chat-design-2026-10-21.md): source `d6310f3`, all eight jobs and ten browser checks in [run 39686957184](https://github.com/PansGPT/pansgpt/actions/runs/39686957184), plus reviewed theme/mobile screenshots. No hosted or live AI verification is claimed.
 - Decision: preserve the approved shell/account controls and shared palette while matching the chat composition. Keep unsupported voice/attachments disabled and sample recents explicitly labelled. Alternatives: rebuilding the AI engine or presenting unavailable controls as working.
 - Roadmap: record the visual refinement separately; full Phase 11 remains pending. Knowledge Base unchanged for this routine UI refinement.
