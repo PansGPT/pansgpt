@@ -166,7 +166,7 @@ export function AuthFrame({
                   Log in
                 </Button>
               ) : (
-                <Link className="auth-welcome-primary" href="/login">
+                <Link className="auth-welcome-primary" href="/login?form=login">
                   Log in
                 </Link>
               )}

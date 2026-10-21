@@ -196,4 +196,8 @@ test("mobile welcome opens a sheet, preserves input on cancel and respects reduc
   await page.setViewportSize({ width: 375, height: 500 });
   await page.getByRole("button", { name: "Sign in", exact: true }).scrollIntoViewIfNeeded();
   await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeInViewport();
+  await page.goto("/signup");
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.getByRole("link", { name: "Log in", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Welcome back", exact: true })).toBeVisible();
 });

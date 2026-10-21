@@ -137,7 +137,12 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
   return (
     <AuthFrame
       mobileEntry={signup ? "signup" : "login"}
-      mobileInitiallyOpen={params.has("error") || params.has("notice") || Boolean(emailSent)}
+      mobileInitiallyOpen={
+        params.has("error") ||
+        params.has("notice") ||
+        params.get("form") === "login" ||
+        Boolean(emailSent)
+      }
       title={emailSent ? "Check your inbox" : signup ? "Create your account" : "Welcome back"}
       description={
         emailSent
@@ -154,7 +159,7 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
               className="auth-link"
               href={
                 signup
-                  ? `/login?next=${encodeURIComponent(destination)}`
+                  ? `/login?next=${encodeURIComponent(destination)}&form=login`
                   : `/signup${destination.startsWith("/onboarding?") ? `?${destination.split("?")[1]}` : ""}`
               }
             >
@@ -167,7 +172,7 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
       {emailSent ? (
         <EmailSent
           email={emailSent}
-          backHref={`/login?next=${encodeURIComponent(destination)}`}
+          backHref={`/login?next=${encodeURIComponent(destination)}&form=login`}
           resend={async () => {
             const { error: failure } = await supabase.auth.resend({
               type: "signup",
