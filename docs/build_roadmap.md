@@ -1333,6 +1333,8 @@ Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
 
 ## 💬 PHASE 11 — AI Chat Interface (Web)
 
+The user authorized a [reference-based visual refinement of the existing chat](chat-design-2026-10-21.md): centered greeting, pill composer, suggestion actions, Recent cards and New chat reset. Verification is pending. This does not complete the full Phase 11 feature set below.
+
 ### 11.1 `@assistant-ui/react` Components
 
 - [ ] `<Thread />` — full conversation container with auto-scroll + virtualization

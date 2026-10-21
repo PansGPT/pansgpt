@@ -126,6 +126,48 @@ test("verified workspace navigation, profile, account themes, failures and mobil
         fullPage: true,
         animations: "disabled",
       });
+      await page.goto("/app/chat");
+      await expect(
+        page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
+      ).toBeVisible();
+      const consent = page.getByRole("checkbox", { name: /I understand that PansGPT/ });
+      if (await consent.isVisible()) {
+        await consent.check();
+        await page.getByRole("button", { name: "I Understand & Agree" }).click();
+      }
+      await expect(page.locator(".study-chat-recent-card")).toHaveCount(4);
+      await expect(page.locator(".study-chat-suggestions button")).toHaveCount(4);
+      await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
+      await expect(
+        page.getByRole("button", { name: "Attach study material", exact: true })
+      ).toBeDisabled();
+      await expect(page.locator("html")).toHaveAttribute("data-theme", value);
+      expect(
+        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
+      ).toBe(true);
+      await page.screenshot({
+        path: `test-results/chat-welcome-${width}-${name}.png`,
+        fullPage: true,
+        animations: "disabled",
+      });
+      if (width === 1764 && value === "dark") {
+        await page.getByRole("button", { name: "Explain a concept", exact: true }).click();
+        await expect(page.getByLabel("Study question")).toHaveValue(
+          "Explain this concept from my course notes: "
+        );
+        await expect(page.getByLabel("Study question")).toBeFocused();
+        await page.getByRole("button", { name: "See all", exact: true }).click();
+        await expect(page.locator(".study-chat-recent-card")).toHaveCount(6);
+        await page.getByRole("button", { name: "Show less", exact: true }).click();
+        await page.locator(".study-chat-recent-card").first().click();
+        await expect(
+          page.getByRole("dialog", { name: "Malaria drug management", exact: true })
+        ).toContainText("sample");
+        await page.keyboard.press("Escape");
+        await expect(page.locator(".study-chat-recent-card").first()).toBeFocused();
+      }
+      await page.goto("/app");
+      await expect(page.locator(".dashboard-recent-card")).toHaveCount(6);
     }
     await openProfile(page);
   }
@@ -154,8 +196,6 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     .getByRole("link", { name: "My saved revision chat", exact: true })
     .click();
   await expect(page).toHaveURL(new RegExp(`/app/chat\\?session=${conversation.id}$`));
-  await page.getByRole("checkbox", { name: /I understand that PansGPT/ }).check();
-  await page.getByRole("button", { name: "I Understand & Agree" }).click();
   await expect(page.getByLabel("Study question")).toBeEnabled();
   let inferenceRequests = 0;
   page.on("request", (outgoing) => {
@@ -174,6 +214,28 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(
     "Keep this draft private"
   );
+  await page.route("**/api/v1/ai/chat/sessions/*/stream", (route) =>
+    route.fulfill({
+      contentType: "text/event-stream",
+      body: 'event: text_chunk\ndata: {"token":"Synthetic stream response."}\n\nevent: done\ndata: {"full_text":"Synthetic stream response."}\n\n',
+    })
+  );
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByText("Synthetic stream response.", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Study question")).toBeEnabled();
+  await page.screenshot({
+    path: "test-results/chat-conversation-375.png",
+    fullPage: true,
+    animations: "disabled",
+  });
+  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
+  ).toBeVisible();
+  await expect(page.getByLabel("Study question")).toHaveValue("");
+  await expect(page.getByText("Synthetic stream response.", { exact: true })).toHaveCount(0);
+  expect(inferenceRequests).toBe(1);
+  await page.unroute("**/api/v1/ai/chat/sessions/*/stream");
   await page.goto("/app");
 
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();

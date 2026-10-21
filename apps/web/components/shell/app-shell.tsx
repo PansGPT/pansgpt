@@ -155,7 +155,7 @@ function Workspace({
   );
   return (
     <DashboardProvider profile={profile}>
-      <div className="app-shell" data-collapsed={collapsed}>
+      <div className="app-shell" data-collapsed={collapsed} data-chat={pathname === "/app/chat"}>
         <a href="#workspace-content" className="shell-skip">
           Skip to content
         </a>
@@ -241,15 +241,17 @@ function Workspace({
               </button>
             </form>
           )}
-          <Tooltip content="Message PansGPT" side="right" arrow>
-            <Link
-              href="/app/chat"
-              className="shell-assistant-launcher"
-              aria-label="Message PansGPT"
-            >
-              <BrandMark />
-            </Link>
-          </Tooltip>
+          {pathname !== "/app/chat" && (
+            <Tooltip content="Message PansGPT" side="left" arrow>
+              <Link
+                href="/app/chat"
+                className="shell-assistant-launcher"
+                aria-label="Message PansGPT"
+              >
+                <BrandMark />
+              </Link>
+            </Tooltip>
+          )}
         </div>
         <ProfileDrawer
           profile={profile}

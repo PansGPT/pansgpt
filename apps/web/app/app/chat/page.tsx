@@ -11,23 +11,25 @@ import React, {
   Suspense,
 } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { z } from "zod";
 import { useChatDraft } from "@/components/shell/chat-draft";
 import { WorkspaceLoading } from "@/components/shell/loading";
 import { useAuth } from "@/lib/auth-context";
 import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
-import { UserInitialsAvatar } from "@/components/UserInitialsAvatar";
+import { ChatComposer } from "@/components/chat/composer";
+import { ChatRecent } from "@/components/chat/recent";
+import { useDashboard } from "@/components/shell/dashboard-data";
+import "./chat.css";
 import {
-  ArrowLeft,
-  Send,
+  ArrowRight,
+  Plus,
   Loader2,
   Bot,
   User,
   ChevronDown,
   Sparkles,
   AlertCircle,
-  Square,
   BookOpen,
 } from "lucide-react";
 import {
@@ -62,7 +64,14 @@ function ChatContent({
 
   const [sessionId, setSessionId] = useState<string | null>(initialSessionId);
   const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
-  const { draft, setDraft } = useChatDraft();
+  const { draft, setDraft, startNewChat } = useChatDraft();
+  const router = useRouter();
+  const { reload } = useDashboard();
+  const root = useRef<HTMLDivElement>(null);
+  const [period] = useState(() => {
+    const hour = new Date().getHours();
+    return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+  });
   const [inputPrompt, setInputPrompt] = useState(draft);
   useEffect(() => () => setDraft(""), [setDraft]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -98,36 +107,45 @@ function ChatContent({
   );
 
   // Ensure a chat session exists
-  const ensureSession = useCallback(async (): Promise<string | null> => {
-    if (sessionId) return sessionId;
-    if (!session?.access_token) return null;
+  const ensureSession = useCallback(
+    async (signal: AbortSignal): Promise<string | null> => {
+      if (sessionId) return sessionId;
+      if (!session?.access_token) return null;
 
-    try {
-      const apiUrl = env.NEXT_PUBLIC_API_URL;
-      const res = await fetch(`${apiUrl}/api/v1/ai/chat/sessions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`, // [DEPS FIX]
-        },
-        body: JSON.stringify({
-          title: "Pharmacology Study Session",
-        }),
-      });
+      try {
+        const apiUrl = env.NEXT_PUBLIC_API_URL;
+        const res = await fetch(`${apiUrl}/api/v1/ai/chat/sessions`, {
+          method: "POST",
+          signal,
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`, // [DEPS FIX]
+          },
+          body: JSON.stringify({
+            title: "Pharmacology Study Session",
+          }),
+        });
 
-      if (res.ok) {
-        const data = await res.json();
-        setSessionId(data.id);
-        return data.id;
+        if (res.ok) {
+          const data = z.object({ id: z.string().uuid() }).parse(await res.json());
+          setSessionId(data.id);
+          reload();
+          return data.id;
+        }
+      } catch (err) {
+        if (!signal.aborted) console.error("Failed to create chat session", err);
       }
-    } catch (err) {
-      console.error("Failed to create chat session", err);
-    }
-    return null;
-  }, [sessionId, session]); // [DEPS FIX]
+      return null;
+    },
+    [sessionId, session, reload]
+  ); // [DEPS FIX]
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth",
+    });
   };
 
   useEffect(() => {
@@ -161,16 +179,16 @@ function ChatContent({
 
     setIsStreaming(true);
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
     try {
-      const currentSessionId = await ensureSession();
+      const currentSessionId = await ensureSession(controller.signal);
+      if (controller.signal.aborted) return;
       if (!currentSessionId) {
         throw new Error("Unable to establish chat session with AI engine.");
       }
 
       const apiUrl = env.NEXT_PUBLIC_API_URL;
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
       const response = await fetch(`${apiUrl}/api/v1/ai/chat/sessions/${currentSessionId}/stream`, {
         method: "POST",
         headers: {
@@ -315,266 +333,214 @@ function ChatContent({
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[var(--bg-secondary)] ">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-[color:var(--fg-brand-primary-600)]" />
       </div>
     );
   }
 
-  const fullName =
-    [profile?.first_name, profile?.last_name].filter(Boolean).join(" ") ||
-    user?.email?.split("@")[0] ||
-    "Student";
-
+  const empty = messages.length === 0;
+  const composer = (
+    <ChatComposer
+      prompt={inputPrompt}
+      onChange={setInputPrompt}
+      onSubmit={(event) => void handleSendMessage(event)}
+      streaming={isStreaming}
+      onStop={handleStopStream}
+    />
+  );
+  const suggestions = [
+    { title: "Explain a concept", prompt: "Explain this concept from my course notes: " },
+    { title: "Create study notes", prompt: "Help me create study notes about: " },
+    { title: "Generate quiz questions", prompt: "Create practice quiz questions about: " },
+    { title: "Summarise a document", prompt: "Summarise this document: " },
+  ];
   return (
-    <div className="shell-chat flex flex-col bg-[var(--bg-primary)] text-[color:var(--text-primary-900)]">
-      {/* Header */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--border-primary)] bg-[var(--bg-primary)] px-4 ">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/app/library"
-            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[color:var(--text-tertiary-600)] hover:bg-[var(--bg-tertiary)] dark:hover:bg-neutral-800 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Library
-          </Link>
-          <div className="h-4 w-px bg-neutral-200 " />
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-emerald-600" />
-            <span className="text-sm font-bold">Study chat</span>
+    <div ref={root} className="study-chat" data-empty={empty}>
+      {empty ? (
+        <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
+          <div className="study-chat-intro">
+            <h1 id="chat-welcome-title">
+              Good {period}, <span>{profile?.first_name || "there"}</span>
+            </h1>
+            <p>What would you like to learn or work on today?</p>
           </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-[color:var(--text-quaternary-500)] hidden sm:inline">
-            {fullName}
-          </span>
-          <UserInitialsAvatar name={fullName} email={user?.email} size="sm" />
-        </div>
-      </header>
-
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl space-y-6">
-          {messages.length === 0 ? (
-            <div className="py-16 text-center space-y-4">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400">
-                <Bot className="h-8 w-8" />
-              </div>
-              <div className="space-y-1">
-                <h2 className="text-lg font-bold text-[color:var(--text-primary-900)] ">
-                  How can PansGPT help your pharmacy studies today?
-                </h2>
-                <p className="text-xs text-[color:var(--text-quaternary-500)] max-w-md mx-auto">
-                  Ask questions about pharmaceutical chemistry, pharmacokinetics, adverse effects,
-                  or clinical case formulations.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-xl mx-auto pt-4">
-                {[
-                  "Explain the mechanism of action of ACE inhibitors vs ARBs",
-                  "Summarize the biopharmaceutics classification system (BCS)",
-                  "What are the major contraindications for Warfarin?",
-                  "Generate a revision summary for autonomic pharmacology",
-                ].map((sample, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      setInputPrompt(sample);
-                    }}
-                    className="rounded-xl border border-[var(--border-primary)] bg-[var(--bg-primary)] p-3 text-left text-xs text-[color:var(--text-secondary-700)] hover:border-emerald-500 hover:bg-[var(--bg-secondary)]/50 dark:hover:border-emerald-500 dark:hover:bg-emerald-950/20 transition-all"
-                  >
-                    &ldquo;{sample}&rdquo;
-                  </button>
-                ))}
-              </div>
-            </div>
-          ) : (
-            messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+          {composer}
+          <div className="study-chat-suggestions" aria-label="Study suggestions">
+            {suggestions.map((suggestion) => (
+              <button
+                key={suggestion.title}
+                onClick={() => {
+                  setInputPrompt(suggestion.prompt);
+                  root.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus();
+                }}
               >
-                {msg.role === "assistant" && (
-                  <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
-                    <Bot className="h-4 w-4" />
-                  </div>
-                )}
-
+                {suggestion.title}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <>
+          <header className="study-chat-thread-heading">
+            <h1>Study chat</h1>
+            <button
+              onClick={() => {
+                startNewChat();
+                router.push("/app/chat");
+              }}
+            >
+              <Plus size={17} aria-hidden="true" />
+              New chat
+            </button>
+          </header>
+          <div className="study-chat-conversation">
+            <div className="study-chat-messages">
+              {messages.map((msg) => (
                 <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-xs leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-emerald-600 text-white"
-                      : "bg-[var(--bg-primary)] border border-[var(--border-primary)] text-[color:var(--text-primary-900)] "
-                  }`}
+                  key={msg.id}
+                  className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  {/* Assistant Tool Execution Badges */}
-                  {msg.role === "assistant" && msg.tools && msg.tools.length > 0 && (
-                    <div className="mb-2.5 flex flex-wrap gap-1.5">
-                      {msg.tools.map((t) => (
-                        <ToolExecutionBadge key={t.call_id} tool={t} />
-                      ))}
+                  {msg.role === "assistant" && (
+                    <div className="study-chat-assistant-avatar">
+                      <Bot className="h-4 w-4" />
                     </div>
                   )}
 
-                  {/* Assistant Collapsible Reasoning Block */}
-                  {msg.role === "assistant" && msg.thinking && (
-                    <details
-                      open={!msg.content ? true : undefined}
-                      className="mb-3 rounded-xl border border-emerald-200/70 bg-[var(--bg-secondary)]/50 p-2.5 text-xs text-[color:var(--text-secondary-700)] dark:border-emerald-950/60 dark:bg-emerald-950/20 transition-all"
-                    >
-                      <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
-                        <div className="flex items-center gap-1.5">
-                          <Sparkles
-                            className={`h-3.5 w-3.5 ${
-                              !msg.content ? "animate-pulse text-emerald-600" : "text-emerald-500"
-                            }`}
-                          />
-                          <span>
-                            {!msg.content
-                              ? "Reasoning in progress..."
-                              : "Thought Process & Clinical Reasoning"}
-                          </span>
-                        </div>
-                        <ChevronDown className="h-3.5 w-3.5 text-[color:var(--text-quaternary-500)]" />
-                      </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-[color:var(--text-tertiary-600)] max-h-56 overflow-y-auto rounded-lg bg-[var(--bg-primary)]/70 p-2 border border-[var(--border-primary)]/50 ">
-                        {msg.thinking}
-                      </pre>
-                    </details>
-                  )}
+                  <div className="study-chat-bubble" data-role={msg.role}>
+                    {/* Assistant Tool Execution Badges */}
+                    {msg.role === "assistant" && msg.tools && msg.tools.length > 0 && (
+                      <div className="mb-2.5 flex flex-wrap gap-1.5">
+                        {msg.tools.map((t) => (
+                          <ToolExecutionBadge key={t.call_id} tool={t} />
+                        ))}
+                      </div>
+                    )}
 
-                  {/* Message Content: render text in pre-wrap preserving whitespace & code */}
-                  <div className="whitespace-pre-wrap font-sans text-sm break-words">
-                    {msg.content || (
-                      <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        {msg.tools && msg.tools.some((t) => t.status === "running")
-                          ? "Executing pharmacological research tools..."
-                          : "Generating response..."}
-                      </span>
+                    {/* Assistant Collapsible Reasoning Block */}
+                    {msg.role === "assistant" && msg.thinking && (
+                      <details
+                        open={!msg.content ? true : undefined}
+                        className="study-chat-thinking"
+                      >
+                        <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-[color:var(--text-brand-secondary-700)]">
+                          <div className="flex items-center gap-1.5">
+                            <Sparkles
+                              className={`h-3.5 w-3.5 ${
+                                !msg.content
+                                  ? "animate-pulse text-[color:var(--fg-brand-primary-600)]"
+                                  : "text-[color:var(--fg-brand-primary-600)]"
+                              }`}
+                            />
+                            <span>
+                              {!msg.content
+                                ? "Reasoning in progress..."
+                                : "Thought Process & Clinical Reasoning"}
+                            </span>
+                          </div>
+                          <ChevronDown className="h-3.5 w-3.5 text-[color:var(--text-quaternary-500)]" />
+                        </summary>
+                        <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-[color:var(--text-tertiary-600)] max-h-56 overflow-y-auto rounded-lg bg-[var(--bg-primary)]/70 p-2 border border-[var(--border-primary)]/50 ">
+                          {msg.thinking}
+                        </pre>
+                      </details>
+                    )}
+
+                    {/* Message Content: render text in pre-wrap preserving whitespace & code */}
+                    <div className="whitespace-pre-wrap font-sans text-sm break-words">
+                      {msg.content || (
+                        <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          {msg.tools && msg.tools.some((t) => t.status === "running")
+                            ? "Executing pharmacological research tools..."
+                            : "Generating response..."}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Generated Artifacts (Documents, Slides, Flashcards, Chemical Structures, Mnemonics) */}
+                    {msg.role === "assistant" && msg.artifacts && msg.artifacts.length > 0 && (
+                      <div className="my-2.5 space-y-2">
+                        {msg.artifacts.map((art, idx) => (
+                          <ArtifactRenderer key={idx} artifact={art} />
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Verified Syllabus Grounding Citations */}
+                    {msg.role === "assistant" && msg.citations && msg.citations.length > 0 && (
+                      <div className="mt-3 border-t border-[var(--border-secondary)] pt-2 ">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[color:var(--text-quaternary-500)]">
+                          <BookOpen className="h-3 w-3" />
+                          <span>Sources</span>{" "}
+                          {/* [CHAT FIX 2] Web sources are labeled separately. */}
+                        </div>
+                        <div className="mt-1.5 flex flex-wrap gap-1.5">
+                          {msg.citations.map((c, i) =>
+                            externalSourceUrl(c) ? (
+                              <a
+                                key={i}
+                                href={externalSourceUrl(c)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] underline "
+                                title={c.snippet}
+                              >
+                                {c.title} — Outside the lecture materials
+                              </a>
+                            ) : (
+                              <span
+                                key={i}
+                                className="inline-flex items-center gap-1 rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] text-[color:var(--text-secondary-700)] "
+                                title={c.snippet}
+                              >
+                                <span className="font-semibold text-[color:var(--text-brand-secondary-700)]">
+                                  {c.course_code || "REF"}
+                                </span>
+                                <span className="truncate max-w-[140px]">{c.title}</span>
+                                {c.page_start && (
+                                  <span className="opacity-60">(p. {c.page_start})</span>
+                                )}
+                              </span>
+                            )
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
 
-                  {/* Generated Artifacts (Documents, Slides, Flashcards, Chemical Structures, Mnemonics) */}
-                  {msg.role === "assistant" && msg.artifacts && msg.artifacts.length > 0 && (
-                    <div className="my-2.5 space-y-2">
-                      {msg.artifacts.map((art, idx) => (
-                        <ArtifactRenderer key={idx} artifact={art} />
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Verified Syllabus Grounding Citations */}
-                  {msg.role === "assistant" && msg.citations && msg.citations.length > 0 && (
-                    <div className="mt-3 border-t border-[var(--border-secondary)] pt-2 ">
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[color:var(--text-quaternary-500)]">
-                        <BookOpen className="h-3 w-3" />
-                        <span>Sources</span>{" "}
-                        {/* [CHAT FIX 2] Web sources are labeled separately. */}
-                      </div>
-                      <div className="mt-1.5 flex flex-wrap gap-1.5">
-                        {msg.citations.map((c, i) =>
-                          externalSourceUrl(c) ? (
-                            <a
-                              key={i}
-                              href={externalSourceUrl(c)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] underline "
-                              title={c.snippet}
-                            >
-                              {c.title} — Outside the lecture materials
-                            </a>
-                          ) : (
-                            <span
-                              key={i}
-                              className="inline-flex items-center gap-1 rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] text-[color:var(--text-secondary-700)] "
-                              title={c.snippet}
-                            >
-                              <span className="font-semibold text-emerald-700 dark:text-emerald-400">
-                                {c.course_code || "REF"}
-                              </span>
-                              <span className="truncate max-w-[140px]">{c.title}</span>
-                              {c.page_start && (
-                                <span className="opacity-60">(p. {c.page_start})</span>
-                              )}
-                            </span>
-                          )
-                        )}
-                      </div>
+                  {msg.role === "user" && (
+                    <div className="study-chat-user-avatar">
+                      <User className="h-4 w-4" />
                     </div>
                   )}
                 </div>
-
-                {msg.role === "user" && (
-                  <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-xl bg-neutral-200 text-[color:var(--text-secondary-700)] ">
-                    <User className="h-4 w-4" />
-                  </div>
-                )}
-              </div>
-            ))
-          )}
-
-          {streamError && (
-            <div className="flex items-center gap-2 rounded-xl bg-rose-50 p-3 text-xs text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
-              <AlertCircle className="h-4 w-4 shrink-0" />
-              <span>{streamError}</span>
+              ))}
+              {streamError && (
+                <p className="study-chat-error" role="alert">
+                  <AlertCircle size={17} aria-hidden="true" />
+                  {streamError}
+                </p>
+              )}
+              <p className="p-sr-only" role="status">
+                {isStreaming ? "PansGPT is responding" : ""}
+              </p>
+              <div ref={messagesEndRef} />
             </div>
-          )}
-
-          <div ref={messagesEndRef} />
-        </div>
-      </div>
-
-      {/* Input Composer */}
-      <div className="border-t border-[var(--border-primary)] bg-[var(--bg-primary)] p-4 ">
-        <form onSubmit={handleSendMessage} className="mx-auto flex max-w-3xl items-end gap-2">
-          <div className="relative flex-1">
-            <textarea
-              aria-label="Study question"
-              value={inputPrompt}
-              onChange={(e) => setInputPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSendMessage();
-                }
-              }}
-              placeholder="Ask a pharmacy question or request a drug monograph breakdown..."
-              rows={2}
-              disabled={isStreaming}
-              className="w-full resize-none rounded-2xl border border-neutral-300 bg-[var(--bg-secondary)] px-4 py-3 text-sm text-[color:var(--text-primary-900)] placeholder-neutral-400 focus:border-emerald-500 focus:bg-[var(--bg-primary)] focus:outline-hidden focus:ring-1 focus:ring-emerald-500 dark:focus:bg-neutral-800"
-            />
           </div>
-
-          {isStreaming ? (
-            <button
-              type="button"
-              onClick={handleStopStream}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-md hover:bg-rose-500 transition-colors"
-              title="Stop Generating"
-            >
-              <Square className="h-4 w-4" />
-            </button>
-          ) : (
-            <button
-              type="submit"
-              disabled={!inputPrompt.trim()}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20 hover:bg-emerald-500 disabled:opacity-50 transition-colors"
-              title="Send Message"
-            >
-              <Send className="h-4 w-4" />
-            </button>
-          )}
-        </form>
-        <p className="mt-2 text-center text-[10px] text-[color:var(--text-quaternary-500)]">
-          PansGPT is an AI educational companion. Always verify clinical facts and dosages with
-          official monographs.
-        </p>
-      </div>
-
-      {/* Mandatory Disclaimer Modal */}
+        </>
+      )}
+      {empty ? (
+        <ChatRecent />
+      ) : (
+        <footer className="study-chat-footer">
+          {composer}
+          <p>
+            PansGPT supports your studies. Verify clinical facts and dosages with official
+            monographs.
+          </p>
+        </footer>
+      )}
       <FirstChatDisclaimerModal
         isOpen={isDisclaimerOpen || (userId !== "anonymous" && !disclaimerAccepted)}
         userId={userId}
@@ -682,7 +648,12 @@ function ChatHistory({ id }: { id: string }): React.ReactElement {
 function ChatRoute(): React.ReactElement {
   const params = useSearchParams();
   const id = params.get("session");
-  return id ? <ChatHistory key={id} id={id} /> : <ChatContent key="new-chat" />;
+  const { revision } = useChatDraft();
+  return id ? (
+    <ChatHistory key={`${revision}:${id}`} id={id} />
+  ) : (
+    <ChatContent key={`new-chat:${revision}`} />
+  );
 }
 export default function ChatPage() {
   return (

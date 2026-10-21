@@ -9,3 +9,9 @@ No callable Notion connection is available in this session. Apply only final evi
 - Knowledge Base: a short note only for the integrated shell pattern, owner-only theme mapping, shared slideout focus hooks, route authority boundaries and web package compatibility. Do not rewrite unrelated architecture.
 
 - Final visual decision: restore the original sidebar, Home and card backgrounds after the user reverted the swap experiment. Keep the green study heatmap, pinned account menu and corrected search/chat positions. Daily study-hour tracking remains open; sample hours are explicitly labelled.
+
+## Follow-up: chat reference refinement
+
+- Session: Restyle the existing chat from the user-selected `PansGPT Dark Study Dashboard.png`; Area Web / Chat; Files `apps/web/app/app/chat`, `components/chat`, shell draft/sidebar/layout integration and browser checks. Verified pending final evidence in [the chat record](chat-design-2026-10-21.md).
+- Decision: preserve the approved shell/account controls and shared palette while matching the chat composition. Keep unsupported voice/attachments disabled and sample recents explicitly labelled. Alternatives: rebuilding the AI engine or presenting unavailable controls as working.
+- Roadmap: record the visual refinement separately; full Phase 11 remains pending. Knowledge Base unchanged for this routine UI refinement.

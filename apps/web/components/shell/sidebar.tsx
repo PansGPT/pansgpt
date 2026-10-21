@@ -2,11 +2,12 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, MoreHorizontal, Search } from "lucide-react";
+import { FileText, MoreHorizontal, Search, PlusCircle } from "lucide-react";
 import { destinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
+import { useChatDraft } from "./chat-draft";
 
 export function SidebarLinks({
   close,
@@ -16,6 +17,7 @@ export function SidebarLinks({
   openSearch: () => void;
 }): React.ReactElement {
   const pathname = usePathname();
+  const { startNewChat } = useChatDraft();
   const recentTitle = useId();
   const { chats, loading, error } = useRecentChats();
   const { reload } = useDashboard();
@@ -46,6 +48,20 @@ export function SidebarLinks({
             </Link>
           ))}
       </div>
+      {pathname === "/app/chat" && (
+        <Link
+          href="/app/chat"
+          className="shell-nav-link shell-new-chat"
+          aria-label="New chat"
+          onClick={() => {
+            startNewChat();
+            close();
+          }}
+        >
+          <PlusCircle size={22} aria-hidden="true" />
+          <span>New chat</span>
+        </Link>
+      )}
       <section className="shell-sidebar-group" aria-labelledby={recentTitle}>
         <div className="shell-recent-heading">
           <h2 id={recentTitle}>
