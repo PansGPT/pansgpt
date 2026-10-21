@@ -1217,6 +1217,10 @@ All five additions passed their browser contracts and a real web consumer compil
 
 Product integration remains gated by the staging journey. The library's theme provider persists locally; profile synchronization and an SSR theme bootstrap remain open.
 
+### Auth refinement before the app shell (user-authorized 21 October)
+
+The user authorized recovery completion, the existing auth-screen refresh and journey/theme verification. [Implementation and verification record](auth-refresh-2026-10-21.md). Verification is in progress; Phase 9.3 remains unstarted.
+
 ### 9.3 Web App Shell
 
 - [ ] **Top segmented navigation**: `[Avatar] | [🏠 Home] | [📄 Documents] | [💬 Chat] | [🧠 Quiz] | [📝 Notes]`

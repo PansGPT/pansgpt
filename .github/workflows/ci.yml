@@ -253,3 +253,44 @@ jobs:
 
       - name: Run Repository Secret Scanner Gate
         run: python tooling/check-secrets.py --all
+
+  auth-browser:
+    name: Disposable Auth Browser Journeys
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 11
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --frozen --all-extras
+        working-directory: apps/api
+      - run: pnpm --filter @pansgpt/web exec playwright install --with-deps chromium
+      - name: Start disposable Supabase and captured inbox
+        run: |
+          pnpm exec supabase start
+          pnpm exec supabase db reset --local
+      - name: Verify real email confirmation, onboarding and password recovery
+        run: python tooling/run-auth-browser.py --live
+      - name: Preserve synthetic-account browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: auth-browser-screenshots
+          retention-days: 1
+          path: apps/web/test-results/**/*.png
+      - name: Stop disposable Supabase
+        if: always()
+        run: pnpm exec supabase stop --no-backup

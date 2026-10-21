@@ -1,59 +1,42 @@
 import { env } from "@/env";
+import { safeAuthNext } from "@/lib/auth-navigation";
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import type { Database } from "@pansgpt/types";
 
-export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const requestedNext = searchParams.get("next") || "/app";
-  const next =
-    requestedNext.startsWith("/") &&
-    !requestedNext.startsWith("//") &&
-    !requestedNext.includes("\\")
-      ? requestedNext
-      : "/app";
-  const error = searchParams.get("error");
-  const errorDescription = searchParams.get("error_description");
-
-  if (error || errorDescription) {
-    const errorMsg = errorDescription || error || "Authentication failed";
-    console.error("[Auth Callback] Provider error:", errorMsg);
-    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent(errorMsg)}`);
-  }
-
-  if (code) {
-    const targetUrl = new URL(next, env.NEXT_PUBLIC_APP_URL).toString();
-
-    const response = NextResponse.redirect(targetUrl);
-
-    const supabase = createServerClient<Database>(
-      env.NEXT_PUBLIC_SUPABASE_URL,
-      env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      {
-        cookies: {
-          getAll() {
-            return request.cookies.getAll();
-          },
-          setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              response.cookies.set(name, value, options);
-            });
-          },
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  const params = request.nextUrl.searchParams;
+  const next = safeAuthNext(params.get("next"));
+  const recovery = next === "/update-password";
+  const failure = new URL(
+    recovery ? "/forgot-password?error=link_expired" : "/login?error=auth_failed",
+    env.NEXT_PUBLIC_APP_URL
+  );
+  const response = NextResponse.redirect(new URL(next, env.NEXT_PUBLIC_APP_URL));
+  response.headers.set("Cache-Control", "private, no-store");
+  const fail = (): NextResponse => {
+    response.headers.set("Location", failure.toString());
+    return response;
+  };
+  const code = params.get("code");
+  if (params.has("error") || params.has("error_description") || !code) return fail();
+  const supabase = createServerClient<Database>(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        getAll: () => request.cookies.getAll(),
+        setAll: (cookies: Array<{ name: string; value: string; options?: CookieOptions }>) => {
+          for (const { name, value, options } of cookies)
+            response.cookies.set(name, value, options);
         },
-      }
-    );
-
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-    if (!exchangeError) {
-      return response;
+      },
     }
-
-    console.error("[Auth Callback] exchangeCodeForSession failed:", exchangeError.message);
-    return NextResponse.redirect(
-      `${origin}/login?error=${encodeURIComponent(exchangeError.message)}`
-    );
+  );
+  try {
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    return error ? fail() : response;
+  } catch {
+    return fail();
   }
-
-  return NextResponse.redirect(`${origin}/login?error=no_code_provided`);
 }
