@@ -15,7 +15,7 @@ The user selected `Downloads/PansGPT Dark Study Dashboard.png` for the chat page
 
 ## Verification
 
-Pending final CI and screenshot review. Extend the existing real disposable-auth shell journey to capture chat at 1764/1440/375px in all three themes, check suggestion focus, sample previews, owned session reopening, memory-only draft transfer, synthetic SSE rendering and New chat reset. Inference is disabled on the CI API; the streaming browser check intercepts the request with a synthetic SSE response.
+Pending final CI and screenshot review. Extend the existing real disposable-auth shell journey to capture chat at 1764/1440/375px in all three themes, check suggestion focus, sample previews, owned session reopening, memory-only draft transfer, synthetic SSE rendering, a handled provider error without a stuck generating indicator, and New chat reset. Inference is disabled on the CI API; the streaming browser check intercepts the request with a synthetic SSE response.
 
 The in-app browser connection fails during initialization (`missing field sandboxPolicy`), so repository Playwright checks and synthetic CI screenshots provide browser verification. No hosted user or provider account is used.
 

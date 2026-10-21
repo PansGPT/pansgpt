@@ -448,14 +448,19 @@ function ChatContent({
 
                     {/* Message Content: render text in pre-wrap preserving whitespace & code */}
                     <div className="whitespace-pre-wrap font-sans text-sm break-words">
-                      {msg.content || (
-                        <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          {msg.tools && msg.tools.some((t) => t.status === "running")
-                            ? "Executing pharmacological research tools..."
-                            : "Generating response..."}
-                        </span>
-                      )}
+                      {msg.content ||
+                        (isStreaming && msg.id === messages.at(-1)?.id ? (
+                          <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            {msg.tools && msg.tools.some((t) => t.status === "running")
+                              ? "Executing pharmacological research tools..."
+                              : "Generating response..."}
+                          </span>
+                        ) : msg.artifacts?.length || msg.tools?.length ? null : (
+                          <span className="text-[color:var(--text-tertiary-600)]">
+                            {streamError ? "No response was returned." : "Response stopped."}
+                          </span>
+                        ))}
                     </div>
 
                     {/* Generated Artifacts (Documents, Slides, Flashcards, Chemical Structures, Mnemonics) */}

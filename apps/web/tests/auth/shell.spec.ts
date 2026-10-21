@@ -214,10 +214,13 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(
     "Keep this draft private"
   );
+  let fakeStreamError = false;
   await page.route("**/api/v1/ai/chat/sessions/*/stream", (route) =>
     route.fulfill({
       contentType: "text/event-stream",
-      body: 'event: text_chunk\ndata: {"token":"Synthetic stream response."}\n\nevent: done\ndata: {"full_text":"Synthetic stream response."}\n\n',
+      body: fakeStreamError
+        ? 'event: error\ndata: {"error":"Synthetic provider unavailable"}\n\n'
+        : 'event: text_chunk\ndata: {"token":"Synthetic stream response."}\n\nevent: done\ndata: {"full_text":"Synthetic stream response."}\n\n',
     })
   );
   await page.getByRole("button", { name: "Send message", exact: true }).click();
@@ -235,6 +238,16 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByLabel("Study question")).toHaveValue("");
   await expect(page.getByText("Synthetic stream response.", { exact: true })).toHaveCount(0);
   expect(inferenceRequests).toBe(1);
+  fakeStreamError = true;
+  await page.getByLabel("Study question").fill("Exercise a handled failure");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("Synthetic provider unavailable");
+  await expect(page.getByText("No response was returned.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Generating response...", { exact: true })).toHaveCount(0);
+  await expect(page.getByLabel("Study question")).toBeEnabled();
+  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await expect(page.getByText("Synthetic provider unavailable", { exact: true })).toHaveCount(0);
+  expect(inferenceRequests).toBe(2);
   await page.unroute("**/api/v1/ai/chat/sessions/*/stream");
   await page.goto("/app");
 
