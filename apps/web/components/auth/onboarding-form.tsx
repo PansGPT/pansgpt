@@ -225,7 +225,7 @@ export function OnboardingForm(): React.ReactElement {
                 onClick={() => {
                   setLoadingUniversities(true);
                   setUniversityError(false);
-                  void loadUniversities();
+                  setUniversityAttempt((attempt) => attempt + 1);
                 }}
               >
                 Retry universities

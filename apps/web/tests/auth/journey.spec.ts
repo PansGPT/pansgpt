@@ -31,8 +31,8 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   const replacement = "Synthetic-Replacement-84!";
   await page.goto("/signup");
   await page.getByLabel("Email address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
-  await page.getByLabel("Confirm password", { exact: true }).fill(password);
+  await page.getByLabel(/^Password\s*\*?$/).fill(password);
+  await page.getByLabel(/^Confirm password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Create account", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Check your inbox" })).toBeVisible();
   const confirm = await emailLink(request, email, "Confirm");
@@ -71,7 +71,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
     { times: 1 }
   );
   await page.getByRole("button", { name: "Complete profile" }).click();
-  await expect(page.getByRole("alert")).toContainText("entries are still here");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("entries are still here");
   await expect(page.getByLabel("First name")).toHaveValue("Test");
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page).toHaveURL(/\/app$/);
@@ -79,7 +79,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.getByLabel("Email address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
@@ -94,7 +94,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
     await page.setViewportSize({ width, height: 900 });
     for (const theme of ["Light", "OLED Dark", "Sepia"]) {
       await page.getByLabel("Appearance").selectOption({ label: theme });
-      await expect(page.getByLabel("New password", { exact: true })).toBeVisible();
+      await expect(page.getByLabel(/^New password\s*\*?$/)).toBeVisible();
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
       ).toBe(true);
@@ -104,18 +104,18 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
       });
     }
   }
-  await page.getByLabel("New password", { exact: true }).fill(replacement);
-  await page.getByLabel("Confirm new password", { exact: true }).fill("mismatch");
+  await page.getByLabel(/^New password\s*\*?$/).fill(replacement);
+  await page.getByLabel(/^Confirm new password\s*\*?$/).fill("mismatch");
   await page.getByRole("button", { name: "Update password" }).click();
   await expect(page.getByText("Passwords must match.")).toBeVisible();
-  await page.getByLabel("Confirm new password", { exact: true }).fill(replacement);
+  await page.getByLabel(/^Confirm new password\s*\*?$/).fill(replacement);
   await page.getByRole("button", { name: "Update password" }).click();
   await expect(page).toHaveURL(/\/login\?notice=password_updated/);
   await page.getByLabel("Email address").fill(email);
-  await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("incorrect");
-  await page.getByLabel("Password", { exact: true }).fill(replacement);
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("incorrect");
+  await page.getByLabel(/^Password\s*\*?$/).fill(replacement);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
