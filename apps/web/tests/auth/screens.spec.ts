@@ -8,6 +8,30 @@ for (const width of [375, 1440]) {
       await page.goto("/login");
       await page.getByLabel("Appearance").selectOption({ label: theme });
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+      const signIn = page.getByRole("button", { name: "Sign in", exact: true });
+      expect(
+        await signIn.evaluate((element) => {
+          const style = getComputedStyle(element);
+          const canvas = document.createElement("canvas");
+          const context = canvas.getContext("2d");
+          if (!context) throw new Error("Canvas is unavailable.");
+          const luminance = (color: string): number => {
+            context.fillStyle = color;
+            context.fillRect(0, 0, 1, 1);
+            const rgb = Array.from(context.getImageData(0, 0, 1, 1).data)
+              .slice(0, 3)
+              .map((value) => {
+                const channel = value / 255;
+                return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+              });
+            return 0.2126 * rgb[0]! + 0.7152 * rgb[1]! + 0.0722 * rgb[2]!;
+          };
+          const text = luminance(style.color),
+            background = luminance(style.backgroundColor);
+          return (Math.max(text, background) + 0.05) / (Math.min(text, background) + 0.05);
+        })
+      ).toBeGreaterThanOrEqual(4.5);
+      expect((await signIn.boundingBox())?.height).toBeGreaterThanOrEqual(44);
       await page.screenshot({
         path: `test-results/login-${width}-${theme.replaceAll(" ", "-")}.png`,
         fullPage: true,
@@ -68,8 +92,9 @@ test("request failures are announced and entered email is preserved", async ({ p
   await page.route("**/auth/v1/recover*", (route) =>
     route.fulfill({
       status: 429,
+      headers: { "x-supabase-api-version": "2024-01-01" },
       contentType: "application/json",
-      body: JSON.stringify({ code: "over_email_send_rate_limit", msg: "internal detail" }),
+      body: JSON.stringify({ error_code: "over_email_send_rate_limit", msg: "internal detail" }),
     })
   );
   await page.goto("/forgot-password");
@@ -106,4 +131,16 @@ test("configured OAuth options preserve the desktop bridge and report handoff fa
   await page.getByRole("button", { name: "Continue with Google" }).click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText("sign-in option");
   await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeEnabled();
+});
+
+test("keyboard users can skip to and submit the form", async ({ page }) => {
+  await page.goto("/login");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Skip to form" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("main")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByLabel("Email address")).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
 });

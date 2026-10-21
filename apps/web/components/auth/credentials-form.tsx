@@ -165,6 +165,7 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
       {emailSent ? (
         <EmailSent
           email={emailSent}
+          backHref={`/login?next=${encodeURIComponent(destination)}`}
           resend={async () => {
             const { error: failure } = await supabase.auth.resend({
               type: "signup",

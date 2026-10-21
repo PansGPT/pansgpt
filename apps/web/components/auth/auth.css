@@ -360,3 +360,10 @@
 .auth-root .p-field-control {
   min-height: 44px;
 }
+.auth-root .p-button[data-variant="primary"],
+.auth-story {
+  background: var(--figma-colors-brand-700);
+}
+.auth-root .p-button[data-variant="primary"]:hover:not(:disabled) {
+  background: var(--figma-colors-brand-800);
+}

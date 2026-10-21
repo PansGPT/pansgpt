@@ -1,4 +1,4 @@
-import { safeAuthNext } from "@/lib/auth-navigation";
+import { safeAuthNext, signupDestination } from "@/lib/auth-navigation";
 import { env } from "@/env";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
@@ -59,7 +59,9 @@ export async function updateSession(request: NextRequest) {
     return redirect(
       safeAuthNext(
         request.nextUrl.searchParams.get("next"),
-        pathname === "/signup" ? "/onboarding" : "/app"
+        pathname === "/signup"
+          ? signupDestination(request.nextUrl.searchParams.get("invite"))
+          : "/app"
       )
     );
   }

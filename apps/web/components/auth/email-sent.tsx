@@ -7,10 +7,12 @@ export function EmailSent({
   email,
   recovery,
   resend,
+  backHref = "/login",
 }: {
   email: string;
   recovery?: boolean;
   resend: () => Promise<string | null>;
+  backHref?: string;
 }): React.ReactElement {
   const [seconds, setSeconds] = useState(60);
   const [busy, setBusy] = useState(false);
@@ -56,7 +58,7 @@ export function EmailSent({
       >
         {seconds ? `Resend email in ${seconds}s` : "Resend email"}
       </Button>
-      <Link className="auth-link auth-centered" href="/login">
+      <Link className="auth-link auth-centered" href={backHref}>
         Back to sign in
       </Link>
     </div>
