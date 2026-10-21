@@ -582,20 +582,18 @@
   .auth-welcome-actions {
     position: relative;
     display: grid;
-    gap: 10px;
-    padding: 16px;
-    margin: 0 16px calc(env(safe-area-inset-bottom) + 24px);
-    border: 1px solid var(--border-primary);
-    border-radius: 32px;
-    background: var(--bg-primary);
-    color: var(--text-primary-900);
+    gap: 12px;
+    padding: 24px 28px calc(env(safe-area-inset-bottom) + 28px);
+    margin: 0;
+    border: 0;
+    background: transparent;
   }
-  .auth-welcome-actions > :is(a, button) {
+  .auth-root .auth-welcome-actions > :is(a, button) {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    border-radius: 20px;
+    min-height: 50px;
+    border-radius: 999px;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
@@ -877,4 +875,27 @@
 .auth-welcome-copy .auth-typing-cursor {
   stroke: var(--text-white);
   background: var(--text-white);
+}
+
+.auth-root .auth-welcome-actions > :first-child {
+  background: var(--bg-primary);
+  color: var(--figma-colors-brand-700);
+  border: 1px solid var(--bg-primary);
+  box-shadow: none;
+}
+.auth-root .auth-welcome-actions > :last-child {
+  background: transparent;
+  color: var(--text-white);
+  border: 1px solid rgb(255 255 255 / 0.45);
+  box-shadow: none;
+}
+.auth-root .auth-welcome-actions > :first-child:hover:not(:disabled) {
+  background: var(--bg-secondary);
+}
+.auth-root .auth-welcome-actions > :last-child:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.auth-root .auth-welcome-actions .p-button::after {
+  box-shadow: none;
 }
