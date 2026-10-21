@@ -12,6 +12,8 @@ Archived source data lives in `packages/ui/design`: 785 variables across seven c
 
 ## Use the shared package
 
+[App primitives](app-primitives.md) document the Phase 9.2 Card, shared initials avatar, Sonner Toast, Skeleton and Sentry ErrorBoundary.
+
 [Component contracts](component-contracts.md) describe caller-owned state, upload transport boundaries, empty-state actions, code-snippet tabs/copy/expansion, and source fixture coverage.
 
 Import `@pansgpt/ui/styles.css` once in the application's root stylesheet/layout, then import controls from `@pansgpt/ui`:

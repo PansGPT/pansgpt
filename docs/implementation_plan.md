@@ -1804,9 +1804,9 @@ Every screen shares tokens, components, and layouts. Building it once prevents d
 - Existing Figma Button: primary, secondary, tertiary, link-color and link-gray; destructive option; sm/md/lg/xl sizes. Reuse the inherited typed API.
 - Existing Input, Textarea, Select, Checkbox and RadioGroup.
 - Existing Radix Dialog with keyboard focus containment and restoration; existing slideout compositions can support later app drawers.
-- Existing Avatar accepts a caller-provided image URL or initials; image failure renders the placeholder. Shared extraction of the web UserInitialsAvatar and Supabase profile wiring remain product work.
+- Existing Avatar accepts a caller-provided image URL or initials; image failure renders the placeholder. The web UserInitialsAvatar is now shared with compatible imports; Supabase profile wiring remains product work.
 - Existing Badge, Tag, Spinner and progress indicators.
-- Remaining shared primitives/integrations: generic app Card, Skeleton, Sonner toast wrapper and ErrorBoundary with Sentry reporting. Source-specific selection cards, card headers and notifications do not complete these items.
+- Shared app primitives are implemented: Card/CardContent/CardFooter compose with CardHeader; Skeleton handles decorative loading states; the Sonner wrapper follows all three themes; ErrorBoundary supplies safe render-error fallback, keyboard retry and Sentry SDK capture. The shared UserInitialsAvatar is available through the old web compatibility import. [Contracts and verification](design-system/app-primitives.md) cover 122 Chromium checks and the actual web consumer; app-shell integration and hosted telemetry remain separate gates.
 - **All components** must remain accessible (ARIA), keyboard navigable and theme-aware. Library browser checks do not establish app integration.
 
 ### 29.4 App Shell / Navigation

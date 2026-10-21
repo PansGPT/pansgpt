@@ -30,6 +30,8 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 
 No new phase 8?17 feature expansion or phase 0?7 completion certification until the applicable gates pass. Existing walking-skeleton code remains available for verification.
 
+On 21 October the user approved completing the remaining Phase 9.2 shared-library primitives. That library work is verified; new product routes and app-shell integration retain the staging gate.
+
 ---
 
 ## 🧭 The Engine-First Principle
@@ -1205,11 +1207,13 @@ The inherited Figma library was added in `ad88683` on 11 October. Reuse its sour
 - [x] Verify Radix `Dialog`: accessible keyboard behavior and focus containment/restoration. | file: `packages/ui/src/components/dialog.tsx`
 - [x] Verify existing `Badge`, `Tag` and `Avatar`, including caller-provided initials and failed-image fallback. | files: `packages/ui/src/components/badge.tsx`, `packages/ui/src/components/avatar.tsx`
 - [x] Verify existing `Spinner` and progress indicators. | file: `packages/ui/src/components/progress.tsx`
-- [ ] Generic app `Card` primitive; selection cards and card headers already exist.
-- [ ] Extract the existing web `<UserInitialsAvatar />` into the shared package when product integration proceeds.
-- [ ] `Toast`: Sonner wrapper; existing notification controls do not establish this integration.
-- [ ] `Skeleton`: loading placeholders.
-- [ ] `ErrorBoundary`: friendly render-error fallback and Sentry reporting.
+- [x] Generic app `Card`, `CardContent` and `CardFooter`, composed with the existing `CardHeader`. | file: `packages/ui/src/components/card.tsx`
+- [x] Shared `<UserInitialsAvatar />` with stable web compatibility export, deterministic name/email initials and scoped styles. | files: `packages/ui/src/components/user-initials-avatar.tsx`, `apps/web/components/UserInitialsAvatar.tsx`
+- [x] `Toast`: theme-aware Sonner `Toaster`/`toast` wrapper, announcements, actions and automatic/manual dismissal. | file: `packages/ui/src/components/toast.tsx`
+- [x] `Skeleton`: decorative loading placeholders with reduced-motion support; caller owns loading announcements. | file: `packages/ui/src/components/skeleton.tsx`
+- [x] `ErrorBoundary`: friendly render-error fallback, keyboard retry and Sentry SDK capture; hosted delivery depends on app Sentry configuration. | file: `packages/ui/src/components/error-boundary.tsx`
+
+All five additions passed their browser contracts and a real web consumer compile contract. The complete suite passed **122 Chromium checks** and all seven CI jobs in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39525534478); see [usage and limits](design-system/app-primitives.md).
 
 Product integration remains gated by the staging journey. The library's theme provider persists locally; profile synchronization and an SSR theme bootstrap remain open.
 

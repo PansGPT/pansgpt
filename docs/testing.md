@@ -84,3 +84,11 @@ checks the existing shared library; it does not verify hosted product integratio
 On Windows use a terminal permitted to launch and clean up native browser/server
 processes. Run `pnpm.cmd` if PowerShell blocks the `pnpm.ps1` shim; no execution-policy
 change is required.
+
+
+Phase 9.2 adds a cross-workspace compile contract at
+`apps/web/tests/shared-ui-contract.tsx`. The web TypeScript config explicitly selects
+React's JSX import source so Expo's hoisted React 18 types cannot determine JSX
+checking for the React 19 shared library. Keep this contract in the normal web
+compiler include; it does not create an application route. [Primitive contracts
+and final evidence](design-system/app-primitives.md) include 122 browser checks.

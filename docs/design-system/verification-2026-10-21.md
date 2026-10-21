@@ -2,6 +2,8 @@
 
 Status: verified for the existing shared library. All **117 Chromium browser checks** and all **seven CI jobs** passed at `f7de26e9a4bd29e3f19e95948ebc92192f2aa9fc` ([run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969)). Product integration and hosted release gates remain open.
 
+The later user-approved completion of the remaining Phase 9.2 components is recorded in [app-primitives.md](app-primitives.md), with 122 browser checks and web-consumer verification. The 117-check results below remain the baseline evidence.
+
 ## Scope
 
 Maintain the existing Figma library from commit `ad88683`, contributed on 11 October. This work checks its existing controls, tokens and preview and reconciles roadmap entries with that implementation. Product app-shell integration remains subject to the phase 0-7/staging gate. No new product screen, migration, provider eligibility or hosted credential is introduced.

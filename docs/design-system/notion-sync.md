@@ -125,3 +125,14 @@ Pending decision - 2026-10-11: Use native radio/form semantics for standalone ca
 - **Knowledge Base:** no update required; routine test infrastructure and plan reconciliation do not change the runtime architecture.
 
 No Notion connector is available in this session. This handoff is prepared, **not synchronized**. A complete Linux Chromium run is certified; the separate targeted Windows runs are not one full Windows certification. No hosted credentials or external AI calls were used. The prior October entries above remain historical evidence.
+
+
+## Phase 9.2 completion ? 21 October 2026 (pending synchronization)
+
+- **Session / Change Log:** Complete the remaining shared Card, UserInitialsAvatar, Sonner Toast, Skeleton and Sentry ErrorBoundary components; verify web consumers. **Area:** Shared UI & TypeScript. **Files:** packages/ui components/styles/exports/preview/tests/package.json; apps/web avatar compatibility export, tsconfig and compile contract; pnpm-lock.yaml; canonical plan/roadmap and design-system docs.
+- **Verified: true for shared-library/consumer checks.** [CI](https://github.com/PansGPT/pansgpt/actions/runs/39525534478) at `10239f2a8d3a36af11cd7810e4e6ab99ff9c9948` on `verify/phase-9-2-primitives-20261021`: **122 browser checks**, **427 API tests** (14 skipped), **14 disposable database/worker contracts**, all **seven CI jobs passed**. UI lint/typecheck and the actual web compiler/production build passed. Evidence and limits: [app-primitives.md](app-primitives.md).
+- **Decision Log:** Compose the existing CardHeader; use Sonner and the existing web Sentry SDK version; keep Sentry initialization in the application. Move avatar behavior behind the old import path, with a scoped export/CSS module. Select React JSX types explicitly in the web compiler to keep Expo's React 18 types from contaminating React 19 library imports. **Alternatives:** duplicate the header, custom toast/error-reporting implementations, whole-library styling imports for the avatar, global mobile upgrades or weakening strict types.
+- **Product Roadmap / Features:** Phase 9 remains In progress. Mark all five remaining 9.2 shared-library items complete; retain Phase 9 as In progress. App-shell integration, profile-synced themes, SSR theme bootstrap and hosted journeys remain open. The user approved this reusable-library work while staging remains pending.
+- **Knowledge Base:** no runtime architecture change; no update required for these planned primitives and compiler compatibility fixes.
+
+This entry is prepared, not synchronized: the Notion connector is unavailable. The workbench drops synthetic Sentry events before delivery; this does not verify hosted telemetry or publish student data.
