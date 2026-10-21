@@ -2,6 +2,7 @@
   "extends": "@pansgpt/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "jsxImportSource": "react",
     "paths": {
       "@/*": ["./*"]
     },
