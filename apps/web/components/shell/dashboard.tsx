@@ -1,0 +1,356 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import {
+  BookOpen,
+  CalendarDays,
+  ChevronRight,
+  Clock3,
+  FileText,
+  RefreshCw,
+  PlayCircle,
+} from "lucide-react";
+import {
+  DatePickerCalendar,
+  Skeleton,
+  UserInitialsAvatar,
+  addDateDays,
+  formatDateOnly,
+  localTodayIso,
+} from "@pansgpt/ui/shell";
+import { useAuth } from "@/lib/auth-context";
+import { useDashboard } from "./dashboard-data";
+import { StudyArt } from "./study-art";
+import { sampleDocuments, sampleActivities } from "./sample-data";
+import { SamplePreview } from "./sample-preview";
+import { destinations } from "./navigation";
+type UpcomingEvent = {
+  id: string;
+  title: string;
+  date: string;
+  detail: string;
+  kind: "task" | "class";
+};
+
+const guides = [
+  { title: "Renal system overview", kind: "renal", duration: "5 min read", video: false },
+  { title: "How to approach a clinical case", kind: "case", duration: "4 min watch", video: true },
+  {
+    title: "Active recall for better retention",
+    kind: "recall",
+    duration: "3 min read",
+    video: false,
+  },
+  { title: "Creating effective study notes", kind: "notes", duration: "6 min watch", video: true },
+] as const;
+export function StudyDashboard(): React.ReactElement {
+  const { profile } = useAuth();
+  const router = useRouter();
+  const data = useDashboard();
+  const [today] = useState(localTodayIso);
+  const [preview, setPreview] = useState<string | null>(null);
+  const sampleRecent = !data.loading && !data.recentError && !data.recent.length;
+  const recentCards = sampleRecent
+    ? sampleDocuments.map((document, index) => ({
+        updated_at: `${today}T12:00:00`,
+        documents: { id: `sample-${index}`, title: document.title },
+        art: document.art,
+      }))
+    : data.recent.map((item, index) => ({
+        ...item,
+        art: sampleDocuments[index % sampleDocuments.length]!.art,
+      }));
+  const [month, setMonth] = useState(today);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [activityTab, setActivityTab] = useState<"timetable" | "tasks">("timetable");
+  const [period] = useState(() => {
+    const hour = new Date().getHours();
+    return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+  });
+  const events: UpcomingEvent[] = data.tasks.map((task) => ({
+    kind: "task",
+    id: task.id,
+    title: task.title,
+    date: task.due_date,
+    detail: [task.due_time?.slice(0, 5), task.subtitle].filter(Boolean).join(" · "),
+  }));
+  for (let offset = 0; offset < 21; offset += 1) {
+    const date = addDateDays(today, offset);
+    const weekday = formatDateOnly(date, { weekday: "long" }).toLowerCase();
+    for (const slot of data.timetable) {
+      if (
+        slot.day.trim().toLowerCase() === weekday ||
+        slot.day.trim().toLowerCase() === weekday.slice(0, 3)
+      )
+        events.push({
+          kind: "class",
+          id: `${slot.id}-${date}`,
+          title: slot.course_title,
+          date,
+          detail: [slot.start_time?.slice(0, 5) || slot.time_slot, slot.venue]
+            .filter(Boolean)
+            .join(" · "),
+        });
+    }
+  }
+  const sampleEvents = !data.loading && !data.eventsError && !events.length;
+  if (sampleEvents) events.push(...sampleActivities(today));
+  events.sort(
+    (left, right) => left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail)
+  );
+  const agenda = (selected ? events.filter((item) => item.date === selected) : events).slice(0, 3);
+  const activeDates = Array.from(new Set(events.map((item) => item.date)));
+  return (
+    <div className="study-dashboard">
+      <nav className="dashboard-mobile-destinations" aria-label="Study tools">
+        {destinations
+          .filter((item) => !["/app", "/app/chat"].includes(item.href))
+          .map(({ href, label, icon: Icon }) => (
+            <Link href={href} key={href}>
+              <Icon size={26} aria-hidden="true" />
+              <span>{label}</span>
+            </Link>
+          ))}
+      </nav>
+      <header className="dashboard-greeting">
+        <h1>
+          Good {period}, <span>{profile?.first_name || "there"}</span>
+        </h1>
+      </header>
+      <section aria-labelledby="recently-visited-title">
+        <div className="dashboard-section-heading">
+          <h2 id="recently-visited-title">
+            <Clock3 size={19} aria-hidden="true" />
+            <span className="dashboard-desktop-label">Recently opened documents</span>
+            <span className="dashboard-mobile-label">Recents</span>
+          </h2>
+          {sampleRecent && <span className="dashboard-sample-badge">Sample</span>}
+          <Link href="/app/library">
+            See all
+            <ChevronRight size={17} aria-hidden="true" />
+          </Link>
+        </div>
+        {data.loading ? (
+          <div
+            className="dashboard-recent-grid"
+            role="status"
+            aria-label="Loading recently visited materials"
+          >
+            {[0, 1, 2, 3, 4, 5].map((item) => (
+              <Skeleton key={item} variant="rectangle" className="dashboard-recent-skeleton" />
+            ))}
+          </div>
+        ) : data.recentError ? (
+          <div className="dashboard-region-empty" role="alert">
+            <p>We couldn&apos;t load your recent materials.</p>
+            <button onClick={data.reload}>
+              <RefreshCw size={15} />
+              Try again
+            </button>
+          </div>
+        ) : recentCards.length ? (
+          <div className="dashboard-recent-grid">
+            {recentCards.map((item) => (
+              <button
+                key={item.documents.id}
+                onClick={() => {
+                  if (sampleRecent) setPreview(item.documents.title);
+                  else router.push(`/app/library?q=${encodeURIComponent(item.documents.title)}`);
+                }}
+                className="dashboard-recent-card"
+              >
+                <div className="dashboard-recent-cover">
+                  <StudyArt kind={item.art} />
+                </div>
+                <div className="dashboard-recent-body">
+                  <span className="dashboard-file-icon">
+                    <FileText size={19} aria-hidden="true" />
+                  </span>
+                  <h3>{item.documents.title}</h3>
+                  <div className="dashboard-card-meta">
+                    <UserInitialsAvatar name={profile?.first_name} size="sm" />
+                    <span>
+                      {new Date(item.updated_at).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="dashboard-region-empty">
+            <Clock3 size={24} aria-hidden="true" />
+            <div>
+              <h3>Your next session starts here</h3>
+              <p>The materials you open will appear here for a quick return.</p>
+            </div>
+            <Link href="/app/library">
+              Explore your library
+              <ChevronRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
+        )}
+      </section>
+      <section aria-labelledby="learn-title" className="dashboard-learn-section">
+        <div className="dashboard-section-heading">
+          <h2 id="learn-title">
+            <BookOpen size={20} aria-hidden="true" />
+            Learn
+          </h2>
+          <span className="dashboard-sample-badge">Sample</span>
+          <Link href="/app/learn">
+            See all
+            <ChevronRight size={17} aria-hidden="true" />
+          </Link>
+        </div>
+        <div className="dashboard-learn-grid">
+          {guides.map((guide) => (
+            <button
+              className="dashboard-learn-card"
+              key={guide.kind}
+              onClick={() => setPreview(guide.title)}
+            >
+              <div className="dashboard-learn-cover">
+                <StudyArt kind={guide.kind} />
+              </div>
+              <div className="dashboard-learn-body">
+                <h3>{guide.title}</h3>
+                <span>
+                  {guide.video ? (
+                    <PlayCircle size={16} aria-hidden="true" />
+                  ) : (
+                    <BookOpen size={16} aria-hidden="true" />
+                  )}
+                  {guide.duration}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </section>
+      <section aria-labelledby="upcoming-events-title">
+        <div className="dashboard-section-heading">
+          <h2 id="upcoming-events-title">
+            <CalendarDays size={21} aria-hidden="true" />
+            <span className="dashboard-desktop-label">Activities</span>
+            <span className="dashboard-mobile-label">Activity</span>
+          </h2>
+          {sampleEvents && <span className="dashboard-sample-badge">Sample</span>}
+          {selected && <button onClick={() => setSelected(null)}>Show upcoming</button>}
+        </div>
+        <div className="dashboard-events">
+          <div className="dashboard-calendar">
+            <DatePickerCalendar
+              month={month}
+              onMonthChange={setMonth}
+              selection={{ start: selected, end: selected }}
+              onSelect={setSelected}
+              activeDates={activeDates}
+              today={today}
+              weekStartsOn={0}
+              disableOutsideMonth
+            />
+          </div>
+          <div className="dashboard-agenda" aria-live="polite">
+            {data.loading ? (
+              <p role="status">Loading your schedule…</p>
+            ) : data.eventsError ? (
+              <div role="alert">
+                <h3>Your schedule couldn&apos;t be loaded</h3>
+                <button onClick={data.reload}>Try again</button>
+              </div>
+            ) : agenda.length ? (
+              agenda.map((event) => (
+                <div className="dashboard-event" key={event.id}>
+                  <div className="dashboard-event-date">
+                    <strong>
+                      {event.date === today
+                        ? "Today"
+                        : formatDateOnly(event.date, { weekday: "short" })}
+                    </strong>
+                    <span>{formatDateOnly(event.date, { month: "short", day: "numeric" })}</span>
+                  </div>
+                  <span className="dashboard-event-dot" aria-hidden="true" />
+                  <div>
+                    <h3>{event.title}</h3>
+                    <p>{event.detail || "All day"}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="dashboard-agenda-empty">
+                <CalendarDays size={24} aria-hidden="true" />
+                <h3>
+                  {selected ? "Nothing scheduled for this day" : "A little room in your schedule"}
+                </h3>
+                <p>
+                  {selected
+                    ? formatDateOnly(selected, { weekday: "long", month: "short", day: "numeric" })
+                    : "Your upcoming classes and tasks will appear here."}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="dashboard-mobile-activity">
+          <div className="dashboard-activity-tabs" aria-label="Activity view">
+            <button
+              aria-pressed={activityTab === "timetable"}
+              onClick={() => setActivityTab("timetable")}
+            >
+              Timetable
+            </button>
+            <button aria-pressed={activityTab === "tasks"} onClick={() => setActivityTab("tasks")}>
+              Tasks
+            </button>
+          </div>
+          {data.loading ? (
+            <p role="status">Loading your schedule?</p>
+          ) : data.eventsError ? (
+            <div role="alert">
+              <p>Your schedule is unavailable.</p>
+              <button onClick={data.reload}>Try again</button>
+            </div>
+          ) : events.filter((item) => item.kind === (activityTab === "tasks" ? "task" : "class"))
+              .length ? (
+            events
+              .filter((item) => item.kind === (activityTab === "tasks" ? "task" : "class"))
+              .slice(0, 5)
+              .map((event) => (
+                <div className="dashboard-event" key={event.id}>
+                  <div className="dashboard-event-date">
+                    <strong>{formatDateOnly(event.date, { weekday: "short" })}</strong>
+                    <span>{formatDateOnly(event.date, { month: "short", day: "numeric" })}</span>
+                  </div>
+                  <span className="dashboard-event-dot" aria-hidden="true" />
+                  <div>
+                    <h3>{event.title}</h3>
+                    <p>{event.detail || "All day"}</p>
+                  </div>
+                </div>
+              ))
+          ) : (
+            <div className="dashboard-agenda-empty">
+              <h3>{activityTab === "tasks" ? "No upcoming tasks" : "No upcoming classes"}</h3>
+              <p>Your {activityTab === "tasks" ? "tasks" : "timetable"} will appear here.</p>
+            </div>
+          )}
+        </div>
+      </section>
+      <SamplePreview title={preview} onClose={() => setPreview(null)}>
+        <div className="dashboard-preview-art">
+          <StudyArt kind="document" />
+        </div>
+        <p>
+          This sample shows how your study content will look. It is not part of your library and has
+          not been saved to your account.
+        </p>
+        <Link href="/app/library">Explore your library</Link>
+      </SamplePreview>
+    </div>
+  );
+}

@@ -1,0 +1,185 @@
+"use client";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { z } from "zod";
+import { createClient } from "@/lib/supabase/client";
+import { useAuth, type UserProfile } from "@/lib/auth-context";
+import { usePathname } from "next/navigation";
+import { env } from "@/env";
+import { localTodayIso } from "@pansgpt/ui/shell";
+
+const recentSchema = z.array(
+  z.object({
+    updated_at: z.string(),
+    documents: z.object({ id: z.string(), title: z.string(), course_code: z.string().nullable() }),
+  })
+);
+const taskSchema = z.array(
+  z.object({
+    id: z.string(),
+    title: z.string(),
+    due_date: z.string(),
+    due_time: z.string().nullable(),
+    subtitle: z.string().nullable(),
+  })
+);
+const timetableSchema = z.array(
+  z.object({
+    id: z.string(),
+    course_title: z.string(),
+    day: z.string(),
+    start_time: z.string().nullable(),
+    time_slot: z.string(),
+    venue: z.string().nullable(),
+  })
+);
+type DashboardData = {
+  recent: z.infer<typeof recentSchema>;
+  tasks: z.infer<typeof taskSchema>;
+  timetable: z.infer<typeof timetableSchema>;
+  loading: boolean;
+  recentError: boolean;
+  eventsError: boolean;
+};
+const initial: DashboardData = {
+  recent: [],
+  tasks: [],
+  timetable: [],
+  loading: true,
+  recentError: false,
+  eventsError: false,
+};
+const DashboardContext = createContext<(DashboardData & { reload: () => void }) | null>(null);
+const chatsSchema = z.object({
+  sessions: z.array(z.object({ id: z.string().uuid(), title: z.string().nullable() })),
+});
+type RecentChats = {
+  chats: z.infer<typeof chatsSchema>["sessions"];
+  loading: boolean;
+  error: boolean;
+};
+const ChatsContext = createContext<RecentChats | null>(null);
+export function DashboardProvider({
+  profile,
+  children,
+}: {
+  profile: UserProfile;
+  children: ReactNode;
+}): React.ReactElement {
+  const [supabase] = useState(createClient);
+  const [data, setData] = useState(initial);
+  const [attempt, setAttempt] = useState(0);
+  const { session } = useAuth();
+  const pathname = usePathname();
+  const token = session?.access_token;
+  const [chatData, setChatData] = useState<RecentChats>({ chats: [], loading: true, error: false });
+  useEffect(() => {
+    const controller = new AbortController();
+    async function loadChats(): Promise<void> {
+      try {
+        if (!token) throw new Error("Session unavailable");
+        const response = await fetch(
+          `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions?limit=30`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal,
+          }
+        );
+        if (!response.ok) throw new Error("Chat history unavailable");
+        const result = chatsSchema.parse(await response.json());
+        if (!controller.signal.aborted)
+          setChatData({ chats: result.sessions, loading: false, error: false });
+      } catch {
+        if (!controller.signal.aborted) setChatData({ chats: [], loading: false, error: true });
+      }
+    }
+    void loadChats();
+    return () => controller.abort();
+  }, [token, attempt, pathname]);
+  useEffect(() => {
+    const controller = new AbortController();
+    const university = profile.university_id;
+    const level = z
+      .enum(["100", "200", "300", "400", "500", "600"])
+      .safeParse(profile.current_level);
+    if (!university) {
+      queueMicrotask(() => {
+        if (!controller.signal.aborted)
+          setData({ ...initial, loading: false, recentError: true, eventsError: true });
+      });
+      return () => controller.abort();
+    }
+    void Promise.all([
+      supabase
+        .from("study_progress")
+        .select("updated_at,documents!inner(id,title,course_code)")
+        .eq("user_id", profile.id)
+        .eq("documents.university_id", university)
+        .eq("documents.status", "active")
+        .is("documents.deleted_at", null)
+        .order("updated_at", { ascending: false })
+        .limit(6)
+        .abortSignal(controller.signal),
+      supabase
+        .from("student_tasks")
+        .select("id,title,due_date,due_time,subtitle")
+        .eq("user_id", profile.id)
+        .eq("university_id", university)
+        .eq("is_completed", false)
+        .gte("due_date", localTodayIso())
+        .order("due_date")
+        .order("due_time", { nullsFirst: false })
+        .limit(30)
+        .abortSignal(controller.signal),
+      level.success
+        ? supabase
+            .from("timetables")
+            .select("id,course_title,day,start_time,time_slot,venue")
+            .eq("university_id", university)
+            .eq("level", level.data)
+            .abortSignal(controller.signal)
+        : Promise.resolve({ data: [], error: null }),
+    ])
+      .then(([history, tasks, timetable]) => {
+        if (controller.signal.aborted) return;
+        const recent = recentSchema.safeParse(history.data);
+        const pending = taskSchema.safeParse(tasks.data);
+        const classes = timetableSchema.safeParse(timetable.data);
+        setData({
+          recent: recent.success && !history.error ? recent.data : [],
+          tasks: pending.success && !tasks.error ? pending.data : [],
+          timetable: classes.success && !timetable.error ? classes.data : [],
+          loading: false,
+          recentError: Boolean(history.error) || !recent.success,
+          eventsError:
+            Boolean(tasks.error) ||
+            Boolean(timetable.error) ||
+            !pending.success ||
+            !classes.success,
+        });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setData({ ...initial, loading: false, recentError: true, eventsError: true });
+      });
+    return () => controller.abort();
+  }, [attempt, profile.current_level, profile.id, profile.university_id, supabase]);
+  function reload(): void {
+    setData((value) => ({ ...value, loading: true }));
+    setAttempt((value) => value + 1);
+  }
+  return (
+    <DashboardContext.Provider value={{ ...data, reload }}>
+      <ChatsContext.Provider value={chatData}>{children}</ChatsContext.Provider>
+    </DashboardContext.Provider>
+  );
+}
+export function useDashboard(): DashboardData & { reload: () => void } {
+  const context = useContext(DashboardContext);
+  if (!context) throw new Error("Dashboard data requires a verified workspace.");
+  return context;
+}
+export function useRecentChats(): RecentChats {
+  const context = useContext(ChatsContext);
+  if (!context) throw new Error("Recent chats require a verified workspace.");
+  return context;
+}

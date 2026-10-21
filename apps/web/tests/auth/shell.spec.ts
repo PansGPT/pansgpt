@@ -26,7 +26,31 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await expect(page.getByRole("heading", { name: "Make yourself at home, Shell." })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
+  ).toBeVisible();
+
+  await expect(page.locator(".dashboard-recent-card")).toHaveCount(6);
+  await expect(page.locator(".dashboard-recent-grid")).toHaveCSS("display", "grid");
+  await expect(
+    page.getByRole("heading", { name: "Recently opened documents", exact: true })
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Learn", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Activities", exact: true })).toBeVisible();
+  const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
+  await expect(sidebar.getByRole("heading", { name: "Recent chats Sample" })).toBeVisible();
+  await expect(sidebar.getByText("Teamspaces", { exact: true })).toHaveCount(0);
+  await expect(sidebar.getByText("Private", { exact: true })).toHaveCount(0);
+  await expect(sidebar.getByText("PansGPT Workspace", { exact: true })).toHaveCount(0);
+  await page.getByRole("link", { name: "Message PansGPT", exact: true }).focus();
+  await expect(page.getByRole("tooltip")).toContainText("Message PansGPT");
+  await page.keyboard.press("Escape");
+  await page.locator(".dashboard-recent-card").first().click();
+  await expect(page.getByRole("dialog", { name: "Pharmacology Notes", exact: true })).toContainText(
+    "Sample content"
+  );
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".dashboard-recent-card").first()).toBeFocused();
 
   await page.getByRole("button", { name: "Collapse sidebar" }).click();
   await expect(page.getByRole("button", { name: "Expand sidebar" })).toBeVisible();
@@ -74,7 +98,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     await expect(profile.getByRole("status")).toContainText("Your theme is saved");
     await expect(page.locator("html")).toHaveAttribute("data-theme", value);
     await page.keyboard.press("Escape");
-    for (const width of [1440, 375]) {
+    for (const width of [1764, 1440, 375]) {
       await page.setViewportSize({ width, height: 900 });
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
@@ -90,6 +114,47 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.screenshot({ path: "test-results/shell-profile-375.png", fullPage: true });
   await page.keyboard.press("Escape");
 
+  // Create only a conversation record; inference remains disabled for this entire journey.
+  const historyRequest = page.waitForRequest(
+    (outgoing) =>
+      outgoing.url().includes("/api/v1/ai/chat/sessions?") && outgoing.method() === "GET"
+  );
+  await page.reload();
+  const listRequest = await historyRequest;
+  const authorization = listRequest.headers()["authorization"];
+  const apiRoot = new URL(listRequest.url()).origin;
+  const created = await request.post(`${apiRoot}/api/v1/ai/chat/sessions`, {
+    headers: { Authorization: authorization! },
+    data: { title: "My saved revision chat" },
+  });
+  expect(created.ok()).toBe(true);
+  const conversation: { id: string } = await created.json();
+  await page.reload();
+  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  await page
+    .getByRole("dialog", { name: "Workspace navigation", exact: true })
+    .getByRole("link", { name: "My saved revision chat", exact: true })
+    .click();
+  await expect(page).toHaveURL(new RegExp(`/app/chat\\?session=${conversation.id}$`));
+  await page.getByRole("checkbox", { name: /I understand that PansGPT/ }).check();
+  await page.getByRole("button", { name: "I Understand & Agree" }).click();
+  await expect(page.getByLabel("Study question")).toBeEnabled();
+  let inferenceRequests = 0;
+  page.on("request", (outgoing) => {
+    if (outgoing.url().endsWith("/stream")) inferenceRequests += 1;
+  });
+  await page.goto("/app");
+  await page.getByLabel("Message PansGPT", { exact: true }).fill("Keep this draft private");
+  await page.getByRole("button", { name: "Open chat", exact: true }).click();
+  await expect(page).toHaveURL(/\/app\/chat$/);
+  await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");
+  expect(inferenceRequests).toBe(0);
+  expect(page.url()).not.toContain("Keep");
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(
+    "Keep this draft private"
+  );
+  await page.goto("/app");
+
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();
   const mobile = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
   await expect(mobile.getByRole("link", { name: "Home", exact: true })).toHaveAttribute(
@@ -102,7 +167,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(mobile).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "Make room for your ideas" })).toBeVisible();
   await expect(page.getByRole("main")).toBeFocused();
-  await expect(page.getByRole("button", { name: "New note", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
   await page.keyboard.press("Control+k");
   const search = page.getByRole("dialog", { name: "Quick search", exact: true });
   await search.getByLabel("Search pages").fill("zzzz");

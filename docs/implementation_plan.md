@@ -1198,15 +1198,15 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 
 ### 🚀 Hosting & Deployment
 
-| Service      | Host (Bootstrap)                | Host (Funded)           | Why                                                 |
-| ------------ | ------------------------------- | ----------------------- | --------------------------------------------------- |
-| Web Frontend | **Vercel** (free)               | Vercel Pro              | Best Next.js deployment, zero config                |
-| Mobile App   | **EAS** (free builds)           | EAS Production          | Cloud builds + OTA + App Store / Play Store         |
-| Backend API  | **Render** (free)               | Render paid / Railway   | Free web service + keep-alive strategy              |
+| Service      | Host (Bootstrap)                             | Host (Funded)           | Why                                                                               |
+| ------------ | -------------------------------------------- | ----------------------- | --------------------------------------------------------------------------------- |
+| Web Frontend | **Vercel** (free)                            | Vercel Pro              | Best Next.js deployment, zero config                                              |
+| Mobile App   | **EAS** (free builds)                        | EAS Production          | Cloud builds + OTA + App Store / Play Store                                       |
+| Backend API  | **Render** (free)                            | Render paid / Railway   | Free web service + keep-alive strategy                                            |
 | Task Workers | **Operator-managed Linux** (Oracle deferred) | Separate worker service | GitHub Actions currently runs staging checks only; ongoing consumers await a host |
-| Redis        | **Upstash** (free)              | Upstash paid            | 10,000 commands/day free, serverless                |
-| File Storage | **Cloudflare R2** (free 10GB)   | R2 paid                 | As decided above                                    |
-| Database     | **Supabase** (free)             | Supabase Pro            | As decided above                                    |
+| Redis        | **Upstash** (free)                           | Upstash paid            | 10,000 commands/day free, serverless                                              |
+| File Storage | **Cloudflare R2** (free 10GB)                | R2 paid                 | As decided above                                                                  |
+| Database     | **Supabase** (free)                          | Supabase Pro            | As decided above                                                                  |
 
 **Render Free Tier — Full Details:**
 
@@ -1839,6 +1839,8 @@ All 3 themes apply correctly, keyboard nav works on all components, Storybook (o
 > **Auth UI refinement (21 October 2026):** Existing web entry points remain `/login`, `/signup`, `/forgot-password` and `/onboarding`; `/update-password` completes the PKCE recovery callback. Shared UI components supply the three-theme presentation. FastAPI remains authoritative for roles, tenancy and onboarding. See [implementation and verification limits](auth-refresh-2026-10-21.md). This work precedes Phase 9.3 and does not implement the app shell.
 
 The subsequent [guided-onboarding revision](auth-guided-onboarding-2026-10-21.md) presents name, university, academic level and review/agreement as separate full-page steps. Drafts remain in component memory across Back/Edit navigation; only final confirmation calls the existing onboarding API. Mobile auth uses the original legacy diagonal animation/typing welcome composition on a green canvas, with white sliding forms. Desktop uses a green artwork panel with a horizontally centered, lowered tracing logo and a stronger bottom fade, plus a flat white form area. Appearance controls are omitted; the fixed auth palette preserves saved app theme preferences.
+
+The user-authorized [Phase 9.3 shell](phase-9-3-app-shell-2026-10-21.md) follows the latest [reference direction](design-system/app-shell-direction-2026-10-21.md): a PansGPT sidebar with Recent chats, independent opened-document cards, Learn cards, Activities, a bottom-left circular logo shortcut and a mobile message composer. Teamspaces and Private are omitted. Explicitly labelled Sample previews fill missing content without writes or inference. Existing owner-scoped `user_preferences.theme` stores `oled_dark` for UI `dark`; API profile verification gates the workspace. This supersedes older top-navigation and three-action-bar composition descriptions for this shell. Phase 10's aggregate API, realtime, offline and performance requirements remain open. Verification is recorded separately.
 
 ### 3.1 Auth Strategy Overview
 

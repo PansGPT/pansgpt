@@ -2,8 +2,19 @@
 
 import { env } from "@/env";
 
-import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useSyncExternalStore,
+  Suspense,
+} from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { z } from "zod";
+import { useChatDraft } from "@/components/shell/chat-draft";
+import { WorkspaceLoading } from "@/components/shell/loading";
 import { useAuth } from "@/lib/auth-context";
 import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
 import { UserInitialsAvatar } from "@/components/UserInitialsAvatar";
@@ -40,12 +51,20 @@ interface MessageItem {
   artifacts?: ArtifactItem[];
 }
 
-export default function ChatPage() {
+function ChatContent({
+  initialSessionId = null,
+  initialMessages = [],
+}: {
+  initialSessionId?: string | null;
+  initialMessages?: MessageItem[];
+}) {
   const { user, session, profile, loading: authLoading } = useAuth();
 
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<MessageItem[]>([]);
-  const [inputPrompt, setInputPrompt] = useState("");
+  const [sessionId, setSessionId] = useState<string | null>(initialSessionId);
+  const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
+  const { draft, setDraft } = useChatDraft();
+  const [inputPrompt, setInputPrompt] = useState(draft);
+  useEffect(() => () => setDraft(""), [setDraft]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamError, setStreamError] = useState<string | null>(null);
 
@@ -512,6 +531,7 @@ export default function ChatPage() {
         <form onSubmit={handleSendMessage} className="mx-auto flex max-w-3xl items-end gap-2">
           <div className="relative flex-1">
             <textarea
+              aria-label="Study question"
               value={inputPrompt}
               onChange={(e) => setInputPrompt(e.target.value)}
               onKeyDown={(e) => {
@@ -563,5 +583,110 @@ export default function ChatPage() {
         }}
       />
     </div>
+  );
+}
+
+const historySchema = z.object({
+  session: z.object({ id: z.string().uuid(), user_id: z.string().uuid() }),
+  messages: z.array(
+    z.object({
+      id: z.string().uuid(),
+      role: z.enum(["user", "assistant", "system"]),
+      content: z.string(),
+      thinking_text: z.string().nullable().optional(),
+      citations: z
+        .array(
+          z.object({
+            title: z.string(),
+            chunk_id: z.string().nullable().optional(),
+            document_id: z.string().nullable().optional(),
+            source_type: z.enum(["document", "web"]).optional(),
+            url: z.string().nullable().optional(),
+            course_code: z.string().nullable().optional(),
+            page_start: z.number().int().positive().nullable().optional(),
+            page_end: z.number().int().positive().nullable().optional(),
+            snippet: z.string().optional(),
+            confidence: z.string().optional(),
+          })
+        )
+        .nullable()
+        .optional(),
+    })
+  ),
+});
+
+function ChatHistory({ id }: { id: string }): React.ReactElement {
+  const { session, profile } = useAuth();
+  const [history, setHistory] = useState<MessageItem[] | null>(null);
+  const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const token = session?.access_token;
+  const owner = profile?.id;
+  useEffect(() => {
+    const controller = new AbortController();
+    async function load(): Promise<void> {
+      try {
+        if (!token || !owner || !z.string().uuid().safeParse(id).success)
+          throw new Error("Invalid conversation");
+        const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error("Conversation unavailable");
+        const result = historySchema.parse(await response.json());
+        if (result.session.id !== id || result.session.user_id !== owner)
+          throw new Error("Conversation mismatch");
+        if (!controller.signal.aborted)
+          setHistory(
+            result.messages.flatMap((item): MessageItem[] =>
+              item.role === "system"
+                ? []
+                : [
+                    {
+                      id: item.id,
+                      role: item.role,
+                      content: item.content,
+                      thinking: item.thinking_text ?? undefined,
+                      citations: item.citations ?? undefined,
+                    },
+                  ]
+            )
+          );
+      } catch {
+        if (!controller.signal.aborted) setError(true);
+      }
+    }
+    void load();
+    return () => controller.abort();
+  }, [id, owner, token, attempt]);
+  if (error)
+    return (
+      <div className="shell-placeholder" role="alert">
+        <h1>We couldn&apos;t open this chat</h1>
+        <p>It may be unavailable or no longer accessible.</p>
+        <button
+          onClick={() => {
+            setError(false);
+            setAttempt((value) => value + 1);
+          }}
+        >
+          Try again
+        </button>
+        <Link href="/app/chat">Start a new chat</Link>
+      </div>
+    );
+  if (!history) return <WorkspaceLoading />;
+  return <ChatContent initialSessionId={id} initialMessages={history} />;
+}
+function ChatRoute(): React.ReactElement {
+  const params = useSearchParams();
+  const id = params.get("session");
+  return id ? <ChatHistory key={id} id={id} /> : <ChatContent key="new-chat" />;
+}
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<WorkspaceLoading />}>
+      <ChatRoute />
+    </Suspense>
   );
 }

@@ -97,7 +97,9 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await expect(page.getByText("Test Student", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await expect(page.getByText("Test Student", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Test$/ })
+  ).toBeVisible();
   await page.getByRole("button", { name: "Open profile", exact: true }).click();
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);

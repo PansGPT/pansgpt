@@ -16,12 +16,16 @@ const documentSchema = z.object({
   embedding_status: z.string().nullish(),
 });
 type LibraryDocument = z.infer<typeof documentSchema>;
-export function WorkspaceLibrary(): React.ReactElement {
+export function WorkspaceLibrary({
+  initialQuery = "",
+}: {
+  initialQuery?: string;
+}): React.ReactElement {
   const { session, profile } = useAuth();
   const [documents, setDocuments] = useState<LibraryDocument[]>([]);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [attempt, setAttempt] = useState(0);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [uploadOpen, setUploadOpen] = useState(false);
   useEffect(() => {
     const controller = new AbortController();

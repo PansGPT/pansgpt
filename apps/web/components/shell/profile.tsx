@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { Button, isThemeName, Slideout, UserInitialsAvatar } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import type { usePreferences } from "./use-preferences";
@@ -10,10 +10,14 @@ export function ProfileDrawer({
   profile,
   preferences,
   compact = false,
+  open,
+  onOpenChange,
 }: {
   profile: UserProfile;
   preferences: ReturnType<typeof usePreferences>;
   compact?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }): React.ReactElement {
   const router = useRouter();
   const { signOut } = useAuth();
@@ -34,11 +38,14 @@ export function ProfileDrawer({
   }
   return (
     <Slideout
+      open={open}
+      onOpenChange={onOpenChange}
       title="Your profile"
       description="Your account, university and workspace preferences."
       trigger={
         <button className="shell-account" aria-label="Open profile">
           <UserInitialsAvatar name={name} email={profile.email} size="sm" />
+          {compact && <ChevronDown size={16} aria-hidden="true" />}
           {!compact && (
             <span>
               <strong>{name}</strong>
