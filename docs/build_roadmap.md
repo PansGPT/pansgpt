@@ -1219,7 +1219,11 @@ Product integration remains gated by the staging journey. The library's theme pr
 
 ### Auth refinement before the app shell (user-authorized 21 October)
 
-The user authorized recovery completion, the existing auth-screen refresh and journey/theme verification. [Implementation and verification record](auth-refresh-2026-10-21.md). Verification is in progress; Phase 9.3 remains unstarted.
+The user authorized recovery completion, the existing auth-screen refresh and journey/theme verification. [Implementation and verification record](auth-refresh-2026-10-21.md). All eight CI jobs passed at `6e44e67` in [run 39556574232](https://github.com/PansGPT/pansgpt/actions/runs/39556574232); Phase 9.3 remains unstarted.
+
+- [x] Complete PKCE password recovery with `/update-password`, safe callback destinations and session-cookie preservation.
+- [x] Refresh the existing login, signup/confirmation, forgot-password, reset-password and onboarding screens using the shared design system.
+- [x] Pass all 11 disposable auth browser checks, including real email links, API onboarding/retries, password replacement, mobile/desktop and all three themes. Hosted/provider/native limits remain in the verification record.
 
 ### 9.3 Web App Shell
 
