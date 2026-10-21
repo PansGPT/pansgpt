@@ -144,7 +144,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     if (outgoing.url().endsWith("/stream")) inferenceRequests += 1;
   });
   await page.goto("/app");
-  await page.getByLabel("Message PansGPT", { exact: true }).fill("Keep this draft private");
+  await page
+    .locator(".shell-mobile-composer")
+    .getByLabel("Message PansGPT", { exact: true })
+    .fill("Keep this draft private");
   await page.getByRole("button", { name: "Open chat", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/chat$/);
   await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");

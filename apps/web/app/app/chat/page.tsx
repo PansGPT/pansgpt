@@ -74,6 +74,7 @@ function ChatContent({
   // Streaming abort controller
   const abortControllerRef = useRef<AbortController | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => () => abortControllerRef.current?.abort(), []);
 
   const userId = user?.id || profile?.id || "anonymous";
 
