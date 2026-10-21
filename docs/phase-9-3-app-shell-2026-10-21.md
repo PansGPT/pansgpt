@@ -29,4 +29,4 @@ The in-app browser tool remains unavailable before setup (`missing field sandbox
 
 Hosted deployment, native-device journeys, provider attestations and Phase 10's remaining data/performance/offline gates are not certified here.
 
-The latest surface adjustment swaps the sidebar and Home backgrounds: the sidebar uses `--bg-primary`, while Home uses `--bg-secondary`. Home cards, the activity panel and mobile composer use `--bg-primary` to preserve separation. This uses semantic tokens across Light, OLED Dark and Sepia; other content routes retain their own canvas.
+The latest surface adjustment swaps the sidebar and Home backgrounds: the sidebar uses `--bg-primary`, while Home uses `--bg-secondary`. Following the next refinement, dark Home cards and the activity panel use the lighter `--bg-tertiary` shade, rather than black. Light/Sepia cards and the mobile composer retain `--bg-primary` to preserve separation. This uses semantic tokens across Light, OLED Dark and Sepia; other content routes retain their own canvas.

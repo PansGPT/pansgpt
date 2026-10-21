@@ -1696,7 +1696,13 @@
   }
 }
 
-/* The user-selected Home surface reverses the previous sidebar/canvas contrast. */
+/* The user-selected Home surface reverses the sidebar/canvas contrast. */
+.app-shell {
+  --shell-card-bg: var(--bg-primary);
+}
+[data-theme="dark"] .app-shell {
+  --shell-card-bg: var(--bg-tertiary);
+}
 .app-shell[data-home="true"] .shell-workspace {
   background: var(--bg-secondary);
 }
@@ -1706,9 +1712,11 @@
     .dashboard-learn-card,
     .dashboard-events,
     .dashboard-file-icon,
-    .dashboard-region-empty,
-    .shell-mobile-composer
+    .dashboard-region-empty
   ) {
+  background: var(--shell-card-bg);
+}
+.app-shell[data-home="true"] .shell-mobile-composer {
   background: var(--bg-primary);
 }
 .app-shell[data-home="true"] .dashboard-recent-card:nth-child(2n) .dashboard-recent-cover {
@@ -1716,4 +1724,7 @@
 }
 .app-shell[data-home="true"] .dashboard-recent-card:nth-child(3n) .dashboard-recent-cover {
   background: color-mix(in srgb, var(--fg-brand-primary-600) 22%, var(--bg-primary));
+}
+.app-shell[data-home="true"] .study-activity [data-intensity="0"] {
+  background: var(--bg-secondary);
 }
