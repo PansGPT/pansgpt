@@ -56,7 +56,10 @@ export function AppPrimitivesFixtures(): React.ReactElement {
         />
         <CardContent>
           <p>Last opened yesterday. Continue your study session.</p>
-          <p data-testid="long-card-copy">{"pharmacology".repeat(35)}</p>
+          <details>
+            <summary>Long-content example</summary>
+            <p data-testid="long-card-copy">{"pharmacology".repeat(35)}</p>
+          </details>
         </CardContent>
         <CardFooter>
           <a href="#document-opened">Open document</a>
@@ -65,7 +68,9 @@ export function AppPrimitivesFixtures(): React.ReactElement {
           </Button>
         </CardFooter>
       </Card>
-      <output aria-label="Saved documents">{actions}</output>
+      <p>
+        Saved documents: <output aria-label="Saved documents">{actions}</output>
+      </p>
       <div className="preview-row" aria-label="Initials avatar examples">
         <UserInitialsAvatar name="Godgive Okeke" size="sm" data-testid="initials-name" />
         <UserInitialsAvatar name="Godgive Okeke" data-testid="initials-duplicate" />
@@ -135,7 +140,9 @@ export function AppPrimitivesFixtures(): React.ReactElement {
       <ErrorBoundary onReset={() => setFail(false)}>
         <StudySummary fail={fail} />
       </ErrorBoundary>
-      <output aria-label="Captured errors">{captured}</output>
+      <p>
+        Captured test errors: <output aria-label="Captured errors">{captured}</output>
+      </p>
       <output aria-label="Captured event ID">{eventId}</output>
     </section>
   );

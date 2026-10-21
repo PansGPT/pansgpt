@@ -1,9 +1,9 @@
-import type { ComponentProps } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { cn } from "../utils";
 import styles from "../styles/user-initials-avatar.module.css";
 
 export type UserInitialsAvatarProps = Omit<
-  ComponentProps<"span">,
+  ComponentPropsWithoutRef<"span">,
   "children" | "role" | "aria-label" | "title"
 > & {
   name?: string | null;

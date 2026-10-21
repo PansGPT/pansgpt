@@ -38,6 +38,7 @@ test("cards preserve native actions, readable themes and a narrow mobile layout"
     await expect(page.getByLabel("Saved documents")).toHaveText("1");
   }
   expect(new Set(backgrounds).size).toBe(3);
+  await page.getByText("Long-content example", { exact: true }).click();
   await page.setViewportSize({ width: 375, height: 900 });
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth))
@@ -110,6 +111,10 @@ test("toasts follow all themes, expose keyboard actions and dismiss automaticall
     await page.getByLabel("Appearance", { exact: true }).selectOption(theme);
     await saved.click();
     await expect(message).toContainText("Your study note is ready.");
+    await expect(page.getByRole("region", { name: /Notifications/ })).toHaveAttribute(
+      "aria-live",
+      "polite"
+    );
     const expectedBackground = await page
       .getByTestId("study-card")
       .evaluate((node) => getComputedStyle(node).backgroundColor);

@@ -23,6 +23,20 @@
   min-width: 0;
   padding: var(--figma-spacing-3xl);
 }
+.p-card-content > :first-child {
+  margin-block-start: 0;
+}
+.p-card-content > :last-child {
+  margin-block-end: 0;
+}
+.p-card-footer > a {
+  color: var(--text-brand-secondary-700);
+  text-underline-offset: 3px;
+}
+.p-card-footer > a:focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 3px;
+}
 .p-card-footer {
   display: flex;
   flex-wrap: wrap;
@@ -116,6 +130,14 @@
   color: var(--text-secondary-700);
 }
 .p-toaster .p-toast-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px;
+  border-radius: var(--figma-radius-full);
   color: var(--text-secondary-700);
   background: var(--bg-primary);
   border: 1px solid var(--border-secondary);
