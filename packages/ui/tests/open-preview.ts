@@ -25,6 +25,14 @@ export async function focusByKeyboard(target: Locator): Promise<void> {
   await target.scrollIntoViewIfNeeded();
   await target.focus();
   await target.press("Shift+Tab");
+  // The previous control can be above a long, non-focusable source archive.
+  // Settle that scroll before Tab: Radix dismisses tooltips on ancestor scroll.
+  await target.scrollIntoViewIfNeeded();
+  await target.page().evaluate(
+    () => new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    })
+  );
   await target.page().keyboard.press("Tab");
   await expect(target).toBeFocused();
 }
