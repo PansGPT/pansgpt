@@ -294,7 +294,7 @@ export default function ChatPage() {
 
   if (authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-neutral-50 dark:bg-neutral-950">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-secondary)] ">
         <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
     );
@@ -306,29 +306,26 @@ export default function ChatPage() {
     "Student";
 
   return (
-    <div className="flex h-screen flex-col bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+    <div className="shell-chat flex flex-col bg-[var(--bg-primary)] text-[color:var(--text-primary-900)]">
       {/* Header */}
-      <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200 bg-white px-4 dark:border-neutral-800 dark:bg-neutral-900">
+      <header className="flex h-14 shrink-0 items-center justify-between border-b border-[var(--border-primary)] bg-[var(--bg-primary)] px-4 ">
         <div className="flex items-center gap-3">
           <Link
-            href="/app"
-            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 transition-colors"
+            href="/app/library"
+            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[color:var(--text-tertiary-600)] hover:bg-[var(--bg-tertiary)] dark:hover:bg-neutral-800 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Library
           </Link>
-          <div className="h-4 w-px bg-neutral-200 dark:bg-neutral-800" />
+          <div className="h-4 w-px bg-neutral-200 " />
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-600" />
-            <span className="text-sm font-bold">Clinical Study Copilot</span>
-            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
-              SSE Stream
-            </span>
+            <span className="text-sm font-bold">Study chat</span>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs text-neutral-500 dark:text-neutral-400 hidden sm:inline">
+          <span className="text-xs text-[color:var(--text-quaternary-500)] hidden sm:inline">
             {fullName}
           </span>
           <UserInitialsAvatar name={fullName} email={user?.email} size="sm" />
@@ -344,10 +341,10 @@ export default function ChatPage() {
                 <Bot className="h-8 w-8" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                <h2 className="text-lg font-bold text-[color:var(--text-primary-900)] ">
                   How can PansGPT help your pharmacy studies today?
                 </h2>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 max-w-md mx-auto">
+                <p className="text-xs text-[color:var(--text-quaternary-500)] max-w-md mx-auto">
                   Ask questions about pharmaceutical chemistry, pharmacokinetics, adverse effects,
                   or clinical case formulations.
                 </p>
@@ -365,7 +362,7 @@ export default function ChatPage() {
                     onClick={() => {
                       setInputPrompt(sample);
                     }}
-                    className="rounded-xl border border-neutral-200 bg-white p-3 text-left text-xs text-neutral-700 hover:border-emerald-500 hover:bg-emerald-50/50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:border-emerald-500 dark:hover:bg-emerald-950/20 transition-all"
+                    className="rounded-xl border border-[var(--border-primary)] bg-[var(--bg-primary)] p-3 text-left text-xs text-[color:var(--text-secondary-700)] hover:border-emerald-500 hover:bg-[var(--bg-secondary)]/50 dark:hover:border-emerald-500 dark:hover:bg-emerald-950/20 transition-all"
                   >
                     &ldquo;{sample}&rdquo;
                   </button>
@@ -388,7 +385,7 @@ export default function ChatPage() {
                   className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm shadow-xs leading-relaxed ${
                     msg.role === "user"
                       ? "bg-emerald-600 text-white"
-                      : "bg-white border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
+                      : "bg-[var(--bg-primary)] border border-[var(--border-primary)] text-[color:var(--text-primary-900)] "
                   }`}
                 >
                   {/* Assistant Tool Execution Badges */}
@@ -404,7 +401,7 @@ export default function ChatPage() {
                   {msg.role === "assistant" && msg.thinking && (
                     <details
                       open={!msg.content ? true : undefined}
-                      className="mb-3 rounded-xl border border-emerald-200/70 bg-emerald-50/50 p-2.5 text-xs text-neutral-700 dark:border-emerald-950/60 dark:bg-emerald-950/20 dark:text-neutral-300 transition-all"
+                      className="mb-3 rounded-xl border border-emerald-200/70 bg-[var(--bg-secondary)]/50 p-2.5 text-xs text-[color:var(--text-secondary-700)] dark:border-emerald-950/60 dark:bg-emerald-950/20 transition-all"
                     >
                       <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
                         <div className="flex items-center gap-1.5">
@@ -419,9 +416,9 @@ export default function ChatPage() {
                               : "Thought Process & Clinical Reasoning"}
                           </span>
                         </div>
-                        <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
+                        <ChevronDown className="h-3.5 w-3.5 text-[color:var(--text-quaternary-500)]" />
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-neutral-600 dark:text-neutral-400 max-h-56 overflow-y-auto rounded-lg bg-white/70 dark:bg-neutral-900/60 p-2 border border-neutral-200/50 dark:border-neutral-800/50">
+                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-[color:var(--text-tertiary-600)] max-h-56 overflow-y-auto rounded-lg bg-[var(--bg-primary)]/70 p-2 border border-[var(--border-primary)]/50 ">
                         {msg.thinking}
                       </pre>
                     </details>
@@ -430,7 +427,7 @@ export default function ChatPage() {
                   {/* Message Content: render text in pre-wrap preserving whitespace & code */}
                   <div className="whitespace-pre-wrap font-sans text-sm break-words">
                     {msg.content || (
-                      <span className="flex items-center gap-1.5 text-neutral-400 italic">
+                      <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
                         {msg.tools && msg.tools.some((t) => t.status === "running")
                           ? "Executing pharmacological research tools..."
@@ -450,8 +447,8 @@ export default function ChatPage() {
 
                   {/* Verified Syllabus Grounding Citations */}
                   {msg.role === "assistant" && msg.citations && msg.citations.length > 0 && (
-                    <div className="mt-3 border-t border-neutral-100 pt-2 dark:border-neutral-800">
-                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                    <div className="mt-3 border-t border-[var(--border-secondary)] pt-2 ">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[color:var(--text-quaternary-500)]">
                         <BookOpen className="h-3 w-3" />
                         <span>Sources</span>{" "}
                         {/* [CHAT FIX 2] Web sources are labeled separately. */}
@@ -464,7 +461,7 @@ export default function ChatPage() {
                               href={externalSourceUrl(c)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] underline dark:bg-neutral-800"
+                              className="rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] underline "
                               title={c.snippet}
                             >
                               {c.title} — Outside the lecture materials
@@ -472,7 +469,7 @@ export default function ChatPage() {
                           ) : (
                             <span
                               key={i}
-                              className="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                              className="inline-flex items-center gap-1 rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] text-[color:var(--text-secondary-700)] "
                               title={c.snippet}
                             >
                               <span className="font-semibold text-emerald-700 dark:text-emerald-400">
@@ -491,7 +488,7 @@ export default function ChatPage() {
                 </div>
 
                 {msg.role === "user" && (
-                  <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-xl bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+                  <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-xl bg-neutral-200 text-[color:var(--text-secondary-700)] ">
                     <User className="h-4 w-4" />
                   </div>
                 )}
@@ -511,7 +508,7 @@ export default function ChatPage() {
       </div>
 
       {/* Input Composer */}
-      <div className="border-t border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="border-t border-[var(--border-primary)] bg-[var(--bg-primary)] p-4 ">
         <form onSubmit={handleSendMessage} className="mx-auto flex max-w-3xl items-end gap-2">
           <div className="relative flex-1">
             <textarea
@@ -526,7 +523,7 @@ export default function ChatPage() {
               placeholder="Ask a pharmacy question or request a drug monograph breakdown..."
               rows={2}
               disabled={isStreaming}
-              className="w-full resize-none rounded-2xl border border-neutral-300 bg-neutral-50 px-4 py-3 text-sm text-neutral-900 placeholder-neutral-400 focus:border-emerald-500 focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-emerald-500 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-100 dark:focus:bg-neutral-800"
+              className="w-full resize-none rounded-2xl border border-neutral-300 bg-[var(--bg-secondary)] px-4 py-3 text-sm text-[color:var(--text-primary-900)] placeholder-neutral-400 focus:border-emerald-500 focus:bg-[var(--bg-primary)] focus:outline-hidden focus:ring-1 focus:ring-emerald-500 dark:focus:bg-neutral-800"
             />
           </div>
 
@@ -550,7 +547,7 @@ export default function ChatPage() {
             </button>
           )}
         </form>
-        <p className="mt-2 text-center text-[10px] text-neutral-400">
+        <p className="mt-2 text-center text-[10px] text-[color:var(--text-quaternary-500)]">
           PansGPT is an AI educational companion. Always verify clinical facts and dosages with
           official monographs.
         </p>

@@ -139,6 +139,8 @@ export type SlideoutProps = ComponentProps<typeof Primitive.Root> & {
   children?: ReactNode;
   className?: string;
   side?: "left" | "right";
+  onOpenAutoFocus?: ComponentProps<typeof Primitive.Content>["onOpenAutoFocus"];
+  onCloseAutoFocus?: ComponentProps<typeof Primitive.Content>["onCloseAutoFocus"];
 };
 export function Slideout({
   trigger,
@@ -149,6 +151,8 @@ export function Slideout({
   children,
   className,
   side = "right",
+  onOpenAutoFocus,
+  onCloseAutoFocus,
   ...props
 }: SlideoutProps): React.ReactElement {
   return (
@@ -156,7 +160,12 @@ export function Slideout({
       {trigger && <Primitive.Trigger asChild>{trigger}</Primitive.Trigger>}
       <Primitive.Portal>
         <Primitive.Overlay className="p-slideout-overlay" />
-        <Primitive.Content className={cn("p-slideout-dialog", className)} data-side={side}>
+        <Primitive.Content
+          className={cn("p-slideout-dialog", className)}
+          data-side={side}
+          onOpenAutoFocus={onOpenAutoFocus}
+          onCloseAutoFocus={onCloseAutoFocus}
+        >
           <Primitive.Title className="p-sr-only">{title}</Primitive.Title>
           <Primitive.Description className="p-sr-only">{description}</Primitive.Description>
           <SlideoutDialogContext.Provider value>

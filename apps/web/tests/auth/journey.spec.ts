@@ -1,27 +1,7 @@
-import { test, expect, type APIRequestContext } from "@playwright/test";
+import { test, expect } from "@playwright/test";
+import { emailLink } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
-async function emailLink(
-  request: APIRequestContext,
-  email: string,
-  subject: string
-): Promise<string> {
-  let html = "";
-  await expect
-    .poll(
-      async () => {
-        const response = await request.get(
-          `http://127.0.0.1:54324/view/latest.html?query=${encodeURIComponent(`to:${email} subject:${subject}`)}`
-        );
-        if (response.ok()) html = await response.text();
-        return /href="http[^\"]+\/auth\/v1\/verify\?/.test(html);
-      },
-      { timeout: 30000 }
-    )
-    .toBe(true);
-  const link = html.match(/href="(http[^\"]+\/auth\/v1\/verify\?[^\"]+)"/)?.[1];
-  if (!link) throw new Error("Captured email has no confirmation link.");
-  return link.replaceAll("&amp;", "&");
-}
+
 test("real signup, confirmation, onboarding retries, sign-out, recovery and password replacement", async ({
   page,
   request,
@@ -118,12 +98,14 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page).toHaveURL(/\/app$/);
   await expect(page.getByText("Test Student", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Open profile", exact: true }).click();
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
+  await page.getByRole("button", { name: "Open profile", exact: true }).click();
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await page.getByRole("link", { name: "Forgot password?" }).click();
   await expect(page.getByRole("heading", { name: "Forgot your password?" })).toBeVisible();
@@ -162,6 +144,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await page.getByLabel(/^Password\s*\*?$/).fill(replacement);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
+  await page.getByRole("button", { name: "Open profile", exact: true }).click();
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await page.goto(reset);
   await expect(page).toHaveURL(/\/forgot-password\?error=link_expired/);

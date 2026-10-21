@@ -9,6 +9,8 @@ overrides:
   http-cache-semantics@4.2.0: 4.3.0
   sharp@0.35.4: 0.35.5
 
+packageExtensionsChecksum: sha256-J3gwSSWOh5bJ4xLvviO8p1wojiOP6d5YCF3h42ZU+LQ=
+
 importers:
   .:
     devDependencies:
@@ -107,8 +109,8 @@ importers:
         specifier: ^10.74.0
         version: 10.74.0(@opentelemetry/core@2.11.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.11.0(@opentelemetry/api@1.9.1))(next@16.3.8(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.63.0)(@types/node@20.19.43)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)(webpack@5.98.0(postcss@8.5.28))
       "@supabase/ssr":
-        specifier: ^0.5.2
-        version: 0.5.2(@supabase/supabase-js@2.115.0(@opentelemetry/api@1.9.1))
+        specifier: ^0.12.7
+        version: 0.12.7(@supabase/supabase-js@2.115.0(@opentelemetry/api@1.9.1))
       "@supabase/supabase-js":
         specifier: ^2.48.1
         version: 2.115.0(@opentelemetry/api@1.9.1)
@@ -118,6 +120,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      framer-motion:
+        specifier: ^14.4.0
+        version: 14.4.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       lucide-react:
         specifier: ^0.475.0
         version: 0.475.0(react@19.2.8)
@@ -156,10 +161,10 @@ importers:
         specifier: ^20.17.17
         version: 20.19.43
       "@types/react":
-        specifier: ^19.0.8
+        specifier: ^19.2.18
         version: 19.2.18
       "@types/react-dom":
-        specifier: ^19.0.3
+        specifier: ^19.2.7
         version: 19.2.7(@types/react@19.2.18)
       eslint:
         specifier: ^9.39.0
@@ -4478,13 +4483,13 @@ packages:
       }
     engines: { node: ">=22.0.0" }
 
-  "@supabase/ssr@0.5.2":
+  "@supabase/ssr@0.12.7":
     resolution:
       {
-        integrity: sha512-n3plRhr2Bs8Xun1o4S3k1CDv17iH5QY9YcoEvXX3bxV1/5XSasA0mNXYycFmADIdtdE6BG9MRjP5CGIs8qxC8A==,
+        integrity: sha512-wiBtEie1KkRJi9RrZWY3R2imRhX1JY7qMyUCH2z9AUk15gQebNEplM+urbCKamdxaTJLXUU6LlpkJsaxhojCEg==,
       }
     peerDependencies:
-      "@supabase/supabase-js": ^2.43.4
+      "@supabase/supabase-js": ^2.114.0
 
   "@supabase/storage-js@2.115.0":
     resolution:
@@ -4783,12 +4788,6 @@ packages:
     resolution:
       {
         integrity: sha512-BgT2szDXnVypgpNxOK8aL5SGjUdaQbC++WZNjF1Qge3Og2+zhHj+RWhmehLhYyvQwqAmvezruVfOf8+3m74W+g==,
-      }
-
-  "@types/cookie@0.6.0":
-    resolution:
-      {
-        integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==,
       }
 
   "@types/eslint-scope@3.7.7":
@@ -6359,12 +6358,12 @@ packages:
         integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==,
       }
 
-  cookie@0.7.2:
+  cookie@1.1.1:
     resolution:
       {
-        integrity: sha512-yki5XnKuf750l50uGTllt6kKILY4nQ1eNIQatoXEByZ5dWgnKqbnqmTrBE5B4N7lrMJKQ2ytWMiTO2o0v6Ew/w==,
+        integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==,
       }
-    engines: { node: ">= 0.6" }
+    engines: { node: ">=18" }
 
   core-js-compat@3.50.0:
     resolution:
@@ -7595,6 +7594,21 @@ packages:
         integrity: sha512-j23EibVLnp4zNXGW7LjryXYa2X6U/M96yoOX+ybZxwkYajdxRNEqYY3zhh7y0i6kfISKS2jr+EJq1YTUDEv5+w==,
       }
     engines: { node: ">= 6" }
+
+  framer-motion@14.4.0:
+    resolution:
+      {
+        integrity: sha512-HtO1fxord2rnXYRyr1laG4uY7+OtgwDc9Szcg1wlMq/LF7BO3/S7a+KEo691U7pSi+i0ueRuRqaD1UaLEmZHuQ==,
+      }
+    peerDependencies:
+      "@types/react": ^19.2.18
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   freeport-async@2.0.0:
     resolution:
@@ -9679,6 +9693,18 @@ packages:
     resolution:
       {
         integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==,
+      }
+
+  motion-dom@14.4.0:
+    resolution:
+      {
+        integrity: sha512-1q8RyHSdr5COpzrv3JgJ9XRjOO88ZN9CwflpkGgyO/SR/SNRP/dD6EU8SEo092kcKY34IzHC5diJPKrQRMA8lQ==,
+      }
+
+  motion-utils@14.1.1:
+    resolution:
+      {
+        integrity: sha512-3VvN5Uvf8B6qG+OfOui6Nht5EWp+vLuU3IqcAj7ItZGKqtmTjCebl5sGZF7/08gEHRnEl1AP/fIwbcEyVrcQGQ==,
       }
 
   ms@2.0.0:
@@ -15782,11 +15808,10 @@ snapshots:
       "@supabase/phoenix": 0.4.5
       tslib: 2.8.1
 
-  "@supabase/ssr@0.5.2(@supabase/supabase-js@2.115.0(@opentelemetry/api@1.9.1))":
+  "@supabase/ssr@0.12.7(@supabase/supabase-js@2.115.0(@opentelemetry/api@1.9.1))":
     dependencies:
       "@supabase/supabase-js": 2.115.0(@opentelemetry/api@1.9.1)
-      "@types/cookie": 0.6.0
-      cookie: 0.7.2
+      cookie: 1.1.1
 
   "@supabase/storage-js@2.115.0":
     dependencies:
@@ -15946,8 +15971,6 @@ snapshots:
   "@types/conventional-commits-parser@5.0.2":
     dependencies:
       "@types/node": 20.19.43
-
-  "@types/cookie@0.6.0": {}
 
   "@types/eslint-scope@3.7.7":
     dependencies:
@@ -16980,7 +17003,7 @@ snapshots:
 
   convert-source-map@2.0.0: {}
 
-  cookie@0.7.2: {}
+  cookie@1.1.1: {}
 
   core-js-compat@3.50.0:
     dependencies:
@@ -18079,6 +18102,16 @@ snapshots:
       es-set-tostringtag: 2.1.0
       hasown: 2.0.4
       mime-types: 2.1.35
+
+  framer-motion@14.4.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
+    dependencies:
+      "@types/react": 19.2.18
+      motion-dom: 14.4.0
+      motion-utils: 14.1.1
+      tslib: 2.8.1
+    optionalDependencies:
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   freeport-async@2.0.0: {}
 
@@ -19335,6 +19368,12 @@ snapshots:
   mkdirp@1.0.4: {}
 
   module-details-from-path@1.0.4: {}
+
+  motion-dom@14.4.0:
+    dependencies:
+      motion-utils: 14.1.1
+
+  motion-utils@14.1.1: {}
 
   ms@2.0.0: {}
 
