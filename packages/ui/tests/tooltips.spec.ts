@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
-import { openPreview } from "./open-preview";
+import { focusByKeyboard, openPreview } from "./open-preview";
 
 type SourceChild = { name: string; x: number; y: number; width: number; height: number };
 type SourceVariant = {
@@ -78,8 +78,7 @@ test("help tooltips open by keyboard and hover, dismiss, flip at viewport edges 
 }) => {
   const demo = page.getByRole("group", { name: "Interactive tooltip example" });
   const help = demo.getByRole("button", { name: "Study tips", exact: true });
-  await help.scrollIntoViewIfNeeded();
-  await help.focus();
+  await focusByKeyboard(help);
   const tip = page.locator(".p-tooltip-positioner:visible");
   await expect(tip).toContainText("Read the source document");
   await expect(help).toHaveAttribute("aria-describedby", /.+/);
@@ -96,8 +95,7 @@ test("help tooltips open by keyboard and hover, dismiss, flip at viewport edges 
     node.style.top = "8px";
     node.style.left = "160px";
   });
-  await help.blur();
-  await help.focus();
+  await focusByKeyboard(help);
   await expect(tip).toHaveAttribute("data-side", "bottom");
   await expect(tip.locator('.p-tooltip-arrow[data-arrow="top-center"]')).toBeVisible();
   await expect(tip.locator('.p-tooltip-arrow[data-arrow="bottom-center"]')).toBeHidden();

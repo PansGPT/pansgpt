@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
-import { openPreview } from "./open-preview";
+import { focusByKeyboard, openPreview } from "./open-preview";
 type Layer = [string, number, number, number, number];
 type Source = { name: string; width: number; height: number; layers: Layer[] };
 const geometry = JSON.parse(
@@ -115,8 +115,7 @@ test("avatar group add/more controls work by keyboard, preserve counts and offer
   const demo = page.getByRole("group", { name: "Interactive avatar group" });
   const group = demo.getByRole("group", { name: "Study group members" });
   const add = group.getByRole("button", { name: "Add user" });
-  await add.scrollIntoViewIfNeeded();
-  await add.focus();
+  await focusByKeyboard(add);
   await expect(page.locator(".p-avatar-add-tooltip:visible")).toContainText("Add user");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Enter");

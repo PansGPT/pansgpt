@@ -94,5 +94,17 @@ test("live charts inspect data, toggle series and handle extreme or missing valu
   await expect(gauge).toHaveAttribute("aria-label", "Weekly goal: 40%, 60%, 80%");
   await page.setViewportSize({ width: 375, height: 900 });
   await expect(slider).toBeVisible();
-  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+  const overflow = await page.evaluate(() =>
+    [...document.querySelectorAll("body *")].flatMap((node) => {
+      const box = node.getBoundingClientRect();
+      // Scrollable source archives intentionally keep their original frames.
+      if (box.right <= innerWidth || node.closest(".chart-source-grid")) return [];
+      return [{ tag: node.tagName, className: node.getAttribute("class"), right: box.right }];
+    })
+  );
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth), {
+      message: `Chart must fit the mobile viewport: ${JSON.stringify(overflow)}`,
+    })
+    .toBeLessThanOrEqual(375);
 });

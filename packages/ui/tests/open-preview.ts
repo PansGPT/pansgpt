@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 
 /** React may mount after window.load; settle its fonts/artwork before interaction. */
 export async function openPreview(page: Page, url: string): Promise<void> {
@@ -18,4 +18,13 @@ export async function openPreview(page: Page, url: string): Promise<void> {
       requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
     });
   });
+}
+
+/** Enter through the real keyboard path after scrolling the long specimen grid. */
+export async function focusByKeyboard(target: Locator): Promise<void> {
+  await target.scrollIntoViewIfNeeded();
+  await target.focus();
+  await target.press("Shift+Tab");
+  await target.page().keyboard.press("Tab");
+  await expect(target).toBeFocused();
 }

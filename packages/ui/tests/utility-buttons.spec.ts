@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
-import { openPreview } from "./open-preview";
+import { focusByKeyboard, openPreview } from "./open-preview";
 type Source = {
   name: string;
   width: number;
@@ -72,8 +72,7 @@ test("utility controls retain native actions and keyboard tooltip behavior", asy
   await openPreview(page, "/?section=close");
   const demo = page.getByRole("group", { name: "Interactive utility buttons" });
   const action = demo.getByRole("button", { name: "Utility action", exact: true });
-  await action.scrollIntoViewIfNeeded();
-  await action.focus();
+  await focusByKeyboard(action);
   await expect(page.getByRole("tooltip")).toContainText("Utility action");
   await action.press("Escape");
   await expect(page.getByRole("tooltip")).toHaveCount(0);
