@@ -2,7 +2,7 @@
 .auth-root {
   min-height: 100svh;
   display: grid;
-  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(440px, 0.62fr);
   background: var(--bg-secondary);
   color: var(--text-primary-900);
   font: 400 14px/1.6 var(--font-body);
@@ -45,18 +45,7 @@
   justify-content: space-between;
 }
 .auth-story::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  inset: auto -190px -320px auto;
-  width: 480px;
-  height: 480px;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  border-radius: 50%;
-  background: transparent;
-  box-shadow:
-    0 0 0 64px rgb(255 255 255 / 0.04),
-    0 0 0 128px rgb(255 255 255 / 0.025);
+  content: none;
 }
 .auth-root .auth-wordmark {
   display: inline-flex;
@@ -791,9 +780,11 @@
   letter-spacing: 1.7px;
 }
 .auth-story > .auth-brand-art {
-  width: min(75%, 560px);
-  top: 6%;
-  left: 32%;
+  width: clamp(720px, 78vw, 1120px);
+  top: auto;
+  left: auto;
+  right: -280px;
+  bottom: -340px;
   opacity: 0.5;
 }
 .auth-story .auth-art-base {

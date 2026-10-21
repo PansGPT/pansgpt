@@ -22,6 +22,16 @@ for (const width of [375, 1440]) {
             .locator(".auth-card")
             .evaluate((element) => getComputedStyle(element).borderRadius)
         ).toBe("0px");
+        const hero = await page.getByRole("complementary", { name: "About PansGPT" }).boundingBox();
+        const mark = await page.locator(".auth-story > .auth-brand-art").boundingBox();
+        if (!hero || !mark) throw new Error("The desktop artwork is missing.");
+        expect(mark.x + mark.width).toBeGreaterThan(hero.x + hero.width);
+        expect(mark.y + mark.height).toBeGreaterThan(hero.y + hero.height);
+        expect(
+          await page
+            .locator(".auth-story")
+            .evaluate((element) => getComputedStyle(element, "::after").content)
+        ).toBe("none");
         await page.getByRole("button", { name: "Pause animation", exact: true }).click();
         await expect(
           page.getByRole("button", { name: "Resume animation", exact: true })
@@ -29,6 +39,32 @@ for (const width of [375, 1440]) {
         await page.getByRole("button", { name: "Resume animation", exact: true }).click();
       }
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+      const palette = await page.locator(".auth-card").evaluate((element) => {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Canvas is unavailable.");
+        const pixel = (color: string): number[] => {
+          context.clearRect(0, 0, 1, 1);
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+          return Array.from(context.getImageData(0, 0, 1, 1).data);
+        };
+        const style = getComputedStyle(element);
+        const token = pixel(style.getPropertyValue("--bg-primary"));
+        let surface = element as Element | null;
+        let actual: number[] = [];
+        while (surface) {
+          actual = pixel(getComputedStyle(surface).backgroundColor);
+          if (actual[3] === 255) break;
+          surface = surface.parentElement;
+        }
+        return { token, actual, font: style.fontFamily };
+      });
+      expect(palette.actual).toEqual(palette.token);
+      expect(palette.font).toContain("Plus Jakarta Sans");
+      if (theme === "OLED Dark") expect(palette.actual.slice(0, 3)).toEqual([0, 0, 0]);
+      if (theme === "Light") expect(palette.actual.slice(0, 3)).toEqual([255, 255, 255]);
+      if (theme === "Sepia") expect(palette.actual[0]!).toBeGreaterThan(palette.actual[2]!);
       const signIn = page.getByRole("button", { name: "Sign in", exact: true });
       expect(
         await signIn.evaluate((element) => {
