@@ -241,7 +241,9 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   fakeStreamError = true;
   await page.getByLabel("Study question").fill("Exercise a handled failure");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("Synthetic provider unavailable");
+  await expect(page.getByRole("main").getByRole("alert")).toContainText(
+    "Synthetic provider unavailable"
+  );
   await expect(page.getByText("No response was returned.", { exact: true })).toBeVisible();
   await expect(page.getByText("Generating response...", { exact: true })).toHaveCount(0);
   await expect(page.getByLabel("Study question")).toBeEnabled();

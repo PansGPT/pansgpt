@@ -207,6 +207,9 @@ test("configured OAuth options preserve the desktop bridge and report handoff fa
 
 test("keyboard users can skip to and submit the form", async ({ page }) => {
   await page.goto("/login");
+  await page.bringToFront();
+  await expect(page.getByRole("heading", { name: "Welcome back", exact: true })).toBeVisible();
+  await page.waitForFunction(() => document.hasFocus());
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: "Skip to form" })).toBeFocused();
   await page.keyboard.press("Enter");
