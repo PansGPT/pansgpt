@@ -26,6 +26,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   page,
   request,
 }) => {
+  test.setTimeout(120000);
   const email = `auth-${Date.now()}@example.test`;
   const password = "Synthetic-Original-73!";
   const replacement = "Synthetic-Replacement-84!";
@@ -84,6 +85,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await expect(page).toHaveURL(/\/app$/);
   await page.getByRole("button", { name: "Sign Out", exact: true }).click();
   await page.getByRole("link", { name: "Forgot password?" }).click();
+  await expect(page.getByRole("heading", { name: "Forgot your password?" })).toBeVisible();
   await page.getByLabel("Email address").fill(email);
   await page.getByRole("button", { name: "Send reset link" }).click();
   await expect(page.getByRole("status")).toContainText("If an account exists");

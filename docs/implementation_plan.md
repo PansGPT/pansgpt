@@ -1836,6 +1836,8 @@ All 3 themes apply correctly, keyboard nav works on all components, Storybook (o
 
 ---
 
+> **Auth UI refinement (21 October 2026):** Existing web entry points remain `/login`, `/signup`, `/forgot-password` and `/onboarding`; `/update-password` completes the PKCE recovery callback. Shared UI components supply the three-theme presentation. FastAPI remains authoritative for roles, tenancy and onboarding. See [implementation and verification limits](auth-refresh-2026-10-21.md). This work precedes Phase 9.3 and does not implement the app shell.
+
 ### 3.1 Auth Strategy Overview
 
 Auth is handled entirely by **Supabase Auth**. No custom auth server. No rolling our own JWT signing.
