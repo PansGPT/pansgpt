@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Checkbox, Input, Select } from "@pansgpt/ui/auth";
+import { Button, Checkbox, Input, RadioGroup, Select, Skeleton } from "@pansgpt/ui/auth";
 import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
-import { AuthAlert, AuthFrame } from "./frame";
-import { AuthLoading } from "./loading";
+import { AuthAlert } from "./frame";
+import { OnboardingFrame } from "./onboarding-frame";
 interface University {
   id: string;
   name: string;
@@ -35,6 +35,7 @@ export function OnboardingForm(): React.ReactElement {
   const level = draft.level ?? profile?.current_level ?? "";
   const terms = draft.terms ?? Boolean(profile?.terms_accepted_at);
   const [attempted, setAttempted] = useState(false);
+  const [step, setStep] = useState(0);
   const [busy, setBusy] = useState(false);
   const pending = useRef(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,13 +83,115 @@ export function OnboardingForm(): React.ReactElement {
   useEffect(() => {
     if (error) errorRef.current?.focus();
   }, [error]);
-  if (loading) return <AuthLoading />;
+  const goToStep = (next: number): void => {
+    setStep(next);
+    setAttempted(false);
+    setError(null);
+  };
+  const complete = async (): Promise<void> => {
+    pending.current = true;
+    setBusy(true);
+    try {
+      const token = session?.access_token;
+      if (!token) throw new Error("Your session has ended. Please sign in again.");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+      const invite = params.get("invite");
+      if (invite) {
+        const redeemed = await fetch(
+          `${env.NEXT_PUBLIC_API_URL}/api/v1/auth/invites/${encodeURIComponent(invite)}/redeem`,
+          { method: "POST", headers }
+        );
+        if (!redeemed.ok)
+          throw new Error(
+            "This invitation could not be accepted. Please contact your university administrator."
+          );
+      }
+      const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/auth/onboard`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          first_name: first.trim(),
+          last_name: last.trim(),
+          university_id: university,
+          current_level: level,
+          terms_accepted: true,
+        }),
+      });
+      if (!response.ok)
+        throw new Error(
+          "Your profile could not be saved. Your entries are still here; please retry."
+        );
+      const confirmed = await refreshProfile();
+      if (!confirmed?.is_onboarded)
+        throw new Error("Your saved profile could not be verified. Please retry.");
+      router.replace("/app");
+      router.refresh();
+    } catch (failure: unknown) {
+      setError(
+        failure instanceof Error && failure.message !== "Failed to fetch"
+          ? failure.message
+          : "We could not connect. Your entries are still here; please retry."
+      );
+    } finally {
+      pending.current = false;
+      setBusy(false);
+    }
+  };
+  const titles = [
+    "What's your name?",
+    "Where are you studying?",
+    "What level are you in?",
+    "Ready to make it yours?",
+  ];
+  const descriptions = [
+    "Let's start with what we should call you.",
+    "Choose your university to set your academic context.",
+    "Pick your current academic level. You can update it later.",
+    `${first.trim() || "One last step"}, take a moment to check your details.`,
+  ];
+  const selectedUniversity = universities.find((item) => item.id === university);
   return (
-    <AuthFrame
-      title="Make this space yours"
-      description="Tell us a little about your studies so we can set up your academic profile."
+    <OnboardingFrame
+      step={step}
+      title={titles[step]!}
+      description={descriptions[step]!}
+      busy={busy}
+      back={() => goToStep(Math.max(0, step - 1))}
+      footer={
+        profile && (
+          <>
+            <span>Signed in as {profile.email}</span>
+            <button
+              className="auth-link"
+              type="button"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                try {
+                  await signOut();
+                  router.replace("/login");
+                } catch {
+                  setError("We could not sign out. Please try again.");
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              Sign out
+            </button>
+          </>
+        )
+      }
     >
-      {!profile ? (
+      {loading ? (
+        <div className="onboarding-loading" role="status" aria-label="Loading profile">
+          <Skeleton style={{ height: 52 }} />
+          <Skeleton style={{ height: 52 }} />
+        </div>
+      ) : !profile ? (
         <div className="auth-form">
           <AuthAlert>Your profile could not be loaded. Please retry before continuing.</AuthAlert>
           <Button
@@ -106,18 +209,10 @@ export function OnboardingForm(): React.ReactElement {
           >
             Retry profile
           </Button>
-          <Button
-            variant="secondary"
-            leadingIcon={null}
-            trailingIcon={null}
-            onClick={() => void signOut().then(() => router.replace("/login"))}
-          >
-            Sign out
-          </Button>
         </div>
       ) : (
         <form
-          className="auth-form"
+          className="auth-form onboarding-form"
           noValidate
           aria-busy={busy}
           onSubmit={async (event) => {
@@ -125,153 +220,192 @@ export function OnboardingForm(): React.ReactElement {
             if (pending.current) return;
             setAttempted(true);
             setError(null);
-            if (!first.trim() || !last.trim() || !university || !level || !terms) {
-              setError("Complete the required fields below to continue.");
-              return;
-            }
             if (
-              !universities.some((item) => item.id === university) ||
-              !levels.some((item) => item.value === level)
+              step === 0 &&
+              (!first.trim() ||
+                !last.trim() ||
+                first.trim().length > 100 ||
+                last.trim().length > 100)
             ) {
-              setError("Choose an available university and academic level.");
+              setError("Enter your first and last name to continue.");
               return;
             }
-            pending.current = true;
-            setBusy(true);
-            try {
-              const token = session?.access_token;
-              if (!token) throw new Error("Your session has ended. Please sign in again.");
-              const headers = {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              };
-              const invite = params.get("invite");
-              if (invite) {
-                const redeemed = await fetch(
-                  `${env.NEXT_PUBLIC_API_URL}/api/v1/auth/invites/${encodeURIComponent(invite)}/redeem`,
-                  { method: "POST", headers }
-                );
-                if (!redeemed.ok)
-                  throw new Error(
-                    "This invitation could not be accepted. Please contact your university administrator."
-                  );
-              }
-              const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/auth/onboard`, {
-                method: "POST",
-                headers,
-                body: JSON.stringify({
-                  first_name: first.trim(),
-                  last_name: last.trim(),
-                  university_id: university,
-                  current_level: level,
-                  terms_accepted: true,
-                }),
-              });
-              if (!response.ok)
-                throw new Error(
-                  "Your profile could not be saved. Your entries are still here; please retry."
-                );
-              const confirmed = await refreshProfile();
-              if (!confirmed?.is_onboarded)
-                throw new Error("Your saved profile could not be verified. Please retry.");
-              router.replace("/app");
-              router.refresh();
-            } catch (failure: unknown) {
-              setError(
-                failure instanceof Error && failure.message !== "Failed to fetch"
-                  ? failure.message
-                  : "We could not connect. Your entries are still here; please retry."
-              );
-            } finally {
-              pending.current = false;
-              setBusy(false);
+            if (step === 1 && (!selectedUniversity || loadingUniversities || universityError)) {
+              setError("Choose an available university to continue.");
+              return;
             }
+            if (step === 2 && !levels.some((item) => item.value === level)) {
+              setError("Choose your academic level to continue.");
+              return;
+            }
+            if (step < 3) {
+              goToStep(step + 1);
+              return;
+            }
+            if (!first.trim() || !last.trim()) {
+              goToStep(0);
+              return;
+            }
+            if (!selectedUniversity) {
+              goToStep(1);
+              return;
+            }
+            if (!levels.some((item) => item.value === level)) {
+              goToStep(2);
+              return;
+            }
+            if (!terms) {
+              setError("Please agree to the Terms of Service and Privacy Policy to continue.");
+              return;
+            }
+            await complete();
           }}
         >
           {error && (
-            <div ref={errorRef} tabIndex={-1}>
+            <div tabIndex={-1} ref={errorRef}>
               <AuthAlert>{error}</AuthAlert>
             </div>
           )}
-          <fieldset disabled={busy} className="auth-fieldset">
-            <legend>Your name</legend>
-            <div className="auth-name-fields">
-              <Input
-                label="First name"
-                autoComplete="given-name"
-                required
-                value={first}
-                onChange={(event) => setDraft((value) => ({ ...value, first: event.target.value }))}
-                error={attempted && !first.trim() ? "Enter your first name." : undefined}
-              />
-              <Input
-                label="Last name"
-                autoComplete="family-name"
-                required
-                value={last}
-                onChange={(event) => setDraft((value) => ({ ...value, last: event.target.value }))}
-                error={attempted && !last.trim() ? "Enter your last name." : undefined}
-              />
-            </div>
-          </fieldset>
-          {universityError && (
-            <div className="auth-form">
-              <AuthAlert>Universities could not be loaded.</AuthAlert>
-              <Button
-                variant="secondary"
-                type="button"
-                leadingIcon={null}
-                trailingIcon={null}
-                onClick={() => {
-                  setLoadingUniversities(true);
-                  setUniversityError(false);
-                  setUniversityAttempt((attempt) => attempt + 1);
-                }}
-              >
-                Retry universities
-              </Button>
-            </div>
-          )}
-          <Select
-            label="University"
-            placeholder={loadingUniversities ? "Loading universities..." : "Choose your university"}
-            required
-            disabled={busy || loadingUniversities || universityError}
-            value={university}
-            onValueChange={(value) =>
-              setDraft((draftValue) => ({ ...draftValue, university: value }))
-            }
-            options={universities.map((item) => ({
-              value: item.id,
-              label: item.short_name ? `${item.name} (${item.short_name})` : item.name,
-            }))}
-            error={attempted && !university ? "Choose your university." : undefined}
-          />
-          <Select
-            label="Academic level"
-            placeholder="Choose your level"
-            required
-            disabled={busy}
-            value={level}
-            onValueChange={(value) => setDraft((draftValue) => ({ ...draftValue, level: value }))}
-            options={levels}
-            error={attempted && !level ? "Choose your academic level." : undefined}
-          />
-          <div>
-            <Checkbox
-              label="I agree to the Terms of Service and Privacy Policy"
-              disabled={busy}
-              checked={terms}
-              onCheckedChange={(checked) =>
-                setDraft((value) => ({ ...value, terms: checked === true }))
-              }
-              aria-invalid={attempted && !terms}
-              aria-describedby={attempted && !terms ? "terms-error" : undefined}
-            />
-            {attempted && !terms && (
-              <p id="terms-error" className="auth-field-error">
-                Your agreement is required to continue.
-              </p>
+          <div className="onboarding-step" key={step}>
+            {step === 0 && (
+              <div className="onboarding-name-fields">
+                <Input
+                  label="First name"
+                  autoComplete="given-name"
+                  required
+                  maxLength={100}
+                  disabled={busy}
+                  value={first}
+                  placeholder="Your first name"
+                  onChange={(event) =>
+                    setDraft((value) => ({ ...value, first: event.target.value }))
+                  }
+                  error={attempted && !first.trim() ? "Enter your first name." : undefined}
+                />
+                <Input
+                  label="Last name"
+                  autoComplete="family-name"
+                  required
+                  maxLength={100}
+                  disabled={busy}
+                  value={last}
+                  placeholder="Your last name"
+                  onChange={(event) =>
+                    setDraft((value) => ({ ...value, last: event.target.value }))
+                  }
+                  error={attempted && !last.trim() ? "Enter your last name." : undefined}
+                />
+              </div>
+            )}
+            {step === 1 && (
+              <div className="auth-form">
+                {universityError && (
+                  <>
+                    <AuthAlert>Universities could not be loaded.</AuthAlert>
+                    <Button
+                      variant="secondary"
+                      type="button"
+                      leadingIcon={null}
+                      trailingIcon={null}
+                      onClick={() => {
+                        setLoadingUniversities(true);
+                        setUniversityError(false);
+                        setUniversityAttempt((value) => value + 1);
+                      }}
+                    >
+                      Retry universities
+                    </Button>
+                  </>
+                )}
+                <Select
+                  label="University"
+                  placeholder={
+                    loadingUniversities ? "Loading universities..." : "Choose your university"
+                  }
+                  required
+                  disabled={busy || loadingUniversities || universityError}
+                  value={university}
+                  onValueChange={(value) =>
+                    setDraft((draftValue) => ({ ...draftValue, university: value }))
+                  }
+                  options={universities.map((item) => ({
+                    value: item.id,
+                    label: item.short_name ? `${item.name} (${item.short_name})` : item.name,
+                  }))}
+                  error={attempted && !selectedUniversity ? "Choose your university." : undefined}
+                />
+                <p className="auth-help">Only participating universities are listed here.</p>
+              </div>
+            )}
+            {step === 2 && (
+              <>
+                <RadioGroup
+                  label="Academic level"
+                  className="onboarding-levels"
+                  value={level}
+                  onValueChange={(value) =>
+                    setDraft((draftValue) => ({ ...draftValue, level: value }))
+                  }
+                  required
+                  disabled={busy}
+                  options={levels}
+                  aria-invalid={attempted && !level}
+                  aria-describedby={attempted && !level ? "level-error" : undefined}
+                />
+                {attempted && !level && (
+                  <p id="level-error" className="auth-field-error">
+                    Choose your academic level.
+                  </p>
+                )}
+              </>
+            )}
+            {step === 3 && (
+              <>
+                <dl className="onboarding-review">
+                  {[
+                    { label: "Name", value: `${first.trim()} ${last.trim()}`, target: 0 },
+                    {
+                      label: "University",
+                      value: selectedUniversity?.name || "Not selected",
+                      target: 1,
+                    },
+                    { label: "Academic level", value: `${level} Level`, target: 2 },
+                  ].map((item) => (
+                    <div key={item.label}>
+                      <div>
+                        <dt>{item.label}</dt>
+                        <dd>{item.value}</dd>
+                      </div>
+                      <button
+                        type="button"
+                        disabled={busy}
+                        className="auth-link"
+                        aria-label={`Edit ${item.label.toLowerCase()}`}
+                        onClick={() => goToStep(item.target)}
+                      >
+                        Edit
+                      </button>
+                    </div>
+                  ))}
+                </dl>
+                <div className="onboarding-agreement">
+                  <Checkbox
+                    label="I agree to the Terms of Service and Privacy Policy"
+                    checked={terms}
+                    disabled={busy}
+                    onCheckedChange={(checked) =>
+                      setDraft((value) => ({ ...value, terms: checked === true }))
+                    }
+                    aria-invalid={attempted && !terms}
+                    aria-describedby={attempted && !terms ? "terms-error" : undefined}
+                  />
+                  {attempted && !terms && (
+                    <p id="terms-error" className="auth-field-error">
+                      Your agreement is required to continue.
+                    </p>
+                  )}
+                </div>
+              </>
             )}
           </div>
           <Button
@@ -280,12 +414,12 @@ export function OnboardingForm(): React.ReactElement {
             trailingIcon={null}
             loading={busy}
             loadingText="Saving profile..."
-            disabled={busy || loadingUniversities || universityError}
+            disabled={busy || (step === 1 && (loadingUniversities || universityError))}
           >
-            Complete profile
+            {step === 3 ? "Complete profile" : "Continue"}
           </Button>
         </form>
       )}
-    </AuthFrame>
+    </OnboardingFrame>
   );
 }

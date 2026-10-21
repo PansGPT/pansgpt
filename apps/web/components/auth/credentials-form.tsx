@@ -136,6 +136,8 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
   };
   return (
     <AuthFrame
+      mobileEntry={signup ? "signup" : "login"}
+      mobileInitiallyOpen={params.has("error") || params.has("notice") || Boolean(emailSent)}
       title={emailSent ? "Check your inbox" : signup ? "Create your account" : "Welcome back"}
       description={
         emailSent

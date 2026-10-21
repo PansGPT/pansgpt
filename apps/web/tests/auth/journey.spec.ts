@@ -44,27 +44,67 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   );
   await page.goto(confirm);
   await expect(page).toHaveURL(/\/onboarding/);
-  await page.getByRole("button", { name: "Retry universities" }).click();
-  for (const width of [375, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    for (const theme of ["Light", "OLED Dark", "Sepia"]) {
-      await page.getByLabel("Appearance").selectOption({ label: theme });
-      await expect(page.getByRole("combobox", { name: "University", exact: true })).toBeVisible();
-      expect(
-        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
-      ).toBe(true);
-      await page.screenshot({
-        path: `test-results/onboarding-${width}-${theme.replaceAll(" ", "-")}.png`,
-        fullPage: true,
-      });
+  let onboardingWrites = 0;
+  page.on("request", (request) => {
+    if (request.url().endsWith("/api/v1/auth/onboard") && request.method() === "POST")
+      onboardingWrites += 1;
+  });
+  async function captureStep(step: number, title: string): Promise<void> {
+    await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "Setup progress" }).locator('[aria-current="step"]')
+    ).toHaveCount(1);
+    for (const width of [375, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const theme of ["Light", "OLED Dark", "Sepia"]) {
+        await page.getByLabel("Appearance").selectOption({ label: theme });
+        expect(
+          await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
+        ).toBe(true);
+        await page.screenshot({
+          path: `test-results/onboarding-step-${step}-${width}-${theme.replaceAll(" ", "-")}.png`,
+          fullPage: true,
+        });
+      }
     }
   }
+  await captureStep(1, "What's your name?");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("first and last name");
   await page.getByLabel("First name").fill("Test");
   await page.getByLabel("Last name").fill("Student");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Where are you studying?" })).toBeFocused();
+  await expect(page.getByLabel("First name")).toHaveCount(0);
+  await page.getByRole("button", { name: "Retry universities" }).click();
+  await captureStep(2, "Where are you studying?");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("available university");
   await page.getByRole("combobox", { name: "University", exact: true }).click();
   await page.getByRole("option", { name: /University of Jos/ }).click();
-  await page.getByRole("combobox", { name: "Academic level" }).click();
-  await page.getByRole("option", { name: "300 Level", exact: true }).click();
+  await page.getByRole("button", { name: "Back", exact: true }).click();
+  await expect(page.getByLabel("First name")).toHaveValue("Test");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("combobox", { name: "University", exact: true })).toContainText(
+    "University of Jos"
+  );
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await captureStep(3, "What level are you in?");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("academic level");
+  await page.getByRole("radio", { name: "300 Level", exact: true }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await captureStep(4, "Ready to make it yours?");
+  expect(onboardingWrites).toBe(0);
+  await page.getByRole("button", { name: "Complete profile" }).click();
+  await expect(page.getByRole("main").getByRole("alert")).toContainText("agree");
+  expect(onboardingWrites).toBe(0);
+  await page.getByRole("button", { name: "Edit name", exact: true }).click();
+  await expect(page.getByLabel("Last name")).toHaveValue("Student");
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
+  await expect(page.getByRole("radio", { name: "300 Level", exact: true })).toBeChecked();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("checkbox").check();
   await page.route(
     "**/api/v1/auth/onboard",
@@ -73,7 +113,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   );
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page.getByRole("main").getByRole("alert")).toContainText("entries are still here");
-  await expect(page.getByLabel("First name")).toHaveValue("Test");
+  await expect(page.getByText("Test Student", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Complete profile" }).click();
   await expect(page).toHaveURL(/\/app$/);
   await expect(page.getByText("Test Student", { exact: true })).toBeVisible();

@@ -8,3 +8,5 @@ export { Select } from "./components/select";
 export { Skeleton } from "./components/skeleton";
 export { SocialButton } from "./components/social-button";
 export { ThemeProvider, useTheme, isThemeName } from "./components/theme";
+
+export { RadioGroup } from "./components/radio-group";

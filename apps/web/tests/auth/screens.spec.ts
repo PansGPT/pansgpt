@@ -7,6 +7,25 @@ for (const width of [375, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/login");
       await page.getByLabel("Appearance").selectOption({ label: theme });
+      if (width === 375) {
+        await expect(page.getByRole("region", { name: "Welcome to PansGPT" })).toBeVisible();
+        await page.screenshot({
+          path: `test-results/welcome-${width}-${theme.replaceAll(" ", "-")}.png`,
+          fullPage: true,
+        });
+        await page.getByRole("button", { name: "Log in", exact: true }).click();
+      } else {
+        await expect(page.getByRole("complementary", { name: "About PansGPT" })).toBeVisible();
+        expect(
+          await page
+            .locator(".auth-card")
+            .evaluate((element) => getComputedStyle(element).borderRadius)
+        ).toBe("0px");
+        await page.getByRole("button", { name: "Pause animation", exact: true }).click();
+        await expect(
+          page.getByRole("button", { name: "Resume animation", exact: true })
+        ).toHaveAttribute("aria-pressed", "true");
+      }
       await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
       const signIn = page.getByRole("button", { name: "Sign in", exact: true });
       expect(
@@ -143,4 +162,33 @@ test("keyboard users can skip to and submit the form", async ({ page }) => {
   await expect(page.getByLabel("Email address")).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");
+});
+
+test("mobile welcome opens a sheet, preserves input on cancel and respects reduced motion", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Welcome back" })).not.toBeVisible();
+  expect(
+    await page
+      .locator(".auth-mobile-art .auth-art-glow")
+      .evaluateAll((elements) =>
+        elements.every((element) => getComputedStyle(element).animationName === "none")
+      )
+  ).toBe(true);
+  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Welcome back" })).toBeVisible();
+  expect(
+    await page.getByRole("main").evaluate((element) => getComputedStyle(element).position)
+  ).toBe("fixed");
+  await page.getByLabel("Email address").fill("draft@example.test");
+  await page.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Log in", exact: true })).toBeFocused();
+  await page.getByRole("button", { name: "Log in", exact: true }).click();
+  await expect(page.getByLabel("Email address")).toHaveValue("draft@example.test");
+  await page.setViewportSize({ width: 375, height: 500 });
+  await page.getByRole("button", { name: "Sign in", exact: true }).scrollIntoViewIfNeeded();
+  await expect(page.getByRole("button", { name: "Sign in", exact: true })).toBeInViewport();
 });
