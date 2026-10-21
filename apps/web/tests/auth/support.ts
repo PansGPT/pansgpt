@@ -1,4 +1,21 @@
-import { expect, type APIRequestContext } from "@playwright/test";
+import { expect, type APIRequestContext, type Page } from "@playwright/test";
+export async function accountMenu(page: Page): Promise<void> {
+  if ((page.viewportSize()?.width ?? 1440) <= 860) {
+    const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+    if (!(await navigation.isVisible()))
+      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+    await navigation.getByRole("button", { name: "Account menu", exact: true }).click();
+  } else await page.getByRole("button", { name: "Account menu", exact: true }).click();
+}
+export async function openProfile(page: Page): Promise<void> {
+  await accountMenu(page);
+  await page.getByRole("menuitem", { name: "Profile", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Your profile", exact: true })).toBeVisible();
+}
+export async function logout(page: Page): Promise<void> {
+  await accountMenu(page);
+  await page.getByRole("menuitem", { name: "Log out", exact: true }).click();
+}
 export async function emailLink(
   request: APIRequestContext,
   email: string,

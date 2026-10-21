@@ -32,10 +32,13 @@ const timetableSchema = z.array(
     venue: z.string().nullable(),
   })
 );
+const completedSchema = z.array(z.object({ id: z.string(), completed_at: z.string() }));
 type DashboardData = {
   recent: z.infer<typeof recentSchema>;
   tasks: z.infer<typeof taskSchema>;
   timetable: z.infer<typeof timetableSchema>;
+  completed: z.infer<typeof completedSchema>;
+  activityError: boolean;
   loading: boolean;
   recentError: boolean;
   eventsError: boolean;
@@ -44,6 +47,8 @@ const initial: DashboardData = {
   recent: [],
   tasks: [],
   timetable: [],
+  completed: [],
+  activityError: false,
   loading: true,
   recentError: false,
   eventsError: false,
@@ -104,7 +109,13 @@ export function DashboardProvider({
     if (!university) {
       queueMicrotask(() => {
         if (!controller.signal.aborted)
-          setData({ ...initial, loading: false, recentError: true, eventsError: true });
+          setData({
+            ...initial,
+            loading: false,
+            recentError: true,
+            eventsError: true,
+            activityError: true,
+          });
       });
       return () => controller.abort();
     }
@@ -138,13 +149,27 @@ export function DashboardProvider({
             .eq("level", level.data)
             .abortSignal(controller.signal)
         : Promise.resolve({ data: [], error: null }),
+      supabase
+        .from("student_tasks")
+        .select("id,completed_at")
+        .eq("user_id", profile.id)
+        .eq("university_id", university)
+        .eq("is_completed", true)
+        .not("completed_at", "is", null)
+        .gte("completed_at", new Date(Date.now() - 180 * 86400000).toISOString())
+        .order("completed_at", { ascending: false })
+        .limit(1000)
+        .abortSignal(controller.signal),
     ])
-      .then(([history, tasks, timetable]) => {
+      .then(([history, tasks, timetable, completed]) => {
         if (controller.signal.aborted) return;
         const recent = recentSchema.safeParse(history.data);
         const pending = taskSchema.safeParse(tasks.data);
         const classes = timetableSchema.safeParse(timetable.data);
+        const activity = completedSchema.safeParse(completed.data);
         setData({
+          completed: activity.success && !completed.error ? activity.data : [],
+          activityError: Boolean(completed.error) || !activity.success,
           recent: recent.success && !history.error ? recent.data : [],
           tasks: pending.success && !tasks.error ? pending.data : [],
           timetable: classes.success && !timetable.error ? classes.data : [],
@@ -159,7 +184,13 @@ export function DashboardProvider({
       })
       .catch(() => {
         if (!controller.signal.aborted)
-          setData({ ...initial, loading: false, recentError: true, eventsError: true });
+          setData({
+            ...initial,
+            loading: false,
+            recentError: true,
+            eventsError: true,
+            activityError: true,
+          });
       });
     return () => controller.abort();
   }, [attempt, profile.current_level, profile.id, profile.university_id, supabase]);

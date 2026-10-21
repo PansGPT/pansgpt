@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { emailLink } from "./support";
+import { emailLink, logout } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
 
 test("real signup, confirmation, onboarding retries, sign-out, recovery and password replacement", async ({
@@ -100,15 +100,13 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Test$/ })
   ).toBeVisible();
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
-  await page.getByRole("button", { name: "Sign Out", exact: true }).click();
+  await logout(page);
   await expect(page).toHaveURL(/\/login/);
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
-  await page.getByRole("button", { name: "Sign Out", exact: true }).click();
+  await logout(page);
   await page.getByRole("link", { name: "Forgot password?" }).click();
   await expect(page.getByRole("heading", { name: "Forgot your password?" })).toBeVisible();
   await page.getByLabel("Email address").fill(email);
@@ -146,8 +144,7 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await page.getByLabel(/^Password\s*\*?$/).fill(replacement);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
-  await page.getByRole("button", { name: "Sign Out", exact: true }).click();
+  await logout(page);
   await page.goto(reset);
   await expect(page).toHaveURL(/\/forgot-password\?error=link_expired/);
 });

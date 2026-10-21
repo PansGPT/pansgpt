@@ -4,6 +4,13 @@ export { Skeleton } from "./components/skeleton";
 export { Card, CardContent } from "./components/card";
 export { Slideout } from "./components/slideout";
 export { Tooltip } from "./components/tooltip";
+export {
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownHeader,
+  DropdownItem,
+} from "./components/dropdown";
 export { ApplicationNavPanel } from "./components/application-navigation-layout";
 export { ThemeProvider, useTheme, isThemeName } from "./components/theme";
 export type { ThemeName } from "./components/theme";

@@ -12,12 +12,16 @@ export function ProfileDrawer({
   compact = false,
   open,
   onOpenChange,
+  hideTrigger = false,
+  returnFocus,
 }: {
   profile: UserProfile;
   preferences: ReturnType<typeof usePreferences>;
   compact?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  hideTrigger?: boolean;
+  returnFocus?: () => void;
 }): React.ReactElement {
   const router = useRouter();
   const { signOut } = useAuth();
@@ -42,17 +46,25 @@ export function ProfileDrawer({
       onOpenChange={onOpenChange}
       title="Your profile"
       description="Your account, university and workspace preferences."
+      onCloseAutoFocus={(event) => {
+        if (returnFocus) {
+          event.preventDefault();
+          returnFocus();
+        }
+      }}
       trigger={
-        <button className="shell-account" aria-label="Open profile">
-          <UserInitialsAvatar name={name} email={profile.email} size="sm" />
-          {compact && <ChevronDown size={16} aria-hidden="true" />}
-          {!compact && (
-            <span>
-              <strong>{name}</strong>
-              <small>View your profile</small>
-            </span>
-          )}
-        </button>
+        hideTrigger ? undefined : (
+          <button className="shell-account" aria-label="Open profile">
+            <UserInitialsAvatar name={name} email={profile.email} size="sm" />
+            {compact && <ChevronDown size={16} aria-hidden="true" />}
+            {!compact && (
+              <span>
+                <strong>{name}</strong>
+                <small>View your profile</small>
+              </span>
+            )}
+          </button>
+        )
       }
     >
       <div className="shell-profile">

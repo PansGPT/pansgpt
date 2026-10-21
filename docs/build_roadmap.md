@@ -1232,13 +1232,13 @@ User follow-up: restore the original legacy welcome composition with local asset
 User-selected references and the latest sidebar/card corrections are recorded in [app shell direction](design-system/app-shell-direction-2026-10-21.md). Implementation and verification are tracked in [the Phase 9.3 record](phase-9-3-app-shell-2026-10-21.md). Use the existing palette and explicitly labelled sample content where data is absent. Verification is pending.
 
 - [ ] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
-- [ ] Avatar opens profile drawer with API-verified name, university, level and owner-only credits.
+- [ ] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
 - [ ] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.
-- [ ] Light / OLED Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` ? `oled_dark` mapping and sync retry.
+- [ ] Light / OLED Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` to `oled_dark` mapping and sync retry.
 - [ ] Route loading skeletons and friendly 404/error recovery.
-- [ ] Bottom-left circular logo chat shortcut with ?Message PansGPT? tooltip; mobile draft composer; keyboard page search.
+- [ ] Bottom-right circular logo chat shortcut with "Message PansGPT" tooltip; mobile draft composer; keyboard page search.
 - [ ] Framer Motion route transitions respect reduced motion.
-- [ ] Reference-shaped document card grid, Learn cards and Activities preview; labelled samples never persist or invoke inference.
+- [ ] Reference-shaped document card grid, Learn cards and Activities study-streak/agenda preview; labelled samples never persist or invoke inference.
 
 ---
 

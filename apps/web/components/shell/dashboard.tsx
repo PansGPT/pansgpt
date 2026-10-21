@@ -12,7 +12,6 @@ import {
   PlayCircle,
 } from "lucide-react";
 import {
-  DatePickerCalendar,
   Skeleton,
   UserInitialsAvatar,
   addDateDays,
@@ -22,6 +21,7 @@ import {
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
+import { StudyActivity } from "./study-activity";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { destinations } from "./navigation";
@@ -61,8 +61,6 @@ export function StudyDashboard(): React.ReactElement {
         ...item,
         art: sampleDocuments[index % sampleDocuments.length]!.art,
       }));
-  const [month, setMonth] = useState(today);
-  const [selected, setSelected] = useState<string | null>(null);
   const [activityTab, setActivityTab] = useState<"timetable" | "tasks">("timetable");
   const [period] = useState(() => {
     const hour = new Date().getHours();
@@ -99,8 +97,7 @@ export function StudyDashboard(): React.ReactElement {
   events.sort(
     (left, right) => left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail)
   );
-  const agenda = (selected ? events.filter((item) => item.date === selected) : events).slice(0, 3);
-  const activeDates = Array.from(new Set(events.map((item) => item.date)));
+  const agenda = events.slice(0, 3);
   return (
     <div className="study-dashboard">
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
@@ -240,20 +237,10 @@ export function StudyDashboard(): React.ReactElement {
             <span className="dashboard-mobile-label">Activity</span>
           </h2>
           {sampleEvents && <span className="dashboard-sample-badge">Sample</span>}
-          {selected && <button onClick={() => setSelected(null)}>Show upcoming</button>}
         </div>
         <div className="dashboard-events">
           <div className="dashboard-calendar">
-            <DatePickerCalendar
-              month={month}
-              onMonthChange={setMonth}
-              selection={{ start: selected, end: selected }}
-              onSelect={setSelected}
-              activeDates={activeDates}
-              today={today}
-              weekStartsOn={0}
-              disableOutsideMonth
-            />
+            <StudyActivity today={today} />
           </div>
           <div className="dashboard-agenda" aria-live="polite">
             {data.loading ? (
@@ -284,14 +271,8 @@ export function StudyDashboard(): React.ReactElement {
             ) : (
               <div className="dashboard-agenda-empty">
                 <CalendarDays size={24} aria-hidden="true" />
-                <h3>
-                  {selected ? "Nothing scheduled for this day" : "A little room in your schedule"}
-                </h3>
-                <p>
-                  {selected
-                    ? formatDateOnly(selected, { weekday: "long", month: "short", day: "numeric" })
-                    : "Your upcoming classes and tasks will appear here."}
-                </p>
+                <h3>A little room in your schedule</h3>
+                <p>Your upcoming classes and tasks will appear here.</p>
               </div>
             )}
           </div>
@@ -309,7 +290,7 @@ export function StudyDashboard(): React.ReactElement {
             </button>
           </div>
           {data.loading ? (
-            <p role="status">Loading your schedule?</p>
+            <p role="status">Loading your schedule…</p>
           ) : data.eventsError ? (
             <div role="alert">
               <p>Your schedule is unavailable.</p>

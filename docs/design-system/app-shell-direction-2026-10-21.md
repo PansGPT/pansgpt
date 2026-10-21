@@ -1,4 +1,4 @@
-# App shell direction ? 21 October 2026
+# App shell direction - 21 October 2026
 
 ## Authoritative references
 
@@ -11,9 +11,11 @@ Match composition using the existing shared palette and typography. Keep the gre
 
 Brand: **PansGPT**. The collapsible sidebar contains Home, Library, Quiz, Notes, Focus and **Recent chats**. Remove Teamspaces and Private entirely. Chat history comes from the existing authenticated FastAPI session endpoint, separately from document history.
 
-Center the greeting above six **individual recently opened document cards** with distinct cover illustrations, titles and dates. Follow with four illustrated Learn cards and an **Activities** calendar/agenda panel. The cards have separate surfaces and gaps. A circular shortcut containing our original logo sits at the **bottom-left**, with the custom keyboard/hover tooltip **Message PansGPT**, following the explicit user instruction over the image's bottom-right P+ placement.
+Center the greeting above six **individual recently opened document cards** with distinct cover illustrations, titles and dates. Follow with four illustrated Learn cards and an **Activities** study-streak/agenda panel. The cards have separate surfaces and gaps. Following the latest position correction, a circular shortcut containing our original logo sits at the **bottom-right**, with the custom keyboard/hover tooltip **Message PansGPT**. Search sits on the Recent chats heading row. The header has no notification or profile controls. The sidebar footer contains an account button opening a shared Radix menu with Profile, Settings, Help and Log out; Profile/Settings open the existing profile and theme panel. Collapse removes artificial minimum height while retaining access to the pinned account button.
 
 Use locally authored SVG illustrations for covers; the reference's photographic document thumbnails are not included. Keep this visual difference explicit in verification.
+
+The calendar is a study-activity heatmap with a green intensity scale and per-day tooltips. Existing owner/university-scoped completed tasks supply real completion counts over the last 180 days (up to 1,000 rows). The schema has no daily study-duration source yet: sample accounts show explicitly labelled sample minutes; real task activity does not fabricate study hours. Daily study-time capture and the aggregate endpoint remain open Phase 10 work.
 
 ## Mobile composition
 
@@ -27,6 +29,6 @@ Actual document history uses owner study progress joined to active, undeleted do
 
 ## Roadmap reconciliation
 
-The user-selected sidebar replaces the former top segmented navigation. The logo shortcut/mobile composer replace the former three-action bottom bar. Use the actual `/app` layout and `user_preferences.theme` table, mapping UI `dark` to database `oled_dark`. Keep appearance controls in the profile drawer, outside auth.
+The user-selected sidebar replaces the former top segmented navigation. The bottom-right logo shortcut/mobile composer replace the former three-action bottom bar. Use the actual `/app` layout and `user_preferences.theme` table, mapping UI `dark` to database `oled_dark`. Keep appearance controls in the profile drawer, outside auth.
 
 Phase 9.3 provides navigation, guards, profile/theme controls, loading/error recovery and reference-shaped preview content. Phase 10's aggregate API, complete widgets, realtime credit updates, offline cache and performance gates remain separate work.

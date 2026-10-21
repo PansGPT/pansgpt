@@ -7,7 +7,6 @@ import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
-  Bell,
   Plus,
   Mic,
   ArrowUp,
@@ -23,13 +22,14 @@ import {
 } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import { BrandMark } from "@/components/auth/brand-art";
-import { destinations, isCurrentDestination } from "./navigation";
+import { destinations } from "./navigation";
 import { WorkspaceLoading } from "./loading";
 import { ProfileDrawer } from "./profile";
 import { usePreferences } from "./use-preferences";
 import { DashboardProvider } from "./dashboard-data";
 import { ChatDraftProvider, useChatDraft } from "./chat-draft";
 import { SidebarLinks } from "./sidebar";
+import { AccountMenu } from "./account-menu";
 
 function Brand(): React.ReactElement {
   return (
@@ -59,14 +59,22 @@ function Workspace({
     navigation: false,
     search: false,
     profile: false,
+    help: false,
   });
   if (panels.pathname !== pathname)
-    setPanels({ pathname, navigation: false, search: false, profile: false });
+    setPanels({ pathname, navigation: false, search: false, profile: false, help: false });
   const navigationOpen = panels.pathname === pathname && panels.navigation;
   const searchOpen = panels.pathname === pathname && panels.search;
   const profileOpen = panels.pathname === pathname && panels.profile;
+  const profileReturn = useRef<HTMLButtonElement | null>(null);
+  const helpOpen = panels.pathname === pathname && panels.help;
+  function returnToAccount(): void {
+    if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
+      profileReturn.current.focus();
+    else document.querySelector<HTMLButtonElement>(".shell-mobile-menu")?.focus();
+  }
   function setProfileOpen(open: boolean): void {
-    setPanels((value) => ({ ...value, pathname, profile: open }));
+    setPanels((value) => ({ ...value, pathname, profile: open, navigation: false, help: false }));
   }
   function setNavigationOpen(open: boolean): void {
     setPanels((value) => ({ ...value, pathname, navigation: open }));
@@ -84,10 +92,9 @@ function Workspace({
       pathname,
     };
     setQuery("");
-    setPanels({ pathname, navigation: false, search: true, profile: false });
+    setPanels({ pathname, navigation: false, search: true, profile: false, help: false });
   }, [pathname]);
   const preferences = usePreferences(profile.id, profile.university_id);
-  const current = destinations.find((item) => isCurrentDestination(pathname, item.href));
   useEffect(() => {
     main.current?.focus({ preventScroll: true });
   }, [pathname]);
@@ -119,6 +126,19 @@ function Workspace({
           )}
         </div>
       }
+      account={
+        <AccountMenu
+          profile={profile}
+          openProfile={(opener) => {
+            profileReturn.current = opener;
+            setProfileOpen(true);
+          }}
+          openHelp={(opener) => {
+            profileReturn.current = opener;
+            setPanels({ pathname, navigation: false, search: false, profile: false, help: true });
+          }}
+        />
+      }
       label={mobile ? "Mobile navigation" : "Primary navigation"}
       navigation={
         <SidebarLinks
@@ -126,7 +146,6 @@ function Workspace({
             if (mobile) setNavigationOpen(false);
           }}
           openSearch={openSearch}
-          openProfile={() => setProfileOpen(true)}
         />
       }
     />
@@ -148,27 +167,7 @@ function Workspace({
             <div className="shell-mobile-brand">
               <Brand />
             </div>
-            <div className="shell-breadcrumb">
-              <span>Your workspace</span>
-              <span aria-hidden="true">/</span>
-              <strong>{current?.label ?? "Page"}</strong>
-            </div>
             <div className="shell-header-actions">
-              <button
-                className="shell-icon-button shell-notifications"
-                disabled
-                title="Notifications are coming soon"
-                aria-label="Notifications"
-              >
-                <Bell size={21} />
-              </button>
-              <ProfileDrawer
-                profile={profile}
-                preferences={preferences}
-                compact
-                open={profileOpen}
-                onOpenChange={setProfileOpen}
-              />
               <Slideout
                 title="Workspace navigation"
                 description="Find your study tools."
@@ -179,9 +178,9 @@ function Workspace({
                   setNavigationOpen(open);
                 }}
                 onCloseAutoFocus={(event) => {
-                  if (navigationOrigin.current !== pathname) {
+                  if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
                     event.preventDefault();
-                    main.current?.focus({ preventScroll: true });
+                    if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
                   }
                 }}
                 trigger={
@@ -252,6 +251,36 @@ function Workspace({
             </Link>
           </Tooltip>
         </div>
+        <ProfileDrawer
+          profile={profile}
+          preferences={preferences}
+          open={profileOpen}
+          onOpenChange={setProfileOpen}
+          hideTrigger
+          returnFocus={returnToAccount}
+        />
+        <Slideout
+          title="Help"
+          description="Find your way around PansGPT."
+          open={helpOpen}
+          onOpenChange={(open) => setPanels((value) => ({ ...value, help: open }))}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+            returnToAccount();
+          }}
+        >
+          <div className="dashboard-sample-preview">
+            <h3>Your study space</h3>
+            <p>
+              Open Library for your course documents, or use Message PansGPT to start a study chat.
+            </p>
+            <h3>Find a page quickly</h3>
+            <p>Use the search beside Recent chats, or press Ctrl + K (Command + K on Mac).</p>
+            <h3>Your preferences</h3>
+            <p>Open your account at the bottom of the sidebar to change your theme or sign out.</p>
+            <p>Cards marked Sample show the intended experience while your account is new.</p>
+          </div>
+        </Slideout>
         <Slideout
           title="Quick search"
           description="Find a page in your workspace."

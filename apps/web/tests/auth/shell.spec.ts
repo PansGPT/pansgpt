@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { emailLink } from "./support";
+import { emailLink, openProfile, accountMenu } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
 
 test("verified workspace navigation, profile, account themes, failures and mobile keyboard access", async ({
@@ -37,6 +37,13 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   ).toBeVisible();
   await expect(page.getByRole("heading", { name: "Learn", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Activities", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Notifications", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Open profile", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Study streak", exact: true })).toContainText(
+    "Sample study time"
+  );
+  await page.locator(".study-activity-grid button:not(:disabled)").first().click();
+  await expect(page.locator(".study-activity-detail")).toContainText("tasks completed");
   const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
   await expect(sidebar.getByRole("heading", { name: "Recent chats Sample" })).toBeVisible();
   await expect(sidebar.getByText("Teamspaces", { exact: true })).toHaveCount(0);
@@ -54,8 +61,19 @@ test("verified workspace navigation, profile, account themes, failures and mobil
 
   await page.getByRole("button", { name: "Collapse sidebar" }).click();
   await expect(page.getByRole("button", { name: "Expand sidebar" })).toBeVisible();
+  expect(
+    await page
+      .locator(".shell-sidebar .p-app-nav-panel-top")
+      .evaluate((element) => element.scrollHeight <= element.clientHeight)
+  ).toBe(true);
   await page.getByRole("button", { name: "Expand sidebar" }).click();
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
+  await accountMenu(page);
+  await page.getByRole("menuitem", { name: "Help", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Help", exact: true })).toContainText(
+    "Find a page quickly"
+  );
+  await page.keyboard.press("Escape");
+  await openProfile(page);
   const profile = page.getByRole("dialog", { name: "Your profile", exact: true });
   await expect(profile.getByText("University of Jos", { exact: true })).toBeVisible();
   await expect(profile.getByText("200 Level", { exact: true })).toBeVisible();
@@ -82,12 +100,12 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect((await saved).request().postDataJSON()).toMatchObject({ theme: "oled_dark" });
   await expect(profile.getByRole("status")).toContainText("Your theme is saved");
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Open profile", exact: true })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Account menu", exact: true })).toBeFocused();
   // Prove the authenticated database preference wins over a stale device value.
   await page.evaluate(() => localStorage.setItem("pansgpt-theme", "light"));
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
+  await openProfile(page);
   await expect(profile.getByLabel("Workspace theme")).toHaveValue("dark");
   for (const [value, name] of [
     ["dark", "OLED-Dark"],
@@ -109,7 +127,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
         animations: "disabled",
       });
     }
-    await page.getByRole("button", { name: "Open profile", exact: true }).click();
+    await openProfile(page);
   }
   await page.screenshot({ path: "test-results/shell-profile-375.png", fullPage: true });
   await page.keyboard.press("Escape");
@@ -212,7 +230,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.unroute("**/api/v1/auth/me");
   await page.getByRole("button", { name: "Retry profile verification" }).click();
   await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Open profile", exact: true }).click();
+  await openProfile(page);
   await profile.getByRole("button", { name: "Sign Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.goto("/app/notes");

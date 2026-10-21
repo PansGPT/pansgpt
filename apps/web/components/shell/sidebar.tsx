@@ -2,7 +2,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, MoreHorizontal, Search, Settings } from "lucide-react";
+import { FileText, MoreHorizontal, Search } from "lucide-react";
 import { destinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
@@ -11,11 +11,9 @@ import { SamplePreview } from "./sample-preview";
 export function SidebarLinks({
   close,
   openSearch,
-  openProfile,
 }: {
   close: () => void;
   openSearch: () => void;
-  openProfile: () => void;
 }): React.ReactElement {
   const pathname = usePathname();
   const recentTitle = useId();
@@ -49,11 +47,22 @@ export function SidebarLinks({
           ))}
       </div>
       <section className="shell-sidebar-group" aria-labelledby={recentTitle}>
-        <h2 id={recentTitle}>
-          Recent chats {examples && <span className="dashboard-sample-badge">Sample</span>}
-        </h2>
+        <div className="shell-recent-heading">
+          <h2 id={recentTitle}>
+            Recent chats {examples && <span className="dashboard-sample-badge">Sample</span>}
+          </h2>
+          <button
+            aria-label="Quick search"
+            onClick={() => {
+              close();
+              openSearch();
+            }}
+          >
+            <Search size={16} aria-hidden="true" />
+          </button>
+        </div>
         {loading ? (
-          <p className="shell-sidebar-hint">Loading chats?</p>
+          <p className="shell-sidebar-hint">Loading chats…</p>
         ) : error ? (
           <>
             <p className="shell-sidebar-hint">Chat history is unavailable.</p>
@@ -89,26 +98,6 @@ export function SidebarLinks({
           </button>
         )}
       </section>
-      <div className="shell-sidebar-utilities">
-        <button
-          onClick={() => {
-            close();
-            openProfile();
-          }}
-        >
-          <Settings size={16} aria-hidden="true" />
-          <span>Settings</span>
-        </button>
-        <button
-          onClick={() => {
-            close();
-            openSearch();
-          }}
-          aria-label="Quick search"
-        >
-          <Search size={17} aria-hidden="true" />
-        </button>
-      </div>
       <SamplePreview title={sample} onClose={() => setSample(null)}>
         <p className="sample-chat-bubble">
           Help me organise my revision for {sample?.toLowerCase()}.
