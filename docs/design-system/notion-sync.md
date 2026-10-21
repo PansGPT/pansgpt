@@ -118,26 +118,10 @@ Pending decision - 2026-10-11: Use native radio/form semantics for standalone ca
 
 ## Follow-up - 21 October 2026 (pending synchronization)
 
-Read `docs/design-system/verification-2026-10-21.md` for actual completion evidence
-before setting Verified. Session / Change Log: **Stabilize existing design-system
-browser checks and reconcile roadmap**; Area: **Shared UI & CI**. Files: UI test
-driver/package script, browser readiness checks, CI workflow, canonical roadmap/
-implementation plan and design-system verification/testing docs.
+- **Session / Change Log:** Stabilize existing design-system browser checks and reconcile roadmap. **Date:** 2026-10-21. **Area:** Shared UI & CI. **Files:** packages/ui test driver, package script, Playwright config/tests/media fixture; .github/workflows/ci.yml; docs/build_roadmap.md, implementation_plan.md, testing.md, design-system records and related verification handoffs.
+- **Verified: true for these checks:** all **117 Chromium browser contracts** and all **seven CI jobs** passed. The same run passed **427 API tests** (14 skipped) and **14 disposable database/worker contracts**. [CI run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969); tested commit `f7de26e9a4bd29e3f19e95948ebc92192f2aa9fc` on `verify/design-system-20261021`. Detailed evidence and intermediate failures: [verification record](verification-2026-10-21.md).
+- **Decision Log:** Compile the workbench once, normalize headless font metrics, settle decoded resources/scroll before keyboard interaction and use a synthetic local VP8 fixture. **Rationale:** cold source transforms exceeded navigation deadlines; platform font hinting, pending artwork/scroll and MediaRecorder output made tests unreliable. **Alternatives:** raise timeouts, weaken source geometry, force tooltip state, depend on a warmed server or modify component styles to compensate for test rendering. All original source coverage and assertions remain; the exhaustive icon check now uses five bounded ranges.
+- **Product Roadmap / Features:** Phase 9 = **In progress: existing library verified; app integration gated**. Check the existing foundations and implemented atoms in roadmap 9.1/9.2. Use actual Plus Jakarta Sans/Roboto Mono typography and the inherited Button API. Keep generic Card, shared initials-avatar extraction, Sonner wrapper, Skeleton, ErrorBoundary, profile-synced themes, SSR theme bootstrap and app shell open. Phase 8 and phases 0-7 remain **Testing** overall while hosted/provider/native gates are open. Close the old shared-UI feed-timeout item only.
+- **Knowledge Base:** no update required; routine test infrastructure and plan reconciliation do not change the runtime architecture.
 
-Decision: test the freshly compiled preview instead of cold development-server
-transforms. Rationale: 5,083 resource requests caused the first feed navigation to
-exceed its 60-second deadline; the unchanged compiled feed checks passed. Alternatives:
-raise timeouts, remove assertions, or rely on a warmed/stale server. Preserve all
-source geometry, keyboard/accessibility checks, individual deadlines and traces.
-
-Update Phase 9 to recognize the inherited core library while keeping app-shell
-integration gated on the staging journey. Record actual Plus Jakarta Sans/Roboto
-Mono typography and the inherited Button API. Keep generic Card, shared initials
-avatar extraction, Sonner wrapper, Skeleton, ErrorBoundary, profile-synced themes
-and SSR theme bootstrap open. Phase 8 remains Testing while its hosted slice is
-unverified. No new product screens or provider approvals are included.
-
-The full suite and CI are in progress; do not mark them passed from the two feed
-checks alone. Knowledge Base does not need a routine testing-fix update; the runtime
-stack and architectural boundaries are unchanged. Report any later full-suite result
-and its exact CI revision/link from the verification record.
+No Notion connector is available in this session. This handoff is prepared, **not synchronized**. A complete Linux Chromium run is certified; the separate targeted Windows runs are not one full Windows certification. No hosted credentials or external AI calls were used. The prior October entries above remain historical evidence.

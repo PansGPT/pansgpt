@@ -57,4 +57,4 @@ When the matching web deployment is verified, use the actual staging API URL, th
 
 ## Release evidence
 
-Record deployed revision, service URL, infrastructure/full readiness, auth journeys, worker startup/recovery, queue reconciliation, storage operations and the approved document journey. Provider privacy, native OAuth and the separate UI feed timeout remain open until actually verified.
+Record deployed revision, service URL, infrastructure/full readiness, auth journeys, worker startup/recovery, queue reconciliation, storage operations and the approved document journey. Provider privacy and native OAuth remain open until actually verified. The independent shared-UI browser work is tracked in [its verification record](design-system/verification-2026-10-21.md).

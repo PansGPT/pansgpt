@@ -152,7 +152,7 @@ PR reviewed + CI green → merged to main
 | **6B** | AI Engine Advanced            | Source fixes; live gates pending | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
 | **7**  | Auth Backend                  | Source fixes; live gates pending | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8**  | Walking Skeleton Web UI       | Testing: staging slice pending | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
-| **9**  | Design System + App Shell     | Library available; app integration gated | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
+| **9**  | Design System + App Shell     | Library verified; app integration gated | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
 | **10** | PDF Reader (Web)              |            ⏳ Pending            | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
 | **11** | AI Chat Interface (Web)       |            ⏳ Pending            | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
 | **12** | Learn Mode (Web)              |            ⏳ Pending            | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
@@ -1191,20 +1191,20 @@ PR reviewed + CI green → merged to main
 
 ### 9.1 Existing Design Foundations (`packages/ui`)
 
-The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checklist below records source presence; verification status is recorded separately and full-suite work is currently in progress.
+The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checked items below cover the existing library contracts: all 117 Chromium checks and all seven CI jobs passed in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969). Tailwind mappings are generated and checked; application-level consumption remains integration work.
 
-- [ ] Verify existing three-theme OKLCH foundations: Light, true-black OLED Dark and Sepia. | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
-- [ ] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
-- [ ] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
-- [ ] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
+- [x] Verify existing three-theme OKLCH foundations: Light, true-black OLED Dark and Sepia. | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
+- [x] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
+- [x] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
+- [x] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
 
 ### 9.2 Existing Atomic Component Library (Web - `packages/ui`)
 
-- [ ] Verify `Button`: primary, secondary, tertiary and link variants; destructive option; sm/md/lg/xl sizes. The inherited minimal appearance is named `tertiary`; preserve that API. | file: `packages/ui/src/components/button.tsx`
-- [ ] Verify `Input`, `Textarea`, `Select`: label, error state and helper text. | files: `packages/ui/src/components/field.tsx`, `packages/ui/src/components/select.tsx`
-- [ ] Verify Radix `Dialog`: accessible keyboard behavior and focus containment/restoration. | file: `packages/ui/src/components/dialog.tsx`
-- [ ] Verify existing `Badge`, `Tag` and `Avatar` with initials fallback. | files: `packages/ui/src/components/badge.tsx`, `packages/ui/src/components/avatar.tsx`
-- [ ] Verify existing `Spinner` and progress indicators. | file: `packages/ui/src/components/progress.tsx`
+- [x] Verify `Button`: primary, secondary, tertiary and link variants; destructive option; sm/md/lg/xl sizes. The inherited minimal appearance is named `tertiary`; preserve that API. | file: `packages/ui/src/components/button.tsx`
+- [x] Verify `Input`, `Textarea`, `Select`: label, error state and helper text. | files: `packages/ui/src/components/field.tsx`, `packages/ui/src/components/select.tsx`
+- [x] Verify Radix `Dialog`: accessible keyboard behavior and focus containment/restoration. | file: `packages/ui/src/components/dialog.tsx`
+- [x] Verify existing `Badge`, `Tag` and `Avatar`, including caller-provided initials and failed-image fallback. | files: `packages/ui/src/components/badge.tsx`, `packages/ui/src/components/avatar.tsx`
+- [x] Verify existing `Spinner` and progress indicators. | file: `packages/ui/src/components/progress.tsx`
 - [ ] Generic app `Card` primitive; selection cards and card headers already exist.
 - [ ] Extract the existing web `<UserInitialsAvatar />` into the shared package when product integration proceeds.
 - [ ] `Toast`: Sonner wrapper; existing notification controls do not establish this integration.

@@ -1802,14 +1802,12 @@ Every screen shares tokens, components, and layouts. Building it once prevents d
 ### 29.3 Atomic Component Library (packages/ui)
 
 - Existing Figma Button: primary, secondary, tertiary, link-color and link-gray; destructive option; sm/md/lg/xl sizes. Reuse the inherited typed API.
-- Input, Textarea, Select, Checkbox, RadioGroup
-- Card, Sheet, Dialog/Modal
-- Avatar (initials-based, with Supabase avatar URL fallback)
-- Badge, Tag
-- Skeleton (loading placeholder)
-- Toast/Snackbar (using sonner)
-- Spinner
-- **All components**: accessible (ARIA), keyboard navigable, theme-aware
+- Existing Input, Textarea, Select, Checkbox and RadioGroup.
+- Existing Radix Dialog with keyboard focus containment and restoration; existing slideout compositions can support later app drawers.
+- Existing Avatar accepts a caller-provided image URL or initials; image failure renders the placeholder. Shared extraction of the web UserInitialsAvatar and Supabase profile wiring remain product work.
+- Existing Badge, Tag, Spinner and progress indicators.
+- Remaining shared primitives/integrations: generic app Card, Skeleton, Sonner toast wrapper and ErrorBoundary with Sentry reporting. Source-specific selection cards, card headers and notifications do not complete these items.
+- **All components** must remain accessible (ARIA), keyboard navigable and theme-aware. Library browser checks do not establish app integration.
 
 ### 29.4 App Shell / Navigation
 
@@ -1821,8 +1819,7 @@ Every screen shares tokens, components, and layouts. Building it once prevents d
 ### 29.5 Typography Scale
 
 - **Font**: locally hosted Plus Jakarta Sans Variable for body/display, with 44 archived Figma text styles; locally hosted Roboto Mono for code snippets. The inherited implementation supersedes the earlier Inter/Geist proposal.
-- **Scale**: xs/sm/base/lg/xl/2xl/3xl using
-  em units
+- **Scale**: preserve the archived Figma font-size/line-height CSS variables and generated typography classes. The existing library uses source pixel metrics; application-level text scaling remains a separate accessibility concern.
 
 ### 29.6 Icon System & Animation
 

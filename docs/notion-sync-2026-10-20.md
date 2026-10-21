@@ -40,3 +40,13 @@ The user supplied the connected agent's receipt confirming that the database ses
 > The manual workflow builds a disposable Supabase database from all 31 migrations plus seed and runs Redis within the GitHub runner. Synthetic jobs on unique queues defer once and finish after worker restart; cancellation removes canary keys. Row fingerprints and sentinel application queues establish isolation. No staging secrets, hosted data, R2 objects or provider calls are used. The separate strict-target diagnostic is available for an eventual trusted operator host; its real staging R2 check has not run remotely.
 >
 > Update the relevant infrastructure/ingestion roadmap notes and Knowledge Base worker topology because this changes the hosting pattern. Remove any promise of free Render background workers or ongoing Actions hosting. Keep phases 0-7 Testing. Strict ZDR blocks all six providers. API deployment, ongoing worker hosting, real document lease/heartbeat/kill recovery, scoped retention deletion, approved ingestion/chat and native auth remain open. Final GitHub read-back confirmed zero repository Actions secrets and no `staging-workers` secret environment. No GitHub staging secrets or paid services were created.
+
+
+## Shared-UI follow-up ? 21 October 2026
+
+The historical prompts above predate the dedicated shared-library browser work.
+Use [the current verification record](design-system/verification-2026-10-21.md)
+and [its concise Engineering handoff](design-system/notion-sync.md#follow-up---21-october-2026-pending-synchronization)
+for the UI result and Phase 9 checklist. Keep hosted application/worker journeys,
+provider privacy eligibility and native-device auth open. The shared-library
+checks do not close those gates or complete the full Phase 9 app shell.

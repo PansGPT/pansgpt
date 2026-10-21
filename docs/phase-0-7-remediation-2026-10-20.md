@@ -53,7 +53,7 @@ Initial local verification, before disposable replay:
 | SQL mirror / contract parser                         | 30 byte-matched migrations with immediate RLS; parser recognizes 50 tables and 11 declared RPCs | Catalog comparison and SQL execution await disposable Supabase                                              |
 | Diff hygiene                                         | Passed                                                                                          | Generated Next.js metadata restored; no commit or push                                                      |
 
-An extra `pnpm test` run also started the later shared-UI Playwright suite. It was stopped after a feed-fixture test exceeded its 60-second timeout; five other UI tests had passed. The isolated feed test also timed out; trace navigation alone took about 45 seconds. This does **not** certify the full 113-test UI suite or establish a rendering defect. A dedicated browser-performance/test-reliability pass remains open outside phase 0?7. A streaming test also exceeded its 400ms wall-clock assertion under concurrent load; the isolated five streaming tests and final serial 400-test API run passed without changing that assertion.
+An extra `pnpm test` run also started the later shared-UI Playwright suite. It was stopped after a feed-fixture test exceeded its 60-second timeout; five other UI tests had passed. The isolated feed test also timed out; trace navigation alone took about 45 seconds. This does **not** certify the full 113-test UI suite or establish a rendering defect. A dedicated follow-up subsequently closed this shared-library test issue; see the 21 October evidence below. A streaming test also exceeded its 400ms wall-clock assertion under concurrent load; the isolated five streaming tests and final serial 400-test API run passed without changing that assertion.
 
 Database execution and staging schema checks subsequently passed; provider eligibility, application deployment and device checks remain pending. The source also rejects empty extraction before index replacement and marks image-only ingestion failed when no searchable chunks were produced. Privacy-blocked ingestion remains durable without Redis delivery, while cleanup can run independently.
 
@@ -79,3 +79,13 @@ The disposable Supabase/type-generation workflow follows [Supabase?s CI guidance
 The user selected GitHub Actions now and Oracle later, then preferred avoiding any risky upload of existing access keys. We used disposable Supabase/Redis without exporting staging credentials. [The manual worker run passed 24 checks](https://github.com/PansGPT/pansgpt/actions/runs/39512003760), including real ARQ deferred delivery across worker-instance restart, cancellation cleanup and preservation of disposable row/queue sentinels. The complete source CI also passed: 427 API tests with 14 skips and 14 separate database/worker contracts. [Runbook, exact revisions and remaining limits](worker-verification-2026-10-20.md).
 
 This narrows the worker execution gap but does not close actual hosted ingestion, document lease/heartbeat/process-kill recovery, R2 deletion or continuous availability. GitHub is used for development/testing only; ongoing worker hosting remains deferred to Oracle. No new migration, hosted data change, AI call or paid service was introduced in this follow-up. Overall phases remain Testing, and the Notion handoff is ready for the connected agent.
+
+
+### Shared-library follow-up ? 21 October 2026
+
+The independent feed/test-reliability issue is closed for the configured shared-library
+Chromium suite: **117 passed** and all seven CI jobs passed at `f7de26e9a4bd29e3f19e95948ebc92192f2aa9fc`
+([run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969)). See [the design-system verification](design-system/verification-2026-10-21.md)
+for fixes, intermediate failures and limits. Hosted staging journeys, provider eligibility,
+native OAuth and product app-shell integration remain open; this does not mark overall
+phase 0-7 remediation or the full Phase 9 complete.
