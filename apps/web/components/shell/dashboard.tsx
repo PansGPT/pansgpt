@@ -11,17 +11,12 @@ import {
   RefreshCw,
   PlayCircle,
 } from "lucide-react";
-import {
-  Skeleton,
-  UserInitialsAvatar,
-  addDateDays,
-  formatDateOnly,
-  localTodayIso,
-} from "@pansgpt/ui/shell";
+import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
 import { StudyActivity } from "./study-activity";
+import { DocumentThumbnail } from "./document-thumbnail";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { destinations } from "./navigation";
@@ -44,6 +39,61 @@ const guides = [
   },
   { title: "Creating effective study notes", kind: "notes", duration: "6 min watch", video: true },
 ] as const;
+
+function ScheduleState({
+  loading,
+  error,
+  onRetry,
+  kind,
+}: {
+  loading: boolean;
+  error: boolean;
+  onRetry: () => void;
+  kind?: "tasks" | "timetable";
+}): React.ReactElement {
+  if (loading)
+    return (
+      <div className="dashboard-schedule-loading" role="status" aria-label="Loading your schedule">
+        <p>Getting your schedule ready…</p>
+        <div aria-hidden="true">
+          {[0, 1, 2].map((row) => (
+            <div className="dashboard-schedule-skeleton" key={row}>
+              <Skeleton variant="rectangle" />
+              <Skeleton variant="text" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  return (
+    <div className="dashboard-schedule-state" role={error ? "alert" : undefined}>
+      <span className="dashboard-schedule-icon">
+        <CalendarDays size={23} aria-hidden="true" />
+      </span>
+      <h4>
+        {error
+          ? "Your schedule couldn’t be loaded"
+          : kind === "tasks"
+            ? "No upcoming tasks"
+            : kind === "timetable"
+              ? "No upcoming classes"
+              : "A little room in your schedule"}
+      </h4>
+      <p>
+        {error
+          ? "Try again to see your upcoming classes and tasks."
+          : `Your ${kind === "tasks" ? "tasks" : kind === "timetable" ? "classes" : "classes and tasks"} will appear here when available.`}
+      </p>
+      {error && (
+        <button type="button" className="dashboard-schedule-retry" onClick={onRetry}>
+          <RefreshCw size={15} aria-hidden="true" />
+          Try again
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function StudyDashboard(): React.ReactElement {
   const { profile } = useAuth();
   const router = useRouter();
@@ -54,13 +104,9 @@ export function StudyDashboard(): React.ReactElement {
   const recentCards = sampleRecent
     ? sampleDocuments.map((document, index) => ({
         updated_at: `${today}T12:00:00`,
-        documents: { id: `sample-${index}`, title: document.title },
-        art: document.art,
+        documents: { id: `sample-${index}`, title: document.title, updated_at: today },
       }))
-    : data.recent.map((item, index) => ({
-        ...item,
-        art: sampleDocuments[index % sampleDocuments.length]!.art,
-      }));
+    : data.recent;
   const [activityTab, setActivityTab] = useState<"timetable" | "tasks">("timetable");
   const [period] = useState(() => {
     const hour = new Date().getHours();
@@ -119,7 +165,11 @@ export function StudyDashboard(): React.ReactElement {
         <div className="dashboard-section-heading">
           <h2 id="recently-visited-title">
             <Clock3 size={19} aria-hidden="true" />
-            <span className="dashboard-desktop-label">Recently opened documents</span>
+            <span className="dashboard-desktop-label">
+              {data.recentSource === "library" && !sampleRecent
+                ? "From your library"
+                : "Recently opened documents"}
+            </span>
             <span className="dashboard-mobile-label">Recents</span>
           </h2>
           {sampleRecent && <span className="dashboard-sample-badge">Sample</span>}
@@ -158,7 +208,10 @@ export function StudyDashboard(): React.ReactElement {
                 className="dashboard-recent-card"
               >
                 <div className="dashboard-recent-cover">
-                  <StudyArt kind={item.art} />
+                  <DocumentThumbnail
+                    documentId={sampleRecent ? undefined : item.documents.id}
+                    revision={item.documents.updated_at}
+                  />
                 </div>
                 <div className="dashboard-recent-body">
                   <span className="dashboard-file-icon">
@@ -166,7 +219,6 @@ export function StudyDashboard(): React.ReactElement {
                   </span>
                   <h3>{item.documents.title}</h3>
                   <div className="dashboard-card-meta">
-                    <UserInitialsAvatar name={profile?.first_name} size="sm" />
                     <span>
                       {new Date(item.updated_at).toLocaleDateString(undefined, {
                         month: "short",
@@ -211,8 +263,17 @@ export function StudyDashboard(): React.ReactElement {
               key={guide.kind}
               onClick={() => setPreview(guide.title)}
             >
-              <div className="dashboard-learn-cover">
+              <div className="dashboard-learn-cover" data-art={guide.kind}>
                 <StudyArt kind={guide.kind} />
+                <span className="dashboard-guide-label" aria-hidden="true">
+                  {guide.kind === "renal"
+                    ? "Explore the essentials"
+                    : guide.kind === "case"
+                      ? "Connect the dots"
+                      : guide.kind === "recall"
+                        ? "Put it into practice"
+                        : "Make it your own"}
+                </span>
               </div>
               <div className="dashboard-learn-body">
                 <h3>{guide.title}</h3>
@@ -243,13 +304,16 @@ export function StudyDashboard(): React.ReactElement {
             <StudyActivity today={today} />
           </div>
           <div className="dashboard-agenda" aria-live="polite">
-            {data.loading ? (
-              <p role="status">Loading your schedule…</p>
-            ) : data.eventsError ? (
-              <div role="alert">
-                <h3>Your schedule couldn&apos;t be loaded</h3>
-                <button onClick={data.reload}>Try again</button>
-              </div>
+            <div className="dashboard-agenda-heading">
+              <h3>Up next</h3>
+              <span>Classes &amp; tasks</span>
+            </div>
+            {data.loading || data.eventsError ? (
+              <ScheduleState
+                loading={data.loading}
+                error={data.eventsError}
+                onRetry={data.reload}
+              />
             ) : agenda.length ? (
               agenda.map((event) => (
                 <div className="dashboard-event" key={event.id}>
@@ -269,11 +333,7 @@ export function StudyDashboard(): React.ReactElement {
                 </div>
               ))
             ) : (
-              <div className="dashboard-agenda-empty">
-                <CalendarDays size={24} aria-hidden="true" />
-                <h3>A little room in your schedule</h3>
-                <p>Your upcoming classes and tasks will appear here.</p>
-              </div>
+              <ScheduleState loading={false} error={false} onRetry={data.reload} />
             )}
           </div>
         </div>
@@ -289,13 +349,8 @@ export function StudyDashboard(): React.ReactElement {
               Tasks
             </button>
           </div>
-          {data.loading ? (
-            <p role="status">Loading your schedule…</p>
-          ) : data.eventsError ? (
-            <div role="alert">
-              <p>Your schedule is unavailable.</p>
-              <button onClick={data.reload}>Try again</button>
-            </div>
+          {data.loading || data.eventsError ? (
+            <ScheduleState loading={data.loading} error={data.eventsError} onRetry={data.reload} />
           ) : events.filter((item) => item.kind === (activityTab === "tasks" ? "task" : "class"))
               .length ? (
             events
@@ -315,10 +370,7 @@ export function StudyDashboard(): React.ReactElement {
                 </div>
               ))
           ) : (
-            <div className="dashboard-agenda-empty">
-              <h3>{activityTab === "tasks" ? "No upcoming tasks" : "No upcoming classes"}</h3>
-              <p>Your {activityTab === "tasks" ? "tasks" : "timetable"} will appear here.</p>
-            </div>
+            <ScheduleState loading={false} error={false} onRetry={data.reload} kind={activityTab} />
           )}
         </div>
       </section>

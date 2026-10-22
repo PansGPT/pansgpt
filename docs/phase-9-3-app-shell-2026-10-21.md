@@ -32,3 +32,5 @@ The in-app browser tool remains unavailable before setup (`missing field sandbox
 Hosted deployment, native-device journeys, provider attestations and Phase 10's remaining data/performance/offline gates are not certified here.
 
 The user reverted the background-swap experiment. Keep the original surfaces: Home uses `--bg-primary`; the sidebar and cards use `--bg-secondary`. The account menu, streak heatmap and other approved layout changes remain part of this design.
+
+22 October amendment: the user approved refining Home after comparison with Notion. Home's dark `--bg-primary` now uses the existing charcoal token locally; the sidebar/cards retain their original surface roles. Content width, document/Learn proportions, schedule states and the developer-indicator position were refined. See [the follow-up record](dashboard-refinement-2026-10-22.md) for current scope and local verification; the older CI evidence above applies to its named commit.

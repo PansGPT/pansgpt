@@ -10,7 +10,21 @@ import { localTodayIso } from "@pansgpt/ui/shell";
 const recentSchema = z.array(
   z.object({
     updated_at: z.string(),
-    documents: z.object({ id: z.string(), title: z.string(), course_code: z.string().nullable() }),
+    documents: z.object({
+      id: z.string(),
+      title: z.string(),
+      course_code: z.string().nullable(),
+      updated_at: z.string().optional(),
+    }),
+  })
+);
+const libraryPreviewSchema = z.array(
+  z.object({
+    id: z.string(),
+    title: z.string(),
+    course_code: z.string().nullable(),
+    created_at: z.string(),
+    updated_at: z.string(),
   })
 );
 const taskSchema = z.array(
@@ -35,6 +49,7 @@ const timetableSchema = z.array(
 const completedSchema = z.array(z.object({ id: z.string(), completed_at: z.string() }));
 type DashboardData = {
   recent: z.infer<typeof recentSchema>;
+  recentSource: "history" | "library";
   tasks: z.infer<typeof taskSchema>;
   timetable: z.infer<typeof timetableSchema>;
   completed: z.infer<typeof completedSchema>;
@@ -45,6 +60,7 @@ type DashboardData = {
 };
 const initial: DashboardData = {
   recent: [],
+  recentSource: "history",
   tasks: [],
   timetable: [],
   completed: [],
@@ -119,17 +135,50 @@ export function DashboardProvider({
       });
       return () => controller.abort();
     }
-    void Promise.all([
-      supabase
+    const universityId = university;
+    async function recentDocuments(): Promise<{
+      data: z.infer<typeof recentSchema>;
+      error: boolean;
+      source: "history" | "library";
+    }> {
+      const history = await supabase
         .from("study_progress")
-        .select("updated_at,documents!inner(id,title,course_code)")
+        .select("updated_at,documents!inner(id,title,course_code,updated_at)")
         .eq("user_id", profile.id)
-        .eq("documents.university_id", university)
+        .eq("documents.university_id", universityId)
         .eq("documents.status", "active")
         .is("documents.deleted_at", null)
         .order("updated_at", { ascending: false })
         .limit(6)
-        .abortSignal(controller.signal),
+        .abortSignal(controller.signal);
+      const parsedHistory = recentSchema.safeParse(history.data);
+      if (history.error || !parsedHistory.success)
+        return { data: [], error: true, source: "history" };
+      if (parsedHistory.data.length)
+        return { data: parsedHistory.data, error: false, source: "history" };
+      const catalog = await supabase
+        .from("documents")
+        .select("id,title,course_code,created_at,updated_at")
+        .eq("university_id", universityId)
+        .eq("status", "active")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(6)
+        .abortSignal(controller.signal);
+      const parsedCatalog = libraryPreviewSchema.safeParse(catalog.data);
+      if (catalog.error || !parsedCatalog.success)
+        return { data: [], error: true, source: "library" };
+      return {
+        data: parsedCatalog.data.map(({ created_at, ...document }) => ({
+          updated_at: created_at,
+          documents: document,
+        })),
+        error: false,
+        source: "library",
+      };
+    }
+    void Promise.all([
+      recentDocuments(),
       supabase
         .from("student_tasks")
         .select("id,title,due_date,due_time,subtitle")
@@ -171,6 +220,7 @@ export function DashboardProvider({
           completed: activity.success && !completed.error ? activity.data : [],
           activityError: Boolean(completed.error) || !activity.success,
           recent: recent.success && !history.error ? recent.data : [],
+          recentSource: history.source,
           tasks: pending.success && !tasks.error ? pending.data : [],
           timetable: classes.success && !timetable.error ? classes.data : [],
           loading: false,

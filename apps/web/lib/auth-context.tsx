@@ -4,6 +4,7 @@ import { env } from "@/env";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { desktopAuth } from "./desktop-auth";
+import { clearThumbnailCaches } from "./document-thumbnail-cache";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
 
@@ -129,7 +130,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [supabase, fetchProfile]);
 
+  useEffect(() => {
+    if (loading) return;
+    void clearThumbnailCaches(
+      profile?.id === session?.user.id && profile?.university_id
+        ? { userId: profile.id, universityId: profile.university_id }
+        : undefined
+    );
+  }, [loading, profile?.id, profile?.university_id, session?.user.id]);
+
   const signOut = async () => {
+    await clearThumbnailCaches();
     try {
       await desktopAuth()?.signOut();
     } finally {

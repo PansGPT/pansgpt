@@ -4,6 +4,7 @@
 # ==============================================================================
 
 import json
+import logging
 import uuid
 
 import asyncpg
@@ -25,6 +26,7 @@ from app.engines.storage import (
     build_document_storage_key,
     storage_engine,
 )
+from app.engines.thumbnail import document_thumbnail
 from app.models.library import (
     ConfirmUploadResponse,
     DocumentDetailResponse,
@@ -36,6 +38,49 @@ from app.models.library import (
 )
 
 router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
+logger = logging.getLogger(__name__)
+
+
+@router.get("/{document_id}/thumbnail", response_class=Response)
+async def get_document_thumbnail(
+    document_id: str,
+    auth_user: UserContext = Depends(get_current_user),
+    _document_scope: str = Depends(require_scoped_document),
+) -> Response:
+    """Private first-page preview from the same authorized PDF used by the reader."""
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Preview is unavailable.")
+        can_review = bool(set(auth_user.roles) & {"lecturer", "university_admin", "super_admin"})
+        row = await conn.fetchrow(
+            "SELECT storage_key, converted_key FROM public.documents "
+            "WHERE id = $1 AND university_id = $2 AND deleted_at IS NULL "
+            "AND (status = 'active' OR $3);",
+            uuid.UUID(document_id),
+            require_university(auth_user),
+            can_review,
+        )
+    if row is None:
+        raise HTTPException(status_code=404, detail="Document not found.")
+    key = row["converted_key"] or row["storage_key"]
+    if not key or not key.lower().endswith(".pdf"):
+        raise HTTPException(status_code=404, detail="PDF preview is not ready.")
+    try:
+        image = await document_thumbnail(key)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail="Document preview is unavailable.") from exc
+    except Exception as exc:
+        logger.warning(
+            "document_thumbnail_failed document_id=%s error_type=%s",
+            document_id,
+            type(exc).__name__,
+        )
+        raise HTTPException(status_code=503, detail="Document preview is unavailable.") from exc
+    return Response(
+        image,
+        media_type="image/png",
+        headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -839,6 +884,9 @@ async def reembed_document(
 # 10. Documents Alias Router (Resolves Endpoint Path Discrepancy - Roadmap 5.2)
 # ------------------------------------------------------------------------------
 documents_router = APIRouter(prefix="/documents", tags=["Documents"])
+documents_router.add_api_route(
+    "/{document_id}/thumbnail", get_document_thumbnail, methods=["GET"], response_class=Response
+)
 documents_router.add_api_route(
     "/upload",
     initialize_document_upload,

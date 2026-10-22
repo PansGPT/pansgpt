@@ -1242,6 +1242,10 @@ User-selected references and the latest sidebar/card corrections are recorded in
 - [x] Framer Motion route transitions respect reduced motion.
 - [x] Reference-shaped document card grid, Learn cards and Activities study-streak/agenda preview; labelled samples never persist or invoke inference.
 
+22 October follow-up: user-approved narrower Home layout, softer charcoal canvas, compact document cards, taller white/black Learn covers and shared schedule loading/error/empty states. Recent cards use private first-page thumbnails from the actual R2 PDFs; accounts without reading history show active library documents under “From your library”. The development indicator is disabled to avoid overlap with the chat shortcut. [Scope and verification](dashboard-refinement-2026-10-22.md); this does not close hosted or Phase 10 aggregate/offline/performance gates.
+
+Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user confirmed real covers appeared. Add account/university-scoped binary browser caching (24 hours, 24 entries, document-revision invalidation and logout cleanup). Final size is five desktop columns with 88px covers and no card avatars after the user rejected the larger version. Cache reuse, isolation, expiry and cleanup are verified; 446 offline API tests and 12 web unit tests passed, alongside the final production build. Full offline-reader support remains pending.
+
 ---
 
 ## 🏠 PHASE 10 — Home Page (Student Daily Hub)

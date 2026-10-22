@@ -144,15 +144,27 @@ class R2StorageEngine:
             )
             return url
 
-    async def download_bytes(self, key: str) -> bytes:
+    async def download_bytes(self, key: str, *, max_bytes: int | None = None) -> bytes:
         """Download raw bytes of an object from R2."""
         async with self.get_client() as s3:
             response = await s3.get_object(
                 Bucket=settings.r2_bucket_name,
                 Key=key,
             )
-            async with response["Body"] as stream:
-                return await stream.read()
+            body = response["Body"]
+            async with body:
+                if max_bytes is None:
+                    return await body.read()
+                if int(response.get("ContentLength", 0)) > max_bytes:
+                    raise ValueError("Object exceeds the download limit.")
+                chunks: list[bytes] = []
+                total = 0
+                while chunk := await body.read(min(1024 * 1024, max_bytes - total + 1)):
+                    total += len(chunk)
+                    if total > max_bytes:
+                        raise ValueError("Object exceeds the download limit.")
+                    chunks.append(chunk)
+                return b"".join(chunks)
 
     async def upload_bytes(
         self,

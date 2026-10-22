@@ -155,7 +155,12 @@ function Workspace({
   );
   return (
     <DashboardProvider profile={profile}>
-      <div className="app-shell" data-collapsed={collapsed} data-chat={pathname === "/app/chat"}>
+      <div
+        className="app-shell"
+        data-collapsed={collapsed}
+        data-chat={pathname === "/app/chat"}
+        data-home={pathname === "/app"}
+      >
         <a href="#workspace-content" className="shell-skip">
           Skip to content
         </a>
