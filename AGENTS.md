@@ -76,7 +76,7 @@ pansgpt/
 │   └── desktop/        # Electron 33, SQLite embedded database, Context Isolation
 ├── packages/
 │   ├── database/       # Migrations & database schemas (mirrored to supabase/migrations)
-│   ├── ui/             # Shared Radix primitives & OKLCH token definitions (Light/OLED/Sepia)
+│   ├── ui/             # Shared Radix primitives & OKLCH token definitions (Light/Dark/Sepia)
 │   ├── types/          # Shared TypeScript DTOs, API contracts, Supabase generated types
 │   ├── eslint-config/  # Shared ESLint base configurations
 │   └── typescript-config/ # Shared tsconfig bases
@@ -146,7 +146,7 @@ pansgpt/
 
 ### E. Frontend & UI/UX Standards
 
-- Three semantic themes: **Light**, **OLED Dark**, and **Sepia Warm Reading Mode** using OKLCH color tokens in `packages/ui`.
+- Three semantic themes: **Light**, **Dark (charcoal)**, and **Sepia Warm Reading Mode** using OKLCH color tokens in `packages/ui`.
 - 4-layer virtualized PDF Reader with text highlights, snip-to-chat, and sticky AI sidebar.
 - Offline-First PWA via `@serwist/next` with 3 caching tiers and IndexedDB outbox sync.
 

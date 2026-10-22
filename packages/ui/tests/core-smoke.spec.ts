@@ -20,7 +20,7 @@ test("core dialog traps keyboard focus, closes on Escape and restores its trigge
   await expect(trigger).toBeFocused();
 });
 
-test("core appearance persists OLED and Sepia choices across reloads", async ({ page }) => {
+test("core appearance persists Dark and Sepia choices across reloads", async ({ page }) => {
   await openPreview(page, "/?section=core");
   const appearance = page.getByRole("combobox", { name: "Appearance", exact: true });
   for (const theme of ["dark", "sepia", "light"]) {

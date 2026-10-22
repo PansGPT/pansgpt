@@ -159,7 +159,7 @@ function PreviewHeader(): React.ReactElement {
             }}
           >
             <option value="light">Light</option>
-            <option value="dark">OLED Dark</option>
+            <option value="dark">Dark</option>
             <option value="sepia">Sepia</option>
           </select>
         </label>

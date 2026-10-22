@@ -5,7 +5,7 @@ The user approved the refinements discussed after comparing Downloads screenshot
 ## Changes
 
 1. Narrow the desktop Home content to a 1120px container, including side padding, and give the greeting more space above and below. Keep the existing mobile navigation composition.
-2. Use the design system's charcoal token for Home's dark canvas. Sidebar and cards retain their secondary surface; this does not repeat the reverted background swap, change saved theme values or replace the global OLED theme.
+2. Use the design system's charcoal token for Home's dark canvas. Sidebar and cards retain their secondary surface; the subsequent user-approved shared-theme follow-up below promotes this canvas globally without swapping sidebar/card surfaces or changing stored theme values.
 3. Real cards show first-page previews of their actual R2 PDFs, using converted PDFs for Office uploads. With no reading history, show active university library documents under “From your library”. After the user's size feedback, use five desktop columns with 88px covers (80px on tablet); remove card avatars and retain the date. Mobile keeps the existing compact list. Only an empty library retains the labelled sample fallback.
 4. Increase Learn cover height and use white backgrounds with black local SVG illustrations, following the user's subsequent correction. Add brief decorative captions; sample guides remain labelled and open local previews.
 5. Add an “Up next” heading, schedule skeletons, an illustrated error/empty state and an accessible retry button shared by desktop and mobile. Retry invokes the existing dashboard reload; this improves presentation and does not claim to repair unavailable hosted schedule services.
@@ -49,3 +49,11 @@ Phase 9.3 remains in Testing for hosted rollout. Phase 10's aggregate API, study
 ## Notion synchronization
 
 No callable Notion connector is available. Apply the concise follow-up in [the Notion handoff](phase-9-3-notion-sync-2026-10-21.md); verification must retain the local/synthetic scope above.
+
+## Shared charcoal theme follow-up
+
+After the dashboard work was committed as `486271f`, the user requested its colors across all pages. Promote the existing gray-dark-mode-950 canvas into the shared dark `--bg-primary` extension and remove Home's scoped override. The sidebar, cards, borders, text and green accents already use shared tokens; their hierarchy stays consistent. Generated Figma exports and Light/Sepia are unchanged. The visible option is now Dark; stored `oled_dark` preferences retain the existing mapping without a data migration.
+
+Update the existing shared-card color expectation from pure black to the approved charcoal RGB `(12, 14, 18)`. Verification for this follow-up is recorded below separately from the earlier thumbnail work.
+
+Follow-up verification: all seven existing shared-UI card/appearance/interaction browser tests passed using installed Chrome and the compiled preview. An isolated shell check confirmed the same charcoal RGB `(12, 14, 18)` for Home, Chat, Library, Quiz, Notes and Focus navigation paths. That harness mounts real shell components with synthetic dashboard content; it does not establish complete route functionality or hosted integration. Auth remains explicitly scoped to its approved Light presentation. The full lint/typecheck/unit sequence and isolated production build were also started; their final results are recorded separately below when available.

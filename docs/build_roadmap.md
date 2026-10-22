@@ -1197,7 +1197,7 @@ PR reviewed + CI green → merged to main
 
 The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checked items below cover the existing library contracts: all 117 Chromium checks and all seven CI jobs passed in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969). Tailwind mappings are generated and checked; application-level consumption remains integration work.
 
-- [x] Verify existing three-theme OKLCH foundations: Light, true-black OLED Dark and Sepia. | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
+- [x] Verify existing three-theme OKLCH foundations: Light, charcoal Dark and Sepia (shared Home canvas adopted on 22 October 2026). | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
 - [x] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
 - [x] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
 - [x] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
@@ -1236,11 +1236,13 @@ User-selected references and the latest sidebar/card corrections are recorded in
 - [x] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
 - [x] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
 - [x] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.
-- [x] Light / OLED Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` to `oled_dark` mapping and sync retry.
+- [x] Light / Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` to `oled_dark` mapping and sync retry.
 - [x] Route loading skeletons and friendly 404/error recovery.
 - [x] Bottom-right circular logo chat shortcut with "Message PansGPT" tooltip; mobile draft composer; keyboard page search.
 - [x] Framer Motion route transitions respect reduced motion.
 - [x] Reference-shaped document card grid, Learn cards and Activities study-streak/agenda preview; labelled samples never persist or invoke inference.
+
+22 October shared-theme follow-up: promote the approved Home charcoal canvas to the shared dark-theme token for every page; remove its Home-only color override. Existing secondary card/sidebar surfaces, Light/Sepia and persisted `oled_dark` preference mapping remain compatible. See [verification](dashboard-refinement-2026-10-22.md).
 
 22 October follow-up: user-approved narrower Home layout, softer charcoal canvas, compact document cards, taller white/black Learn covers and shared schedule loading/error/empty states. Recent cards use private first-page thumbnails from the actual R2 PDFs; accounts without reading history show active library documents under “From your library”. The development indicator is disabled to avoid overlap with the chat shortcut. [Scope and verification](dashboard-refinement-2026-10-22.md); this does not close hosted or Phase 10 aggregate/offline/performance gates.
 
@@ -1542,7 +1544,7 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 - [ ] Profile editor: first_name, last_name, current_level, university_id
 - [ ] `<UserInitialsAvatar />` — first initial from `first_name`, deterministic color
 - [ ] AI response style preference: `concise | balanced | detailed` → stored in user preferences
-- [ ] Theme selector: Light / OLED Dark / Sepia Warm
+- [ ] Theme selector: Light / Dark / Sepia Warm
 - [ ] Active session list + individual session revocation
 - [ ] Password change (via Supabase `updateUser`)
 - [ ] Account deletion: 30-day soft delete → GDPR purge cron

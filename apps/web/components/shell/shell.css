@@ -1783,10 +1783,6 @@
   color: var(--text-tertiary-600);
 }
 
-/* Home uses the design system's charcoal canvas; saved OLED preferences stay intact. */
-[data-theme="dark"] .app-shell[data-home="true"] {
-  --bg-primary: var(--figma-colors-gray-dark-mode-950);
-}
 @media (min-width: 861px) {
   .app-shell[data-home="true"] .shell-main {
     width: 100%;
