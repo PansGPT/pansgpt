@@ -1,7 +1,7 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
 > **Source of Truth**: Every decision in this roadmap is drawn directly from [`implementation_plan.md`](implementation_plan.md).
-> **Core Philosophy**: Engines are built and verified first via API tests. UI is built last, on top of proven infrastructure.
+> **Core Philosophy**: Backend foundations and API tests gate live integration. Frontend and backend coding may proceed in parallel against agreed typed contracts and explicit sample data.
 > **Budget**: $0 pilot with operator-managed workers. Provider privacy eligibility and account compute allocation must be verified before hosted use.
 
 ## Phase 0?7 remediation gate ? 20 October 2026
@@ -28,7 +28,7 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 - [x] Database verification synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
 - [ ] Synchronize the new staging deployment and worker verification follow-ups; phases remain Testing while release gates are pending.
 
-No new phase 8?17 feature expansion or phase 0?7 completion certification until the applicable gates pass. Existing walking-skeleton code remains available for verification.
+The earlier hold on phase 8?17 development is superseded for contract-first frontend coding by the user-approved 22 October workflow below. Phase 0?7 completion certification and live feature release still require the applicable gates; mock UI does not close them.
 
 On 21 October the user approved completing the remaining Phase 9.2 shared-library primitives. That library work is verified; new product routes and app-shell integration retain the staging gate.
 
@@ -36,11 +36,11 @@ On 21 October the user approved completing the remaining Phase 9.2 shared-librar
 
 ## 🧭 The Engine-First Principle
 
-Most teams build auth screens and home pages before the core product engine exists.
-That is the wrong order. Here is the correct order:
+Backend foundations and verified APIs remain delivery dependencies. The user approved parallel frontend coding on 22 October 2026: agree a feature's typed contracts, states and acceptance criteria first, then implement frontend fixtures and backend services in parallel.
 
 ```
-Infrastructure → Engines (no UI) → API verification → Walking skeleton → Full UI
+Foundations → Agreed contracts → Frontend with mocks + Backend implementation
+           → API/security verification → Live integration → Release verification
 ```
 
 For PansGPT:
@@ -53,12 +53,14 @@ For PansGPT:
 5. Build the document ingestion engine (R2, PyMuPDF, 8-stage pipeline, gemini-embedding-2, HNSW) <!-- [EMBED FIX] -->
 6. Build the AI/LLM orchestration engine (Gemma 4 → Groq → OpenRouter, tools, SSE)
 7. Build the auth backend (JWKS, JWT, RBAC role guards)
-8. Verify all three engines work via pytest API tests — no UI yet
+8. Verify all three engines work via pytest API tests before live integration
 9. Build the walking skeleton web UI (sign up → upload → chat → AI response on staging)
-10. Build the full UI surface by surface on top of proven APIs
+10. Build each full UI against agreed contracts; integrate with proven APIs as they pass their gates
 11. Add mobile (Expo), then desktop (Electron), then payments, email, SEO
 12. Security hardening, observability, load testing, launch
 ```
+
+Use `../pansgpt-eli` as a reference for flows and data shapes, adapting selected code to the current architecture and design tokens. Frontend previews must label synthetic data, keep unfinished live paths disabled or identified, and never mask real API failures. See [the legacy reuse handoff](legacy-reuse-and-parallel-development-2026-10-22.md) for evidence, schema mismatches and the cofounder workflow. Mock-only work does not complete a feature or authorize a legacy database import.
 
 ---
 
@@ -1406,6 +1408,16 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 
 > ⚠️ **Scope Clarification (Option A)**: Phase 13 builds **BOTH the Backend Quiz Generation Engine & ARQ Workers (`apps/api/app/routers/quiz.py`, `apps/api/app/engines/quiz.py`) AND the Frontend Quiz Interface**.
 
+> **22 October development amendment:** Frontend coding may start against agreed shared DTOs and explicit synthetic fixtures while the backend is implemented. The legacy quiz flow is a reference, not a compatible API. Phase 13 remains Pending; [the handoff](legacy-reuse-and-parallel-development-2026-10-22.md) records the outstanding contract and security work.
+
+### 13.0 Contracts & Legacy Adaptation
+
+- [ ] Agree shared request/response DTOs, job and SSE states, timing units, scoring rules and acceptance criteria before frontend/backend implementation diverges
+- [ ] Reconcile Section 11's five planned formats with existing database constraints using forward CLI migrations; distinguish multi-select from per-option True/False negative marking
+- [ ] Define taking DTOs without answer keys/explanations, authorized result DTOs, submission retry semantics and opt-in minimal public sharing
+- [ ] Restrict database access so clients cannot read unreleased answer keys or write authoritative questions, grades and job state; verify grants/RLS and cross-user/tenant access in real database tests
+- [ ] Build an explicit frontend fixture adapter covering success, empty, loading, partial generation, failure, cancellation, privacy hold and expired session states
+
 ### 13.1 Backend Quiz Engine & Generation Pipeline (`apps/api/app/routers/quiz.py`)
 
 - [ ] Async background quiz generation ARQ worker (`generate_quiz_task`)
@@ -1420,11 +1432,11 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 ### 13.2 Frontend Quiz System Interface (`apps/web/app/app/quiz/`)
 
 - [ ] Quiz builder modal: select topics, difficulty, count, time limit, question formats
-- [ ] Enqueue `generate_quiz` ARQ job → return `quiz_generation_job_id`
+- [ ] Submit the agreed job request to FastAPI; the backend durably enqueues generation and returns the agreed typed job response
 - [ ] Client polls `GET /api/quiz/jobs/{id}` or subscribes to Supabase Realtime for progress
-- [ ] Questions parsed from tagged XML blocks: `<question>QUESTION: ... TYPE: ... A: ... ANSWER: ... EXPLANATION: ...</question>` — deterministic regex parse, no JSON fragility
-- [ ] Validated with Pydantic `QuizQuestionModel`
-- [ ] Question formats: MCQ, True/False, Multi-Select, Fill-in-blank, Negative marking
+- [ ] Consume typed, sanitized question DTOs; tagged-block parsing and Pydantic question validation run in the backend
+- [ ] Validate API responses at the frontend boundary against the agreed DTOs
+- [ ] Render Section 11 formats: Objective, Multi-Select, per-option True/False with negative marking, single True/False and Short Answer; existing fill-blank/clinical schema values require explicit scope reconciliation before adding UI
 - [ ] Timed interface: countdown timer, question navigator, flag-for-review
 - [ ] Auto-submit on timer expiry
 - [ ] Results: score, per-question breakdown, explanations for wrong answers

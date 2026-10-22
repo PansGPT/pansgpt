@@ -1,10 +1,12 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
 > **Status**: ✅ Section 1 Complete — Stack Decisions Locked.
-> **Approach**: Engine-first implementation; completion requires executable verification, not design approval.
+> **Approach**: Contract-first parallel frontend/backend development on backend foundations; live integration and completion require executable verification.
 > **Budget**: Bootstrapped — $0. Every decision must have a free tier that works.
 
-> **2026-10-20 implementation amendment:** The [phase 0?7 remediation record](phase-0-7-remediation-2026-10-20.md) governs current implementation status and supersedes conflicting historical descriptions. The original feature inventory remains historical. Phase 8 expansion is gated on migrated-database contracts, privacy eligibility, and the staging journey. Offline tests do not establish hosted readiness.
+> **2026-10-20 implementation amendment:** The [phase 0?7 remediation record](phase-0-7-remediation-2026-10-20.md) governs current implementation status and supersedes conflicting historical descriptions. The original feature inventory remains historical. Live feature release is gated on applicable migrated-database contracts, privacy eligibility, and the staging journey. Offline tests do not establish hosted readiness.
+
+> **2026-10-22 development amendment (user-approved):** Frontend coding may precede backend completion after agreeing typed contracts, states and acceptance criteria. Frontend fixtures and backend implementation may proceed in parallel; mocks must be synthetic and explicitly identified. Review legacy `../pansgpt-eli` flows and data shapes, then adapt selected code to this monorepo's design system, auth, tenancy, database and API patterns. This supersedes backend-first restrictions on frontend coding, while preserving integration/release gates, server-authoritative grading, API-only AI routing and strict ZDR blocking. See [AGENTS.md](../AGENTS.md) and [the legacy reuse handoff](legacy-reuse-and-parallel-development-2026-10-22.md). No live legacy data migration is authorized by this workflow change.
 
 > **2026-10-20 database verification:** All 31 migrations and seed replayed in disposable Supabase; staging received its 15 pending migrations through the CLI. Generated types, 50 table contracts, 18 RPC declarations, RLS/grants, UUIDv7 and scheduled jobs are verified. Existing 4 documents and 275 chunks retained identical checksums. [Evidence and upgrade fixes](database-verification-2026-10-20.md). Application deployment, provider eligibility and device journeys remain release gates; phases 0-7 are not universally certified complete.
 
@@ -4277,6 +4279,8 @@ GET    /api/learn/retests                                   ← List pending spa
 > In reality, Phase 6 focused strictly on conversational chat streaming and RAG retrieval. The dedicated Quiz Generation Engine (`apps/api/app/routers/quiz.py`, ARQ generation workers, tagged XML parsing, scoring algorithms) was **never built in Phase 6**.  
 > Therefore, under **Phase 13**, we build **BOTH the end-to-end Backend Quiz Engine & Generation Workers AND the Frontend Quiz Interface (Builder Modal, Timed Taking Screen, Result Card)**.
 
+> **Contract and security prerequisite (22 October 2026):** Section 11 describes the intended system, not an implemented quiz backend. Agree the public DTOs before parallel implementation; reconcile Section 11 formats with current `quiz_questions.question_type` constraints via forward migrations. Taking and progress responses exclude answer keys/explanations; enforce the same boundary through database grants/RLS, and prohibit client writes to authoritative grades and job state. Parse and validate model output in FastAPI, not in clients. Public sharing must be opt-in with an explicit minimal payload; the historical public endpoint description below does not authorize exposing full questions, answer keys or another student's best attempt. [Legacy findings and pending decisions](legacy-reuse-and-parallel-development-2026-10-22.md).
+
 ---
 
 ### 11.1 System Architecture & Async Generation Pipeline
@@ -4470,7 +4474,7 @@ Students can share their quiz achievements directly to WhatsApp study groups, st
 - **WhatsApp Web Desktop Fallback**: Automatically downloads the high-res PNG and opens WhatsApp Web with a pre-formatted message:
   > _"18/20 in PCL 421 – thanks to PANSGPT! 🎯\n🔥 Outstanding Performance!\nJoin my study group on PansGPT: https://pansgpt.app"_
 - **Download Image**: 1-click download as `pansgpt-quiz-result-{timestamp}.png`.
-- **Public Share Endpoint**: Non-authenticated public view route (`GET /api/quiz/share/{quiz_id}`) for peers opening shared links.
+- **Public Share Endpoint**: Opt-in, revocable public result-summary route (`GET /api/quiz/share/{quiz_id}`) for peers opening shared links. Return only an agreed minimal share DTO; never full question rows, answer keys or another student's best attempt. Define share identifiers and access semantics before implementation.
 
 ---
 
@@ -4571,7 +4575,7 @@ GET    /api/quiz/{quizId}                ← Fetch full quiz metadata and genera
 POST   /api/quiz/submit                  ← Submit answers for grading ({quizId, answers: [{questionId, selectedAnswer}], timeTaken})
 GET    /api/quiz/results/{resultId}      ← Fetch detailed score breakdown, option-level scoring, and explanations
 GET    /api/quiz/history                 ← Get user's paginated quiz attempt history with course/level filters
-GET    /api/quiz/share/{quizId}          ← Public endpoint returning quiz questions & top attempt for peer shares
+GET    /api/quiz/share/{quizId}          ← Opt-in, revocable minimal result summary; no answer keys or private attempts
 ```
 
 ---

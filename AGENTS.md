@@ -7,9 +7,15 @@
 
 ## 1. Core Non-Negotiable Engineering Principles
 
-1. **Engine-First Sequence**:
-   - Sequence: `Infrastructure -> Database Schema & Migrations -> Ingestion & AI Engines -> API Verification (pytest) -> Walking Skeleton UI -> Full Platform UI`.
-   - Never build frontend pages or auth screens before backend engines, database tables, and API contracts are implemented and verified via automated tests.
+1. **Contract-First Parallel Development; Verified Integration**:
+   - Infrastructure, database security and backend engines remain the foundation. Frontend coding may start before its backend is complete once the feature's typed request/response contracts, states and acceptance criteria are agreed and recorded. Frontend and backend implementation may then proceed in parallel.
+   - Put shared TypeScript DTOs in `packages/types`; align backend Pydantic schemas and contract tests with them. Resolve schema and plan mismatches before treating legacy payloads as new contracts. Database row types alone are not public API contracts.
+   - Frontend work may use deterministic, synthetic fixtures behind an explicit development/demo adapter. Identify sample data visibly; never silently replace live failures with mocks or use real student data as committed fixtures. Mock-driven UI may be reviewed and merged with unfinished live integration disabled or clearly identified.
+   - Enable live feature integration only after the applicable migrations, backend authorization, validation and pytest API contracts pass. Mark the feature complete only after real frontend/backend journeys and required CI gates pass; a working mock proves only the frontend scope tested. Existing staging, native-device and provider privacy release gates remain open until verified.
+   - Use sibling `../pansgpt-eli` as a reference for existing flows, components and data shapes. Adapt selected code into this monorepo using its current design system, auth, tenancy and API patterns; do not introduce runtime imports from the legacy folder, copy credentials or run legacy SQL scripts. Moving actual legacy records requires a separate reviewed mapping and non-destructive migration/import procedure.
+   - Quiz generation, answer keys, grading, scores and authoritative timing remain backend-controlled. Live taking/progress responses must exclude answers and explanations until authorized review. Enforce this at database grants/RLS as well as API serialization; mock scores never become persisted attempts.
+
+   This workflow was explicitly approved by the user on 22 October 2026 and supersedes the earlier prohibition on frontend implementation before backend completion. See [legacy reuse and parallel development handoff](docs/legacy-reuse-and-parallel-development-2026-10-22.md).
 
 2. **Strict AI Engine Routing**:
    - **Clients (Web, Mobile, Desktop) NEVER invoke LLM providers directly.**
@@ -147,6 +153,8 @@ pansgpt/
 ---
 
 ## 6. Platform Implementation Sequence
+
+These phases define delivery dependencies and completion gates. Under Section 1.1, frontend coding against agreed contracts and mocks can proceed ahead of the corresponding backend; this does not certify the phase or bypass its integration/release gates.
 
 1. **Phase 0–3**: Monorepo Scaffolding, Secrets Validation, Multi-Environment Wiring.
 2. **Phase 4**: Database Foundation (Schema, Extensions, RLS, Seed, Functions).
