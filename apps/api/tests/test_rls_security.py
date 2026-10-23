@@ -10,7 +10,8 @@ from app.core.config import settings
 
 async def _get_live_test_connection() -> asyncpg.Connection | None:
     """Helper to establish a direct connection to PostgreSQL for RLS verification."""
-    url = settings.DATABASE_URL or os.getenv("DATABASE_URL")
+    # [CHAT FIX 2] Never inherit the app's database: these tests insert rows before rollback.
+    url = os.getenv("RLS_TEST_DATABASE_URL")
     if not url:
         return None
     try:
@@ -27,13 +28,16 @@ async def _get_live_test_connection() -> asyncpg.Connection | None:
         return None
 
 
+@pytest.mark.live  # [CHAT FIX 2] Requires a dedicated disposable test database.
 @pytest.mark.asyncio
 async def test_university_scoping_invariant():
     """Verify that multi-tenant PostgreSQL Row-Level Security (RLS) isolation
     strictly prevents cross-university data access at the database level."""
     conn = await _get_live_test_connection()
     if not conn:
-        pytest.skip("PostgreSQL staging/test database unreachable; skipping live RLS test.")
+        pytest.skip(
+            "Dedicated RLS_TEST_DATABASE_URL not configured or test database unreachable."
+        )  # [CHAT FIX 2]
 
     try:
         # Execute inside a transaction that is guaranteed to roll back cleanly
@@ -168,13 +172,16 @@ async def test_university_scoping_invariant():
         await conn.close()
 
 
+@pytest.mark.live  # [CHAT FIX 2]
 @pytest.mark.asyncio
 async def test_document_chunks_rls_isolation():
     """Verify that Row-Level Security on document_chunks strictly prohibits
     cross-tenant vector/chunk retrieval for students from another university."""
     conn = await _get_live_test_connection()
     if not conn:
-        pytest.skip("PostgreSQL staging/test database unreachable; skipping live RLS test.")
+        pytest.skip(
+            "Dedicated RLS_TEST_DATABASE_URL not configured or test database unreachable."
+        )  # [CHAT FIX 2]
 
     try:
         async with conn.transaction():
@@ -238,7 +245,7 @@ async def test_document_chunks_rls_isolation():
             )
 
             chunk_lag_id = uuid.uuid4()
-            dummy_vector = [0.0] * 3072
+            dummy_vector = [0.0] * settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
             await conn.execute(
                 """
                 INSERT INTO public.document_chunks (id, document_id, content, chunk_index, embedding)

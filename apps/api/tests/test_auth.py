@@ -217,10 +217,12 @@ async def test_upload_endpoint_with_student_role_returns_403(client, rsa_key_pai
 
 @pytest.mark.asyncio
 async def test_upload_endpoint_with_admin_role_succeeds(
-    client, rsa_key_pair, mock_jwks, monkeypatch
+    client,  # [PRELAUNCH FIX]
+    rsa_key_pair,  # [PRELAUNCH FIX]
+    mock_jwks,  # [PRELAUNCH FIX]
+    mock_upload_services,  # [PRELAUNCH FIX]
 ):
     """Verify POST /api/v1/library/upload allows university_admin and super_admin."""
-    monkeypatch.setattr("app.routers.library.settings.DATABASE_URL", "")
     admin_token = make_token(
         rsa_key_pair,
         role="university_admin",
@@ -341,6 +343,7 @@ async def test_api_key_validation(client, monkeypatch):
 async def test_dev_bypass_in_development_returns_super_admin(client, monkeypatch):
     """Verify development mode without auth headers returns dev super_admin."""
     monkeypatch.setattr(settings, "ENVIRONMENT", "development")
+    monkeypatch.setattr(settings, "LOCAL_DEV_MODE", True)  # [PRELAUNCH FIX]
     response = await client.get("/api/v1/auth/me")
     assert response.status_code == 200
     data = response.json()

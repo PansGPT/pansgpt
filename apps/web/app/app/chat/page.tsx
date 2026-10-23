@@ -23,6 +23,8 @@ import {
   CitationItem,
   ToolExecutionState,
   ArtifactItem,
+  SSEParsedEvent,
+  externalSourceUrl, // [CHAT FIX 2]
 } from "@/lib/sse-parser";
 import { ToolExecutionBadge } from "@/components/tools/ToolExecutionBadge";
 import { ArtifactRenderer } from "@/components/artifacts/ArtifactRenderer";
@@ -81,9 +83,7 @@ export default function ChatPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-          "X-User-Id": userId,
-          "X-University-Id": profile?.university_id || "",
+          Authorization: `Bearer ${session.access_token}`, // [DEPS FIX]
         },
         body: JSON.stringify({
           title: "Pharmacology Study Session",
@@ -99,7 +99,7 @@ export default function ChatPage() {
       console.error("Failed to create chat session", err);
     }
     return null;
-  }, [sessionId, session, userId, profile]);
+  }, [sessionId, session]); // [DEPS FIX]
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -150,9 +150,7 @@ export default function ChatPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token || ""}`,
-          "X-User-Id": userId,
-          "X-University-Id": profile?.university_id || "",
+          Authorization: `Bearer ${session?.access_token || ""}`, // [DEPS FIX]
         },
         body: JSON.stringify({
           message: prompt,
@@ -171,37 +169,18 @@ export default function ChatPage() {
       const decoder = new TextDecoder();
       const sseParser = new SSEEventStreamReader();
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          // Flush any final buffered events
-          const finalEvents = sseParser.flush();
-          for (const evt of finalEvents) {
-            const data = evt.data as any;
-            if (evt.event === "done" && data.full_text) {
-              setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMsgId ? { ...msg, content: data.full_text } : msg
-                )
-              );
-            }
-          }
-          break;
-        }
-
-        const rawChunk = decoder.decode(value, { stream: true });
-        const events = sseParser.push(rawChunk);
-
+      const applyEvents = (events: SSEParsedEvent[]) => {
+        // [CHAT FIX 2]
         for (const evt of events) {
-          const data = evt.data as any;
+          const { event, data } = evt; // [CHAT FIX 2] Narrow validated payloads by event.
 
-          if (evt.event === "text_chunk" && data.token) {
+          if (event === "text_chunk" && data.token) {
             setMessages((prev) =>
               prev.map((msg) =>
                 msg.id === assistantMsgId ? { ...msg, content: msg.content + data.token } : msg
               )
             );
-          } else if (evt.event === "thinking_chunk" && data.token) {
+          } else if (event === "thinking_chunk" && data.token) {
             setMessages((prev) =>
               prev.map((msg) =>
                 msg.id === assistantMsgId
@@ -209,11 +188,11 @@ export default function ChatPage() {
                   : msg
               )
             );
-          } else if (evt.event === "citations" && Array.isArray(data)) {
+          } else if (event === "citations") {
             setMessages((prev) =>
               prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, citations: data } : msg))
             );
-          } else if (evt.event === "tool_start" && data.call_id) {
+          } else if (event === "tool_start" && data.call_id) {
             const newTool: ToolExecutionState = {
               call_id: data.call_id,
               tool_name: data.tool_name || "tool",
@@ -233,7 +212,7 @@ export default function ChatPage() {
                 return { ...msg, tools: [...existing, newTool] };
               })
             );
-          } else if (evt.event === "tool_end" && data.call_id) {
+          } else if (event === "tool_end" && data.call_id) {
             setMessages((prev) =>
               prev.map((msg) => {
                 if (msg.id !== assistantMsgId) return msg;
@@ -252,7 +231,7 @@ export default function ChatPage() {
                 return { ...msg, tools: updated };
               })
             );
-          } else if (evt.event === "artifact_ready" && data.skill_name) {
+          } else if (event === "artifact_ready" && data.skill_name) {
             const artifact: ArtifactItem = {
               skill_name: data.skill_name,
               title: data.title || "Generated Artifact",
@@ -268,18 +247,26 @@ export default function ChatPage() {
                 return { ...msg, artifacts: [...existing, artifact] };
               })
             );
-          } else if (evt.event === "done") {
+          } else if (event === "done") {
             if (data.full_text) {
+              const fullText = data.full_text; // [CHAT FIX 2]
               setMessages((prev) =>
-                prev.map((msg) =>
-                  msg.id === assistantMsgId ? { ...msg, content: data.full_text } : msg
-                )
+                prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: fullText } : msg))
               );
             }
-          } else if (evt.event === "error") {
+          } else if (event === "error") {
             setStreamError(data.error || "Streaming error encountered.");
           }
         }
+      };
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          applyEvents(sseParser.push(decoder.decode()));
+          applyEvents(sseParser.flush()); // [CHAT FIX 2] Preserve every final event, including errors.
+          break;
+        }
+        applyEvents(sseParser.push(decoder.decode(value, { stream: true })));
       }
     } catch (err: unknown) {
       if (err instanceof DOMException && err.name === "AbortError") {
@@ -410,12 +397,26 @@ export default function ChatPage() {
 
                   {/* Assistant Collapsible Reasoning Block */}
                   {msg.role === "assistant" && msg.thinking && (
-                    <details className="mb-3 rounded-xl border border-neutral-200 bg-neutral-50/80 p-2.5 text-xs text-neutral-600 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-300">
-                      <summary className="flex cursor-pointer select-none items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
-                        <ChevronDown className="h-3.5 w-3.5" />
-                        Clinical Reasoning & Retrieval Context
+                    <details
+                      open={!msg.content ? true : undefined}
+                      className="mb-3 rounded-xl border border-emerald-200/70 bg-emerald-50/50 p-2.5 text-xs text-neutral-700 dark:border-emerald-950/60 dark:bg-emerald-950/20 dark:text-neutral-300 transition-all"
+                    >
+                      <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-emerald-800 dark:text-emerald-300">
+                        <div className="flex items-center gap-1.5">
+                          <Sparkles
+                            className={`h-3.5 w-3.5 ${
+                              !msg.content ? "animate-pulse text-emerald-600" : "text-emerald-500"
+                            }`}
+                          />
+                          <span>
+                            {!msg.content
+                              ? "Reasoning in progress..."
+                              : "Thought Process & Clinical Reasoning"}
+                          </span>
+                        </div>
+                        <ChevronDown className="h-3.5 w-3.5 text-neutral-400" />
                       </summary>
-                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] text-neutral-600 dark:text-neutral-400 max-h-48 overflow-y-auto">
+                      <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-neutral-600 dark:text-neutral-400 max-h-56 overflow-y-auto rounded-lg bg-white/70 dark:bg-neutral-900/60 p-2 border border-neutral-200/50 dark:border-neutral-800/50">
                         {msg.thinking}
                       </pre>
                     </details>
@@ -447,24 +448,38 @@ export default function ChatPage() {
                     <div className="mt-3 border-t border-neutral-100 pt-2 dark:border-neutral-800">
                       <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
                         <BookOpen className="h-3 w-3" />
-                        <span>Verified Course Citations</span>
+                        <span>Sources</span>{" "}
+                        {/* [CHAT FIX 2] Web sources are labeled separately. */}
                       </div>
                       <div className="mt-1.5 flex flex-wrap gap-1.5">
-                        {msg.citations.map((c, i) => (
-                          <span
-                            key={i}
-                            className="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
-                            title={c.snippet}
-                          >
-                            <span className="font-semibold text-emerald-700 dark:text-emerald-400">
-                              {c.course_code || "REF"}
+                        {msg.citations.map((c, i) =>
+                          externalSourceUrl(c) ? (
+                            <a
+                              key={i}
+                              href={externalSourceUrl(c)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] underline dark:bg-neutral-800"
+                              title={c.snippet}
+                            >
+                              {c.title} — Outside the lecture materials
+                            </a>
+                          ) : (
+                            <span
+                              key={i}
+                              className="inline-flex items-center gap-1 rounded-md bg-neutral-100 px-2 py-0.5 text-[11px] text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+                              title={c.snippet}
+                            >
+                              <span className="font-semibold text-emerald-700 dark:text-emerald-400">
+                                {c.course_code || "REF"}
+                              </span>
+                              <span className="truncate max-w-[140px]">{c.title}</span>
+                              {c.page_start && (
+                                <span className="opacity-60">(p. {c.page_start})</span>
+                              )}
                             </span>
-                            <span className="truncate max-w-[140px]">{c.title}</span>
-                            {c.page_start && (
-                              <span className="opacity-60">(p. {c.page_start})</span>
-                            )}
-                          </span>
-                        ))}
+                          )
+                        )}
                       </div>
                     </div>
                   )}

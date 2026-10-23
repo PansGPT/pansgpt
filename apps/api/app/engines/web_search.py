@@ -9,6 +9,7 @@ import hashlib
 import time
 from datetime import UTC, datetime
 from typing import Any
+from urllib.parse import urlsplit  # [CHAT FIX 2]
 
 import httpx
 import structlog
@@ -172,6 +173,8 @@ class WebSearchEngine:
         Executes web search with MD5 caching and per-user daily quota enforcement.
         """
         norm_query = " ".join(query.strip().split())
+        if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
+            return {"results": [], "source": "disabled", "status": "success"}  # [CHAT FIX 2]
         if not norm_query:
             return {"results": [], "source": "empty_query", "status": "success"}
 
@@ -218,7 +221,7 @@ class WebSearchEngine:
 
         # Step 3: Execute Upstream Search (Tavily or Fallback)
         results: list[dict[str, Any]] = []
-        source = "curated-biomedical-fallback"
+        source = "no_web_results"  # [CHAT FIX 2]
 
         if self.tavily_key and not any(
             p in self.tavily_key.lower() for p in ["placeholder", "dummy", "test"]
@@ -243,28 +246,20 @@ class WebSearchEngine:
                             results = [
                                 {
                                     "title": item.get("title", "Biomedical Literature"),
-                                    "url": item.get("url", "https://pubmed.ncbi.nlm.nih.gov"),
+                                    "url": item["url"],  # [CHAT FIX 2]
                                     "content": item.get("content", ""),
                                 }
                                 for item in tavily_items
+                                if isinstance(item.get("url"), str)  # [CHAT FIX 2]
+                                and urlsplit(item["url"]).scheme  # [CHAT FIX 2]
+                                in {"https", "http"}  # [CHAT FIX 2]
+                                and urlsplit(item["url"]).netloc  # [CHAT FIX 2]
+                                and isinstance(item.get("content"), str)  # [CHAT FIX 2]
+                                and item["content"].strip()  # [CHAT FIX 2]
                             ]
                             source = "tavily-biomedical"
             except Exception as exc:
                 logger.warning("tavily_api_call_failed", error=str(exc))
-
-        # Fallback if Tavily returned no results or is unconfigured
-        if not results:
-            results = [
-                {
-                    "title": f"Biomedical Literature Reference: {norm_query}",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov",
-                    "content": (
-                        f"Pharmacological consensus reference for '{norm_query}': "
-                        "Clinical pharmacology guidelines recommend cross-referencing therapeutic drug "
-                        "mechanisms, receptor selectivity, and adverse reactions against official pharmacopeial monographs (BNF, USP, WHO)."
-                    ),
-                }
-            ]
 
         # Step 4: Populate MD5 Result Cache
         self._result_cache[query_hash] = (now, results)

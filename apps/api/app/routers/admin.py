@@ -12,12 +12,14 @@ import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
+from app.core.authorization import require_university  # [TENANT FIX]
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import (
     UserContext,
     require_admin_or_super_admin,
 )
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.core.rate_limit import limiter
 
 logger = structlog.get_logger(__name__)
@@ -123,15 +125,16 @@ async def create_lecturer_invite(
     - Generates multi-use, expiring token.
     - Optionally dispatches invite email via Resend if email is provided.
     """
+    authenticated_university = require_university(current_user)  # [TENANT FIX]
     # Determine target university
     target_uni_id = payload.university_id or (
-        str(current_user.university_id) if current_user.university_id else DEFAULT_UNIJOS_ID
+        str(authenticated_university)  # [TENANT FIX]
     )
     try:
         uni_uuid = uuid.UUID(target_uni_id)
     except ValueError as exc:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail=f"Invalid target university UUID format: {target_uni_id}",
         ) from exc
 
@@ -149,7 +152,7 @@ async def create_lecturer_invite(
     now = datetime.now(UTC)
     expires_at = now + timedelta(days=payload.expires_in_days)
     invite_token = secrets.token_hex(24)
-    invite_id = uuid.uuid4()
+    invite_id = uuid7()  # [LEFTOVER FIX]
     app_base_url = "https://pansgpt.com"
     invite_url = f"{app_base_url}/signup?invite={invite_token}"
 

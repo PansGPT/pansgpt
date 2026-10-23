@@ -6,9 +6,9 @@
  * Standard HTTP header keys used across Web, Mobile, Desktop and API.
  */
 export const AUTH_HEADERS = {
+  // [DEPS FIX] Verified login supplies caller identity.
   API_KEY: "x-api-key",
   CLIENT_ID: "x-client-id",
-  UNIVERSITY_ID: "x-university-id",
   REQUEST_ID: "x-request-id",
 } as const;
 
@@ -32,10 +32,10 @@ export const PORTS = {
 export const AI_MODELS = {
   PRIMARY: "gemma-4-31b-it",
   SECONDARY: "gemma-4-26b-a4b-it",
-  EMBEDDING: "gemini-embedding-002",
-  EMBEDDING_DIMENSIONS: 3072,
+  EMBEDDING: "gemini-embedding-2", // [EMBED FIX]
+  EMBEDDING_DIMENSIONS: 1536, // [DIM 1536]
   GROQ_FALLBACK: "openai/gpt-oss-120b",
-  OPENROUTER_FALLBACK: "google/gemma-2-27b-it",
+  OPENROUTER_FALLBACK: "nvidia/nemotron-3-ultra-550b-a55b:free", // [CHAT FIX 2] Match backend metadata.
 } as const;
 
 /**

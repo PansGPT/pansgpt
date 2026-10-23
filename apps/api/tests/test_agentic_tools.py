@@ -1,17 +1,36 @@
 # ==============================================================================
 # Phase 6B: Dynamic AI Skills, Agentic Tools & Whisper STT Verification Suite
 # ==============================================================================
-
 import io
+import unittest.mock
+import uuid  # [CHAT FIX 2]
+from contextlib import asynccontextmanager  # [CHAT FIX 2]
 
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, Response  # [CHAT FIX 2]
 
 from app.engines.guard import STUDY_DISCLAIMER, policy_guard
 from app.engines.llm import MultiTierLlmEngine
 from app.engines.rag import rag_engine
 from app.engines.skills import skill_engine
+from app.engines.storage import DEFAULT_UNIVERSITY_ID, storage_engine  # [CHAT FIX 2]
 from app.engines.tools import tool_engine
+from app.engines.web_search import web_search_engine  # [CHAT FIX 2]
+from tests.conftest import TenantTestState  # [TENANT FIX]
+
+
+@pytest.fixture(autouse=True)
+def mock_r2_artifact_upload(monkeypatch):
+    """Prevent tests from uploading dummy artifact files to live Cloudflare R2."""
+    monkeypatch.setattr(
+        "app.engines.skills.r2_storage.upload_bytes",
+        unittest.mock.AsyncMock(return_value="https://mock-r2-url/test"),
+    )
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        type(storage_engine),  # [CHAT FIX 2]
+        "is_configured",  # [CHAT FIX 2]
+        property(lambda _: True),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
 
 
 # ------------------------------------------------------------------------------
@@ -29,6 +48,7 @@ async def test_hybrid_rag_acronym_and_fallback_retrieval():
     """Verify hybrid RAG retrieval normalizes acronyms and returns structured citations."""
     context, citations = await rag_engine.retrieve_context(
         query="What is the MOA of HCTZ in HTN?",
+        university_id=DEFAULT_UNIVERSITY_ID,  # [TENANT FIX]
         match_count=2,
     )
     # Even if database is empty/offline in test, query normalization and function exit cleanly
@@ -52,11 +72,12 @@ async def test_skill_create_doc_generates_valid_docx():
             }
         ],
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_doc"
     assert payload.file_extension == "docx"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/docs/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/docs/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".docx")
     assert payload.download_url is not None
@@ -69,11 +90,12 @@ async def test_skill_create_pdf_generates_valid_pdf():
         title="Antimicrobial Susceptibility Pocket Guide",
         content="Beta-lactams inhibit peptidoglycan transpeptidase cell wall cross-linking.",
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_pdf"
     assert payload.file_extension == "pdf"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pdf/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/pdf/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".pdf")
     assert payload.download_url is not None
@@ -92,11 +114,12 @@ async def test_skill_create_pptx_generates_valid_presentation():
             }
         ],
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_pptx"
     assert payload.file_extension == "pptx"
     assert payload.storage_key.startswith(
-        "universities/01a07664-7a69-7ce0-ad6a-b219462cbde3/artifacts/pptx/"
+        "artifacts/01a07664-7a69-7ce0-ad6a-b219462cbde3/018f3a10-0001-7000-8000-000000000001/pptx/"  # [CHAT FIX]
     )
     assert payload.storage_key.endswith(".pptx")
     assert payload.download_url is not None
@@ -104,15 +127,24 @@ async def test_skill_create_pptx_generates_valid_presentation():
 
 @pytest.mark.asyncio
 async def test_skill_default_fallback_university_artifacts():
-    """Verify that when no university_id is provided, storage key falls back to universities/default/artifacts/."""
+    """Reject implicit tenant defaults; retain explicit university artifact assertions. [CHAT FIX]"""
+    with pytest.raises(ValueError, match="University and owner are required"):  # [CHAT FIX]
+        await skill_engine.execute_create_md(  # [CHAT FIX]
+            "Missing tenant",  # [CHAT FIX]
+            "Offline",  # [CHAT FIX]
+            user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
+        )  # [CHAT FIX]
     payload = await skill_engine.execute_create_md(
         title="Pharmacokinetics Overview",
         markdown_content="ADME processes overview.",
-        university_id=None,
+        university_id=DEFAULT_UNIVERSITY_ID,  # [CHAT FIX]
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
     assert payload.skill_name == "create_md"
     assert payload.file_extension == "md"
-    assert payload.storage_key.startswith("universities/default/artifacts/md/")
+    assert payload.storage_key.startswith(  # [CHAT FIX]
+        f"artifacts/{DEFAULT_UNIVERSITY_ID}/018f3a10-0001-7000-8000-000000000001/md/"  # [CHAT FIX]
+    )  # [CHAT FIX]
     assert payload.storage_key.endswith(".md")
     assert payload.download_url is not None
 
@@ -159,8 +191,28 @@ async def test_skill_chemical_structure():
 # 3. Core AI Tools Execution Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_tool_web_search_biomedical():
+async def test_tool_web_search_biomedical(monkeypatch: pytest.MonkeyPatch) -> None:  # [CHAT FIX 2]
     """Verify web search returns biomedical literature results."""
+    monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
+    monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        AsyncClient,  # [CHAT FIX 2]
+        "post",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            return_value=Response(  # [CHAT FIX 2]
+                200,  # [CHAT FIX 2]
+                json={  # [CHAT FIX 2]
+                    "results": [  # [CHAT FIX 2]
+                        {  # [CHAT FIX 2]
+                            "title": "Published research",  # [CHAT FIX 2]
+                            "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",  # [CHAT FIX 2]
+                            "content": "Real upstream result mocked for the unit test.",  # [CHAT FIX 2]
+                        }  # [CHAT FIX 2]
+                    ]  # [CHAT FIX 2]
+                },  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     result = await tool_engine.execute_web_search("Amoxicillin renal adjustment")
     assert "results" in result
     assert len(result["results"]) > 0
@@ -177,7 +229,10 @@ async def test_tool_dispatcher_invalid_tool():
 # 4. Agentic SSE Stream with Tool Invocations
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
+async def test_agentic_chat_streaming_tool_events(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify SSE streaming produces tool_start, artifact_ready, and tool_end events."""
     session_id = "018f3a30-0001-7000-8000-000000000002"
     payload = {
@@ -189,11 +244,11 @@ async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
     response = await client.post(
         f"/api/v1/ai/chat/sessions/{session_id}/stream",
         json=payload,
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert response.status_code == 200
     text = response.text
     assert "event: init" in text
+    assert "event: thinking_chunk" in text
     assert "event: tool_start" in text
     assert "event: artifact_ready" in text
     assert "event: tool_end" in text
@@ -205,7 +260,10 @@ async def test_agentic_chat_streaming_tool_events(client: AsyncClient):
 # 5. Voice Transcription STT Endpoint
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_voice_transcription_endpoint(client: AsyncClient):
+async def test_voice_transcription_endpoint(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify POST /ai/chat/transcribe endpoint processes uploaded audio."""
     fake_audio = io.BytesIO(b"RIFF\x24\x00\x00\x00WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00")
     files = {"file": ("mic_input.wav", fake_audio, "audio/wav")}
@@ -314,8 +372,30 @@ def test_candidate_reranking_scoring_and_ordering():
 # 9. Absence Policy & Autonomous Web Search Fallback Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_absence_policy_triggers_web_search_fallback():
+async def test_absence_policy_triggers_web_search_fallback(  # [CHAT FIX 2]
+    monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
+) -> None:  # [CHAT FIX 2]
     """Verify that low/empty syllabus confidence autonomously triggers web search fallback."""
+    monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
+    monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        AsyncClient,  # [CHAT FIX 2]
+        "post",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            return_value=Response(  # [CHAT FIX 2]
+                200,  # [CHAT FIX 2]
+                json={  # [CHAT FIX 2]
+                    "results": [  # [CHAT FIX 2]
+                        {  # [CHAT FIX 2]
+                            "title": "Published research",  # [CHAT FIX 2]
+                            "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",  # [CHAT FIX 2]
+                            "content": "Real upstream result mocked for the unit test.",  # [CHAT FIX 2]
+                        }  # [CHAT FIX 2]
+                    ]  # [CHAT FIX 2]
+                },  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     context, citations = await rag_engine.retrieve_context(
         query="What is the novel mechanism of Teclistamab in relapsed myeloma?",
         university_id="01a07664-7a69-7ce0-ad6a-b219462cbde3",
@@ -371,10 +451,54 @@ async def test_multi_tier_failover_http_429_to_groq(monkeypatch):
 # 11. Multi-Tenant Cross-University Isolation Test
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_rag_cross_university_tenant_isolation():
+async def test_rag_cross_university_tenant_isolation(monkeypatch):  # [CHAT FIX 2]
     """Verify RAG retrieval cleanly enforces university tenant boundary."""
     uni_a = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
     uni_b = "01a07664-7a69-7ce0-ad6a-b219462cbde4"
+
+    from app.engines import rag as rag_module  # [CHAT FIX 2]
+
+    async def fetch(sql, *args):  # [CHAT FIX 2]
+        if "match_documents_hybrid" not in sql:  # [CHAT FIX 2]
+            return []  # [CHAT FIX 2]
+        assert "d.university_id = $5" in sql  # [CHAT FIX 2]
+        assert "d.status = 'active'" in sql and "d.deleted_at IS NULL" in sql  # [CHAT FIX 2]
+        return [  # [CHAT FIX 2]
+            dict(  # [CHAT FIX 2]
+                chunk_id=args[4],  # [CHAT FIX 2]
+                document_id=args[4],  # [CHAT FIX 2]
+                content=str(args[4]),  # [CHAT FIX 2]
+                page_start=1,  # [CHAT FIX 2]
+                page_end=1,  # [CHAT FIX 2]
+                chunk_index=0,  # [CHAT FIX 2]
+                dense_score=0.9,  # [CHAT FIX 2]
+                fts_score=0.5,  # [CHAT FIX 2]
+                trgm_score=0.5,  # [CHAT FIX 2]
+                rrf_score=0.04,  # [CHAT FIX 2]
+                segment_id=None,  # [CHAT FIX 2]
+                bounding_box=None,  # [CHAT FIX 2]
+                doc_title="Verified lecture",  # [CHAT FIX 2]
+                course_code="PCL 401",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ]  # [CHAT FIX 2]
+
+    @asynccontextmanager  # [CHAT FIX 2]
+    async def connection():  # [CHAT FIX 2]
+        yield unittest.mock.AsyncMock(  # [CHAT FIX 2]
+            fetch=unittest.mock.AsyncMock(side_effect=fetch)  # [CHAT FIX 2]
+        )  # [CHAT FIX 2]
+
+    async def rerank(query, candidates, **kwargs):  # [CHAT FIX 2]
+        return [dict(row, rerank_score=0.9) for row in candidates]  # [CHAT FIX 2]
+
+    monkeypatch.setattr(rag_module, "get_db_connection", connection)  # [CHAT FIX 2]
+    monkeypatch.setattr(rag_module.settings, "ENABLE_QUERY_EXPANSION", False)  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        rag_module.gemini_embedder,  # [CHAT FIX 2]
+        "embed_batch",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(return_value=[[0.0] * 1536]),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
+    monkeypatch.setattr(rag_module.candidate_reranker, "rerank", rerank)  # [CHAT FIX 2]
 
     ctx_a, cits_a = await rag_engine.retrieve_context(
         query="Pharmacokinetics of digoxin in heart failure",
@@ -386,3 +510,5 @@ async def test_rag_cross_university_tenant_isolation():
     )
     assert ctx_a is not None
     assert ctx_b is not None
+    assert [citation.document_id for citation in cits_a] == [str(uuid.UUID(uni_a))]  # [CHAT FIX 2]
+    assert [citation.document_id for citation in cits_b] == [str(uuid.UUID(uni_b))]  # [CHAT FIX 2]

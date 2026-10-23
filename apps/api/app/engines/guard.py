@@ -467,12 +467,25 @@ class PolicyGuardEngine:
             "4. Maintain a supportive, academic, professional tone appropriate for training future licensed pharmacists.\n"
             "5. Format output with clear markdown headings, bullet points, and chemical/receptor mechanisms where appropriate.\n"
             "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
+            "7. Step-by-step reasoning: Before your final response or when selecting tools, enclose your internal clinical analysis, syllabus breakdown, and pedagogical rationale inside <think>...</think> tags. This thinking process will be rendered in the student's interactive reasoning inspector.\n"
         )
 
         if rag_context and rag_context.strip():
-            base += f"\n--- VERIFIED COURSE MATERIAL CHUNKS ---\n{rag_context}\n--- END COURSE MATERIALS ---\n"
+            label = (  # [CHAT FIX 2]
+                "EXTERNAL WEB RESULTS — OUTSIDE THE LECTURE MATERIALS"  # [CHAT FIX 2]
+                if "Outside the lecture materials" in rag_context  # [CHAT FIX 2]
+                else "VERIFIED COURSE MATERIAL CHUNKS"  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+            base += f"\n--- {label} ---\n{rag_context}\n--- END SOURCES ---\n"  # [CHAT FIX 2]
         else:
             base += "\n(No specific lecture monograph chunks were retrieved for this question. Answer generally based on standard pharmacology principles while reminding the student to verify with their official course slides.)\n"
+
+        base += (
+            "\nREASONING & THINKING DIRECTIVE:\n"
+            "Begin your response with your clinical and pedagogical reasoning enclosed in <think>...</think> tags. "
+            "Analyze the mechanism of action, relevant contraindications, syllabus context, and plan your explanation or tool selection. "
+            "Then provide your clear student-facing explanation or summary.\n"
+        )
 
         return base
 

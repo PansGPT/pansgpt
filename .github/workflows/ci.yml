@@ -60,7 +60,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12" # [CHAT FIX 2] Match the production image.
 
       - name: Install Dependencies
         working-directory: apps/api
@@ -113,7 +113,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12" # [CHAT FIX 2]
 
       - name: Install Gitleaks Binary
         run: |

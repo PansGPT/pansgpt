@@ -1,14 +1,69 @@
 # ==============================================================================
 # Gemini Embedding Engine (Stage 8)  # [EMBED FIX]
-# Model: gemini-embedding-2, 3072 dimensions, batch processing  # [EMBED FIX]
+# Model: gemini-embedding-2, 1536 dimensions, batch processing  # [DIM 1536]
 # ==============================================================================
 
 import asyncio  # [EMBED FIX]
 import hashlib  # [EMBED FIX]
 import math  # [EMBED FIX]
+import re  # [EMBED RETRY FIX]
 from typing import Literal  # [EMBED FIX]
 
+import structlog  # [EMBED RETRY FIX]
+
 from app.core.config import settings  # [EMBED FIX]
+
+logger = structlog.get_logger(__name__)  # [EMBED RETRY FIX]
+
+
+def _parse_retry_delay(exc: Exception) -> float | None:  # [EMBED RETRY FIX]
+    """Extract retry delay seconds from Google APIError details or message."""  # [EMBED RETRY FIX]
+    details = getattr(exc, "details", None)  # [EMBED RETRY FIX]
+    detail_list = []  # [EMBED RETRY FIX]
+    if isinstance(details, dict):  # [EMBED RETRY FIX]
+        if "error" in details and isinstance(details["error"], dict):  # [EMBED RETRY FIX]
+            detail_list = details["error"].get("details", [])  # [EMBED RETRY FIX]
+        else:  # [EMBED RETRY FIX]
+            detail_list = details.get("details", [])  # [EMBED RETRY FIX]
+    elif isinstance(details, list):  # [EMBED RETRY FIX]
+        detail_list = details  # [EMBED RETRY FIX]
+
+    if isinstance(detail_list, list):  # [EMBED RETRY FIX]
+        for item in detail_list:  # [EMBED RETRY FIX]
+            if isinstance(item, dict):  # [EMBED RETRY FIX]
+                delay_val = item.get("retryDelay", item.get("retry_delay"))  # [EMBED RETRY FIX]
+                if delay_val is not None:  # [EMBED RETRY FIX]
+                    if isinstance(delay_val, str):  # [EMBED RETRY FIX]
+                        m = re.search(r"([\d.]+)", delay_val)  # [EMBED RETRY FIX]
+                        if m:  # [EMBED RETRY FIX]
+                            return float(m.group(1))  # [EMBED RETRY FIX]
+                    elif isinstance(delay_val, (int, float)):  # [EMBED RETRY FIX]
+                        return float(delay_val)  # [EMBED RETRY FIX]
+                    elif isinstance(delay_val, dict):  # [EMBED RETRY FIX]
+                        return float(delay_val.get("seconds", 0))  # [EMBED RETRY FIX]
+
+    msg = getattr(exc, "message", None) or str(exc)  # [EMBED RETRY FIX]
+    m = re.search(
+        r"retry\s+(?:in|after)\s+([\d.]+)\s*s", str(msg), re.IGNORECASE
+    )  # [EMBED RETRY FIX]
+    if m:  # [EMBED RETRY FIX]
+        return float(m.group(1))  # [EMBED RETRY FIX]
+
+    m = re.search(r"retryDelay[\"'\s:]+([\d.]+)", str(exc), re.IGNORECASE)  # [EMBED RETRY FIX]
+    if m:  # [EMBED RETRY FIX]
+        return float(m.group(1))  # [EMBED RETRY FIX]
+
+    return None  # [EMBED RETRY FIX]
+
+
+def _is_rate_limit(exc: Exception) -> bool:  # [EMBED RETRY FIX]
+    """Determine if exception is a 429 / RESOURCE_EXHAUSTED error."""  # [EMBED RETRY FIX]
+    code = getattr(exc, "code", None)  # [EMBED RETRY FIX]
+    status = getattr(exc, "status", None)  # [EMBED RETRY FIX]
+    if code == 429 or status == "RESOURCE_EXHAUSTED":  # [EMBED RETRY FIX]
+        return True  # [EMBED RETRY FIX]
+    exc_str = str(exc).lower()  # [EMBED RETRY FIX]
+    return "429" in exc_str or "resource_exhausted" in exc_str  # [EMBED RETRY FIX]
 
 
 class EmbeddingError(Exception):  # [EMBED FIX]
@@ -18,10 +73,18 @@ class EmbeddingError(Exception):  # [EMBED FIX]
 
 
 class GeminiEmbeddingEngine:  # [EMBED FIX]
-    """Generates 3072-dimensional dense vector embeddings using Google AI Studio."""  # [EMBED FIX]
+    """Generates 1536-dimensional dense vector embeddings using Google AI Studio."""  # [DIM 1536]
 
     def __init__(self):  # [EMBED FIX]
-        self.model_name = settings.GEMINI_EMBEDDING_MODEL  # [EMBED FIX]
+        raw_model = settings.GEMINI_EMBEDDING_MODEL
+        if not raw_model or raw_model in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            raw_model = "gemini-embedding-2"
+        self.model_name = raw_model
         self.dimensions = settings.GEMINI_EMBEDDING_DIMENSIONS  # [EMBED FIX]
         self.api_key = settings.GEMINI_API_KEY  # [EMBED FIX]
 
@@ -46,7 +109,7 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
     def _generate_deterministic_vector(self, text: str) -> list[float]:
         """
         Fallback for offline unit tests:
-        Generates deterministic 3072d pseudo-random normalized vector based on SHA256 of text.
+        Generates deterministic 1536d pseudo-random normalized vector based on SHA256 of text.  # [DIM 1536]
         """
         seed = int(hashlib.sha256(text.encode("utf-8")).hexdigest(), 16)
         vec = []
@@ -70,7 +133,9 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
     ) -> list[float]:  # [EMBED FIX]
         """Embed a single text string."""  # [EMBED FIX]
         results = await self.embed_batch(  # [EMBED FIX]
-            [text], kind=kind, titles=[title] if title else None  # [EMBED FIX]
+            [text],
+            kind=kind,
+            titles=[title] if title else None,  # [EMBED FIX]
         )  # [EMBED FIX]
         return results[0]  # [EMBED FIX]
 
@@ -81,8 +146,8 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
         titles: list[str] | None = None,  # [EMBED FIX]
         max_batch_size: int = 32,  # [EMBED FIX]
     ) -> list[list[float]]:  # [EMBED FIX]
-        """  # [EMBED FIX]
-        Embed a list of text strings into 3072-dimensional vectors.  # [EMBED FIX]
+        """# [EMBED FIX]
+        Embed a list of text strings into 1536-dimensional vectors.  # [DIM 1536]
         Uses single batched API calls of wrapped Content objects capped at 32 items.  # [EMBED FIX]
         """  # [EMBED FIX]
         if not texts:  # [EMBED FIX]
@@ -113,6 +178,13 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
             http_options=types.HttpOptions(api_version="v1"),
         )  # [EMBED FIX]
         model_name = self.model_name or settings.GEMINI_EMBEDDING_MODEL  # [EMBED FIX]
+        if not model_name or model_name in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            model_name = "gemini-embedding-2"
         dimensions = self.dimensions or settings.GEMINI_EMBEDDING_DIMENSIONS  # [EMBED FIX]
         config = types.EmbedContentConfig(output_dimensionality=dimensions)  # [EMBED FIX]
         all_embeddings: list[list[float]] = []  # [EMBED FIX]
@@ -124,10 +196,12 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
                 for s in batch  # [EMBED FIX]
             ]  # [EMBED FIX]
 
-            retries = 3  # [EMBED FIX]
-            delay = 1.0  # [EMBED FIX]
+            max_429_attempts = 5  # [EMBED RETRY FIX]
+            attempt_429 = 0  # [EMBED RETRY FIX]
+            retries_other = 3  # [EMBED RETRY FIX]
+            delay_other = 1.0  # [EMBED RETRY FIX]
 
-            while retries > 0:  # [EMBED FIX]
+            while True:  # [EMBED RETRY FIX]
                 try:  # [EMBED FIX]
                     resp = await asyncio.wait_for(  # [EMBED FIX]
                         client.aio.models.embed_content(  # [EMBED FIX]
@@ -155,30 +229,49 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
                 except EmbeddingError:  # [EMBED FIX]
                     raise  # [EMBED FIX]
                 except Exception as exc:  # [EMBED FIX]
+                    if _is_rate_limit(exc):  # [EMBED RETRY FIX]
+                        attempt_429 += 1  # [EMBED RETRY FIX]
+                        if attempt_429 >= max_429_attempts:  # [EMBED RETRY FIX]
+                            orig_msg = getattr(exc, "message", None) or str(
+                                exc
+                            )  # [EMBED RETRY FIX]
+                            raise EmbeddingError(orig_msg) from exc  # [EMBED RETRY FIX]
+                        parsed_wait = _parse_retry_delay(exc)  # [EMBED RETRY FIX]
+                        wait_base = (
+                            parsed_wait if parsed_wait is not None else 60.0
+                        )  # [EMBED RETRY FIX]
+                        sleep_seconds = min(65.0, wait_base + 1.0)  # [EMBED RETRY FIX]
+                        logger.warning(  # [EMBED RETRY FIX]
+                            "embed_rate_limited",  # [EMBED RETRY FIX]
+                            wait_seconds=sleep_seconds,  # [EMBED RETRY FIX]
+                            attempt=attempt_429,  # [EMBED RETRY FIX]
+                            attempt_number=attempt_429,  # [EMBED RETRY FIX]
+                        )  # [EMBED RETRY FIX]
+                        await asyncio.sleep(sleep_seconds)  # [EMBED RETRY FIX]
+                        continue  # [EMBED RETRY FIX]
+
                     is_retryable = False  # [EMBED FIX]
                     if isinstance(exc, (TimeoutError, asyncio.TimeoutError)):  # [EMBED FIX]
                         is_retryable = True  # [EMBED FIX]
                     elif isinstance(exc, errors.APIError):  # [EMBED FIX]
                         code = getattr(exc, "code", None)  # [EMBED FIX]
-                        if code == 429 or (code is not None and 500 <= code < 600):  # [EMBED FIX]
+                        if code is not None and 500 <= code < 600:  # [EMBED RETRY FIX]
                             is_retryable = True  # [EMBED FIX]
-                    elif (  # [EMBED FIX]
-                        "429" in str(exc)  # [EMBED FIX]
-                        or "resource_exhausted" in str(exc).lower()  # [EMBED FIX]
-                        or "timeout" in str(exc).lower()  # [EMBED FIX]
-                    ):  # [EMBED FIX]
+                    elif "timeout" in str(exc).lower():  # [EMBED RETRY FIX]
                         is_retryable = True  # [EMBED FIX]
 
                     if not is_retryable:  # [EMBED FIX]
-                        raise EmbeddingError(f"Non-retryable embedding failure: {exc}") from exc  # [EMBED FIX]
+                        raise EmbeddingError(
+                            f"Non-retryable embedding failure: {exc}"
+                        ) from exc  # [EMBED FIX]
 
-                    retries -= 1  # [EMBED FIX]
-                    if retries == 0:  # [EMBED FIX]
+                    retries_other -= 1  # [EMBED RETRY FIX]
+                    if retries_other == 0:  # [EMBED RETRY FIX]
                         raise EmbeddingError(  # [EMBED FIX]
                             f"Embedding call failed after 3 attempts: {exc}"  # [EMBED FIX]
                         ) from exc  # [EMBED FIX]
-                    await asyncio.sleep(delay)  # [EMBED FIX]
-                    delay *= 2.0  # [EMBED FIX]
+                    await asyncio.sleep(delay_other)  # [EMBED RETRY FIX]
+                    delay_other *= 2.0  # [EMBED RETRY FIX]
 
         return all_embeddings  # [EMBED FIX]
 

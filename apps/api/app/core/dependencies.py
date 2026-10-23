@@ -458,8 +458,7 @@ async def get_current_user(
     Resolves verified user identity:
     1. Validates Bearer JWT with Supabase JWKS (RS256).
     2. Queries user roles and university tenant context from Postgres.
-    3. Supports test role header overrides in test suites.
-    4. Falls back to dev bypass when ENVIRONMENT == 'development' and unauthenticated.
+    3. Explicit LOCAL_DEV_MODE permits local role headers and unauthenticated dev login. [PRELAUNCH FIX]
     """
     auth_str = authorization if isinstance(authorization, str) else None
     role_str = x_user_role if isinstance(x_user_role, str) else None
@@ -496,7 +495,7 @@ async def get_current_user(
         )
 
     # 2. Direct role header (for automated pytest test suites & internal dev mocks)
-    if role_str and settings.ENVIRONMENT == "development":
+    if role_str and settings.local_dev_enabled:  # [PRELAUNCH FIX]
         uid = uid_str or "018f3a10-0001-7000-8000-000000000001"
         return UserContext(
             id=uid,
@@ -513,7 +512,7 @@ async def get_current_user(
         )
 
     # 3. Dev bypass for development environment without auth headers
-    if settings.ENVIRONMENT == "development" and not auth_str and not role_str:
+    if settings.local_dev_enabled and not auth_str and not role_str:  # [PRELAUNCH FIX]
         return UserContext(
             id="018f3a10-0001-7000-8000-000000000001",
             email="dev-admin@unijos.edu.ng",

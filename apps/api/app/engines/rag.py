@@ -1,12 +1,13 @@
 # ==============================================================================
 # PansGPT 2.0 RAG Pipeline & Context Assembler (Phase 6)
-# Model: gemini-embedding-2 (3072d Dense Vector Search) + FTS + Trigram (RRF k=60)
+# Model: gemini-embedding-2 (1536d Dense Vector Search) + FTS + Trigram (RRF k=60)  # [DIM 1536]
 # ==============================================================================
 
 import json
 import re
 import uuid
 from typing import Any
+from urllib.parse import urlsplit  # [CHAT FIX 2]
 
 import structlog
 
@@ -19,6 +20,9 @@ from app.engines.reranker import candidate_reranker
 from app.models.chat import CitationItem
 
 logger = structlog.get_logger(__name__)
+ABSENCE_NOTICE = (  # [CHAT FIX 2]
+    "This topic was not found in your course materials. No external web sources are available."  # [CHAT FIX 2]
+)  # [CHAT FIX 2]
 
 
 class RagRetrievalEngine:
@@ -26,7 +30,7 @@ class RagRetrievalEngine:
     3-Pool Hybrid RAG Retrieval Engine:
     - Normalizes medical abbreviations with 200+ term clinical dictionary
     - Multi-Query decomposition & HyDE hypothetical document generation
-    - Computes 3072d dense vector embeddings via Gemini
+    - Computes 1536d dense vector embeddings via Gemini  # [DIM 1536]
     - Executes PostgreSQL 3-Pool Hybrid Search (Vector + FTS + Trigram) with RRF (k=60)
     - Multi-factor candidate re-ranking (Dense + RRF + Lexical Overlap + Metadata)
     - Absence Policy automated web search fallback for low/empty confidence
@@ -66,11 +70,55 @@ class RagRetrievalEngine:
         """
         return candidate_reranker.fallback_heuristic_scoring(query, candidates)[:top_k]
 
+    @staticmethod  # [CHAT FIX 2]
+    async def _keyword_search(  # [CHAT FIX 2]
+        conn: Any,  # [CHAT FIX 2]
+        university: uuid.UUID,  # [CHAT FIX 2]
+        documents: list[uuid.UUID] | None,  # [CHAT FIX 2]
+        course: str | None,  # [CHAT FIX 2]
+        query: str,  # [CHAT FIX 2]
+        limit: int,  # [CHAT FIX 2]
+    ) -> list:  # [CHAT FIX 2]
+        sql = """ -- [CHAT FIX 2]
+            WITH eligible AS ( -- [CHAT FIX 2]
+                SELECT c.*, d.title AS doc_title, d.course_code -- [CHAT FIX 2]
+                FROM public.document_chunks c -- [CHAT FIX 2]
+                JOIN public.documents d ON d.id = c.document_id -- [CHAT FIX 2]
+                WHERE d.university_id = $1 AND d.status = 'active' AND d.deleted_at IS NULL -- [CHAT FIX 2]
+                  AND ($2::uuid[] IS NULL OR d.id = ANY($2)) -- [CHAT FIX 2]
+                  AND ($3::text IS NULL OR d.course_code = $3) -- [CHAT FIX 2]
+            ), fts AS ( -- [CHAT FIX 2]
+                SELECT id, ts_rank_cd(content_fts, websearch_to_tsquery('english', $4)) AS score, -- [CHAT FIX 2]
+                       row_number() OVER (ORDER BY ts_rank_cd(content_fts, websearch_to_tsquery('english', $4)) DESC) AS rank -- [CHAT FIX 2]
+                FROM eligible WHERE content_fts @@ websearch_to_tsquery('english', $4) -- [CHAT FIX 2]
+            ), trgm AS ( -- [CHAT FIX 2]
+                SELECT id, word_similarity($4, content) AS score, -- [CHAT FIX 2]
+                       row_number() OVER (ORDER BY word_similarity($4, content) DESC) AS rank -- [CHAT FIX 2]
+                FROM eligible WHERE word_similarity($4, content) > 0.35 -- [CHAT FIX 2]
+            ) -- [CHAT FIX 2]
+            SELECT e.id AS chunk_id, e.document_id, e.content, e.chunk_index, e.page_start, -- [CHAT FIX 2]
+                   e.page_end, e.segment_id, e.bounding_box, e.doc_title, e.course_code, -- [CHAT FIX 2]
+                   0.0::float8 AS dense_score, COALESCE(f.score, 0.0) AS fts_score, -- [CHAT FIX 2]
+                   COALESCE(t.score, 0.0) AS trgm_score, -- [CHAT FIX 2]
+                   (COALESCE(1.0 / (60 + f.rank), 0.0) + COALESCE(1.0 / (60 + t.rank), 0.0)) AS rrf_score -- [CHAT FIX 2]
+            FROM eligible e LEFT JOIN fts f ON f.id = e.id LEFT JOIN trgm t ON t.id = e.id -- [CHAT FIX 2]
+            WHERE f.id IS NOT NULL OR t.id IS NOT NULL -- [CHAT FIX 2]
+            ORDER BY rrf_score DESC LIMIT $5; -- [CHAT FIX 2]
+        """  # [CHAT FIX 2]
+        return await conn.fetch(  # [CHAT FIX 2]
+            sql,  # [CHAT FIX 2]
+            university,  # [CHAT FIX 2]
+            documents,  # [CHAT FIX 2]
+            course.upper().strip() if course else None,  # [CHAT FIX 2]
+            query,  # [CHAT FIX 2]
+            limit,  # [CHAT FIX 2]
+        )  # [CHAT FIX 2]
+
     async def retrieve_context(
         self,
         query: str,
         document_id: str | None = None,
-        university_id: str | None = "01a07664-7a69-7ce0-ad6a-b219462cbde3",
+        university_id: str | None = None,  # [TENANT FIX]
         course_code: str | None = None,
         match_count: int = 4,
         match_threshold: float = 0.25,
@@ -83,6 +131,21 @@ class RagRetrievalEngine:
         Supports contextual history rewriting for follow-up questions with pronouns.
         Returns: (assembled_context_markdown, list_of_citations)
         """
+        if university_id is None:  # [TENANT FIX]
+            raise ValueError("university_id is required for document retrieval.")  # [TENANT FIX]
+        filter_uni_uuid = uuid.UUID(university_id)  # [TENANT FIX]
+        if document_id:  # [TENANT FIX]
+            async with get_db_connection() as scope_conn:  # [TENANT FIX]
+                if scope_conn is None:  # [TENANT FIX]
+                    return None, []  # [TENANT FIX]
+                allowed = await scope_conn.fetchval(  # [TENANT FIX]
+                    "SELECT id FROM public.documents WHERE id = $1 AND university_id = $2 "  # [TENANT FIX]
+                    "AND status = 'active' AND deleted_at IS NULL;",  # [TENANT FIX]
+                    uuid.UUID(document_id),  # [TENANT FIX]
+                    filter_uni_uuid,  # [TENANT FIX]
+                )  # [TENANT FIX]
+                if allowed is None:  # [TENANT FIX]
+                    return None, []  # [TENANT FIX]
         # 1. Acronym Normalization (e.g., CVS -> Cardiovascular System, HCTZ -> Hydrochlorothiazide)
         normalized_query = policy_guard.normalize_medical_acronyms(query)
 
@@ -128,41 +191,63 @@ class RagRetrievalEngine:
                 expanded_queries = self.generate_multi_query_expansions(search_query)
                 hyde_passage = self.generate_hyde_passage(search_query)
 
-        # 4. Compute 3072d dense vector embeddings in batch
-        embed_texts = [search_query]
-        for eq in expanded_queries:
-            if eq != search_query and eq not in embed_texts:
-                embed_texts.append(eq)
-        has_hyde = bool(hyde_passage and len(hyde_passage.strip()) > 30)
-        if has_hyde:
-            embed_texts.append(hyde_passage)
+        # 4. Compute 1536d dense vector embeddings in batch  # [DIM 1536]
+        query_texts = [search_query]  # [EMBED FIX]
+        for eq in expanded_queries:  # [EMBED FIX]
+            if eq != search_query and eq not in query_texts:  # [EMBED FIX]
+                query_texts.append(eq)  # [EMBED FIX]
+        has_hyde = bool(hyde_passage and len(hyde_passage.strip()) > 30)  # [EMBED FIX]
+        embed_texts = list(query_texts)  # [EMBED FIX]
+        if has_hyde:  # [EMBED FIX]
+            embed_texts.append(hyde_passage)  # [EMBED FIX]
 
-        embeddings: list[list[float]] = []
-        try:
-            embeddings = await gemini_embedder.embed_batch(embed_texts)
-        except Exception as exc:
-            logger.warning("query_batch_embedding_failed", error=str(exc))
+        embeddings: list[list[float]] = []  # [EMBED FIX]
+        try:  # [EMBED FIX]
+            # Embed search_query and expanded queries with kind="query"  # [EMBED FIX]
+            query_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
+                query_texts,
+                kind="query",  # [EMBED FIX]
+            )  # [EMBED FIX]
+            embeddings.extend(query_embeddings)  # [EMBED FIX]
 
-        query_vector = embeddings[0] if embeddings else None
-        vector_str = f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None
+            if has_hyde:  # [EMBED FIX]
+                # Embed HyDE passage with kind="document" (hypothetical document passage; to be benchmarked)  # [EMBED FIX]
+                hyde_embeddings = await gemini_embedder.embed_batch(  # [EMBED FIX]
+                    [hyde_passage],
+                    kind="document",  # [EMBED FIX]
+                )  # [EMBED FIX]
+                embeddings.extend(hyde_embeddings)  # [EMBED FIX]
+        except Exception as exc:  # [EMBED FIX]
+            logger.warning(  # [CHAT FIX 2]
+                "query_batch_embedding_failed_dense_retrieval_skipped",  # [EMBED FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX 2]
+                error=str(exc) or repr(exc),  # [CHAT FIX 2]
+                msg="Dense vector retrieval skipped due to embedding failure; proceeding with FTS/trigram only",  # [EMBED FIX]
+            )  # [EMBED FIX]
+            embeddings = []  # [EMBED FIX]
+
+        query_vector = embeddings[0] if embeddings else None  # [EMBED FIX]
+        vector_str = (
+            f"[{','.join(str(x) for x in query_vector)}]" if query_vector else None
+        )  # [EMBED FIX]
 
         raw_matches: list[dict] = []
         seen_chunk_ids: set[str] = set()
 
         async with get_db_connection() as conn:
             try:
-                if not conn or not vector_str:
-                    raise ValueError("Database connection or vector unavailable for hybrid RAG")
+                if not conn:  # [CHAT FIX 2]
+                    raise ValueError("Database connection unavailable for RAG")  # [CHAT FIX 2]
 
                 # 4. Try Primary: 3-Pool Hybrid Search RPC (Vector + FTS + Trigram with RRF k=60)
-                filter_uni_uuid = uuid.UUID(university_id) if university_id else None
                 filter_doc_uuids = [uuid.UUID(document_id)] if document_id else None
 
                 # If course_code is provided without a document_id, resolve docs for that course
                 if not filter_doc_uuids and course_code:
                     course_doc_rows = await conn.fetch(
-                        "SELECT id FROM public.documents WHERE course_code = $1 AND deleted_at IS NULL",
+                        "SELECT id FROM public.documents WHERE course_code = $1 AND university_id = $2 AND status = 'active' AND deleted_at IS NULL",  # [TENANT FIX]
                         course_code.upper().strip(),
+                        filter_uni_uuid,  # [TENANT FIX]
                     )
                     if course_doc_rows:
                         filter_doc_uuids = [r["id"] for r in course_doc_rows]
@@ -194,19 +279,33 @@ class RagRetrievalEngine:
                         filter_doc_ids := $6
                     ) m
                     LEFT JOIN public.documents d ON d.id = m.document_id
+                    WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
+                      AND ($6::uuid[] IS NULL OR d.id = ANY($6)) -- [TENANT FIX]
                     ORDER BY m.rrf_score DESC;
                 """
                 try:
-                    rows = await conn.fetch(
-                        hybrid_sql,
-                        normalized_query,
-                        vector_str,
-                        float(match_threshold),
-                        int(match_count * 2),
-                        filter_uni_uuid,
-                        filter_doc_uuids,
-                    )
+                    if not vector_str:  # [CHAT FIX 2]
+                        rows = await self._keyword_search(  # [CHAT FIX 2]
+                            conn,  # [CHAT FIX 2]
+                            filter_uni_uuid,  # [CHAT FIX 2]
+                            filter_doc_uuids,  # [CHAT FIX 2]
+                            course_code,  # [CHAT FIX 2]
+                            normalized_query,  # [CHAT FIX 2]
+                            match_count * 2,  # [CHAT FIX 2]
+                        )  # [CHAT FIX 2]
+                    else:  # [CHAT FIX 2]
+                        rows = await conn.fetch(  # [CHAT FIX 2]
+                            hybrid_sql,  # [CHAT FIX 2]
+                            normalized_query,  # [CHAT FIX 2]
+                            vector_str,  # [CHAT FIX 2]
+                            float(match_threshold),  # [CHAT FIX 2]
+                            int(match_count * 2),  # [CHAT FIX 2]
+                            filter_uni_uuid,  # [CHAT FIX 2]
+                            filter_doc_uuids,  # [CHAT FIX 2]
+                        )  # [CHAT FIX 2]
                 except Exception as hybrid_exc:
+                    if not vector_str:  # [CHAT FIX 2]
+                        raise  # [CHAT FIX 2]
                     logger.info("match_documents_hybrid_rpc_fallback", error=str(hybrid_exc))
                     # Fallback to legacy RPC if hybrid RPC is not present
                     if document_id:
@@ -228,6 +327,7 @@ class RagRetrievalEngine:
                                 d.course_code
                             FROM public.match_document_chunks($1::vector, $2, $3, $4) m
                             LEFT JOIN public.documents d ON d.id = m.document_id
+                            WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
                             ORDER BY m.similarity DESC;
                         """
                         rows = await conn.fetch(
@@ -236,17 +336,13 @@ class RagRetrievalEngine:
                             float(match_threshold),
                             int(match_count * 2),
                             uuid.UUID(document_id),
+                            filter_uni_uuid,  # [TENANT FIX]
                         )
                     else:
                         candidate_docs = filter_doc_uuids
                         if not candidate_docs:
-                            doc_filter_sql = (
-                                "SELECT id FROM public.documents WHERE deleted_at IS NULL"
-                            )
-                            params: list = []
-                            if filter_uni_uuid:
-                                doc_filter_sql += " AND university_id = $1"
-                                params.append(filter_uni_uuid)
+                            doc_filter_sql = "SELECT id FROM public.documents WHERE deleted_at IS NULL AND status = 'active' AND university_id = $1"  # [TENANT FIX]
+                            params: list[uuid.UUID] = [filter_uni_uuid]  # [TENANT FIX]
                             doc_rows = await conn.fetch(doc_filter_sql, *params)
                             candidate_docs = [r["id"] for r in doc_rows]
 
@@ -271,6 +367,8 @@ class RagRetrievalEngine:
                                     d.course_code
                                 FROM public.match_documents_global($1::vector, $2, $3, $4::uuid[]) m
                                 LEFT JOIN public.documents d ON d.id = m.document_id
+                                WHERE d.university_id = $5 AND d.status = 'active' AND d.deleted_at IS NULL -- [TENANT FIX]
+                                  AND d.id = ANY($4) -- [TENANT FIX]
                                 ORDER BY m.similarity DESC;
                             """
                             rows = await conn.fetch(
@@ -279,6 +377,7 @@ class RagRetrievalEngine:
                                 float(match_threshold),
                                 int(match_count * 2),
                                 candidate_docs,
+                                filter_uni_uuid,  # [TENANT FIX]
                             )
 
                 for r in rows:
@@ -402,18 +501,27 @@ class RagRetrievalEngine:
                 is_empty_or_low = True
 
         if is_empty_or_low:
+            if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
+                return ABSENCE_NOTICE, []  # [CHAT FIX 2]
             logger.info("absence_policy_triggered_invoking_web_search", query=query)
             from app.engines.tools import tool_engine
 
             web_res = await tool_engine.execute_web_search(query=normalized_query, num_results=3)
-            web_results = web_res.get("results", [])
+            web_results = [  # [CHAT FIX 2]
+                item  # [CHAT FIX 2]
+                for item in web_res.get("results", [])  # [CHAT FIX 2]
+                if isinstance(item.get("url"), str)  # [CHAT FIX 2]
+                and urlsplit(item["url"]).scheme in {"https", "http"}  # [CHAT FIX 2]
+                and urlsplit(item["url"]).netloc  # [CHAT FIX 2]
+                and isinstance(item.get("content"), str)  # [CHAT FIX 2]
+                and item["content"].strip()  # [CHAT FIX 2]
+            ]  # [CHAT FIX 2]
             if web_results:
                 web_citations: list[CitationItem] = []
                 web_blocks: list[str] = [
                     "> [!NOTE]\n"
-                    "> **Absence Policy Notice**: This pharmacological topic was not found with sufficient confidence "
-                    "in your university syllabus lecture slides. Verified biomedical literature (PubMed / DailyMed / BNF) "
-                    "has been retrieved as an authoritative fallback to prevent hallucination."
+                    "> **Absence Policy Notice**: This topic was not found in your course materials. "  # [CHAT FIX 2]
+                    "**Outside the lecture materials**: the following real web search results are external references."  # [CHAT FIX 2]
                 ]
                 for w_idx, item in enumerate(web_results):
                     w_title = item.get("title", "Biomedical Literature Reference")
@@ -421,12 +529,12 @@ class RagRetrievalEngine:
                     w_url = item.get("url", "")
                     web_citations.append(
                         CitationItem(
-                            chunk_id=str(uuid.uuid4()),
-                            document_id=str(uuid.uuid4()),
+                            source_type="web",  # [CHAT FIX 2]
+                            url=w_url,  # [CHAT FIX 2]
                             title=w_title,
                             course_code="WEB-REF",
-                            page_start=1,
-                            page_end=1,
+                            page_start=None,  # [CHAT FIX 2]
+                            page_end=None,  # [CHAT FIX 2]
                             similarity=0.75,
                             snippet=w_snippet[:200] + "..." if len(w_snippet) > 200 else w_snippet,
                             dense_score=0.75,
@@ -438,11 +546,11 @@ class RagRetrievalEngine:
                         )
                     )
                     web_blocks.append(
-                        f"[External Verified Source {w_idx + 1}: {w_title}]({w_url})\n{w_snippet}"
+                        f"[External Web Source {w_idx + 1}: {w_title}]({w_url})\n{w_snippet}"  # [CHAT FIX 2]
                     )
                 return "\n\n".join(web_blocks), web_citations
 
-            return None, []
+            return None, []  # [CHAT FIX 2]
 
         # 7. Sibling or Full-Segment Expansion for Top Match
         if reranked_matches and (expand_full_segment or expand_siblings):
@@ -458,10 +566,16 @@ class RagRetrievalEngine:
                             seg_sql = """
                                 SELECT content
                                 FROM public.document_chunks
-                                WHERE document_id = $1 AND segment_id = $2
+                                WHERE document_id = $1 AND segment_id = $2 -- [TENANT FIX]
+                                  AND EXISTS (SELECT 1 FROM public.documents d WHERE d.id = document_id AND d.university_id = $3 AND d.status = 'active' AND d.deleted_at IS NULL) -- [TENANT FIX]
                                 ORDER BY chunk_index ASC;
                             """
-                            seg_rows = await conn.fetch(seg_sql, doc_uuid, uuid.UUID(seg_id))
+                            seg_rows = await conn.fetch(  # [TENANT FIX]
+                                seg_sql,  # [TENANT FIX]
+                                doc_uuid,  # [TENANT FIX]
+                                uuid.UUID(seg_id),  # [TENANT FIX]
+                                filter_uni_uuid,  # [TENANT FIX]
+                            )  # [TENANT FIX]
                             if seg_rows:
                                 top_chunk["expanded_content"] = "\n\n".join(
                                     r["content"].strip() for r in seg_rows
@@ -470,11 +584,16 @@ class RagRetrievalEngine:
                             sibling_sql = """
                                 SELECT id, document_id, content, page_start, page_end, chunk_index
                                 FROM public.document_chunks
-                                WHERE document_id = $1 AND chunk_index IN ($2, $3)
+                                WHERE document_id = $1 AND chunk_index IN ($2, $3) -- [TENANT FIX]
+                                  AND EXISTS (SELECT 1 FROM public.documents d WHERE d.id = document_id AND d.university_id = $4 AND d.status = 'active' AND d.deleted_at IS NULL) -- [TENANT FIX]
                                 ORDER BY chunk_index ASC;
                             """
                             siblings = await conn.fetch(
-                                sibling_sql, doc_uuid, max(0, c_idx - 1), c_idx + 1
+                                sibling_sql,  # [TENANT FIX]
+                                doc_uuid,  # [TENANT FIX]
+                                max(0, c_idx - 1),  # [TENANT FIX]
+                                c_idx + 1,  # [TENANT FIX]
+                                filter_uni_uuid,  # [TENANT FIX]
                             )
                             before_text = ""
                             after_text = ""

@@ -25,7 +25,11 @@ def mock_wav_bytes() -> bytes:
 # 1. Endpoint Functional Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_transcribe_wav_success(client: AsyncClient, mock_wav_bytes: bytes):
+async def test_transcribe_wav_success(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    mock_wav_bytes: bytes,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify POST /api/v1/ai/chat/transcribe accepts WAV audio and returns 200."""
     files = {"file": ("student_query.wav", io.BytesIO(mock_wav_bytes), "audio/wav")}
     response = await client.post("/api/v1/ai/chat/transcribe", files=files)
@@ -39,7 +43,11 @@ async def test_transcribe_wav_success(client: AsyncClient, mock_wav_bytes: bytes
 
 
 @pytest.mark.asyncio
-async def test_transcribe_accepts_legacy_audio_field(client: AsyncClient, mock_wav_bytes: bytes):
+async def test_transcribe_accepts_legacy_audio_field(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    mock_wav_bytes: bytes,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify endpoint accepts multipart field 'audio' for frontend backward compatibility."""
     files = {"audio": ("student_query.webm", io.BytesIO(mock_wav_bytes), "audio/webm")}
     response = await client.post("/api/v1/ai/chat/transcribe", files=files)
@@ -49,7 +57,11 @@ async def test_transcribe_accepts_legacy_audio_field(client: AsyncClient, mock_w
 
 
 @pytest.mark.asyncio
-async def test_transcribe_accepts_m4a_mobile_format(client: AsyncClient, mock_wav_bytes: bytes):
+async def test_transcribe_accepts_m4a_mobile_format(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    mock_wav_bytes: bytes,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify mobile iOS/Android m4a voice recordings are accepted."""
     files = {"file": ("mobile_record.m4a", io.BytesIO(mock_wav_bytes), "audio/m4a")}
     response = await client.post("/api/v1/ai/chat/transcribe", files=files)
@@ -60,7 +72,10 @@ async def test_transcribe_accepts_m4a_mobile_format(client: AsyncClient, mock_wa
 # 2. Validation & Security Guard Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_transcribe_rejects_empty_file(client: AsyncClient):
+async def test_transcribe_rejects_empty_file(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify 0-byte audio file returns HTTP 400 Bad Request."""
     files = {"file": ("empty.wav", io.BytesIO(b""), "audio/wav")}
     response = await client.post("/api/v1/ai/chat/transcribe", files=files)
@@ -69,7 +84,10 @@ async def test_transcribe_rejects_empty_file(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_transcribe_rejects_disallowed_mime_type(client: AsyncClient):
+async def test_transcribe_rejects_disallowed_mime_type(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify non-audio files (.pdf, .exe) return HTTP 415 Unsupported Media Type."""
     files = {"file": ("lecture.pdf", io.BytesIO(b"%PDF-1.4 header"), "application/pdf")}
     response = await client.post("/api/v1/ai/chat/transcribe", files=files)
@@ -78,7 +96,10 @@ async def test_transcribe_rejects_disallowed_mime_type(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_transcribe_rejects_oversized_file(client: AsyncClient):
+async def test_transcribe_rejects_oversized_file(  # [PRELAUNCH FIX]
+    client: AsyncClient,  # [PRELAUNCH FIX]
+    authenticated_student,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify files exceeding 25MB return HTTP 413 Payload Too Large."""
     large_payload = b"0" * (26 * 1024 * 1024)
     files = {"file": ("too_large.wav", io.BytesIO(large_payload), "audio/wav")}

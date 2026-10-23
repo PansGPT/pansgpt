@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 import aioboto3
 from botocore.config import Config
+from botocore.exceptions import ClientError  # [LEFTOVER FIX]
 
 from app.core.config import settings
 
@@ -34,20 +35,25 @@ def build_document_storage_key(
     return f"universities/{university_id}/courses/{clean_course}/original/{document_id}.{ext}"
 
 
-def build_converted_storage_key(
-    document_id: str,
-    university_id: str | None = None,
-    course_code: str | None = None,
-) -> str:
-    """
-    Construct canonical converted R2 key for Office documents converted to PDF:
+def build_converted_storage_key(  # [VISION FIX]
+    document_id: str,  # [VISION FIX]
+    university_id: str | None = None,  # [VISION FIX]
+    course_code: str | None = None,  # [VISION FIX]
+) -> str:  # [VISION FIX]
+    """Construct canonical converted R2 key for Office documents converted to PDF:
     universities/{university_id}/courses/{course_code}/converted/{document_id}.pdf
-    with fallback to converted/{document_id}.pdf if university/course not provided.
-    """
-    if university_id and course_code:
-        clean_course = sanitize_filename_part(course_code)
-        return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"
-    return f"converted/{document_id}.pdf"
+    Raises ValueError if university_id or course_code is missing.
+    """  # [VISION FIX]
+    if not university_id or not course_code:  # [VISION FIX]
+        raise ValueError(  # [VISION FIX]
+            f"Cannot build converted storage key for document '{document_id}': "  # [VISION FIX]
+            "both university_id and course_code are required."  # [VISION FIX]
+        )  # [VISION FIX]
+    clean_course = sanitize_filename_part(course_code)  # [VISION FIX]
+    return f"universities/{university_id}/courses/{clean_course}/converted/{document_id}.pdf"  # [VISION FIX]
+
+
+DEFAULT_UNIVERSITY_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
 
 
 def build_artifact_storage_key(
@@ -55,17 +61,19 @@ def build_artifact_storage_key(
     file_extension: str,
     artifact_id: str | None = None,
     university_id: str | None = None,
+    user_id: str | None = None,  # [CHAT FIX]
 ) -> str:
     """
-    Construct canonical artifact R2 key nested directly under university:
-    universities/{university_id}/artifacts/{format_type}/{artifact_id}.{ext}
-    Defaults university_id to 'default' if None/empty to ensure strict institutional nesting.
+    Owner-scoped generated artifacts: artifacts/{university}/{user}/{format}/{id}.{ext}. [CHAT FIX]
     """
-    clean_uni = sanitize_filename_part(university_id) if university_id else "default"
+    if not university_id or not user_id:  # [CHAT FIX]
+        raise ValueError("University and owner are required for generated artifacts.")  # [CHAT FIX]
+    clean_uni = str(uuid.UUID(university_id))  # [CHAT FIX]
+    owner = str(uuid.UUID(user_id))  # [CHAT FIX]
     clean_fmt = sanitize_filename_part(format_type)
     ext = file_extension.lstrip(".").lower()
     art_id = artifact_id or str(uuid.uuid4())
-    return f"universities/{clean_uni}/artifacts/{clean_fmt}/{art_id}.{ext}"
+    return f"artifacts/{clean_uni}/{owner}/{clean_fmt}/{art_id}.{ext}"  # [CHAT FIX]
 
 
 class R2StorageEngine:
@@ -159,6 +167,24 @@ class R2StorageEngine:
                 Body=data,
                 ContentType=content_type,
             )
+
+    async def get_object_size(self, key: str) -> int | None:  # [LEFTOVER FIX]
+        """Return stored bytes from HEAD; only a missing object returns None. [LEFTOVER FIX]"""
+        try:  # [LEFTOVER FIX]
+            async with self.get_client() as s3:  # [LEFTOVER FIX]
+                response = await s3.head_object(  # [LEFTOVER FIX]
+                    Bucket=settings.r2_bucket_name,  # [LEFTOVER FIX]
+                    Key=key,  # [LEFTOVER FIX]
+                )  # [LEFTOVER FIX]
+                return int(response["ContentLength"])  # [LEFTOVER FIX]
+        except ClientError as exc:  # [LEFTOVER FIX]
+            if exc.response.get("Error", {}).get("Code") in {  # [LEFTOVER FIX]
+                "404",  # [LEFTOVER FIX]
+                "NoSuchKey",  # [LEFTOVER FIX]
+                "NotFound",  # [LEFTOVER FIX]
+            }:  # [LEFTOVER FIX]
+                return None  # [LEFTOVER FIX]
+            raise  # [LEFTOVER FIX]
 
     async def object_exists(self, key: str) -> bool:
         """Check if an object exists in the active bucket."""

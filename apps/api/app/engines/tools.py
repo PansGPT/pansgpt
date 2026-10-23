@@ -159,8 +159,11 @@ class ToolExecutionEngine:
     async def execute_read_document(
         document_id: str,
         page_number: int | None = None,
+        university_id: str | None = None,  # [TENANT FIX]
     ) -> dict[str, Any]:
         """Reads document content from database chunks."""
+        if university_id is None:  # [TENANT FIX]
+            raise ValueError("university_id is required to read a document.")  # [TENANT FIX]
         try:
             doc_uuid = uuid.UUID(document_id)
         except ValueError:
@@ -175,8 +178,9 @@ class ToolExecutionEngine:
                 }
 
             doc_row = await conn.fetchrow(
-                "SELECT title, course_code, total_pages FROM public.documents WHERE id = $1 AND deleted_at IS NULL",
+                "SELECT title, course_code, page_count AS total_pages FROM public.documents WHERE id = $1 AND university_id = $2 AND status = 'active' AND deleted_at IS NULL",  # [TENANT FIX]
                 doc_uuid,
+                uuid.UUID(university_id),  # [TENANT FIX]
             )
             if not doc_row:
                 return {"error": f"Document {document_id} not found."}
@@ -268,6 +272,7 @@ class ToolExecutionEngine:
                 return await self.execute_read_document(
                     document_id=arguments.get("document_id", ""),
                     page_number=arguments.get("page_number"),
+                    university_id=university_id,  # [TENANT FIX]
                 )
             elif tool_name == "web_search":
                 return await self.execute_web_search(

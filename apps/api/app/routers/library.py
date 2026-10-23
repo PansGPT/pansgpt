@@ -7,12 +7,23 @@ import uuid
 
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
-from fastapi.responses import RedirectResponse
 
+from app.core.authorization import require_scoped_document, require_university  # [TENANT FIX]
 from app.core.config import settings
-from app.core.dependencies import get_current_user, require_admin_or_super_admin
+from app.core.database import get_db_connection  # [TENANT FIX 2]
+from app.core.dependencies import (  # [TENANT FIX]
+    UserContext,  # [TENANT FIX]
+    get_current_user,  # [TENANT FIX]
+    require_admin_or_super_admin,  # [TENANT FIX]
+    require_lecturer,  # [PRELAUNCH FIX]
+)  # [TENANT FIX]
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
-from app.engines.storage import build_document_storage_key, storage_engine
+from app.engines.storage import (
+    DEFAULT_UNIVERSITY_ID,
+    build_document_storage_key,
+    storage_engine,
+)
 from app.models.library import (
     ConfirmUploadResponse,
     DocumentDetailResponse,
@@ -37,18 +48,23 @@ router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
 )
 async def initialize_document_upload(
     payload: DocumentUploadRequest,
-    university_id: str | None = Query(
-        default="01a07664-7a69-7ce0-ad6a-b219462cbde3",
-        description="University ID (scoped to active tenant, defaults to UNIJOS)",
-    ),
-    auth_user: dict = Depends(require_admin_or_super_admin),
-):
+    auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
+) -> DocumentUploadResponse:  # [PRELAUNCH FIX]
     """
     Stage 1: Generates an immutable Cloudflare R2 path and a time-limited presigned PUT URL.
     The client streams the PDF directly to R2 edge storage ($0 egress).
     """
-    doc_id = str(uuid.uuid4())
-    ext = payload.file_name.split(".")[-1] if "." in payload.file_name else "pdf"
+    university_id = str(require_university(auth_user))  # [TENANT FIX]
+    doc_id = str(uuid7())  # [LEFTOVER FIX]
+    try:  # [PRELAUNCH FIX]
+        ext = payload.upload_extension()  # [PRELAUNCH FIX]
+    except ValueError as exc:  # [PRELAUNCH FIX]
+        raise HTTPException(status_code=400, detail=str(exc)) from exc  # [PRELAUNCH FIX]
+    if payload.file_size_bytes > settings.MAX_UPLOAD_MB * 1024 * 1024:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=413,  # [PRELAUNCH FIX]
+            detail=f"File exceeds the {settings.MAX_UPLOAD_MB} MB upload limit.",  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
 
     storage_key = build_document_storage_key(
         university_id=university_id,
@@ -57,50 +73,79 @@ async def initialize_document_upload(
         file_extension=ext,
     )
 
-    if storage_engine.is_configured:
-        try:
-            presigned_url = await storage_engine.generate_presigned_put_url(
-                key=storage_key,
-                content_type=payload.mime_type,
-                expires_in=900,
-            )
-        except Exception:
-            presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_token"
-    else:
-        presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_dev_token"
-
-    if settings.DATABASE_URL:
-        try:
-            conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
-            await conn.execute(
-                """
-                INSERT INTO public.documents (
-                    id, university_id, title, course_code, course_title,
-                    topic, lecturer_name, storage_key, file_size_bytes,
-                    mime_type, status, target_levels, academic_session,
-                    semester, embedding_status
-                ) VALUES (
-                    $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 'active',
-                    $11, $12, $13, 'pending'
-                ) ON CONFLICT (id) DO NOTHING;
-                """,
-                uuid.UUID(doc_id),
-                uuid.UUID(university_id),
-                payload.title,
-                payload.course_code.upper().strip(),
-                payload.course_title.strip(),
-                payload.topic,
-                payload.lecturer_name,
-                storage_key,
-                payload.file_size_bytes,
-                payload.mime_type,
-                payload.target_levels,
-                payload.academic_session,
-                payload.semester,
-            )
-            await conn.close()
-        except Exception:
-            pass
+    if not settings.DATABASE_URL:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=503,  # [PRELAUNCH FIX]
+            detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
+    document_status = (  # [PRELAUNCH FIX]
+        "active"  # [PRELAUNCH FIX]
+        if (set(auth_user.roles) | {auth_user.role})  # [PRELAUNCH FIX]
+        & {"university_admin", "super_admin"}  # [PRELAUNCH FIX]
+        else "pending_review"  # [PRELAUNCH FIX]
+    )  # [PRELAUNCH FIX]
+    conn = None  # [PRELAUNCH FIX]
+    try:  # [PRELAUNCH FIX]
+        conn = await asyncpg.connect(  # [PRELAUNCH FIX]
+            settings.DATABASE_URL,  # [PRELAUNCH FIX]
+            timeout=3.0,  # [PRELAUNCH FIX]
+            statement_cache_size=0,  # [PRELAUNCH FIX]
+        )  # [PRELAUNCH FIX]
+        async with conn.transaction():  # [PRELAUNCH FIX]
+            # A link failure rolls the inserted document back before returning an error. [PRELAUNCH FIX]
+            inserted = await conn.execute(  # [PRELAUNCH FIX]
+                "INSERT INTO public.documents ("  # [PRELAUNCH FIX]
+                "id, university_id, title, course_code, course_title, topic, lecturer_name, "  # [PRELAUNCH FIX]
+                "storage_key, file_size_bytes, mime_type, target_levels, academic_session, "  # [PRELAUNCH FIX]
+                "semester, status, embedding_status) VALUES ("  # [PRELAUNCH FIX]
+                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending');",  # [PRELAUNCH FIX]
+                uuid.UUID(doc_id),  # [PRELAUNCH FIX]
+                uuid.UUID(university_id),  # [PRELAUNCH FIX]
+                payload.title,  # [PRELAUNCH FIX]
+                payload.course_code.upper().strip(),  # [PRELAUNCH FIX]
+                payload.course_title.strip(),  # [PRELAUNCH FIX]
+                payload.topic,  # [PRELAUNCH FIX]
+                payload.lecturer_name,  # [PRELAUNCH FIX]
+                storage_key,  # [PRELAUNCH FIX]
+                payload.file_size_bytes,  # [PRELAUNCH FIX]
+                payload.mime_type,  # [PRELAUNCH FIX]
+                payload.target_levels,  # [PRELAUNCH FIX]
+                payload.academic_session,  # [PRELAUNCH FIX]
+                payload.semester,  # [PRELAUNCH FIX]
+                document_status,  # [PRELAUNCH FIX]
+            )  # [PRELAUNCH FIX]
+            if inserted != "INSERT 0 1":  # [PRELAUNCH FIX]
+                raise HTTPException(  # [PRELAUNCH FIX]
+                    status_code=503,  # [PRELAUNCH FIX]
+                    detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+                )  # [PRELAUNCH FIX]
+            try:  # [PRELAUNCH FIX]
+                if not storage_engine.is_configured:  # [PRELAUNCH FIX]
+                    raise OSError("Upload storage is not configured.")  # [PRELAUNCH FIX]
+                presigned_url = await storage_engine.generate_presigned_put_url(  # [PRELAUNCH FIX]
+                    key=storage_key,  # [PRELAUNCH FIX]
+                    content_type=payload.mime_type,  # [PRELAUNCH FIX]
+                    expires_in=900,  # [PRELAUNCH FIX]
+                )  # [PRELAUNCH FIX]
+                if not presigned_url:  # [PRELAUNCH FIX]
+                    raise OSError("Upload storage returned no link.")  # [PRELAUNCH FIX]
+            except Exception as exc:  # [PRELAUNCH FIX]
+                if not settings.local_dev_enabled:  # [PRELAUNCH FIX]
+                    raise HTTPException(  # [PRELAUNCH FIX]
+                        status_code=503,  # [PRELAUNCH FIX]
+                        detail="Upload storage is unavailable.",  # [PRELAUNCH FIX]
+                    ) from exc  # [PRELAUNCH FIX]
+                presigned_url = f"https://mock-r2.pansgpt.com/{storage_key}?signature=mock_dev_token"  # [PRELAUNCH FIX]
+    except HTTPException:  # [PRELAUNCH FIX]
+        raise  # [PRELAUNCH FIX]
+    except Exception as exc:  # [PRELAUNCH FIX]
+        raise HTTPException(  # [PRELAUNCH FIX]
+            status_code=503,  # [PRELAUNCH FIX]
+            detail="Unable to create upload record.",  # [PRELAUNCH FIX]
+        ) from exc  # [PRELAUNCH FIX]
+    finally:  # [PRELAUNCH FIX]
+        if conn is not None:  # [PRELAUNCH FIX]
+            await conn.close()  # [PRELAUNCH FIX]
 
     return DocumentUploadResponse(
         document_id=doc_id,
@@ -127,57 +172,205 @@ async def initialize_document_upload(
 )
 async def confirm_document_upload(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
-    Transitions status to 'pending' and enqueues the background ingestion job via ARQ.
+    Active documents enter ingestion; pending reviews wait for verified approval. [CHAT FIX 2]
     """
     storage_key = None
+    conn = None  # [CHAT FIX 2]
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
             row = await conn.fetchrow(
-                "SELECT storage_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",
+                "SELECT storage_key, status FROM public.documents "  # [CHAT FIX 2]
+                "WHERE id = $1 AND deleted_at IS NULL;",
                 uuid.UUID(document_id),
             )
             if not row:
-                await conn.close()
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
                     detail=f"Document {document_id} not found",
                 )
             storage_key = row["storage_key"]
 
-            await conn.execute(
+            if row["status"] == "pending_review":  # [CHAT FIX 2]
+                return ConfirmUploadResponse(
+                    document_id=document_id,
+                    mode="awaiting_approval",
+                    message="Upload received. Processing will start after approval.",
+                )
+            if row["status"] != "active":  # [CHAT FIX 2]
+                raise HTTPException(
+                    status_code=409, detail="Only approved documents can be processed."
+                )
+
+            confirmed = await conn.fetchrow(  # [CHAT FIX 2]
                 """
                 UPDATE public.documents
                 SET embedding_status = 'pending', updated_at = now()
-                WHERE id = $1;
+                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL
+                RETURNING storage_key; -- [CHAT FIX 2]
                 """,
                 uuid.UUID(document_id),
             )
-            await conn.close()
+            if not confirmed:
+                raise HTTPException(
+                    status_code=409, detail="Document approval changed. Retry confirmation."
+                )
         except HTTPException:
             raise
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail=f"Database connection error: {e!s}",
-            )
+                detail="Unable to confirm the document upload.",  # [CHAT FIX 2]
+            ) from e
+        finally:  # [CHAT FIX 2]
+            if conn is not None:
+                await conn.close()
 
     if not storage_key:
-        storage_key = f"universities/default/courses/general/original/{document_id}.pdf"
+        raise HTTPException(
+            status_code=503, detail="Document storage metadata is unavailable."
+        )  # [CHAT FIX 2]
 
     job_id = await enqueue_ingestion_job(document_id, storage_key)
-    mode = "queued" if job_id else ("sync" if settings.DATABASE_URL else "no_db")
+    if not job_id:  # [CHAT FIX 2] There is no synchronous fallback when the queue fails.
+        raise HTTPException(
+            status_code=503, detail="Processing could not be queued. Retry confirmation."
+        )
 
     return ConfirmUploadResponse(
         document_id=document_id,
         job_id=job_id,
-        mode=mode,
+        mode="queued",
         message="Document upload confirmed. Background processing pipeline dispatched.",
     )
+
+
+# ------------------------------------------------------------------------------
+# 2B. Direct Byte Streaming Artifact & Document Download
+# Must be defined BEFORE /documents/{document_id} to prevent path collision
+# ------------------------------------------------------------------------------
+@router.get(
+    "/artifacts/download",
+    summary="Download an owned generated artifact as an attachment",  # [CHAT FIX]
+)
+async def download_document_or_artifact(
+    key: str = Query(..., description="Cloudflare R2 storage key"),
+    filename: str | None = Query(
+        default=None, description="Override download filename (without extension)"
+    ),
+    auth_user: UserContext = Depends(get_current_user),  # [CHAT FIX]
+):
+    """Serve generated artifacts only to their verified owner or a super admin. [CHAT FIX]"""
+    parts = key.split("/")  # [CHAT FIX]
+    if (  # [CHAT FIX]
+        len(parts) != 5  # [CHAT FIX]
+        or parts[0] != "artifacts"  # [CHAT FIX]
+        or ".." in key  # [CHAT FIX]
+        or "\\" in key  # [CHAT FIX]
+        or parts[3] not in {"docs", "pdf", "pptx", "md"}  # [CHAT FIX]
+        or not parts[4]  # [CHAT FIX]
+        or any(  # [CHAT FIX]
+            c  # [CHAT FIX]
+            not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.-"  # [CHAT FIX]
+            for c in parts[4]  # [CHAT FIX]
+        )  # [CHAT FIX]
+    ):  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
+    try:  # [CHAT FIX]
+        university_id, owner_id = uuid.UUID(parts[1]), uuid.UUID(parts[2])  # [CHAT FIX]
+    except ValueError as exc:  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [CHAT FIX]
+    is_super_admin = "super_admin" in (set(auth_user.roles) | {auth_user.role})  # [CHAT FIX]
+    if not is_super_admin and (  # [CHAT FIX]
+        owner_id != auth_user.id or university_id != auth_user.university_id  # [CHAT FIX]
+    ):  # [CHAT FIX]
+        raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
+    return await _download_storage_file(key, filename)  # [CHAT FIX]
+
+
+async def _download_storage_file(key: str, filename: str | None) -> Response:  # [CHAT FIX]
+    """Serve bytes after the calling route has checked authorization. [CHAT FIX]"""
+    ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
+    media_types = {
+        "pdf": "application/pdf",
+        "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "md": "text/markdown",
+        "json": "application/json",
+    }
+
+    # Build a clean, human-readable filename
+    if filename:
+        safe_name = "".join(c if c.isalnum() or c in "-_ " else "_" for c in filename).strip()
+        safe_name = safe_name.replace(" ", "_")
+        clean_filename = f"{safe_name}.{ext}"
+    else:
+        clean_filename = key.split("/")[-1]
+
+    try:
+        data = await storage_engine.download_bytes(key)
+        return Response(
+            content=data,
+            media_type=media_types.get(ext, "application/octet-stream"),
+            headers={
+                "Content-Disposition": f'attachment; filename="{clean_filename}"',
+                "Content-Length": str(len(data)),
+                "Cache-Control": "no-cache",
+            },
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found.",  # [CHAT FIX]
+        ) from exc  # [CHAT FIX]
+
+
+@router.get(  # [TENANT FIX 2]
+    "/documents/download",  # [TENANT FIX 2]
+    summary="Download a library document after verifying access",  # [TENANT FIX 2]
+)  # [TENANT FIX 2]
+async def download_library_document(  # [TENANT FIX 2]
+    key: str = Query(..., description="Cloudflare R2 document storage key"),  # [TENANT FIX 2]
+    filename: str | None = Query(None, description="Override download filename"),  # [TENANT FIX 2]
+    current_user: UserContext = Depends(get_current_user),  # [TENANT FIX 2]
+) -> Response:  # [TENANT FIX 2]
+    if not key or ".." in key or key.startswith("/"):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    document: asyncpg.Record | None = None  # [TENANT FIX 2]
+    try:  # [TENANT FIX 2]
+        async with get_db_connection() as conn:  # [TENANT FIX 2]
+            if conn is not None:  # [TENANT FIX 2]
+                document = await conn.fetchrow(  # [TENANT FIX 2]
+                    "SELECT university_id, status, deleted_at FROM public.documents "  # [TENANT FIX 2]
+                    "WHERE storage_key = $1 OR converted_key = $1 LIMIT 1;",  # [TENANT FIX 2]
+                    key,  # [TENANT FIX 2]
+                )  # [TENANT FIX 2]
+    except Exception as exc:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [TENANT FIX 2]
+    if document is None or document["deleted_at"] is not None:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    roles = set(current_user.roles) | {current_user.role}  # [TENANT FIX 2]
+    is_super_admin = "super_admin" in roles  # [TENANT FIX 2]
+    if not is_super_admin and (  # [TENANT FIX 2]
+        current_user.university_id is None  # [TENANT FIX 2]
+        or document["university_id"] != current_user.university_id  # [TENANT FIX 2]
+    ):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    is_tenant_admin = bool(roles & {"university_admin", "admin"})  # [TENANT FIX 2]
+    if document["status"] != "active" and not (is_super_admin or is_tenant_admin):  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.")  # [TENANT FIX 2]
+    try:  # [TENANT FIX 2]
+        return await _download_storage_file(  # [CHAT FIX]
+            key=key,  # [TENANT FIX 2]
+            filename=filename,  # [TENANT FIX 2]
+        )  # [TENANT FIX 2]
+    except HTTPException as exc:  # [TENANT FIX 2]
+        raise HTTPException(status_code=404, detail="File not found.") from exc  # [TENANT FIX 2]
 
 
 # ------------------------------------------------------------------------------
@@ -190,9 +383,18 @@ async def confirm_document_upload(
 )
 async def get_single_document(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Fetch metadata and embedding status for a specific document."""
+    try:
+        doc_uuid = uuid.UUID(document_id)
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Document '{document_id}' not found.",
+        )
+
     if not settings.DATABASE_URL:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -211,7 +413,7 @@ async def get_single_document(
             FROM public.documents
             WHERE id = $1 AND deleted_at IS NULL;
             """,
-            uuid.UUID(document_id),
+            doc_uuid,
         )
 
         segments_rows = await conn.fetch(
@@ -286,7 +488,7 @@ async def get_single_document(
 async def update_document_metadata(
     document_id: str,
     payload: DocumentPatchRequest,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
 ):
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
@@ -295,9 +497,13 @@ async def update_document_metadata(
             detail="Database connection is not configured.",
         )
 
+    roles = set(auth_user.roles) | {auth_user.role}  # [CHAT FIX 2]
+    university_id = (  # [CHAT FIX 2]
+        None if "super_admin" in roles else require_university(auth_user)  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     updates = []
-    values = []
-    idx = 2
+    values = [university_id]  # [CHAT FIX 2]
+    idx = 3  # [CHAT FIX 2]
 
     for field, val in payload.model_dump(exclude_unset=True).items():
         if val is not None:
@@ -311,12 +517,17 @@ async def update_document_metadata(
             detail="No valid fields provided for update.",
         )
 
+    if payload.status == "active":  # [CHAT FIX 2]
+        updates.append(f"reviewed_by = ${idx}")  # [CHAT FIX 2]
+        values.append(auth_user.id)  # [CHAT FIX 2]
+        updates.append("reviewed_at = now()")  # [CHAT FIX 2]
     updates.append("updated_at = now()")
     query = f"""
         UPDATE public.documents
         SET {", ".join(updates)}
         WHERE id = $1 AND deleted_at IS NULL
-        RETURNING id;
+          AND ($2::uuid IS NULL OR university_id = $2) -- [CHAT FIX 2]
+        RETURNING id, storage_key, embedding_status; -- [CHAT FIX 2]
     """
 
     try:
@@ -336,7 +547,23 @@ async def update_document_metadata(
             detail=f"Database update error: {e!s}",
         )
 
-    return await get_single_document(document_id)
+    # [CHAT FIX 2] Approval may precede upload completion; confirmation queues it later.
+    if payload.status == "active" and res.get("embedding_status") == "pending":
+        try:  # [CHAT FIX 2] A missing upload may wait; a storage outage must be reported.
+            stored_size = await storage_engine.get_object_size(res["storage_key"])
+        except Exception as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="Document approved, but upload storage could not be checked. Please retry approval.",
+            ) from exc
+        if stored_size is not None:
+            job_id = await enqueue_ingestion_job(document_id, res["storage_key"])
+            if not job_id:
+                raise HTTPException(
+                    status_code=503,
+                    detail="Document approved, but processing could not be queued. Please retry approval.",
+                )
+    return await get_single_document(document_id, auth_user=auth_user)  # [TENANT FIX]
 
 
 # ------------------------------------------------------------------------------
@@ -349,7 +576,8 @@ async def update_document_metadata(
 )
 async def soft_delete_document(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Marks document as deleted (deleted_at = now()). Chunks remain for audit until hard purged."""
     if not settings.DATABASE_URL:
@@ -384,7 +612,8 @@ async def soft_delete_document(
 )
 async def get_document_segments(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     """Returns the ordered hierarchical chapter and topic segments of a document."""
     if not settings.DATABASE_URL:
@@ -432,31 +661,51 @@ async def get_document_segments(
 )
 async def get_document_pdf_stream_url(
     document_id: str,
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     storage_key = None
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
-            row = await conn.fetchrow(
-                "SELECT storage_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",
-                uuid.UUID(document_id),
-            )
-            await conn.close()
-            if row:
-                storage_key = row["storage_key"]
+            row = await conn.fetchrow(  # [OFFICE PDF FIX]
+                "SELECT storage_key, converted_key FROM public.documents WHERE id = $1 AND deleted_at IS NULL;",  # [OFFICE PDF FIX]
+                uuid.UUID(document_id),  # [OFFICE PDF FIX]
+            )  # [OFFICE PDF FIX]
+            await conn.close()  # [OFFICE PDF FIX]
+            if row:  # [OFFICE PDF FIX]
+                storage_key = row["converted_key"] or row["storage_key"]  # [OFFICE PDF FIX]
         except Exception:
             pass
 
     if not storage_key:
-        storage_key = f"universities/default/courses/general/original/{document_id}.pdf"
+        if not settings.local_dev_enabled:  # [CHAT FIX 2]
+            raise HTTPException(  # [CHAT FIX 2]
+                status_code=503,  # [CHAT FIX 2]
+                detail="Document storage is unavailable.",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        storage_key = (
+            f"universities/{DEFAULT_UNIVERSITY_ID}/courses/general/original/{document_id}.pdf"
+        )
 
     if storage_engine.is_configured:
         try:
             url = await storage_engine.generate_presigned_get_url(storage_key, expires_in=900)
-        except Exception:
+            if not url:  # [CHAT FIX 2]
+                raise OSError("Storage returned no download link.")  # [CHAT FIX 2]
+        except Exception as exc:  # [CHAT FIX 2]
+            if not settings.local_dev_enabled:  # [CHAT FIX 2]
+                raise HTTPException(  # [CHAT FIX 2]
+                    status_code=503,  # [CHAT FIX 2]
+                    detail="Document storage is unavailable.",  # [CHAT FIX 2]
+                ) from exc  # [CHAT FIX 2]
             url = f"https://cdn.pansgpt.com/{storage_key}?sig=mock_token"
     else:
+        if not settings.local_dev_enabled:  # [CHAT FIX 2]
+            raise HTTPException(  # [CHAT FIX 2]
+                status_code=503,  # [CHAT FIX 2]
+                detail="Document storage is unavailable.",  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
         url = f"https://cdn.pansgpt.com/{storage_key}?sig=mock_dev_token"
 
     return PdfUrlResponse(
@@ -464,62 +713,6 @@ async def get_document_pdf_stream_url(
         presigned_url=url,
         expires_in_seconds=900,
     )
-
-
-@router.get(
-    "/documents/download",
-    summary="Download artifact or document via presigned URL or direct streaming",
-)
-async def download_document_or_artifact(
-    key: str = Query(..., description="Cloudflare R2 storage key"),
-    auth_user: dict = Depends(get_current_user),
-):
-    """
-    Downloads or streams any canonical university asset or student artifact.
-    Generates an authorized 1-hour presigned URL or streams directly.
-    """
-    if ".." in key or key.startswith("/"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid storage key",
-        )
-
-    if storage_engine.is_configured:
-        try:
-            exists = await storage_engine.object_exists(key)
-            if not exists:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Storage object '{key}' not found in bucket.",
-                )
-            url = await storage_engine.generate_presigned_get_url(key, expires_in=3600)
-            return RedirectResponse(url=url, status_code=status.HTTP_307_TEMPORARY_REDIRECT)
-        except HTTPException:
-            raise
-        except Exception:
-            pass
-
-    try:
-        data = await storage_engine.download_bytes(key)
-        ext = key.rsplit(".", 1)[-1].lower() if "." in key else "bin"
-        media_types = {
-            "pdf": "application/pdf",
-            "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-            "md": "text/markdown",
-            "json": "application/json",
-        }
-        filename = key.split("/")[-1]
-        return Response(
-            content=data,
-            media_type=media_types.get(ext, "application/octet-stream"),
-            headers={"Content-Disposition": f'attachment; filename="{filename}"'},
-        )
-    except Exception as exc:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Storage object not found: {str(exc)}",
-        )
 
 
 # ------------------------------------------------------------------------------
@@ -531,18 +724,10 @@ async def download_document_or_artifact(
     summary="List course documents scoped to university and level",
 )
 async def list_documents(
-    university_id: str | None = Query(
-        default=None,
-        description="Filter by university ID (defaults to user's university or UNIJOS)",
-    ),
     course_code: str | None = Query(None, description="Optional course code filter (e.g. PCL 401)"),
-    auth_user: dict = Depends(get_current_user),
+    auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
 ):
-    target_uni = university_id or (
-        str(auth_user.get("university_id"))
-        if auth_user.get("university_id")
-        else "01a07664-7a69-7ce0-ad6a-b219462cbde3"
-    )
+    target_uni = str(require_university(auth_user))  # [TENANT FIX]
     results: list[DocumentDetailResponse] = []
     if settings.DATABASE_URL:
         try:
@@ -557,6 +742,12 @@ async def list_documents(
                 WHERE university_id = $1 AND deleted_at IS NULL
             """
             params = [uuid.UUID(target_uni)]
+            if not (set(auth_user.roles) | {auth_user.role}) & {  # [PRELAUNCH FIX]
+                "lecturer",  # [PRELAUNCH FIX]
+                "university_admin",  # [PRELAUNCH FIX]
+                "super_admin",  # [PRELAUNCH FIX]
+            }:  # [PRELAUNCH FIX]
+                query += " AND status = 'active'"  # [PRELAUNCH FIX]
             if course_code:
                 query += " AND course_code = $2"
                 params.append(course_code.upper().strip())
@@ -604,7 +795,8 @@ async def list_documents(
 )
 async def reembed_document(
     document_id: str,
-    auth_user: dict = Depends(require_admin_or_super_admin),
+    auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
+    _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
 ):
     if settings.DATABASE_URL:
         try:

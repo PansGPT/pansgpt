@@ -252,9 +252,11 @@ class CandidateReranker:
             else:
                 scored = self.fallback_heuristic_scoring(query, candidates)
 
-        except TimeoutError:
+        except TimeoutError as exc:  # [CHAT FIX]
             logger.warning(
                 "reranker_timeout_fallback_engaged",
+                error_type=type(exc).__name__,  # [CHAT FIX]
+                error=repr(exc),  # [CHAT FIX]
                 provider=provider,
                 timeout_s=timeout,
                 query=query[:60],

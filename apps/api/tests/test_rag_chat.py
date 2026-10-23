@@ -1,7 +1,6 @@
 # ==============================================================================
 # Phase 6: AI / LLM Orchestration & RAG Verification Suite
 # ==============================================================================
-
 from unittest.mock import AsyncMock, patch
 
 import httpx
@@ -11,6 +10,7 @@ from httpx import AsyncClient
 
 from app.engines.guard import policy_guard
 from app.engines.llm import MultiTierLlmEngine
+from tests.conftest import TenantTestState  # [TENANT FIX]
 
 
 # ------------------------------------------------------------------------------
@@ -184,13 +184,15 @@ async def test_multi_tier_llm_failover_deterministic_offline_fallback():
 # 3. Chat Session CRUD API Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_chat_session_lifecycle_api(client: AsyncClient):
+async def test_chat_session_lifecycle_api(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify session creation, listing, and message retrieval endpoints."""
     # 1. Create Session
     create_resp = await client.post(
         "/api/v1/ai/chat/sessions",
         json={"title": "Adrenergic Receptors Study Session"},
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert create_resp.status_code == 201
     data = create_resp.json()
@@ -200,7 +202,6 @@ async def test_chat_session_lifecycle_api(client: AsyncClient):
     # 2. List Sessions
     list_resp = await client.get(
         "/api/v1/ai/chat/sessions",
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert list_resp.status_code == 200
     list_data = list_resp.json()
@@ -209,7 +210,6 @@ async def test_chat_session_lifecycle_api(client: AsyncClient):
     # 3. Get Session Details
     detail_resp = await client.get(
         f"/api/v1/ai/chat/sessions/{session_id}",
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert detail_resp.status_code == 200
     detail_data = detail_resp.json()
@@ -221,7 +221,10 @@ async def test_chat_session_lifecycle_api(client: AsyncClient):
 # 4. SSE Chat Streaming API Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_chat_streaming_endpoint_sse(client: AsyncClient):
+async def test_chat_streaming_endpoint_sse(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify SSE streaming produces well-formed event stream (init, text_chunk, done)."""
     session_id = "018f3a30-0001-7000-8000-000000000001"
     payload = {
@@ -232,7 +235,6 @@ async def test_chat_streaming_endpoint_sse(client: AsyncClient):
     response = await client.post(
         f"/api/v1/ai/chat/sessions/{session_id}/stream",
         json=payload,
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert response.status_code == 200
     assert "text/event-stream" in response.headers.get("content-type", "")
@@ -244,7 +246,10 @@ async def test_chat_streaming_endpoint_sse(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_chat_streaming_blocks_injection_sse(client: AsyncClient):
+async def test_chat_streaming_blocks_injection_sse(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify that malicious prompts sent to streaming endpoint trigger safety policy events."""
     session_id = "018f3a30-0001-7000-8000-000000000001"
     payload = {
@@ -255,7 +260,6 @@ async def test_chat_streaming_blocks_injection_sse(client: AsyncClient):
     response = await client.post(
         f"/api/v1/ai/chat/sessions/{session_id}/stream",
         json=payload,
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert response.status_code == 200
     stream_content = response.text
@@ -266,7 +270,10 @@ async def test_chat_streaming_blocks_injection_sse(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_chat_streaming_with_multi_turn_history(client: AsyncClient):
+async def test_chat_streaming_with_multi_turn_history(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify that multi-turn conversation history is accepted and parsed in SSE streaming."""
     session_id = "018f3a30-0001-7000-8000-000000000001"
     payload = {
@@ -284,7 +291,6 @@ async def test_chat_streaming_with_multi_turn_history(client: AsyncClient):
     response = await client.post(
         f"/api/v1/ai/chat/sessions/{session_id}/stream",
         json=payload,
-        headers={"X-User-Id": "018f3a10-0001-7000-8000-000000000001"},
     )
     assert response.status_code == 200
     assert "text/event-stream" in response.headers.get("content-type", "")

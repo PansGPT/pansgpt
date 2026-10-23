@@ -3,6 +3,7 @@
 # ==============================================================================
 
 import asyncio
+import logging
 from contextlib import asynccontextmanager
 
 import structlog
@@ -21,6 +22,9 @@ from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
+
+# Suppress SDK-level AFC deprecation warnings from google.genai.models
+logging.getLogger("google.genai.models").setLevel(logging.ERROR)
 
 logger = structlog.get_logger(__name__)
 
@@ -41,6 +45,7 @@ if settings.SENTRY_DSN:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    settings.validate_local_dev_mode()  # [PRELAUNCH FIX]
     # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
     await prewarm_jwks_cache()

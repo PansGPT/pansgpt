@@ -2,6 +2,7 @@
 # PansGPT 2.0 AI / Chat & RAG Streaming API Router (Phase 6)
 # ==============================================================================
 
+import asyncio  # [CHAT FIX]
 import json
 import time
 import uuid
@@ -14,7 +15,6 @@ from fastapi import (
     BackgroundTasks,
     Depends,
     File,
-    Header,
     HTTPException,
     Query,
     Request,
@@ -23,13 +23,19 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 
+from app.core.authorization import (  # [TENANT FIX]
+    check_document_scope,  # [TENANT FIX]
+    require_owned_session,  # [TENANT FIX]
+    require_university,  # [TENANT FIX]
+)  # [TENANT FIX]
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
+from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
-from app.engines.rag import rag_engine
+from app.engines.rag import ABSENCE_NOTICE, rag_engine  # [CHAT FIX 2]
 from app.engines.thinking import strip_thinking_tokens
 from app.models.chat import (
     ChatMessageResponse,
@@ -43,21 +49,6 @@ from app.models.chat import (
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/ai/chat", tags=["AI & Chat Engine"])
-
-# Default mock user ID for unauthenticated dev/testing sessions
-DEV_DEFAULT_USER_ID = "018f3a10-0001-7000-8000-000000000001"
-DEV_DEFAULT_UNI_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
-
-
-def _extract_user_id(x_user_id: str | None = None) -> str:
-    """Extracts or assigns user ID for the active request."""
-    if x_user_id:
-        try:
-            uuid.UUID(x_user_id)
-            return x_user_id
-        except ValueError:
-            pass
-    return DEV_DEFAULT_USER_ID
 
 
 async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
@@ -94,7 +85,11 @@ async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
         ) from exc
 
 
-async def _auto_generate_session_title(session_id: str, message: str) -> None:
+async def _auto_generate_session_title(  # [TENANT FIX]
+    session_id: str,  # [TENANT FIX]
+    message: str,  # [TENANT FIX]
+    user_id: str,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Background task to set session title from user prompt if still default."""
     try:
         words = message.strip().split()
@@ -109,10 +104,11 @@ async def _auto_generate_session_title(session_id: str, message: str) -> None:
                     UPDATE public.chat_sessions
                     SET title = CASE WHEN title = 'New Chat' THEN $2 ELSE title END,
                         updated_at = now()
-                    WHERE id = $1;
+                    WHERE id = $1 AND user_id = $3; -- [TENANT FIX]
                     """,
                     uuid.UUID(session_id),
                     title,
+                    uuid.UUID(user_id),  # [TENANT FIX]
                 )
     except Exception as exc:
         logger.warning("background_title_update_failed", error=str(exc))
@@ -126,13 +122,19 @@ async def _auto_generate_session_title(session_id: str, message: str) -> None:
 )
 async def create_chat_session(
     payload: ChatSessionCreateRequest,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Creates a new chat session thread for the authenticated student."""
-    user_id = x_user_id or str(current_user.id)
-    session_id = str(uuid.uuid4())
-    doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None
+    user_id = str(current_user.id)  # [TENANT FIX]
+    require_university(current_user)  # [TENANT FIX]
+    session_id = str(uuid7())  # [LEFTOVER FIX]
+    doc_uuid = uuid.UUID(payload.document_id) if payload.document_id else None  # [TENANT FIX]
+    if payload.document_id:  # [TENANT FIX]
+        await check_document_scope(  # [TENANT FIX]
+            payload.document_id,  # [TENANT FIX]
+            current_user,  # [TENANT FIX]
+            active_only=True,  # [TENANT FIX]
+        )  # [TENANT FIX]
     title = payload.title or "New Chat"
 
     now_str = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -174,12 +176,12 @@ async def create_chat_session(
     summary="List student's active chat sessions",
 )
 async def list_chat_sessions(
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     limit: int = Query(default=30, ge=1, le=100),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Returns a list of conversation threads for the student."""
-    user_id = x_user_id or str(current_user.id)
+    user_id = str(current_user.id)  # [TENANT FIX]
+    require_university(current_user)  # [TENANT FIX]
     sessions: list[ChatSessionResponse] = []
 
     async with get_db_connection() as conn:
@@ -218,11 +220,11 @@ async def list_chat_sessions(
 )
 async def get_chat_session_details(
     session_id: str,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """Retrieves session details and its active message tree."""
-    user_id = x_user_id or str(current_user.id)
+    require_university(current_user)  # [TENANT FIX]
+    await require_owned_session(session_id, current_user)  # [TENANT FIX]
     session_data: dict | None = None
     messages: list[ChatMessageResponse] = []
 
@@ -234,9 +236,10 @@ async def get_chat_session_details(
                     SELECT id, user_id, document_id, title, summary,
                            created_at::text, updated_at::text
                     FROM public.chat_sessions
-                    WHERE id = $1 AND deleted_at IS NULL;
+                    WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL; -- [TENANT FIX]
                     """,
                     uuid.UUID(session_id),
+                    current_user.id,  # [TENANT FIX]
                 )
                 if s_row:
                     session_data = {
@@ -286,16 +289,8 @@ async def get_chat_session_details(
             except Exception as exc:
                 logger.warning("get_chat_session_details_db_failed", error=str(exc))
 
-    if not session_data:
-        session_data = {
-            "id": session_id,
-            "user_id": user_id,
-            "title": "Pharmacology Chat",
-            "document_id": None,
-            "summary": None,
-            "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            "updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        }
+    if not session_data:  # [TENANT FIX]
+        raise HTTPException(status_code=404, detail="Conversation not found.")  # [TENANT FIX]
 
     return {
         "session": session_data,
@@ -312,35 +307,72 @@ async def stream_chat_session(
     session_id: str,
     payload: StreamChatRequest,
     background_tasks: BackgroundTasks,
-    x_user_id: str | None = Header(None, alias="X-User-Id"),
-    x_university_id: str | None = Header(None, alias="X-University-Id"),
     current_user: UserContext = Depends(get_current_user),
 ):
     """
     Core Server-Sent Events (SSE) endpoint:
     1. Pre-LLM Prompt Injection & Policy Guard
     2. Medical Acronym Normalizer
-    3. RAG Retrieval via Supabase RPC (3072d dense vectors + sibling & segment expansion)
+    3. RAG Retrieval via Supabase RPC (1536d dense vectors + sibling & segment expansion)  # [DIM 1536]
     4. Multi-turn Agentic Tool Loop & Multi-tier LLM inference
     5. SSE Token streaming with 15s keep-alive heartbeat and disconnect abort
     6. Asynchronous persistence of user and assistant messages + telemetry
     """
-    user_id = x_user_id or str(current_user.id)
-    university_id = (
-        x_university_id
-        or (str(current_user.university_id) if current_user.university_id else None)
-        or DEV_DEFAULT_UNI_ID
-    )
-    user_message_id = str(uuid.uuid4())
-    assistant_message_id = str(uuid.uuid4())
+    user_id = str(current_user.id)  # [TENANT FIX]
+    university_id = str(require_university(current_user))  # [TENANT FIX]
+    await require_owned_session(session_id, current_user, payload.parent_message_id)  # [TENANT FIX]
+    if payload.document_id:  # [TENANT FIX]
+        await check_document_scope(  # [TENANT FIX]
+            payload.document_id,  # [TENANT FIX]
+            current_user,  # [TENANT FIX]
+            active_only=True,  # [TENANT FIX]
+        )  # [TENANT FIX]
+    user_message_id = str(uuid7())  # [LEFTOVER FIX]
+    assistant_message_id = str(uuid7())  # [LEFTOVER FIX]
 
     if not current_user.dev_bypass:
         await _deduct_user_credit(user_id, assistant_message_id)
 
     # Queue background operations
-    background_tasks.add_task(_auto_generate_session_title, session_id, payload.message)
+    background_tasks.add_task(  # [TENANT FIX]
+        _auto_generate_session_title,  # [TENANT FIX]
+        session_id,  # [TENANT FIX]
+        payload.message,  # [TENANT FIX]
+        user_id,  # [TENANT FIX]
+    )  # [TENANT FIX]
+
+    model_started = False  # [CHAT FIX 2]
+
+    async def save_assistant_message(  # [CHAT FIX 2]
+        text: str, citations: list[CitationItem], thinking: str | None = None
+    ) -> None:
+        """Persist retrieval notices and model answers through the same path."""
+        async with get_db_connection() as conn:
+            if conn:
+                try:
+                    await conn.execute(
+                        """
+                        INSERT INTO public.chat_messages (
+                            id, session_id, parent_message_id, role, content, citations, thinking_text
+                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
+                        ON CONFLICT (id) DO NOTHING;
+                        """,
+                        uuid.UUID(assistant_message_id),
+                        uuid.UUID(session_id),
+                        uuid.UUID(user_message_id),
+                        text,
+                        json.dumps([c.model_dump() for c in citations]) if citations else None,
+                        thinking,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "save_assistant_message_failed",
+                        error_type=type(exc).__name__,
+                        error=repr(exc),
+                    )
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
+        nonlocal model_started  # [CHAT FIX 2]
         last_heartbeat = time.time()
 
         # 1. Yield init event
@@ -443,6 +475,19 @@ async def stream_chat_session(
             yield f"event: citations\ndata: {json.dumps(cits_data)}\n\n"
 
         # 5. Build Clinical System Prompt Grounded in Course Chunks
+        if (  # [CHAT FIX 2]
+            classification.requires_rag  # [CHAT FIX 2]
+            and not citations  # [CHAT FIX 2]
+            and (  # [CHAT FIX 2]
+                not rag_context  # [CHAT FIX 2]
+                or "not found in your course materials" in rag_context  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ):  # [CHAT FIX 2]
+            rag_context = ABSENCE_NOTICE  # [CHAT FIX 2]
+            yield f"event: text_chunk\ndata: {json.dumps({'token': rag_context, 'delta': rag_context, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
+            await save_assistant_message(rag_context, [])  # [CHAT FIX 2]
+            yield f"event: done\ndata: {json.dumps({'full_text': rag_context, 'citations_count': 0, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
+            return  # [CHAT FIX 2]
         system_prompt = policy_guard.build_system_prompt(rag_context)
 
         # 6. Stream tokens and agentic events from Multi-tier LLM Engine with full history
@@ -451,6 +496,7 @@ async def stream_chat_session(
         last_provider = "google"
 
         try:
+            model_started = True  # [CHAT FIX 2]
             async for event_type, data, provider in llm_engine.stream_agentic_chat(
                 system_prompt=system_prompt,
                 user_message=payload.message,
@@ -489,6 +535,11 @@ async def stream_chat_session(
                 elif event_type == "artifact_ready":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     yield f"event: artifact_ready\ndata: {json.dumps(dumped)}\n\n"
+                elif event_type == "error":  # [CHAT FIX]
+                    yield f"event: error\ndata: {json.dumps(data)}\n\n"  # [CHAT FIX 2]
+                    if data.get("code"):  # [CHAT FIX 2]
+                        yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens), 'citations_count': len(citations), 'provider': provider})}\n\n"  # [CHAT FIX 2]
+                    return  # [CHAT FIX 2]
 
         except Exception as exc:
             logger.error("stream_chat_unhandled_failure", error=str(exc))
@@ -505,34 +556,35 @@ async def stream_chat_session(
         full_thinking_text = "".join(collected_thinking).strip() or None
 
         # 7. Asynchronously save assistant message to DB
-        async with get_db_connection() as conn:
-            if conn:
-                try:
-                    cits_json = (
-                        json.dumps([c.model_dump() for c in citations]) if citations else None
-                    )
-                    await conn.execute(
-                        """
-                        INSERT INTO public.chat_messages (
-                            id, session_id, parent_message_id, role, content, citations, thinking_text
-                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
-                        ON CONFLICT (id) DO NOTHING;
-                        """,
-                        uuid.UUID(assistant_message_id),
-                        uuid.UUID(session_id),
-                        uuid.UUID(user_message_id),
-                        full_response_text,
-                        cits_json,
-                        full_thinking_text,
-                    )
-                except Exception as exc:
-                    logger.warning("save_assistant_message_failed", error=str(exc))
+        await save_assistant_message(
+            full_response_text, citations, full_thinking_text
+        )  # [CHAT FIX 2]
 
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
+    async def bounded_sse_events() -> AsyncGenerator[str, None]:  # [CHAT FIX]
+        try:  # [CHAT FIX]
+            async with asyncio.timeout(settings.CHAT_TOTAL_TIMEOUT_S):  # [CHAT FIX]
+                async for event in sse_event_generator():  # [CHAT FIX]
+                    yield event  # [CHAT FIX]
+        except TimeoutError as exc:  # [CHAT FIX]
+            logger.warning(  # [CHAT FIX]
+                "chat_request_deadline_exceeded",  # [CHAT FIX]
+                deadline="total",  # [CHAT FIX]
+                timeout_s=settings.CHAT_TOTAL_TIMEOUT_S,  # [CHAT FIX]
+                error_type=type(exc).__name__,  # [CHAT FIX]
+                error=repr(exc),  # [CHAT FIX]
+            )  # [CHAT FIX]
+            message = {"error": "The answer timed out. Please try again."}  # [CHAT FIX 2]
+            if model_started:  # [CHAT FIX 2]
+                message.update(code="TIMEOUT", retryable=True)  # [CHAT FIX 2]
+            yield f"event: error\ndata: {json.dumps(message)}\n\n"  # [CHAT FIX]
+            if model_started:  # [CHAT FIX 2]
+                yield f"event: done\ndata: {json.dumps({'full_text': '', 'citations_count': 0})}\n\n"  # [CHAT FIX 2]
+
     return StreamingResponse(
-        sse_event_generator(),
+        bounded_sse_events(),  # [CHAT FIX]
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
@@ -573,7 +625,7 @@ async def transcribe_voice_audio(
 
     if len(audio_bytes) > settings.WHISPER_MAX_FILE_SIZE_BYTES:
         raise HTTPException(
-            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,  # [LEFTOVER FIX]
             detail=f"Audio file exceeds maximum allowed size of {settings.WHISPER_MAX_FILE_SIZE_BYTES // (1024 * 1024)}MB.",
         )
 

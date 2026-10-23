@@ -8,3 +8,5 @@ allowBuilds:
   unrs-resolver: true
 overrides:
   webpack: "5.98.0"
+  "http-cache-semantics@4.2.0": "4.3.0" # [DEPS FIX]
+  "sharp@0.35.4": "0.35.5" # [DEPS FIX]

@@ -3,87 +3,530 @@
 # Distinguishes text scans, pharmacology diagrams/pathways, and image tables
 # ==============================================================================
 
-from typing import Literal
+import asyncio  # [VISION FIX]
+import hashlib  # [VISION FIX]
+from typing import Any, Literal  # [PHASE2 FIX]
 
-from app.core.config import settings
+import structlog  # [VISION FIX]
 
-ImageRouteType = Literal["text_scan", "diagram", "table"]
+from app.core.config import settings  # [VISION FIX]
+from app.engines.embedder import _parse_retry_delay  # [WORKER FIX 3]
+
+logger = structlog.get_logger(__name__)  # [VISION FIX]
+
+ImageRouteType = Literal["text_scan", "diagram", "table"]  # [VISION FIX]
+
+BACKOFF_5XX = [1.0, 2.0, 4.0, 8.0, 8.0]  # [VISION FIX]
+BACKOFF_CONN = [5.0, 10.0, 20.0, 40.0, 60.0]  # [VISION FIX]
 
 
-class ImageClassifier:
-    """Classifies embedded images and scanned page canvases into downstream pipelines."""
+def _extract_status_code(exc: Exception) -> int | None:  # [WORKER FIX 3]
+    """Extract numeric HTTP status / error code from exception attributes."""  # [WORKER FIX 3]
+    for attr in ("code", "status_code"):  # [WORKER FIX 3]
+        val = getattr(exc, attr, None)  # [WORKER FIX 3]
+        if val is not None:  # [WORKER FIX 3]
+            try:  # [WORKER FIX 3]
+                return int(val)  # [WORKER FIX 3]
+            except (ValueError, TypeError):  # [WORKER FIX 3]
+                pass  # [WORKER FIX 3]
+    return None  # [WORKER FIX 3]
 
-    def __init__(self):
-        self._api_key = settings.GEMINI_API_KEY
 
-    async def classify_and_process(
-        self,
-        image_bytes: bytes,
-        mime_type: str = "image/png",
-    ) -> tuple[ImageRouteType, str]:
-        """
-        Classifies image and extracts appropriate content:
+def _is_rate_limit(exc: Exception) -> bool:  # [WORKER FIX 3]
+    """Determine if exception is a 429 / RESOURCE_EXHAUSTED error."""  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        return code == 429  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status == "RESOURCE_EXHAUSTED":  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    return "429" in msg or "resource_exhausted" in msg  # [WORKER FIX 3]
+
+
+def _is_connection_error(exc: Exception) -> bool:  # [VISION FIX]
+    try:  # [VISION FIX]
+        import aiohttp  # [VISION FIX]
+
+        aio_types = (aiohttp.ClientConnectorError,)  # [VISION FIX]
+    except ImportError:  # [VISION FIX]
+        aio_types = ()  # [VISION FIX]
+    if isinstance(exc, (OSError, ConnectionError, *aio_types)):  # [VISION FIX]
+        return True  # [VISION FIX]
+    msg = str(exc).lower()  # [VISION FIX]
+    return (  # [VISION FIX]
+        "getaddrinfo failed" in msg  # [VISION FIX]
+        or "cannot connect to host" in msg  # [VISION FIX]
+        or "connection error" in msg  # [VISION FIX]
+        or "connection reset" in msg  # [VISION FIX]
+        or "network is unreachable" in msg  # [VISION FIX]
+    )  # [VISION FIX]
+
+
+def _is_server_error_or_timeout(exc: Exception) -> bool:  # [WORKER FIX 3]
+    if isinstance(exc, (TimeoutError, asyncio.TimeoutError)):  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        # Decide by numeric code first: only 5xx is server error, 4xx is NOT  # [WORKER FIX 3]
+        return 500 <= code < 600  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status in ("INTERNAL", "UNAVAILABLE", "DEADLINE_EXCEEDED"):  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    if "timeout" in msg:  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    return any(  # [WORKER FIX 3]
+        x in msg  # [WORKER FIX 3]
+        for x in [  # [WORKER FIX 3]
+            "500",  # [WORKER FIX 3]
+            "502",  # [WORKER FIX 3]
+            "503",  # [WORKER FIX 3]
+            "504",  # [WORKER FIX 3]
+            "internal error",  # [WORKER FIX 3]
+            "unavailable",  # [WORKER FIX 3]
+            "server error",  # [WORKER FIX 3]
+        ]  # [WORKER FIX 3]
+    )  # [WORKER FIX 3]
+
+
+def _is_400_invalid_image(exc: Exception) -> bool:  # [WORKER FIX 3]
+    code = _extract_status_code(exc)  # [WORKER FIX 3]
+    if code is not None:  # [WORKER FIX 3]
+        return code == 400  # [WORKER FIX 3]
+    status = getattr(exc, "status", None)  # [WORKER FIX 3]
+    if status == "INVALID_ARGUMENT":  # [WORKER FIX 3]
+        return True  # [WORKER FIX 3]
+    msg = str(exc).lower()  # [WORKER FIX 3]
+    return (  # [WORKER FIX 3]
+        "400" in msg or "invalid_argument" in msg or "invalid argument" in msg  # [WORKER FIX 3]
+    ) and (not _is_server_error_or_timeout(exc) and not _is_rate_limit(exc))  # [WORKER FIX 3]
+
+
+class VisionError(Exception):  # [VISION FIX]
+    """Raised when vision classification or description fails permanently."""  # [VISION FIX]
+
+    pass  # [VISION FIX]
+
+
+def _extract_telemetry(response: Any) -> tuple[str, str | None, int, int, int]:  # [PHASE2 FIX]
+    """Extract finish_reason, block_reason, and token usage counts from vision response."""  # [PHASE2 FIX]
+    candidate = (  # [PHASE2 FIX]
+        response.candidates[0]  # [PHASE2 FIX]
+        if (getattr(response, "candidates", None) and len(response.candidates) > 0)  # [PHASE2 FIX]
+        else None  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    finish_reason = getattr(candidate, "finish_reason", None) if candidate else None  # [PHASE2 FIX]
+    if (
+        hasattr(finish_reason, "__class__") and "Mock" in finish_reason.__class__.__name__
+    ):  # [PHASE2 FIX]
+        finish_reason = None  # [PHASE2 FIX]
+    finish_reason_str = (  # [PHASE2 FIX]
+        getattr(finish_reason, "value", None)  # [PHASE2 FIX]
+        or getattr(finish_reason, "name", None)  # [PHASE2 FIX]
+        or (str(finish_reason) if finish_reason is not None else "UNKNOWN")  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    prompt_feedback = getattr(response, "prompt_feedback", None)  # [PHASE2 FIX]
+    block_reason = (  # [PHASE2 FIX]
+        getattr(prompt_feedback, "block_reason", None) if prompt_feedback else None  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    if (
+        hasattr(block_reason, "__class__") and "Mock" in block_reason.__class__.__name__
+    ):  # [PHASE2 FIX]
+        block_reason = None  # [PHASE2 FIX]
+    block_reason_str = (  # [PHASE2 FIX]
+        getattr(block_reason, "value", None)  # [PHASE2 FIX]
+        or getattr(block_reason, "name", None)  # [PHASE2 FIX]
+        or (str(block_reason) if block_reason is not None else None)  # [PHASE2 FIX]
+    )  # [PHASE2 FIX]
+    usage = getattr(response, "usage_metadata", None)  # [PHASE2 FIX]
+    prompt_tokens = getattr(usage, "prompt_token_count", 0) or 0  # [PHASE2 FIX]
+    candidates_tokens = getattr(usage, "candidates_token_count", 0) or 0  # [PHASE2 FIX]
+    thoughts_tokens = getattr(usage, "thoughts_token_count", 0) or 0  # [PHASE2 FIX]
+    if not isinstance(prompt_tokens, int):  # [PHASE2 FIX]
+        prompt_tokens = 0  # [PHASE2 FIX]
+    if not isinstance(candidates_tokens, int):  # [PHASE2 FIX]
+        candidates_tokens = 0  # [PHASE2 FIX]
+    if not isinstance(thoughts_tokens, int):  # [PHASE2 FIX]
+        thoughts_tokens = 0  # [PHASE2 FIX]
+    return (
+        finish_reason_str,
+        block_reason_str,
+        prompt_tokens,
+        candidates_tokens,
+        thoughts_tokens,
+    )  # [PHASE2 FIX]
+
+
+class ImageClassifier:  # [VISION FIX]
+    """Classifies embedded images and scanned page canvases into downstream pipelines."""  # [VISION FIX]
+
+    def __init__(self):  # [VISION FIX]
+        self._api_key = settings.GEMINI_API_KEY  # [VISION FIX]
+
+    async def classify_and_process(  # [VISION FIX]
+        self,  # [VISION FIX]
+        image_bytes: bytes,  # [VISION FIX]
+        mime_type: str = "image/png",  # [VISION FIX]
+        page_number: int | None = None,  # [VISION FIX]
+    ) -> tuple[ImageRouteType | None, str | None]:  # [VISION FIX]
+        """Classifies image and extracts appropriate content:
         - 'text_scan': Verbatim text transcription (Clinical Safety Rule: NO summarization)
         - 'diagram': Descriptive markdown [Visual Description: ...]
         - 'table': Structured markdown rows & columns
-        """
-        if (
-            not self._api_key
-            or "placeholder" in self._api_key.lower()
-            or "test" in self._api_key.lower()
-        ):
-            # If in mock/test or offline mode, provide intelligent fallback
-            return "diagram", "[Visual Description: Pharmacological pathway / slide diagram]"
+        """  # [VISION FIX]
+        if settings.VISION_FAKE_MODE:  # [VISION FIX]
+            return "diagram", "[Visual Description: Mock pharmacology diagram]"  # [VISION FIX]
 
-        try:
-            from google import genai
-            from google.genai import types
+        api_key = self._api_key or settings.GEMINI_API_KEY  # [VISION FIX]
+        if not api_key:  # [VISION FIX]
+            raise VisionError("GEMINI_API_KEY not configured for vision processing")  # [VISION FIX]
 
-            client = genai.Client(api_key=self._api_key)
-            prompt = """
-You are an expert pharmacology and medical document processor.
-Analyze the provided image and perform two tasks:
-1. Determine the classification:
-   - TEXT_SCAN: If this is a page or snippet of printed/handwritten text or notes.
-   - TABLE: If this is a grid, matrix, or dosage/drug comparison table.
-   - DIAGRAM: If this is a chemical structure, biological pathway, chart, or clinical illustration.
+        from google import genai  # [VISION FIX]
+        from google.genai import types  # [VISION FIX]
 
-2. Process the content according to its classification:
-   - If TEXT_SCAN: Transcribe all visible text VERBATIM. Do NOT summarize or omit anything.
-   - If TABLE: Output the table as clean, formatted Markdown table with headers and rows.
-   - If DIAGRAM: Output a concise description starting with '[Visual Description: ' describing the structures, arrows, receptors, and pathways.
+        client = genai.Client(api_key=api_key)  # [VISION FIX]
+        prompt = (  # [VISION FIX]
+            "/nothink\n"  # [VISION FIX]
+            "You are an expert pharmacology and medical document processor.\n"
+            "Analyze the provided image and perform two tasks:\n"
+            "1. Determine the classification:\n"
+            "   - TEXT_SCAN: If this is a page or snippet of printed/handwritten text or notes.\n"
+            "   - TABLE: If this is a grid, matrix, or dosage/drug comparison table.\n"
+            "   - DIAGRAM: If this is a chemical structure, biological pathway, chart, or clinical illustration.\n\n"
+            "2. Process the content according to its classification:\n"
+            "   - If TEXT_SCAN: Transcribe all visible text VERBATIM. Do NOT summarize or omit anything.\n"
+            "   - If TABLE: Output the table as clean, formatted Markdown table with headers and rows.\n"
+            "   - If DIAGRAM: Output a concise description starting with '[Visual Description: ' describing the structures, arrows, receptors, and pathways.\n\n"
+            "Format your exact response as:\n"
+            "CLASSIFICATION: <TEXT_SCAN|TABLE|DIAGRAM>\n"
+            "---CONTENT---\n"
+            "<Your processed output>\n"
+        )  # [VISION FIX]
 
-Format your exact response as:
-CLASSIFICATION: <TEXT_SCAN|TABLE|DIAGRAM>
----CONTENT---
-<Your processed output>
-"""
-            part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
-            response = await client.aio.models.generate_content(
-                model=settings.GEMINI_PRIMARY_MODEL,
-                contents=[part, prompt],
-            )
-            raw = response.text.strip() if response.text else ""
+        model_to_use = (  # [PHASE2 FIX]
+            getattr(settings, "GEMINI_VISION_MODEL", None) or "gemma-4-26b-a4b-it"  # [PHASE2 FIX]
+        )  # [PHASE2 FIX]
+        default_max_tokens = getattr(settings, "VISION_MAX_OUTPUT_TOKENS", 1024)  # [PHASE2 FIX]
+        hash_prefix = hashlib.md5(image_bytes).hexdigest()[:8]  # [VISION FIX]
+        max_attempts = 5  # [VISION FIX]
 
-            route: ImageRouteType = "diagram"
-            content: str = ""
+        for attempt in range(max_attempts):  # [VISION FIX]
+            try:  # [VISION FIX]
+                part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)  # [VISION FIX]
+                response = await client.aio.models.generate_content(  # [PHASE2 FIX]
+                    model=model_to_use,  # [PHASE2 FIX]
+                    contents=[part, prompt],  # [PHASE2 FIX]
+                    config=types.GenerateContentConfig(  # [PHASE2 FIX]
+                        max_output_tokens=default_max_tokens,  # [PHASE2 FIX]
+                        automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [PHASE2 FIX]
+                            disable=True  # [PHASE2 FIX]
+                        ),  # [PHASE2 FIX]
+                    ),  # [PHASE2 FIX]
+                )  # [PHASE2 FIX]
+                finish_reason, block_reason, p_tok, c_tok, th_tok = _extract_telemetry(
+                    response
+                )  # [PHASE2 FIX]
+                raw = (
+                    response.text.strip() if getattr(response, "text", None) else ""
+                )  # [PHASE2 FIX]
 
-            if "CLASSIFICATION: TEXT_SCAN" in raw:
-                route = "text_scan"
-            elif "CLASSIFICATION: TABLE" in raw:
-                route = "table"
-            elif "CLASSIFICATION: DIAGRAM" in raw:
-                route = "diagram"
+                if not raw:  # [PHASE2 FIX]
+                    # (b) SAFETY or block_reason -> do NOT retry; mark skipped with 'blocked:<reason>' [PHASE2 FIX]
+                    if finish_reason == "SAFETY" or block_reason is not None:  # [PHASE2 FIX]
+                        reason = block_reason or finish_reason or "SAFETY"  # [PHASE2 FIX]
+                        logger.warning(  # [PHASE2 FIX]
+                            "vision_empty_blocked",  # [PHASE2 FIX]
+                            page=page_number,  # [PHASE2 FIX]
+                            hash_prefix=hash_prefix,  # [PHASE2 FIX]
+                            finish_reason=finish_reason,  # [PHASE2 FIX]
+                            block_reason=block_reason,  # [PHASE2 FIX]
+                            prompt_tokens=p_tok,  # [PHASE2 FIX]
+                            candidates_tokens=c_tok,  # [PHASE2 FIX]
+                            thoughts_tokens=th_tok,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                        return None, f"blocked:{reason}"  # [PHASE2 FIX]
 
-            if "---CONTENT---" in raw:
-                content = raw.split("---CONTENT---", 1)[1].strip()
-            else:
-                content = raw
+                    # (a) MAX_TOKENS: retry with 4096, then 8192 [WORKER FIX]
+                    if finish_reason == "MAX_TOKENS":  # [WORKER FIX]
+                        for esc_tokens in (4096, 8192):  # [WORKER FIX]
+                            esc_step_success = False  # [WORKER FIX]
+                            esc_step_max_tries = 3  # [WORKER FIX]
+                            for step_try in range(esc_step_max_tries):  # [WORKER FIX]
+                                logger.warning(  # [WORKER FIX]
+                                    "vision_empty_retry",  # [WORKER FIX]
+                                    page=page_number,  # [WORKER FIX]
+                                    hash_prefix=hash_prefix,  # [WORKER FIX]
+                                    attempt=attempt + 1,  # [WORKER FIX]
+                                    step_try=step_try + 1,  # [WORKER FIX]
+                                    finish_reason=finish_reason,  # [WORKER FIX]
+                                    block_reason=block_reason,  # [WORKER FIX]
+                                    prompt_tokens=p_tok,  # [WORKER FIX]
+                                    candidates_tokens=c_tok,  # [WORKER FIX]
+                                    thoughts_tokens=th_tok,  # [WORKER FIX]
+                                    escalated_tokens=esc_tokens,  # [WORKER FIX]
+                                )  # [WORKER FIX]
+                                await asyncio.sleep(  # [WORKER FIX]
+                                    1.0
+                                    if step_try == 0
+                                    else BACKOFF_5XX[
+                                        min(step_try, len(BACKOFF_5XX) - 1)
+                                    ]  # [WORKER FIX]
+                                )  # [WORKER FIX]
+                                try:  # [WORKER FIX]
+                                    retry_response = await client.aio.models.generate_content(  # [WORKER FIX]
+                                        model=model_to_use,  # [WORKER FIX]
+                                        contents=[part, prompt],  # [WORKER FIX]
+                                        config=types.GenerateContentConfig(  # [WORKER FIX]
+                                            max_output_tokens=esc_tokens,  # [WORKER FIX]
+                                            automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [WORKER FIX]
+                                                disable=True  # [WORKER FIX]
+                                            ),  # [WORKER FIX]
+                                        ),  # [WORKER FIX]
+                                    )  # [WORKER FIX]
+                                    (
+                                        finish_reason,
+                                        block_reason,
+                                        p_tok,
+                                        c_tok,
+                                        th_tok,
+                                    ) = (  # [WORKER FIX]
+                                        _extract_telemetry(  # [WORKER FIX]
+                                            retry_response  # [WORKER FIX]
+                                        )  # [WORKER FIX]
+                                    )  # [WORKER FIX]
+                                    raw = (  # [WORKER FIX]
+                                        retry_response.text.strip()  # [WORKER FIX]
+                                        if getattr(retry_response, "text", None)  # [WORKER FIX]
+                                        else ""  # [WORKER FIX]
+                                    )  # [WORKER FIX]
+                                    esc_step_success = True  # [WORKER FIX]
+                                    break  # [WORKER FIX]
+                                except Exception as esc_exc:  # [WORKER FIX]
+                                    if _is_rate_limit(esc_exc):  # [WORKER FIX]
+                                        wait_delay = (
+                                            _parse_retry_delay(esc_exc) or 20.0
+                                        )  # [WORKER FIX]
+                                        logger.warning(  # [WORKER FIX]
+                                            "vision_escalation_rate_limit",  # [WORKER FIX]
+                                            page=page_number,  # [WORKER FIX]
+                                            wait_seconds=wait_delay,  # [WORKER FIX]
+                                            error=str(esc_exc),  # [WORKER FIX]
+                                        )  # [WORKER FIX]
+                                        await asyncio.sleep(wait_delay)  # [WORKER FIX]
+                                    elif (  # [WORKER FIX]
+                                        _is_server_error_or_timeout(esc_exc)  # [WORKER FIX]
+                                        or _is_connection_error(esc_exc)  # [WORKER FIX]
+                                    ):  # [WORKER FIX]
+                                        logger.warning(  # [WORKER FIX]
+                                            "vision_escalation_transient_error",  # [WORKER FIX]
+                                            page=page_number,  # [WORKER FIX]
+                                            escalated_tokens=esc_tokens,  # [WORKER FIX]
+                                            step_try=step_try + 1,  # [WORKER FIX]
+                                            error=str(esc_exc),  # [WORKER FIX]
+                                        )  # [WORKER FIX]
+                                    else:  # [WORKER FIX 2]
+                                        # Non-retriable error (400, 401, 403, 404, bad request) -> stop at once with no retry  # [WORKER FIX 2]
+                                        logger.warning(  # [WORKER FIX 2]
+                                            "vision_escalation_non_retriable_error",  # [WORKER FIX 2]
+                                            page=page_number,  # [WORKER FIX 2]
+                                            escalated_tokens=esc_tokens,  # [WORKER FIX 2]
+                                            step_try=step_try + 1,  # [WORKER FIX 2]
+                                            error=str(esc_exc),  # [WORKER FIX 2]
+                                        )  # [WORKER FIX 2]
+                                        raise VisionError(  # [WORKER FIX 2]
+                                            f"Vision escalation to {esc_tokens} tokens failed with non-retriable error: {esc_exc}"  # [WORKER FIX 2]
+                                        ) from esc_exc  # [WORKER FIX 2]
+                                    if step_try == esc_step_max_tries - 1:  # [WORKER FIX 2]
+                                        raise VisionError(  # [WORKER FIX 2]
+                                            f"Vision escalation to {esc_tokens} tokens failed after {esc_step_max_tries} attempts: {esc_exc}"  # [WORKER FIX 2]
+                                        ) from esc_exc  # [WORKER FIX 2]
+                            if not esc_step_success:  # [WORKER FIX]
+                                break  # [WORKER FIX]
+                            if raw:  # [WORKER FIX]
+                                break  # [WORKER FIX]
+                            if (  # [WORKER FIX]
+                                finish_reason == "SAFETY"
+                                or block_reason is not None  # [WORKER FIX]
+                            ):  # [WORKER FIX]
+                                reason = block_reason or finish_reason or "SAFETY"  # [WORKER FIX]
+                                return None, f"blocked:{reason}"  # [WORKER FIX]
+                            if finish_reason != "MAX_TOKENS":  # [WORKER FIX]
+                                break  # [WORKER FIX]
+                    else:  # [PHASE2 FIX]
+                        # (c) otherwise retry once as today [PHASE2 FIX]
+                        logger.warning(  # [PHASE2 FIX]
+                            "vision_empty_retry",  # [PHASE2 FIX]
+                            page=page_number,  # [PHASE2 FIX]
+                            hash_prefix=hash_prefix,  # [PHASE2 FIX]
+                            attempt=attempt + 1,  # [PHASE2 FIX]
+                            finish_reason=finish_reason,  # [PHASE2 FIX]
+                            block_reason=block_reason,  # [PHASE2 FIX]
+                            prompt_tokens=p_tok,  # [PHASE2 FIX]
+                            candidates_tokens=c_tok,  # [PHASE2 FIX]
+                            thoughts_tokens=th_tok,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                        try:  # [PHASE2 FIX]
+                            await asyncio.sleep(1.0)  # [PHASE2 FIX]
+                            retry_response = await client.aio.models.generate_content(  # [PHASE2 FIX]
+                                model=model_to_use,  # [PHASE2 FIX]
+                                contents=[part, prompt],  # [PHASE2 FIX]
+                                config=types.GenerateContentConfig(  # [PHASE2 FIX]
+                                    max_output_tokens=default_max_tokens,  # [PHASE2 FIX]
+                                    automatic_function_calling=types.AutomaticFunctionCallingConfig(  # [PHASE2 FIX]
+                                        disable=True  # [PHASE2 FIX]
+                                    ),  # [PHASE2 FIX]
+                                ),  # [PHASE2 FIX]
+                            )  # [PHASE2 FIX]
+                            finish_reason, block_reason, p_tok, c_tok, th_tok = (
+                                _extract_telemetry(  # [PHASE2 FIX]
+                                    retry_response  # [PHASE2 FIX]
+                                )
+                            )  # [PHASE2 FIX]
+                            raw = (  # [PHASE2 FIX]
+                                retry_response.text.strip()  # [PHASE2 FIX]
+                                if getattr(retry_response, "text", None)  # [PHASE2 FIX]
+                                else ""  # [PHASE2 FIX]
+                            )  # [PHASE2 FIX]
+                        except Exception:  # [PHASE2 FIX]
+                            pass  # [PHASE2 FIX]
+                        if not raw and (
+                            finish_reason == "SAFETY" or block_reason is not None
+                        ):  # [PHASE2 FIX]
+                            reason = block_reason or finish_reason or "SAFETY"  # [PHASE2 FIX]
+                            return None, f"blocked:{reason}"  # [PHASE2 FIX]
 
-            return route, content
-        except Exception:
-            # Resilient fallback
-            return "diagram", "[Visual Description: Pharmacological diagram]"
+                    if not raw:  # [PHASE2 FIX]
+                        logger.warning(  # [PHASE2 FIX]
+                            "vision_empty_result",  # [PHASE2 FIX]
+                            page=page_number,  # [PHASE2 FIX]
+                            hash_prefix=hash_prefix,  # [PHASE2 FIX]
+                            finish_reason=finish_reason,  # [PHASE2 FIX]
+                            block_reason=block_reason,  # [PHASE2 FIX]
+                            prompt_tokens=p_tok,  # [PHASE2 FIX]
+                            candidates_tokens=c_tok,  # [PHASE2 FIX]
+                            thoughts_tokens=th_tok,  # [PHASE2 FIX]
+                        )  # [PHASE2 FIX]
+                        return None, f"empty:{finish_reason}"  # [PHASE2 FIX]
+
+                route: ImageRouteType = "diagram"  # [VISION FIX]
+                content: str = ""  # [VISION FIX]
+
+                if "CLASSIFICATION: TEXT_SCAN" in raw:  # [VISION FIX]
+                    route = "text_scan"  # [VISION FIX]
+                elif "CLASSIFICATION: TABLE" in raw:  # [VISION FIX]
+                    route = "table"  # [VISION FIX]
+                elif "CLASSIFICATION: DIAGRAM" in raw:  # [VISION FIX]
+                    route = "diagram"  # [VISION FIX]
+
+                if "---CONTENT---" in raw:  # [VISION FIX]
+                    content = raw.split("---CONTENT---", 1)[1].strip()  # [VISION FIX]
+                else:  # [VISION FIX]
+                    content = raw  # [VISION FIX]
+
+                logger.info(  # [PHASE2 FIX]
+                    "vision_image_processed",  # [PHASE2 FIX]
+                    page=page_number,  # [PHASE2 FIX]
+                    hash_prefix=hash_prefix,  # [PHASE2 FIX]
+                    route=route,  # [PHASE2 FIX]
+                    finish_reason=finish_reason,  # [PHASE2 FIX]
+                    block_reason=block_reason,  # [PHASE2 FIX]
+                    prompt_tokens=p_tok,  # [PHASE2 FIX]
+                    candidates_tokens=c_tok,  # [PHASE2 FIX]
+                    thoughts_tokens=th_tok,  # [PHASE2 FIX]
+                )  # [PHASE2 FIX]
+
+                return route, content  # [VISION FIX]
+
+            except VisionError:  # [WORKER FIX]
+                raise  # [WORKER FIX]
+            except Exception as exc:  # [VISION FIX]
+                is_final_attempt = attempt == max_attempts - 1  # [VISION FIX]
+
+                # 1. Connection / DNS error  # [VISION FIX]
+                if _is_connection_error(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision connection failed after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    conn_delay = BACKOFF_CONN[min(attempt, len(BACKOFF_CONN) - 1)]  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_connection_error",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        retry_delay=conn_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(conn_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
+
+                # 2. Rate limit (429 / RESOURCE_EXHAUSTED)  # [VISION FIX]
+                if _is_rate_limit(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision rate limit exhausted after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    parsed_wait = _parse_retry_delay(exc)  # [VISION FIX]
+                    wait_base = parsed_wait if parsed_wait is not None else 60.0  # [VISION FIX]
+                    rate_delay = min(65.0, wait_base + 1.0)  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_rate_limited",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        wait_seconds=rate_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(rate_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
+
+                # 3. HTTP 400 invalid image error -> skip only this image (3c)  # [VISION FIX]
+                if _is_400_invalid_image(exc):  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_image_skipped",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    return None, None  # [PHASE2 FIX]
+
+                # 4. 5xx and timeouts  # [VISION FIX]
+                if _is_server_error_or_timeout(exc):  # [VISION FIX]
+                    if is_final_attempt:  # [VISION FIX]
+                        raise VisionError(  # [VISION FIX]
+                            f"Vision server error exhausted after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                        ) from exc  # [VISION FIX]
+                    server_delay = BACKOFF_5XX[min(attempt, len(BACKOFF_5XX) - 1)]  # [VISION FIX]
+                    logger.warning(  # [VISION FIX]
+                        "vision_transient_error",  # [VISION FIX]
+                        page=page_number,  # [VISION FIX]
+                        hash_prefix=hash_prefix,  # [VISION FIX]
+                        attempt=attempt + 1,  # [VISION FIX]
+                        retry_delay=server_delay,  # [VISION FIX]
+                        error=str(exc),  # [VISION FIX]
+                    )  # [VISION FIX]
+                    await asyncio.sleep(server_delay)  # [VISION FIX]
+                    continue  # [VISION FIX]
+
+                # 5. Any other unexpected error -> NEVER skip, retry or raise VisionError  # [VISION FIX]
+                if is_final_attempt:  # [VISION FIX]
+                    raise VisionError(  # [VISION FIX]
+                        f"Vision analysis failed after {max_attempts} attempts: {exc}"  # [VISION FIX]
+                    ) from exc  # [VISION FIX]
+                unknown_delay = BACKOFF_5XX[min(attempt, len(BACKOFF_5XX) - 1)]  # [VISION FIX]
+                logger.warning(  # [VISION FIX]
+                    "vision_unexpected_error",  # [VISION FIX]
+                    page=page_number,  # [VISION FIX]
+                    hash_prefix=hash_prefix,  # [VISION FIX]
+                    attempt=attempt + 1,  # [VISION FIX]
+                    retry_delay=unknown_delay,  # [VISION FIX]
+                    error=str(exc),  # [VISION FIX]
+                )  # [VISION FIX]
+                await asyncio.sleep(unknown_delay)  # [VISION FIX]
+                continue  # [VISION FIX]
+
+        raise VisionError(f"Vision analysis failed after {max_attempts} attempts")  # [VISION FIX]
 
 
-image_classifier = ImageClassifier()
+image_classifier = ImageClassifier()  # [VISION FIX]

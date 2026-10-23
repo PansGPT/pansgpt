@@ -2,10 +2,13 @@
 # Unit & Integration Tests: Web Search Daily Quotas & MD5 Caching (Section 8)
 # ==============================================================================
 
+from unittest.mock import AsyncMock  # [CHAT FIX 2]
+
 import pytest
+from httpx import AsyncClient, Response  # [CHAT FIX 2]
 
 from app.engines.tools import tool_engine
-from app.engines.web_search import WebSearchEngine
+from app.engines.web_search import WebSearchEngine, web_search_engine  # [CHAT FIX 2]
 
 
 @pytest.fixture(autouse=True)
@@ -126,9 +129,31 @@ async def test_md5_cache_hit_does_not_consume_quota():
 # 4. Tool Engine Dispatch Integration
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_tool_engine_dispatch_web_search_with_user():
+async def test_tool_engine_dispatch_web_search_with_user(  # [CHAT FIX 2]
+    monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
+) -> None:  # [CHAT FIX 2]
     """Verify tool_engine.dispatch_tool passes user_id and respects search quotas."""
     user_id = "tool-engine-test-user-333"
+    monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
+    monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        AsyncClient,  # [CHAT FIX 2]
+        "post",  # [CHAT FIX 2]
+        AsyncMock(  # [CHAT FIX 2]
+            return_value=Response(  # [CHAT FIX 2]
+                200,  # [CHAT FIX 2]
+                json={  # [CHAT FIX 2]
+                    "results": [  # [CHAT FIX 2]
+                        {  # [CHAT FIX 2]
+                            "title": "Published research",  # [CHAT FIX 2]
+                            "url": "https://pubmed.ncbi.nlm.nih.gov/12345678/",  # [CHAT FIX 2]
+                            "content": "Real upstream result mocked for the unit test.",  # [CHAT FIX 2]
+                        }  # [CHAT FIX 2]
+                    ]  # [CHAT FIX 2]
+                },  # [CHAT FIX 2]
+            )  # [CHAT FIX 2]
+        ),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     result = await tool_engine.dispatch_tool(
         tool_name="web_search",
         arguments={"query": "Metformin lactic acidosis mechanism", "num_results": 2},

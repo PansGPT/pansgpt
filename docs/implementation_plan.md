@@ -731,7 +731,7 @@ R2_PUBLIC_DOMAIN=https://documents-staging.pansgpt.com
 # AI Providers
 GEMINI_API_KEY=YOUR_GOOGLE_AI_STUDIO_API_KEY
 GEMINI_PRIMARY_MODEL=gemma-4-31b-it
-GEMINI_EMBEDDING_MODEL=gemini-embedding-002
+GEMINI_EMBEDDING_MODEL=gemini-embedding-2  # [EMBED FIX]
 GROQ_API_KEY=YOUR_GROQ_API_KEY
 GROQ_FALLBACK_MODEL=llama-3.3-70b-versatile
 OPENROUTER_API_KEY=YOUR_OPENROUTER_API_KEY
@@ -1102,11 +1102,11 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 
 **Google AI Studio (Gemma 4 & Gemini Embeddings — Free tier)**
 
-| Model ID               | Type      | Multimodal Support | Context    | Latency       | Reasoning Support                              | Tool Calling                  |
-| ---------------------- | --------- | ------------------ | ---------- | ------------- | ---------------------------------------------- | ----------------------------- |
-| `gemma-4-31b-it`       | Dense 31B | Yes (Text + Image) | 256K       | ~1.5s – 2.5s  | Yes (Native Thinking Mode)                     | Yes (Native Function Calling) |
-| `gemma-4-26b-a4b-it`   | MoE (A4B) | Yes (Text + Image) | 256K       | ~800ms – 1.5s | Yes (Native Thinking Mode with Budget Control) | Yes (Native Function Calling) |
-| `gemini-embedding-002` | Embedding | Text (Embedding)   | 8K (3072d) | ~50ms – 150ms | N/A                                            | N/A                           |
+| Model ID             | Type      | Multimodal Support | Context    | Latency       | Reasoning Support                              | Tool Calling                  |
+| -------------------- | --------- | ------------------ | ---------- | ------------- | ---------------------------------------------- | ----------------------------- |
+| `gemma-4-31b-it`     | Dense 31B | Yes (Text + Image) | 256K       | ~1.5s – 2.5s  | Yes (Native Thinking Mode)                     | Yes (Native Function Calling) |
+| `gemma-4-26b-a4b-it` | MoE (A4B) | Yes (Text + Image) | 256K       | ~800ms – 1.5s | Yes (Native Thinking Mode with Budget Control) | Yes (Native Function Calling) |
+| `gemini-embedding-2` | Embedding | Text (Embedding)   | 8K (1536d) | ~50ms – 150ms | N/A                                            | N/A                           | <!-- [DIM 1536] --> |
 
 **Groq (Ultra-Fast Inference — Free rate-limited tier)**
 
@@ -1133,11 +1133,11 @@ PDF Reader loads → Frontend requests signed URL → FastAPI generates R2 signe
 
 **Google AI Studio**
 
-| Model ID               | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-| ---------------------- | ------------- | ---------------- | ------------- |
-| `gemma-4-26b-a4b-it`   | 30            | 16K              | 14.4K         |
-| `gemma-4-31b-it`       | 30            | 16K              | 14.4K         |
-| `gemini-embedding-002` | 1,500         | 1,000K           | 10K           |
+| Model ID             | RPM (Req/Min)                                                                         | TPM (Tokens/Min)           | RPD (Req/Day) |
+| -------------------- | ------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| `gemma-4-26b-a4b-it` | 30                                                                                    | 16K                        | 14.4K         |
+| `gemma-4-31b-it`     | 30                                                                                    | 16K                        | 14.4K         |
+| `gemini-embedding-2` | 100 requests/min (free tier, per Google 429 error on 2026-10-10); daily limit UNKNOWN | <!-- [EMBED RETRY FIX] --> |
 
 **Groq (Text & Audio)**
 
@@ -1276,7 +1276,7 @@ State Management
 
 
 Database & Storage
-├── Supabase Postgres + pgvector  ← Primary DB, 3072d HNSW vector search, RLS
+├── Supabase Postgres + pgvector  ← Primary DB, 1536d HNSW vector search, RLS <!-- [DIM 1536] -->
 ├── Redis (Upstash, free)          ← Task queue (ARQ) + caching
 └── Cloudflare R2 (free 10GB)      ← File storage (replaces Google Drive)
 
@@ -1292,7 +1292,7 @@ LLM Engine (Tiered Failover, All Free Tier)
 ├── whisper-large-v3                 (Groq)
 ├── gemma-4-31b-it                   (Google AI Studio)
 ├── gemma-4-26b-a4b-it               (Google AI Studio)
-├── gemini-embedding-002             (Google AI Studio)
+├── gemini-embedding-2                 (Google AI Studio)  <!-- [EMBED FIX] -->
 ├── nvidia/nemotron-3-ultra-550b-a55b:free   (OpenRouter)
 ├── nvidia/nemotron-3-super-120b-a12b:free   (OpenRouter)
 ├── nvidia/nemotron-3-nano-30b-a3b:free      (OpenRouter)
@@ -2071,23 +2071,23 @@ _Next: Section 4 — Database Design_
 
 ## ✅ SECTION 4 — DATABASE DESIGN
 
-> This section represents a **fundamental redesign from first principles**. It consolidates redundant schemas (e.g. unified `users`, unified `documents`), introduces dynamic Claude-style `ai_skills`, leverages `HNSW` vector indexing for `gemini-embedding-002`, enforces compliance-ready soft deletion with retention windows, and provides clean async background job tracking.
+> This section represents a **fundamental redesign from first principles**. It consolidates redundant schemas (e.g. unified `users`, unified `documents`), introduces dynamic Claude-style `ai_skills`, leverages `HNSW` vector indexing for `gemini-embedding-2`, enforces compliance-ready soft deletion with retention windows, and provides clean async background job tracking. <!-- [EMBED FIX] -->
 
 ---
 
 ### 4.1 First Principles Design Decisions
 
-| Decision                                   | Why                                                                                                                                                                                                                                                                                          |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **UUIDv7 for Primary Keys**                | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables.                                                                                                          |
-| **Unified `users` table**                  | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`).                                                         |
-| **Unified `documents` table**              | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication.                                                                                    |
-| **Dynamic Claude-Style `ai_skills` Table** | Instead of hardcoding all AI tools in code, specialized academic & clinical tools (e.g. dosage calculators, drug interaction checkers, OSCE case simulators) are stored in an `ai_skills` table with short metadata for the model router and full on-demand markdown instructions.           |
-| **HNSW Indexing for `pgvector`**           | Store `gemini-embedding-002` outputs as `vector(3072)`, then build the ANN index as `HNSW ((embedding::halfvec(3072)) halfvec_cosine_ops)`. This is an intentional pgvector compatibility decision for 3072d embeddings; retrieval RPCs use the same halfvec cast for indexed cosine search. |
-| **Soft Deletes with Retention Window**     | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period.                                                            |
-| **Cloudflare R2 Blob Storage**             | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2.                                                                                                   |
-| **Async Background Job Architecture**      | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts.                                                            |
-| **Greenfield Clean-Slate Deployment**      | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities.                                                                                                                                  |
+| Decision                                   | Why                                                                                                                                                                                                                                                                                |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UUIDv7 for Primary Keys**                | Time-ordered UUIDs (UUIDv7) eliminate B-tree index fragmentation and yield much higher write throughput than random UUIDv4 or auto-incrementing integers across distributed tables.                                                                                                |
+| **Unified `users` table**                  | Replaces 3 separate tables (`profiles`, `user_roles`, and `lecturer_profiles`). A single `users` table linked 1:1 with `auth.users` holds personal info, university affiliation, current level, and a `roles` array (`user_role[]`).                                               |
+| **Unified `documents` table**              | Unifies the library and lecturer submissions. Documents uploaded by admins start as `active`; lecturer uploads start as `pending_review`. On admin approval, status becomes `active` without duplication.                                                                          |
+| **Dynamic Claude-Style `ai_skills` Table** | Instead of hardcoding all AI tools in code, specialized academic & clinical tools (e.g. dosage calculators, drug interaction checkers, OSCE case simulators) are stored in an `ai_skills` table with short metadata for the model router and full on-demand markdown instructions. |
+| **HNSW Indexing for `pgvector`**           | Store `gemini-embedding-2` outputs as `vector(1536)`, then build the ANN index as `HNSW ((embedding::halfvec(1536)) halfvec_cosine_ops)`. This aligns with standard pgvector indexing for 1536d embeddings; retrieval RPCs use the same halfvec cast for indexed cosine search.    | <!-- [DIM 1536] --> |
+| **Soft Deletes with Retention Window**     | To comply with data privacy policies and allow account restoration, user accounts, notes, documents, and chat sessions utilize `deleted_at timestamptz`. A background cron purges soft-deleted rows past the 30-day grace period.                                                  |
+| **Cloudflare R2 Blob Storage**             | No Base64 images or binary files are stored in PostgreSQL. Avatars, original PDFs, converted slide PDFs, and note screenshots store clean `storage_key` strings pointing to Cloudflare R2.                                                                                         |
+| **Async Background Job Architecture**      | Complex multi-step generations (e.g. multi-page document quiz extraction) track state in `quiz_generation_jobs` with progress stages (`queued` → `retrieving` → `generating` → `saving` → `completed`), preventing HTTP timeouts.                                                  |
+| **Greenfield Clean-Slate Deployment**      | No legacy ETL data migration is required. The platform launches on a fresh, clean Supabase schema with automated seed migrations for Nigerian universities.                                                                                                                        |
 
 ---
 
@@ -2095,7 +2095,7 @@ _Next: Section 4 — Database Design_
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; -- uuidv7 generation
-CREATE EXTENSION IF NOT EXISTS vector;      -- pgvector for 3072-dim embeddings
+CREATE EXTENSION IF NOT EXISTS vector;      -- pgvector for 1536-dim embeddings <!-- [DIM 1536] -->
 CREATE EXTENSION IF NOT EXISTS pgcrypto;    -- cryptographically secure tokens
 ```
 
@@ -2124,7 +2124,7 @@ CREATE TYPE quiz_job_status AS ENUM ('queued', 'retrieving', 'generating', 'savi
 |                                  | `users`                          | Unified profile, role array, university link, and soft-delete state.                    |
 |                                  | `invitations`                    | Multi-use invite links with role grants and usage limits.                               |
 | **Content & Ingestion**          | `documents`                      | Unified document catalog (admin uploads & lecturer submissions).                        |
-|                                  | `document_chunks`                | 3072-dim vector chunks for RAG.                                                         |
+|                                  | `document_chunks`                | 1536-dim vector chunks for RAG.                                                         | <!-- [DIM 1536] --> |
 |                                  | `document_sections`              | AI-generated structured sections for Learn Mode.                                        |
 |                                  | `document_notes`                 | PDF screenshot cropped notes with AI commentary (R2 keys).                              |
 |                                  | `document_highlights`            | User text highlights with colors, page indices, and bounding boxes.                     |
@@ -2279,14 +2279,14 @@ CREATE TABLE public.document_chunks (
   page_start  integer,
   page_end    integer,
   chunk_index integer NOT NULL,
-  embedding   vector(3072) NOT NULL,              -- gemini-embedding-002 dimension
+  embedding   vector(1536) NOT NULL,              -- gemini-embedding-2 dimension  <!-- [DIM 1536] -->
   created_at  timestamptz NOT NULL DEFAULT now()
 );
 -- HNSW Index for ultra-fast vector similarity search without rebuild requirements.
--- Store the original 3072d vector at full precision, but index via halfvec because
--- pgvector's standard vector_cosine_ops HNSW operator class is dimension-limited.
+-- Store the 1536d vector at full precision, indexed via halfvec. <!-- [DIM 1536] -->
+-- pgvector's standard vector_cosine_ops or halfvec_cosine_ops HNSW operator class. <!-- [DIM 1536] -->
 CREATE INDEX idx_document_chunks_hnsw ON public.document_chunks
-  USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops);
+  USING hnsw ((embedding::halfvec(1536)) halfvec_cosine_ops); <!-- [DIM 1536] -->
 CREATE INDEX idx_document_chunks_doc ON public.document_chunks(document_id);
 ```
 
@@ -2743,7 +2743,7 @@ erDiagram
 
     users ||--o{ documents : "uploaded by (audit)"
     universities ||--o{ documents : "owns (scoped to)"
-    documents ||--o{ document_chunks : "3072d vectors"
+    documents ||--o{ document_chunks : "1536d vectors" <!-- [DIM 1536] -->
     documents ||--o{ document_sections : "learn sections"
     documents ||--o{ document_notes : "annotations"
     documents ||--o{ document_highlights : "highlights"
@@ -2909,7 +2909,7 @@ graph TD
    - **Zero-Latency Acronym Normalizer**: Fast in-memory dictionary expands 200+ medical/pharmacy acronyms (`HCTZ`, `MOA`, `Abx`, `ADR`, `MIC`, `GFR`, `CYP450`) prior to embedding and text search.
    - **Multi-Query Decomposition & HyDE**: For complex multi-part or ambiguous student queries, generates 2–3 targeted sub-queries to maximize lexical and semantic recall across slide decks.
 2. **PostgreSQL 3-Pool Scoped Search (`match_documents_hybrid`)**:
-   - **Vector Pool**: `gemini-embedding-002` (3072d HNSW cosine distance) $\rightarrow$ Top 30 candidates.
+   - **Vector Pool**: `gemini-embedding-2` (1536d HNSW cosine distance) $\rightarrow$ Top 30 candidates. <!-- [DIM 1536] -->
    - **FTS Lexical Pool**: `content_fts` with `websearch_to_tsquery('english', query)` $\rightarrow$ Top 30 candidates.
    - **Trigram Similarity Pool**: `word_similarity(query, content)` via `pg_trgm` $\rightarrow$ Top 30 candidates (robust to student spelling errors).
 3. **Unweighted Reciprocal Rank Fusion (RRF, $k=60$)**:
@@ -2937,7 +2937,7 @@ Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast infe
 | ---------------------------------------------------- | ---------------- | ---------- | ---------------- | ---------- | -------------- | ------------------------- | ----------------------------- | ------------------------------- |
 | `gemma-4-31b-it`                                     | Google AI Studio | Dense 31B  | Text + Image     | 256K       | ~1.5s – 2.5s   | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Chat & Deep Study**   |
 | `gemma-4-26b-a4b-it`                                 | Google AI Studio | MoE (A4B)  | Text + Image     | 256K       | ~800ms – 1.5s  | Yes (Native Thinking)     | Yes (Native Function Calling) | **Primary Fast Chat & OCR**     |
-| `gemini-embedding-002`                               | Google AI Studio | Embedding  | Text             | 8K (3072d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**    |
+| `gemini-embedding-2`                                 | Google AI Studio | Embedding  | Text             | 8K (1536d) | ~50ms – 150ms  | N/A                       | N/A                           | **Vector Embeddings (HNSW)**    | <!-- [DIM 1536] --> |
 | `openai/gpt-oss-120b`                                | Groq             | MoE 120B   | Text-only        | 128K       | ~300ms – 600ms | Yes (Configurable CoT)    | Yes (Native Function Calling) | **Fast Fallback & Quiz Engine** |
 | `qwen/qwen3.6-27b`                                   | Groq             | Dense 27B  | Text + Image     | 128K       | ~250ms – 500ms | Yes (Thinking Mode)       | Yes (Native Function Calling) | **Fast Multimodal Fallback**    |
 | `whisper-large-v3-turbo`                             | Groq             | STT        | Audio-only       | ~25s chunk | ~200ms – 400ms | N/A                       | N/A                           | **Voice Input (Primary)**       |
@@ -2952,11 +2952,11 @@ Google AI Studio serves as the **primary tier**, Groq provides **ultra-fast infe
 
 **Google AI Studio**
 
-| Model ID               | RPM (Req/Min) | TPM (Tokens/Min) | RPD (Req/Day) |
-| ---------------------- | ------------- | ---------------- | ------------- |
-| `gemma-4-26b-a4b-it`   | 30            | 16K              | 14.4K         |
-| `gemma-4-31b-it`       | 30            | 16K              | 14.4K         |
-| `gemini-embedding-002` | 1,500         | 1,000K           | 10K           |
+| Model ID             | RPM (Req/Min)                                                                         | TPM (Tokens/Min)           | RPD (Req/Day) |
+| -------------------- | ------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| `gemma-4-26b-a4b-it` | 30                                                                                    | 16K                        | 14.4K         |
+| `gemma-4-31b-it`     | 30                                                                                    | 16K                        | 14.4K         |
+| `gemini-embedding-2` | 100 requests/min (free tier, per Google 429 error on 2026-10-10); daily limit UNKNOWN | <!-- [EMBED RETRY FIX] --> |
 
 **Groq (Text & Audio)**
 
@@ -2987,17 +2987,23 @@ To prevent mid-sentence answer truncation and eliminate vision OCR bottlenecks d
 # ---------------------------------------------------------------------------
 # Purpose-Driven Token Ceilings
 # ---------------------------------------------------------------------------
-TEXT_CHAT_MAX_TOKENS = 4096         # Full-depth conversational and essay explanations
-VISION_REPLY_MAX_TOKENS = 2048      # High-quality multimodal reasoning answer ceiling
-VISION_EXTRACTION_MAX_TOKENS = 768  # Dense slide / diagram background OCR extraction budget
+TEXT_CHAT_MAX_TOKENS = (  # [LEFTOVER FIX]
+    4096  # Full-depth conversational and essay explanations  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
+VISION_REPLY_MAX_TOKENS = (  # [LEFTOVER FIX]
+    2048  # High-quality multimodal reasoning answer ceiling  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
+VISION_EXTRACTION_MAX_TOKENS = (  # [LEFTOVER FIX]
+    768  # Dense slide / diagram background OCR extraction budget  # [LEFTOVER FIX]
+)  # [LEFTOVER FIX]
 
 # ---------------------------------------------------------------------------
 # Dedicated Background OCR Extraction Cascade (Fastest OCR First for RAG)
 # ---------------------------------------------------------------------------
 VISION_EXTRACTION_CASCADE = [
     "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",  # OpenRouter (Ultra-fast MoE Omni)
-    "nvidia/nemotron-nano-12b-v2-vl:free",               # OpenRouter (Lightweight 12B VL)
-    "gemma-4-26b-a4b-it",                                  # Google AI Studio (Fallback)
+    "nvidia/nemotron-nano-12b-v2-vl:free",  # OpenRouter (Lightweight 12B VL)  # [LEFTOVER FIX]
+    "gemma-4-26b-a4b-it",  # Google AI Studio (Fallback)  # [LEFTOVER FIX]
 ]
 ```
 
@@ -3123,7 +3129,7 @@ flowchart TD
     S6 --> S7
 
     %% Stage 8
-    S7 --> S8["Stage 8: Semantic Chunking & Vector Embeddings\n• Tables & Diagrams: Atomic Chunks (1:1)\n• Text: Segment-Bounded Recursive Chunks (512 tok)\n• Gemini-Embedding-002 (3072d) → HNSW Index"]
+    S7 --> S8["Stage 8: Semantic Chunking & Vector Embeddings\n• Tables & Diagrams: Atomic Chunks (1:1)\n• Text: Segment-Bounded Recursive Chunks (512 tok)\n• gemini-embedding-2 (1536d) → HNSW Index"]  %% [DIM 1536]
 ```
 
 ---
@@ -3160,6 +3166,12 @@ Every image encountered—whether a 200px inline diagram or a full scanned page�
 | **Diagram / Figure / Chemical Structure** | **Vision Description** | Descriptive markdown `[Visual Description: ...]` |
 | **Table** (bitmap or scanned table)       | **Stage 6**            | Structured markdown / JSON table                 |
 
+> [!NOTE] Two-Phase Robust Ingestion Pipeline [IMAGES PHASE]
+> Ingestion is divided into two resilient phases so upstream AI outages cannot drop a document:
+>
+> 1. **Phase 1 (Immediate Text & Embeddings)**: Extracts pages, native text, and structural tables; computes embeddings and writes chunks, segments, and pages immediately. All visual assets (embedded images and scanned canvases) are queued in `document_images` with status `pending`. The document is instantly marked `completed` and searchable.
+> 2. **Phase 2 (Resumable Background Vision)**: An asynchronous background task (`process_pending_images`) drains `document_images` using a 2.1s throttle and exponential backoffs. If 3 consecutive failures occur, processing pauses gracefully without data loss. Image descriptions and transcripts are atomically attached as elements and chunks upon success.
+
 #### Stage 5 — Text-Image Transcription (OCR-First $\rightarrow$ Vision Fallback)
 
 - **Clinical Safety Rule**: Content must be recovered **verbatim** (exact drug names, dosages, units, mechanisms). **No summarization or paraphrasing is permitted.**
@@ -3188,7 +3200,7 @@ A single AI pass evaluates all extracted elements (native text, transcribed text
 - **Topic Shift Detected (No Heading)** $\rightarrow$ Creates new segment; `title_source = 'synthesized'`.
 - **No Heading, No Topic Shift** $\rightarrow$ Appends content to the currently open segment; `title_source = 'inherited'`.
 
-**Cross-Page Continuity**: Cross-page topics (e.g. _Sulfonamides_ discussed across pages 3, 4, and 12) are **not** linked with brittle ingestion-time pointers. Instead, cross-page topic continuity is dynamically reconstructed at query time using **Hybrid Retrieval** (keyword BM25 + 3072d vector search + re-ranking).
+**Cross-Page Continuity**: Cross-page topics (e.g. _Sulfonamides_ discussed across pages 3, 4, and 12) are **not** linked with brittle ingestion-time pointers. Instead, cross-page topic continuity is dynamically reconstructed at query time using **Hybrid Retrieval** (keyword BM25 + 1536d vector search + re-ranking). <!-- [DIM 1536] -->
 
 #### Stage 8 — Chunking Mechanics & Vector Embeddings
 
@@ -3200,7 +3212,7 @@ A single AI pass evaluates all extracted elements (native text, transcribed text
 
 - **Boundary Enforcement**: Text chunks never split across segment boundaries.
 - **Page Tagging**: Every chunk retains `page_start` and `page_end` for exact reader deep-linking.
-- **Embedding Generation**: `gemini-embedding-002` generates **3072-dimensional vectors** stored in `document_chunks.embedding vector(3072)`. The ANN index intentionally casts to `halfvec(3072)` and uses `halfvec_cosine_ops` so pgvector can HNSW-index the 3072d embedding space.
+- **Embedding Generation**: `gemini-embedding-2` generates **1536-dimensional vectors** stored in `document_chunks.embedding vector(1536)`. The ANN index casts to `halfvec(1536)` and uses `halfvec_cosine_ops` so pgvector can HNSW-index the 1536d embedding space. <!-- [DIM 1536] -->
 
 ---
 
@@ -3245,7 +3257,7 @@ CREATE TABLE public.document_elements (
 );
 CREATE INDEX idx_document_elements_segment ON public.document_elements(segment_id, order_index);
 
--- 4. Document Chunks (Retrieval & 3072d Vectors)
+-- 4. Document Chunks (Retrieval & 1536d Vectors) <!-- [DIM 1536] -->
 CREATE TABLE public.document_chunks (
   id              uuid PRIMARY KEY DEFAULT uuid_generate_v7(),
   document_id     uuid NOT NULL REFERENCES public.documents(id) ON DELETE CASCADE,
@@ -3255,11 +3267,11 @@ CREATE TABLE public.document_chunks (
   page_start      integer NOT NULL,
   page_end        integer NOT NULL,
   chunk_index     integer NOT NULL,
-  embedding       vector(3072) NOT NULL,        -- gemini-embedding-002
+  embedding       vector(1536) NOT NULL,        -- gemini-embedding-2  <!-- [DIM 1536] -->
   created_at      timestamptz NOT NULL DEFAULT now()
 );
 CREATE INDEX idx_document_chunks_hnsw ON public.document_chunks
-  USING hnsw ((embedding::halfvec(3072)) halfvec_cosine_ops);
+  USING hnsw ((embedding::halfvec(1536)) halfvec_cosine_ops); <!-- [DIM 1536] -->
 CREATE INDEX idx_document_chunks_lookup ON public.document_chunks(document_id, segment_id);
 ```
 
@@ -3274,7 +3286,7 @@ Ingestion is executed asynchronously using **ARQ (Async Redis Queue)**:
   - `0% – 40%`: Text layer check, native extraction, OCR/Vision transcription.
   - `40% – 60%`: Table extraction and classification.
   - `60% – 80%`: AI Hierarchy pass and segment creation.
-  - `80% – 100%`: 512-token chunking, `gemini-embedding-002` batch embeddings, HNSW index insertion.
+  - `80% – 100%`: 512-token chunking, `gemini-embedding-2` batch embeddings, HNSW index insertion. <!-- [EMBED FIX] -->
 - **Heartbeat & Deadlock Recovery**: 30-second worker heartbeats prevent abandoned jobs from blocking the queue.
 - **Re-Embedding RPC (`prepare_document_reembed`)**: Atomically flushes chunks and elements for instant vector re-indexing upon model updates.
 
@@ -4901,7 +4913,10 @@ Accessible during examination periods and within the Timetable Modal:
 The AI Engine injects **both** schedules into the system prompt:
 
 ```python
-async def get_cached_student_schedule(level: str, current_user: Optional[User] = None) -> str:
+async def get_cached_student_schedule(  # [LEFTOVER FIX]
+    level: str,  # [LEFTOVER FIX]
+    current_user: Optional[User] = None,  # [LEFTOVER FIX]
+) -> str:  # [LEFTOVER FIX]
     """
     Fetches university-scoped class timetable AND exam timetable,
     formatting both into an optimized structured context block.
@@ -6657,6 +6672,7 @@ import time, uuid, structlog
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
+
 class ObservabilityMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         req_id = request.headers.get("X-Request-ID") or f"req_{uuid.uuid4().hex[:12]}"
@@ -6669,21 +6685,28 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
             user = getattr(request.state, "user", None)
 
             logger = structlog.get_logger("http.access")
-            logger.info("http_request_finished",
+            logger.info(  # [LEFTOVER FIX]
+                "http_request_finished",  # [LEFTOVER FIX]
                 request_id=req_id,
                 method=request.method,
                 path=request.url.path,
                 status_code=response.status_code,
                 duration_ms=round(elapsed_ms, 2),
-                user_id=getattr(user, "id", "anonymous") if user else "anonymous"
+                user_id=getattr(user, "id", "anonymous")  # [LEFTOVER FIX]
+                if user  # [LEFTOVER FIX]
+                else "anonymous",  # [LEFTOVER FIX]
             )
             response.headers["X-Request-ID"] = req_id
             return response
         except Exception as exc:
             elapsed_ms = (time.perf_counter() - start_time) * 1000
-            structlog.get_logger("http.access").error("http_request_failed",
-                request_id=req_id, method=request.method, path=request.url.path,
-                duration_ms=round(elapsed_ms, 2), error=str(exc)
+            structlog.get_logger("http.access").error(  # [LEFTOVER FIX]
+                "http_request_failed",  # [LEFTOVER FIX]
+                request_id=req_id,  # [LEFTOVER FIX]
+                method=request.method,  # [LEFTOVER FIX]
+                path=request.url.path,  # [LEFTOVER FIX]
+                duration_ms=round(elapsed_ms, 2),  # [LEFTOVER FIX]
+                error=str(exc),  # [LEFTOVER FIX]
             )
             raise exc
 ```
@@ -6719,6 +6742,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
 ```python
 # backend/services/canary_guard.py
 import secrets
+
 
 class CanaryGuard:
     @staticmethod

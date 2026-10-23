@@ -12,6 +12,19 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Application Mode
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
+    LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
+    MAX_UPLOAD_MB: int = Field(default=50, ge=1)  # [PRELAUNCH FIX]
+
+    @property  # [PRELAUNCH FIX]
+    def local_dev_enabled(self) -> bool:  # [PRELAUNCH FIX]
+        return self.ENVIRONMENT == "development" and self.LOCAL_DEV_MODE  # [PRELAUNCH FIX]
+
+    def validate_local_dev_mode(self) -> None:  # [PRELAUNCH FIX]
+        if self.LOCAL_DEV_MODE and self.ENVIRONMENT != "development":  # [PRELAUNCH FIX]
+            raise ValueError(  # [PRELAUNCH FIX]
+                "LOCAL_DEV_MODE is only allowed in local development."  # [PRELAUNCH FIX]
+            )  # [PRELAUNCH FIX]
+
     PROJECT_NAME: str = "PansGPT 2.0 Core Engine"
     API_V1_PREFIX: str = "/api/v1"
 
@@ -59,6 +72,9 @@ class Settings(BaseSettings):
     R2_SECRET_ACCESS_KEY: str | None = None
     R2_BUCKET_NAME: str = "pansgpt-library-staging"
 
+    # LibreOffice Office to PDF Conversion Path  # [OFFICE PDF FIX]
+    SOFFICE_PATH: str = ""  # [OFFICE PDF FIX]
+
     @property
     def r2_bucket_name(self) -> str:
         if self.ENVIRONMENT == "production":
@@ -87,18 +103,22 @@ class Settings(BaseSettings):
     X_API_KEY_MOBILE: str | None = None
     X_API_KEY_DESKTOP: str | None = None
 
-    # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 3072d embedding
+    # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 1536d embedding  # [DIM 1536]
     GEMINI_API_KEY: str | None = None
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
-    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 3072d, Google AI Studio
-    GEMINI_EMBEDDING_DIMENSIONS: int = 3072  # [EMBED FIX]
-    HYDE_GENERATION_MODEL: str = "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
+    GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 1536d, Google AI Studio  # [DIM 1536]
+    GEMINI_EMBEDDING_DIMENSIONS: int = 1536  # [DIM 1536]
+    HYDE_GENERATION_MODEL: str = (
+        "gemma-4-31b-it"  # Model used for HyDE passage generation during RAG
+    )
     EMBEDDER_FAKE_MODE: bool = False  # [EMBED FIX]
+    VISION_FAKE_MODE: bool = False  # [IMAGE FIX]
 
     GROQ_API_KEY: str | None = None
     GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
-    GROQ_SECONDARY_MODEL: str = "qwen/qwen3.6-27b"
+    GROQ_SECONDARY_MODEL: str = "qwen/qwen3.8-27b"
+    GROQ_EXPANSION_MODEL: str = "qwen/qwen3.8-27b"
     WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
     WHISPER_SECONDARY_MODEL: str = "whisper-large-v3"
     OPENAI_API_KEY: str | None = None
@@ -131,6 +151,10 @@ class Settings(BaseSettings):
 
     # Purpose-Driven Token Ceilings (Section 6.5.3)
     TEXT_CHAT_MAX_TOKENS: int = 4096
+    CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
+    CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
+    CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
+    HYDE_TIMEOUT_S: float = Field(default=8, gt=0)  # [CHAT FIX]
     VISION_REPLY_MAX_TOKENS: int = 2048
     VISION_EXTRACTION_MAX_TOKENS: int = 768
 
@@ -151,14 +175,16 @@ class Settings(BaseSettings):
     RERANKER_DEFAULT_TOP_K: int = 6
 
     # Multimodal Vision Settings (Roadmap 6B.14 & Section 7)
-    GEMINI_VISION_MODEL: str = "gemini-1.5-flash"
+    GEMINI_VISION_MODEL: str = "gemma-4-26b-a4b-it"  # [VISION FIX]
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
     GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
+    VISION_MAX_OUTPUT_TOKENS: int = 1024  # [PHASE2 FIX]
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
     VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
     VISION_OVERALL_TIMEOUT_SECONDS: float = 25.0  # 25s global pipeline timeout
 
     # Web Search Quotas & Caching (Roadmap 6B.13 & Section 8)
+    WEB_SEARCH_ENABLED: bool = True  # [CHAT FIX 2]
     WEB_SEARCH_DAILY_LIMIT_STUDENT: int = 5
     WEB_SEARCH_DAILY_LIMIT_PRO: int = 25
     WEB_SEARCH_DAILY_LIMIT_STAFF: int = 50
@@ -191,6 +217,18 @@ class Settings(BaseSettings):
     # Observability
     SENTRY_DSN: str | None = None
 
+    @field_validator("GEMINI_EMBEDDING_MODEL", mode="before")
+    @classmethod
+    def normalize_gemini_embedding_model(cls, v: str | None) -> str:
+        if not v or v in (
+            "gemini-embedding-002",
+            "models/gemini-embedding-002",
+            "gemini-embedding-exp-03-07",
+            "models/gemini-embedding-exp-03-07",
+        ):
+            return "gemini-embedding-2"
+        return v
+
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v):
@@ -203,6 +241,7 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def validate_environment_requirements(self) -> "Settings":
         """Fail-fast validation enforcing mandatory secrets on staging and production."""
+        self.validate_local_dev_mode()  # [PRELAUNCH FIX]
         if self.ENVIRONMENT in ("staging", "production"):
             missing = []
             for field_name in (

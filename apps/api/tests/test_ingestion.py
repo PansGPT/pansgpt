@@ -1,7 +1,6 @@
 # ==============================================================================
 # Phase 5 Document Ingestion Engine Full Verification Suite (Roadmap 5.11)
 # ==============================================================================
-
 import io
 import unittest.mock
 import uuid
@@ -10,16 +9,21 @@ import docx
 import fitz  # PyMuPDF
 import pptx
 import pytest
+from arq import Retry  # [DIM 1536]
+from httpx import AsyncClient  # [TENANT FIX]
 
+from app.core.config import settings  # [DIM 1536]
 from app.engines.chunker import semantic_chunker
-from app.engines.embedder import gemini_embedder
+from app.engines.embedder import EmbeddingError, gemini_embedder  # [DIM 1536]
 from app.engines.extractor import document_extractor
 from app.engines.ingestion import document_ingestion_engine
 from app.engines.storage import (
+    DEFAULT_UNIVERSITY_ID,
     build_artifact_storage_key,
     build_converted_storage_key,
     build_document_storage_key,
 )
+from tests.conftest import TenantTestState  # [TENANT FIX]
 from workers.tasks import _claim_document, _update_document_status, ingest_document_job
 
 
@@ -97,11 +101,23 @@ def test_storage_key_generation():
     assert key == f"universities/{uni_id}/courses/pcl_401/original/{doc_id}.pdf"
 
 
-def test_converted_storage_key_format():
-    """Verify canonical converted Office-to-PDF path (Roadmap 5.1)."""
-    doc_id = "018f3a30-0001-7000-8000-000000000002"
-    key = build_converted_storage_key(doc_id)
-    assert key == f"converted/{doc_id}.pdf"
+def test_converted_storage_key_format():  # [VISION FIX]
+    """Verify canonical converted Office-to-PDF path requires university and course."""  # [VISION FIX]
+    import pytest  # [VISION FIX]
+
+    doc_id = "018f3a30-0001-7000-8000-000000000002"  # [VISION FIX]
+    uni_id = "018f3a10-0001-7000-8000-000000000001"  # [VISION FIX]
+    key = build_converted_storage_key(
+        doc_id, university_id=uni_id, course_code="PCL 411"
+    )  # [VISION FIX]
+    assert key == f"universities/{uni_id}/courses/pcl_411/converted/{doc_id}.pdf"  # [VISION FIX]
+
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id)  # [VISION FIX]
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id, university_id=uni_id)  # [VISION FIX]
+    with pytest.raises(ValueError):  # [VISION FIX]
+        build_converted_storage_key(doc_id, course_code="PCL 411")  # [VISION FIX]
 
 
 def test_artifact_storage_key_generation():
@@ -113,17 +129,25 @@ def test_artifact_storage_key_generation():
         file_extension="pptx",
         artifact_id=art_id,
         university_id=uni_id,
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
-    assert key == f"universities/{uni_id}/artifacts/pptx/{art_id}.pptx"
+    assert (  # [CHAT FIX]
+        key  # [CHAT FIX]
+        == f"artifacts/{uni_id}/018f3a10-0001-7000-8000-000000000001/pptx/{art_id}.pptx"  # [CHAT FIX]
+    )  # [CHAT FIX]
 
-    # Default fallback when university_id is None
+    # An explicit default university still requires an owner. [CHAT FIX]
     default_key = build_artifact_storage_key(
         format_type="pdf",
         file_extension="pdf",
         artifact_id=art_id,
-        university_id=None,
+        university_id=DEFAULT_UNIVERSITY_ID,  # [CHAT FIX]
+        user_id="018f3a10-0001-7000-8000-000000000001",  # [CHAT FIX]
     )
-    assert default_key == f"universities/default/artifacts/pdf/{art_id}.pdf"
+    assert (  # [CHAT FIX]
+        default_key  # [CHAT FIX]
+        == f"artifacts/{DEFAULT_UNIVERSITY_ID}/018f3a10-0001-7000-8000-000000000001/pdf/{art_id}.pdf"  # [CHAT FIX]
+    )  # [CHAT FIX]
 
 
 # ------------------------------------------------------------------------------
@@ -218,18 +242,18 @@ def test_chunker_text_recursive_splitting():
 # ------------------------------------------------------------------------------
 
 
-@pytest.mark.asyncio
-async def test_embedder_vector_dimensions():
-    """Verify gemini_embedder produces dense vectors with exactly 3072 dimensions."""
-    test_texts = [
-        "Pharmacokinetics and bioavailability of amoxicillin capsules.",
-        "Mechanism of action of ACE inhibitors in essential hypertension.",
-    ]
-    vectors = await gemini_embedder.embed_batch(test_texts)
-    assert len(vectors) == 2
-    for vec in vectors:
-        assert len(vec) == 3072
-        assert isinstance(vec[0], float)
+@pytest.mark.asyncio  # [DIM 1536]
+async def test_embedder_vector_dimensions():  # [DIM 1536]
+    """Verify gemini_embedder produces dense vectors with configured dimensions."""  # [DIM 1536]
+    test_texts = [  # [DIM 1536]
+        "Pharmacokinetics and bioavailability of amoxicillin capsules.",  # [DIM 1536]
+        "Mechanism of action of ACE inhibitors in essential hypertension.",  # [DIM 1536]
+    ]  # [DIM 1536]
+    vectors = await gemini_embedder.embed_batch(test_texts, kind="document")  # [DIM 1536]
+    assert len(vectors) == 2  # [DIM 1536]
+    for vec in vectors:  # [DIM 1536]
+        assert len(vec) == settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
+        assert isinstance(vec[0], float)  # [DIM 1536]
 
 
 # ------------------------------------------------------------------------------
@@ -241,7 +265,7 @@ async def test_embedder_vector_dimensions():
 async def test_full_8stage_pipeline_execution():
     """
     End-to-End Test: Run synthetic PDF through all 8 stages of DocumentIngestionEngine.
-    Confirms page layer detection, hierarchy creation, atomic chunking, and 3072d vector generation.
+    Confirms page layer detection, hierarchy creation, atomic chunking, and 1536d vector generation.  # [DIM 1536]
     """
     pdf_bytes = create_synthetic_test_pdf()
     doc_id = "018f3a30-0001-7000-8000-000000000099"
@@ -276,11 +300,11 @@ async def test_full_8stage_pipeline_execution():
         assert el["content_type"] in ("text", "table", "diagram")
         assert len(el["raw_content"]) > 0
 
-    # 4. Verify Chunks & 3072d Vector Embeddings (Stage 8)
+    # 4. Verify Chunks & 1536d Vector Embeddings (Stage 8)  # [DIM 1536]
     assert len(result.chunks) >= 2
     for chunk in result.chunks:
         assert chunk["document_id"] == doc_id
-        assert len(chunk["embedding"]) == 3072
+        assert len(chunk["embedding"]) == settings.GEMINI_EMBEDDING_DIMENSIONS  # [DIM 1536]
         assert isinstance(chunk["chunk_index"], int)
 
     # 5. Verify Progress Telemetry Milestones (Roadmap 5.9)
@@ -295,9 +319,13 @@ async def test_full_8stage_pipeline_execution():
 
 
 @pytest.mark.asyncio
-async def test_upload_endpoint_generates_presigned_url(client, monkeypatch):
+async def test_upload_endpoint_generates_presigned_url(  # [PRELAUNCH FIX]
+    client,  # [PRELAUNCH FIX]
+    monkeypatch,  # [PRELAUNCH FIX]
+    mock_upload_services,  # [PRELAUNCH FIX]
+):  # [PRELAUNCH FIX]
     """Verify POST /api/v1/library/upload and aliased /api/v1/documents/upload generate 201 Created."""
-    monkeypatch.setattr("app.routers.library.settings.DATABASE_URL", "")
+    monkeypatch.setattr("app.routers.library.settings.LOCAL_DEV_MODE", True)  # [PRELAUNCH FIX]
     payload = {
         "title": "Adrenergic Pharmacology Lecture 1",
         "course_code": "PCL 401",
@@ -334,8 +362,9 @@ async def test_upload_endpoint_generates_presigned_url(client, monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_rbac_upload_security_guard(client):
+async def test_rbac_upload_security_guard(client, monkeypatch):  # [PRELAUNCH FIX]
     """Verify students cannot initiate uploads (Roadmap 5.10 RBAC requirement)."""
+    monkeypatch.setattr("app.routers.library.settings.LOCAL_DEV_MODE", True)  # [PRELAUNCH FIX]
     payload = {
         "title": "Unauthorized Student Upload",
         "course_code": "PCL 401",
@@ -351,8 +380,13 @@ async def test_rbac_upload_security_guard(client):
 
 
 @pytest.mark.asyncio
-async def test_confirm_upload_endpoints(client):
+async def test_confirm_upload_endpoints(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify confirm-upload transitions and returns 202 Accepted, 404, or 500 (offline DB)."""
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
     random_doc_id = str(uuid.uuid4())
     # 1. Primary path
     resp1 = await client.post(f"/api/v1/library/{random_doc_id}/confirm-upload")
@@ -364,9 +398,25 @@ async def test_confirm_upload_endpoints(client):
 
 
 @pytest.mark.asyncio
-async def test_pdf_stream_url_endpoint(client):
+async def test_pdf_stream_url_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+    monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/{id}/pdf-url returns valid streaming URL."""
     test_id = "018f3a30-0001-7000-8000-000000000001"
+    from app.engines.storage import storage_engine  # [CHAT FIX 2]
+
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        type(storage_engine),  # [CHAT FIX 2]
+        "is_configured",  # [CHAT FIX 2]
+        property(lambda _: True),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
+    monkeypatch.setattr(  # [CHAT FIX 2]
+        storage_engine,  # [CHAT FIX 2]
+        "generate_presigned_get_url",  # [CHAT FIX 2]
+        unittest.mock.AsyncMock(return_value="https://storage.invalid/verified"),  # [CHAT FIX 2]
+    )  # [CHAT FIX 2]
     response = await client.get(f"/api/v1/library/{test_id}/pdf-url")
     assert response.status_code == 200
     data = response.json()
@@ -376,7 +426,10 @@ async def test_pdf_stream_url_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_get_single_document_endpoint(client):
+async def test_get_single_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/documents/{id} handles non-existent gracefully."""
     random_id = str(uuid.uuid4())
     response = await client.get(f"/api/v1/library/documents/{random_id}")
@@ -384,9 +437,25 @@ async def test_get_single_document_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_patch_document_endpoint(client):
+async def test_patch_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+    monkeypatch: pytest.MonkeyPatch,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify PATCH /api/v1/library/documents/{id} requires valid fields."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
+    monkeypatch.setattr(  # [TENANT FIX]
+        "app.routers.library.asyncpg.connect",  # [TENANT FIX]
+        unittest.mock.AsyncMock(  # [TENANT FIX]
+            side_effect=ConnectionError("Offline database fixture")  # [TENANT FIX]
+        ),  # [TENANT FIX]
+    )  # [TENANT FIX]
     # Empty body -> 422
     resp_empty = await client.patch(f"/api/v1/library/documents/{random_id}", json={})
     assert resp_empty.status_code == 422
@@ -400,17 +469,33 @@ async def test_patch_document_endpoint(client):
 
 
 @pytest.mark.asyncio
-async def test_delete_document_endpoint(client):
+async def test_delete_document_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify DELETE /api/v1/library/documents/{id} soft-deletes returning 204."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
+    tenant_state.user["role"] = "university_admin"  # [TENANT FIX]
+    tenant_state.user["roles"] = ["university_admin"]  # [TENANT FIX]
     response = await client.delete(f"/api/v1/library/documents/{random_id}")
     assert response.status_code in (204, 500)
 
 
 @pytest.mark.asyncio
-async def test_get_document_segments_endpoint(client):
+async def test_get_document_segments_endpoint(  # [TENANT FIX]
+    client: AsyncClient,  # [TENANT FIX]
+    tenant_state: TenantTestState,  # [TENANT FIX]
+) -> None:  # [TENANT FIX]
     """Verify GET /api/v1/library/documents/{id}/segments returns list."""
     random_id = str(uuid.uuid4())
+    tenant_state.documents[uuid.UUID(random_id)] = dict(  # [TENANT FIX]
+        next(iter(tenant_state.documents.values())),  # [TENANT FIX]
+        id=uuid.UUID(random_id),  # [TENANT FIX]
+    )  # [TENANT FIX]
     response = await client.get(f"/api/v1/library/documents/{random_id}/segments")
     assert response.status_code in (200, 500)
     if response.status_code == 200:
@@ -446,6 +531,10 @@ async def test_worker_failure_status_transition():
             side_effect=RuntimeError("Simulated pipeline failure"),
         ),
         unittest.mock.patch("workers.tasks._claim_document", return_value=True),
+        unittest.mock.patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
     ):
         with pytest.raises(RuntimeError):
             await ingest_document_job(
@@ -453,3 +542,200 @@ async def test_worker_failure_status_transition():
                 document_id=doc_id,
                 storage_key="invalid/path.pdf",
             )
+
+
+# [DIM 1536]
+# [DIM 1536]
+@pytest.mark.asyncio  # [DIM 1536]
+async def test_worker_embedding_error_retry_and_failure():  # [DIM 1536]
+    """Verify EmbeddingError causes Retry(defer=30) on attempt 1 and transitions to failed on attempt 3."""  # [DIM 1536]
+    doc_id = str(uuid.uuid4())  # [DIM 1536]
+    status_updates = []  # [DIM 1536]
+
+    # [DIM 1536]
+    async def mock_status(doc_id_arg, status, progress=0):  # [DIM 1536]
+        status_updates.append((status, progress))  # [DIM 1536]
+
+    # [DIM 1536]
+    with (  # [DIM 1536]
+        unittest.mock.patch.object(  # [DIM 1536]
+            document_ingestion_engine,  # [DIM 1536]
+            "ingest_document_from_r2",  # [DIM 1536]
+            side_effect=EmbeddingError("Simulated embedding failure"),  # [DIM 1536]
+        ),  # [DIM 1536]
+        unittest.mock.patch("workers.tasks._claim_document", return_value=True),  # [DIM 1536]
+        unittest.mock.patch(  # [LEFTOVER FIX]
+            "workers.tasks.storage_engine.get_object_size",  # [LEFTOVER FIX]
+            return_value=1024,  # [LEFTOVER FIX]
+        ),  # [LEFTOVER FIX]
+        unittest.mock.patch(
+            "workers.tasks._update_document_status", side_effect=mock_status
+        ),  # [DIM 1536]
+    ):  # [DIM 1536]
+        # Attempt 1: raises Retry(defer=30)  # [DIM 1536]
+        with pytest.raises(Retry) as retry_exc:  # [DIM 1536]
+            await ingest_document_job(  # [DIM 1536]
+                {"job_try": 1},  # [DIM 1536]
+                document_id=doc_id,  # [DIM 1536]
+                storage_key="invalid/path.pdf",  # [DIM 1536]
+            )  # [DIM 1536]
+        assert retry_exc.value.defer_score == 30 * 1000  # [DIM 1536]
+        # [DIM 1536]
+        # Attempt 3: transitions to failed and raises EmbeddingError  # [DIM 1536]
+        with pytest.raises(EmbeddingError):  # [DIM 1536]
+            await ingest_document_job(  # [DIM 1536]
+                {"job_try": 3},  # [DIM 1536]
+                document_id=doc_id,  # [DIM 1536]
+                storage_key="invalid/path.pdf",  # [DIM 1536]
+            )  # [DIM 1536]
+        assert any(s == "failed" for s, _ in status_updates)  # [DIM 1536]
+
+
+# [NUL FIX]
+@pytest.mark.asyncio  # [NUL FIX]
+async def test_ingestion_database_write_strips_nul_characters(monkeypatch):  # [NUL FIX]
+    """Verify write path strips NUL (0x00) and escaped \\u0000 from pages, segments, elements, and chunks [NUL FIX]."""  # [NUL FIX]
+    from app.engines.ingestion import IngestionPipelineResult, _sanitize_for_db  # [NUL FIX]
+
+    # [NUL FIX]
+    # Direct helper validation on nested structure  # [NUL FIX]
+    sample = {  # [NUL FIX]
+        "title": "Adrenergic\x00Toxicology",  # [NUL FIX]
+        "nested": ["item\x001", {"k\x00ey": "val\x00ue", "json_esc": "\\u0000bad"}],  # [NUL FIX]
+    }  # [NUL FIX]
+    cleaned = _sanitize_for_db(sample)  # [NUL FIX]
+    assert cleaned == {  # [NUL FIX]
+        "title": "AdrenergicToxicology",  # [NUL FIX]
+        "nested": ["item1", {"key": "value", "json_esc": "bad"}],  # [NUL FIX]
+    }  # [NUL FIX]
+    # [NUL FIX]
+    # Full write-path mocking  # [NUL FIX]
+    executemany_calls = []  # [NUL FIX]
+
+    # [NUL FIX]
+    class MockTransaction:  # [NUL FIX]
+        async def __aenter__(self):  # [NUL FIX]
+            return self  # [NUL FIX]
+
+        async def __aexit__(self, exc_type, exc_val, exc_tb):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+    # [NUL FIX]
+    class MockConn:  # [NUL FIX]
+        def transaction(self):  # [NUL FIX]
+            return MockTransaction()  # [NUL FIX]
+
+        async def executemany(self, query, args):  # [NUL FIX]
+            executemany_calls.append((query, args))  # [NUL FIX]
+
+        async def execute(self, query, *args):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+        async def close(self):  # [NUL FIX]
+            pass  # [NUL FIX]
+
+    # [NUL FIX]
+    async def mock_connect(*args, **kwargs):  # [NUL FIX]
+        return MockConn()  # [NUL FIX]
+
+    # [NUL FIX]
+    monkeypatch.setattr(
+        "app.engines.ingestion.settings.DATABASE_URL", "postgresql://mock:mock@localhost:5432/mock"
+    )  # [NUL FIX]
+    monkeypatch.setattr("asyncpg.connect", mock_connect)  # [NUL FIX]
+    monkeypatch.setattr(  # [NUL FIX]
+        "app.engines.ingestion.storage_engine.download_bytes",  # [NUL FIX]
+        unittest.mock.AsyncMock(return_value=b"%PDF-mock"),  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    doc_id = str(uuid.uuid4())  # [NUL FIX]
+    seg_id = str(uuid.uuid4())  # [NUL FIX]
+    el_id = str(uuid.uuid4())  # [NUL FIX]
+    chunk_id = str(uuid.uuid4())  # [NUL FIX]
+    # [NUL FIX]
+    mock_result = IngestionPipelineResult(  # [NUL FIX]
+        document_id=doc_id,  # [NUL FIX]
+        pages=[
+            {  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "page_number": 1,  # [NUL FIX]
+                "has_text_layer": True,  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        segments=[
+            {  # [NUL FIX]
+                "id": seg_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "title": "Toxic\x00Plants\x00Overview",  # [NUL FIX]
+                "title_source": "explicit\x00source",  # [NUL FIX]
+                "start_page": 1,  # [NUL FIX]
+                "end_page": 1,  # [NUL FIX]
+                "order_index": 0,  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        elements=[
+            {  # [NUL FIX]
+                "id": el_id,  # [NUL FIX]
+                "segment_id": seg_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "page_number": 1,  # [NUL FIX]
+                "content_type": "text\x00type",  # [NUL FIX]
+                "extraction_method": "pdfplumber\x00method",  # [NUL FIX]
+                "raw_content": "Cardiac\x00glycosides\x00in\x00Digitalis",  # [NUL FIX]
+                "order_index": 0,  # [NUL FIX]
+                "bounding_box": {"label": "Box\x00Label", "escaped": "\\u0000text"},  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+        chunks=[
+            {  # [NUL FIX]
+                "id": chunk_id,  # [NUL FIX]
+                "document_id": doc_id,  # [NUL FIX]
+                "segment_id": seg_id,  # [NUL FIX]
+                "element_id": el_id,  # [NUL FIX]
+                "content": "Digitalis\x00purpurea\x00toxicity\x00and\x00treatment",  # [NUL FIX]
+                "page_start": 1,  # [NUL FIX]
+                "page_end": 1,  # [NUL FIX]
+                "chunk_index": 0,  # [NUL FIX]
+                "embedding": [0.05] * 1536,  # [NUL FIX]
+                "bounding_box": {"tag": "chunk\x00box", "escaped": "\\u0000chunk"},  # [NUL FIX]
+            }
+        ],  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    monkeypatch.setattr(  # [NUL FIX]
+        document_ingestion_engine,  # [NUL FIX]
+        "run_pipeline_on_bytes",  # [NUL FIX]
+        unittest.mock.AsyncMock(return_value=mock_result),  # [NUL FIX]
+    )  # [NUL FIX]
+    # [NUL FIX]
+    success = await document_ingestion_engine.ingest_document_from_r2(  # [NUL FIX]
+        document_id=doc_id,  # [NUL FIX]
+        storage_key=f"universities/{DEFAULT_UNIVERSITY_ID}/courses/pcl_411/converted/test.pdf",  # [NUL FIX]
+    )  # [NUL FIX]
+    assert success is True  # [NUL FIX]
+    assert len(executemany_calls) == 4  # [NUL FIX]
+    # [NUL FIX]
+    # Assert every value passed to executemany contains NO \x00 and NO \u0000  # [NUL FIX]
+    for _query, args in executemany_calls:  # [NUL FIX]
+        for row in args:  # [NUL FIX]
+            for item in row:  # [NUL FIX]
+                if isinstance(item, str):  # [NUL FIX]
+                    assert "\x00" not in item, (
+                        f"Found NUL character in row item: {item}"
+                    )  # [NUL FIX]
+                    assert "\\u0000" not in item, (
+                        f"Found escaped \\u0000 in row item: {item}"
+                    )  # [NUL FIX]
+    # [NUL FIX]
+    # Explicitly check that sanitized substrings are present  # [NUL FIX]
+    all_str_items = [
+        item
+        for _, args in executemany_calls
+        for row in args
+        for item in row
+        if isinstance(item, str)
+    ]  # [NUL FIX]
+    assert any("ToxicPlantsOverview" in s for s in all_str_items)  # [NUL FIX]
+    assert any("CardiacglycosidesinDigitalis" in s for s in all_str_items)  # [NUL FIX]
+    assert any("Digitalispurpureatoxicityandtreatment" in s for s in all_str_items)  # [NUL FIX]
+    assert any("BoxLabel" in s for s in all_str_items)  # [NUL FIX]

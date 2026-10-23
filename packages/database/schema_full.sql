@@ -739,7 +739,7 @@ RETURNS boolean
 LANGUAGE plpgsql
 AS $$
 DECLARE
-  v_claimed boolean := false;
+  v_claimed integer := 0; -- [CHAT FIX 2]
 BEGIN
   UPDATE public.documents
   SET
@@ -748,13 +748,15 @@ BEGIN
     ingestion_heartbeat = now(),
     updated_at = now()
   WHERE id = doc_id
+    AND status = 'active' -- [CHAT FIX 2]
+    AND deleted_at IS NULL -- [CHAT FIX 2]
     AND (
       embedding_status = 'pending'
       OR (embedding_status = 'processing' AND ingestion_heartbeat < now() - interval '10 minutes')
     );
   
   GET DIAGNOSTICS v_claimed = ROW_COUNT;
-  RETURN v_claimed;
+  RETURN v_claimed > 0; -- [CHAT FIX 2]
 END;
 $$;
 
