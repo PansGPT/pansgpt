@@ -90,6 +90,7 @@ async function apiError(response: Response): Promise<string> {
 type RunOptions = { editId?: string; regenerateId?: string; parentId?: string | null };
 
 export function useChatRuntime({
+  active: enabled = true,
   token,
   ownerId,
   canSend,
@@ -98,6 +99,7 @@ export function useChatRuntime({
   onSessionChanged,
   onArtifactReady,
 }: {
+  active?: boolean;
   token: string | undefined;
   ownerId: string;
   canSend: boolean;
@@ -119,6 +121,7 @@ export function useChatRuntime({
   const sessionPromise = useRef<Promise<string> | null>(null);
   const active = useRef<AbortController | null>(null);
   const lifetime = useRef<AbortController | null>(null);
+  const available = useRef(enabled);
   useEffect(() => {
     lifetime.current = new AbortController();
     return () => {
@@ -242,6 +245,13 @@ export function useChatRuntime({
     [token, canSend, headers]
   );
   useEffect(() => () => dictation.dispose(), [dictation]);
+  useEffect(() => {
+    available.current = enabled;
+    if (!enabled) {
+      active.current?.abort();
+      dictation.dispose();
+    }
+  }, [enabled, dictation]);
 
   const run = useCallback(
     async (
@@ -249,6 +259,8 @@ export function useChatRuntime({
       files: NonNullable<ChatMessageView["attachments"]>,
       options: RunOptions = {}
     ) => {
+      // An attachment submission can finish after the Home sheet was closed.
+      if (!available.current || lifetime.current?.signal.aborted) return;
       if (active.current || isSwitching) return;
       if (!token || !canSend) {
         setError("Please acknowledge the study notice before sending.");
@@ -528,7 +540,7 @@ export function useChatRuntime({
     convertMessage: convertChatMessage,
     isRunning,
     isLoading: isSwitching,
-    isSendDisabled: !token || !canSend || isSwitching,
+    isSendDisabled: !enabled || !token || !canSend || isSwitching,
     onNew,
     onEdit: onNew,
     onReload,

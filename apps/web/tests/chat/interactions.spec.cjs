@@ -1842,3 +1842,388 @@ test("general web answers show web references and actionable lookup failures", a
   await expect(page.locator(".study-chat-footer").getByRole("alert")).toHaveCount(0);
   await page.screenshot({ path: test.info().outputPath("general-web-unavailable-mobile.png") });
 });
+
+test("mobile Home Recents shows documents only", async ({ page }) => {
+  await setupChat(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.addInitScript(() => {
+    window.__PREVIEW_DOCUMENTS__ = [
+      {
+        id: "00000000-0000-4000-8000-000000000021",
+        title: "Synthetic opened pharmacology",
+        created_at: "2026-10-24T12:00:00Z",
+      },
+    ];
+  });
+  await page.goto("/?surface=home&state=r2", { waitUntil: "load", timeout: 60000 });
+  const recents = page.getByRole("region", { name: "Recents", exact: true });
+  await expect(recents.getByRole("button", { name: /Synthetic opened pharmacology/ })).toBeVisible({
+    timeout: 60000,
+  });
+  await expect(recents.getByText("Synthetic study conversation", { exact: true })).toHaveCount(0);
+  await page.screenshot({ path: test.info().outputPath("mobile-home-document-recents.png") });
+});
+
+test("mobile Home sheet retains draft and attachments, streams, cancels and resets", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  page.setDefaultTimeout(15000);
+  page.setDefaultNavigationTimeout(60000);
+  await setupChat(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?surface=home");
+  const trigger = page.getByRole("textbox", { name: "Message PansGPT", exact: true });
+  await expect(trigger).toHaveCSS("font-size", "16px");
+  await trigger.click();
+  const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await expect(sheet).toBeVisible();
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
+  ).toBe(0);
+  await expect
+    .poll(async () => {
+      const rect = await sheet.boundingBox();
+      return rect.y + rect.height;
+    })
+    .toBeLessThanOrEqual(845);
+  expect((await sheet.boundingBox()).y).toBeGreaterThanOrEqual(14);
+  await expect(sheet.locator(".mobile-home-chat-header .auth-brand-mark")).toHaveCount(0);
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCSS(
+    "border-radius",
+    "50%"
+  );
+  const input = sheet.getByLabel("Study question", { exact: true });
+  await expect(input).toHaveCSS("font-size", "16px");
+  expect(
+    (await sheet.getByRole("button", { name: "New chat", exact: true }).boundingBox()).height
+  ).toBe(40);
+  await input.fill("A private unfinished question");
+  await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
+  const history = sheet.getByRole("region", { name: "Chat history", exact: true });
+  await expect(
+    history.getByRole("button", { name: "Synthetic study conversation", exact: true })
+  ).toBeVisible();
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCount(0);
+  await expect(
+    sheet.getByRole("button", { name: "Conversation options", exact: true })
+  ).toHaveCount(0);
+  await sheet.getByRole("button", { name: "Search conversations", exact: true }).click();
+  await sheet.getByRole("textbox", { name: "Search chat history", exact: true }).fill("synthetic");
+  await expect(history.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.screenshot({
+    path: test.info().outputPath("mobile-home-chat-history.png"),
+    animations: "disabled",
+  });
+  await sheet.getByRole("button", { name: "Back to conversation", exact: true }).click();
+  await expect(input).toHaveValue("A private unfinished question");
+  await expect
+    .poll(async () => {
+      const rect = await sheet.locator(".study-chat-composer").boundingBox();
+      return rect.x + rect.width;
+    })
+    .toBeLessThanOrEqual(378);
+  const composerBounds = await sheet.locator(".study-chat-composer").boundingBox();
+  expect(composerBounds.x + composerBounds.width).toBeLessThanOrEqual(378);
+  const chooser = page.waitForEvent("filechooser");
+  await sheet.getByRole("button", { name: "Attach study material", exact: true }).click();
+  await (
+    await chooser
+  ).setFiles({
+    name: "synthetic-sheet-note.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("Synthetic sheet attachment"),
+  });
+  await expect(
+    sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
+  ).toBeVisible();
+  await page.screenshot({
+    path: test.info().outputPath("mobile-home-chat-sheet-draft.png"),
+    animations: "disabled",
+  });
+  await sheet.getByRole("button", { name: "Close chat", exact: true }).click();
+  await expect(sheet).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await expect(input).toHaveValue("A private unfinished question");
+  await expect(
+    sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
+  ).toBeVisible();
+  await sheet.getByRole("button", { name: "New chat", exact: true }).click();
+  await expect(input).toHaveValue("");
+  await expect(
+    sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
+  ).toHaveCount(0);
+  await input.fill("A synthetic sheet question");
+  await sheet.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(sheet.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  await expect(sheet.getByText(/PansGPT supports your studies/)).toHaveCount(0);
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toBeInViewport();
+  expect((await sheet.locator(".study-chat").boundingBox()).x).toBeGreaterThanOrEqual(0);
+  await page.screenshot({
+    path: test.info().outputPath("mobile-home-chat-sheet-answer.png"),
+    animations: "disabled",
+  });
+  await expect(sheet.getByRole("button", { name: "Share", exact: true })).toHaveCount(0);
+  await expect(sheet.locator(".study-chat-thread-heading")).toHaveCount(0);
+  await sheet.getByRole("button", { name: "Conversation options", exact: true }).click();
+  await expect(page.getByRole("menuitem", { name: "Pin", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await page.evaluate(() => {
+    window.__holdReasoning = true;
+  });
+  await input.fill("A cancellable synthetic response");
+  await sheet.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(sheet.getByRole("button", { name: "Stop generating", exact: true })).toBeVisible();
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
+    )
+    .toBe(2);
+  await page.keyboard.press("Escape");
+  await expect(sheet).not.toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__reasoningAborted)).toBe(true);
+  await trigger.click();
+  await expect(sheet.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
+  await input.fill("Still private on Home");
+  expect(page.url()).not.toContain("private");
+  expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(
+    "Still private on Home"
+  );
+  await sheet.getByRole("button", { name: "Close chat", exact: true }).click();
+  await page.setViewportSize({ width: 1440, height: 975 });
+  await expect(trigger).not.toBeVisible();
+  await page.getByRole("link", { name: "New chat", exact: true }).first().click();
+  await expect(page.getByLabel("Study question")).toHaveValue("");
+});
+
+test("mobile Home sheet opens a saved chat and keeps the first-chat notice usable", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  await setupChat(page);
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/?surface=home", { waitUntil: "commit", timeout: 60000 });
+  await page.evaluate((id) => {
+    localStorage.removeItem(`pansgpt_disclaimer_accepted_${id}`);
+  }, owner);
+  await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
+  const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await expect(sheet).toBeVisible();
+  await sheet.getByRole("checkbox", { name: /I understand that PansGPT/ }).check();
+  await sheet.getByRole("button", { name: "I Understand & Agree", exact: true }).click();
+  await sheet.evaluate((element) => {
+    element.dataset.identityCheck = "stable-sheet";
+  });
+  await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
+  await sheet
+    .getByRole("region", { name: "Chat history", exact: true })
+    .getByRole("button", { name: "Synthetic study conversation", exact: true })
+    .click();
+  await expect(sheet.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await expect(sheet).toHaveAttribute("data-identity-check", "stable-sheet");
+  await expect(sheet.getByRole("button", { name: "Share", exact: true })).toHaveCount(0);
+  expect(page.url()).toContain("surface=home");
+  await expect(
+    sheet.getByRole("button", { name: "Conversation options", exact: true })
+  ).toBeEnabled();
+  await sheet.getByRole("button", { name: "Conversation options", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Rename", exact: true }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Rename chat", exact: true }).getByLabel("Chat name")
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(sheet).toBeVisible();
+  await page.setViewportSize({ width: 375, height: 500 });
+  await expect
+    .poll(async () => {
+      const rect = await sheet.locator(".study-chat-composer").boundingBox();
+      return rect.y + rect.height;
+    })
+    .toBeLessThanOrEqual(500);
+  await page.screenshot({
+    path: test.info().outputPath("mobile-home-sheet-short-viewport.png"),
+    animations: "disabled",
+  });
+  await sheet.getByRole("button", { name: "Voice input", exact: true }).click();
+  await expect(sheet.getByRole("button", { name: "Finish recording", exact: true })).toBeVisible();
+  await sheet.getByRole("button", { name: "Close chat", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.__trackStopped)).toBe(true);
+});
+
+async function swipeSheet(page, from, to, cancelled = false) {
+  // CDP uses screen coordinates, so wait for the sheet's opening motion to settle.
+  await expect
+    .poll(async () => (await page.locator(".mobile-home-chat-sheet").boundingBox()).y)
+    .toBe(14);
+  const touch = await page.context().newCDPSession(page);
+  await touch.send("Input.dispatchTouchEvent", {
+    type: "touchStart",
+    touchPoints: [{ x: from.x, y: from.y, id: 1 }],
+  });
+  for (let step = 1; step <= 6; step++) {
+    await touch.send("Input.dispatchTouchEvent", {
+      type: "touchMove",
+      touchPoints: [
+        {
+          x: from.x + ((to.x - from.x) * step) / 6,
+          y: from.y + ((to.y - from.y) * step) / 6,
+          id: 1,
+        },
+      ],
+    });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+  await touch.send("Input.dispatchTouchEvent", {
+    type: cancelled ? "touchCancel" : "touchEnd",
+    touchPoints: [],
+  });
+  await touch.detach();
+}
+
+test("mobile Home sheet supports swipes without losing drafts or swallowing normal scrolling", async ({
+  page,
+}) => {
+  test.setTimeout(120000);
+  await setupChat(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?surface=home", { waitUntil: "load", timeout: 60000 });
+  const trigger = page.getByRole("textbox", { name: "Message PansGPT", exact: true });
+  await trigger.click();
+  const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  const views = sheet.locator(".mobile-home-chat-views");
+  await expect(sheet).toBeVisible();
+  await expect.poll(async () => (await sheet.boundingBox()).y).toBe(14);
+  await sheet.getByLabel("Study question", { exact: true }).fill("Keep my swipe draft");
+  await swipeSheet(page, { x: 85, y: 250 }, { x: 260, y: 255 });
+  await expect(views).toHaveAttribute("data-history", "true");
+  await expect(
+    sheet.getByRole("button", { name: "Search conversations", exact: true })
+  ).toBeVisible();
+  await page.screenshot({
+    path: test.info().outputPath("sheet-swipe-history.png"),
+    animations: "disabled",
+  });
+  await swipeSheet(page, { x: 195, y: 28 }, { x: 195, y: 165 });
+  await expect(sheet).not.toBeVisible();
+  await trigger.click();
+  await expect(views).toHaveAttribute("data-history", "false");
+  await swipeSheet(page, { x: 85, y: 250 }, { x: 260, y: 255 });
+  await expect(views).toHaveAttribute("data-history", "true");
+  await swipeSheet(page, { x: 270, y: 270 }, { x: 90, y: 273 });
+  await expect(views).toHaveAttribute("data-history", "false");
+  await expect(sheet.getByLabel("Study question", { exact: true })).toHaveValue(
+    "Keep my swipe draft"
+  );
+  await swipeSheet(page, { x: 80, y: 260 }, { x: 115, y: 260 });
+  await expect(views).toHaveAttribute("data-history", "false");
+  await swipeSheet(page, { x: 80, y: 260 }, { x: 235, y: 260 }, true);
+  await expect(views).toHaveAttribute("data-history", "false");
+  const input = await sheet.getByLabel("Study question", { exact: true }).boundingBox();
+  await swipeSheet(
+    page,
+    { x: input.x + 35, y: input.y + 12 },
+    { x: input.x + 155, y: input.y + 12 }
+  );
+  await expect(views).toHaveAttribute("data-history", "false");
+  await swipeSheet(page, { x: 195, y: 28 }, { x: 195, y: 165 });
+  await expect(sheet).not.toBeVisible();
+  await expect(trigger).toBeFocused();
+  await trigger.click();
+  await expect(sheet.getByLabel("Study question", { exact: true })).toHaveValue(
+    "Keep my swipe draft"
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
+    )
+    .toBe(0);
+  // A populated, scrollable conversation must consume a downward scroll instead of dismissing.
+  await page.evaluate(() => {
+    let parent = null;
+    const tree = Array.from({ length: 36 }, (_, index) => {
+      const id = crypto.randomUUID();
+      const item = {
+        id,
+        parent_message_id: parent,
+        role: index % 2 ? "assistant" : "user",
+        content: `Synthetic scroll turn ${index}. ` + "Synthetic study material. ".repeat(12),
+        is_active_branch: true,
+      };
+      parent = id;
+      return item;
+    });
+    sessionStorage.setItem("interaction-tree", JSON.stringify(tree));
+  });
+  await page.reload();
+  await trigger.click();
+  await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
+  await sheet
+    .getByRole("region", { name: "Chat history", exact: true })
+    .getByRole("button", { name: "Synthetic study conversation", exact: true })
+    .click();
+  const viewport = sheet.locator(".study-chat-conversation");
+  await expect(viewport).toBeVisible();
+  await viewport.evaluate((element) => {
+    element.scrollTop = 450;
+  });
+  await expect.poll(() => viewport.evaluate((element) => element.scrollTop)).toBeGreaterThan(100);
+  const before = await viewport.evaluate((element) => element.scrollTop);
+  await swipeSheet(page, { x: 190, y: 290 }, { x: 195, y: 420 });
+  await expect(sheet).toBeVisible();
+  await expect.poll(() => viewport.evaluate((element) => element.scrollTop)).toBeLessThan(before);
+  await page.screenshot({
+    path: test.info().outputPath("sheet-native-scroll.png"),
+    animations: "disabled",
+  });
+});
+
+test("Home plus selects local attachments instead of opening search", async ({ page }) => {
+  test.setTimeout(90000);
+  await setupChat(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?surface=home", { waitUntil: "load", timeout: 60000 });
+  await page.evaluate((id) => localStorage.removeItem(`pansgpt_disclaimer_accepted_${id}`), owner);
+  const chooser = page.waitForEvent("filechooser");
+  await page
+    .locator(".shell-mobile-composer")
+    .getByRole("button", { name: "Attach study material", exact: true })
+    .click();
+  await (
+    await chooser
+  ).setFiles({
+    name: "synthetic-home-note.txt",
+    mimeType: "text/plain",
+    buffer: Buffer.from("Synthetic attachment selected from Home"),
+  });
+  const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await expect(sheet.getByRole("checkbox", { name: /I understand that PansGPT/ })).toBeVisible();
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.method === "POST").length)
+  ).toBe(0);
+  await sheet.getByRole("checkbox", { name: /I understand that PansGPT/ }).check();
+  await sheet.getByRole("button", { name: "I Understand & Agree", exact: true }).click();
+  await expect(
+    sheet.getByRole("group", { name: "Document attachment synthetic-home-note.txt", exact: true })
+  ).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "Search conversations", exact: true })).toHaveCount(
+    0
+  );
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.method === "POST").length)
+  ).toBe(0);
+  await sheet
+    .getByLabel("Study question", { exact: true })
+    .fill("Explain this synthetic attachment");
+  await sheet.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(sheet.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => window.__calls.find((call) => call.url.endsWith("/stream")).body.attachment_ids.length
+    )
+  ).toBe(1);
+  await page.screenshot({
+    path: test.info().outputPath("home-plus-attachment.png"),
+    animations: "disabled",
+  });
+});

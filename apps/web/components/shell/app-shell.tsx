@@ -17,6 +17,7 @@ import { DashboardProvider } from "./dashboard-data";
 import { ChatDraftProvider, useChatDraft } from "./chat-draft";
 import { SidebarLinks } from "./sidebar";
 import { AccountMenu } from "./account-menu";
+import { MobileHomeChat } from "./mobile-home-chat";
 
 function Brand(): React.ReactElement {
   return (
@@ -236,7 +237,8 @@ function Workspace({
               <div className="shell-route-content">{children}</div>
             </motion.div>
           </main>
-          {pathname !== "/app/chat" && (
+          {pathname === "/app" && <MobileHomeChat />}
+          {pathname !== "/app/chat" && pathname !== "/app" && (
             <form
               className="shell-mobile-composer p-study-composer"
               onSubmit={(event) => {
@@ -401,7 +403,7 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
     );
   }
   return (
-    <ChatDraftProvider key={profile.id}>
+    <ChatDraftProvider key={`${profile.id}:${profile.university_id}`}>
       <Workspace profile={profile}>{children}</Workspace>
     </ChatDraftProvider>
   );
