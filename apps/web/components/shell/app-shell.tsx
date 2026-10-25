@@ -314,7 +314,8 @@ function Workspace({
           <div className="dashboard-sample-preview">
             <h3>Your study space</h3>
             <p>
-              Open Library for your course documents, or use Message PansGPT to start a study chat.
+              Open Library for your course documents, or choose New chat in the navigation to start
+              a study chat.
             </p>
             <h3>Find your conversations</h3>
             <p>

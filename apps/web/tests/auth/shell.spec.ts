@@ -72,7 +72,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await accountMenu(page);
   await page.getByRole("menuitem", { name: "Help", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Help", exact: true })).toContainText(
-    "Find a page quickly"
+    "Find your conversations"
   );
   await page.keyboard.press("Escape");
   await openProfile(page);
@@ -227,7 +227,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     "```text\nsynthetic study example\n```",
   ].join("\n\n");
   const syntheticEvents = [
-    ["progress", { code: "creating_materials" }],
+    ["thinking_chunk", { code: "creating_materials" }],
     ["tool_start", { call_id: "synthetic-tool", tool_name: "create_doc", arguments: {} }],
     ["tool_end", { call_id: "synthetic-tool", tool_name: "create_doc", status: "success" }],
     ["text_chunk", { token: syntheticAnswer }],
