@@ -207,12 +207,13 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     if (outgoing.url().endsWith("/stream")) inferenceRequests += 1;
   });
   await page.goto("/app");
-  await page
-    .locator(".shell-mobile-composer")
-    .getByLabel("Message PansGPT", { exact: true })
-    .fill("Keep this draft private");
-  await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(page).toHaveURL(/\/app\/chat$/);
+  await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
+  const homeChat = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await expect(homeChat).toBeVisible();
+  await homeChat.getByLabel("Study question").fill("Keep this draft private");
+  await homeChat.getByRole("button", { name: "Close chat", exact: true }).click();
+  await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
   await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");
   expect(inferenceRequests).toBe(0);
   expect(page.url()).not.toContain("Keep");
@@ -264,6 +265,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     fullPage: true,
     animations: "disabled",
   });
+  await homeChat.getByRole("button", { name: "Close chat", exact: true }).click();
   await startNewChat(page);
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
@@ -362,14 +364,17 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   page.on("request", (outgoing) => {
     if (outgoing.url().includes("/api/v1/library/documents")) libraryRequests += 1;
   });
-  await page.route("**/api/v1/auth/me", (route) =>
-    route.fulfill({ status: 503, body: "Synthetic profile failure" })
-  );
+  let profileRequests = 0;
+  await page.route("**/api/v1/auth/me", (route) => {
+    profileRequests += 1;
+    return route.fulfill({ status: 503, body: "Synthetic profile failure" });
+  });
   await page.goto("/app/library");
   await expect(
-    page.getByRole("heading", { name: "We couldn't verify your profile" })
+    page.getByRole("heading", { name: "Your study service is temporarily unavailable" })
   ).toBeVisible();
   expect(libraryRequests).toBe(0);
+  expect(profileRequests).toBe(1);
   await page.unroute("**/api/v1/auth/me");
   await page.getByRole("button", { name: "Retry profile verification" }).click();
   await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();

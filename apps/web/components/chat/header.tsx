@@ -14,9 +14,11 @@ import { ChatSessionMenu } from "./session-menu";
 export function ChatHeader({
   sessionId,
   initialTitle,
+  variant = "header",
 }: {
   sessionId: string | null;
   initialTitle?: string;
+  variant?: "header" | "sheet";
 }): React.ReactElement {
   const { session, profile } = useAuth();
   const { chats } = useRecentChats();
@@ -128,6 +130,15 @@ export function ChatHeader({
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+  if (variant === "sheet")
+    return (
+      <ChatSessionMenu
+        chat={chat}
+        compactTrigger
+        disabled={!sessionId || running || metadataError}
+        onChanged={setSaved}
+      />
+    );
   return (
     <header className="study-chat-thread-heading">
       <div className="study-chat-heading-copy">

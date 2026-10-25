@@ -284,6 +284,9 @@
   }
 }
 @media (max-width: 860px) {
+  .study-chat-thread-heading {
+    display: none;
+  }
   .study-chat {
     min-height: calc(100dvh - 76px);
   }

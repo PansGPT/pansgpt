@@ -108,7 +108,13 @@ export function PresentationSlideView({
   );
 }
 
-export function PresentationWorkspace({ children }: { children: ReactNode }): React.ReactElement {
+export function PresentationWorkspace({
+  children,
+  active = true,
+}: {
+  children: ReactNode;
+  active?: boolean;
+}): React.ReactElement {
   const { session, profile } = useAuth();
   const desktop = useSyncExternalStore(
     subscribe,
@@ -124,6 +130,11 @@ export function PresentationWorkspace({ children }: { children: ReactNode }): Re
     data?: PresentationPreviewResponse;
     error?: string;
   } | null>(null);
+  // Reset this local preview when its owning Home sheet is dismissed.
+  if (!active && artifact) {
+    setArtifact(null);
+    setResult(null);
+  }
   const panel = useRef<HTMLElement>(null);
   const thumbs = useRef<HTMLElement>(null);
   const opener = useRef<HTMLButtonElement | null>(null);

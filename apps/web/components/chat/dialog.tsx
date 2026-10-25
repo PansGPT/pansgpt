@@ -33,8 +33,9 @@ export function ConversationDialog({
       }}
     >
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="p-dialog-overlay" />
+        <DialogPrimitive.Overlay className="p-dialog-overlay" data-chat-overlay />
         <DialogPrimitive.Content
+          data-chat-overlay
           className={`study-chat-dialog ${className}`}
           onCloseAutoFocus={onCloseAutoFocus}
           onEscapeKeyDown={(event) => {

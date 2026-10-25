@@ -2,30 +2,27 @@
 
 import { env } from "@/env";
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { desktopAuth } from "./desktop-auth";
 import { clearThumbnailCaches } from "./document-thumbnail-cache";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
+import type { AuthProfileResponse } from "@pansgpt/types";
+import {
+  createProfileVerifier,
+  requestProfile,
+  visibleVerifiedProfile,
+  type ProfileFailure,
+  type ProfileSnapshot,
+} from "./profile-verification";
 
-export interface UserProfile {
-  id: string;
-  email: string;
-  first_name: string | null;
-  last_name: string | null;
-  role: string;
-  university_id: string | null;
-  university_name?: string | null;
-  current_level: string | null;
-  terms_accepted_at: string | null;
-  is_onboarded: boolean;
-  is_active: boolean;
-}
+export type UserProfile = AuthProfileResponse;
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   profile: UserProfile | null;
+  profileError: ProfileFailure | null;
   loading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<UserProfile | null>;
@@ -37,58 +34,97 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [supabase] = useState(() => createClient());
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const fetchProfile = useCallback(async (token: string): Promise<UserProfile | null> => {
-    try {
-      const apiUrl = env.NEXT_PUBLIC_API_URL;
-      const res = await fetch(`${apiUrl}/api/v1/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        setProfile(data);
-        return data;
+  const currentSession = useRef<Session | null>(null);
+  const [snapshot, setSnapshot] = useState<ProfileSnapshot | null>(null);
+  const [lastVerified, setLastVerified] = useState<UserProfile | null>(null);
+  const [bootstrapping, setBootstrapping] = useState(true);
+  const [sessionError, setSessionError] = useState<ProfileFailure | null>(null);
+  const [verifier] = useState(() =>
+    createProfileVerifier(
+      (identity, signal) => requestProfile(env.NEXT_PUBLIC_API_URL, identity, signal),
+      (next) => {
+        setSnapshot(next);
+        if (next.status === "ready") setLastVerified(next.profile);
+        else if (next.status === "error") setLastVerified(null);
       }
-    } catch {
-      // The API remains the authority; never bypass a failed authorization request.
-    }
-
-    setProfile(null);
-    return null;
-  }, []);
-
+    )
+  );
+  const applySession = useCallback(
+    (next: Session | null) => {
+      if (currentSession.current?.user.id !== next?.user.id) setLastVerified(null);
+      if (
+        currentSession.current?.access_token !== next?.access_token ||
+        currentSession.current?.user.id !== next?.user.id
+      ) {
+        verifier.cancel();
+        setSnapshot(null);
+      }
+      currentSession.current = next;
+      setSession(next);
+      setUser(next?.user ?? null);
+      setSessionError(null);
+    },
+    [verifier]
+  );
   const refreshProfile = useCallback(async () => {
-    if (!session?.access_token) return null;
-    return await fetchProfile(session.access_token);
-  }, [session, fetchProfile]);
+    const active = currentSession.current;
+    if (!active?.access_token) return null;
+    return verifier.verify({ accessToken: active.access_token, userId: active.user.id }, true);
+  }, [verifier]);
+
+  const accessToken = session?.access_token;
+  const userId = session?.user.id;
+  useEffect(() => {
+    if (!accessToken || !userId) {
+      verifier.cancel();
+      return;
+    }
+    void verifier.verify({ accessToken, userId });
+    return () => verifier.cancel();
+  }, [accessToken, userId, verifier]);
+
+  const owned =
+    snapshot?.accessToken === accessToken && snapshot?.userId === userId ? snapshot : null;
+  const profile = visibleVerifiedProfile(
+    accessToken && userId ? { accessToken, userId } : null,
+    snapshot,
+    lastVerified
+  );
+  const profileError = sessionError ?? (owned?.status === "error" ? owned.error : null);
+  const loading =
+    bootstrapping || Boolean(session && !profile && (!owned || owned.status === "checking"));
 
   useEffect(() => {
     let mounted = true;
+    let authEventReceived = false;
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      if (!mounted || authEventReceived) return;
+      timedOut = true;
+      setSessionError({ code: "session_unavailable", retryable: true });
+      setBootstrapping(false);
+    }, 15_000);
 
     async function initSession() {
       try {
         const nativeSession = await desktopAuth()?.getSession();
+        if (!mounted || timedOut || authEventReceived) return;
         if (nativeSession) await supabase.auth.setSession(nativeSession);
         const {
           data: { session: currentSession },
+          error,
         } = await supabase.auth.getSession();
-        if (!mounted) return;
-
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-
-        if (currentSession?.access_token) {
-          await fetchProfile(currentSession.access_token);
-        }
-      } catch (err) {
-        console.error("Failed to initialize session", err);
+        if (error) throw error;
+        if (!mounted || timedOut || authEventReceived) return;
+        applySession(currentSession);
+      } catch {
+        if (mounted && !timedOut && !authEventReceived)
+          setSessionError({ code: "session_unavailable", retryable: true });
       } finally {
-        if (mounted) setLoading(false);
+        if (mounted && !authEventReceived) {
+          clearTimeout(timer);
+          setBootstrapping(false);
+        }
       }
     }
 
@@ -109,26 +145,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, newSession) => {
-      if (!mounted) return;
-      setSession(newSession);
-      setUser(newSession?.user ?? null);
-
-      if (newSession?.access_token) {
-        await fetchProfile(newSession.access_token);
-      } else {
-        setProfile(null);
-      }
-      setLoading(false);
+    } = supabase.auth.onAuthStateChange((event, newSession) => {
+      // Explicit bootstrap reads the initial session (after native storage). An
+      // early INITIAL_SESSION=null must not cancel a pending native restoration.
+      if (!mounted || event === "INITIAL_SESSION") return;
+      authEventReceived = true;
+      clearTimeout(timer);
+      applySession(newSession);
+      setBootstrapping(false);
     });
 
     return () => {
       stopNative?.();
       clearInterval(refreshNative);
+      clearTimeout(timer);
       mounted = false;
+      verifier.cancel();
       subscription.unsubscribe();
     };
-  }, [supabase, fetchProfile]);
+  }, [supabase, applySession, verifier]);
 
   useEffect(() => {
     if (loading) return;
@@ -144,11 +179,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await desktopAuth()?.signOut();
     } finally {
-      await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
     }
-    setUser(null);
-    setSession(null);
-    setProfile(null);
+    applySession(null);
   };
 
   return (
@@ -157,6 +191,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         session,
         profile,
+        profileError,
         loading,
         signOut,
         refreshProfile,

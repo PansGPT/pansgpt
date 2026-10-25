@@ -8,6 +8,7 @@ import sys
 SERVICE_ENV: dict[str, str] = {
     "ENVIRONMENT": "development",
     "LOCAL_DEV_MODE": "false",
+    "ALLOWED_ORIGINS": '["http://localhost:3000","https://pansgpt-web.vercel.app"]',
     "DATABASE_URL": "offline-unit-test",
     "SUPABASE_URL": "https://example.supabase.co",
     "SUPABASE_ANON_KEY": "test-mock-key",

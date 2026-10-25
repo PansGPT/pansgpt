@@ -214,7 +214,10 @@ test("keyboard users can skip to and submit the form", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Skip to form" })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("main")).toBeFocused();
-  await page.keyboard.press("Tab");
+  // Public providers and a failed-discovery retry are legitimate form controls.
+  // Preserve their tab order while proving the email field remains reachable.
+  const preceding = await page.locator(".auth-social button, .auth-provider-status button").count();
+  for (let index = 0; index <= preceding; index++) await page.keyboard.press("Tab");
   await expect(page.getByLabel("Email address")).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.getByLabel("Email address")).toHaveAttribute("aria-invalid", "true");

@@ -35,11 +35,13 @@ import { offerConversationUndo } from "./undo-notice";
 export function ChatSessionMenu({
   chat,
   titleTrigger = false,
+  compactTrigger = false,
   disabled = false,
   onChanged,
 }: {
   chat: ChatSessionSummary;
   titleTrigger?: boolean;
+  compactTrigger?: boolean;
   disabled?: boolean;
   onChanged?: (chat: ChatSessionSummary | null) => void;
 }): React.ReactElement {
@@ -113,14 +115,22 @@ export function ChatSessionMenu({
           <button
             ref={trigger}
             type="button"
-            className={titleTrigger ? "study-chat-title-menu" : "shell-chat-menu"}
+            className={
+              compactTrigger
+                ? "shell-icon-button"
+                : titleTrigger
+                  ? "study-chat-title-menu"
+                  : "shell-chat-menu"
+            }
             title={
-              disabled && !titleTrigger
+              disabled && !titleTrigger && !compactTrigger
                 ? "Sample conversation. Start your own chat to use these controls."
                 : undefined
             }
             disabled={disabled || busy}
-            aria-label={titleTrigger ? "Conversation options" : `Options for ${chat.title}`}
+            aria-label={
+              titleTrigger || compactTrigger ? "Conversation options" : `Options for ${chat.title}`
+            }
           >
             {titleTrigger ? (
               <>
@@ -133,6 +143,7 @@ export function ChatSessionMenu({
           </button>
         </DropdownTrigger>
         <DropdownContent
+          data-chat-overlay
           aria-label="Conversation actions"
           className="study-chat-session-menu"
           align={titleTrigger ? "start" : "end"}

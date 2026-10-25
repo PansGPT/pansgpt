@@ -1,5 +1,5 @@
 import { Skeleton } from "@pansgpt/ui/shell";
-export function WorkspaceLoading(): React.ReactElement {
+export function WorkspaceLoading({ message }: { message?: string } = {}): React.ReactElement {
   return (
     <div
       className="workspace-loading"
@@ -9,6 +9,7 @@ export function WorkspaceLoading(): React.ReactElement {
     >
       <Skeleton variant="rectangle" className="workspace-loading-heading" />
       <Skeleton className="workspace-loading-copy" />
+      {message && <p>{message}</p>}
       <div className="workspace-loading-grid">
         {[0, 1, 2].map((item) => (
           <Skeleton key={item} variant="rectangle" className="workspace-loading-card" />

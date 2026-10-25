@@ -192,6 +192,23 @@ async def test_auth_me_valid_jwt_returns_profile(client, rsa_key_pair, mock_jwks
     assert "student" in data["roles"]
     assert data["university_id"] == "01a07664-7a69-7ce0-ad6a-b219462cbde3"
     assert data["dev_bypass"] is False
+    # Public DTO contract, distinct from database rows and caller-editable metadata.
+    assert set(data) == {
+        "id",
+        "email",
+        "role",
+        "roles",
+        "university_id",
+        "first_name",
+        "last_name",
+        "current_level",
+        "terms_accepted_at",
+        "is_onboarded",
+        "client_type",
+        "dev_bypass",
+    }
+    assert isinstance(data["is_onboarded"], bool)
+    assert data["client_type"] == "web"
 
 
 # ------------------------------------------------------------------------------

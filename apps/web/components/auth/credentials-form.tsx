@@ -8,13 +8,23 @@ import { z } from "zod";
 import { Button, Input, SocialButton } from "@pansgpt/ui/auth";
 import { env } from "@/env";
 import { createClient } from "@/lib/supabase/client";
+import {
+  fetchOAuthProviders,
+  type OAuthProvider,
+  type OAuthProviderSettings,
+} from "@/lib/supabase/oauth-providers";
 import { desktopAuth } from "@/lib/desktop-auth";
 import { authMessage, safeAuthNext, signupDestination } from "@/lib/auth-navigation";
 import { AuthAlert, AuthFrame, AuthStatus } from "./frame";
 import { PasswordField } from "./password-field";
 import { EmailSent } from "./email-sent";
-type Provider = "google" | "apple";
-export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.ReactElement {
+export function CredentialsForm({
+  mode,
+  initialProviderSettings,
+}: {
+  mode: "login" | "signup";
+  initialProviderSettings: OAuthProviderSettings;
+}): React.ReactElement {
   const signup = mode === "signup";
   const router = useRouter();
   const params = useSearchParams();
@@ -28,30 +38,32 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
   const [busy, setBusy] = useState<string | null>(null);
   const pending = useRef(false);
   const [emailSent, setEmailSent] = useState<string | null>(null);
-  const [providers, setProviders] = useState<Provider[]>([]);
+  const [providerSettings, setProviderSettings] = useState(initialProviderSettings);
+  const [providerAttempt, setProviderAttempt] = useState(0);
+  const [checkingProviders, setCheckingProviders] = useState(
+    initialProviderSettings.status === "unavailable"
+  );
+  const providers = providerSettings.providers;
   useEffect(() => {
     const controller = new AbortController();
-    void fetch(`${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`, {
-      headers: { apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY },
-      signal: controller.signal,
-    })
-      .then(async (response) => {
-        if (!response.ok) return;
-        const settings: unknown = await response.json();
-        if (typeof settings !== "object" || !settings || !("external" in settings)) return;
-        const external = settings.external;
-        if (typeof external !== "object" || !external) return;
-        setProviders(
-          (["google", "apple"] as const).filter(
-            (provider) => provider in external && Reflect.get(external, provider) === true
-          )
-        );
+    // Refresh public configuration without clearing the server-rendered options.
+    void fetchOAuthProviders(
+      env.NEXT_PUBLIC_SUPABASE_URL,
+      env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      controller.signal
+    )
+      .then((enabled) => {
+        if (!controller.signal.aborted)
+          setProviderSettings({ status: "ready", providers: enabled });
       })
       .catch(() => {
-        /* Email remains available if provider settings cannot be loaded. */
+        // Preserve the last verified options; an outage is not a disabled provider.
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setCheckingProviders(false);
       });
     return () => controller.abort();
-  }, []);
+  }, [providerAttempt]);
   const schema = z
     .object({
       email: z.string().trim().email("Enter a valid email address."),
@@ -111,7 +123,7 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
       setBusy(null);
     }
   };
-  const oauth = async (provider: Provider): Promise<void> => {
+  const oauth = async (provider: OAuthProvider): Promise<void> => {
     if (pending.current) return;
     pending.current = true;
     setBusy(provider);
@@ -187,6 +199,28 @@ export function CredentialsForm({ mode }: { mode: "login" | "signup" }): React.R
           {error && <AuthAlert>{error}</AuthAlert>}
           {!signup && params.get("notice") === "password_updated" && (
             <AuthStatus>Your password has been updated. Sign in with your new password.</AuthStatus>
+          )}
+          {providerSettings.status === "unavailable" && (
+            <div className="auth-provider-status" role="status">
+              <span>
+                {checkingProviders
+                  ? "Checking sign-in options…"
+                  : "Social sign-in options could not be loaded."}
+              </span>
+              {!checkingProviders && (
+                <button
+                  type="button"
+                  className="auth-link"
+                  disabled={Boolean(busy)}
+                  onClick={() => {
+                    setCheckingProviders(true);
+                    setProviderAttempt((attempt) => attempt + 1);
+                  }}
+                >
+                  Retry sign-in options
+                </button>
+              )}
+            </div>
           )}
           {providers.length > 0 && (
             <>
