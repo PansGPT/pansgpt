@@ -7,9 +7,15 @@
 
 ## 1. Core Non-Negotiable Engineering Principles
 
-1. **Engine-First Sequence**:
-   - Sequence: `Infrastructure -> Database Schema & Migrations -> Ingestion & AI Engines -> API Verification (pytest) -> Walking Skeleton UI -> Full Platform UI`.
-   - Never build frontend pages or auth screens before backend engines, database tables, and API contracts are implemented and verified via automated tests.
+1. **Contract-First Parallel Development; Verified Integration**:
+   - Infrastructure, database security and backend engines remain the foundation. Frontend coding may start before its backend is complete once the feature's typed request/response contracts, states and acceptance criteria are agreed and recorded. Frontend and backend implementation may then proceed in parallel.
+   - Put shared TypeScript DTOs in `packages/types`; align backend Pydantic schemas and contract tests with them. Resolve schema and plan mismatches before treating legacy payloads as new contracts. Database row types alone are not public API contracts.
+   - Frontend work may use deterministic, synthetic fixtures behind an explicit development/demo adapter. Identify sample data visibly; never silently replace live failures with mocks or use real student data as committed fixtures. Mock-driven UI may be reviewed and merged with unfinished live integration disabled or clearly identified.
+   - Enable live feature integration only after the applicable migrations, backend authorization, validation and pytest API contracts pass. Mark the feature complete only after real frontend/backend journeys and required CI gates pass; a working mock proves only the frontend scope tested. Existing staging, native-device and provider privacy release gates remain open until verified.
+   - Use sibling `../pansgpt-eli` as a reference for existing flows, components and data shapes. Adapt selected code into this monorepo using its current design system, auth, tenancy and API patterns; do not introduce runtime imports from the legacy folder, copy credentials or run legacy SQL scripts. Moving actual legacy records requires a separate reviewed mapping and non-destructive migration/import procedure.
+   - Quiz generation, answer keys, grading, scores and authoritative timing remain backend-controlled. Live taking/progress responses must exclude answers and explanations until authorized review. Enforce this at database grants/RLS as well as API serialization; mock scores never become persisted attempts.
+
+   This workflow was explicitly approved by the user on 22 October 2026 and supersedes the earlier prohibition on frontend implementation before backend completion. See [legacy reuse and parallel development handoff](docs/legacy-reuse-and-parallel-development-2026-10-22.md).
 
 2. **Strict AI Engine Routing**:
    - **Clients (Web, Mobile, Desktop) NEVER invoke LLM providers directly.**
@@ -70,7 +76,7 @@ pansgpt/
 │   └── desktop/        # Electron 33, SQLite embedded database, Context Isolation
 ├── packages/
 │   ├── database/       # Migrations & database schemas (mirrored to supabase/migrations)
-│   ├── ui/             # Shared Radix primitives & OKLCH token definitions (Light/OLED/Sepia)
+│   ├── ui/             # Shared Radix primitives & OKLCH token definitions (Light/Dark/Sepia)
 │   ├── types/          # Shared TypeScript DTOs, API contracts, Supabase generated types
 │   ├── eslint-config/  # Shared ESLint base configurations
 │   └── typescript-config/ # Shared tsconfig bases
@@ -129,24 +135,32 @@ pansgpt/
 
 - Streaming SSE responses (`text/event-stream`) over HTTP/2.
 - Dynamic AI Skill system (`ai_skills` registry) supporting Dosage Calculator, Drug Interaction Checker, Chemical Reaction Drawer.
-- Multi-tier circuit breaker: Gemma 4 -> Groq LLaMA 3.3 -> OpenRouter.
+- Semantic route-or-answer decisions run in FastAPI: eligible Groq -> Google -> eligible OpenRouter, using the message and bounded selected history. Simple answers/clarifications reuse that completion; do not restore phrase catalogs or generate a second simple answer. If no eligible model returns a valid decision within the budget, return a retryable error and refund/release the run; do not treat provider unavailability as evidence that RAG is needed. See `docs/semantic-routing-2026-10-23.md`.
+- Grounded/deeper generation retains its multi-tier circuit breaker: Gemma 4 -> configured Groq models -> OpenRouter. Scope, permissions, provider privacy and credits remain backend-authoritative.
+- General questions are allowed by explicit user decision on 25 October 2026. Semantic routing distinguishes course evidence from public web evidence; current general facts must not enter pharmacy-document retrieval. Resolve relative dates using the configured request timezone and do not fabricate current answers when search is unavailable. See `docs/general-web-routing-2026-10-25.md`; hosted verification remains open.
+- Conversation titles are backend-generated after successful exchanges. Social names remain provisional (`title_source=pending`) until a substantive topic emerges; final generated and manual names are protected. Use `last_message_at` for activity ordering so rename/pin/archive operations do not reorder unpinned history. Conversation search is owner/university scoped and indexes selected user/assistant message content, excluding private reasoning, hidden branches and deleted chats. See `docs/conversation-management-2026-10-24.md` and `docs/chat-titles-and-progress-2026-10-25.md`.
+- Presentation previews must read the owned saved PPTX through the backend, not public R2/Office URLs or a synthetic replacement. Parse in a bounded subprocess; render typed allowlisted primitives, preserve download access on preview failure, and clear preview state across account/conversation changes. A requested slide total includes the single automatic cover and is validated before upload. See `docs/presentation-workspace-2026-10-25.md`.
+- Deleted conversations are recoverable only by their owner within 30 days. Physical file cleanup uses the durable queue after retention purge; preserve generated files referenced by another chat.
 
 ### D. Authentication & Security
 
 - Asymmetric RS256 JWKS verification in FastAPI against Supabase Auth.
 - FastAPI dependency role guards: `require_role(["student", "lecturer", "university_admin", "super_admin"])`.
 - Per-client API identity authentication (`X-API-Key` header with SHA-256 validation).
-- Compliance: Zero Data Retention (ZDR) policy for AI prompts; automated DSAR and Right-to-be-Forgotten data deletion handlers.
+- Provider retention policy: Google/Gemini is exempt from the ZDR gate by explicit user decision on 22 October 2026. On 25 October the user approved a separate Tavily public-query retention exception (`TAVILY_PUBLIC_SEARCH_ALLOWED`), without approving uploaded files, full conversations or patient details. Disclose the applicable retention/review/sharing terms; never label either exception as verified ZDR. Other integrations still require verified ZDR. See `docs/provider-privacy.md`. Automated DSAR and Right-to-be-Forgotten deletion handlers remain required.
+- Chat image inference resolves owned attachment UUIDs within the authenticated account, university and conversation. Upload does not invoke vision; Send analyses normalized image pixels against the question. Never let model-provided URLs/storage keys bypass this boundary. Authenticated previews stay in temporary browser blob URLs. See `docs/chat-images-2026-10-24.md`.
 
 ### E. Frontend & UI/UX Standards
 
-- Three semantic themes: **Light**, **OLED Dark**, and **Sepia Warm Reading Mode** using OKLCH color tokens in `packages/ui`.
+- Three semantic themes: **Light**, **Dark (charcoal)**, and **Sepia Warm Reading Mode** using OKLCH color tokens in `packages/ui`.
 - 4-layer virtualized PDF Reader with text highlights, snip-to-chat, and sticky AI sidebar.
 - Offline-First PWA via `@serwist/next` with 3 caching tiers and IndexedDB outbox sync.
 
 ---
 
 ## 6. Platform Implementation Sequence
+
+These phases define delivery dependencies and completion gates. Under Section 1.1, frontend coding against agreed contracts and mocks can proceed ahead of the corresponding backend; this does not certify the phase or bypass its integration/release gates.
 
 1. **Phase 0–3**: Monorepo Scaffolding, Secrets Validation, Multi-Environment Wiring.
 2. **Phase 4**: Database Foundation (Schema, Extensions, RLS, Seed, Functions).

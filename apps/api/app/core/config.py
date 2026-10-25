@@ -4,6 +4,7 @@
 # ==============================================================================
 
 from typing import Literal
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -13,6 +14,8 @@ class Settings(BaseSettings):
     # Application Mode
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
+    ENABLE_AI: bool = True
+    ENABLE_INGESTION: bool = True
     MAX_UPLOAD_MB: int = Field(default=50, ge=1)  # [PRELAUNCH FIX]
 
     @property  # [PRELAUNCH FIX]
@@ -105,6 +108,33 @@ class Settings(BaseSettings):
 
     # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 1536d embedding  # [DIM 1536]
     GEMINI_API_KEY: str | None = None
+    # Legacy setting retained for environment compatibility; Google no longer requires ZDR.
+    GOOGLE_ZDR_CONFIRMED: bool = False
+    GROQ_ZDR_CONFIRMED: bool = False
+    OPENAI_ZDR_CONFIRMED: bool = False
+    OPENROUTER_ZDR_CONFIRMED: bool = False
+    TAVILY_ZDR_CONFIRMED: bool = False
+    # Public-query exception approved locally on 25 October; never claim verified ZDR.
+    TAVILY_PUBLIC_SEARCH_ALLOWED: bool = False
+    COHERE_ZDR_CONFIRMED: bool = False
+
+    def provider_privacy_allowed(self, provider: str) -> bool:
+        """Google has a user-approved retention exception; other providers require ZDR."""
+        verified = {
+            "google": True,
+            "groq": self.GROQ_ZDR_CONFIRMED,
+            "openai": self.OPENAI_ZDR_CONFIRMED,
+            "openrouter": self.OPENROUTER_ZDR_CONFIRMED,
+            "tavily": self.TAVILY_ZDR_CONFIRMED,
+            "cohere": self.COHERE_ZDR_CONFIRMED,
+        }
+        return verified.get(provider, False)
+
+    def require_provider_privacy(self, provider: str) -> None:
+        """Enforce the provider policy without representing Google's exception as ZDR."""
+        if not self.provider_privacy_allowed(provider):
+            raise RuntimeError(f"Provider {provider} is blocked: ZDR has not been verified.")
+
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
     GEMINI_SECONDARY_MODEL: str = "gemma-4-26b-a4b-it"
     GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-2"  # 1536d, Google AI Studio  # [DIM 1536]
@@ -116,7 +146,7 @@ class Settings(BaseSettings):
     VISION_FAKE_MODE: bool = False  # [IMAGE FIX]
 
     GROQ_API_KEY: str | None = None
-    GROQ_FALLBACK_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_FALLBACK_MODEL: str = "llama-3.3-70b-versatile"
     GROQ_SECONDARY_MODEL: str = "qwen/qwen3.8-27b"
     GROQ_EXPANSION_MODEL: str = "qwen/qwen3.8-27b"
     WHISPER_PRIMARY_MODEL: str = "whisper-large-v3-turbo"
@@ -154,6 +184,10 @@ class Settings(BaseSettings):
     CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
     CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
     CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
+    INTENT_ROUTER_TOTAL_TIMEOUT_S: float = Field(default=12, gt=0, le=30)
+    INTENT_ROUTER_ATTEMPT_TIMEOUT_S: float = Field(default=8, gt=0, le=15)
+    INTENT_ROUTER_MAX_TOKENS: int = Field(default=768, ge=128, le=2048)
+    CHAT_RETRIEVAL_TIMEOUT_S: float = Field(default=25, gt=0, le=60)
     HYDE_TIMEOUT_S: float = Field(default=8, gt=0)  # [CHAT FIX]
     VISION_REPLY_MAX_TOKENS: int = 2048
     VISION_EXTRACTION_MAX_TOKENS: int = 768
@@ -177,7 +211,7 @@ class Settings(BaseSettings):
     # Multimodal Vision Settings (Roadmap 6B.14 & Section 7)
     GEMINI_VISION_MODEL: str = "gemma-4-26b-a4b-it"  # [VISION FIX]
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
-    GROQ_VISION_MODEL: str = "llama-3.2-11b-vision-preview"
+    GROQ_VISION_MODEL: str = "qwen/qwen3.8-27b"
     VISION_MAX_OUTPUT_TOKENS: int = 1024  # [PHASE2 FIX]
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
     VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
@@ -190,6 +224,17 @@ class Settings(BaseSettings):
     WEB_SEARCH_DAILY_LIMIT_STAFF: int = 50
     WEB_SEARCH_CACHE_TTL_SECONDS: int = 3600  # 1 hour TTL
     WEB_SEARCH_TIMEOUT_SECONDS: float = 8.0
+    WEB_SEARCH_CURRENT_CACHE_TTL_SECONDS: int = Field(default=120, ge=0, le=300)
+    AI_REQUEST_TIMEZONE: str = "Africa/Lagos"
+
+    @field_validator("AI_REQUEST_TIMEZONE")
+    @classmethod
+    def validate_request_timezone(cls, value: str) -> str:
+        try:
+            ZoneInfo(value)
+        except ZoneInfoNotFoundError as exc:
+            raise ValueError("Use a valid IANA timezone for AI request dates.") from exc
+        return value
 
     # Search Tool Integration
     TAVILY_API_KEY: str | None = None
@@ -231,7 +276,7 @@ class Settings(BaseSettings):
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
-    def assemble_cors_origins(cls, v):
+    def assemble_cors_origins(cls, v: list[str] | str) -> list[str] | str:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
         elif isinstance(v, (list, str)):
@@ -253,6 +298,29 @@ class Settings(BaseSettings):
                 val = getattr(self, field_name)
                 if not val or "placeholder" in str(val).lower() or "example" in str(val).lower():
                     missing.append(field_name)
+            if self.EMBEDDER_FAKE_MODE or self.VISION_FAKE_MODE:
+                raise ValueError("Fake engines are forbidden in hosted environments")
+            if self.ENABLE_AI and not any(
+                (self.GEMINI_API_KEY, self.GROQ_API_KEY, self.OPENROUTER_API_KEY)
+            ):
+                missing.append("AI provider credential")
+            if self.ENABLE_INGESTION:
+                for name, value in (
+                    ("GEMINI_API_KEY", self.GEMINI_API_KEY),
+                    ("R2_ENDPOINT", self.r2_endpoint_url),
+                    ("R2_ACCESS_KEY", self.r2_access_key),
+                    ("R2_SECRET_KEY", self.r2_secret_key),
+                    ("REDIS_URL", self.redis_connection_url),
+                ):
+                    if not value or any(
+                        marker in str(value).lower()
+                        for marker in ("placeholder", "your-", "your_", "dummy", "example")
+                    ):
+                        missing.append(name)
+            if self.OPENROUTER_API_KEY and not self.OPENROUTER_FALLBACK_MODEL.endswith(":free"):
+                raise ValueError("The zero-budget OpenRouter fallback must use a :free model")
+            if self.OPENROUTER_API_KEY and not self.OPENROUTER_FAST_MODEL.endswith(":free"):
+                raise ValueError("The zero-budget OpenRouter secondary must use a :free model")
             if missing:
                 raise ValueError(
                     f"CRITICAL: Missing or invalid required environment variables for {self.ENVIRONMENT}: {', '.join(missing)}"
@@ -262,7 +330,7 @@ class Settings(BaseSettings):
             object.__setattr__(
                 self,
                 "DATABASE_URL",
-                "postgresql://postgres:postgres@127.0.0.1:5432/postgres",
+                "postgresql://postgres:postgres@127.0.0.1:54322/postgres",
             )
         return self
 

@@ -553,7 +553,7 @@ async def test_worker_embedding_error_retry_and_failure():  # [DIM 1536]
     status_updates = []  # [DIM 1536]
 
     # [DIM 1536]
-    async def mock_status(doc_id_arg, status, progress=0):  # [DIM 1536]
+    async def mock_status(doc_id_arg, status, progress=0, worker_id=None):  # [DIM 1536]
         status_updates.append((status, progress))  # [DIM 1536]
 
     # [DIM 1536]
@@ -739,3 +739,16 @@ async def test_ingestion_database_write_strips_nul_characters(monkeypatch):  # [
     assert any("CardiacglycosidesinDigitalis" in s for s in all_str_items)  # [NUL FIX]
     assert any("Digitalispurpureatoxicityandtreatment" in s for s in all_str_items)  # [NUL FIX]
     assert any("BoxLabel" in s for s in all_str_items)  # [NUL FIX]
+
+
+@pytest.fixture(autouse=True)
+def isolated_worker_outbox(monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from workers import tasks
+
+    monkeypatch.setattr(
+        tasks, "record_job", AsyncMock(return_value="018f3a30-0001-7000-8000-000000000001")
+    )
+    monkeypatch.setattr(tasks, "finish_job", AsyncMock())
+    monkeypatch.setattr(tasks, "_release_document_for_retry", AsyncMock())

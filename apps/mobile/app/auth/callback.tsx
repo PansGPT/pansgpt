@@ -6,7 +6,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import * as Linking from "expo-linking";
 import { supabase } from "../../lib/supabase";
 
 export default function AuthCallback() {
@@ -28,22 +27,6 @@ export default function AuthCallback() {
           return;
         }
 
-        // If access token & refresh token are directly passed in params
-        if (params.access_token && params.refresh_token) {
-          const { error } = await supabase.auth.setSession({
-            access_token: params.access_token,
-            refresh_token: params.refresh_token,
-          });
-
-          if (error) {
-            setErrorMessage(error.message);
-            return;
-          }
-
-          router.replace("/");
-          return;
-        }
-
         // If PKCE authorization code is provided
         if (params.code) {
           const { error } = await supabase.auth.exchangeCodeForSession(params.code);
@@ -56,37 +39,7 @@ export default function AuthCallback() {
           return;
         }
 
-        // Check if there is an initial URL with hash parameters (#access_token=...)
-        const initialUrl = await Linking.getInitialURL();
-        if (initialUrl && initialUrl.includes("#")) {
-          const hashString = initialUrl.split("#")[1];
-          const hashParams = new URLSearchParams(hashString);
-          const accessToken = hashParams.get("access_token");
-          const refreshToken = hashParams.get("refresh_token");
-
-          if (accessToken && refreshToken) {
-            const { error } = await supabase.auth.setSession({
-              access_token: accessToken,
-              refresh_token: refreshToken,
-            });
-
-            if (error) {
-              setErrorMessage(error.message);
-              return;
-            }
-
-            router.replace("/");
-            return;
-          }
-        }
-
-        // If no credentials found in URL, verify if session already exists
-        const { data } = await supabase.auth.getSession();
-        if (data.session) {
-          router.replace("/");
-        } else {
-          setErrorMessage("No authentication credentials found in redirect URL.");
-        }
+        setErrorMessage("Start a new sign-in to obtain a valid authorization code.");
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Authentication failed";
         setErrorMessage(message);

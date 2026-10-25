@@ -1,0 +1,98 @@
+[
+  {
+    "id": "addressed_greeting",
+    "message": "Hey PansGPT, you around?",
+    "history": [],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false
+  },
+  {
+    "id": "study_support",
+    "message": "I have half an hour before class. Help me organize a quick study session.",
+    "history": [],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false
+  },
+  {
+    "id": "definition",
+    "message": "Explain bioavailability like I'm new to pharmacy.",
+    "history": [],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false
+  },
+  {
+    "id": "rewrite_followup",
+    "message": "Could you make that friendlier?",
+    "history": [
+      {
+        "role": "assistant",
+        "content": "Please submit your revision notes before Friday."
+      }
+    ],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false
+  },
+  {
+    "id": "clinical_safety",
+    "message": "Is warfarin safe in pregnancy?",
+    "history": [],
+    "expected_route": "complex_path",
+    "requires_tools": false,
+    "requires_rag": true
+  },
+  {
+    "id": "mixed_greeting_clinical",
+    "message": "Hello chat, what happens when warfarin and amiodarone are combined?",
+    "history": [],
+    "expected_route": "complex_path",
+    "requires_tools": false,
+    "requires_rag": true
+  },
+  {
+    "id": "artifact_followup",
+    "message": "Turn that into slides",
+    "history": [
+      {
+        "role": "user",
+        "content": "Explain renal clearance"
+      },
+      {
+        "role": "assistant",
+        "content": "Renal clearance is the volume of plasma cleared of a substance by the kidneys per unit time."
+      }
+    ],
+    "expected_route": "complex_path",
+    "requires_tools": true,
+    "requires_rag": false
+  },
+  {
+    "id": "general_current_result",
+    "message": "what was the score btwn arsenal and everton yesterday",
+    "history": [],
+    "expected_route": "complex_path",
+    "requires_tools": false,
+    "requires_rag": false,
+    "requires_web": true
+  },
+  {
+    "id": "explicit_general_web",
+    "message": "Search the web for the result of yesterday's match",
+    "history": [{ "role": "user", "content": "I am following Arsenal and Everton." }],
+    "expected_route": "complex_path",
+    "requires_tools": false,
+    "requires_rag": false,
+    "requires_web": true
+  },
+  {
+    "id": "missing_context",
+    "message": "Can you explain that again?",
+    "history": [],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false
+  }
+]

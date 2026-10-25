@@ -153,12 +153,29 @@ async def test_vision_engine_sha256_result_caching():
     assert res2["sha256"] == res1["sha256"]
 
 
+@pytest.mark.asyncio
+async def test_vision_cache_is_scoped_to_account_and_full_question(monkeypatch):
+    engine = VisionAnalysisEngine()
+    monkeypatch.setattr(engine, "gemini_key", None)
+    monkeypatch.setattr(engine, "groq_key", None)
+    monkeypatch.setattr(engine, "openrouter_key", None)
+    uri = "data:image/png;base64," + base64.b64encode(TINY_PNG_BYTES).decode()
+    first = await engine.analyze(uri, "Explain this lecture diagram", "student-a")
+    repeat = await engine.analyze(uri, "Explain this lecture diagram", "student-a")
+    different_user = await engine.analyze(uri, "Explain this lecture diagram", "student-b")
+    different_question = await engine.analyze(uri, "Summarise this lecture diagram", "student-a")
+    assert first["cached"] is False
+    assert repeat["cached"] is True
+    assert different_user["cached"] is False
+    assert different_question["cached"] is False
+
+
 # ------------------------------------------------------------------------------
 # 4. Tool Engine Dispatch Integration
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_tool_engine_dispatch_vision_analyze():
-    """Verify tool_engine.dispatch_tool cleanly executes vision_analyze."""
+async def test_tool_engine_rejects_unowned_vision_input():
+    """Models cannot submit raw image data in place of an owned attachment ID."""
     b64_str = base64.b64encode(TINY_PNG_BYTES).decode("utf-8")
     data_uri = f"data:image/png;base64,{b64_str}"
 
@@ -170,6 +187,5 @@ async def test_tool_engine_dispatch_vision_analyze():
         },
         user_id="user-123",
     )
-    assert payload["status"] == "success"
-    assert payload["category"] == "CHEMICAL_STRUCTURE"
-    assert "Medicinal Chemistry" in payload["analysis"]
+    assert payload["status"] == "error"
+    assert "analysis" not in payload

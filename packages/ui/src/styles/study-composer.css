@@ -1,0 +1,93 @@
+/* One visual composer contract for Home, welcome and conversation surfaces. */
+.p-study-composer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-height: 53px;
+  padding: 6px;
+  border: 1px solid var(--border-primary);
+  border-radius: 28px;
+  background: var(--bg-secondary);
+  color: var(--text-primary-900);
+  box-shadow: var(--effect-shadow-sm);
+}
+.p-study-composer:focus-within {
+  border-color: var(--border-brand);
+}
+.p-study-composer-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 39px;
+}
+.p-study-composer .p-study-composer-input {
+  display: block;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 24px;
+  max-height: 160px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  font: 400 14px/1.6 var(--font-body);
+}
+.p-study-composer-input::placeholder {
+  color: var(--text-placeholder);
+}
+.p-study-composer .p-study-composer-input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.p-study-composer .p-study-composer-control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.p-study-composer .p-study-composer-submit {
+  width: 39px;
+  height: 39px;
+  background: var(--fg-brand-primary-600);
+  color: var(--bg-primary);
+}
+.p-study-composer-control:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.p-study-composer .p-study-composer-submit:disabled {
+  opacity: 1;
+  background: var(--bg-tertiary);
+  color: var(--text-quaternary-500);
+}
+.p-study-composer-attachments {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 5px 8px 8px;
+}
+.p-study-composer-attachments:empty {
+  display: none;
+}
+.p-study-composer-attachments button {
+  width: 24px;
+  height: 24px;
+}
+.p-study-composer-status {
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--text-tertiary-600);
+}

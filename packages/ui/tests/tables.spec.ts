@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { tableSources } from "../preview/table-source-data";
 test("all 101 table source specimens preserve Figma frames and native SVG assets", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1800, height: 1100 });
-  await page.goto("/?section=tables");
+  await openPreview(page, "/?section=tables");
   await page.evaluate(() => document.fonts.ready);
   const mismatches: string[] = [];
   for (const family of tableSources)
@@ -53,7 +54,7 @@ test("all 101 table source specimens preserve Figma frames and native SVG assets
 test("live tables sort stably, select eligible rows and support keyboard ratings and empty states", async ({
   page,
 }) => {
-  await page.goto("/?section=tables");
+  await openPreview(page, "/?section=tables");
   const live = page.getByTestId("live-table");
   await live.getByRole("button", { name: "Sort by Score" }).click();
   await expect(live.locator("tbody tr").first()).toContainText("Bola");

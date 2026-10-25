@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS public.documents (
   created_at          timestamptz NOT NULL DEFAULT now(),
   updated_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.documents ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_documents_lookup ON public.documents(university_id, course_code, status);
 CREATE INDEX IF NOT EXISTS idx_documents_ingestion ON public.documents(embedding_status) WHERE embedding_status IN ('pending', 'processing');
@@ -56,6 +57,7 @@ CREATE TABLE IF NOT EXISTS public.document_chunks (
   embedding   vector(1536) NOT NULL,
   created_at  timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_chunks ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_chunks_hnsw ON public.document_chunks
   USING hnsw (embedding vector_cosine_ops);
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS public.document_sections (
   check_questions jsonb,
   created_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_sections ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_sections_doc ON public.document_sections(document_id, section_index);
 
@@ -91,6 +94,7 @@ CREATE TABLE IF NOT EXISTS public.document_notes (
   created_at      timestamptz NOT NULL DEFAULT now(),
   updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_notes ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_notes_user_doc ON public.document_notes(user_id, document_id);
 
@@ -111,6 +115,7 @@ CREATE TABLE IF NOT EXISTS public.document_highlights (
   created_at      timestamptz NOT NULL DEFAULT now(),
   updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.document_highlights ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_highlights_lookup ON public.document_highlights(user_id, document_id, page_number);
 

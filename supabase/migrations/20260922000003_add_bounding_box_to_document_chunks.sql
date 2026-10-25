@@ -9,18 +9,18 @@
 ALTER TABLE public.document_elements
   ADD COLUMN IF NOT EXISTS bounding_box jsonb DEFAULT NULL;
 
-COMMENT ON COLUMN public.document_elements.bounding_box IS 
+COMMENT ON COLUMN public.document_elements.bounding_box IS
   'Normalized coordinate geometry: { page: int, page_width: float, page_height: float, bbox: [x0, y0, x1, y1], rects: [[x0, y0, x1, y1], ...] }';
 
 -- 2. Add bounding_box to document_chunks (used in vector retrieval and citations)
 ALTER TABLE public.document_chunks
   ADD COLUMN IF NOT EXISTS bounding_box jsonb DEFAULT NULL;
 
-COMMENT ON COLUMN public.document_chunks.bounding_box IS 
+COMMENT ON COLUMN public.document_chunks.bounding_box IS
   'Normalized coordinate geometry: { page: int, page_width: float, page_height: float, bbox: [x0, y0, x1, y1], rects: [[x0, y0, x1, y1], ...] }';
 
 -- GIN Index for queries filtering or inspecting coordinate existence
-CREATE INDEX IF NOT EXISTS idx_document_chunks_bbox ON public.document_chunks 
+CREATE INDEX IF NOT EXISTS idx_document_chunks_bbox ON public.document_chunks
   USING gin (bounding_box) WHERE bounding_box IS NOT NULL;
 
 -- 3. Update match_documents_hybrid to return real c.bounding_box

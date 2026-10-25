@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = {
   name: string;
   width: number;
@@ -11,7 +12,7 @@ const sources = JSON.parse(
   readFileSync(resolve(__dirname, "../design/avatar-profile-geometry.json"), "utf8")
 ) as Source[];
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=avatars");
+  await openPreview(page, "/?section=avatars");
   await expect(page.getByRole("heading", { name: "Avatar groups and labels" })).toBeVisible();
   await page.evaluate(async () => {
     await document.fonts.ready;

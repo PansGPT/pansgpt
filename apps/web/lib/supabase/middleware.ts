@@ -1,4 +1,6 @@
-import { createServerClient } from "@supabase/ssr";
+import { safeAuthNext, signupDestination } from "@/lib/auth-navigation";
+import { env } from "@/env";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@pansgpt/types";
 
@@ -8,14 +10,14 @@ export async function updateSession(request: NextRequest) {
   });
 
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet: Array<{ name: string; value: string; options?: any }>) {
+        setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
@@ -39,23 +41,30 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Protect /app/** and /onboarding from unauthenticated users
-  if (!user && (pathname.startsWith("/app") || pathname.startsWith("/onboarding"))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("next", pathname);
-    return NextResponse.redirect(url);
-  }
-
-  // Redirect logged-in users away from /login, /signup, /forgot-password
+  const redirect = (path: string): NextResponse => {
+    const response = NextResponse.redirect(new URL(path, request.url));
+    for (const cookie of supabaseResponse.cookies.getAll()) response.cookies.set(cookie);
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
+  };
+  if (user && pathname === "/") return redirect("/app");
+  if (!user && pathname === "/update-password")
+    return redirect("/forgot-password?error=recovery_required");
   if (
-    user &&
-    (pathname === "/login" || pathname === "/signup" || pathname === "/forgot-password")
+    !user &&
+    (pathname === "/app" || pathname.startsWith("/app/") || pathname === "/onboarding")
   ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/app";
-    return NextResponse.redirect(url);
+    return redirect(`/login?next=${encodeURIComponent(pathname + request.nextUrl.search)}`);
   }
-
+  if (user && (pathname === "/login" || pathname === "/signup")) {
+    return redirect(
+      safeAuthNext(
+        request.nextUrl.searchParams.get("next"),
+        pathname === "/signup"
+          ? signupDestination(request.nextUrl.searchParams.get("invite"))
+          : "/app"
+      )
+    );
+  }
   return supabaseResponse;
 }

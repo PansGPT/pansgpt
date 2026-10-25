@@ -6,16 +6,19 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./auth": "./src/auth.ts",
+    "./user-initials-avatar": "./src/components/user-initials-avatar.tsx",
     "./styles.css": "./src/styles/index.css",
     "./tokens.css": "./src/styles/tokens.css",
-    "./tailwind.css": "./src/styles/tailwind.css"
+    "./tailwind.css": "./src/styles/tailwind.css",
+    "./shell": "./src/shell.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "preview:dev": "vite",
     "preview:build": "vite build",
     "preview:serve": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
-    "test": "playwright test",
+    "test": "node scripts/test.mjs",
     "lint": "eslint src preview tests --ext .ts,.tsx && node scripts/generate-tokens.mjs --check && node scripts/generate-typography.mjs --check && node scripts/generate-coverage.mjs --check && node scripts/check-css-references.mjs && node scripts/check-paint-styles.mjs && node scripts/generate-icons.mjs --check && node scripts/check-section-assets.mjs",
     "icons:generate": "node scripts/generate-icons.mjs",
     "coverage:generate": "node scripts/generate-coverage.mjs",
@@ -25,9 +28,11 @@
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",
+    "@sentry/react": "10.74.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
     "radix-ui": "^1.6.7",
+    "sonner": "2.0.8",
     "tailwind-merge": "^3.0.1"
   },
   "devDependencies": {

@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { chartSources } from "../preview/chart-source-data";
 
 test("all 93 chart specimens preserve native Figma frames and SVG dimensions", async ({ page }) => {
   await page.setViewportSize({ width: 1800, height: 1100 });
-  await page.goto("/?section=charts");
+  await openPreview(page, "/?section=charts");
   await page.evaluate(() => document.fonts.ready);
   const mismatches: string[] = [];
   for (const family of chartSources)
@@ -59,7 +60,7 @@ test("all 93 chart specimens preserve native Figma frames and SVG dimensions", a
 test("live charts inspect data, toggle series and handle extreme or missing values", async ({
   page,
 }) => {
-  await page.goto("/?section=charts");
+  await openPreview(page, "/?section=charts");
   const chart = page.getByRole("figure", { name: "Study activity", exact: true });
   const slider = chart.getByRole("slider", { name: "Inspect Study activity" });
   await slider.focus();
@@ -93,5 +94,17 @@ test("live charts inspect data, toggle series and handle extreme or missing valu
   await expect(gauge).toHaveAttribute("aria-label", "Weekly goal: 40%, 60%, 80%");
   await page.setViewportSize({ width: 375, height: 900 });
   await expect(slider).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+  const overflow = await page.evaluate(() =>
+    [...document.querySelectorAll("body *")].flatMap((node) => {
+      const box = node.getBoundingClientRect();
+      // Scrollable source archives intentionally keep their original frames.
+      if (box.right <= innerWidth || node.closest(".chart-source-grid")) return [];
+      return [{ tag: node.tagName, className: node.getAttribute("class"), right: box.right }];
+    })
+  );
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth), {
+      message: `Chart must fit the mobile viewport: ${JSON.stringify(overflow)}`,
+    })
+    .toBeLessThanOrEqual(375);
 });

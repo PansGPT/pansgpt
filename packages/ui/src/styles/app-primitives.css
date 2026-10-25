@@ -1,0 +1,163 @@
+.p-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--figma-radius-xl);
+  background: var(--bg-primary);
+  color: var(--text-primary-900);
+  box-shadow: var(--effect-shadow-xs);
+  font-family: var(--font-body);
+  overflow-wrap: anywhere;
+}
+.p-card > :first-child {
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+}
+.p-card > :last-child {
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+.p-card-content {
+  min-width: 0;
+  padding: var(--figma-spacing-3xl);
+}
+.p-card-content > :first-child {
+  margin-block-start: 0;
+}
+.p-card-content > :last-child {
+  margin-block-end: 0;
+}
+.p-card-footer > a {
+  color: var(--text-brand-secondary-700);
+  text-underline-offset: 3px;
+}
+.p-card-footer > a:focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 3px;
+}
+.p-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--figma-spacing-lg);
+  padding: var(--figma-spacing-xl) var(--figma-spacing-3xl);
+  border-top: 1px solid var(--border-secondary);
+}
+.p-skeleton {
+  display: block;
+  width: 100%;
+  height: 1em;
+  border-radius: var(--figma-radius-sm);
+  background: var(--bg-quaternary);
+}
+.p-skeleton[data-variant="rectangle"] {
+  height: 80px;
+  border-radius: var(--figma-radius-lg);
+}
+.p-skeleton[data-variant="circle"] {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.p-skeleton[data-animated="true"] {
+  animation: p-skeleton-pulse 1.8s ease-in-out infinite;
+}
+@keyframes p-skeleton-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+.p-error-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--figma-spacing-xl);
+  padding: var(--figma-spacing-3xl);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--figma-radius-xl);
+  color: var(--text-primary-900);
+  background: var(--bg-primary);
+  font: 400 14px/20px var(--font-body);
+  overflow-wrap: anywhere;
+}
+.p-error-fallback > p {
+  margin: 0;
+  color: var(--text-tertiary-600);
+}
+.p-toaster .p-toast {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--figma-spacing-lg);
+  width: 100%;
+  padding: var(--figma-spacing-xl);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--figma-radius-lg);
+  background: var(--bg-primary);
+  color: var(--text-primary-900);
+  box-shadow: var(--effect-shadow-lg);
+  font: 400 14px/20px var(--font-body);
+  overflow-wrap: anywhere;
+}
+.p-toaster .p-toast [data-content] {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+.p-toaster .p-toast-title {
+  font-weight: 600;
+}
+.p-toaster .p-toast-description {
+  color: var(--text-tertiary-600);
+}
+.p-toaster .p-toast-action,
+.p-toaster .p-toast-cancel {
+  flex: none;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: var(--figma-radius-sm);
+  background: var(--bg-brand-solid);
+  color: var(--text-white);
+  font: inherit;
+  cursor: pointer;
+}
+.p-toaster .p-toast-cancel {
+  background: var(--bg-secondary);
+  color: var(--text-secondary-700);
+}
+.p-toaster .p-toast-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 4px;
+  border-radius: var(--figma-radius-full);
+  color: var(--text-secondary-700);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
+  cursor: pointer;
+}
+.p-toaster .p-toast :is(button, a):focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .p-skeleton[data-animated="true"] {
+    animation: none;
+  }
+}
+@media (max-width: 480px) {
+  .p-card-content,
+  .p-card-footer {
+    padding-inline: var(--figma-spacing-xl);
+  }
+  .p-toaster .p-toast {
+    flex-wrap: wrap;
+  }
+}

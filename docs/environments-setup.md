@@ -1,120 +1,60 @@
-# PansGPT 2.0 — Environments & Deployment Setup Guide
+# Environments and staging deployment
 
-> **Source of Truth**: [`docs/build_roadmap.md`](build_roadmap.md) (Phase 3: Environments Wired).  
-> **Repository Architecture**: Turborepo Monorepo (`apps/web`, `apps/api`, `apps/mobile`, `apps/desktop`, `packages/*`).
+Canonical execution order: [build roadmap](build_roadmap.md) and [implementation plan](implementation_plan.md). Current database evidence: [database verification](database-verification-2026-10-20.md). Application deployment is tracked separately in [the staging deployment record](staging-deployment-2026-10-20.md).
 
----
+## Environment boundaries
 
-## 1. Environments Topology
+| Environment | API                                | Database                                | Workers                                                    |
+| ----------- | ---------------------------------- | --------------------------------------- | ---------------------------------------------------------- |
+| Development | Local FastAPI                      | Local Supabase CLI/Docker               | Local ARQ during development                               |
+| Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Actions disposable checks; Oracle worker host deferred |
+| Production  | Provision and verify before launch | Separate hosted Supabase project        | Separate host/configuration before launch                  |
 
+The staging database is migrated and verified. The documented custom domains and previous Render deployment records do not certify that the current API revision is deployed. Production is outside this staging action.
+
+## Render API deployment
+
+`render.yaml` defines the staging Docker web service using `apps/api` as its build root. It does not provision a free background-worker service. [Render Free instances](https://render.com/docs/free) support web services and selected datastores; background workers require another eligible host under the $0 pilot plan.
+
+1. Install/authorize the Render integration, or configure an API credential in a local ignored environment. Never commit a deploy hook or API token.
+2. Inspect the existing staging service and confirm its repository, free plan, Docker root/context, environment and current deployment before changing it.
+3. Populate staging configuration from the secret inventory in Render's environment manager. Keep all six `*_ZDR_CONFIRMED` flags false until the privacy register contains verified account evidence. Keep fake engines and `LOCAL_DEV_MODE` false.
+4. Deploy the reviewed CI-passing commit explicitly; do not assume unmerged local changes or the default branch contain it.
+5. Use `/health/infrastructure` for Render's HTTP health check. It verifies required database/Redis/R2 connectivity independently of provider eligibility. Full `/health/ready` remains 503 while a required provider is blocked.
+6. Verify the deployed revision and live endpoints. A liveness 200 alone does not establish infrastructure health, provider approval, worker availability or complete product readiness.
+
+[Render's health checks](https://render.com/docs/health-checks) expect a response within five seconds. Independent infrastructure probes run concurrently with four-second bounds and a 30-second cache. `/health/live` stays a lightweight process check. The scheduled availability workflow should keep checking full `/health/ready` and report the privacy hold honestly.
+
+## Worker operation
+
+Use the same application revision and staging configuration on the selected worker host:
+
+```sh
+cd apps/api
+uv sync --frozen --no-dev
+uv run arq workers.settings.WorkerSettings
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              PansGPT 2.0 Topology                            │
-├────────────────────────────────┬────────────────────────────────────────────┤
-│ STAGING (Pre-release)          │ PRODUCTION (Live Students)                 │
-├────────────────────────────────┼────────────────────────────────────────────┤
-│ Web: staging.pansgpt.com       │ Web: pansgpt.com / app.pansgpt.com         │
-│ Vercel Preview Deployments     │ Vercel Production Deployment               │
-├────────────────────────────────┼────────────────────────────────────────────┤
-│ API: api.staging.pansgpt.com   │ API: api.pansgpt.com                       │
-│ Render Web: pansgpt-api-staging│ Render Web: pansgpt-api-production        │
-│ Render Worker: pansgpt-worker-stg│ Render Worker: pansgpt-worker-prod       │
-├────────────────────────────────┼────────────────────────────────────────────┤
-│ DB: Supabase Project #1        │ DB: Supabase Project #2                    │
-│ Ref: nrzbjhqtcxlfiyvoeanb      │ Ref: (To be provisioned before Phase 28)  │
-├────────────────────────────────┼────────────────────────────────────────────┤
-│ Storage: Cloudflare R2 Staging │ Storage: Cloudflare R2 Production          │
-│ Bucket: pansgpt-library-staging│ Bucket: pansgpt-library-production         │
-└────────────────────────────────┴────────────────────────────────────────────┘
+
+Run the picture queue separately when required:
+
+```sh
+uv run arq workers.settings.PictureWorkerSettings
 ```
 
----
+The main worker initializes a small Postgres pool, reconciles the durable outbox and schedules cleanup. The picture worker drains its separate queue and exits. Do not grant provider eligibility just to make a worker health check pass. Privacy-blocked ingestion stays durable until its dependencies and eligible provider are available.
 
-## 2. Render Deployment (`apps/api`)
+The user selected GitHub Actions now and Oracle later. [Worker Verification (Disposable Services)](../.github/workflows/worker-verification.yml) runs finite checks on a disposable local Supabase database and Redis inside the GitHub runner. It verifies isolated queue retries/restarts and cancellation without receiving existing staging credentials. It never connects to hosted staging data or R2. See [the worker runbook](worker-verification-2026-10-20.md) for execution and evidence.
 
-The backend is configured via [`render.yaml`](../render.yaml) using multi-stage Docker builds.
+GitHub Actions is used for development/testing, not ongoing application hosting ([service terms](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features#actions)). No continuously available worker is provisioned. Oracle remains deferred; application ingestion stays pending while provider privacy and hosting gates are open.
 
-### 2.1 Initial Blueprint Setup
+## Database governance
 
-1. Log into the [Render Dashboard](https://dashboard.render.com).
-2. Click **New +** → **Blueprint**.
-3. Connect the `pansgpt` GitHub repository.
-4. Render will parse `render.yaml` and discover 4 services:
-   - `pansgpt-api-staging` (FastAPI Web Service)
-   - `pansgpt-worker-staging` (ARQ Background Worker)
-   - `pansgpt-api-production` (FastAPI Web Service — autoDeploy: false)
-   - `pansgpt-worker-production` (ARQ Worker — autoDeploy: false)
-5. Fill in the required environment variables (marked `sync: false` in `render.yaml`) from [`docs/secrets-inventory.md`](secrets-inventory.md).
-6. Click **Apply**.
+All schema changes use versioned mirrored SQL and Supabase CLI deployment. Staging already records all 31 versions; do not reset or reseed it during application deployment. The existing four documents and 275 chunks have preserved checksums.
 
-### 2.2 Free Tier Operational Guidelines
+## Web configuration
 
-- Render free instances sleep after **15 minutes of inactivity** (cold start delay ~45–60 seconds).
-- The free plan provides **750 instance hours/month**. Running both API and Worker continuously will consume 1,440 hours/month, exceeding the free quota after ~15 days.
-- **Recommended Free-Tier Setup**:
-  - In staging, keep `pansgpt-api-staging` active.
-  - Run `pansgpt-worker-staging` only when processing batch document ingestions, or upgrade to a $7/month Starter instance when running continuous background workloads.
-  - Keep-alive pings (see Section 5) keep `pansgpt-api-staging` warm 24/7 within the 750 free hours.
+When the matching web deployment is verified, use the actual staging API URL, the staging Supabase public URL/anon key and the server-only client API key. Validate preview and production scopes separately. Never put provider credentials or a Supabase service-role key in public frontend variables.
 
----
+## Release evidence
 
-## 3. Vercel Deployment (`apps/web`)
-
-The frontend Next.js App Router application is deployed to Vercel.
-
-### 3.1 Initial Project Link
-
-1. Log into the [Vercel Dashboard](https://vercel.com).
-2. Click **Add New...** → **Project**.
-3. Import the `pansgpt` GitHub repository.
-4. **Project Settings**:
-   - **Framework Preset**: Next.js
-   - **Root Directory**: `apps/web` (Important: do not leave at repository root)
-   - **Build & Output Settings**: Automatically detected from [`apps/web/vercel.json`](../apps/web/vercel.json):
-     - Build Command: `cd ../.. && pnpm --filter=@pansgpt/web build`
-     - Install Command: `pnpm install`
-5. **Environment Variables**:
-   Add the following variables to **Preview** and **Production** scopes:
-   - `NEXT_PUBLIC_APP_URL`: `https://staging.pansgpt.com` (Preview) / `https://pansgpt.com` (Production)
-   - `NEXT_PUBLIC_API_URL`: `https://api.staging.pansgpt.com` (Preview) / `https://api.pansgpt.com` (Production)
-   - `NEXT_PUBLIC_SUPABASE_URL`: `https://nrzbjhqtcxlfiyvoeanb.supabase.co`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: `<SUPABASE_ANON_KEY>`
-   - `NEXT_PUBLIC_POSTHOG_KEY`: `<POSTHOG_PROJECT_KEY>`
-   - `NEXT_PUBLIC_POSTHOG_HOST`: `https://us.i.posthog.com`
-   - `NEXT_PUBLIC_SENTRY_DSN`: `<SENTRY_DSN>`
-   - `X_API_KEY_WEB`: `<SECRET_INTERNAL_CLIENT_KEY>`
-6. Click **Deploy**.
-
----
-
-## 4. Supabase Database Wiring
-
-### 4.1 Staging Project #1 (`nrzbjhqtcxlfiyvoeanb`)
-
-- **Status**: Live and verified.
-- **Connection Type**: Transaction Pooler on port `5432` / `6543`.
-- **Pooler Mode**: Session/Transaction with `statement_cache_size=0`.
-- **Auto-Pause Policy**: Free-tier projects pause after 7 days of inactivity. If paused, log into the Supabase dashboard and click **Restore project**.
-
-### 4.2 Production Project #2
-
-- Provisioned immediately before Phase 28 (Production Launch).
-- Completely isolated from Staging. No data, users, or credentials are shared.
-
----
-
-## 5. Keep-Alive & Observability
-
-### 5.1 GitHub Actions Keep-Alive Pinger
-
-- **File**: [`.github/workflows/keep_alive.yml`](../.github/workflows/keep_alive.yml)
-- **Schedule**: `*/10 * * * *` (runs every 10 minutes).
-- **Target**: `GET https://api.staging.pansgpt.com/health/ready`
-- **Purpose**: Prevents Render free-tier container spin-down.
-
-### 5.2 Secondary Uptime Monitor (cron-job.org / Better Uptime)
-
-- In addition to GitHub Actions (which can experience queue delays), set up a free monitor on [cron-job.org](https://cron-job.org) or [Better Uptime](https://betteruptime.com):
-  - **URL**: `https://api.staging.pansgpt.com/health/live`
-  - **Interval**: Every 5 or 10 minutes
-  - **Alert Threshold**: Send notification if endpoint fails 2 consecutive checks.
+Record deployed revision, service URL, infrastructure/full readiness, auth journeys, worker startup/recovery, queue reconciliation, storage operations and the approved document journey. Provider privacy and native OAuth remain open until actually verified. The independent shared-UI browser work is tracked in [its verification record](design-system/verification-2026-10-21.md).

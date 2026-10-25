@@ -1,18 +1,47 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
 > **Source of Truth**: Every decision in this roadmap is drawn directly from [`implementation_plan.md`](implementation_plan.md).
-> **Core Philosophy**: Engines are built and verified first via API tests. UI is built last, on top of proven infrastructure.
-> **Budget**: $0. Every tool listed below has a free tier that works at launch.
+> **Core Philosophy**: Backend foundations and API tests gate live integration. Frontend and backend coding may proceed in parallel against agreed typed contracts and explicit sample data.
+> **Budget**: $0 pilot with operator-managed workers. Provider privacy eligibility and account compute allocation must be verified before hosted use.
+
+## Phase 0?7 remediation gate ? 20 October 2026
+
+The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediation record](phase-0-7-remediation-2026-10-20.md) maps each finding to its fix and remaining verification.
+
+1. Authorization and token verification, SQL grants/RLS boundaries, and honest persistence results.
+2. Strict provider privacy, configuration and actual CI coverage.
+3. Durable ingestion delivery, lease-safe retries/replacement and visible image completeness.
+4. Provider-native streaming/tools, grounded retrieval, quotas, safe output and credit recovery.
+5. Invitation redemption, retention, native authentication lifecycle and contract synchronization.
+6. Run offline gates, replay the complete Supabase history/seed and real DB contracts, then verify approved providers and the staging journey.
+
+- [x] Implement source corrections and explicit unavailable behavior for unsupported clinical handlers.
+- [x] Enforce provider privacy policy: Google/Gemini has a user-approved retention exception (22 October); every other unverified provider remains blocked. See [privacy register](provider-privacy.md#google-retention-exception---22-october-2026).
+- [x] Replay all 31 migrations and seed in disposable Supabase; 12 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39423479706).
+- [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
+- [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
+- [x] Verify ARQ retries/restarts and cancellation on disposable GitHub Actions services: [24 checks passed](https://github.com/PansGPT/pansgpt/actions/runs/39512003760). No staging keys uploaded; Oracle hosting remains deferred. This does not certify hosted document ingestion or continuous worker availability.
+- [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
+      Google/Gemini no longer requires ZDR by explicit user decision; live integration remains unverified. Local Groq Global ZDR was user-confirmed on 22 October; see the [scoped attestation](provider-privacy.md#local-groq-attestation---22-october-2026). Other providers still require ZDR; hosted verification and live integration gates remain open.
+- [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
+- [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
+- [x] Earlier remediation entries synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
+- [x] Database verification synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
+- [ ] Synchronize the new staging deployment and worker verification follow-ups; phases remain Testing while release gates are pending.
+
+The earlier hold on phase 8?17 development is superseded for contract-first frontend coding by the user-approved 22 October workflow below. Phase 0?7 completion certification and live feature release still require the applicable gates; mock UI does not close them.
+
+On 21 October the user approved completing the remaining Phase 9.2 shared-library primitives. That library work is verified; new product routes and app-shell integration retain the staging gate.
 
 ---
 
 ## 🧭 The Engine-First Principle
 
-Most teams build auth screens and home pages before the core product engine exists.
-That is the wrong order. Here is the correct order:
+Backend foundations and verified APIs remain delivery dependencies. The user approved parallel frontend coding on 22 October 2026: agree a feature's typed contracts, states and acceptance criteria first, then implement frontend fixtures and backend services in parallel.
 
 ```
-Infrastructure → Engines (no UI) → API verification → Walking skeleton → Full UI
+Foundations → Agreed contracts → Frontend with mocks + Backend implementation
+           → API/security verification → Live integration → Release verification
 ```
 
 For PansGPT:
@@ -25,12 +54,14 @@ For PansGPT:
 5. Build the document ingestion engine (R2, PyMuPDF, 8-stage pipeline, gemini-embedding-2, HNSW) <!-- [EMBED FIX] -->
 6. Build the AI/LLM orchestration engine (Gemma 4 → Groq → OpenRouter, tools, SSE)
 7. Build the auth backend (JWKS, JWT, RBAC role guards)
-8. Verify all three engines work via pytest API tests — no UI yet
+8. Verify all three engines work via pytest API tests before live integration
 9. Build the walking skeleton web UI (sign up → upload → chat → AI response on staging)
-10. Build the full UI surface by surface on top of proven APIs
+10. Build each full UI against agreed contracts; integrate with proven APIs as they pass their gates
 11. Add mobile (Expo), then desktop (Electron), then payments, email, SEO
 12. Security hardening, observability, load testing, launch
 ```
+
+Use `../pansgpt-eli` as a reference for flows and data shapes, adapting selected code to the current architecture and design tokens. Frontend previews must label synthetic data, keep unfinished live paths disabled or identified, and never mask real API failures. See [the legacy reuse handoff](legacy-reuse-and-parallel-development-2026-10-22.md) for evidence, schema mismatches and the cofounder workflow. Mock-only work does not complete a feature or authorize a legacy database import.
 
 ---
 
@@ -38,7 +69,7 @@ For PansGPT:
 
 | Priority | Platform                  | Decision                                                                                   |
 | :------: | ------------------------- | ------------------------------------------------------------------------------------------ |
-| **1st**  | **Web (Next.js 15)**      | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
+| **1st**  | **Web (Next.js 16.3.8)**  | Fastest iteration. No app store delays. Proves product-market fit first. SEO-discoverable. |
 | **2nd**  | **Mobile (Expo SDK 52+)** | Students are mobile-heavy for daily study. Built once web features are stable.             |
 | **3rd**  | **Desktop (Electron 33)** | Offline-first power users. ~90% code share with web. Sequenced last.                       |
 
@@ -108,51 +139,51 @@ PR reviewed + CI green → merged to main
 - 750 free instance hours/month (exact 24/7 for one service)
 - **Sleeps after 15 minutes of inactivity** — cold start delay ~1 minute
 - **Keep-alive strategy**: cron-job.org (free) pings `GET /health/ready` every 10 minutes
-- Keep to **1 free service** per Render account — API + Worker running simultaneously burns both services' hours
+- Render Free hosts the API only; background workers need a separate eligible host. Actions currently runs isolated staging checks, with Oracle hosting deferred.
 
 ---
 
 ## 📋 Phase Overview
 
-|   #    | Phase                         |      Status      | What Gets Built                                                                                          | Gate Before Continuing                                                         |
-| :----: | ----------------------------- | :--------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| **0**  | Local Dev Environment         |   ✅ **Done**    | Every developer runs the full stack locally                                                              | All services start without errors                                              |
-| **1**  | Monorepo Scaffold + CI        |   ✅ **Done**    | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
-| **2**  | Secrets + Config              |   ✅ **Done**    | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
-| **3**  | Environments Wired            |   ✅ **Done**    | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
-| **4**  | Database Foundation           |   ✅ **Done**    | All migrations, RLS policies, enums, indexes, seed data, 45 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
-| **5**  | Document Ingestion Engine     |   ✅ **Done**    | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
-| **6A** | AI Engine Foundation          |   ✅ **Done**    | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
-| **6B** | AI Engine Advanced            |   ✅ **Done**    | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
-| **7**  | Auth Backend                  |   ✅ **Done**    | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
-| **8**  | Walking Skeleton Web UI       | ✅ **Core Done** | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
-| **9**  | Design System + App Shell     |    ⏳ Pending    | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
-| **10** | PDF Reader (Web)              |    ⏳ Pending    | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
-| **11** | AI Chat Interface (Web)       |    ⏳ Pending    | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
-| **12** | Learn Mode (Web)              |    ⏳ Pending    | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
-| **13** | Quiz System (Web)             |    ⏳ Pending    | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
-| **14** | Notes (Web)                   |    ⏳ Pending    | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
-| **15** | Timetable + Dashboard (Web)   |    ⏳ Pending    | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
-| **16** | Portals                       |    ⏳ Pending    | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
-| **17** | Settings + Profile + Feedback |    ⏳ Pending    | Profile, preferences, session management, CSAT, feedback triage                                          | Student updates profile and theme; feedback lands in admin                     |
-| **18** | Credits + Payments            |    ⏳ Pending    | Double-entry credit ledger, Paystack, Flutterwave                                                        | Student purchases credits and spends them on AI                                |
-| **19** | Email System                  |    ⏳ Pending    | Resend, React Email templates, ARQ worker queue                                                          | Welcome email arrives after signup                                             |
-| **20** | Mobile (Expo)                 |    ⏳ Pending    | Auth, PDF reader, chat, quiz, notes, timetable, widgets                                                  | Full student journey works on iOS + Android                                    |
-| **21** | Desktop (Electron)            |    ⏳ Pending    | Offline SQLite, PDF cache, background sync, auto-updater                                                 | Full offline study session works without internet                              |
-| **22** | PWA + Offline (Web)           |    ⏳ Pending    | `@serwist/next`, caching tiers, IndexedDB outbox                                                         | Web app installs and key flows work offline                                    |
-| **23** | Public Pages + SEO            |    ⏳ Pending    | Landing, pricing, about, JSON-LD, Open Graph, sitemap                                                    | Public pages indexed by Google with correct metadata                           |
-| **24** | Security Hardening            |    ⏳ Pending    | CORS, headers, rate limits, NDPA 2023, dependency scan                                                   | Security checklist cleared                                                     |
-| **25** | Observability + Monitoring    |    ⏳ Pending    | Sentry, PostHog, Better Uptime, structlog, keep-alive                                                    | Errors visible, events tracked, uptime alerting live                           |
-| **26** | Performance + Load Testing    |    ⏳ Pending    | Lighthouse, k6, EXPLAIN ANALYZE                                                                          | p95 API < 500ms; Lighthouse performance > 90                                   |
-| **27** | Pre-Launch Checklist          |    ⏳ Pending    | Full checklist verification                                                                              | Every item checked                                                             |
-| **28** | Production Launch 🚀          |    ⏳ Pending    | DNS live, migrations applied, smoke tested                                                               | Real students using the app                                                    |
-| **29** | Post-Launch Iteration         |    ⏳ Pending    | Feature flags, DORA metrics, incident process                                                            | Sustainable delivery culture active                                            |
+|   #    | Phase                         |                 Status                  | What Gets Built                                                                                          | Gate Before Continuing                                                         |
+| :----: | ----------------------------- | :-------------------------------------: | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| **0**  | Local Dev Environment         |    Source fixes; live gates pending     | Every developer runs the full stack locally                                                              | All services start without errors                                              |
+| **1**  | Monorepo Scaffold + CI        |    Source fixes; live gates pending     | Repo structure, turbo.json, git hooks, PR templates, blocking CI                                         | CI passes on an empty repo push                                                |
+| **2**  | Secrets + Config              |    Source fixes; live gates pending     | `.env.example`, Pydantic BaseSettings, `@t3-oss/env-nextjs`, per-env isolation                           | App refuses to start with missing vars                                         |
+| **3**  | Environments Wired            |    Source fixes; live gates pending     | Local, staging, production Supabase + Vercel + Render deployment                                         | Staging URL is reachable; `/health/ready` returns 200                          |
+| **4**  | Database Foundation           |        Testing; DB gates passed         | All migrations, RLS policies, enums, indexes, seed data, 50 tables, 3-pool hybrid search, credit ledger  | `supabase db reset` succeeds locally; migrations apply cleanly to staging      |
+| **5**  | Document Ingestion Engine     |    Source fixes; live gates pending     | R2 storage, PyMuPDF, PDF pipeline, `gemini-embedding-2` (1536d) HNSW — multi-format, ARQ worker pipeline | A PDF can be uploaded and fully indexed via pytest API test                    | <!-- [DIM 1536] --> |
+| **6A** | AI Engine Foundation          |    Source fixes; live gates pending     | Gemma/Groq/OpenRouter failover, 1536d vector search, basic SSE, guard, acronym normalizer                | Streamed AI response over a document works via pytest API test                 | <!-- [DIM 1536] --> |
+| **6B** | AI Engine Advanced            |    Source fixes; live gates pending     | Hybrid RAG (FTS+Trigram+RRF), tools.py, multi-turn loop, AI skills, ZDR, Whisper                         | All tools callable by LLM; agentic loop works with 5 turns                     |
+| **7**  | Auth Backend                  |    Source fixes; live gates pending     | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
+| **8**  | Walking Skeleton Web UI       |     Testing: staging slice pending      | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
+| **9**  | Design System + App Shell     | Library verified; app integration gated | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
+| **10** | PDF Reader (Web)              |               ⏳ Pending                | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
+| **11** | AI Chat Interface (Web)       |               ⏳ Pending                | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
+| **12** | Learn Mode (Web)              |               ⏳ Pending                | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
+| **13** | Quiz System (Web)             |               ⏳ Pending                | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
+| **14** | Notes (Web)                   |               ⏳ Pending                | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
+| **15** | Timetable + Dashboard (Web)   |               ⏳ Pending                | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
+| **16** | Portals                       |               ⏳ Pending                | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
+| **17** | Settings + Profile + Feedback |               ⏳ Pending                | Profile, preferences, session management, CSAT, feedback triage                                          | Student updates profile and theme; feedback lands in admin                     |
+| **18** | Credits + Payments            |               ⏳ Pending                | Double-entry credit ledger, Paystack, Flutterwave                                                        | Student purchases credits and spends them on AI                                |
+| **19** | Email System                  |               ⏳ Pending                | Resend, React Email templates, ARQ worker queue                                                          | Welcome email arrives after signup                                             |
+| **20** | Mobile (Expo)                 |               ⏳ Pending                | Auth, PDF reader, chat, quiz, notes, timetable, widgets                                                  | Full student journey works on iOS + Android                                    |
+| **21** | Desktop (Electron)            |               ⏳ Pending                | Offline SQLite, PDF cache, background sync, auto-updater                                                 | Full offline study session works without internet                              |
+| **22** | PWA + Offline (Web)           |               ⏳ Pending                | `@serwist/next`, caching tiers, IndexedDB outbox                                                         | Web app installs and key flows work offline                                    |
+| **23** | Public Pages + SEO            |               ⏳ Pending                | Landing, pricing, about, JSON-LD, Open Graph, sitemap                                                    | Public pages indexed by Google with correct metadata                           |
+| **24** | Security Hardening            |               ⏳ Pending                | CORS, headers, rate limits, NDPA 2023, dependency scan                                                   | Security checklist cleared                                                     |
+| **25** | Observability + Monitoring    |               ⏳ Pending                | Sentry, PostHog, Better Uptime, structlog, keep-alive                                                    | Errors visible, events tracked, uptime alerting live                           |
+| **26** | Performance + Load Testing    |               ⏳ Pending                | Lighthouse, k6, EXPLAIN ANALYZE                                                                          | p95 API < 500ms; Lighthouse performance > 90                                   |
+| **27** | Pre-Launch Checklist          |               ⏳ Pending                | Full checklist verification                                                                              | Every item checked                                                             |
+| **28** | Production Launch 🚀          |               ⏳ Pending                | DNS live, migrations applied, smoke tested                                                               | Real students using the app                                                    |
+| **29** | Post-Launch Iteration         |               ⏳ Pending                | Feature flags, DORA metrics, incident process                                                            | Sustainable delivery culture active                                            |
 
 ---
 
 ## ⚙️ PHASES 0–6 — Exhaustive Build Checklist
 
-> Every item below is an atomic buildable task. [x] = built & verified in code. [ ] = specced but not yet built. [~] = partially implemented.
+> Every item below is an atomic buildable task. [x] records source implementation or historical evidence; it does not certify current deployment. [ ] = outstanding verification or work. [~] = partial. The remediation gate below controls phase sign-off.
 > For design decisions and technical detail on any item, see [implementation_plan.md](implementation_plan.md).
 
 # PansGPT — Roadmap Phases 0–6
@@ -175,7 +206,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Section 1 — Stack Decisions (L379)
 
 - [x] Read and understand Section 1 (Stack Decisions) in full before any setup
-- [x] Confirm chosen stack: Next.js 15, Expo SDK 52, Electron 33, FastAPI, Supabase, Cloudflare R2, Upstash Redis
+- [x] Confirm chosen stack: Next.js 16.3.8, Expo SDK 52, Electron 33, FastAPI, Supabase, Cloudflare R2, Upstash Redis
 - [x] Confirm AI providers: Gemma 4 (Google AI Studio), Groq, OpenRouter, Gemini Embedding 2 (1536d) <!-- [DIM 1536] -->
 - [x] Confirm all third-party services have free-tier accounts created: Supabase, Render, Vercel, Cloudflare R2, Upstash Redis, Google AI Studio, Groq, OpenRouter, Tavily, Paystack, Resend, Sentry, PostHog
 
@@ -193,8 +224,8 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Local Dev Environment
 
-- [x] Pin Python version to 3.11 | file: apps/api/.python-version
-- [x] Align Python version with roadmap spec (`>=3.11` compatible across 3.11 and 3.12) | file: apps/api/pyproject.toml
+- [x] Pin Python version to 3.12 | file: apps/api/.python-version
+- [x] Require Python 3.12+ and verify the API under Python 3.12 | file: apps/api/pyproject.toml
 - [x] Install Python dependency manifests for FastAPI | file: apps/api/requirements.txt, apps/api/pyproject.toml
 - [x] Generate and commit `uv.lock` dependency lockfile via `uv lock` | file: apps/api/uv.lock
 
@@ -202,7 +233,8 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Local Dev Environment
 
-- [x] Install Docker Desktop and Supabase CLI (Configured remote hosted Supabase DB)
+- [x] Install and verify Supabase CLI 2.116.0.
+- [ ] Install a local container runtime on this developer host; disposable Docker execution is verified in CI.
 - [x] Configure local Supabase Docker infrastructure | file: supabase/config.toml
 - [x] Configure local Supabase UNIJOS seed data | file: supabase/seed.sql
 
@@ -250,7 +282,7 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Monorepo Scaffold + CI
 
-- [x] Scaffold Next.js 15 App Router web application workspace (`@pansgpt/web`) | file: apps/web/package.json
+- [x] Scaffold Next.js 16.3.8 App Router web application workspace (`@pansgpt/web`) | file: apps/web/package.json
 - [x] Scaffold Expo SDK 52 mobile application workspace (`@pansgpt/mobile`) | file: apps/mobile/package.json
 - [x] Scaffold Electron 33 desktop application workspace (`@pansgpt/desktop`) | file: apps/desktop/package.json
 - [x] Scaffold FastAPI Python backend service workspace (`pansgpt-api`) | file: apps/api/pyproject.toml
@@ -395,11 +427,11 @@ PR reviewed + CI green → merged to main
 
 - [x] Write multi-stage production `Dockerfile` | file: apps/api/Dockerfile
 - [x] Create Render infrastructure blueprint for staging web service (`pansgpt-api-staging`) | file: render.yaml
-- [x] Add Render background worker service spec in `render.yaml` | file: render.yaml
+- [x] Define ARQ main/picture settings and isolated Actions verification; ongoing Linux worker hosting remains deferred. | files: `apps/api/workers/settings.py`, `.github/workflows/worker-verification.yml`
 - [x] Use Docker build instruction (`env: docker`) in `render.yaml` instead of raw Python pip | file: render.yaml
 - [x] Add missing environment variable declarations to `render.yaml` | file: render.yaml
-- [x] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md
-- [x] Verify public reachable Staging API Render URL (`https://pansgpt-api-staging.onrender.com`) | docs: docs/environments-setup.md
+- [ ] Configure Render GitHub connection and automated continuous deployment to staging | docs: docs/environments-setup.md ? current deployment must be reverified
+- [ ] Verify public reachable Staging API Render URL (`https://pansgpt-api-staging.onrender.com`) | docs: docs/environments-setup.md ? current deployment must be reverified
 
 ### 3.4 Staging: Web (Vercel)
 
@@ -408,13 +440,13 @@ PR reviewed + CI green → merged to main
 - [x] Configure Next.js Vercel monorepo build | file: apps/web/vercel.json
 - [x] Configure Vercel GitHub connection for automated PR preview deployments | docs: docs/environments-setup.md
 - [x] Set Staging environment variables in Vercel Preview and Render dashboards | docs: docs/environments-setup.md
-- [x] Verify public reachable Vercel Preview URL (Next.js 16.3.4 build verified) | docs: docs/environments-setup.md
+- [ ] Verify public reachable Vercel Preview URL (Next.js 16.3.8 local build; hosted verification pending) | docs: docs/environments-setup.md ? current deployment must be reverified
 
 ### 3.5 Staging: Supabase
 
 > 📖 See implementation_plan.md § Environments Wired
 
-- [x] Wire and confirm Staging Supabase hosted database is reachable | verified live via pooler port 5432
+- [x] Confirm staging Supabase is reachable through pooler port 5432; CLI migrations and read-only catalog/data checks passed on 2026-10-20. Application deployment remains separate.
 
 ### 3.6 Production Provisioning
 
@@ -455,37 +487,37 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Database Foundation
 
-- [x] Create `universities` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `academic_terms` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `users` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `invitations` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `documents` table | file: supabase/migrations/20260906090002_core_schema.sql
+- [x] Create `universities` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `academic_terms` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `users` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `invitations` table | file: supabase/migrations/20260906090002_identity_and_tenancy.sql
+- [x] Create `documents` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
 - [x] Create `document_chunks` table (migrated to 1536d) | file: supabase/migrations/20261010030000_embedding_1536.sql <!-- [DIM 1536] -->
-- [x] Create `document_sections` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_notes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_highlights` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `study_progress` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quizzes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_questions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_attempts` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `quiz_generation_jobs` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_learn_progress` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_learn_pending_retests` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `ai_skills` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `chat_sessions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `chat_messages` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `ai_telemetry` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `timetables` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `student_tasks` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `course_knowledge` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `exam_restrictions` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `general_notes` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `system_settings` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `system_settings_history` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `audit_logs` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_pages` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_segments` table | file: supabase/migrations/20260906090002_core_schema.sql
-- [x] Create `document_elements` table | file: supabase/migrations/20260906090002_core_schema.sql
+- [x] Create `document_sections` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `document_notes` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `document_highlights` table | file: supabase/migrations/20260906090003_content_and_ingestion.sql
+- [x] Create `study_progress` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quizzes` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_questions` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_attempts` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `quiz_generation_jobs` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `document_learn_progress` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `document_learn_pending_retests` table | file: supabase/migrations/20260906090004_learning_and_quizzes.sql
+- [x] Create `ai_skills` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `chat_sessions` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `chat_messages` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `ai_telemetry` table | file: supabase/migrations/20260906090005_ai_and_chat.sql
+- [x] Create `timetables` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `student_tasks` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `course_knowledge` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `exam_restrictions` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `general_notes` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `system_settings` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `system_settings_history` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `audit_logs` table | file: supabase/migrations/20260906090006_academic_operations_and_notes.sql
+- [x] Create `document_pages` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
+- [x] Create `document_segments` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
+- [x] Create `document_elements` table | file: supabase/migrations/20260910100001_phase5_ingestion_3072d.sql
 - [x] Create `flashcards` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `subscriptions` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `user_credits` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
@@ -502,6 +534,11 @@ PR reviewed + CI green → merged to main
 - [x] Create `email_logs` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `email_suppressions` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create `user_email_preferences` table | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Create `background_jobs` table | file: supabase/migrations/20261020091000_durable_ingestion.sql
+- [x] Create `document_images` table | file: supabase/migrations/20261013233000_document_images.sql
+- [x] Create `invitation_redemptions` table | file: supabase/migrations/20261020095000_invitation_redemption.sql
+- [x] Create `storage_cleanup_jobs` table | file: supabase/migrations/20261020101000_retention_jobs.sql
+- [x] Create `web_search_usage` table | file: supabase/migrations/20260922000004_create_web_search_usage.sql
 
 ### 4.3 RLS Policies
 
@@ -509,7 +546,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Create `uni_select` policy on `universities`
 - [x] Create `users_select_self` policy on `users`
-- [x] Create `users_update_self` policy on `users`
+- [x] Revoke client profile mutations and remove `users_update_self`; privileged API writes own profile/role changes | file: supabase/migrations/20261020090000_authorization_boundaries.sql
 - [x] Create `documents_select_student` policy on `documents`
 - [x] Create `documents_admin_all` policy on `documents`
 - [x] Create `chunks_select` policy on `document_chunks`
@@ -545,7 +582,7 @@ PR reviewed + CI green → merged to main
 - [x] Create Admin write policies for `ai_skills` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create Admin write policies for `system_settings` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 - [x] Create Admin write policies for `academic_terms` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
-- [x] Create User registration INSERT policy on `users` | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Remove direct client user INSERT policy; Auth trigger/API own registration | file: supabase/migrations/20261020090000_authorization_boundaries.sql
 - [x] Create complete tenant-isolation and owner RLS policies across all 14 new Phase 4 tables | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 
 ### 4.4 Indexes
@@ -577,7 +614,7 @@ PR reviewed + CI green → merged to main
 - [x] Create `purge_soft_deleted_records()` function
 - [x] Create `prepare_document_reembed()` function
 - [x] Create `match_documents_hybrid()` function (3-pool dense + FTS + trigram with RRF k=60) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
-- [x] Create `deduct_user_credits()` function (Atomic balance verification & double-entry credit ledger logging) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
+- [x] Create `deduct_user_credits()` function (Atomic balance verification, idempotent debit journal, compensating refunds and reconciliation) | file: supabase/migrations/20260911010001_phase4_database_foundation_complete.sql
 
 ### 4.6 Triggers
 
@@ -593,7 +630,7 @@ PR reviewed + CI green → merged to main
 
 - [x] Seed initial university for University of Jos (UNIJOS) | file: supabase/seed.sql
 - [x] Seed default `system_settings` configuration | file: supabase/seed.sql
-- [x] Seed core AI skills (`dosage_calculator`, `drug_interaction_checker`, `chemical_drawer`) | file: supabase/seed.sql
+- [x] Preserve unsupported clinical skill registry rows as inactive in both migration and seed; allow only implemented backend handlers | files: supabase/seed.sql, supabase/migrations/20261020092000_skill_registry.sql
 - [x] Fix `supabase/seed.sql` with clean schema-aligned columns and ON CONFLICT handling | file: supabase/seed.sql
 - [x] Fix `course_knowledge` seed to match the actual schema | file: supabase/seed.sql
 - [x] Seed sample documents and institutions with multi-tenant isolation support | file: supabase/seed.sql
@@ -603,7 +640,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Database Foundation
 
 - [x] Create type generation script: `tooling/gen-types.sh`
-- [x] Regenerate `packages/types/src/supabase.ts` against actual migrations and live Staging DB across all 45 tables and RPCs | file: packages/types/src/supabase.ts
+- [x] Generate `packages/types/src/supabase.ts` from the disposable migrated database; compare 50 table contracts and 18 RPC declarations against both disposable and staging catalogs | file: packages/types/src/supabase.ts
 
 ---
 
@@ -679,10 +716,10 @@ PR reviewed + CI green → merged to main
 
 - [x] Implement Semantic Chunker | file: apps/api/app/engines/chunker.py
 - [x] Implement Atomic Chunk Invariant (Tables and diagrams are strictly atomic)
-- [x] Implement Recursive Text Splitting (512 max tokens with 64-token overlap)
+- [x] Implement Recursive Text Splitting (512 max tokens with 51-token overlap (approximately 10%))
 - [x] Implement Segment Bounding (preserve `page_start`, `page_end`, `segment_id`, `element_id`)
-- [x] Implement True LLM-driven topic shift detection and hierarchical sectioning (Stage 7)
-- [x] Explicitly populate `title_source = 'inherited'` when elements continue an existing segment
+- [x] Implement deterministic page-heading segmentation (Stage 7); LLM semantic topic-shift detection is deferred until a benchmark and privacy-eligible provider justify it
+- [x] Continue unheaded pages in the open segment; use explicit heading titles or a synthesized default, without inventing extra inherited segments
 
 ### 5.7 Embedding (Gemini 1536d) <!-- [DIM 1536] -->
 
@@ -848,11 +885,12 @@ PR reviewed + CI green → merged to main
 - [x] Refactor Google AI Studio calls to use native token streaming (`client.aio.models.generate_content_stream`) instead of simulated word-splitting
 - [x] Refactor OpenRouter to use true streaming instead of non-streaming `httpx.AsyncClient` post
 
-### 6B.2 Zero Data Retention (ZDR) Headers
+### 6B.2 Strict Provider Privacy Eligibility
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Pass Zero Data Retention headers/parameters to all upstream AI providers
+- [x] Apply the user-approved Google/Gemini retention exception; block all other providers without verified account/endpoint attestations and enforce OpenRouter ZDR routing parameters
+- [ ] Verify provider account settings and policies where ZDR is required; retain evidence and Google retention disclosure in `docs/provider-privacy.md` before certifying live integrations
 
 ### 6B.3 FTS Retrieval Pool (websearch_to_tsquery)
 
@@ -926,6 +964,8 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Advanced AI Engine
 
 - [x] Implement `vision_analyze` tool handler callable by the chat model
+- [x] 24 October: resolve owned `attachment_id` within authenticated account/university/conversation scope; analyse original pixels against the question at Send. No model-supplied URLs/storage keys or generic AI description at upload. Scoped cache, privacy-aware provider fallback, deadlines and visible failures are covered by offline API tests. A synthetic live diagram passed through Groq after Google timed out. [Contract and verification](chat-images-2026-10-24.md).
+- [ ] Hosted authenticated image upload → private R2 → question-aware answer → history/preview journey, including outage/cancellation and real student-device validation.
 
 ### 6B.15 Multi-Turn Agentic Tool Loop (max 5 turns)
 
@@ -964,13 +1004,17 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Implement Intent and Complexity Classifier to route queries
+- [x] Implement model-driven route-or-answer decisions with selected history, direct-answer reuse, eligible Groq/Google/OpenRouter fallback, and grounded handoffs. This replaces the regex classifier; backend scope/privacy/permissions remain authoritative. [Outage correction](semantic-routing-outages-2026-10-23.md): bounded retryable errors, provider cooldowns, no RAG on routing unavailability and separate retrieval deadlines. [23 October contracts and verification](semantic-routing-2026-10-23.md).
+- [x] Correct the reported live-information routing gap locally: semantic course/web evidence selection, dated public queries, general/biomedical scope, actual web citations and actionable unavailable states. Both reported phrasings passed real Groq routing without RAG; a public Tavily-to-answer probe passed. Public-only retention exception is user-approved and configured only in the ignored local environment, without claiming ZDR. [Implementation and verification](general-web-routing-2026-10-25.md).
+- [ ] Verify general/clinical web routing, quota/privacy/error recovery and disclosures on the matching hosted frontend/API; local success does not certify deployment or every possible semantic decision.
 
-### 6B.21 Fire-and-Forget: Credit Deduction
+### 6B.21 Atomic Chat Credit Reservation & Finalization
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Dispatch credit deduction via `BackgroundTasks`
+- [x] Reserve a chat credit atomically before streaming, settle the ledger after successful persistence and refund failed/cancelled runs. This supersedes fire-and-forget deduction after `done`, which could allow concurrent uncharged work. | file: `apps/api/app/routers/chat.py`
+
+Superseded proposal retained for traceability: “Dispatch credit deduction via `BackgroundTasks`.” The checked entry records the existing implemented lifecycle, not a newly introduced pricing decision.
 
 ### 6B.22 Fire-and-Forget: Session Title Generation
 
@@ -1046,8 +1090,8 @@ PR reviewed + CI green → merged to main
 - [x] Create `UserContext` structure with id, email, role, roles, university_id, client_type | file: apps/api/app/core/dependencies.py
 - [x] Subclass `dict` on `UserContext` for backward compatibility with `auth_user["role"]` | file: apps/api/app/core/dependencies.py
 - [x] Database lookup of user roles from `public.users` table in Postgres | file: apps/api/app/core/dependencies.py
-- [x] Cache resolved roles in Redis with 5-minute TTL (`ROLE_CACHE_TTL_SECONDS = 300`) | file: apps/api/app/core/dependencies.py
-- [x] In-memory role cache fallback when Redis is absent or offline | file: apps/api/app/core/dependencies.py
+- [x] Read roles and tenancy from Postgres on every authenticated request; Redis profile copies never grant authority | file: apps/api/app/core/dependencies.py
+- [x] Fail closed on authorization database outages; metadata and stale caches cannot substitute for authoritative roles | file: apps/api/app/core/dependencies.py
 - [x] Immediate rejection of deactivated users where `deleted_at IS NOT NULL` | file: apps/api/app/core/dependencies.py
 - [x] Default fallback to student role when no elevated role record exists | file: apps/api/app/core/dependencies.py
 - [x] Development environment bypass granting super_admin context when unauthenticated | file: apps/api/app/core/dependencies.py
@@ -1125,7 +1169,7 @@ PR reviewed + CI green → merged to main
 - [x] Integration test: `require_api_key` accepts valid client key and identifies client_type | file: apps/api/tests/test_auth.py
 - [x] Integration test: `require_api_key` rejects invalid/missing key with 401 Unauthorized | file: apps/api/tests/test_auth.py
 - [x] Integration test: Dev bypass returns super_admin context in development environment | file: apps/api/tests/test_auth.py
-- [x] Integration test: 5-minute role cache stores and retrieves profile without redundant DB hits | file: apps/api/tests/test_auth.py
+- [x] Regression tests: JWT expiry and required claims checked on every verification; role metadata cannot grant access | file: apps/api/tests/test_auth.py
 - [x] Full regression suite passes across all 63 backend tests | file: apps/api/tests/
 
 ---
@@ -1156,36 +1200,65 @@ PR reviewed + CI green → merged to main
 
 > Now apply real design on top of a proven working system. Design tokens are established **before** scaffolding any feature screens.
 
-### 9.1 Design Token Freeze (`packages/ui`)
+### 9.1 Existing Design Foundations (`packages/ui`)
 
-- [ ] **3-theme OKLCH color system**:
-  - Light — default academic clean
-  - OLED Dark — true black (AMOLED-safe, no dark grey compromise)
-  - Sepia Warm — low-fatigue long reading sessions
-- [ ] Typography scale (font sizes, line heights, weights) as CSS custom properties
-- [ ] Spacing scale (4px base unit)
-- [ ] All tokens consumed by Tailwind v4 via CSS variables
+The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checked items below cover the existing library contracts: all 117 Chromium checks and all seven CI jobs passed in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969). Tailwind mappings are generated and checked; application-level consumption remains integration work.
 
-### 9.2 Atomic Component Library (Web — `packages/ui`)
+- [x] Verify existing three-theme OKLCH foundations: Light, neutral charcoal Dark and Sepia (dark surfaces refined on 23 October 2026). | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
+- [x] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
+- [x] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
+- [x] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
 
-- [ ] `Button` — variants: primary, secondary, ghost, destructive; sizes: sm, md, lg
-- [ ] `Input`, `Textarea`, `Select` — with label, error state, helper text
-- [ ] `Modal` / `Dialog` — Radix Dialog, accessible, focus-trapped
-- [ ] `Card`, `Badge`, `<UserInitialsAvatar />`
-- [ ] `Toast` — Sonner wrapper
-- [ ] `Spinner` / `Skeleton` — loading states
-- [ ] `ErrorBoundary` — catches React render errors, shows friendly fallback, reports to Sentry
+23 October palette follow-up: neutral #111111 canvas, #181818 sidebar/cards/composer and #1F1F1F raised surfaces replace the tinted dark gray ramp. Chat's radial glow is removed; brand green remains an accent. [Visual and contrast verification](neutral-dark-theme-2026-10-23.md).
+
+### 9.2 Existing Atomic Component Library (Web - `packages/ui`)
+
+- [x] Verify `Button`: primary, secondary, tertiary and link variants; destructive option; sm/md/lg/xl sizes. The inherited minimal appearance is named `tertiary`; preserve that API. | file: `packages/ui/src/components/button.tsx`
+- [x] Verify `Input`, `Textarea`, `Select`: label, error state and helper text. | files: `packages/ui/src/components/field.tsx`, `packages/ui/src/components/select.tsx`
+- [x] Verify Radix `Dialog`: accessible keyboard behavior and focus containment/restoration. | file: `packages/ui/src/components/dialog.tsx`
+- [x] Verify existing `Badge`, `Tag` and `Avatar`, including caller-provided initials and failed-image fallback. | files: `packages/ui/src/components/badge.tsx`, `packages/ui/src/components/avatar.tsx`
+- [x] Verify existing `Spinner` and progress indicators. | file: `packages/ui/src/components/progress.tsx`
+- [x] Generic app `Card`, `CardContent` and `CardFooter`, composed with the existing `CardHeader`. | file: `packages/ui/src/components/card.tsx`
+- [x] Shared `<UserInitialsAvatar />` with stable web compatibility export, deterministic name/email initials and scoped styles. | files: `packages/ui/src/components/user-initials-avatar.tsx`, `apps/web/components/UserInitialsAvatar.tsx`
+- [x] `Toast`: theme-aware Sonner `Toaster`/`toast` wrapper, announcements, actions and automatic/manual dismissal. | file: `packages/ui/src/components/toast.tsx`
+- [x] `Skeleton`: decorative loading placeholders with reduced-motion support; caller owns loading announcements. | file: `packages/ui/src/components/skeleton.tsx`
+- [x] `ErrorBoundary`: friendly render-error fallback, keyboard retry and Sentry SDK capture; hosted delivery depends on app Sentry configuration. | file: `packages/ui/src/components/error-boundary.tsx`
+
+All five additions passed their browser contracts and a real web consumer compile contract. The complete suite passed **122 Chromium checks** and all seven CI jobs in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39525534478); see [usage and limits](design-system/app-primitives.md).
+
+Product integration remains gated by the staging journey. The library's theme provider persists locally; profile synchronization and an SSR theme bootstrap remain open.
+
+### Auth refinement before the app shell (user-authorized 21 October)
+
+The user authorized recovery completion, the existing auth-screen refresh and journey/theme verification. [Implementation and verification record](auth-refresh-2026-10-21.md). All eight CI jobs passed at `6e44e67` in [run 39556574232](https://github.com/PansGPT/pansgpt/actions/runs/39556574232); Phase 9.3 remains unstarted.
+
+- [x] Complete PKCE password recovery with `/update-password`, safe callback destinations and session-cookie preservation.
+- [x] Refresh the existing login, signup/confirmation, forgot-password, reset-password and onboarding screens using the shared design system.
+- [x] Pass all 11 disposable auth browser checks, including real email links, API onboarding/retries, password replacement, mobile/desktop and all three themes. Hosted/provider/native limits remain in the verification record.
+
+User follow-up: restore the original legacy welcome composition with local assets, a centered/lowered tracing logo on the green desktop artwork panel, a stronger bottom fade and a flat white form area. Mobile uses the legacy diagonal animation/typing copy on green and white sliding forms. Appearance controls are removed. Keep the four-step full-page onboarding flow. [Latest implementation and verification](auth-guided-onboarding-2026-10-21.md). All eight jobs and nine auth browser checks passed at `65a63f6` in [run 39571319509](https://github.com/PansGPT/pansgpt/actions/runs/39571319509). The user then authorized Phase 9.3 after the auth push.
 
 ### 9.3 Web App Shell
 
-- [ ] **Top segmented navigation**: `[Avatar] | [🏠 Home] | [📄 Documents] | [💬 Chat] | [🧠 Quiz] | [📝 Notes]`
-- [ ] Avatar → profile drawer (student name, university, level, credits)
-- [ ] Authenticated layout (`app/(app)/layout.tsx`)
-- [ ] Theme switcher: Light / Dark / Sepia — persisted to `localStorage` + Supabase profile `preferences` column
-- [ ] **Route loading states** — skeleton screens (no blank flash on navigation)
-- [ ] **Error pages** — friendly 404 + 500 with navigation back to safety
-- [ ] **Bottom Floating Action Bar**: `[🔍 Quick Search] | [✨ Ask AI] | [📝 New Note/Task]`
-- [ ] Framer Motion page transitions
+User-selected references and the latest sidebar/card corrections are recorded in [app shell direction](design-system/app-shell-direction-2026-10-21.md). Implementation and verification are tracked in [the Phase 9.3 record](phase-9-3-app-shell-2026-10-21.md). Use the existing palette and explicitly labelled sample content where data is absent. All eight CI jobs and ten disposable auth/shell browser checks passed at `d4f626f` in [run 39596053267](https://github.com/PansGPT/pansgpt/actions/runs/39596053267). The background-swap experiment was reverted to that verified application source. Hosted rollout remains pending.
+
+23 October mobile Home refinement: match the top-to-bottom composition of the user-selected `Dark-Mode PansGPT Dashboard.png`, using the shared charcoal/green palette and the smaller type scale requested in follow-up. Mobile-only wordmark/account header, compact tool shortcuts (including Learn), four detailed document Recents, dated activity timeline and pill composer. Desktop document thumbnails and the approved chat welcome remain separate. [Implementation and verification](mobile-home-reference-2026-10-23.md).
+
+- [x] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
+- [x] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
+- [x] Shared menu polish for the profile popup, aligned New chat on Home/Chat, removal of the floating assistant launcher, and collapsed toggle outside the sidebar beside the logo. [Local UI verification](search-and-sidebar-polish-2026-10-24.md); hosted rollout remains open.
+- [x] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.
+- [x] Light / Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` to `oled_dark` mapping and sync retry.
+- [x] Route loading skeletons and friendly 404/error recovery.
+- [x] Shared Home/chat draft composer, sidebar New chat and keyboard page search. The user removed the earlier floating logo shortcut on 24 October; sidebar New chat is the current entry point.
+- [x] Framer Motion route transitions respect reduced motion.
+- [x] Reference-shaped document card grid, Learn cards and Activities study-streak/agenda preview; labelled samples never persist or invoke inference.
+
+22 October shared-theme follow-up: promote the approved Home charcoal canvas to the shared dark-theme token for every page; remove its Home-only color override. Existing secondary card/sidebar surfaces, Light/Sepia and persisted `oled_dark` preference mapping remain compatible. See [verification](dashboard-refinement-2026-10-22.md).
+
+22 October follow-up: user-approved narrower Home layout, softer charcoal canvas, compact document cards, taller white/black Learn covers and shared schedule loading/error/empty states. Recent cards use private first-page thumbnails from the actual R2 PDFs; accounts without reading history show active library documents under “From your library”. The development indicator is disabled to avoid overlap with the chat shortcut. [Scope and verification](dashboard-refinement-2026-10-22.md); this does not close hosted or Phase 10 aggregate/offline/performance gates.
+
+Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user confirmed real covers appeared. Add account/university-scoped binary browser caching (24 hours, 24 entries, document-revision invalidation and logout cleanup). Final size is five desktop columns with 88px covers and no card avatars after the user rejected the larger version. Cache reuse, isolation, expiry and cleanup are verified; 446 offline API tests and 12 web unit tests passed, alongside the final production build. Full offline-reader support remains pending.
 
 ---
 
@@ -1196,19 +1269,19 @@ PR reviewed + CI green → merged to main
 
 ### 10.1 Layout & Navigation Shell
 
-- [ ] Implement app shell sidebar layout for web (collapsible)
-- [ ] Implement bottom tab navigation for mobile (5 tabs: Home, Library, Chat, Quiz, Profile)
-- [ ] Implement top bar with user avatar, initials badge, settings icon
-- [ ] Implement active route highlighting in navigation
-- [ ] Implement auth guard: redirect to /auth/login if no session
+- [x] Implement app shell sidebar layout for web (collapsible).
+- [x] Implement the user-approved responsive mobile navigation, including Learn and Home study-tool links; account access uses the profile menu. This supersedes the original fixed five-tab proposal.
+- [x] Implement the user-approved sidebar account/initials button with profile/settings/help/logout popup, superseding top-bar notification/profile icons.
+- [x] Implement active route highlighting in navigation.
+- [x] Implement auth/profile/onboarding guards; unauthenticated users go to `/login`.
 
 ### 10.2 Home Page Components
 
-- [ ] Implement greeting header with student name and university
-- [ ] Implement "Recent Documents" horizontal scroll carousel (last 5 opened)
-- [ ] Implement "Quick Chat" input bar routing to AI Chat
-- [ ] Implement "Today's Timetable" mini widget (next 3 class slots)
-- [ ] Implement "Pending Tasks" list (student_tasks table)
+- [x] Implement the approved greeting with student name; university/level details are available in the profile menu.
+- [x] Implement the approved five-column recent-document card grid with actual private PDF thumbnails, scoped browser caching and a labelled library fallback. This supersedes the original horizontal carousel.
+- [x] Implement the shared Home composer routing a memory-only draft into AI Chat.
+- [x] Implement the read-only timetable/task Activities widget with the next three entries, loading/error/retry states and visibly labelled sample previews when empty.
+- [x] Render pending `student_tasks` in the Activities task tab; task creation/completion remains Phase 15 work.
 - [ ] Implement "Continue Studying" card (last read document + page)
 - [ ] Implement AI usage summary mini widget (credits used today)
 
@@ -1217,7 +1290,8 @@ PR reviewed + CI green → merged to main
 - [ ] Server Component fetches: recent documents, timetable slots, pending tasks, study progress
 - [ ] Client Component fetches: credit balance (real-time via Supabase Realtime)
 - [ ] Implement Suspense boundaries with Skeleton placeholders for each widget
-- [ ] Implement error boundaries with retry actions
+- [x] Implement existing recent-document and schedule loading skeletons without certifying the planned server-component/Suspense aggregator above.
+- [x] Implement route error recovery plus recent-document/schedule error states with retry actions.
 
 ### 10.4 Offline Support
 
@@ -1280,13 +1354,29 @@ Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
 
 ## 💬 PHASE 11 — AI Chat Interface (Web)
 
+The user authorized a [reference-based visual refinement of the existing chat](chat-design-2026-10-21.md): centered greeting, pill composer, suggestion actions, Recent cards and New chat reset. All eight jobs and ten disposable auth/shell browser checks passed at `d6310f3` in [run 39686957184](https://github.com/PansGPT/pansgpt/actions/runs/39686957184). Reviewed desktop/mobile screenshots are linked in the record. This does not complete the full Phase 11 feature set below.
+
+22 October implementation: Phase 11 is in progress by user authorization while Phase 10 remains open. The first slice uses assistant-ui's external-store runtime over the existing authenticated FastAPI SSE/history contracts. Preserve the approved composition and shared themes. [Scope, contracts and verification](phase-11-assistant-ui-2026-10-22.md).
+
+Earlier 23 October interaction scope: [contracts and verification](phase-11-chat-interactions-2026-10-23.md). That slice preserved the then-approved welcome while adapting active conversations to assistant-ui; the later UI/session direction below is current. Staging migration applied through the CLI; real database/API rollback tests and local synthetic browser tests passed. Full Phase 11 and hosted release certification remain open.
+
+Latest 23 October follow-up: use a vertically centered desktop welcome with the original compact, fully rounded default input (the user reverted its enlargement); remove prompt-action chips and the four course-search/read-document/web-search/image-analysis welcome starters. Wrapped/multiline chat text sits above a stable bottom toolbar. Keep original inline branch switches by the user's later direction. Chat headers show the conversation name/dropdown and Share; title/sidebar menus persist pin/rename/archive/restore/soft-delete. Share currently copies/downloads the selected branch, without public publishing. The later public-progress boundary, smaller greeting and popup styling are recorded in [chat polish](chat-progress-and-controls-2026-10-23.md). Mobile Learn remains. [Current contracts and verification](chat-session-controls-2026-10-23.md).
+
+23 October artifact-delivery follow-up: generated files download through the owner-authorized `/api/v1/library/artifacts/download` route with visible failure/retry states. A download card is emitted only after storage succeeds, including local development. Presentation/document generation ends with a brief confirmation rather than repeating file content in chat; tool status is consolidated into Steps. [Delivery contract and verification](artifact-delivery-2026-10-23.md). Phase 11 remains in progress.
+
+25 October presentation workspace: new decks open beside chat on desktop; cards reopen actual-file previews, with a full-screen mobile dialog, slide thumbnails, navigation, fit/zoom, speaker notes, sources and authenticated download. Private bounded PPTX parsing supplies typed vector/text previews from R2, with explicit unsupported-media/error states. A styled 16:9 generator adds one cover and enforces requested total counts, including explicit document-context requests. Public stages describe progress; the authoring model writes a natural, deck-specific completion without a prescribed opener, and backend retrieval/tool results supply reference labels and safe links. [Contracts and local/live-synthetic verification](presentation-workspace-2026-10-25.md). Editing and hosted rollout remain separate gates.
+
 ### 11.1 `@assistant-ui/react` Components
 
-- [ ] `<Thread />` — full conversation container with auto-scroll + virtualization
-- [ ] `<Message />` — markdown + LaTeX rendering, thinking blocks, tool call indicators
-- [ ] `<Composer />` — multi-line input, auto-resize, file/image attachment, voice input hook
-- [ ] `<BranchPicker />` — `← 1/2 →` branch navigation for regenerations + edits
-- [ ] `<ActionBar />` — copy, thumbs up/down, regenerate, edit
+24 October sizing follow-up: opened images fit up to 1200px wide within the viewport and lazily request an owner-authorized 1536px preview; list thumbnails remain 96px and use the 384px API variant. Message actions use 13px icons and compact 28px desktop / 32px mobile buttons. [Current image contract](chat-images-2026-10-24.md).
+
+24 October image/attachment follow-up: assistant-ui attachment primitives and adapted element styling provide local composer thumbnails, file cards, removable pending files and authenticated saved-image previews. The latest reference correction places 96px sent image tiles above/outside the right-aligned text bubble, hides image filenames, and opens an image-only viewer over a dim black backdrop with accessible closing/focus handling. Message actions use compact ghost buttons/tooltips in the existing palette; the approved input geometry and inline branch switches remain. [Contracts and verification](chat-images-2026-10-24.md). Full Phase 11 certification remains open.
+
+- [x] `<Thread />` - native viewport/scrolling; TanStack dynamic virtualization above 80 visible messages, verified with 240 synthetic turns.
+- [x] `<Message />` - Markdown/GFM/math, reasoning, tool status, citations and artifacts; server-owned state. Response errors appear beside the failed turn rather than above the composer. [Inline error verification](inline-chat-errors-2026-10-23.md).
+- [x] `<Composer />` - multiline input, send/cancel, memory-only drafts, authenticated private file attachments and backend voice transcription. Shared input styling uses fully pill-shaped default corners; the original compact input geometry is restored, and multiline text moves above a stable toolbar. Send requires non-whitespace text; attachments need a question/caption. During generation the primary Send slot becomes Stop; microphone recording stays separate.
+- [x] `<BranchPicker />` - persisted owner-authorized navigation across regenerated answers and edited questions; selected path survives reload.
+- [x] `<ActionBar />` - copy, server-owned edits/regeneration, durable feedback with failure/retry handling. These checks certify local integration contracts, not hosted AI inference.
 
 ### 11.2 Generative UI for Skills & Pharmacy Drawers
 
@@ -1305,12 +1395,34 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 
 ### 11.3 Voice Input, Sharing & Session Management
 
-- [ ] Voice input: Web Speech API → text fills Composer input (graceful degradation on unsupported browsers)
+- [x] Voice input: MediaRecorder -> authenticated FastAPI `/api/v1/ai/chat/transcribe` -> composer text. Maximum 60 seconds/10 MB in browser; no automatic send. Explicit permission, cancellation and unsupported-browser errors. Replaces browser Web Speech recognition to keep inference on the backend; real microphone/mobile-device verification remains open.
 - [ ] **AI Response Style & Tone Selector**: Header/composer dropdown enabling students to toggle AI pedagogical tone (_Concise_, _Exam-focused_, _Explain Like I'm 5_, _In-depth Academic_) which injects corresponding system modifiers
 - [ ] **Chat Session Sharing (`/share/[sessionId]`)**: Generate read-only public links allowing students to share AI study chats and clinical explanations with classmates
-- [ ] Session management: create, rename (AI auto-suggests 3–5 word title after first response), search, soft-delete
-- [ ] Full-text search across chat history (PostgreSQL `tsvector`)
-- [ ] Credit deduction hook: `deduct_user_credits` stored procedure called after `event: done`
+- [x] Owner-authorized create/rename/pin/archive/restore/soft-delete session APIs and title/sidebar menus; active-run guard, strict validation, staging CLI migration and rollback/API/browser verification. Hosted rollout remains open.
+- [x] Share selected conversation branch as a reviewable text/Markdown copy; no hidden branches, reasoning or private file URLs. Public-link sharing remains unchecked above.
+- [ ] Deployed frontend/backend session-management journey with real auth and required CI gates, including disposable replay of migration 33.
+- [x] Semantic 2–6 word titles after successful exchanges: greeting/social names are provisional (`pending`) and later study topics can replace them; substantive names become `generated` and manual names stay protected. Privacy-gated background generation and bounded header/sidebar refresh remain. The 25 October user-approved change supersedes leaving greetings as New chat. [Current title/progress contract](chat-titles-and-progress-2026-10-25.md); [original staging race checks](conversation-management-2026-10-24.md).
+- [x] Owner/university-scoped full-text title and selected-message search with snippets, pagination, optional archived results and matched-message navigation. Search reads server history rather than only loaded sidebar rows. PostgreSQL indexes and staging API checks verified; hosted authenticated browser rollout remains open.
+- [x] Reference-inspired search popup: recent chats before typing; compact title/snippet/date results with readable Markdown-free previews, Clear and functional All/Chats scopes using existing semantic colors. Heroicons' archive box with an inner arrow distinguishes Archive from Download and Delete. [UI refinement and verification](search-and-sidebar-polish-2026-10-24.md).
+- [x] Separate Pinned/Recent groups; pin/rename do not change activity order. Centred rename/delete dialogs, archive/delete Undo, and Deleted chats restore within the existing 30-day retention window. Versioned migrations 34–35 applied to staging via CLI; generated artifact cleanup respects remaining chat references. [Scope, evidence and limits](conversation-management-2026-10-24.md).
+- [x] Chat credit lifecycle: atomically reserve via `deduct_user_credits` before work, settle successful persisted turns and refund unsuccessful runs before releasing the run lease. The original after-`done` deduction proposal is superseded; hosted real-credit verification remains open.
+
+### 11.4 Attachments, Artifacts & Presentation Workspace
+
+The completed boxes below record tested implementation scope, not full Phase 11 or hosted release certification. See [images](chat-images-2026-10-24.md), [artifact delivery](artifact-delivery-2026-10-23.md) and [presentation verification](presentation-workspace-2026-10-25.md).
+
+- [x] Private image/file upload, assistant-ui composer attachments, saved image previews and backend image-pixel analysis scoped to the authenticated owner/university/conversation.
+- [x] Sent images outside the text bubble, image-only overlay viewer, responsive enlargement and compact message actions.
+- [x] Authenticated generated-file downloads with storage-before-card delivery, useful error/retry handling and cancellation cleanup.
+- [x] Read-only previews parsed from the actual owned PPTX, using isolated bounded ZIP/XML processing and typed allowlisted slide geometry/text.
+- [x] Desktop chat/preview workspace and mobile full-screen viewer with actual slide thumbnails, keyboard navigation, fit/zoom, speaker notes, sources and download.
+- [x] Consistent 16:9 presentation templates, one automatic cover, exact requested totals and duplicate-cover/text-fit validation. PansGPT header/footer branding is fixed in this template.
+- [x] Natural completion prose written by the authoring model for the actual deck, without a prescribed success opener, repeated slide contents or an extra inference request.
+- [x] Backend retrieval/search reference titles and safe links in deck notes, preview Sources and completion; deduplication and explicit absence when no references were attached.
+- [x] Public planning/design/readiness stages; discard private provider reasoning and keep tool status inside Steps.
+- [ ] Verify these journeys against matching deployed frontend/API/workers with real authentication and eligible hosted providers; complete required CI gates.
+
+25 October checkpoint: the latest completion refinement passed 604 offline API tests, API lint/format and both focused presentation browser journeys. The preceding workspace passed all 10 chat browser journeys, 25 web unit checks, six workspace type checks and a production build. CI results for the commit being prepared are separate evidence. Tone controls, public-link sharing, the remaining skill/pharmacy drawers, PDF Reader, Learn Mode and hosted/native gates remain open.
 
 ---
 
@@ -1351,6 +1463,16 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 
 > ⚠️ **Scope Clarification (Option A)**: Phase 13 builds **BOTH the Backend Quiz Generation Engine & ARQ Workers (`apps/api/app/routers/quiz.py`, `apps/api/app/engines/quiz.py`) AND the Frontend Quiz Interface**.
 
+> **22 October development amendment:** Frontend coding may start against agreed shared DTOs and explicit synthetic fixtures while the backend is implemented. The legacy quiz flow is a reference, not a compatible API. Phase 13 remains Pending; [the handoff](legacy-reuse-and-parallel-development-2026-10-22.md) records the outstanding contract and security work.
+
+### 13.0 Contracts & Legacy Adaptation
+
+- [ ] Agree shared request/response DTOs, job and SSE states, timing units, scoring rules and acceptance criteria before frontend/backend implementation diverges
+- [ ] Reconcile Section 11's five planned formats with existing database constraints using forward CLI migrations; distinguish multi-select from per-option True/False negative marking
+- [ ] Define taking DTOs without answer keys/explanations, authorized result DTOs, submission retry semantics and opt-in minimal public sharing
+- [ ] Restrict database access so clients cannot read unreleased answer keys or write authoritative questions, grades and job state; verify grants/RLS and cross-user/tenant access in real database tests
+- [ ] Build an explicit frontend fixture adapter covering success, empty, loading, partial generation, failure, cancellation, privacy hold and expired session states
+
 ### 13.1 Backend Quiz Engine & Generation Pipeline (`apps/api/app/routers/quiz.py`)
 
 - [ ] Async background quiz generation ARQ worker (`generate_quiz_task`)
@@ -1365,11 +1487,11 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 ### 13.2 Frontend Quiz System Interface (`apps/web/app/app/quiz/`)
 
 - [ ] Quiz builder modal: select topics, difficulty, count, time limit, question formats
-- [ ] Enqueue `generate_quiz` ARQ job → return `quiz_generation_job_id`
+- [ ] Submit the agreed job request to FastAPI; the backend durably enqueues generation and returns the agreed typed job response
 - [ ] Client polls `GET /api/quiz/jobs/{id}` or subscribes to Supabase Realtime for progress
-- [ ] Questions parsed from tagged XML blocks: `<question>QUESTION: ... TYPE: ... A: ... ANSWER: ... EXPLANATION: ...</question>` — deterministic regex parse, no JSON fragility
-- [ ] Validated with Pydantic `QuizQuestionModel`
-- [ ] Question formats: MCQ, True/False, Multi-Select, Fill-in-blank, Negative marking
+- [ ] Consume typed, sanitized question DTOs; tagged-block parsing and Pydantic question validation run in the backend
+- [ ] Validate API responses at the frontend boundary against the agreed DTOs
+- [ ] Render Section 11 formats: Objective, Multi-Select, per-option True/False with negative marking, single True/False and Short Answer; existing fill-blank/clinical schema values require explicit scope reconciliation before adding UI
 - [ ] Timed interface: countdown timer, question navigator, flag-for-review
 - [ ] Auto-submit on timer expiry
 - [ ] Results: score, per-question breakdown, explanations for wrong answers
@@ -1471,7 +1593,7 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 - [ ] Profile editor: first_name, last_name, current_level, university_id
 - [ ] `<UserInitialsAvatar />` — first initial from `first_name`, deterministic color
 - [ ] AI response style preference: `concise | balanced | detailed` → stored in user preferences
-- [ ] Theme selector: Light / OLED Dark / Sepia Warm
+- [ ] Theme selector: Light / Dark / Sepia Warm
 - [ ] Active session list + individual session revocation
 - [ ] Password change (via Supabase `updateUser`)
 - [ ] Account deletion: 30-day soft delete → GDPR purge cron
@@ -1623,13 +1745,15 @@ _(Full architecture documented in `credits_pricing_architecture.md` — pricing 
 
 ## 🌐 PHASE 23 — Public Pages + SEO
 
+25 October: the user approved the branded coming-soon holding page with existing Log in / Sign up destinations. Verified sessions now redirect from `/` to `/app`; anonymous visitors keep the public page. All 28 web Node tests, web typecheck and affected-file lint passed. This does not complete the full marketing landing page below; hosted auth verification remains open. [Scope and verification limits](public-coming-soon-2026-10-25.md).
+
 - [ ] Landing page: hero, features, social proof, CTA
 - [ ] Pricing page: credit packages, plan comparison (updated once Section 5 is finalized)
 - [ ] About, University Partnerships pages
 - [ ] Blog / Changelog (MDX-powered)
 - [ ] Legal: Privacy Policy, Terms of Service
 - [ ] Download page: PWA install, Electron download, iOS App Store, Google Play
-- [ ] Next.js 15 Metadata API: `title`, `description`, `canonical`, `robots` on every public page
+- [ ] Next.js 16.3.8 Metadata API: `title`, `description`, `canonical`, `robots` on every public page
 - [ ] Dynamic Open Graph images via `@vercel/og` for blog posts + quiz share cards
 - [ ] JSON-LD structured data: `SoftwareApplication`, `EducationalOrganization`, `Article`
 - [ ] Auto-generated `sitemap.ts` (all public pages + blog posts)
@@ -1822,7 +1946,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Layer             | Technology                                                   |
 | ----------------- | ------------------------------------------------------------ |
 | Monorepo          | Turborepo + pnpm workspaces                                  |
-| Web Framework     | Next.js 15, App Router, React 19, TypeScript strict          |
+| Web Framework     | Next.js 16.3.8, App Router, React 19, TypeScript strict      |
 | Web Styling       | Tailwind CSS v4, OKLCH tokens, Framer Motion                 |
 | Web PDF           | `pdfjs-dist` + TanStack Virtual                              |
 | Web Chat UI       | `@assistant-ui/react`                                        |
@@ -1858,7 +1982,7 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Error Tracking    | Sentry (all 4 apps — separate DSNs)                          |
 | Analytics         | PostHog (web + mobile, feature flags, session replay)        |
 | Uptime            | Better Uptime                                                |
-| Payments          | Paystack + Flutterwave (double-entry credit ledger)          |
+| Payments          | Paystack + Flutterwave (credit debit/refund journal)         |
 | Testing (Backend) | pytest + HTTPX                                               |
 | Testing (Web)     | Vitest + React Testing Library + Playwright E2E              |
 | Testing (Mobile)  | Jest + React Native Testing Library + Maestro E2E            |

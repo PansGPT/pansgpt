@@ -1,5 +1,9 @@
 # Design-system verification
 
+## Verification follow-up - 2026-10-21
+
+The cold development-server feed timeout was reproduced. Both unchanged feed tests passed against a fresh compiled preview; the normal test command now builds that preview first. Complete-suite and CI status are recorded in [the follow-up](verification-2026-10-21.md). The October 11 results below are historical evidence.
+
 ## Current core handoff - 2026-10-11
 
 The requested deliverable is now reusable basic components. Exhaustive Figma compositions are deferred; the full-source coverage ledger retains its historical partial statuses.

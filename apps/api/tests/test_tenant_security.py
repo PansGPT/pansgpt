@@ -276,7 +276,7 @@ async def test_rag_rejects_foreign_document_before_embedding(  # [TENANT FIX]
 
 @pytest.mark.parametrize("document_specific", [False, True])  # [TENANT FIX]
 @pytest.mark.asyncio  # [TENANT FIX]
-async def test_rag_legacy_fallback_keeps_university_scope(  # [TENANT FIX]
+async def test_rag_keyword_fallback_keeps_university_scope(  # [TENANT FIX]
     tenant_state: TenantTestState,  # [TENANT FIX]
     monkeypatch: pytest.MonkeyPatch,  # [TENANT FIX]
     document_specific: bool,  # [TENANT FIX]
@@ -322,14 +322,12 @@ async def test_rag_legacy_fallback_keeps_university_scope(  # [TENANT FIX]
     )  # [TENANT FIX]
     assert context is None  # [TENANT FIX]
     assert citations == []  # [TENANT FIX]
-    name = (  # [TENANT FIX]
-        "match_document_chunks" if document_specific else "match_documents_global"  # [TENANT FIX]
-    )  # [TENANT FIX]
-    sql, args = next((sql, args) for sql, args in calls if name in sql)  # [TENANT FIX]
-    assert "d.university_id = $5" in sql  # [TENANT FIX]
+    sql, args = next((sql, args) for sql, args in calls if "WITH eligible" in sql)
+    assert "d.university_id = $1" in sql
     assert "d.status = 'active'" in sql  # [TENANT FIX]
     assert "d.deleted_at IS NULL" in sql  # [TENANT FIX]
-    assert args[-1] == uuid.UUID(UNI_A)  # [TENANT FIX]
+    assert args[0] == uuid.UUID(UNI_A)
+    assert "target_levels" in sql
 
 
 @pytest.mark.asyncio  # [TENANT FIX]

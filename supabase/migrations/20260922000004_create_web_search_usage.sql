@@ -12,6 +12,7 @@ create table if not exists public.web_search_usage (
     updated_at timestamptz not null default now(),
     primary key (user_id, date)
 );
+ALTER TABLE public.web_search_usage ENABLE ROW LEVEL SECURITY;
 
 create index if not exists idx_web_search_usage_user_date on public.web_search_usage (user_id, date);
 

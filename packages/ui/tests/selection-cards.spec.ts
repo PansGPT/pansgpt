@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { radioLayouts } from "../preview/radio-layout-data";
 
 test("all 192 selectable cards and 24 groups retain source frames and native SVG geometry", async ({
   page,
 }) => {
-  await page.goto("/?section=radios");
+  await openPreview(page, "/?section=radios");
   await expect(page.locator("[data-radio-source-id]")).toHaveCount(216);
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -58,7 +59,7 @@ test("all 192 selectable cards and 24 groups retain source frames and native SVG
 test("selection cards support keyboard choice, independent actions and native form values", async ({
   page,
 }) => {
-  await page.goto("/?section=radios");
+  await openPreview(page, "/?section=radios");
   const form = page.getByRole("form", { name: "Interactive selection cards" });
   await form.getByRole("radio", { name: "First payment method" }).focus();
   await page.keyboard.press("ArrowDown");

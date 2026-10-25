@@ -1,13 +1,14 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { focusByKeyboard, openPreview } from "./open-preview";
 type Layer = [string, number, number, number, number];
 type Source = { name: string; width: number; height: number; layers: Layer[] };
 const geometry = JSON.parse(
   readFileSync(resolve(__dirname, "../design/avatar-pattern-geometry.json"), "utf8")
 ) as { variants: Source[] }[];
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=avatars");
+  await openPreview(page, "/?section=avatars");
   await expect(page.getByRole("heading", { name: "Avatar groups and labels" })).toBeVisible();
   await page.evaluate(() => document.fonts.ready);
 });
@@ -18,6 +19,13 @@ test("three avatar stacks, twelve add-button states and sixteen label groups mat
   await expect(page.locator(".avatar-add-fixture")).toHaveCount(12);
   await expect(page.locator(".avatar-label-fixture")).toHaveCount(16);
   await page.evaluate(async (geometry) => {
+    await Promise.all(
+      Array.from(
+        document.querySelectorAll<HTMLImageElement>(
+          ".avatar-group-fixture img,.avatar-add-fixture img,.avatar-label-fixture img"
+        )
+      ).map((image) => image.decode())
+    );
     const near = (a: number, b: number, name: string): void => {
       if (Math.abs(a - b) > 0.5) throw new Error(`${name}: ${a} instead of ${b}`);
     };
@@ -80,7 +88,6 @@ test("three avatar stacks, twelve add-button states and sixteen label groups mat
     for (const image of document.querySelectorAll<HTMLImageElement>(
       ".avatar-group-fixture img,.avatar-add-fixture img,.avatar-label-fixture img"
     )) {
-      await image.decode();
       if (!image.src.startsWith(location.origin) || image.naturalWidth === 0)
         throw new Error("Missing local artwork");
       if (image.src.endsWith(".svg")) {
@@ -108,8 +115,7 @@ test("avatar group add/more controls work by keyboard, preserve counts and offer
   const demo = page.getByRole("group", { name: "Interactive avatar group" });
   const group = demo.getByRole("group", { name: "Study group members" });
   const add = group.getByRole("button", { name: "Add user" });
-  await add.scrollIntoViewIfNeeded();
-  await add.focus();
+  await focusByKeyboard(add);
   await expect(page.locator(".p-avatar-add-tooltip:visible")).toContainText("Add user");
   await page.keyboard.press("Escape");
   await page.keyboard.press("Enter");

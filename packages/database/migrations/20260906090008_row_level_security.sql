@@ -6,7 +6,7 @@
 -- 1. Helper function to inspect current user's roles
 CREATE OR REPLACE FUNCTION public.current_user_has_role(required_role user_role)
 RETURNS boolean
-LANGUAGE sql STABLE
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.users
@@ -19,12 +19,13 @@ $$;
 -- 2. Helper function to inspect current user's university_id
 CREATE OR REPLACE FUNCTION public.current_user_university_id()
 RETURNS uuid
-LANGUAGE sql STABLE
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public
 AS $$
   SELECT university_id FROM public.users
   WHERE id = auth.uid()
     AND deleted_at IS NULL;
 $$;
+
 
 -- 3. Enable RLS on all 27 tables
 ALTER TABLE public.universities ENABLE ROW LEVEL SECURITY;

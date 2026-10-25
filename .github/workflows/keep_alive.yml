@@ -1,19 +1,17 @@
-﻿name: Render Keep-Alive Cron
-
+name: API and Web Availability
 on:
   schedule:
-    # Ping every 10 minutes to prevent Render free-tier spinning down
     - cron: "*/10 * * * *"
   workflow_dispatch:
-
 jobs:
-  ping-health:
-    name: Ping API Ready Endpoint
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Staging API Health
+      - name: Probe configured staging endpoints
+        env:
+          API_HEALTH_URL: ${{ vars.STAGING_API_HEALTH_URL }}
+          WEB_URL: ${{ vars.STAGING_WEB_URL }}
         run: |
-          HEALTH_URL="https://api.staging.pansgpt.com/health/ready"
-          echo "Pinging ${HEALTH_URL}..."
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${HEALTH_URL}" || echo "000")
-          echo "Status: ${STATUS}"
+          test -n "$API_HEALTH_URL" && test -n "$WEB_URL"
+          curl --fail --silent --show-error --max-time 90 --retry 2 "$API_HEALTH_URL"
+          curl --fail --silent --show-error --max-time 90 --retry 2 "$WEB_URL" > /dev/null

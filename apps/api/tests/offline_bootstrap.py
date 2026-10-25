@@ -27,6 +27,7 @@ SERVICE_ENV: dict[str, str] = {
     "R2_PUBLIC_DOMAIN": "",
     "COHERE_API_KEY": "",
     "TAVILY_API_KEY": "",
+    "TAVILY_PUBLIC_SEARCH_ALLOWED": "false",
     "RESEND_API_KEY": "",
     "PAYSTACK_SECRET_KEY": "",
     "PAYSTACK_WEBHOOK_SECRET": "",

@@ -1,11 +1,12 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { emptyStateSources } from "../preview/empty-state-source-data";
 
 test("all twelve empty-state layouts match source content, text, graphic and action bounds", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1800, height: 1200 });
-  await page.goto("/?section=empty");
+  await openPreview(page, "/?section=empty");
   await expect(page.locator(".empty-state-source-grid [data-source-id]")).toHaveCount(12);
   await page.evaluate(async (sources) => {
     const near = (actual: number, expected: number, message: string): void => {
@@ -60,7 +61,7 @@ test("all twelve empty-state layouts match source content, text, graphic and act
 test("empty-state actions support keyboard, disabled actions, optional graphics and responsive themes", async ({
   page,
 }) => {
-  await page.goto("/?section=empty");
+  await openPreview(page, "/?section=empty");
   const first = page.locator(".empty-state-source-grid .p-empty-state").first();
   await first.getByRole("button", { name: "Clear search" }).focus();
   await page.keyboard.press("Enter");

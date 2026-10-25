@@ -161,7 +161,7 @@ def _extract_telemetry(response: Any) -> tuple[str, str | None, int, int, int]: 
 class ImageClassifier:  # [VISION FIX]
     """Classifies embedded images and scanned page canvases into downstream pipelines."""  # [VISION FIX]
 
-    def __init__(self):  # [VISION FIX]
+    def __init__(self) -> None:  # [VISION FIX]
         self._api_key = settings.GEMINI_API_KEY  # [VISION FIX]
 
     async def classify_and_process(  # [VISION FIX]
@@ -185,6 +185,7 @@ class ImageClassifier:  # [VISION FIX]
         from google import genai  # [VISION FIX]
         from google.genai import types  # [VISION FIX]
 
+        settings.require_provider_privacy("google")
         client = genai.Client(api_key=api_key)  # [VISION FIX]
         prompt = (  # [VISION FIX]
             "/nothink\n"  # [VISION FIX]

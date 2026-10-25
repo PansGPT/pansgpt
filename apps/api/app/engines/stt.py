@@ -2,8 +2,8 @@
 # PansGPT 2.0 Audio Transcription Engine (Phase 6 / Roadmap 6B.23)
 # Multi-tier Speech-to-Text: Groq Whisper Turbo -> Groq Whisper Large -> OpenAI -> Mock
 # ==============================================================================
-
 import time
+from typing import Any
 
 import httpx
 import structlog
@@ -40,7 +40,7 @@ class AudioTranscriptionEngine:
     with automatic multi-tier failover, domain vocabulary biasing, and hallucination scrubbing.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._groq_client = None
         self._http_client: httpx.AsyncClient | None = None
 
@@ -51,7 +51,7 @@ class AudioTranscriptionEngine:
         lower = key.lower()
         return not any(p in lower for p in ("placeholder", "dummy", "test", "your-", "mock"))
 
-    def _get_groq_client(self):
+    def _get_groq_client(self) -> Any:
         """Lazy-initializes and caches the AsyncGroq client singleton."""
         if self._groq_client is None and self._is_live_key(settings.GROQ_API_KEY):
             try:
@@ -102,7 +102,7 @@ class AudioTranscriptionEngine:
         started = time.perf_counter()
         file_tuple = (filename, audio_bytes, mime_type)
 
-        groq_client = self._get_groq_client()
+        groq_client = self._get_groq_client() if settings.GROQ_ZDR_CONFIRMED else None
 
         # --------------------------------------------------------------------------
         # Tier 1: Groq whisper-large-v3-turbo (~200ms - 400ms)
@@ -176,7 +176,7 @@ class AudioTranscriptionEngine:
         # --------------------------------------------------------------------------
         # Tier 3: OpenAI whisper-1 Safety Net
         # --------------------------------------------------------------------------
-        if self._is_live_key(settings.OPENAI_API_KEY):
+        if settings.OPENAI_ZDR_CONFIRMED and self._is_live_key(settings.OPENAI_API_KEY):
             try:
                 client = self._get_http_client()
                 response = await client.post(
@@ -217,6 +217,8 @@ class AudioTranscriptionEngine:
         # --------------------------------------------------------------------------
         # Tier 4: Deterministic Mock / CI Fallback
         # --------------------------------------------------------------------------
+        if settings.ENVIRONMENT != "development" or not settings.EMBEDDER_FAKE_MODE:
+            raise RuntimeError("No privacy-eligible transcription provider is available")
         latency_ms = (time.perf_counter() - started) * 1000
         mock_transcript = "What is the mechanism of action of beta-lactam antibiotics in bacterial cell wall synthesis?"
         clean_text, is_silent = self.sanitize_transcript(mock_transcript)

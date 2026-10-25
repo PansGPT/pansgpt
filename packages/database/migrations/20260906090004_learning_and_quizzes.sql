@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.study_progress (
   updated_at      timestamptz NOT NULL DEFAULT now(),
   UNIQUE (user_id, document_id)
 );
+ALTER TABLE public.study_progress ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_study_progress_user ON public.study_progress(user_id, updated_at DESC);
 
@@ -33,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.quizzes (
   created_at      timestamptz NOT NULL DEFAULT now(),
   updated_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.quizzes ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_quizzes_user ON public.quizzes(user_id, created_at DESC);
 
@@ -52,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.quiz_questions (
   explanation     text,
   points          integer NOT NULL DEFAULT 1
 );
+ALTER TABLE public.quiz_questions ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_quiz_questions_quiz ON public.quiz_questions(quiz_id, question_order);
 
@@ -67,6 +70,7 @@ CREATE TABLE IF NOT EXISTS public.quiz_attempts (
   answers         jsonb NOT NULL, -- Maps question_id -> { selected_answer, is_correct, explanation }
   completed_at    timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.quiz_attempts ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_quiz_attempts_user ON public.quiz_attempts(user_id, completed_at DESC);
 
@@ -85,6 +89,7 @@ CREATE TABLE IF NOT EXISTS public.quiz_generation_jobs (
   updated_at      timestamptz NOT NULL DEFAULT now(),
   completed_at    timestamptz
 );
+ALTER TABLE public.quiz_generation_jobs ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_quiz_jobs_user ON public.quiz_generation_jobs(user_id, status);
 
@@ -103,6 +108,7 @@ CREATE TABLE IF NOT EXISTS public.document_learn_progress (
   updated_at      timestamptz NOT NULL DEFAULT now(),
   UNIQUE (user_id, document_id, section_index)
 );
+ALTER TABLE public.document_learn_progress ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_learn_progress_user ON public.document_learn_progress(user_id, document_id);
 
@@ -119,5 +125,6 @@ CREATE TABLE IF NOT EXISTS public.document_learn_pending_retests (
   created_at            timestamptz NOT NULL DEFAULT now(),
   resolved_at           timestamptz
 );
+ALTER TABLE public.document_learn_pending_retests ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_learn_retests_queue ON public.document_learn_pending_retests(user_id, document_id, target_section_index) WHERE resolved IS FALSE;

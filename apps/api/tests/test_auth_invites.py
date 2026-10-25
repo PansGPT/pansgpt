@@ -13,6 +13,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from app.core.config import settings
 from app.core.rate_limit import limiter
 
+pytestmark = pytest.mark.usefixtures("authoritative_auth_store")
+
 
 @pytest.fixture(scope="session")
 def rsa_key_pair():
@@ -22,7 +24,7 @@ def rsa_key_pair():
 
 
 @pytest.fixture
-def mock_jwks(monkeypatch, rsa_key_pair):
+def mock_jwks(monkeypatch, rsa_key_pair, authoritative_auth_store):
     """Mocks PyJWKClient to return the matching public key for cryptographic verification."""
     _, public_key = rsa_key_pair
 
@@ -59,7 +61,11 @@ def make_token(
     now = int(time.time())
     user_id = sub or str(uuid.uuid4())
     user_email = email or f"{role}_{user_id[:8]}@unijos.edu.ng"
+    from tests.auth_support import register_profile
+
+    register_profile(user_id, roles or [role], university_id)
     payload = {
+        "iss": f"{settings.SUPABASE_URL}/auth/v1",
         "sub": user_id,
         "email": user_email,
         "aud": "authenticated",

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Layer = {
   name: string;
   x: number;
@@ -14,7 +15,7 @@ const sources = JSON.parse(
   readFileSync(resolve(__dirname, "../design/app-store-geometry.json"), "utf8")
 ) as Source[];
 test("all twenty app-store badges preserve source frames and native artwork", async ({ page }) => {
-  await page.goto("/?section=close");
+  await openPreview(page, "/?section=close");
   await expect(page.locator(".app-store-fixture")).toHaveCount(20);
   await page.evaluate(async (sources) => {
     const stores: Record<string, string> = {

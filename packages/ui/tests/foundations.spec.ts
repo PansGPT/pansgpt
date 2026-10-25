@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { foundationSources } from "../preview/foundation-source-data";
 test("all 80 foundation and documentation specimens preserve native frames and original artwork", async ({
   page,
 }) => {
-  await page.goto("/?section=foundations");
+  await openPreview(page, "/?section=foundations");
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].map((image) => image.decode()));

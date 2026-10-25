@@ -6,6 +6,7 @@ from types import SimpleNamespace  # [TENANT FIX 2]
 from unittest.mock import AsyncMock, MagicMock  # [TENANT FIX 2]
 
 import pytest  # [TENANT FIX 2]
+from fastapi import HTTPException
 from fastapi.testclient import TestClient  # [TENANT FIX 2]
 
 from app.core.dependencies import UserContext, get_current_user  # [TENANT FIX 2]
@@ -317,17 +318,13 @@ async def test_generated_artifact_links_use_artifact_route(  # [TENANT FIX 2]
         "r2_storage",  # [TENANT FIX 2]
         SimpleNamespace(is_configured=configured, upload_bytes=upload),  # [TENANT FIX 2]
     )  # [TENANT FIX 2]
-    monkeypatch.setattr(  # [TENANT FIX 2]
-        skills,  # [TENANT FIX 2]
-        "settings",  # [TENANT FIX 2]
-        SimpleNamespace(  # [CHAT FIX 2]
-            r2_access_key="unit-key",  # [CHAT FIX 2]
-            local_dev_enabled=not configured,  # [CHAT FIX 2]
-            LOCAL_DEV_MODE=not configured,  # [CHAT FIX 2]
-            ENVIRONMENT="local" if not configured else "production",  # [CHAT FIX 2]
-        ),  # [CHAT FIX 2]
-    )  # [TENANT FIX 2]
-    key = f"universities/{UNI_A}/artifacts/pdf/output.pdf"  # [TENANT FIX 2]
+    key = f"artifacts/{UNI_A}/018f3a10-0001-7000-8000-000000000001/pdf/output.pdf"
+    if not configured:
+        with pytest.raises(HTTPException) as error:
+            await skills.skill_engine._safe_r2_upload(key, b"offline", "application/pdf")
+        assert error.value.status_code == 503
+        upload.assert_not_awaited()
+        return
     result_key, url = await skills.skill_engine._safe_r2_upload(  # [TENANT FIX 2]
         key,  # [TENANT FIX 2]
         b"offline",  # [TENANT FIX 2]

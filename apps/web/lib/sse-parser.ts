@@ -2,71 +2,16 @@
 // PansGPT 2.0 Client-Side SSE Stream Parser (Roadmap 6B.16 & Section 9)
 // ==============================================================================
 
-export type SSEEventType =
-  | "init"
-  | "citations"
-  | "thinking_chunk"
-  | "tool_start"
-  | "tool_end"
-  | "artifact_ready"
-  | "text_chunk"
-  | "done"
-  | "error";
-
-export interface BoundingBoxCoordinates {
-  page: number;
-  bbox: [number, number, number, number];
-  rects?: Array<[number, number, number, number]>;
-}
-
-export interface CitationItem {
-  chunk_id?: string | null; // [CHAT FIX 2]
-  document_id?: string | null;
-  source_type?: "document" | "web";
-  url?: string | null;
-  title: string;
-  course_code?: string | null;
-  page_start?: number | null;
-  page_end?: number | null;
-  snippet?: string;
-  confidence?: "HIGH" | "MEDIUM" | "LOW" | "WEB_FALLBACK" | string;
-  bounding_box?: BoundingBoxCoordinates | null;
-}
-
-export interface ToolExecutionState {
-  call_id: string;
-  tool_name: string;
-  arguments?: Record<string, unknown>;
-  status: "running" | "success" | "error";
-  duration_ms?: number;
-  result?: unknown;
-}
-
-export interface ArtifactItem {
-  skill_name: string;
-  title: string;
-  file_extension?: string;
-  storage_key?: string;
-  download_url?: string;
-  content?: Record<string, unknown>;
-}
-
-// [CHAT FIX 2] Keep payload types paired with their event; no identity or `any` casts.
-interface SSEEventData {
-  init: { session_id?: string };
-  citations: CitationItem[];
-  text_chunk: { token?: string; delta?: string };
-  thinking_chunk: { token?: string; delta?: string };
-  tool_start: Omit<ToolExecutionState, "status">;
-  tool_end: Partial<ToolExecutionState> & { call_id: string };
-  artifact_ready: ArtifactItem;
-  done: { full_text?: string };
-  error: { error?: string; code?: string; retryable?: boolean };
-}
-
-export type SSEParsedEvent = {
-  [Kind in SSEEventType]: { event: Kind; data: SSEEventData[Kind] };
-}[SSEEventType];
+import type { CitationItem, SSEParsedEvent } from "@pansgpt/types";
+export type {
+  SSEEventType,
+  BoundingBoxCoordinates,
+  CitationItem,
+  ToolExecutionState,
+  ArtifactItem,
+  SSEEventData,
+  SSEParsedEvent,
+} from "@pansgpt/types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -118,13 +63,22 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
     case "init":
       return {
         event,
-        data: { session_id: typeof value.session_id === "string" ? value.session_id : undefined },
+        data: {
+          session_id: typeof value.session_id === "string" ? value.session_id : undefined,
+          user_message_id:
+            typeof value.user_message_id === "string" ? value.user_message_id : undefined,
+          assistant_message_id:
+            typeof value.assistant_message_id === "string" ? value.assistant_message_id : undefined,
+        },
       };
     case "text_chunk":
     case "thinking_chunk":
       return {
         event,
         data: {
+          ...(event === "thinking_chunk" && typeof value.code === "string"
+            ? { code: value.code }
+            : {}),
           token: typeof value.token === "string" ? value.token : undefined,
           delta: typeof value.delta === "string" ? value.delta : undefined,
         },

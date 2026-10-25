@@ -8,6 +8,7 @@ from arq import create_pool
 from arq.connections import RedisSettings
 
 from app.core.config import settings
+from app.engines.job_outbox import deliver_job, record_job
 
 logger = structlog.get_logger(__name__)
 
@@ -21,6 +22,9 @@ async def enqueue_ingestion_job(
     Returns the ARQ job_id if successfully enqueued, or None if Redis is not configured
     (such as in local CI / test environments).
     """
+    job_id = await record_job(document_id, storage_key, "ingest_document_job")
+    if not settings.ENABLE_INGESTION or not settings.provider_privacy_allowed("google"):
+        return job_id
     redis_url = settings.UPSTASH_REDIS_URL or settings.REDIS_URL
     if not redis_url or "placeholder" in redis_url.lower() or "test" in redis_url.lower():
         logger.warning(
@@ -28,28 +32,21 @@ async def enqueue_ingestion_job(
             document_id=document_id,
             msg="No operational Redis URL configured. Ingestion job was not enqueued.",
         )
-        return None
+        return job_id
 
     try:
         redis_settings = RedisSettings.from_dsn(redis_url)
         redis_pool = await create_pool(redis_settings)
-        job = await redis_pool.enqueue_job(
-            "ingest_document_job",
-            document_id=document_id,
-            storage_key=storage_key,
-        )
-        await redis_pool.close()
+        try:
+            await deliver_job(redis_pool, job_id, "ingest_document_job", document_id, storage_key)
+        finally:
+            await redis_pool.aclose()
+        return job_id
 
-        logger.info(
-            "ingestion_job_enqueued",
-            document_id=document_id,
-            job_id=job.job_id if job else None,
-        )
-        return job.job_id if job else None
     except Exception as e:
         logger.error(
             "arq_enqueue_failed",
             document_id=document_id,
             error=str(e),
         )
-        return None
+        return job_id

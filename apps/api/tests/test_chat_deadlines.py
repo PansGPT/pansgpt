@@ -238,7 +238,8 @@ def test_chat_route_bounds_hanging_retrieval(  # [CHAT FIX]
     assert response.status_code == 200  # [CHAT FIX]
     assert "event: error" in response.text  # [CHAT FIX]
     assert "The answer timed out." in response.text  # [CHAT FIX]
-    assert "event: done" not in response.text  # [CHAT FIX]
+    assert "event: done" in response.text  # Semantic inference starts before retrieval.
+    assert '"code": "TIMEOUT"' in response.text
 
 
 def test_chat_route_forwards_model_error(tenant_state: TenantTestState) -> None:  # [CHAT FIX]

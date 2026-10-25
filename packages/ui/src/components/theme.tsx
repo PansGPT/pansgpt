@@ -8,6 +8,7 @@ export function isThemeName(value: unknown): value is ThemeName {
   return typeof value === "string" && THEME_NAMES.some((theme) => theme === value);
 }
 interface ThemeContextValue {
+  ready: boolean;
   theme: ThemeName;
   setTheme: (theme: ThemeName) => void;
 }
@@ -42,7 +43,9 @@ export function ThemeProvider({
       /* Keep the in-memory theme. */
     }
   }, [ready, theme]);
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme, ready }}>{children}</ThemeContext.Provider>
+  );
 }
 export function useTheme(): ThemeContextValue {
   const value = useContext(ThemeContext);

@@ -51,6 +51,7 @@ async def test_embed_batch_calls_wrapped_content_objects(monkeypatch):  # [EMBED
     monkeypatch.setattr(settings, "EMBEDDER_FAKE_MODE", False)  # [EMBED FIX]
     monkeypatch.setattr(settings, "GEMINI_API_KEY", "test-key-mock")  # [EMBED FIX]
     # [EMBED FIX]
+    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
     mock_response = MagicMock()  # [EMBED FIX]
     mock_emb1 = MagicMock(values=[0.1] * settings.GEMINI_EMBEDDING_DIMENSIONS)  # [DIM 1536]
     mock_emb2 = MagicMock(values=[0.2] * settings.GEMINI_EMBEDDING_DIMENSIONS)  # [DIM 1536]

@@ -30,6 +30,15 @@ def mock_offline_llm_defaults(
         "--allow-live-services"
     ):
         return
+    for provider in (
+        "GOOGLE_ZDR_CONFIRMED",
+        "GROQ_ZDR_CONFIRMED",
+        "OPENAI_ZDR_CONFIRMED",
+        "OPENROUTER_ZDR_CONFIRMED",
+        "TAVILY_ZDR_CONFIRMED",
+        "COHERE_ZDR_CONFIRMED",
+    ):
+        monkeypatch.setattr(settings, provider, True)
     monkeypatch.setattr(settings, "EMBEDDER_FAKE_MODE", True)  # [EMBED FIX]
     monkeypatch.setattr(settings, "VISION_FAKE_MODE", True)  # [IMAGE FIX]
     for field in ("GEMINI_API_KEY", "GROQ_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):
@@ -307,14 +316,15 @@ def tenant_state(monkeypatch: pytest.MonkeyPatch) -> Iterator[TenantTestState]: 
     monkeypatch.setattr(  # [TENANT FIX]
         chat.intent_classifier,  # [TENANT FIX]
         "classify",  # [TENANT FIX]
-        MagicMock(  # [TENANT FIX]
+        AsyncMock(  # [TENANT FIX]
             return_value=QueryClassification(  # [TENANT FIX]
                 intent=IntentType.COURSE_RETRIEVAL,  # [TENANT FIX]
                 complexity=ComplexityLevel.SIMPLE,  # [TENANT FIX]
                 route=RouteType.FAST_PATH,  # [TENANT FIX]
                 requires_rag=True,  # [TENANT FIX]
                 requires_tools=True,  # [TENANT FIX]
-                confidence=1.0,  # [TENANT FIX]
+                confidence=1.0,
+                routing_source="server_context",  # [TENANT FIX]
             )  # [TENANT FIX]
         ),  # [TENANT FIX]
     )  # [TENANT FIX]
@@ -336,3 +346,16 @@ def tenant_state(monkeypatch: pytest.MonkeyPatch) -> Iterator[TenantTestState]: 
     finally:  # [TENANT FIX]
         app.dependency_overrides.clear()  # [TENANT FIX]
         app.dependency_overrides.update(previous)  # [TENANT FIX]
+
+
+@pytest.fixture
+def authoritative_auth_store(monkeypatch: pytest.MonkeyPatch) -> None:
+    from app.core import dependencies
+    from app.routers import admin, auth
+    from tests.auth_support import AUTH_PROFILES, auth_connection
+
+    AUTH_PROFILES.clear()
+    dependencies._IN_MEMORY_ROLE_CACHE.clear()
+    monkeypatch.setattr(dependencies, "get_db_connection", auth_connection)
+    monkeypatch.setattr(auth, "get_db_connection", auth_connection)
+    monkeypatch.setattr(admin, "get_db_connection", auth_connection)

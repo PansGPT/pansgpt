@@ -18,7 +18,25 @@ def isolated_web_search_env(monkeypatch):
 
     monkeypatch.setattr(settings, "UPSTASH_REDIS_URL", None)
     monkeypatch.setattr(settings, "REDIS_URL", None)
-    monkeypatch.setattr(settings, "TAVILY_API_KEY", None)
+    monkeypatch.setattr(settings, "TAVILY_API_KEY", "offline-provider-fixture")
+    monkeypatch.setattr(
+        AsyncClient,
+        "post",
+        AsyncMock(
+            return_value=Response(
+                200,
+                json={
+                    "results": [
+                        {
+                            "title": "Synthetic public reference",
+                            "url": "https://example.test/source",
+                            "content": "A mocked source excerpt.",
+                        }
+                    ]
+                },
+            )
+        ),
+    )
 
 
 # ------------------------------------------------------------------------------

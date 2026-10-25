@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import re
 import time
 from datetime import UTC, datetime
 from typing import Any
@@ -15,6 +16,8 @@ import httpx
 import structlog
 
 from app.core.config import settings
+from app.engines.guard import policy_guard
+from app.models.web_search import SearchScope, WebReference
 
 logger = structlog.get_logger(__name__)
 
@@ -34,6 +37,7 @@ class WebSearchEngine:
     """Manages Tavily web search with per-user daily rate limits and 1-hour MD5 caching."""
 
     def __init__(self) -> None:
+        self._quota_lock = asyncio.Lock()
         self.tavily_key = settings.TAVILY_API_KEY
         self._result_cache: dict[str, tuple[float, list[dict[str, Any]]]] = {}
         self._cache_ttl_seconds: float = float(settings.WEB_SEARCH_CACHE_TTL_SECONDS)
@@ -134,6 +138,46 @@ class WebSearchEngine:
 
         return new_count
 
+    async def reserve_daily_usage(self, user_id: str, limit: int) -> tuple[bool, int]:
+        if settings.ENVIRONMENT != "development":
+            import uuid
+
+            from app.core.database import get_db_connection
+
+            async with get_db_connection() as conn:
+                if conn is None:
+                    raise RuntimeError("Search quota storage is unavailable")
+                count = await conn.fetchval(
+                    "SELECT public.reserve_web_search_quota($1,$2,$3);",
+                    uuid.UUID(user_id),
+                    datetime.now(UTC).date(),
+                    limit,
+                )
+                return count is not None, int(count) if count is not None else limit
+        if settings.redis_connection_url:
+            import redis.asyncio as aioredis
+
+            redis = aioredis.from_url(
+                settings.redis_connection_url, socket_connect_timeout=1, socket_timeout=1
+            )
+            try:
+                script = "local n=tonumber(redis.call('GET',KEYS[1]) or '0'); if n>=tonumber(ARGV[1]) then return -1 end; n=redis.call('INCR',KEYS[1]); redis.call('EXPIRE',KEYS[1],172800); return n"
+                count = int(
+                    await redis.eval(
+                        script, 1, f"web_search:daily:{user_id}:{self._utc_today()}", limit
+                    )
+                )
+                return count != -1, count if count != -1 else limit
+            except Exception:
+                pass  # The database is the shared authoritative fallback.
+            finally:
+                await redis.aclose()
+        async with self._quota_lock:
+            current = await self.get_daily_usage(user_id)
+            if current >= limit:
+                return False, current
+            return True, await self.increment_daily_usage(user_id)
+
     async def _persist_db_usage(self, user_id: str, today: str) -> None:
         """Background persistence of daily usage to Supabase."""
         try:
@@ -168,24 +212,80 @@ class WebSearchEngine:
         num_results: int = 3,
         user_id: str | None = None,
         role: str = "student",
+        scope: SearchScope = "biomedical",
+        current_information: bool = False,
+        public_query: bool = False,
     ) -> dict[str, Any]:
-        """
-        Executes web search with MD5 caching and per-user daily quota enforcement.
-        """
+        """Search scoped public facts; eligibility precedes cache, quota and dispatch."""
         norm_query = " ".join(query.strip().split())
-        if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
-            return {"results": [], "source": "disabled", "status": "success"}  # [CHAT FIX 2]
-        if not norm_query:
-            return {"results": [], "source": "empty_query", "status": "success"}
 
-        query_hash = self.compute_query_hash(norm_query)
+        def unavailable(status: str, message: str) -> dict[str, Any]:
+            return {"status": status, "results": [], "source": status, "message": message}
+
+        if settings.ENVIRONMENT != "development" and not user_id:
+            return unavailable("identity_required", "Sign in to use web search.")
+        if not settings.WEB_SEARCH_ENABLED:
+            return unavailable(
+                "disabled", "Web search is disabled, so I cannot verify current information."
+            )
+        if not norm_query or len(norm_query) > 400 or scope not in {"general", "biomedical"}:
+            return unavailable(
+                "sensitive_query",
+                "Use a short public topic without private details for web search.",
+            )
+        identifier_text = re.sub(r"\b\d{4}-\d{2}-\d{2}\b", "DATE", norm_query)
+        has_phone = any(
+            sum(character.isdigit() for character in match.group()) >= 10
+            for match in re.finditer(r"\b\d[\d\s()+-]{8,}\d\b", identifier_text)
+        )
+        if (
+            has_phone
+            or policy_guard.filter_credential_leaks(norm_query) != norm_query
+            or re.search(
+                r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|"
+                r"\bpatient\b|"
+                r"\b(?:patient\s*name|medical\s*record|mrn|ssn|bvn|nin)\s*[:=#]|"
+                r"[?&](?:token|key|signature|x-amz-signature)=",
+                norm_query,
+                re.IGNORECASE,
+            )
+        ):
+            return unavailable(
+                "sensitive_query",
+                "This search may contain private details. Please use an anonymous public topic.",
+            )
+        if not self.tavily_key or any(
+            value in self.tavily_key.lower() for value in ["placeholder", "dummy", "your_tavily"]
+        ):
+            return unavailable(
+                "not_configured",
+                "Web search is not configured, so I cannot verify current information.",
+            )
+        if not settings.provider_privacy_allowed("tavily") and not (
+            settings.TAVILY_PUBLIC_SEARCH_ALLOWED and public_query
+        ):
+            return unavailable(
+                "privacy_blocked",
+                "Web search is blocked by the privacy policy for this request. Use a public topic without private details.",
+            )
+
+        query_hash = self.compute_query_hash(
+            "\0".join(
+                [
+                    user_id or "anonymous",
+                    scope,
+                    str(current_information),
+                    str(min(max(num_results, 1), 8)),
+                    norm_query,
+                ]
+            )
+        )
         now = time.time()
 
-        # Step 1: Check 1-Hour MD5 Result Cache
         if query_hash in self._result_cache:
-            ts, cached_results = self._result_cache[query_hash]
-            if now - ts < self._cache_ttl_seconds:
-                logger.info("web_search_cache_hit", query_hash=query_hash, query=norm_query[:50])
+            expires, cached_results = self._result_cache[query_hash]
+            if now < expires:
+                logger.info("web_search_cache_hit")
                 return {
                     "status": "success",
                     "results": cached_results,
@@ -198,8 +298,13 @@ class WebSearchEngine:
         limit = self.get_user_daily_limit(role)
         current_count = 0
         if user_id:
-            current_count = await self.get_daily_usage(user_id)
-            if current_count >= limit:
+            try:
+                allowed, current_count = await self.reserve_daily_usage(user_id, limit)
+            except Exception:
+                return unavailable(
+                    "quota_unavailable", "Web-search usage could not be checked. Please retry."
+                )
+            if not allowed:
                 logger.warning(
                     "web_search_quota_exceeded",
                     user_id=user_id,
@@ -212,70 +317,96 @@ class WebSearchEngine:
                     "quota_limit": limit,
                     "quota_used": current_count,
                     "results": [],
-                    "message": (
-                        f"You have reached your daily quota of {limit} web searches for today. "
-                        "Please refer to the verified lecture slides and course monographs in your library."
-                    ),
+                    "message": f"Your daily limit of {limit} web searches has been reached. It resets at 00:00 UTC.",
                     "source": "quota_gate",
                 }
 
-        # Step 3: Execute Upstream Search (Tavily or Fallback)
         results: list[dict[str, Any]] = []
-        source = "no_web_results"  # [CHAT FIX 2]
-
-        if self.tavily_key and not any(
-            p in self.tavily_key.lower() for p in ["placeholder", "dummy", "test"]
-        ):
-            try:
-                async with httpx.AsyncClient(timeout=settings.WEB_SEARCH_TIMEOUT_SECONDS) as client:
-                    resp = await client.post(
-                        "https://api.tavily.com/search",
-                        json={
-                            "api_key": self.tavily_key,
-                            "query": f"{norm_query} pharmacology medical pubmed",
-                            "search_depth": "basic",
-                            "include_domains": BIOMEDICAL_AUTHORITY_DOMAINS,
-                            "max_results": num_results,
-                            "include_answer": True,
-                        },
-                    )
-                    if resp.status_code == 200:
-                        data = resp.json()
-                        tavily_items = data.get("results", [])
-                        if tavily_items:
-                            results = [
-                                {
-                                    "title": item.get("title", "Biomedical Literature"),
-                                    "url": item["url"],  # [CHAT FIX 2]
-                                    "content": item.get("content", ""),
-                                }
-                                for item in tavily_items
-                                if isinstance(item.get("url"), str)  # [CHAT FIX 2]
-                                and urlsplit(item["url"]).scheme  # [CHAT FIX 2]
-                                in {"https", "http"}  # [CHAT FIX 2]
-                                and urlsplit(item["url"]).netloc  # [CHAT FIX 2]
-                                and isinstance(item.get("content"), str)  # [CHAT FIX 2]
-                                and item["content"].strip()  # [CHAT FIX 2]
-                            ]
-                            source = "tavily-biomedical"
-            except Exception as exc:
-                logger.warning("tavily_api_call_failed", error=str(exc))
-
-        # Step 4: Populate MD5 Result Cache
-        self._result_cache[query_hash] = (now, results)
-
-        # Step 5: Increment User Quota (only for real, non-cached searches)
-        new_count = current_count
-        if user_id:
-            new_count = await self.increment_daily_usage(user_id)
+        payload: dict[str, object] = {
+            "api_key": self.tavily_key,
+            "query": norm_query,
+            "topic": "general",
+            "search_depth": "basic",
+            "max_results": min(max(num_results, 1), 8),
+            "include_answer": False,
+            "include_raw_content": False,
+        }
+        if scope == "biomedical":
+            payload["include_domains"] = BIOMEDICAL_AUTHORITY_DOMAINS
+        try:
+            async with httpx.AsyncClient(timeout=settings.WEB_SEARCH_TIMEOUT_SECONDS) as client:
+                resp = await client.post("https://api.tavily.com/search", json=payload)
+            if resp.status_code != 200:
+                logger.warning("web_search_upstream_status", http_status=resp.status_code)
+                return unavailable(
+                    "provider_error",
+                    "The web-search provider could not complete this lookup. Please retry.",
+                )
+            data = resp.json()
+            items = data.get("results", []) if isinstance(data, dict) else None
+            if not isinstance(items, list):
+                return unavailable(
+                    "provider_error",
+                    "The web-search provider returned an invalid response. Please retry.",
+                )
+            for item in items[:8]:
+                if not isinstance(item, dict):
+                    continue
+                url = item.get("url")
+                content = item.get("content")
+                title = item.get("title")
+                if not all(
+                    isinstance(value, str) and value.strip() for value in [url, content, title]
+                ):
+                    continue
+                try:
+                    parsed = urlsplit(url)
+                    if (
+                        parsed.scheme not in {"https", "http"}
+                        or not parsed.hostname
+                        or parsed.username is not None
+                        or parsed.password is not None
+                        or len(url) > 2000
+                        or re.search(r"[\s<>\\]", url)
+                    ):
+                        continue
+                except ValueError:
+                    continue
+                results.append(
+                    WebReference(title=title[:300], url=url, content=content[:8000]).model_dump()
+                )
+        except httpx.TimeoutException:
+            return unavailable("timeout", "The web search timed out. Please retry.")
+        except Exception as exc:
+            logger.warning("tavily_api_call_failed", error_type=type(exc).__name__)
+            return unavailable(
+                "provider_error", "The web-search provider is unavailable. Please retry."
+            )
+        if not results:
+            return unavailable(
+                "empty",
+                "I could not find reliable web results to verify this request. Try an exact date or a more specific public topic.",
+            )
+        ttl = (
+            settings.WEB_SEARCH_CURRENT_CACHE_TTL_SECONDS
+            if current_information
+            else self._cache_ttl_seconds
+        )
+        if len(self._result_cache) >= 256:
+            self._result_cache = {
+                key: value for key, value in self._result_cache.items() if value[0] > now
+            }
+            if len(self._result_cache) >= 256:
+                self._result_cache.pop(next(iter(self._result_cache)))
+        self._result_cache[query_hash] = (now + ttl, results)
 
         return {
             "status": "success",
             "results": results,
-            "source": source,
+            "source": f"tavily-{scope}",
             "cached": False,
             "query": norm_query,
-            "quota_used": new_count,
+            "quota_used": current_count,
             "quota_limit": limit,
         }
 

@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS public.document_images (
     updated_at timestamptz NOT NULL DEFAULT now(),
     UNIQUE (document_id, content_hash, source)
 );
+ALTER TABLE public.document_images ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_document_images_document_status
     ON public.document_images (document_id, status);

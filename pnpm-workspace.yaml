@@ -10,3 +10,9 @@ overrides:
   webpack: "5.98.0"
   "http-cache-semantics@4.2.0": "4.3.0" # [DEPS FIX]
   "sharp@0.35.4": "0.35.5" # [DEPS FIX]
+
+# Motion's React types must resolve against the web app, not Expo's hoisted React 18 types.
+packageExtensions:
+  "framer-motion@14.4.0":
+    peerDependencies:
+      "@types/react": "^19.2.18"

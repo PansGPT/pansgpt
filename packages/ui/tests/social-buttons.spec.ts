@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = {
   id: string;
   name: string;
@@ -14,7 +15,7 @@ const families = JSON.parse(
 test("all 108 social-button variants and six groups preserve source geometry and artwork", async ({
   page,
 }) => {
-  await page.goto("/?section=social");
+  await openPreview(page, "/?section=social");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".social-button-fixture")).toHaveCount(108);
   await expect(page.locator(".social-group-fixture")).toHaveCount(6);
@@ -79,7 +80,7 @@ test("all 108 social-button variants and six groups preserve source geometry and
 test("social groups expose native keyboard callbacks without starting authentication", async ({
   page,
 }) => {
-  await page.goto("/?section=social");
+  await openPreview(page, "/?section=social");
   const demo = page.getByRole("group", { name: "Interactive sign in choices" });
   const google = demo.getByRole("button", { name: "Sign in with Google" });
   await google.scrollIntoViewIfNeeded();

@@ -33,12 +33,12 @@ def broken_storage(monkeypatch: pytest.MonkeyPatch) -> None:  # [CHAT FIX 2]
 
 
 @pytest.mark.parametrize(  # [CHAT FIX 2]
-    "environment,flag,configured,allowed",  # [CHAT FIX 2]
+    "environment,flag,configured",  # [CHAT FIX 2]
     [  # [CHAT FIX 2]
-        ("production", False, True, False),  # [CHAT FIX 2]
-        ("staging", True, True, False),  # [CHAT FIX 2]
-        ("development", False, False, False),  # [CHAT FIX 2]
-        ("development", True, True, True),  # [CHAT FIX 2]
+        ("production", False, True),  # [CHAT FIX 2]
+        ("staging", True, True),  # [CHAT FIX 2]
+        ("development", False, False),  # [CHAT FIX 2]
+        ("development", True, True),  # [CHAT FIX 2]
     ],  # [CHAT FIX 2]
 )  # [CHAT FIX 2]
 async def test_artifact_storage_failure_cannot_create_fake_links(  # [CHAT FIX 2]
@@ -47,7 +47,6 @@ async def test_artifact_storage_failure_cannot_create_fake_links(  # [CHAT FIX 2
     environment: str,  # [CHAT FIX 2]
     flag: bool,  # [CHAT FIX 2]
     configured: bool,  # [CHAT FIX 2]
-    allowed: bool,  # [CHAT FIX 2]
 ) -> None:  # [CHAT FIX 2]
     monkeypatch.setitem(settings.__dict__, "ENVIRONMENT", environment)  # [CHAT FIX 2]
     monkeypatch.setitem(settings.__dict__, "LOCAL_DEV_MODE", flag)  # [CHAT FIX 2]
@@ -56,22 +55,10 @@ async def test_artifact_storage_failure_cannot_create_fake_links(  # [CHAT FIX 2
         "is_configured",  # [CHAT FIX 2]
         property(lambda _: configured),  # [CHAT FIX 2]
     )  # [CHAT FIX 2]
-    if allowed:  # [CHAT FIX 2]
-        key, url = await skill_engine._safe_r2_upload(  # [CHAT FIX 2]
-            "artifacts/owned/file.pdf",  # [CHAT FIX 2]
-            b"file",  # [CHAT FIX 2]
-            "application/pdf",  # [CHAT FIX 2]
-        )  # [CHAT FIX 2]
-        assert key == "artifacts/owned/file.pdf" and url  # [CHAT FIX 2]
-    else:  # [CHAT FIX 2]
-        with pytest.raises(HTTPException) as error:  # [CHAT FIX 2]
-            await skill_engine._safe_r2_upload(  # [CHAT FIX 2]
-                "artifacts/owned/file.pdf",  # [CHAT FIX 2]
-                b"file",  # [CHAT FIX 2]
-                "application/pdf",  # [CHAT FIX 2]
-            )  # [CHAT FIX 2]
-        assert error.value.status_code == 503  # [CHAT FIX 2]
-        assert "storage" in error.value.detail.lower()  # [CHAT FIX 2]
+    with pytest.raises(HTTPException) as error:
+        await skill_engine._safe_r2_upload("artifacts/owned/file.pdf", b"file", "application/pdf")
+    assert error.value.status_code == 503
+    assert "storage" in error.value.detail.lower()
 
 
 @pytest.mark.parametrize(  # [CHAT FIX 2]

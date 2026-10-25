@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("square and portrait image cards preserve original artwork, captions and responsive proportions", async ({
   page,
 }) => {
-  await page.goto("/?section=avatars");
+  await openPreview(page, "/?section=avatars");
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(async () => {
     await Promise.all([...document.images].map((image) => image.decode().catch(() => undefined)));

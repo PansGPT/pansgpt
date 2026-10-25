@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { commandSourceGeometry as geometry } from "../preview/command-source-data";
 
 test("all ten command panels and forty-eight item states retain source geometry", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 2700, height: 1000 });
-  await page.goto("/?section=commands");
+  await openPreview(page, "/?section=commands");
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(async () => {
     await Promise.all([...document.images].map((img) => img.decode().catch(() => undefined)));
@@ -61,7 +62,7 @@ test("all ten command panels and forty-eight item states retain source geometry"
 test("command dialog filters accents, skips disabled results, activates with keyboard and restores focus", async ({
   page,
 }) => {
-  await page.goto("/?section=commands");
+  await openPreview(page, "/?section=commands");
   const trigger = page.getByRole("button", { name: "Open command menu", exact: true });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "People commands" });

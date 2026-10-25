@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsc -p tsconfig.json && electron .",
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --experimental-default-type=module --test tests/*.test.mjs"
   },
   "devDependencies": {
     "@pansgpt/typescript-config": "workspace:*",

@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("four editor layouts, forty-eight source icon states and original SVG geometry", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1600, height: 1100 });
-  await page.goto("/?section=editors");
+  await openPreview(page, "/?section=editors");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator("[data-source-id]")).toHaveCount(4);
   await expect(page.locator("[data-editor-reference-command]")).toHaveCount(48);
@@ -44,7 +45,7 @@ test("four editor layouts, forty-eight source icon states and original SVG geome
 test("formatting preserves selection and undo, color and links work, paste is plain text", async ({
   page,
 }) => {
-  await page.goto("/?section=editors");
+  await openPreview(page, "/?section=editors");
   const live = page.getByTestId("text-editor-live");
   const editor = page.getByRole("textbox", { name: "Notes editor", exact: true });
   const select = async (): Promise<void> => {

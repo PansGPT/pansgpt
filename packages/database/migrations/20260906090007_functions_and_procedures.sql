@@ -92,7 +92,7 @@ BEGIN
       embedding_status = 'pending'
       OR (embedding_status = 'processing' AND ingestion_heartbeat < now() - interval '10 minutes')
     );
-  
+
   GET DIAGNOSTICS v_claimed = ROW_COUNT;
   RETURN v_claimed;
 END;
@@ -115,7 +115,7 @@ BEGIN
     updated_at = now()
   WHERE id = doc_id
     AND ingestion_lock_id = worker_id;
-  
+
   GET DIAGNOSTICS v_updated = ROW_COUNT;
   RETURN v_updated;
 END;

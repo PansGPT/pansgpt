@@ -179,6 +179,7 @@ class CandidateReranker:
         if not api_key:
             raise ValueError("COHERE_API_KEY is not configured")
 
+        settings.require_provider_privacy("cohere")
         url = "https://api.cohere.com/v2/rerank"
         headers = {
             "Authorization": f"Bearer {api_key}",

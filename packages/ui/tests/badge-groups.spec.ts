@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = [string, string, number, number, [string, number, number, number, number][]];
 const sources = JSON.parse(
   readFileSync(resolve(__dirname, "../design/badge-group-geometry.json"), "utf8")
@@ -21,7 +22,7 @@ const hashes = Object.fromEntries(
 test("all eighty badge groups preserve source frames, badge/content positions and original glyphs", async ({
   page,
 }) => {
-  await page.goto("/?section=badgegroups");
+  await openPreview(page, "/?section=badgegroups");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".badge-group-fixture")).toHaveCount(80);
   await page.evaluate(
@@ -94,7 +95,7 @@ test("all eighty badge groups preserve source frames, badge/content positions an
 test("badge-group actions support keyboard, real links, disabled state and wrapping", async ({
   page,
 }) => {
-  await page.goto("/?section=badgegroups");
+  await openPreview(page, "/?section=badgegroups");
   const demo = page.getByRole("group", { name: "Interactive badge groups" });
   const button = demo.getByRole("button", { name: /Inspect release/ });
   await button.click();
