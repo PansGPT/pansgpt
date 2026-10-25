@@ -11,6 +11,7 @@ import structlog
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.rag import rag_engine
+from app.models.web_search import SearchScope
 
 logger = structlog.get_logger(__name__)
 
@@ -80,15 +81,15 @@ CORE_TOOL_DEFINITIONS = [
         "function": {
             "name": "web_search",
             "description": (
-                "Search real-time biomedical and pharmacological scientific literature "
-                "(PubMed, DailyMed, BNF, WHO guidelines) when syllabus materials lack coverage."
+                "Search public web facts using the backend-authorized general or biomedical scope. "
+                "Use a minimal standalone public query; never send patient details, private excerpts, credentials or private URLs."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {
                         "type": "string",
-                        "description": "The biomedical query to search on scientific databases.",
+                        "description": "A public standalone query, at most 400 characters; use explicit dates for time-sensitive facts.",
                     },
                     "num_results": {
                         "type": "integer",
@@ -231,6 +232,9 @@ class ToolExecutionEngine:
         num_results: int = 3,
         user_id: str | None = None,
         role: str = "student",
+        scope: SearchScope = "biomedical",
+        public_query: bool = False,
+        current_information: bool = False,
     ) -> dict[str, Any]:
         """Queries biomedical literature via Tavily with user daily quotas and MD5 caching."""
         from app.engines.web_search import web_search_engine
@@ -240,6 +244,9 @@ class ToolExecutionEngine:
             num_results=num_results,
             user_id=user_id,
             role=role,
+            scope=scope,
+            public_query=public_query,
+            current_information=current_information,
         )
 
     @staticmethod
@@ -278,6 +285,9 @@ class ToolExecutionEngine:
         role: str = "student",
         levels: list[str] | None = None,
         session_id: str | None = None,
+        web_search_scope: SearchScope = "biomedical",
+        public_web_search: bool = False,
+        current_information: bool = False,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
         logger.info("tool_dispatch_requested", tool_name=tool_name)
@@ -305,6 +315,9 @@ class ToolExecutionEngine:
                     num_results=arguments.get("num_results", 3),
                     user_id=user_id,
                     role=role,
+                    scope=web_search_scope,
+                    public_query=public_web_search,
+                    current_information=current_information,
                 )
             elif tool_name == "vision_analyze":
                 return await self.execute_vision_analyze(

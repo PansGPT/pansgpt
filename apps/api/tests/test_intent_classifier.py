@@ -16,15 +16,20 @@ def decision(**changes: object) -> str:
     result: dict[str, object] = {
         "action": "answer",
         "intent": "greeting_conversational",
-        "requires_rag": False,
+        "evidence_source": "none",
         "requires_tools": False,
         "clinical_risk": False,
+        "search_scope": "general",
+        "current_information": False,
+        "public_search_query": False,
         "confidence": 0.98,
         "answer": "Hello! What would you like to work on?",
         "retrieval_query": None,
         "presentation": None,
     }
     result.update(changes)
+    if "requires_rag" in result:
+        result["evidence_source"] = "course" if result.pop("requires_rag") else "none"
     return json.dumps(result)
 
 
@@ -153,7 +158,8 @@ async def test_low_confidence_routes_conservatively_and_ambiguity_can_ask_clarif
     engine, completion = router
     completion.return_value = decision(confidence=0.4)
     result = await engine.classify("That one please")
-    assert result.requires_rag and result.direct_answer is None
+    assert not result.requires_rag and result.direct_answer is None
+    assert result.routing_source == "fallback"
     completion.return_value = decision(
         action="clarify", intent="uncertain", answer="Which topic do you mean?"
     )

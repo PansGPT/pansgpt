@@ -30,6 +30,7 @@ from app.models.chat import (
     VoiceTranscribeResponse,
 )
 from app.models.presentation import PresentationSource
+from app.models.web_search import SearchScope
 
 logger = structlog.get_logger(__name__)
 
@@ -355,6 +356,9 @@ class MultiTierLlmEngine:
         presentation_sources: list[PresentationSource] | None = None,
         presentation_request: bool = False,
         validate_presentation_request: bool = False,
+        web_search_scope: SearchScope = "biomedical",
+        public_web_search: bool = False,
+        current_information: bool = False,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:  # [CHAT FIX]
         attempt_state = {"model": "unknown"}  # [CHAT FIX]
         try:  # [CHAT FIX]
@@ -375,6 +379,9 @@ class MultiTierLlmEngine:
                     presentation_sources=presentation_sources,
                     presentation_request=presentation_request,
                     validate_presentation_request=validate_presentation_request,
+                    web_search_scope=web_search_scope,
+                    public_web_search=public_web_search,
+                    current_information=current_information,
                 ):  # [CHAT FIX]
                     yield event  # [CHAT FIX]
         except TimeoutError as exc:  # [CHAT FIX]
@@ -549,6 +556,9 @@ class MultiTierLlmEngine:
         presentation_sources: list[PresentationSource] | None = None,
         presentation_request: bool = False,
         validate_presentation_request: bool = False,
+        web_search_scope: SearchScope = "biomedical",
+        public_web_search: bool = False,
+        current_information: bool = False,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:
         """
         Multi-turn Agentic Chat Streamer (max 5 turns):
@@ -902,6 +912,9 @@ class MultiTierLlmEngine:
                             role=role,
                             levels=levels,
                             session_id=session_id,
+                            web_search_scope=web_search_scope,
+                            public_web_search=public_web_search,
+                            current_information=current_information,
                         )
                         deck_sources = merge_presentation_sources(deck_sources, t_name, tool_res)
 

@@ -1005,7 +1005,8 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Advanced AI Engine
 
 - [x] Implement model-driven route-or-answer decisions with selected history, direct-answer reuse, eligible Groq/Google/OpenRouter fallback, and grounded handoffs. This replaces the regex classifier; backend scope/privacy/permissions remain authoritative. [Outage correction](semantic-routing-outages-2026-10-23.md): bounded retryable errors, provider cooldowns, no RAG on routing unavailability and separate retrieval deadlines. [23 October contracts and verification](semantic-routing-2026-10-23.md).
-- [ ] Correct the live-information routing gap found on 25 October: distinguish current web evidence from course retrieval, avoid unrelated document citations, and report unavailable search capabilities accurately. The user approved general questions with verified current facts; implementation/provider setup remain open. No phrase catalogue or privacy bypass. [Observed screenshots/logs and agreed direction](live-information-routing-gap-2026-10-25.md).
+- [x] Correct the reported live-information routing gap locally: semantic course/web evidence selection, dated public queries, general/biomedical scope, actual web citations and actionable unavailable states. Both reported phrasings passed real Groq routing without RAG; a public Tavily-to-answer probe passed. Public-only retention exception is user-approved and configured only in the ignored local environment, without claiming ZDR. [Implementation and verification](general-web-routing-2026-10-25.md).
+- [ ] Verify general/clinical web routing, quota/privacy/error recovery and disclosures on the matching hosted frontend/API; local success does not certify deployment or every possible semantic decision.
 
 ### 6B.21 Atomic Chat Credit Reservation & Finalization
 

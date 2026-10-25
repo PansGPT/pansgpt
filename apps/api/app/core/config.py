@@ -4,6 +4,7 @@
 # ==============================================================================
 
 from typing import Literal
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -113,6 +114,8 @@ class Settings(BaseSettings):
     OPENAI_ZDR_CONFIRMED: bool = False
     OPENROUTER_ZDR_CONFIRMED: bool = False
     TAVILY_ZDR_CONFIRMED: bool = False
+    # Public-query exception approved locally on 25 October; never claim verified ZDR.
+    TAVILY_PUBLIC_SEARCH_ALLOWED: bool = False
     COHERE_ZDR_CONFIRMED: bool = False
 
     def provider_privacy_allowed(self, provider: str) -> bool:
@@ -221,6 +224,17 @@ class Settings(BaseSettings):
     WEB_SEARCH_DAILY_LIMIT_STAFF: int = 50
     WEB_SEARCH_CACHE_TTL_SECONDS: int = 3600  # 1 hour TTL
     WEB_SEARCH_TIMEOUT_SECONDS: float = 8.0
+    WEB_SEARCH_CURRENT_CACHE_TTL_SECONDS: int = Field(default=120, ge=0, le=300)
+    AI_REQUEST_TIMEZONE: str = "Africa/Lagos"
+
+    @field_validator("AI_REQUEST_TIMEZONE")
+    @classmethod
+    def validate_request_timezone(cls, value: str) -> str:
+        try:
+            ZoneInfo(value)
+        except ZoneInfoNotFoundError as exc:
+            raise ValueError("Use a valid IANA timezone for AI request dates.") from exc
+        return value
 
     # Search Tool Integration
     TAVILY_API_KEY: str | None = None

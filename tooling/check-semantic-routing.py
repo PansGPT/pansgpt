@@ -12,7 +12,7 @@ from pydantic import BaseModel, TypeAdapter
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps/api"))
 
-from app.engines.intent_classifier import IntentClassifier
+from app.engines.intent_classifier import IntentClassifier  # noqa: E402
 
 
 class RoutingCase(BaseModel):
@@ -22,13 +22,12 @@ class RoutingCase(BaseModel):
     expected_route: str
     requires_tools: bool
     requires_rag: bool
+    requires_web: bool | None = None
 
 
 async def evaluate() -> int:
     cases = TypeAdapter(list[RoutingCase]).validate_json(
-        (ROOT / "apps/api/tests/fixtures/semantic-routing.json").read_text(
-            encoding="utf-8"
-        )
+        (ROOT / "apps/api/tests/fixtures/semantic-routing.json").read_text(encoding="utf-8")
     )
     engine = IntentClassifier()
     failures = 0
@@ -38,8 +37,9 @@ async def evaluate() -> int:
         passed = (
             result.routing_source == "model"
             and result.route.value == case.expected_route
-            and (not case.requires_tools or result.requires_tools)
-            and (not case.requires_rag or result.requires_rag)
+            and result.requires_tools == case.requires_tools
+            and result.requires_rag == case.requires_rag
+            and (case.requires_web is None or result.requires_web == case.requires_web)
             and (case.expected_route != "fast_path" or bool(result.direct_answer))
         )
         failures += int(not passed)
@@ -53,6 +53,7 @@ async def evaluate() -> int:
                     "provider": result.routing_provider,
                     "model": result.routing_model,
                     "requires_rag": result.requires_rag,
+                    "requires_web": result.requires_web,
                     "requires_tools": result.requires_tools,
                     "latency_ms": round((time.monotonic() - started) * 1000),
                 }

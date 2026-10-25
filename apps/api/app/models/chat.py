@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from app.core.schemas import StrictRequest
 from app.models.presentation import PresentationPlan
+from app.models.web_search import EvidenceSource, SearchScope
 
 
 class IntentType(StrEnum):
@@ -45,6 +46,11 @@ class QueryClassification(BaseModel):
     route: RouteType
     requires_rag: bool
     requires_tools: bool
+    requires_web: bool = False
+    search_scope: SearchScope = "biomedical"
+    current_information: bool = False
+    public_search_query: bool = False
+    clinical_risk: bool = False
     confidence: float = Field(ge=0.0, le=1.0, description="Classification confidence score")
     suggested_skills: list[str] = Field(default_factory=list, description="Target skill tool names")
     extracted_topic: str | None = None
@@ -67,9 +73,12 @@ class SemanticDecision(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     action: Literal["answer", "clarify", "grounded"]
     intent: IntentType
-    requires_rag: bool
+    evidence_source: EvidenceSource
     requires_tools: bool
     clinical_risk: bool
+    search_scope: SearchScope
+    current_information: bool
+    public_search_query: bool
     confidence: float = Field(ge=0, le=1, allow_inf_nan=False)
     answer: str = Field(max_length=4000)
     retrieval_query: str | None = Field(max_length=1000)

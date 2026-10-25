@@ -1,6 +1,6 @@
 # Open finding: current-information routing — 25 October 2026
 
-The user supplied two local screenshots and request logs during roadmap/Git delivery. This is an observed unresolved defect, not a completed fix.
+The user supplied two local screenshots and request logs during roadmap/Git delivery. This record preserves the original finding. The subsequent [local correction and verification](general-web-routing-2026-10-25.md) supersedes its implementation-pending status; hosted rollout remains open.
 
 Evidence:
 
@@ -19,6 +19,6 @@ Proposed correction under that direction:
 - Preserve privacy gates. Distinguish missing configuration, privacy hold, provider failure, quota and genuinely empty search results; do not collapse all into “topic not found in course materials.”
 - Test paraphrases, follow-ups, mixed clinical/general requests, explicit document constraints, unavailable providers, stale/current dates and absence of irrelevant citations. Review reranker timeout behavior alongside routing; model failover remains a separate latency issue.
 
-No routing/search code or provider configuration was changed for this finding. The Git snapshot retains the tested prior implementation and explicitly records this open defect and approved direction; Phase 11 and hosted release gates remain open.
+At the time this finding was recorded, no routing/search code or provider configuration had changed. The later local correction adds evidence-source routing and the explicitly approved public-query exception; see the linked verification record. Phase 11 and hosted release gates remain open.
 
 Notion handoff: add this as an open AI-routing issue and raise it above tone controls. Record a Decision Log entry allowing general questions with current facts verified through eligible backend web search; the rejected alternative is limiting all interactions to pharmacy/study scope. Update the roadmap and core-scope Knowledge Base wording, without claiming that general web search is already implemented or configured. Verified only for screenshot/log/code inspection and the non-secret configuration check. No Notion connector is available in this session.

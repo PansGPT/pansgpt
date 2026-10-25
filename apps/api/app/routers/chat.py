@@ -46,6 +46,8 @@ from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
 from app.engines.rag import ABSENCE_NOTICE, rag_engine  # [CHAT FIX 2]
 from app.engines.thinking import ThinkingStreamParser, strip_thinking_tokens
+from app.engines.web_grounding import WebSearchUnavailable, external_context, search_error
+from app.engines.web_search import web_search_engine
 from app.models.chat import (
     ChatMessageResponse,
     ChatSessionCreateRequest,
@@ -56,8 +58,15 @@ from app.models.chat import (
     VoiceTranscribeResponse,
 )
 from app.models.presentation import PresentationSource
+from app.models.web_search import WebSearchResponse
 
 logger = structlog.get_logger(__name__)
+
+
+class RequestDeadlineExceeded(TimeoutError):
+    """Preserve an expired total deadline through generic generation handlers."""
+
+
 router = APIRouter(prefix="/ai/chat", tags=["AI & Chat Engine"])
 
 
@@ -371,6 +380,17 @@ async def stream_chat_session(
         raise
 
     model_started = False  # [CHAT FIX 2]
+    stream_deadline = 0.0
+
+    async def client_disconnected() -> bool:
+        # A cancelled receive scope can consume a simultaneous outer cancellation.
+        if stream_deadline and time.monotonic() >= stream_deadline:
+            raise RequestDeadlineExceeded("Chat request deadline exceeded")
+        disconnected = await request.is_disconnected()
+        if stream_deadline and time.monotonic() >= stream_deadline:
+            raise RequestDeadlineExceeded("Chat request deadline exceeded")
+        return disconnected
+
     persisted_parts: dict[str, list[Any]] = {"tools": [], "artifacts": []}
     progress = ChatProgress()
 
@@ -508,7 +528,7 @@ async def stream_chat_session(
             user_enable_tools=payload.enable_tools,
             has_attachments=bool(turn.attachments),
         )
-        if await request.is_disconnected():
+        if await client_disconnected():
             return
         if classification.routing_source == "fallback":
             logger.warning(
@@ -530,6 +550,8 @@ async def stream_chat_session(
             intent=classification.intent.value,
             route=classification.route.value,
             requires_rag=classification.requires_rag,
+            requires_web=classification.requires_web,
+            search_scope=classification.search_scope,
             requires_tools=classification.requires_tools,
             confidence=classification.confidence,
             routing_source=classification.routing_source,
@@ -561,6 +583,41 @@ async def stream_chat_session(
         # 4. RAG Retrieval & Context Assembly (with pronoun and context history resolution)
         rag_context = None
         citations: list[CitationItem] = []
+        web_context: str | None = None
+        web_citations: list[CitationItem] = []
+        if classification.requires_web:
+            if update := progress.emit("searching_sources"):
+                yield update
+            if not payload.enable_tools:
+                web_result = WebSearchResponse(
+                    status="tools_disabled",
+                    message="Web search is disabled for this message. Enable tools to verify current information.",
+                )
+            else:
+                web_result = WebSearchResponse.model_validate(
+                    await web_search_engine.search(
+                        query=classification.retrieval_query or "",
+                        user_id=user_id,
+                        role=current_user.role,
+                        scope=classification.search_scope,
+                        current_information=classification.current_information,
+                        public_query=classification.public_search_query
+                        and not bool(
+                            turn.attachments or payload.document_id or payload.course_code
+                        ),
+                    )
+                )
+            if web_result.status != "success" or not web_result.results:
+                if web_result.status == "success":
+                    web_result = WebSearchResponse(
+                        status="empty",
+                        message="I could not verify this request from reliable web results.",
+                    )
+                error = search_error(web_result)
+                yield f"event: error\ndata: {json.dumps(error)}\n\n"
+                yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
+                return
+            web_context, web_citations = external_context(web_result)
         if classification.requires_rag and not image_attachments:
             if update := progress.emit("checking_materials"):
                 yield update
@@ -579,7 +636,16 @@ async def stream_chat_session(
                         user_id=user_id,
                         role=current_user.role,
                         levels=[current_user.current_level] if current_user.current_level else None,
+                        public_web_query=classification.retrieval_query
+                        if classification.public_search_query and not turn.attachments
+                        else None,
+                        allow_web_search=payload.enable_tools and not classification.requires_web,
                     )
+            except WebSearchUnavailable as exc:
+                error = search_error(exc.result)
+                yield f"event: error\ndata: {json.dumps(error)}\n\n"
+                yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
+                return
             except Exception as exc:
                 timed_out = isinstance(exc, (TimeoutError, QueryCanceledError))
                 logger.warning(
@@ -598,6 +664,9 @@ async def stream_chat_session(
                 yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
                 return
 
+        if web_context:
+            rag_context = "\n\n".join(part for part in [rag_context, web_context] if part)
+            citations.extend(web_citations)
         # Yield retrieved citations if any exist
         if citations:
             cits_data = [c.model_dump() for c in citations]
@@ -622,7 +691,10 @@ async def stream_chat_session(
             yield f"event: done\ndata: {json.dumps({'full_text': rag_context, 'citations_count': 0, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
             return  # [CHAT FIX 2]
         system_prompt = policy_guard.build_system_prompt(
-            rag_context, intent=classification.intent
+            rag_context,
+            intent=classification.intent,
+            general=classification.search_scope == "general",
+            has_web_sources=any(item.source_type == "web" for item in citations),
         ) + attachment_context(turn.attachments)
 
         if image_attachments:
@@ -668,7 +740,16 @@ async def stream_chat_session(
                 enable_tools=classification.requires_tools,
                 role=current_user.role,
                 levels=[current_user.current_level] if current_user.current_level else None,
-                fast_path=is_fast_path,
+                fast_path=is_fast_path
+                or (
+                    classification.requires_web
+                    and classification.search_scope == "general"
+                    and not classification.requires_tools
+                ),
+                web_search_scope=classification.search_scope,
+                public_web_search=classification.public_search_query
+                and not bool(turn.attachments or payload.document_id or payload.course_code),
+                current_information=classification.current_information,
                 presentation_request=classification.presentation is not None,
                 validate_presentation_request=True,
                 presentation_slide_count=classification.presentation.slide_count
@@ -688,7 +769,7 @@ async def stream_chat_session(
             model_started = True  # [CHAT FIX 2]
             async for event_type, data, provider in response_events():
                 # Check client disconnect abort
-                if await request.is_disconnected():
+                if await client_disconnected():
                     logger.info("stream_chat_client_disconnected_aborting", session_id=session_id)
                     break
 
@@ -747,8 +828,10 @@ async def stream_chat_session(
                 collected_tokens.append(tail)
                 yield f"event: text_chunk\ndata: {json.dumps({'token': tail, 'delta': tail, 'provider': last_provider})}\n\n"
 
+        except RequestDeadlineExceeded:
+            raise
         except Exception as exc:
-            logger.error("stream_chat_unhandled_failure", error=str(exc))
+            logger.error("stream_chat_unhandled_failure", error_type=type(exc).__name__)
             err_msg = "An unexpected error occurred while generating your answer. Please try again."
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
             yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens)})}\n\n"
@@ -776,6 +859,8 @@ async def stream_chat_session(
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
     async def bounded_sse_events() -> AsyncGenerator[str, None]:  # [CHAT FIX]
+        nonlocal stream_deadline
+        stream_deadline = time.monotonic() + settings.CHAT_TOTAL_TIMEOUT_S
         try:  # [CHAT FIX]
             async with asyncio.timeout(settings.CHAT_TOTAL_TIMEOUT_S):  # [CHAT FIX]
                 async for event in sse_event_generator():  # [CHAT FIX]

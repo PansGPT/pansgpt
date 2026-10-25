@@ -13,7 +13,7 @@ Verification evidence remains scoped: latest offline API suite 604 passed, API l
 
 Keep open: full per-skill/pharmacy drawers, response style controls, public chat links, hosted authenticated integration/credit verification, provider attestations and native authentication; Home aggregation/offline/performance, PDF Reader, Learn Mode and quiz backend. Phase 11 remains In Progress.
 
-Updated priority after the user's new screenshots/logs: correct the [live-information routing gap](live-information-routing-gap-2026-10-25.md) before adding response style controls. The user approved general questions with current facts verified through backend web search; implementation/provider setup remain open. Then finish the remaining Phase 11 skill interfaces and return to the deferred PDF Reader before Learn Mode.
+Updated priority after the user's new screenshots/logs: the later [general-web correction](general-web-routing-2026-10-25.md) implements and verifies the reported gap locally, with the user's public-query retention exception. Hosted integration remains open. Next product work can return to response style controls and remaining Phase 11 skill interfaces, then the deferred PDF Reader before Learn Mode. Dependency alerts also require separate triage before release.
 
 Notion synchronization is pending because no Notion connector is available:
 

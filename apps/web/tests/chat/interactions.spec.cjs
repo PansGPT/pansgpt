@@ -270,6 +270,49 @@ async function setupChat(page) {
           tree.push(answer);
           select(answer.id);
           const frame = (event, data) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+          if (window.__webLookupMode) {
+            const prefix =
+              frame("init", {
+                session_id: session,
+                user_message_id: question.id,
+                assistant_message_id: answer.id,
+              }) +
+              frame("thinking_chunk", {
+                code: "searching_sources",
+                token: "Checking external sources.\n",
+              });
+            if (window.__webLookupMode === "unavailable") {
+              tree = tree.filter((item) => item.id !== answer.id);
+              select(question.parent_message_id);
+              return new Response(
+                prefix +
+                  frame("error", {
+                    error: "Web search is not configured, so I cannot verify current information.",
+                    code: "WEB_SEARCH_NOT_CONFIGURED",
+                    retryable: false,
+                  }) +
+                  frame("done", { full_text: "" }),
+                { headers: { "Content-Type": "text/event-stream" } }
+              );
+            }
+            answer.content = "The synthetic public report verifies this fixture result.";
+            answer.citations = [
+              {
+                source_type: "web",
+                title: "Synthetic public match report",
+                url: "https://example.test/report",
+                page_start: null,
+                page_end: null,
+              },
+            ];
+            return new Response(
+              prefix +
+                frame("citations", answer.citations) +
+                frame("text_chunk", { token: answer.content }) +
+                frame("done", { full_text: answer.content }),
+              { headers: { "Content-Type": "text/event-stream" } }
+            );
+          }
           if (window.__artifactMode) {
             answer.content =
               "I've organized the discussion into five slides, pairing four synthetic study topics with concise learning points and revision examples. You can use the outline to review each topic in turn.\n\n**References supplied with this deck**\n- Synthetic course notes\n- [Synthetic study reference](<https://example.test/study>)";
@@ -1759,4 +1802,43 @@ test("timeout feedback stays with its response on desktop and mobile", async ({ 
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     await expect(page.getByRole("alert")).toHaveCount(0);
   }
+});
+
+test("general web answers show web references and actionable lookup failures", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`http://127.0.0.1:4178/?session=${session}`, {
+    waitUntil: "commit",
+    timeout: 60000,
+  });
+  await page.evaluate(() => {
+    window.__webLookupMode = "answer";
+  });
+  await page.getByLabel("Study question").fill("Search for a synthetic public event result");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  const response = page.locator('.study-chat-message[data-role="assistant"]').last();
+  await expect(response).toContainText("The synthetic public report verifies this fixture result.");
+  await expect(response.locator(".study-chat-sources").getByRole("link")).toHaveText(
+    "Synthetic public match report — Web source"
+  );
+  await expect(response.locator(".study-chat-sources").getByRole("link")).toHaveAttribute(
+    "href",
+    "https://example.test/report"
+  );
+  await response.getByRole("button", { name: "Steps", exact: true }).click();
+  await expect(response).toContainText("Checking external sources.");
+  await expect(response).not.toContainText("Checking your course materials.");
+  await page.screenshot({ path: test.info().outputPath("general-web-answer-desktop.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => {
+    window.__webLookupMode = "unavailable";
+  });
+  await page.getByLabel("Study question").fill("Another synthetic current fact");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  const failed = page.locator('.study-chat-message[data-role="assistant"]').last();
+  await expect(failed.getByRole("alert")).toHaveText(
+    "Web search is not configured, so I cannot verify current information."
+  );
+  await expect(failed).not.toContainText("not found in your course materials");
+  await expect(page.locator(".study-chat-footer").getByRole("alert")).toHaveCount(0);
+  await page.screenshot({ path: test.info().outputPath("general-web-unavailable-mobile.png") });
 });

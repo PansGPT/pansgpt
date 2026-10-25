@@ -18,11 +18,13 @@ from app.engines.embedder import gemini_embedder
 from app.engines.guard import policy_guard
 from app.engines.query_expansion import query_expansion_engine
 from app.engines.reranker import candidate_reranker
+from app.engines.web_grounding import WebSearchUnavailable
 from app.models.chat import CitationItem
+from app.models.web_search import WebSearchResponse
 
 logger = structlog.get_logger(__name__)
 ABSENCE_NOTICE = (  # [CHAT FIX 2]
-    "This topic was not found in your course materials. No external web sources are available."  # [CHAT FIX 2]
+    "This topic was not found in your course materials. I could not verify it from available external references."
 )  # [CHAT FIX 2]
 
 
@@ -132,6 +134,8 @@ class RagRetrievalEngine:
         user_id: str | None = None,
         role: str = "student",
         levels: list[str] | None = None,
+        public_web_query: str | None = None,
+        allow_web_search: bool = True,
     ) -> tuple[str | None, list[CitationItem]]:
         """
         Retrieves top relevant chunks for a user query using 3-Pool Hybrid Search (RRF k=60).
@@ -457,14 +461,29 @@ class RagRetrievalEngine:
                 is_empty_or_low = True
 
         if is_empty_or_low:
+            if not allow_web_search:
+                return None, []
             if not settings.WEB_SEARCH_ENABLED:  # [CHAT FIX 2]
-                return ABSENCE_NOTICE, []  # [CHAT FIX 2]
+                raise WebSearchUnavailable(
+                    WebSearchResponse(
+                        status="disabled",
+                        message="No matching course material was found, and web search is disabled.",
+                    )
+                )
             logger.info("absence_policy_triggered_invoking_web_search")
             from app.engines.tools import tool_engine
 
             web_res = await tool_engine.execute_web_search(
-                query=normalized_query, num_results=3, user_id=user_id, role=role
+                query=public_web_query or normalized_query,
+                num_results=3,
+                user_id=user_id,
+                role=role,
+                scope="biomedical",
+                public_query=public_web_query is not None,
             )
+            status = web_res.get("status", "success" if web_res.get("results") else "empty")
+            if status not in {"success", "empty"}:
+                raise WebSearchUnavailable(WebSearchResponse.model_validate(web_res))
             web_results = [  # [CHAT FIX 2]
                 item  # [CHAT FIX 2]
                 for item in web_res.get("results", [])  # [CHAT FIX 2]

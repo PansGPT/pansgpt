@@ -147,7 +147,7 @@ function MessageExtras(): React.ReactElement | null {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {citation.title} — Outside the lecture materials
+                  {citation.title} — Web source
                 </a>
               ) : (
                 <span key={index} title={citation.snippet}>

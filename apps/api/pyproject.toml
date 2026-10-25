@@ -29,6 +29,7 @@ dependencies = [
     "python-multipart>=0.0.32",
     "flashrank>=0.2.9",
     "slowapi>=0.1.9",
+    "tzdata>=2026.5",
 ]
 
 [project.optional-dependencies]
