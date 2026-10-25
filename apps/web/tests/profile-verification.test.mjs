@@ -4,6 +4,7 @@ import {
   createProfileVerifier,
   requestProfile,
   profileFailureMessage,
+  visibleVerifiedProfile,
 } from "../lib/profile-verification.ts";
 
 const identity = { userId: "00000000-0000-4000-8000-000000000001", accessToken: "synthetic-token" };
@@ -21,6 +22,28 @@ const profile = {
   client_type: "web",
   dev_bypass: false,
 };
+
+test("same-account token renewal preserves the verified workspace until a fresh result or failure", () => {
+  const renewed = { ...identity, accessToken: "renewed-synthetic-token" };
+  assert.equal(
+    visibleVerifiedProfile(renewed, { ...renewed, status: "checking" }, profile),
+    profile
+  );
+  assert.equal(visibleVerifiedProfile(renewed, null, profile), profile);
+  assert.equal(
+    visibleVerifiedProfile(
+      renewed,
+      { ...renewed, status: "error", error: { code: "unavailable", retryable: true } },
+      profile
+    ),
+    null
+  );
+  assert.equal(
+    visibleVerifiedProfile({ ...renewed, userId: "another-account" }, null, profile),
+    null
+  );
+  assert.equal(visibleVerifiedProfile(null, null, profile), null);
+});
 const deferred = () => {
   let resolve;
   const promise = new Promise((complete) => {

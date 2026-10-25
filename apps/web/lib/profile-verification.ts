@@ -37,6 +37,22 @@ export type ProfileResult =
   { status: "ready"; profile: AuthProfileResponse } | { status: "error"; error: ProfileFailure };
 export type ProfileSnapshot = ProfileIdentity & (ProfileResult | { status: "checking" });
 
+/** Keep drafts mounted during same-account token renewal, never after a rejection. */
+export function visibleVerifiedProfile(
+  identity: ProfileIdentity | null,
+  snapshot: ProfileSnapshot | null,
+  previous: AuthProfileResponse | null
+): AuthProfileResponse | null {
+  if (!identity) return null;
+  const owned =
+    snapshot?.userId === identity.userId && snapshot.accessToken === identity.accessToken
+      ? snapshot
+      : null;
+  if (owned?.status === "error") return null;
+  if (owned?.status === "ready") return owned.profile.id === identity.userId ? owned.profile : null;
+  return previous?.id === identity.userId ? previous : null;
+}
+
 export function profileFailureMessage(error: ProfileFailure): {
   title: string;
   description: string;

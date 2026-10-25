@@ -11,6 +11,7 @@ import type { AuthProfileResponse } from "@pansgpt/types";
 import {
   createProfileVerifier,
   requestProfile,
+  visibleVerifiedProfile,
   type ProfileFailure,
   type ProfileSnapshot,
 } from "./profile-verification";
@@ -35,16 +36,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const currentSession = useRef<Session | null>(null);
   const [snapshot, setSnapshot] = useState<ProfileSnapshot | null>(null);
+  const [lastVerified, setLastVerified] = useState<UserProfile | null>(null);
   const [bootstrapping, setBootstrapping] = useState(true);
   const [sessionError, setSessionError] = useState<ProfileFailure | null>(null);
   const [verifier] = useState(() =>
     createProfileVerifier(
       (identity, signal) => requestProfile(env.NEXT_PUBLIC_API_URL, identity, signal),
-      setSnapshot
+      (next) => {
+        setSnapshot(next);
+        if (next.status === "ready") setLastVerified(next.profile);
+        else if (next.status === "error") setLastVerified(null);
+      }
     )
   );
   const applySession = useCallback(
     (next: Session | null) => {
+      if (currentSession.current?.user.id !== next?.user.id) setLastVerified(null);
       if (
         currentSession.current?.access_token !== next?.access_token ||
         currentSession.current?.user.id !== next?.user.id
@@ -78,9 +85,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const owned =
     snapshot?.accessToken === accessToken && snapshot?.userId === userId ? snapshot : null;
-  const profile = owned?.status === "ready" ? owned.profile : null;
+  const profile = visibleVerifiedProfile(
+    accessToken && userId ? { accessToken, userId } : null,
+    snapshot,
+    lastVerified
+  );
   const profileError = sessionError ?? (owned?.status === "error" ? owned.error : null);
-  const loading = bootstrapping || Boolean(session && (!owned || owned.status === "checking"));
+  const loading =
+    bootstrapping || Boolean(session && !profile && (!owned || owned.status === "checking"));
 
   useEffect(() => {
     let mounted = true;
