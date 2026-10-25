@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { CredentialsForm } from "@/components/auth/credentials-form";
+import { ConfiguredCredentials } from "@/components/auth/configured-credentials";
 import { AuthLoading } from "@/components/auth/loading";
 export default function Page(): React.ReactElement {
   return (
     <Suspense fallback={<AuthLoading />}>
-      <CredentialsForm mode="signup" />
+      <ConfiguredCredentials mode="signup" />
     </Suspense>
   );
 }

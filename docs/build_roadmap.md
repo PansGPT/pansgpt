@@ -1240,6 +1240,8 @@ User follow-up: restore the original legacy welcome composition with local asset
 
 ### 9.3 Web App Shell
 
+25 October auth follow-up: provider discovery now seeds login/signup from server-verified public settings, preserves verified options on transient refresh failure, and exposes bounded loading/retry states. The deployed site separately returns `401 Invalid API key` for its Supabase public key; Vercel configuration repair and hosted Google authorization remain open. [Diagnosis and verification](auth-provider-visibility-2026-10-25.md).
+
 User-selected references and the latest sidebar/card corrections are recorded in [app shell direction](design-system/app-shell-direction-2026-10-21.md). Implementation and verification are tracked in [the Phase 9.3 record](phase-9-3-app-shell-2026-10-21.md). Use the existing palette and explicitly labelled sample content where data is absent. All eight CI jobs and ten disposable auth/shell browser checks passed at `d4f626f` in [run 39596053267](https://github.com/PansGPT/pansgpt/actions/runs/39596053267). The background-swap experiment was reverted to that verified application source. Hosted rollout remains pending.
 
 23 October mobile Home refinement: match the top-to-bottom composition of the user-selected `Dark-Mode PansGPT Dashboard.png`, using the shared charcoal/green palette and the smaller type scale requested in follow-up. Mobile-only wordmark/account header, compact tool shortcuts (including Learn), four detailed document Recents, dated activity timeline and pill composer. Desktop document thumbnails and the approved chat welcome remain separate. [Implementation and verification](mobile-home-reference-2026-10-23.md).

@@ -272,6 +272,23 @@
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 12px;
 }
+.auth-provider-status {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 20px;
+  color: var(--text-secondary-700);
+  font-size: 12px;
+}
+.auth-provider-status button {
+  justify-self: start;
+  border: 0;
+  padding: 4px 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
 .auth-social .p-social-button {
   width: 100%;
 }
