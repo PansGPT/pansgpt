@@ -1005,7 +1005,7 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Advanced AI Engine
 
 - [x] Implement model-driven route-or-answer decisions with selected history, direct-answer reuse, eligible Groq/Google/OpenRouter fallback, and grounded handoffs. This replaces the regex classifier; backend scope/privacy/permissions remain authoritative. [Outage correction](semantic-routing-outages-2026-10-23.md): bounded retryable errors, provider cooldowns, no RAG on routing unavailability and separate retrieval deadlines. [23 October contracts and verification](semantic-routing-2026-10-23.md).
-- [ ] Correct the live-information routing gap found on 25 October: distinguish current web evidence from course retrieval, avoid unrelated document citations, and report unavailable search capabilities accurately. General-topic scope awaits user direction; no phrase catalogue or privacy bypass. [Observed screenshots/logs and proposed correction](live-information-routing-gap-2026-10-25.md).
+- [ ] Correct the live-information routing gap found on 25 October: distinguish current web evidence from course retrieval, avoid unrelated document citations, and report unavailable search capabilities accurately. The user approved general questions with verified current facts; implementation/provider setup remain open. No phrase catalogue or privacy bypass. [Observed screenshots/logs and agreed direction](live-information-routing-gap-2026-10-25.md).
 
 ### 6B.21 Atomic Chat Credit Reservation & Finalization
 

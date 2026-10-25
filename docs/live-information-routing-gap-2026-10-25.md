@@ -10,13 +10,15 @@ Evidence:
 - Adding “search the web” still entered course retrieval. Empty retrieval invoked the absence-policy web fallback, which returned no usable references; the router emitted its canned course-material absence response.
 - A read-only local configuration check found web search enabled, no configured Tavily key and Tavily privacy eligibility false. No secrets were printed. The existing search implementation additionally appends a pharmacology query suffix and limits searches to biomedical authority domains. A “web fallback invoked” log therefore does not prove that a network search occurred or that general web search is supported.
 
-Proposed correction, pending product scope:
+Agreed product direction: the user selected “Allow general questions; verify current facts with web search.” General-question support is approved; an eligible configured search provider and routing/search changes are still required.
+
+Proposed correction under that direction:
 
 - Keep semantic interpretation; separate course evidence, current web evidence, conversational answers and clarification/out-of-scope handling. Do not add greeting/sports phrase lists.
-- A general current-fact request should either use an eligible appropriately scoped web capability, or receive an immediate accurate capability/scope explanation. It should not search pharmacy documents or attach unrelated citations.
+- A general current-fact request should use an eligible appropriately scoped web capability, or receive an immediate accurate capability explanation when unavailable. It should not search pharmacy documents or attach unrelated citations. Resolve relative dates against the actual request date/timezone before searching.
 - Preserve privacy gates. Distinguish missing configuration, privacy hold, provider failure, quota and genuinely empty search results; do not collapse all into “topic not found in course materials.”
 - Test paraphrases, follow-ups, mixed clinical/general requests, explicit document constraints, unavailable providers, stale/current dates and absence of irrelevant citations. Review reranker timeout behavior alongside routing; model failover remains a separate latency issue.
 
-The user's preference between general-question support and study-only scope is pending. No routing/search code or provider configuration was changed for this finding. The planned Git snapshot retains the tested prior implementation and explicitly records this open defect; Phase 11 and hosted release gates remain open.
+No routing/search code or provider configuration was changed for this finding. The Git snapshot retains the tested prior implementation and explicitly records this open defect and approved direction; Phase 11 and hosted release gates remain open.
 
-Notion handoff: add this as an open AI-routing issue and raise it above tone controls. Verified only for screenshot/log/code inspection and the non-secret configuration check. No Notion connector is available in this session.
+Notion handoff: add this as an open AI-routing issue and raise it above tone controls. Record a Decision Log entry allowing general questions with current facts verified through eligible backend web search; the rejected alternative is limiting all interactions to pharmacy/study scope. Update the roadmap and core-scope Knowledge Base wording, without claiming that general web search is already implemented or configured. Verified only for screenshot/log/code inspection and the non-secret configuration check. No Notion connector is available in this session.

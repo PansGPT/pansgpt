@@ -2921,7 +2921,7 @@ The engine uses a two-tier registry of **Always-Loaded Core Tools** and **Dynami
 
 ### 6.4 Intent Routing, Complexity Analysis & Multi-Turn Agentic Tool Loop
 
-> **25 October observed gap:** The implemented routing model can still confuse current web information with course evidence, producing irrelevant RAG citations and misleading absence wording. The football-score screenshots/logs expose this unresolved behavior. General-topic support is a pending product choice; neither the semantic-router implementation checkbox nor offline tests certify that behavior. See [open finding and proposed correction](live-information-routing-gap-2026-10-25.md).
+> **25 October observed gap and user decision:** The implemented routing model can still confuse current web information with course evidence, producing irrelevant RAG citations and misleading absence wording. The football-score screenshots/logs expose this unresolved behavior. The user approved general questions with current facts verified by backend web search. Implement distinct evidence routing and accurate unavailable-search responses while preserving clinical grounding and provider privacy gates. The semantic-router implementation checkbox and offline tests do not certify this still-open behavior. See [open finding and agreed direction](live-information-routing-gap-2026-10-25.md).
 
 The AI determines the student's intent and place of call, assesses task complexity, selects the necessary tool(s) (if any), executes them, and streams back the final response or artifact:
 
