@@ -12,11 +12,15 @@ from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable  
 from typing import Any
 
 import structlog
+from fastapi import HTTPException
 
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.ids import uuid7  # [LEFTOVER FIX]
-from app.engines.guard import policy_guard
+from app.engines.presentation_completion import (
+    merge_presentation_sources,
+    presentation_confirmation,
+)
 from app.engines.skills import SKILL_TOOL_DEFINITIONS, skill_engine
 from app.engines.thinking import ThinkingStreamParser  # [CHAT FIX]  # [CHAT FIX 2]
 from app.engines.tools import CORE_TOOL_DEFINITIONS, tool_engine
@@ -25,6 +29,7 @@ from app.models.chat import (
     ToolResultPayload,
     VoiceTranscribeResponse,
 )
+from app.models.presentation import PresentationSource
 
 logger = structlog.get_logger(__name__)
 
@@ -344,6 +349,12 @@ class MultiTierLlmEngine:
         enable_tools: bool = True,  # [CHAT FIX]
         role: str = "student",
         levels: list[str] | None = None,
+        fast_path: bool = False,
+        session_id: str | None = None,
+        presentation_slide_count: int | None = None,
+        presentation_sources: list[PresentationSource] | None = None,
+        presentation_request: bool = False,
+        validate_presentation_request: bool = False,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:  # [CHAT FIX]
         attempt_state = {"model": "unknown"}  # [CHAT FIX]
         try:  # [CHAT FIX]
@@ -358,6 +369,12 @@ class MultiTierLlmEngine:
                     attempt_state,  # [CHAT FIX]
                     role,
                     levels,
+                    fast_path=fast_path,
+                    session_id=session_id,
+                    presentation_slide_count=presentation_slide_count,
+                    presentation_sources=presentation_sources,
+                    presentation_request=presentation_request,
+                    validate_presentation_request=validate_presentation_request,
                 ):  # [CHAT FIX]
                     yield event  # [CHAT FIX]
         except TimeoutError as exc:  # [CHAT FIX]
@@ -526,6 +543,12 @@ class MultiTierLlmEngine:
         attempt_state: dict[str, str] | None = None,  # [CHAT FIX]
         role: str = "student",
         levels: list[str] | None = None,
+        fast_path: bool = False,
+        session_id: str | None = None,
+        presentation_slide_count: int | None = None,
+        presentation_sources: list[PresentationSource] | None = None,
+        presentation_request: bool = False,
+        validate_presentation_request: bool = False,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:
         """
         Multi-turn Agentic Chat Streamer (max 5 turns):
@@ -541,11 +564,12 @@ class MultiTierLlmEngine:
             attempt_state = {"model": "unknown"}  # [CHAT FIX]
         start_time = time.time()
         collected_tokens: list[str] = []
-        active_provider = "google"
-        active_model = self.primary_model
+        active_provider = "groq" if fast_path else "google"
+        active_model = self.groq_model if fast_path else self.primary_model
         generation_successful = False
 
         agent_tool_messages: list[dict[str, Any]] = []
+        deck_sources = merge_presentation_sources(presentation_sources or [], "", None)
         active_prompt_tokens = (len(system_prompt) + len(user_message)) // 4
         active_tools = None
         if enable_tools:
@@ -566,24 +590,44 @@ class MultiTierLlmEngine:
             # Allow up to 2 tool execution turns; from turn 2 onwards force text synthesis
             tools_for_turn = active_tools if (turn < 2) else None
 
-            candidates = [
-                ("google", self.primary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
-                ("google", self.secondary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
-                ("groq", self.groq_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
-                ("groq", self.groq_secondary_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
-                (
-                    "openrouter",
-                    self.openrouter_model,
-                    self.openrouter_key,
-                    MAX_HISTORY_TOKENS_OPENROUTER,
-                ),
-                (
-                    "openrouter",
-                    settings.OPENROUTER_FAST_MODEL,
-                    self.openrouter_key,
-                    MAX_HISTORY_TOKENS_OPENROUTER,
-                ),
-            ]
+            if fast_path:
+                candidates = [
+                    ("groq", self.groq_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                    ("groq", self.groq_secondary_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                    ("google", self.primary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                    ("google", self.secondary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                    (
+                        "openrouter",
+                        settings.OPENROUTER_FAST_MODEL,
+                        self.openrouter_key,
+                        MAX_HISTORY_TOKENS_OPENROUTER,
+                    ),
+                    (
+                        "openrouter",
+                        self.openrouter_model,
+                        self.openrouter_key,
+                        MAX_HISTORY_TOKENS_OPENROUTER,
+                    ),
+                ]
+            else:
+                candidates = [
+                    ("google", self.primary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                    ("google", self.secondary_model, self.gemini_key, MAX_HISTORY_TOKENS_GOOGLE),
+                    ("groq", self.groq_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                    ("groq", self.groq_secondary_model, self.groq_key, MAX_HISTORY_TOKENS_GROQ),
+                    (
+                        "openrouter",
+                        self.openrouter_model,
+                        self.openrouter_key,
+                        MAX_HISTORY_TOKENS_OPENROUTER,
+                    ),
+                    (
+                        "openrouter",
+                        settings.OPENROUTER_FAST_MODEL,
+                        self.openrouter_key,
+                        MAX_HISTORY_TOKENS_OPENROUTER,
+                    ),
+                ]
             for provider, model, key, budget in candidates:
                 if not self._is_live_key(key) or not self.circuits.available(model):
                     continue
@@ -706,6 +750,11 @@ class MultiTierLlmEngine:
             # ------------------------------------------------------------------
             # PROCESS AGENT TURN RESULTS
             # ------------------------------------------------------------------
+            file_skills = {"create_doc", "create_pdf", "create_pptx", "create_md"}
+            file_generation_turn = presentation_request or any(
+                tc["name"] in file_skills for tc in tool_calls or []
+            )
+            turn_visible_tokens: list[str] = []
             if text_gen:
                 from app.engines.stream_guard import StreamGuard
 
@@ -719,7 +768,8 @@ class MultiTierLlmEngine:
                             {"delta": thought, "token": thought},
                             active_provider,
                         )
-                    if visible:
+                    if visible and not file_generation_turn:
+                        turn_visible_tokens.append(visible)
                         collected_tokens.append(visible)
                         yield "text_chunk", {"delta": visible, "token": visible}, active_provider
                 tail_visible, tail_thought = parser.feed(output_guard.flush())
@@ -729,67 +779,13 @@ class MultiTierLlmEngine:
                 thought = tail_thought + thought
                 if thought:
                     yield "thinking_chunk", {"delta": thought, "token": thought}, active_provider
-                if visible:
+                if visible and not file_generation_turn:
+                    turn_visible_tokens.append(visible)
                     collected_tokens.append(visible)
                     yield "text_chunk", {"delta": visible, "token": visible}, active_provider
                 text_gen = None
             if tool_calls:
-                # 1. Stream any reasoning or preamble text emitted prior to tool execution
-                turn_visible_tokens: list[str] = []
-                parser = ThinkingStreamParser()
-                has_thought = False
-
-                if text_gen:
-                    async for chunk in text_gen:
-                        sanitized = policy_guard.filter_credential_leaks(chunk)
-                        visible_chunk, thinking_chunk = parser.feed(sanitized)
-                        if thinking_chunk:
-                            has_thought = True
-                            yield (
-                                "thinking_chunk",
-                                {"delta": thinking_chunk, "token": thinking_chunk},
-                                active_provider,
-                            )
-                        if visible_chunk:
-                            turn_visible_tokens.append(visible_chunk)
-                            collected_tokens.append(visible_chunk)
-                            yield (
-                                "text_chunk",
-                                {"delta": visible_chunk, "token": visible_chunk},
-                                active_provider,
-                            )
-                    rem_vis, rem_think = parser.flush()
-                    if rem_think:
-                        has_thought = True
-                        yield (
-                            "thinking_chunk",
-                            {"delta": rem_think, "token": rem_think},
-                            active_provider,
-                        )
-                    if rem_vis:
-                        turn_visible_tokens.append(rem_vis)
-                        collected_tokens.append(rem_vis)
-                        yield (
-                            "text_chunk",
-                            {"delta": rem_vis, "token": rem_vis},
-                            active_provider,
-                        )
-
-                # If the model dispatched a tool call without explicit reasoning text,
-                # provide an informative agent trace in the thinking inspector so the student always
-                # understands the clinical pedagogical intent behind the tool execution.
-                if not has_thought:
-                    tool_names_str = ", ".join(f"`{tc['name']}`" for tc in tool_calls)
-                    agent_trace = (
-                        f"Analyzing student query → Selected specialized clinical tool(s): {tool_names_str} "
-                        f"to compile structured study materials and retrieve verified syllabus evidence.\n"
-                    )
-                    yield (
-                        "thinking_chunk",
-                        {"delta": agent_trace, "token": agent_trace},
-                        active_provider,
-                    )
-
+                successful_files: list[str] = []
                 turn_visible_content = "".join(turn_visible_tokens).strip() or None
                 formatted_tool_calls = [
                     {
@@ -830,17 +826,72 @@ class MultiTierLlmEngine:
                             "error": "This tool is not available for this request.",
                         }
                     elif t_name in SKILL_NAMES:
-                        artifact = await skill_engine.dispatch_skill(
-                            t_name, t_args, user_id=user_id, university_id=university_id
-                        )
+                        try:
+                            if (
+                                t_name == "create_pptx"
+                                and validate_presentation_request
+                                and not presentation_request
+                            ):
+                                from app.engines.presentation_planning import (
+                                    resolve_presentation_plan,
+                                )
+
+                                try:
+                                    plan = await resolve_presentation_plan(user_message, history)
+                                except Exception as exc:
+                                    raise HTTPException(
+                                        503,
+                                        "Presentation requirements could not be checked. Please retry.",
+                                    ) from exc
+                                presentation_slide_count = plan.slide_count
+                                presentation_request = True
+                            artifact = await skill_engine.dispatch_skill(
+                                t_name,
+                                t_args,
+                                user_id=user_id,
+                                university_id=university_id,
+                                **(
+                                    {
+                                        "requested_slide_count": presentation_slide_count,
+                                        "sources": deck_sources,
+                                    }
+                                    if t_name == "create_pptx"
+                                    else {}
+                                ),
+                            )
+                        except HTTPException as exc:
+                            yield (
+                                "tool_end",
+                                ToolResultPayload(
+                                    call_id=call_id,
+                                    tool_name=t_name,
+                                    status="error",
+                                    result={"error": "File generation failed."},
+                                ),
+                                active_provider,
+                            )
+                            yield (
+                                "error",
+                                {
+                                    "error": str(exc.detail)
+                                    if exc.status_code == 422
+                                    else "The file could not be saved. Please try again.",
+                                    "code": str(exc.status_code),
+                                    "retryable": exc.status_code >= 500 or exc.status_code == 422,
+                                },
+                                active_provider,
+                            )
+                            return
                         yield "artifact_ready", artifact, active_provider
+                        if t_name in file_skills:
+                            successful_files.append(t_name)
                         tool_res = {
                             "status": "success",
                             "title": artifact.title,
                             "skill_name": artifact.skill_name,
                             "file_extension": artifact.file_extension,
                             "content_summary": artifact.content,
-                            "instruction": "The artifact file has been compiled and rendered directly as a downloadable card in the student UI. In your response text, provide an educational clinical summary of the content. Do NOT output raw URLs, file paths, or markdown download links in your text.",
+                            "instruction": "The artifact file has been compiled and rendered directly as a downloadable card in the student UI. Confirm completion briefly; do not repeat the slides or document content. Do NOT output raw URLs, file paths, or markdown download links in your text.",
                         }
                     else:
                         tool_res = await tool_engine.dispatch_tool(
@@ -850,14 +901,18 @@ class MultiTierLlmEngine:
                             user_id=user_id,
                             role=role,
                             levels=levels,
+                            session_id=session_id,
                         )
+                        deck_sources = merge_presentation_sources(deck_sources, t_name, tool_res)
 
                     yield (
                         "tool_end",
                         ToolResultPayload(
                             call_id=call_id,
                             tool_name=t_name,
-                            status="success",
+                            status="error"
+                            if isinstance(tool_res, dict) and tool_res.get("status") == "error"
+                            else "success",
                             result=tool_res,
                         ),
                         active_provider,
@@ -873,6 +928,25 @@ class MultiTierLlmEngine:
                             else tool_res,
                         }
                     )
+
+                if successful_files:
+                    confirmation = (
+                        "Your presentation is ready to download."
+                        if successful_files == ["create_pptx"]
+                        else "Your file is ready to download."
+                        if len(successful_files) == 1
+                        else "Your files are ready to download."
+                    )
+                    if successful_files == ["create_pptx"] and isinstance(artifact.content, dict):
+                        confirmation = presentation_confirmation(artifact.content)
+                    collected_tokens.append(confirmation)
+                    yield (
+                        "text_chunk",
+                        {"token": confirmation, "delta": confirmation},
+                        active_provider,
+                    )
+                    generation_successful = True
+                    break
 
                 # In offline mode, complete the interaction by synthesizing the tool output
                 if active_model == "gemma-offline-mock":

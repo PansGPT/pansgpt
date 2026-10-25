@@ -2,27 +2,13 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  ArrowUpRight,
-  Menu,
-  PanelLeftClose,
-  PanelLeftOpen,
-  Plus,
-  Mic,
-  ArrowUp,
-} from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  ApplicationNavPanel,
-  Button,
-  Input,
-  Slideout,
-  ThemeProvider,
-  Tooltip,
-} from "@pansgpt/ui/shell";
+import { ApplicationNavPanel, Button, Slideout, ThemeProvider } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import { BrandMark } from "@/components/auth/brand-art";
-import { destinations } from "./navigation";
+import { ConversationSearch } from "@/components/chat/search-dialog";
+import { ConversationUndo } from "@/components/chat/undo-notice";
 import { WorkspaceLoading } from "./loading";
 import { ProfileDrawer } from "./profile";
 import { usePreferences } from "./use-preferences";
@@ -71,7 +57,12 @@ function Workspace({
   function returnToAccount(): void {
     if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
       profileReturn.current.focus();
-    else document.querySelector<HTMLButtonElement>(".shell-mobile-menu")?.focus();
+    else
+      document
+        .querySelector<HTMLButtonElement>(
+          pathname === "/app" ? ".shell-home-account .shell-account-menu" : ".shell-mobile-menu"
+        )
+        ?.focus();
   }
   function setProfileOpen(open: boolean): void {
     setPanels((value) => ({ ...value, pathname, profile: open, navigation: false, help: false }));
@@ -82,8 +73,6 @@ function Workspace({
   function setSearchOpen(open: boolean): void {
     setPanels((value) => ({ ...value, pathname, search: open }));
   }
-  const [query, setQuery] = useState("");
-  const searchInput = useRef<HTMLInputElement>(null);
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
   const navigationOrigin = useRef(pathname);
   const openSearch = useCallback(() => {
@@ -91,7 +80,6 @@ function Workspace({
       element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
       pathname,
     };
-    setQuery("");
     setPanels({ pathname, navigation: false, search: true, profile: false, help: false });
   }, [pathname]);
   const preferences = usePreferences(profile.id, profile.university_id);
@@ -114,16 +102,6 @@ function Workspace({
       logo={
         <div className="shell-brand-row">
           <Brand />
-          {!mobile && (
-            <button
-              className="shell-collapse"
-              aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-              aria-expanded={!collapsed}
-              onClick={() => setCollapsed((value) => !value)}
-            >
-              {collapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
-            </button>
-          )}
         </div>
       }
       account={
@@ -142,6 +120,7 @@ function Workspace({
       label={mobile ? "Mobile navigation" : "Primary navigation"}
       navigation={
         <SidebarLinks
+          mobile={mobile}
           close={() => {
             if (mobile) setNavigationOpen(false);
           }}
@@ -149,9 +128,6 @@ function Workspace({
         />
       }
     />
-  );
-  const matches = destinations.filter((item) =>
-    `${item.label} ${item.description}`.toLowerCase().includes(query.trim().toLowerCase())
   );
   return (
     <DashboardProvider profile={profile}>
@@ -167,14 +143,49 @@ function Workspace({
         <aside className="shell-sidebar" aria-label="Workspace sidebar">
           {panel()}
         </aside>
+        <button
+          className="shell-collapse shell-collapse-docked"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!collapsed}
+          onClick={() => setCollapsed((value) => !value)}
+        >
+          {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+        </button>
         <div className="shell-workspace">
           <header className="shell-topbar">
             <div className="shell-mobile-brand">
               <Brand />
             </div>
             <div className="shell-header-actions">
+              {pathname === "/app" && (
+                <div className="shell-home-account">
+                  <AccountMenu
+                    profile={profile}
+                    compact
+                    openProfile={(opener) => {
+                      profileReturn.current = opener;
+                      setProfileOpen(true);
+                    }}
+                    openHelp={(opener) => {
+                      profileReturn.current = opener;
+                      setPanels({
+                        pathname,
+                        navigation: false,
+                        search: false,
+                        profile: false,
+                        help: true,
+                      });
+                    }}
+                    openNavigation={() => {
+                      navigationOrigin.current = pathname;
+                      setNavigationOpen(true);
+                    }}
+                  />
+                </div>
+              )}
               <Slideout
                 title="Workspace navigation"
+                className="shell-navigation-drawer"
                 description="Find your study tools."
                 side="left"
                 open={navigationOpen}
@@ -183,6 +194,18 @@ function Workspace({
                   setNavigationOpen(open);
                 }}
                 onCloseAutoFocus={(event) => {
+                  if (
+                    pathname === "/app" &&
+                    navigationOrigin.current === pathname &&
+                    !profileOpen &&
+                    !helpOpen
+                  ) {
+                    event.preventDefault();
+                    document
+                      .querySelector<HTMLButtonElement>(".shell-home-account .shell-account-menu")
+                      ?.focus();
+                    return;
+                  }
                   if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
                     event.preventDefault();
                     if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
@@ -214,48 +237,60 @@ function Workspace({
           </main>
           {pathname !== "/app/chat" && (
             <form
-              className="shell-mobile-composer"
+              className="shell-mobile-composer p-study-composer"
               onSubmit={(event) => {
                 event.preventDefault();
                 const prompt = message.trim();
+                if (!prompt) return;
                 setDraft(prompt.slice(0, 4000));
                 router.push("/app/chat");
                 setMessage("");
               }}
             >
-              <button type="button" aria-label="Quick search" onClick={openSearch}>
-                <Plus size={21} aria-hidden="true" />
-              </button>
-              <input
-                aria-label="Message PansGPT"
-                placeholder="Message PansGPT"
-                value={message}
-                maxLength={4000}
-                onChange={(event) => setMessage(event.target.value)}
-              />
-              <button
-                type="button"
-                aria-label="Voice input"
-                disabled
-                title="Voice input is coming soon"
-              >
-                <Mic size={19} aria-hidden="true" />
-              </button>
-              <button type="submit" aria-label="Open chat">
-                <ArrowUp size={19} aria-hidden="true" />
-              </button>
+              <div className="p-study-composer-row">
+                <button
+                  className="p-study-composer-control"
+                  type="button"
+                  aria-label="Quick search"
+                  onClick={openSearch}
+                >
+                  <Plus size={25} aria-hidden="true" />
+                </button>
+                <input
+                  className="p-study-composer-input"
+                  aria-label="Message PansGPT"
+                  placeholder="Message PansGPT…"
+                  value={message}
+                  maxLength={4000}
+                  onChange={(event) => setMessage(event.target.value)}
+                />
+                <button
+                  type="button"
+                  className="p-study-composer-control"
+                  aria-label="Open chat for voice input"
+                  title={
+                    pathname === "/app"
+                      ? "Continue in chat to record a question"
+                      : "Voice input is available in chat"
+                  }
+                  onClick={() => {
+                    setDraft(message.trim().slice(0, 4000));
+                    router.push("/app/chat");
+                    setMessage("");
+                  }}
+                >
+                  <Mic size={19} aria-hidden="true" />
+                </button>
+                <button
+                  className="p-study-composer-control p-study-composer-submit"
+                  type="submit"
+                  aria-label="Send message"
+                  disabled={!message.trim()}
+                >
+                  <ArrowUp size={19} aria-hidden="true" />
+                </button>
+              </div>
             </form>
-          )}
-          {pathname !== "/app/chat" && (
-            <Tooltip content="Message PansGPT" side="left" arrow>
-              <Link
-                href="/app/chat"
-                className="shell-assistant-launcher"
-                aria-label="Message PansGPT"
-              >
-                <BrandMark />
-              </Link>
-            </Tooltip>
           )}
         </div>
         <ProfileDrawer
@@ -281,55 +316,30 @@ function Workspace({
             <p>
               Open Library for your course documents, or use Message PansGPT to start a study chat.
             </p>
-            <h3>Find a page quickly</h3>
-            <p>Use the search beside Recent chats, or press Ctrl + K (Command + K on Mac).</p>
+            <h3>Find your conversations</h3>
+            <p>
+              Search titles and messages beside Recent chats, or press Ctrl + K (Command + K on
+              Mac).
+            </p>
             <h3>Your preferences</h3>
             <p>Open your account at the bottom of the sidebar to change your theme or sign out.</p>
             <p>Cards marked Sample show the intended experience while your account is new.</p>
           </div>
         </Slideout>
-        <Slideout
-          title="Quick search"
-          description="Find a page in your workspace."
-          open={searchOpen}
-          onOpenChange={setSearchOpen}
-          onOpenAutoFocus={(event) => {
-            event.preventDefault();
-            searchInput.current?.focus();
-          }}
-          onCloseAutoFocus={(event) => {
-            event.preventDefault();
-            const previous = searchReturn.current;
-            if (previous?.pathname === pathname && previous.element?.isConnected)
-              previous.element.focus();
-            else main.current?.focus({ preventScroll: true });
-          }}
-        >
-          <div className="shell-command">
-            <Input
-              ref={searchInput}
-              label="Search pages"
-              placeholder="Library, Chat, Notes…"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-            />
-            <p role="status">
-              {matches.length ? `${matches.length} pages` : "No matching pages. Try another name."}
-            </p>
-            <nav aria-label="Search results">
-              {matches.map(({ href, label, description, icon: Icon }) => (
-                <Link key={href} href={href} onClick={() => setSearchOpen(false)}>
-                  <Icon size={20} aria-hidden="true" />
-                  <span>
-                    <strong>{label}</strong>
-                    <small>{description}</small>
-                  </span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </Slideout>
+        {searchOpen && (
+          <ConversationSearch
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              const previous = searchReturn.current;
+              if (previous?.pathname === pathname && previous.element?.isConnected)
+                previous.element.focus();
+              else main.current?.focus({ preventScroll: true });
+            }}
+          />
+        )}
+        <ConversationUndo />
       </div>
     </DashboardProvider>
   );

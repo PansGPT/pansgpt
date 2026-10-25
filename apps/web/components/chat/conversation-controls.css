@@ -1,0 +1,283 @@
+.study-chat-dialog {
+  box-sizing: border-box;
+  font: 400 14px/1.6 var(--font-body);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 90;
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100dvh - 64px);
+  overflow: auto;
+  padding: 24px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 16px;
+  background: var(--bg-primary);
+  color: var(--text-primary-900);
+  box-shadow: var(--effect-shadow-xl);
+}
+.study-chat-dialog *,
+.study-chat-dialog *::before,
+.study-chat-dialog *::after {
+  box-sizing: border-box;
+}
+.study-chat-dialog > h2 {
+  margin: 0 32px 8px 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.study-chat-dialog > p {
+  margin: 0 0 20px;
+  color: var(--text-tertiary-600);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.study-chat-dialog-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  cursor: pointer;
+}
+.study-chat-dialog-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+.study-chat-dialog button:focus-visible,
+.study-chat-dialog a:focus-visible {
+  outline: 2px solid var(--fg-brand-primary-600);
+  outline-offset: 2px;
+}
+.study-chat-dialog .study-chat-session-form {
+  padding: 0;
+}
+.study-chat-search-dialog {
+  width: min(640px, calc(100vw - 32px));
+  min-height: min(380px, calc(100dvh - 64px));
+  padding: 12px;
+  background: var(--bg-secondary);
+}
+.study-chat-search-dialog > .p-sr-only {
+  margin: -1px;
+}
+.study-chat-search {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+}
+.study-chat-search-input {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 116px 10px 14px;
+  color: var(--text-tertiary-600);
+}
+.study-chat-search-input input {
+  width: 100%;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary-900);
+  font: inherit;
+}
+.study-chat-search-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 12px 8px;
+}
+.study-chat-search-filters button {
+  padding: 5px 13px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary-700);
+  font: inherit;
+  cursor: pointer;
+}
+.study-chat-search-filters button[aria-pressed="true"],
+.study-chat-search-filters button:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+.study-chat-search-heading {
+  margin: 6px 14px 3px;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  font-weight: 400;
+}
+.study-chat-search-results {
+  max-height: min(480px, 60dvh);
+  overflow: auto;
+  display: grid;
+  gap: 3px;
+}
+.study-chat-search-results > p {
+  padding: 24px 8px;
+  text-align: center;
+  color: var(--text-tertiary-600);
+}
+.study-chat-search-results > a {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-width: 0;
+  padding: 12px;
+  border-radius: 10px;
+  color: inherit;
+  text-decoration: none;
+}
+.study-chat-search-results > a:hover,
+.study-chat-search-results > a:focus-visible {
+  background: var(--bg-tertiary);
+}
+.study-chat-search-results > a > svg {
+  flex: none;
+  margin-top: 3px;
+  color: var(--text-tertiary-600);
+}
+.study-chat-search-results > a > span {
+  display: grid;
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+}
+.study-chat-search-results :is(strong, small) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.study-chat-search-results strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.study-chat-search-results small {
+  color: var(--text-tertiary-600);
+  line-height: 1.6;
+  font-size: 12px;
+}
+.study-chat-search-results em {
+  color: var(--text-tertiary-600);
+  font-size: 11px;
+  font-style: normal;
+}
+.study-chat-search-results time {
+  flex: none;
+  margin-top: 2px;
+  color: var(--text-tertiary-600);
+  font-size: 11px;
+}
+.study-chat-search-results > .study-chat-search-recent {
+  align-items: center;
+  min-height: 43px;
+  padding-block: 10px;
+}
+.study-chat-search-results > .study-chat-search-recent > svg {
+  margin-top: 0;
+}
+.study-chat-search-results mark {
+  color: var(--text-primary-900);
+  background: color-mix(in srgb, var(--fg-brand-primary-600) 20%, transparent);
+}
+.study-chat-search > button,
+.study-chat-search-results button,
+.study-chat-library-tabs button,
+.study-chat-archived-list button {
+  border: 1px solid var(--border-secondary);
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary-900);
+  font: inherit;
+  cursor: pointer;
+}
+.study-chat-search > .study-chat-search-clear {
+  position: absolute;
+  top: 17px;
+  right: 55px;
+  padding: 3px 12px;
+  border: 0;
+  border-right: 1px solid var(--border-secondary);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+}
+.study-chat-search-clear:hover {
+  color: var(--text-primary-900);
+}
+.study-chat-library-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.study-chat-library-tabs button[aria-selected="true"] {
+  border-color: var(--fg-brand-primary-600);
+}
+.study-chat-undo {
+  position: fixed;
+  z-index: 120;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 14px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  color: var(--text-primary-900);
+  box-shadow: var(--effect-shadow-xl);
+  font-size: 13px;
+}
+.study-chat-undo > span {
+  overflow-wrap: anywhere;
+}
+.study-chat-undo button {
+  flex: none;
+  padding: 4px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-primary-900);
+  font: inherit;
+  cursor: pointer;
+}
+.study-chat-undo button:first-of-type {
+  color: var(--fg-brand-primary-600);
+  font-weight: 600;
+}
+.study-chat-undo button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.study-chat-message[data-search-match="true"] {
+  border-radius: 12px;
+  outline: 1px solid var(--fg-brand-primary-600);
+  outline-offset: 6px;
+}
+@media (max-width: 600px) {
+  .study-chat-dialog {
+    padding: 20px;
+  }
+  .study-chat-search-dialog {
+    padding: 12px;
+  }
+  .study-chat-undo {
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+  }
+}

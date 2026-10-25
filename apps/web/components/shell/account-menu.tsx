@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronUp, HelpCircle, LogOut, Settings, UserRound } from "lucide-react";
+import { ChevronUp, HelpCircle, LogOut, Menu, Settings, UserRound } from "lucide-react";
 import {
   Dropdown,
   DropdownTrigger,
@@ -16,10 +16,14 @@ export function AccountMenu({
   profile,
   openProfile,
   openHelp,
+  compact = false,
+  openNavigation,
 }: {
   profile: UserProfile;
   openProfile: (opener: HTMLButtonElement | null) => void;
   openHelp: (opener: HTMLButtonElement | null) => void;
+  compact?: boolean;
+  openNavigation?: () => void;
 }): React.ReactElement {
   const { signOut } = useAuth();
   const router = useRouter();
@@ -42,20 +46,28 @@ export function AccountMenu({
       <DropdownTrigger asChild>
         <button
           ref={trigger}
-          className="shell-account shell-account-menu"
+          className={`shell-account shell-account-menu${compact ? " shell-account-compact" : ""}`}
           aria-label="Account menu"
         >
-          <UserInitialsAvatar name={name} email={profile.email} size="sm" />
-          <span className="shell-account-copy">
-            <strong>{name}</strong>
-            <small>{profile.email}</small>
-          </span>
-          <ChevronUp size={16} aria-hidden="true" />
+          {compact ? (
+            <span className="shell-account-initial" aria-hidden="true">
+              {Array.from(profile.first_name || name)[0]?.toUpperCase()}
+            </span>
+          ) : (
+            <UserInitialsAvatar name={name} email={profile.email} size="sm" />
+          )}
+          {!compact && (
+            <span className="shell-account-copy">
+              <strong>{name}</strong>
+              <small>{profile.email}</small>
+            </span>
+          )}
+          {!compact && <ChevronUp size={16} aria-hidden="true" />}
         </button>
       </DropdownTrigger>
       <DropdownContent
-        side="top"
-        align="start"
+        side={compact ? "bottom" : "top"}
+        align={compact ? "end" : "start"}
         aria-label="Account options"
         className="shell-account-popup"
         onCloseAutoFocus={(event) => {
@@ -63,6 +75,11 @@ export function AccountMenu({
         }}
       >
         <DropdownHeader title={name} description={profile.email} />
+        {openNavigation && (
+          <DropdownItem icon={<Menu size={17} />} onSelect={() => transfer(() => openNavigation())}>
+            Navigation
+          </DropdownItem>
+        )}
         <DropdownItem icon={<UserRound size={17} />} onSelect={() => transfer(openProfile)}>
           Profile
         </DropdownItem>
@@ -72,7 +89,9 @@ export function AccountMenu({
         <DropdownItem icon={<HelpCircle size={17} />} onSelect={() => transfer(openHelp)}>
           Help
         </DropdownItem>
+        <div className="study-chat-menu-separator" role="separator" />
         <DropdownItem
+          className="shell-account-logout"
           icon={<LogOut size={17} />}
           disabled={busy}
           onSelect={(event) => {

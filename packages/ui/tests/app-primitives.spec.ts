@@ -34,7 +34,7 @@ test("cards preserve native actions, readable themes and a narrow mobile layout"
     });
     backgrounds.push(colors.background);
     expect(colors.background).not.toBe(colors.text);
-    if (theme === "dark") expect(colors.rgb).toEqual([12, 14, 18]);
+    if (theme === "dark") expect(colors.rgb).toEqual([17, 17, 17]);
     await expect(page.getByLabel("Saved documents")).toHaveText("1");
   }
   expect(new Set(backgrounds).size).toBe(3);

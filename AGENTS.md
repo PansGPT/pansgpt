@@ -135,14 +135,19 @@ pansgpt/
 
 - Streaming SSE responses (`text/event-stream`) over HTTP/2.
 - Dynamic AI Skill system (`ai_skills` registry) supporting Dosage Calculator, Drug Interaction Checker, Chemical Reaction Drawer.
-- Multi-tier circuit breaker: Gemma 4 -> Groq LLaMA 3.3 -> OpenRouter.
+- Semantic route-or-answer decisions run in FastAPI: eligible Groq -> Google -> eligible OpenRouter, using the message and bounded selected history. Simple answers/clarifications reuse that completion; do not restore phrase catalogs or generate a second simple answer. If no eligible model returns a valid decision within the budget, return a retryable error and refund/release the run; do not treat provider unavailability as evidence that RAG is needed. See `docs/semantic-routing-2026-10-23.md`.
+- Grounded/deeper generation retains its multi-tier circuit breaker: Gemma 4 -> configured Groq models -> OpenRouter. Scope, permissions, provider privacy and credits remain backend-authoritative.
+- Conversation titles are backend-generated after successful exchanges. Social names remain provisional (`title_source=pending`) until a substantive topic emerges; final generated and manual names are protected. Use `last_message_at` for activity ordering so rename/pin/archive operations do not reorder unpinned history. Conversation search is owner/university scoped and indexes selected user/assistant message content, excluding private reasoning, hidden branches and deleted chats. See `docs/conversation-management-2026-10-24.md` and `docs/chat-titles-and-progress-2026-10-25.md`.
+- Presentation previews must read the owned saved PPTX through the backend, not public R2/Office URLs or a synthetic replacement. Parse in a bounded subprocess; render typed allowlisted primitives, preserve download access on preview failure, and clear preview state across account/conversation changes. A requested slide total includes the single automatic cover and is validated before upload. See `docs/presentation-workspace-2026-10-25.md`.
+- Deleted conversations are recoverable only by their owner within 30 days. Physical file cleanup uses the durable queue after retention purge; preserve generated files referenced by another chat.
 
 ### D. Authentication & Security
 
 - Asymmetric RS256 JWKS verification in FastAPI against Supabase Auth.
 - FastAPI dependency role guards: `require_role(["student", "lecturer", "university_admin", "super_admin"])`.
 - Per-client API identity authentication (`X-API-Key` header with SHA-256 validation).
-- Compliance: Zero Data Retention (ZDR) policy for AI prompts; automated DSAR and Right-to-be-Forgotten data deletion handlers.
+- Provider retention policy: Google/Gemini is exempt from the ZDR gate by explicit user decision on 22 October 2026; disclose retention, potential human review and product-improvement use under Google's applicable terms. Other providers still require verified ZDR. Never label this exception as verified Google ZDR. See `docs/provider-privacy.md`. Automated DSAR and Right-to-be-Forgotten deletion handlers remain required.
+- Chat image inference resolves owned attachment UUIDs within the authenticated account, university and conversation. Upload does not invoke vision; Send analyses normalized image pixels against the question. Never let model-provided URLs/storage keys bypass this boundary. Authenticated previews stay in temporary browser blob URLs. See `docs/chat-images-2026-10-24.md`.
 
 ### E. Frontend & UI/UX Standards
 

@@ -15,3 +15,10 @@ export interface AuthSessionUser {
   universityId: string | null;
   level: string | null;
 }
+
+export * from "./chat";
+export * from "./presentations";
+
+export type { ChatSessionMetadata, ChatSessionUpdateRequest } from "./chat";
+
+export type { ChatProgressCode } from "./chat";

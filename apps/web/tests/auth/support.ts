@@ -1,9 +1,26 @@
 import { expect, type APIRequestContext, type Page } from "@playwright/test";
+export async function openNavigation(page: Page): Promise<void> {
+  const trigger = page.getByRole("button", { name: "Open navigation", exact: true });
+  if (await trigger.isVisible()) await trigger.click();
+  else {
+    await page
+      .locator(".shell-home-account")
+      .getByRole("button", { name: "Account menu", exact: true })
+      .click();
+    await page.getByRole("menuitem", { name: "Navigation", exact: true }).click();
+  }
+}
 export async function accountMenu(page: Page): Promise<void> {
   if ((page.viewportSize()?.width ?? 1440) <= 860) {
     const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-    if (!(await navigation.isVisible()))
-      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+    const homeAccount = page
+      .locator(".shell-home-account")
+      .getByRole("button", { name: "Account menu", exact: true });
+    if (!(await navigation.isVisible()) && (await homeAccount.isVisible())) {
+      await homeAccount.click();
+      return;
+    }
+    if (!(await navigation.isVisible())) await openNavigation(page);
     await navigation.getByRole("button", { name: "Account menu", exact: true }).click();
   } else await page.getByRole("button", { name: "Account menu", exact: true }).click();
 }

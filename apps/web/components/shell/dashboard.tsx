@@ -10,23 +10,31 @@ import {
   FileText,
   RefreshCw,
   PlayCircle,
+  ClipboardList,
+  NotebookText,
+  LockKeyhole,
 } from "lucide-react";
 import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
+import { MobileActivityTimeline, type DashboardTimelineEvent } from "./mobile-activity-timeline";
 import { StudyActivity } from "./study-activity";
 import { DocumentThumbnail } from "./document-thumbnail";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
-import { destinations } from "./navigation";
-type UpcomingEvent = {
-  id: string;
-  title: string;
-  date: string;
-  detail: string;
-  kind: "task" | "class";
-};
+import { mobileDestinations } from "./navigation";
+type UpcomingEvent = DashboardTimelineEvent;
+
+function recentAge(value: string): string {
+  const elapsed = Math.max(0, Date.now() - new Date(value).getTime());
+  if (!Number.isFinite(elapsed)) return "Recently";
+  const hours = Math.floor(elapsed / 3600000);
+  if (hours < 1) return "Just now";
+  if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+  const days = Math.floor(hours / 24);
+  return `${days} ${days === 1 ? "day" : "days"} ago`;
+}
 
 const guides = [
   { title: "Renal system overview", kind: "renal", duration: "5 min read", video: false },
@@ -117,6 +125,7 @@ export function StudyDashboard(): React.ReactElement {
     id: task.id,
     title: task.title,
     date: task.due_date,
+    time: task.due_time,
     detail: [task.due_time?.slice(0, 5), task.subtitle].filter(Boolean).join(" · "),
   }));
   for (let offset = 0; offset < 21; offset += 1) {
@@ -132,6 +141,8 @@ export function StudyDashboard(): React.ReactElement {
           id: `${slot.id}-${date}`,
           title: slot.course_title,
           date,
+          time: slot.start_time || slot.time_slot,
+          timeSlot: slot.time_slot,
           detail: [slot.start_time?.slice(0, 5) || slot.time_slot, slot.venue]
             .filter(Boolean)
             .join(" · "),
@@ -147,14 +158,24 @@ export function StudyDashboard(): React.ReactElement {
   return (
     <div className="study-dashboard">
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
-        {destinations
+        {mobileDestinations
           .filter((item) => !["/app", "/app/chat"].includes(item.href))
-          .map(({ href, label, icon: Icon }) => (
-            <Link href={href} key={href}>
-              <Icon size={26} aria-hidden="true" />
-              <span>{label}</span>
-            </Link>
-          ))}
+          .map(({ href, label, icon }) => {
+            const Icon =
+              href === "/app/quiz"
+                ? ClipboardList
+                : href === "/app/notes"
+                  ? NotebookText
+                  : href === "/app/focus"
+                    ? LockKeyhole
+                    : icon;
+            return (
+              <Link href={href} key={href}>
+                <Icon size={26} aria-hidden="true" />
+                <span>{label}</span>
+              </Link>
+            );
+          })}
       </nav>
       <header className="dashboard-greeting">
         <h1>
@@ -217,7 +238,14 @@ export function StudyDashboard(): React.ReactElement {
                   <span className="dashboard-file-icon">
                     <FileText size={19} aria-hidden="true" />
                   </span>
-                  <h3>{item.documents.title}</h3>
+                  <div className="dashboard-recent-copy">
+                    <h3>{item.documents.title}</h3>
+                    <span className="dashboard-recent-detail">
+                      Library <span aria-hidden="true">·</span>{" "}
+                      {data.recentSource === "library" && !sampleRecent ? "Added " : ""}
+                      {recentAge(item.updated_at)}
+                    </span>
+                  </div>
                   <div className="dashboard-card-meta">
                     <span>
                       {new Date(item.updated_at).toLocaleDateString(undefined, {
@@ -226,6 +254,7 @@ export function StudyDashboard(): React.ReactElement {
                       })}
                     </span>
                   </div>
+                  <ChevronRight className="dashboard-recent-chevron" size={18} aria-hidden="true" />
                 </div>
               </button>
             ))}
@@ -351,26 +380,13 @@ export function StudyDashboard(): React.ReactElement {
           </div>
           {data.loading || data.eventsError ? (
             <ScheduleState loading={data.loading} error={data.eventsError} onRetry={data.reload} />
-          ) : events.filter((item) => item.kind === (activityTab === "tasks" ? "task" : "class"))
-              .length ? (
-            events
-              .filter((item) => item.kind === (activityTab === "tasks" ? "task" : "class"))
-              .slice(0, 5)
-              .map((event) => (
-                <div className="dashboard-event" key={event.id}>
-                  <div className="dashboard-event-date">
-                    <strong>{formatDateOnly(event.date, { weekday: "short" })}</strong>
-                    <span>{formatDateOnly(event.date, { month: "short", day: "numeric" })}</span>
-                  </div>
-                  <span className="dashboard-event-dot" aria-hidden="true" />
-                  <div>
-                    <h3>{event.title}</h3>
-                    <p>{event.detail || "All day"}</p>
-                  </div>
-                </div>
-              ))
           ) : (
-            <ScheduleState loading={false} error={false} onRetry={data.reload} kind={activityTab} />
+            <MobileActivityTimeline
+              events={events}
+              tab={activityTab}
+              today={today}
+              sample={sampleEvents}
+            />
           )}
         </div>
       </section>

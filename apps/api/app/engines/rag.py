@@ -9,6 +9,7 @@ import uuid
 from typing import Any
 from urllib.parse import urlsplit  # [CHAT FIX 2]
 
+import asyncpg
 import structlog
 
 from app.core.config import settings
@@ -313,6 +314,9 @@ class RagRetrievalEngine:
                             filter_doc_uuids,  # [CHAT FIX 2]
                             levels,
                         )  # [CHAT FIX 2]
+                except (TimeoutError, asyncpg.QueryCanceledError):
+                    # A timeout is not an RPC signature mismatch; do not start more SQL work.
+                    raise
                 except Exception as hybrid_exc:
                     if not vector_str:  # [CHAT FIX 2]
                         raise  # [CHAT FIX 2]
@@ -424,9 +428,13 @@ class RagRetrievalEngine:
                                             "course_code": r["course_code"] or "",
                                         }
                                     )
+                        except (TimeoutError, asyncpg.QueryCanceledError):
+                            raise
                         except Exception as exp_err:
                             logger.debug("expansion_retrieval_skipped", error=str(exp_err))
 
+            except (TimeoutError, asyncpg.QueryCanceledError):
+                raise
             except Exception as exc:
                 logger.warning("rag_retrieval_query_error", error=str(exc))
                 raw_matches = []

@@ -1,93 +1,146 @@
 "use client";
 
-import { env } from "@/env";
-
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useSyncExternalStore,
-  Suspense,
-} from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { AssistantRuntimeProvider, ThreadPrimitive, useAuiState } from "@assistant-ui/react";
+import type { ChatMessageView } from "@pansgpt/types";
+import { ArrowDown, AlertCircle } from "lucide-react";
 import { z } from "zod";
-import { useChatDraft } from "@/components/shell/chat-draft";
-import { WorkspaceLoading } from "@/components/shell/loading";
+import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
-import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
-import { ChatComposer } from "@/components/chat/composer";
-import { ChatRecent } from "@/components/chat/recent";
+import { useChatDraft } from "@/components/shell/chat-draft";
 import { useDashboard } from "@/components/shell/dashboard-data";
+import { WorkspaceLoading } from "@/components/shell/loading";
+import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
+import { ChatRecent } from "@/components/chat/recent";
+import { ChatTools } from "@/components/chat/tools";
+import { ChatHeader } from "@/components/chat/header";
+import { ChatComposer } from "@/components/chat/composer";
+import { ChatMessages } from "@/components/chat/virtual-messages";
+import { parseChatHistory } from "@/lib/chat-history";
+import { ChatActionsContext } from "@/components/chat/actions-context";
+import { useChatRuntime } from "@/components/chat/use-chat-runtime";
+import {
+  PresentationWorkspace,
+  usePresentationWorkspace,
+} from "@/components/artifacts/PresentationWorkspace";
 import "./chat.css";
-import {
-  ArrowRight,
-  Plus,
-  Loader2,
-  Bot,
-  User,
-  ChevronDown,
-  Sparkles,
-  AlertCircle,
-  BookOpen,
-} from "lucide-react";
-import {
-  SSEEventStreamReader,
-  CitationItem,
-  ToolExecutionState,
-  ArtifactItem,
-  SSEParsedEvent,
-  externalSourceUrl, // [CHAT FIX 2]
-} from "@/lib/sse-parser";
-import { ToolExecutionBadge } from "@/components/tools/ToolExecutionBadge";
-import { ArtifactRenderer } from "@/components/artifacts/ArtifactRenderer";
 
-interface MessageItem {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  thinking?: string;
-  citations?: CitationItem[];
-  tools?: ToolExecutionState[];
-  artifacts?: ArtifactItem[];
+const desktopQuery = "(min-width: 861px)";
+function subscribeDesktop(notify: () => void): () => void {
+  const query = window.matchMedia(desktopQuery);
+  query.addEventListener("change", notify);
+  return () => query.removeEventListener("change", notify);
+}
+
+function ChatThread({
+  name,
+  initialDraft,
+  error,
+  sessionId,
+  initialTitle,
+}: {
+  name: string;
+  initialDraft: string;
+  error: string | null;
+  sessionId: string | null;
+  initialTitle?: string;
+}): React.ReactElement {
+  const desktop = useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(desktopQuery).matches,
+    () => true
+  );
+  const empty = useAuiState((state) => state.thread.isEmpty);
+  const running = useAuiState((state) => state.thread.isRunning);
+  const root = useRef<HTMLDivElement>(null);
+  const [viewport, setViewport] = useState<HTMLDivElement | null>(null);
+  const [period] = useState(() => {
+    const hour = new Date().getHours();
+    return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+  });
+  return (
+    <ThreadPrimitive.Root ref={root} className="study-chat" data-empty={empty}>
+      {empty ? (
+        <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
+          <div className="study-chat-intro">
+            <h1 id="chat-welcome-title">
+              Good {period}, <span>{name}</span>
+            </h1>
+          </div>
+          <ChatComposer initialDraft={initialDraft} />
+          {desktop && <ChatTools />}
+          {error && (
+            <p className="study-chat-error" role="alert">
+              <AlertCircle size={17} aria-hidden="true" />
+              {error}
+            </p>
+          )}
+        </section>
+      ) : (
+        <>
+          <ChatHeader sessionId={sessionId} initialTitle={initialTitle} />
+          <ThreadPrimitive.Viewport
+            ref={setViewport}
+            className="study-chat-conversation"
+            turnAnchor="top"
+            data-slot="aui_thread-viewport"
+          >
+            <div className="study-chat-thread-content">
+              <div className="study-chat-messages" data-slot="aui_message-group">
+                <ChatMessages viewport={viewport} />
+                <span className="p-sr-only" role="status">
+                  {running ? "PansGPT is responding" : ""}
+                </span>
+              </div>
+              <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
+                <ThreadPrimitive.ScrollToBottom
+                  className="study-chat-scroll-bottom"
+                  aria-label="Scroll to latest message"
+                  title="Scroll to latest message"
+                >
+                  <ArrowDown size={16} aria-hidden="true" />
+                </ThreadPrimitive.ScrollToBottom>
+                {error && (
+                  <p className="study-chat-error" role="alert">
+                    <AlertCircle size={17} aria-hidden="true" />
+                    {error}
+                  </p>
+                )}
+                <ChatComposer />
+                <p>
+                  PansGPT supports your studies. Verify clinical facts and dosages with official
+                  monographs.
+                </p>
+              </ThreadPrimitive.ViewportFooter>
+            </div>
+          </ThreadPrimitive.Viewport>
+        </>
+      )}
+      {empty && !desktop && <ChatRecent />}
+    </ThreadPrimitive.Root>
+  );
 }
 
 function ChatContent({
   initialSessionId = null,
   initialMessages = [],
+  initialTitle,
 }: {
   initialSessionId?: string | null;
-  initialMessages?: MessageItem[];
-}) {
-  const { user, session, profile, loading: authLoading } = useAuth();
-
-  const [sessionId, setSessionId] = useState<string | null>(initialSessionId);
-  const [messages, setMessages] = useState<MessageItem[]>(initialMessages);
+  initialMessages?: ChatMessageView[];
+  initialTitle?: string;
+}): React.ReactElement {
+  const { user, session, profile, loading } = useAuth();
   const { draft, setDraft, startNewChat } = useChatDraft();
+  const presentations = usePresentationWorkspace();
   const router = useRouter();
+  const [initialDraft] = useState(draft);
   const { reload } = useDashboard();
-  const root = useRef<HTMLDivElement>(null);
-  const [period] = useState(() => {
-    const hour = new Date().getHours();
-    return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
-  });
-  const [inputPrompt, setInputPrompt] = useState(draft);
-  useEffect(() => () => setDraft(""), [setDraft]);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [streamError, setStreamError] = useState<string | null>(null);
-
-  // Disclaimer modal state
-  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
-
-  // Streaming abort controller
-  const abortControllerRef = useRef<AbortController | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => () => abortControllerRef.current?.abort(), []);
-
+  const [acknowledgedHere, setAcknowledgedHere] = useState(false);
   const userId = user?.id || profile?.id || "anonymous";
-
-  const disclaimerAccepted = useSyncExternalStore(
+  const accepted = useSyncExternalStore(
     (notify) => {
       window.addEventListener("storage", notify);
       window.addEventListener("pansgpt-disclaimer", notify);
@@ -98,498 +151,65 @@ function ChatContent({
     },
     () => {
       try {
-        return Boolean(localStorage.getItem(`pansgpt_disclaimer_accepted_${userId}`));
+        return !!localStorage.getItem(`pansgpt_disclaimer_accepted_${userId}`);
       } catch {
         return false;
       }
     },
     () => true
   );
-
-  // Ensure a chat session exists
-  const ensureSession = useCallback(
-    async (signal: AbortSignal): Promise<string | null> => {
-      if (sessionId) return sessionId;
-      if (!session?.access_token) return null;
-
-      try {
-        const apiUrl = env.NEXT_PUBLIC_API_URL;
-        const res = await fetch(`${apiUrl}/api/v1/ai/chat/sessions`, {
-          method: "POST",
-          signal,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${session.access_token}`, // [DEPS FIX]
-          },
-          body: JSON.stringify({
-            title: "Pharmacology Study Session",
-          }),
-        });
-
-        if (res.ok) {
-          const data = z.object({ id: z.string().uuid() }).parse(await res.json());
-          setSessionId(data.id);
-          reload();
-          return data.id;
-        }
-      } catch (err) {
-        if (!signal.aborted) console.error("Failed to create chat session", err);
-      }
-      return null;
-    },
-    [sessionId, session, reload]
-  ); // [DEPS FIX]
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "instant"
-        : "smooth",
-    });
-  };
-
+  useEffect(() => () => setDraft(""), [setDraft]);
+  const { runtime, error, submitFeedback, currentSessionId } = useChatRuntime({
+    token: session?.access_token,
+    ownerId: userId,
+    canSend: accepted || acknowledgedHere,
+    initialSessionId,
+    initialMessages,
+    onSessionChanged: reload,
+    onArtifactReady: presentations?.received,
+  });
   useEffect(() => {
-    scrollToBottom();
-  }, [messages, isStreaming]);
-
-  const handleSendMessage = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const prompt = inputPrompt.trim();
-    if (!prompt || isStreaming) return;
-
-    // Check disclaimer agreement
-    const accepted = localStorage.getItem(`pansgpt_disclaimer_accepted_${userId}`);
-    if (!accepted) {
-      setIsDisclaimerOpen(true);
-      return;
+    function removed(event: Event): void {
+      if (
+        event instanceof CustomEvent &&
+        typeof event.detail === "object" &&
+        event.detail?.id === currentSessionId
+      ) {
+        startNewChat();
+        router.replace("/app/chat");
+      }
     }
-
-    setStreamError(null);
-    setInputPrompt("");
-
-    // Append user message immediately
-    const userMsgId = "user-" + Date.now();
-    const assistantMsgId = "assistant-" + Date.now();
-
-    setMessages((prev) => [
-      ...prev,
-      { id: userMsgId, role: "user", content: prompt },
-      { id: assistantMsgId, role: "assistant", content: "", thinking: "" },
-    ]);
-
-    setIsStreaming(true);
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-    try {
-      const currentSessionId = await ensureSession(controller.signal);
-      if (controller.signal.aborted) return;
-      if (!currentSessionId) {
-        throw new Error("Unable to establish chat session with AI engine.");
-      }
-
-      const apiUrl = env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/api/v1/ai/chat/sessions/${currentSessionId}/stream`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.access_token || ""}`, // [DEPS FIX]
-        },
-        body: JSON.stringify({
-          message: prompt,
-          enable_rag: true,
-          enable_tools: true,
-        }),
-        signal: controller.signal,
-      });
-
-      if (!response.ok || !response.body) {
-        const errJson = await response.json().catch(() => ({}));
-        throw new Error(errJson.detail || `Server error: HTTP ${response.status}`);
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      const sseParser = new SSEEventStreamReader();
-
-      const applyEvents = (events: SSEParsedEvent[]) => {
-        // [CHAT FIX 2]
-        for (const evt of events) {
-          const { event, data } = evt; // [CHAT FIX 2] Narrow validated payloads by event.
-
-          if (event === "text_chunk" && data.token) {
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === assistantMsgId ? { ...msg, content: msg.content + data.token } : msg
-              )
-            );
-          } else if (event === "thinking_chunk" && data.token) {
-            setMessages((prev) =>
-              prev.map((msg) =>
-                msg.id === assistantMsgId
-                  ? { ...msg, thinking: (msg.thinking || "") + data.token }
-                  : msg
-              )
-            );
-          } else if (event === "citations") {
-            setMessages((prev) =>
-              prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, citations: data } : msg))
-            );
-          } else if (event === "tool_start" && data.call_id) {
-            const newTool: ToolExecutionState = {
-              call_id: data.call_id,
-              tool_name: data.tool_name || "tool",
-              arguments: data.arguments || {},
-              status: "running",
-            };
-            setMessages((prev) =>
-              prev.map((msg) => {
-                if (msg.id !== assistantMsgId) return msg;
-                const existing = msg.tools || [];
-                const idx = existing.findIndex((t) => t.call_id === data.call_id);
-                if (idx >= 0) {
-                  const updated = [...existing];
-                  updated[idx] = newTool;
-                  return { ...msg, tools: updated };
-                }
-                return { ...msg, tools: [...existing, newTool] };
-              })
-            );
-          } else if (event === "tool_end" && data.call_id) {
-            setMessages((prev) =>
-              prev.map((msg) => {
-                if (msg.id !== assistantMsgId) return msg;
-                const existing = msg.tools || [];
-                const updated = existing.map((t) =>
-                  t.call_id === data.call_id
-                    ? {
-                        ...t,
-                        status: (data.status === "error" ? "error" : "success") as
-                          "success" | "error",
-                        result: data.result,
-                        duration_ms: data.duration_ms,
-                      }
-                    : t
-                );
-                return { ...msg, tools: updated };
-              })
-            );
-          } else if (event === "artifact_ready" && data.skill_name) {
-            const artifact: ArtifactItem = {
-              skill_name: data.skill_name,
-              title: data.title || "Generated Artifact",
-              file_extension: data.file_extension,
-              storage_key: data.storage_key,
-              download_url: data.download_url,
-              content: data.content,
-            };
-            setMessages((prev) =>
-              prev.map((msg) => {
-                if (msg.id !== assistantMsgId) return msg;
-                const existing = msg.artifacts || [];
-                return { ...msg, artifacts: [...existing, artifact] };
-              })
-            );
-          } else if (event === "done") {
-            if (data.full_text) {
-              const fullText = data.full_text; // [CHAT FIX 2]
-              setMessages((prev) =>
-                prev.map((msg) => (msg.id === assistantMsgId ? { ...msg, content: fullText } : msg))
-              );
-            }
-          } else if (event === "error") {
-            setStreamError(data.error || "Streaming error encountered.");
-          }
-        }
-      };
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          applyEvents(sseParser.push(decoder.decode()));
-          applyEvents(sseParser.flush()); // [CHAT FIX 2] Preserve every final event, including errors.
-          break;
-        }
-        applyEvents(sseParser.push(decoder.decode(value, { stream: true })));
-      }
-    } catch (err: unknown) {
-      if (err instanceof DOMException && err.name === "AbortError") {
-        // Normal user cancellation
-      } else {
-        const msg = err instanceof Error ? err.message : "Error streaming response.";
-        setStreamError(msg);
-      }
-    } finally {
-      setIsStreaming(false);
-      abortControllerRef.current = null;
-    }
-  };
-
-  const handleStopStream = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-  };
-
-  if (authLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--bg-secondary)] ">
-        <Loader2 className="h-8 w-8 animate-spin text-[color:var(--fg-brand-primary-600)]" />
-      </div>
-    );
-  }
-
-  const empty = messages.length === 0;
-  const composer = (
-    <ChatComposer
-      prompt={inputPrompt}
-      onChange={setInputPrompt}
-      onSubmit={(event) => void handleSendMessage(event)}
-      streaming={isStreaming}
-      onStop={handleStopStream}
-    />
-  );
-  const suggestions = [
-    { title: "Explain a concept", prompt: "Explain this concept from my course notes: " },
-    { title: "Create study notes", prompt: "Help me create study notes about: " },
-    { title: "Generate quiz questions", prompt: "Create practice quiz questions about: " },
-    { title: "Summarise a document", prompt: "Summarise this document: " },
-  ];
+    window.addEventListener("pansgpt-chat-removed", removed);
+    return () => window.removeEventListener("pansgpt-chat-removed", removed);
+  }, [currentSessionId, startNewChat, router]);
+  if (loading) return <WorkspaceLoading />;
   return (
-    <div ref={root} className="study-chat" data-empty={empty}>
-      {empty ? (
-        <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
-          <div className="study-chat-intro">
-            <h1 id="chat-welcome-title">
-              Good {period}, <span>{profile?.first_name || "there"}</span>
-            </h1>
-            <p>What would you like to learn or work on today?</p>
-          </div>
-          {composer}
-          <div className="study-chat-suggestions" aria-label="Study suggestions">
-            {suggestions.map((suggestion) => (
-              <button
-                key={suggestion.title}
-                onClick={() => {
-                  setInputPrompt(suggestion.prompt);
-                  root.current?.querySelector<HTMLTextAreaElement>("textarea")?.focus();
-                }}
-              >
-                {suggestion.title}
-                <ArrowRight size={16} aria-hidden="true" />
-              </button>
-            ))}
-          </div>
-        </section>
-      ) : (
-        <>
-          <header className="study-chat-thread-heading">
-            <h1>Study chat</h1>
-            <button
-              onClick={() => {
-                startNewChat();
-                router.push("/app/chat");
-              }}
-            >
-              <Plus size={17} aria-hidden="true" />
-              New chat
-            </button>
-          </header>
-          <div className="study-chat-conversation">
-            <div className="study-chat-messages">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex gap-3.5 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  {msg.role === "assistant" && (
-                    <div className="study-chat-assistant-avatar">
-                      <Bot className="h-4 w-4" />
-                    </div>
-                  )}
-
-                  <div className="study-chat-bubble" data-role={msg.role}>
-                    {/* Assistant Tool Execution Badges */}
-                    {msg.role === "assistant" && msg.tools && msg.tools.length > 0 && (
-                      <div className="mb-2.5 flex flex-wrap gap-1.5">
-                        {msg.tools.map((t) => (
-                          <ToolExecutionBadge key={t.call_id} tool={t} />
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Assistant Collapsible Reasoning Block */}
-                    {msg.role === "assistant" && msg.thinking && (
-                      <details
-                        open={!msg.content ? true : undefined}
-                        className="study-chat-thinking"
-                      >
-                        <summary className="flex cursor-pointer select-none items-center justify-between font-semibold text-[color:var(--text-brand-secondary-700)]">
-                          <div className="flex items-center gap-1.5">
-                            <Sparkles
-                              className={`h-3.5 w-3.5 ${
-                                !msg.content
-                                  ? "animate-pulse text-[color:var(--fg-brand-primary-600)]"
-                                  : "text-[color:var(--fg-brand-primary-600)]"
-                              }`}
-                            />
-                            <span>
-                              {!msg.content
-                                ? "Reasoning in progress..."
-                                : "Thought Process & Clinical Reasoning"}
-                            </span>
-                          </div>
-                          <ChevronDown className="h-3.5 w-3.5 text-[color:var(--text-quaternary-500)]" />
-                        </summary>
-                        <pre className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-[color:var(--text-tertiary-600)] max-h-56 overflow-y-auto rounded-lg bg-[var(--bg-primary)]/70 p-2 border border-[var(--border-primary)]/50 ">
-                          {msg.thinking}
-                        </pre>
-                      </details>
-                    )}
-
-                    {/* Message Content: render text in pre-wrap preserving whitespace & code */}
-                    <div className="whitespace-pre-wrap font-sans text-sm break-words">
-                      {msg.content ||
-                        (isStreaming && msg.id === messages.at(-1)?.id ? (
-                          <span className="flex items-center gap-1.5 text-[color:var(--text-quaternary-500)] italic">
-                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                            {msg.tools && msg.tools.some((t) => t.status === "running")
-                              ? "Executing pharmacological research tools..."
-                              : "Generating response..."}
-                          </span>
-                        ) : msg.artifacts?.length || msg.tools?.length ? null : (
-                          <span className="text-[color:var(--text-tertiary-600)]">
-                            {streamError ? "No response was returned." : "Response stopped."}
-                          </span>
-                        ))}
-                    </div>
-
-                    {/* Generated Artifacts (Documents, Slides, Flashcards, Chemical Structures, Mnemonics) */}
-                    {msg.role === "assistant" && msg.artifacts && msg.artifacts.length > 0 && (
-                      <div className="my-2.5 space-y-2">
-                        {msg.artifacts.map((art, idx) => (
-                          <ArtifactRenderer key={idx} artifact={art} />
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Verified Syllabus Grounding Citations */}
-                    {msg.role === "assistant" && msg.citations && msg.citations.length > 0 && (
-                      <div className="mt-3 border-t border-[var(--border-secondary)] pt-2 ">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[color:var(--text-quaternary-500)]">
-                          <BookOpen className="h-3 w-3" />
-                          <span>Sources</span>{" "}
-                          {/* [CHAT FIX 2] Web sources are labeled separately. */}
-                        </div>
-                        <div className="mt-1.5 flex flex-wrap gap-1.5">
-                          {msg.citations.map((c, i) =>
-                            externalSourceUrl(c) ? (
-                              <a
-                                key={i}
-                                href={externalSourceUrl(c)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] underline "
-                                title={c.snippet}
-                              >
-                                {c.title} — Outside the lecture materials
-                              </a>
-                            ) : (
-                              <span
-                                key={i}
-                                className="inline-flex items-center gap-1 rounded-md bg-[var(--bg-tertiary)] px-2 py-0.5 text-[11px] text-[color:var(--text-secondary-700)] "
-                                title={c.snippet}
-                              >
-                                <span className="font-semibold text-[color:var(--text-brand-secondary-700)]">
-                                  {c.course_code || "REF"}
-                                </span>
-                                <span className="truncate max-w-[140px]">{c.title}</span>
-                                {c.page_start && (
-                                  <span className="opacity-60">(p. {c.page_start})</span>
-                                )}
-                              </span>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {msg.role === "user" && (
-                    <div className="study-chat-user-avatar">
-                      <User className="h-4 w-4" />
-                    </div>
-                  )}
-                </div>
-              ))}
-              {streamError && (
-                <p className="study-chat-error" role="alert">
-                  <AlertCircle size={17} aria-hidden="true" />
-                  {streamError}
-                </p>
-              )}
-              <p className="p-sr-only" role="status">
-                {isStreaming ? "PansGPT is responding" : ""}
-              </p>
-              <div ref={messagesEndRef} />
-            </div>
-          </div>
-        </>
-      )}
-      {empty ? (
-        <ChatRecent />
-      ) : (
-        <footer className="study-chat-footer">
-          {composer}
-          <p>
-            PansGPT supports your studies. Verify clinical facts and dosages with official
-            monographs.
-          </p>
-        </footer>
-      )}
-      <FirstChatDisclaimerModal
-        isOpen={isDisclaimerOpen || (userId !== "anonymous" && !disclaimerAccepted)}
-        userId={userId}
-        onAccept={() => {
-          setIsDisclaimerOpen(false);
-          window.dispatchEvent(new Event("pansgpt-disclaimer"));
-        }}
-      />
-    </div>
+    <AssistantRuntimeProvider runtime={runtime}>
+      <ChatActionsContext.Provider value={{ submitFeedback, sessionId: currentSessionId }}>
+        <ChatThread
+          name={profile?.first_name || "there"}
+          initialDraft={initialDraft}
+          error={error}
+          sessionId={currentSessionId}
+          initialTitle={initialTitle}
+        />
+        <FirstChatDisclaimerModal
+          isOpen={userId !== "anonymous" && !accepted && !acknowledgedHere}
+          userId={userId}
+          onAccept={() => {
+            setAcknowledgedHere(true);
+            window.dispatchEvent(new Event("pansgpt-disclaimer"));
+          }}
+        />
+      </ChatActionsContext.Provider>
+    </AssistantRuntimeProvider>
   );
 }
 
-const historySchema = z.object({
-  session: z.object({ id: z.string().uuid(), user_id: z.string().uuid() }),
-  messages: z.array(
-    z.object({
-      id: z.string().uuid(),
-      role: z.enum(["user", "assistant", "system"]),
-      content: z.string(),
-      thinking_text: z.string().nullable().optional(),
-      citations: z
-        .array(
-          z.object({
-            title: z.string(),
-            chunk_id: z.string().nullable().optional(),
-            document_id: z.string().nullable().optional(),
-            source_type: z.enum(["document", "web"]).optional(),
-            url: z.string().nullable().optional(),
-            course_code: z.string().nullable().optional(),
-            page_start: z.number().int().positive().nullable().optional(),
-            page_end: z.number().int().positive().nullable().optional(),
-            snippet: z.string().optional(),
-            confidence: z.string().optional(),
-          })
-        )
-        .nullable()
-        .optional(),
-    })
-  ),
-});
-
 function ChatHistory({ id }: { id: string }): React.ReactElement {
   const { session, profile } = useAuth();
-  const [history, setHistory] = useState<MessageItem[] | null>(null);
+  const [title, setTitle] = useState<string>();
+  const [history, setHistory] = useState<ChatMessageView[] | null>(null);
   const [error, setError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const token = session?.access_token;
@@ -600,30 +220,21 @@ function ChatHistory({ id }: { id: string }): React.ReactElement {
       try {
         if (!token || !owner || !z.string().uuid().safeParse(id).success)
           throw new Error("Invalid conversation");
-        const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-          signal: controller.signal,
-        });
+        const response = await fetch(
+          `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions/${id}?include_branches=true`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal,
+          }
+        );
         if (!response.ok) throw new Error("Conversation unavailable");
-        const result = historySchema.parse(await response.json());
-        if (result.session.id !== id || result.session.user_id !== owner)
-          throw new Error("Conversation mismatch");
-        if (!controller.signal.aborted)
-          setHistory(
-            result.messages.flatMap((item): MessageItem[] =>
-              item.role === "system"
-                ? []
-                : [
-                    {
-                      id: item.id,
-                      role: item.role,
-                      content: item.content,
-                      thinking: item.thinking_text ?? undefined,
-                      citations: item.citations ?? undefined,
-                    },
-                  ]
-            )
-          );
+        const data: unknown = await response.json();
+        const messages = parseChatHistory(data, id, owner);
+        const metadata = z
+          .object({ session: z.object({ title: z.string().optional() }) })
+          .parse(data);
+        if (!controller.signal.aborted) setTitle(metadata.session.title);
+        if (!controller.signal.aborted) setHistory(messages);
       } catch {
         if (!controller.signal.aborted) setError(true);
       }
@@ -648,22 +259,37 @@ function ChatHistory({ id }: { id: string }): React.ReactElement {
       </div>
     );
   if (!history) return <WorkspaceLoading />;
-  return <ChatContent initialSessionId={id} initialMessages={history} />;
+  return <ChatContent initialSessionId={id} initialMessages={history} initialTitle={title} />;
 }
 function ChatRoute(): React.ReactElement {
   const params = useSearchParams();
   const id = params.get("session");
   const { revision } = useChatDraft();
+  const { profile } = useAuth();
+  const identity = `${profile?.id}:${profile?.university_id}`;
   return id ? (
-    <ChatHistory key={`${revision}:${id}`} id={id} />
+    <ChatHistory key={`${identity}:${revision}:${id}`} id={id} />
   ) : (
-    <ChatContent key={`new-chat:${revision}`} />
+    <ChatContent key={`${identity}:new-chat:${revision}`} />
   );
 }
 export default function ChatPage() {
   return (
     <Suspense fallback={<WorkspaceLoading />}>
-      <ChatRoute />
+      <PresentationRoute />
     </Suspense>
+  );
+}
+
+function PresentationRoute(): React.ReactElement {
+  const { profile } = useAuth();
+  const params = useSearchParams();
+  const { revision } = useChatDraft();
+  return (
+    <PresentationWorkspace
+      key={`${profile?.id}:${profile?.university_id}:${params.get("session") || "new"}:${revision}`}
+    >
+      <ChatRoute />
+    </PresentationWorkspace>
   );
 }

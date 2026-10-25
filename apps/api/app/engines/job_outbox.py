@@ -43,8 +43,8 @@ async def deliver_job(redis: Any, job_id: str, name: str, document_id: str, key:
 
 
 async def reconcile_jobs(ctx: dict[str, Any]) -> None:
-    if not settings.ENABLE_INGESTION or not settings.GOOGLE_ZDR_CONFIRMED:
-        return  # Keep durable work pending while embeddings are privacy-blocked.
+    if not settings.ENABLE_INGESTION or not settings.provider_privacy_allowed("google"):
+        return  # Keep durable work pending while ingestion is disabled or disallowed.
     async with get_db_connection() as conn:
         if conn is None:
             return

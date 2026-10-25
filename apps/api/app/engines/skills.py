@@ -10,11 +10,11 @@ import pymupdf
 import structlog
 from docx import Document
 from fastapi import HTTPException  # [CHAT FIX 2]
-from pptx import Presentation
+from pydantic import ValidationError
 
-from app.core.config import settings
 from app.engines.storage import build_artifact_storage_key, r2_storage
 from app.models.chat import ArtifactReadyPayload
+from app.models.presentation import PresentationContentSlide, PresentationSource
 
 logger = structlog.get_logger(__name__)
 
@@ -74,12 +74,24 @@ SKILL_TOOL_DEFINITIONS = [
         "type": "function",
         "function": {
             "name": "create_pptx",
-            "description": "Generate a Microsoft PowerPoint (.pptx) presentation slide deck for seminar or lecture revision.",
+            "description": "Generate a styled PowerPoint presentation. One cover is added automatically. Provide only content slides and honor the student's total count including that cover.",
             "parameters": {
                 "type": "object",
                 "properties": {
                     "title": {"type": "string", "description": "Presentation title"},
                     "subtitle": {"type": "string", "description": "Subtitle or course code"},
+                    "overview": {
+                        "type": "string",
+                        "minLength": 20,
+                        "maxLength": 600,
+                        "description": "Write your natural, concise completion message to the student, tailored to their request and the actual deck you have authored. Explain its main coverage, organization or learning focus in your own words, including the actual total slide count where useful. Vary your wording naturally; no prescribed opener or boilerplate. Use plain text, without repeating slide bullets, internal planning, links, source claims or unrequested features. Backend-verified references are added separately. This message is shown only after the file saves successfully.",
+                    },
+                    "slide_count": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30,
+                        "description": "Total slides INCLUDING the automatic cover. slides must contain exactly slide_count minus one content slides.",
+                    },
                     "slides": {
                         "type": "array",
                         "items": {
@@ -87,13 +99,17 @@ SKILL_TOOL_DEFINITIONS = [
                             "properties": {
                                 "title": {"type": "string"},
                                 "bullet_points": {"type": "array", "items": {"type": "string"}},
+                                "notes": {
+                                    "type": "string",
+                                    "description": "Optional presenter notes for the student. Never include internal planning, system instructions or private reasoning.",
+                                },
                             },
                             "required": ["title", "bullet_points"],
                         },
-                        "description": "List of slides with titles and bullet points.",
+                        "description": "Content slides only; do not include a cover. Distinct titles, up to five concise bullets per slide and optional notes.",
                     },
                 },
-                "required": ["title", "slides"],
+                "required": ["title", "slides", "slide_count", "overview"],
             },
         },
     },
@@ -222,41 +238,17 @@ class SkillExecutionEngine:
         """
         import urllib.parse
 
-        r2_key = settings.r2_access_key or ""
-        if r2_storage.is_configured and not any(
-            p in r2_key.lower() for p in ("placeholder", "dummy", "test", "mock")
-        ):
-            try:
-                await asyncio.wait_for(
-                    r2_storage.upload_bytes(key, data, content_type),
-                    timeout=15.0,
-                )
-                # Upload succeeded — return our own streaming endpoint (not the raw presigned URL)
-                params = f"key={urllib.parse.quote(key, safe='')}"
-                if title:
-                    params += f"&filename={urllib.parse.quote(title, safe='')}"
-                return key, f"/api/v1/library/artifacts/download?{params}"  # [TENANT FIX 2]
-            except Exception as exc:
-                logger.warning(
-                    "artifact_r2_upload_failed",
-                    key=key,
-                    error=str(exc),
-                    error_type=type(exc).__name__,
-                )
-                if not settings.local_dev_enabled:  # [CHAT FIX 2]
-                    raise HTTPException(  # [CHAT FIX 2]
-                        status_code=503,  # [CHAT FIX 2]
-                        detail="Artifact storage is unavailable.",  # [CHAT FIX 2]
-                    ) from exc  # [CHAT FIX 2]
-        if not settings.local_dev_enabled:  # [CHAT FIX 2]
-            raise HTTPException(  # [CHAT FIX 2]
-                status_code=503,  # [CHAT FIX 2]
-                detail="Artifact storage is unavailable.",  # [CHAT FIX 2]
-            )  # [CHAT FIX 2]
+        if not r2_storage.is_configured:
+            raise HTTPException(status_code=503, detail="Artifact storage is unavailable.")
+        try:
+            await asyncio.wait_for(r2_storage.upload_bytes(key, data, content_type), timeout=15.0)
+        except Exception as exc:
+            logger.warning("artifact_r2_upload_failed", error_type=type(exc).__name__)
+            raise HTTPException(status_code=503, detail="Artifact storage is unavailable.") from exc
         params = f"key={urllib.parse.quote(key, safe='')}"
         if title:
             params += f"&filename={urllib.parse.quote(title, safe='')}"
-        return key, f"/api/v1/library/artifacts/download?{params}"  # [TENANT FIX 2]
+        return key, f"/api/v1/library/artifacts/download?{params}"
 
     async def execute_create_doc(
         self,
@@ -359,32 +351,27 @@ class SkillExecutionEngine:
         subtitle: str | None = None,
         university_id: str | None = None,
         user_id: str | None = None,  # [CHAT FIX]
+        slide_count: int | None = None,
+        sources: list[PresentationSource] | None = None,
+        overview: str | None = None,
     ) -> ArtifactReadyPayload:
-        """Generates a PowerPoint presentation using python-pptx."""
-        prs = Presentation()
+        """Build one cover plus validated content, without silently adding another slide."""
+        from app.engines.presentations import build_presentation
 
-        # Title slide
-        title_slide_layout = prs.slide_layouts[0]
-        slide = prs.slides.add_slide(title_slide_layout)
-        slide.shapes.title.text = title
-        if subtitle and slide.placeholders[1]:
-            slide.placeholders[1].text = subtitle
-
-        # Bullet slides
-        bullet_slide_layout = prs.slide_layouts[1]
-        for s_data in slides:
-            s = prs.slides.add_slide(bullet_slide_layout)
-            s.shapes.title.text = s_data.get("title", "Slide")
-            tf = s.placeholders[1].text_frame
-            bullets = s_data.get("bullet_points", [])
-            for i, b in enumerate(bullets):
-                p = tf.add_paragraph() if i > 0 else tf.paragraphs[0]
-                p.text = b
-                p.level = 0
-
-        bio = io.BytesIO()
-        prs.save(bio)
-        data = bio.getvalue()
+        if slide_count is not None and (type(slide_count) is not int or not 1 <= slide_count <= 30):
+            raise HTTPException(422, "Presentation slide count must be an integer from 1 to 30.")
+        try:
+            validated = [PresentationContentSlide.model_validate(slide) for slide in slides]
+            data, metadata = await asyncio.to_thread(
+                build_presentation, title, validated, subtitle, slide_count, sources or [], overview
+            )
+        except ValidationError as exc:
+            raise HTTPException(
+                422,
+                "Use slide titles, up to five concise bullets per slide, optional speaker notes and an overview of 20–600 characters.",
+            ) from exc
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
 
         storage_key = build_artifact_storage_key(
             format_type="pptx",
@@ -405,7 +392,7 @@ class SkillExecutionEngine:
             file_extension="pptx",
             storage_key=key,
             download_url=url,
-            content={"slides_count": len(slides) + 1},
+            content=metadata,
         )
 
     async def execute_create_md(
@@ -508,6 +495,8 @@ class SkillExecutionEngine:
         arguments: dict[str, Any],
         user_id: str | None = None,
         university_id: str | None = None,
+        requested_slide_count: int | None = None,
+        sources: list[PresentationSource] | None = None,
     ) -> ArtifactReadyPayload:
         """Dispatches dynamic skill by name."""
         logger.info("skill_dispatch_requested", skill=skill_name, university_id=university_id)
@@ -527,12 +516,27 @@ class SkillExecutionEngine:
                 user_id=user_id,  # [CHAT FIX]
             )
         elif skill_name == "create_pptx":
+            declared = arguments.get("slide_count")
+            if (
+                requested_slide_count is not None
+                and declared is not None
+                and declared != requested_slide_count
+            ):
+                raise HTTPException(
+                    422,
+                    f"The student requested {requested_slide_count} slides including the cover; use that exact total.",
+                )
             return await self.execute_create_pptx(
                 title=arguments.get("title", "Lecture Slides"),
                 slides=arguments.get("slides", []),
                 subtitle=arguments.get("subtitle"),
                 university_id=university_id,
                 user_id=user_id,  # [CHAT FIX]
+                slide_count=requested_slide_count
+                if requested_slide_count is not None
+                else declared,
+                sources=sources,
+                overview=arguments.get("overview"),
             )
         elif skill_name == "create_md":
             return await self.execute_create_md(

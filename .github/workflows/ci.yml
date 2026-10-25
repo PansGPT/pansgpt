@@ -121,7 +121,9 @@ jobs:
           pnpm exec supabase db reset --local
       - name: Execute database RLS and privilege contracts
         working-directory: apps/api
-        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py tests/test_worker_verification_live.py --allow-live-services -q
+        env:
+          CHAT_INTERACTIONS_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py tests/test_worker_verification_live.py tests/test_conversation_discovery_live.py --allow-live-services -q
       - name: Compare committed contracts with the migrated catalog
         run: uv run --project apps/api python tooling/check-db-contracts.py
       - name: Generate actual database types
@@ -195,6 +197,27 @@ jobs:
           path: |
             packages/ui/test-results/**/trace.zip
             packages/ui/test-results/**/error-context.md
+
+  chat-ui:
+    name: Assistant UI Interaction Contracts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 11
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @pansgpt/web exec playwright install --with-deps chromium
+      - name: Verify synthetic chat interactions without hosted credentials
+        run: pnpm --filter @pansgpt/web test:chat
 
   build-web:
     name: Web Smoke Build Check

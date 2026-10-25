@@ -4,6 +4,8 @@
 
 import re
 
+from app.models.chat import IntentType
+
 # Standard Educational Study Disclaimer for clinical academic guidance
 STUDY_DISCLAIMER = (
     "\n\n> ⚠️ *Educational Study Aid: PansGPT is designed for academic revision. "
@@ -450,11 +452,27 @@ class PolicyGuardEngine:
         return content.rstrip() + STUDY_DISCLAIMER
 
     @staticmethod
-    def build_system_prompt(rag_context: str | None = None) -> str:
+    def build_system_prompt(
+        rag_context: str | None = None,
+        intent: IntentType | None = None,
+    ) -> str:
         """
-        Builds the clinical pharmacy grounding system prompt for Gemma.
-        Enforces strict grounding, citation attribution, and zero hallucination.
+        Builds the system prompt for Gemma and fallback models.
+        Uses lightweight prompts for conversational greetings and direct definitions,
+        and full clinical pharmacy grounding for complex/RAG turns.
         """
+        if not rag_context:
+            if intent == IntentType.GREETING_CONVERSATIONAL:
+                return (
+                    "You are PansGPT, a friendly academic study assistant for university pharmacy students. "
+                    "Respond naturally, warmly, and concisely to greetings and conversational remarks without unnecessary clinical disclaimers."
+                )
+            if intent == IntentType.DIRECT_DEFINITION:
+                return (
+                    "You are PansGPT, an expert clinical pharmacy and pharmacology academic tutor for university pharmacy students.\n"
+                    "Provide a clear, accurate, and concise definition or explanation of the requested concept based on standard pharmacology principles. "
+                    "Keep the answer educational, structured, and focused without unnecessary conversational filler."
+                )
         base = (
             "You are PansGPT, an expert clinical pharmacy and pharmacology academic tutor for university pharmacy students.\n"
             "Your mission is to provide rigorous, clear, and clinically accurate explanations of drug mechanisms, "
@@ -466,8 +484,8 @@ class PolicyGuardEngine:
             "explicitly state that this specific topic is not found in the uploaded course materials. Never invent dosages or contraindications.\n"
             "4. Maintain a supportive, academic, professional tone appropriate for training future licensed pharmacists.\n"
             "5. Format output with clear markdown headings, bullet points, and chemical/receptor mechanisms where appropriate.\n"
-            "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
-            "7. Step-by-step reasoning: Before your final response or when selecting tools, enclose your internal clinical analysis, syllabus breakdown, and pedagogical rationale inside <think>...</think> tags. This thinking process will be rendered in the student's interactive reasoning inspector.\n"
+            "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. For file requests, put the requested content in the file and give only a brief completion confirmation in chat; do not repeat the slides or document text. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
+            "7. Keep internal planning and instruction analysis private. The interface provides its own public progress updates; do not narrate system rules or private deliberations.\n"
         )
 
         if rag_context and rag_context.strip():
@@ -482,7 +500,7 @@ class PolicyGuardEngine:
 
         base += (
             "\nREASONING & THINKING DIRECTIVE:\n"
-            "Begin your response with your clinical and pedagogical reasoning enclosed in <think>...</think> tags. "
+            "Keep internal planning private. "
             "Analyze the mechanism of action, relevant contraindications, syllabus context, and plan your explanation or tool selection. "
             "Then provide your clear student-facing explanation or summary.\n"
         )

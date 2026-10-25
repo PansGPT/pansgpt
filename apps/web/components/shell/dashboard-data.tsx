@@ -1,10 +1,11 @@
 "use client";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import { usePathname } from "next/navigation";
 import { env } from "@/env";
+import { chatSessionSummarySchema } from "@/lib/chat-sessions";
 import { localTodayIso } from "@pansgpt/ui/shell";
 
 const recentSchema = z.array(
@@ -71,7 +72,7 @@ const initial: DashboardData = {
 };
 const DashboardContext = createContext<(DashboardData & { reload: () => void }) | null>(null);
 const chatsSchema = z.object({
-  sessions: z.array(z.object({ id: z.string().uuid(), title: z.string().nullable() })),
+  sessions: z.array(chatSessionSummarySchema),
 });
 type RecentChats = {
   chats: z.infer<typeof chatsSchema>["sessions"];
@@ -244,10 +245,10 @@ export function DashboardProvider({
       });
     return () => controller.abort();
   }, [attempt, profile.current_level, profile.id, profile.university_id, supabase]);
-  function reload(): void {
+  const reload = useCallback((): void => {
     setData((value) => ({ ...value, loading: true }));
     setAttempt((value) => value + 1);
-  }
+  }, []);
   return (
     <DashboardContext.Provider value={{ ...data, reload }}>
       <ChatsContext.Provider value={chatData}>{children}</ChatsContext.Provider>

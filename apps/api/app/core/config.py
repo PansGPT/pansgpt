@@ -107,6 +107,7 @@ class Settings(BaseSettings):
 
     # AI / LLM Providers ($0 Budget Tier) - Strictly Gemma for generation, Gemini only for 1536d embedding  # [DIM 1536]
     GEMINI_API_KEY: str | None = None
+    # Legacy setting retained for environment compatibility; Google no longer requires ZDR.
     GOOGLE_ZDR_CONFIRMED: bool = False
     GROQ_ZDR_CONFIRMED: bool = False
     OPENAI_ZDR_CONFIRMED: bool = False
@@ -114,17 +115,21 @@ class Settings(BaseSettings):
     TAVILY_ZDR_CONFIRMED: bool = False
     COHERE_ZDR_CONFIRMED: bool = False
 
-    def require_provider_privacy(self, provider: str) -> None:
-        """Account attestations are required; a custom HTTP header is not consent."""
+    def provider_privacy_allowed(self, provider: str) -> bool:
+        """Google has a user-approved retention exception; other providers require ZDR."""
         verified = {
-            "google": self.GOOGLE_ZDR_CONFIRMED,
+            "google": True,
             "groq": self.GROQ_ZDR_CONFIRMED,
             "openai": self.OPENAI_ZDR_CONFIRMED,
             "openrouter": self.OPENROUTER_ZDR_CONFIRMED,
             "tavily": self.TAVILY_ZDR_CONFIRMED,
             "cohere": self.COHERE_ZDR_CONFIRMED,
         }
-        if not verified.get(provider, False):
+        return verified.get(provider, False)
+
+    def require_provider_privacy(self, provider: str) -> None:
+        """Enforce the provider policy without representing Google's exception as ZDR."""
+        if not self.provider_privacy_allowed(provider):
             raise RuntimeError(f"Provider {provider} is blocked: ZDR has not been verified.")
 
     GEMINI_PRIMARY_MODEL: str = "gemma-4-31b-it"
@@ -176,6 +181,10 @@ class Settings(BaseSettings):
     CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
     CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
     CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
+    INTENT_ROUTER_TOTAL_TIMEOUT_S: float = Field(default=12, gt=0, le=30)
+    INTENT_ROUTER_ATTEMPT_TIMEOUT_S: float = Field(default=8, gt=0, le=15)
+    INTENT_ROUTER_MAX_TOKENS: int = Field(default=768, ge=128, le=2048)
+    CHAT_RETRIEVAL_TIMEOUT_S: float = Field(default=25, gt=0, le=60)
     HYDE_TIMEOUT_S: float = Field(default=8, gt=0)  # [CHAT FIX]
     VISION_REPLY_MAX_TOKENS: int = 2048
     VISION_EXTRACTION_MAX_TOKENS: int = 768

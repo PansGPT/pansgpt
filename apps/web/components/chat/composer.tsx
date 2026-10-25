@@ -1,86 +1,107 @@
 "use client";
-import { useEffect, useRef, type FormEvent } from "react";
-import { ArrowUp, AudioLines, Mic, Plus, Square } from "lucide-react";
+import { useEffect } from "react";
+import { ComposerPrimitive, useAui, useAuiState } from "@assistant-ui/react";
+import { ArrowUp, Mic, Plus, Square } from "lucide-react";
+import { ChatAttachment } from "./attachment";
 
-export function ChatComposer({
-  prompt,
-  onChange,
-  onSubmit,
-  streaming,
-  onStop,
-}: {
-  prompt: string;
-  onChange: (prompt: string) => void;
-  onSubmit: (event?: FormEvent) => void;
-  streaming: boolean;
-  onStop: () => void;
-}): React.ReactElement {
-  const input = useRef<HTMLTextAreaElement>(null);
+/** Native assistant-ui controls, shared Home pill styling. */
+export function ChatComposer({ initialDraft }: { initialDraft?: string }): React.ReactElement {
+  const aui = useAui();
   useEffect(() => {
-    if (!input.current) return;
-    input.current.style.height = "auto";
-    input.current.style.height = `${Math.min(input.current.scrollHeight, 140)}px`;
-  }, [prompt]);
+    if (initialDraft !== undefined) aui.composer().setText(initialDraft);
+  }, [aui, initialDraft]);
+  const busy = useAuiState(
+    (state) => state.thread.isRunning || state.composer.submission !== undefined
+  );
+  const dictating = useAuiState((state) => state.composer.dictation != null);
+  const empty = useAuiState((state) => !state.composer.text.trim());
   return (
-    <form className="study-chat-composer" onSubmit={onSubmit}>
-      <button
-        type="button"
-        className="study-chat-add"
-        aria-label="Attach study material"
-        title="Document attachments are coming soon"
-        disabled
-      >
-        <Plus size={28} aria-hidden="true" />
-      </button>
-      <textarea
-        ref={input}
+    <ComposerPrimitive.Root
+      className="study-chat-composer p-study-composer"
+      data-variant="adaptive"
+      compact
+      onSubmit={(event) => {
+        if (empty || busy || dictating) event.preventDefault();
+      }}
+    >
+      <div className="study-chat-composer-attachments p-study-composer-attachments">
+        <ComposerPrimitive.Attachments>
+          {() => <ChatAttachment removable />}
+        </ComposerPrimitive.Attachments>
+      </div>
+      <ComposerPrimitive.Input
+        className="p-study-composer-input"
         aria-label="Study question"
         placeholder="Message PansGPT…"
-        value={prompt}
         rows={1}
         maxLength={10000}
-        onChange={(event) => onChange(event.target.value)}
-        disabled={streaming}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
-            event.preventDefault();
-            if (prompt.trim() && !streaming) onSubmit();
-          }
-        }}
+        autoFocus={false}
+        addAttachmentOnPaste={false}
       />
-      <button
-        type="button"
-        className="study-chat-mic"
-        aria-label="Voice input"
-        title="Voice input is coming soon"
-        disabled
-      >
-        <Mic size={25} aria-hidden="true" />
-      </button>
-      {streaming ? (
-        <button
+      <div className="p-study-composer-toolbar">
+        <ComposerPrimitive.AddAttachment
           type="button"
-          className="study-chat-send"
-          aria-label="Stop generating"
-          onClick={onStop}
+          className="p-study-composer-control"
+          aria-label="Attach study material"
+          title="Attach PDF, text, PNG or JPEG (up to 4 files, 10 MB each)"
         >
-          <Square size={22} aria-hidden="true" />
-        </button>
-      ) : (
-        <button
-          type="submit"
-          className="study-chat-send"
-          aria-label={prompt.trim() ? "Send message" : "Voice chat"}
-          disabled={!prompt.trim()}
-          title={prompt.trim() ? "Send message" : "Voice chat is coming soon"}
-        >
-          {prompt.trim() ? (
-            <ArrowUp size={27} aria-hidden="true" />
+          <Plus size={25} aria-hidden="true" />
+        </ComposerPrimitive.AddAttachment>
+        <div className="p-study-composer-actions">
+          {dictating ? (
+            <ComposerPrimitive.StopDictation
+              className="p-study-composer-control"
+              aria-label="Finish recording"
+              title="Finish recording and transcribe"
+            >
+              <Square size={18} aria-hidden="true" />
+            </ComposerPrimitive.StopDictation>
           ) : (
-            <AudioLines size={28} aria-hidden="true" />
+            <ComposerPrimitive.Dictate
+              className="p-study-composer-control"
+              aria-label="Voice input"
+              disabled={busy}
+              title="Record a question; transcription fills this input"
+            >
+              <Mic size={19} aria-hidden="true" />
+            </ComposerPrimitive.Dictate>
           )}
-        </button>
+          {busy ? (
+            <ComposerPrimitive.Cancel
+              className="p-study-composer-control p-study-composer-submit"
+              aria-label="Stop generating"
+              title="Stop generating"
+            >
+              <Square size={18} aria-hidden="true" />
+            </ComposerPrimitive.Cancel>
+          ) : (
+            <ComposerPrimitive.Send
+              className="p-study-composer-control p-study-composer-submit"
+              aria-label="Send message"
+              disabled={empty || busy || dictating}
+            >
+              <ArrowUp size={19} aria-hidden="true" />
+            </ComposerPrimitive.Send>
+          )}
+        </div>
+      </div>
+      {dictating && (
+        <span className="p-study-composer-status" role="status">
+          Recording / transcribing…
+        </span>
       )}
-    </form>
+    </ComposerPrimitive.Root>
+  );
+}
+
+export function ChatEditComposer(): React.ReactElement {
+  return (
+    <ComposerPrimitive.Root className="study-chat-edit">
+      <ComposerPrimitive.Input aria-label="Edit question" maxLength={10000} rows={3} />
+      <div>
+        <ComposerPrimitive.Cancel>Cancel edit</ComposerPrimitive.Cancel>
+        <ComposerPrimitive.Send>Save as new branch</ComposerPrimitive.Send>
+      </div>
+    </ComposerPrimitive.Root>
   );
 }

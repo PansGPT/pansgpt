@@ -1,14 +1,33 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-10-25 presentation workspace amendment:** Owner-authorized `/api/v1/library/artifacts/presentation` reads the saved PPTX and returns bounded typed slide geometry/text/notes; isolated parsing, ZIP/XML checks, private/no-store responses and allowlisted SVG rendering avoid external Office viewers or persistent derivative objects. Desktop uses a chat/preview split; mobile uses a focus-managed dialog. New 16:9 templates have one cover and enforce requested total counts. The semantic route supplies the count, with a bounded requirements resolver only when an actual presentation tool call follows the explicit-context routing bypass. The authoring model writes a natural completion as bounded artifact metadata; show it after successful storage, with no extra inference or prescribed success opener. Backend-supplied retrieval/search references populate deck notes, preview sources and completion links; model-authored reference claims are not accepted. Public stages remain separate from private reasoning. [Contracts, tests and remaining hosted gates](presentation-workspace-2026-10-25.md).
+
+> **2026-10-25 title/progress amendment:** User-approved social/greeting names are provisional (`title_source=pending`) until the model identifies a substantive topic; final generated and manual names remain protected. Title generation reads selected history and returns an internal provisional flag, without a phrase catalogue or database/public DTO change. Header and sidebar publish both stages. Artifact routes emit public preparation progress before model/tool waiting, retaining the private-reasoning boundary and actual-dispatch tool statuses. Delete confirmation identifies the recovery path. [Contract and verification](chat-titles-and-progress-2026-10-25.md).
+
+> **2026-10-24 search/navigation refinement:** Search opens with real recent chats and uses compact title/snippet/date results with readable Markdown previews, Clear, and active/all-chat scopes through the existing authenticated API. Archive uses Heroicons' archive-box-arrow-down asset with its upstream license; account popups share conversation-menu styling. New chat is a consistent sidebar entry with equal space above/below; the floating assistant launcher is removed. The collapsed desktop toggle sits outside the rail beside the logo. Semantic theme tokens and existing authorization contracts remain unchanged. [Local UI checks and hosted limits](search-and-sidebar-polish-2026-10-24.md).
+
+> **2026-10-24 conversation management:** Generate semantic titles asynchronously after successful exchanges; manual names are never overwritten. The initial greeting-only New chat behavior is superseded by the 25 October provisional-title amendment above. `title_source` tracks pending/generated/manual; `last_message_at` separates conversation activity from organization changes. Owner/university-scoped PostgreSQL full-text title/selected-message search provides plain snippets, pagination, archived filtering and message targets. Separate Pinned/Recent groups, centred rename/delete dialogs, 10s Undo and owner-authorized 30-day deletion recovery preserve archive/pin state. CLI migrations add indexed search and durable generated-file cleanup at retention purge, protecting other chat references. [Contracts, staging/local checks and open hosted gates](conversation-management-2026-10-24.md).
+
+> **2026-10-24 image UI correction:** Sent image tiles appear above/outside the right-aligned text bubble, matching the user's assistant-ui screenshot. Image filenames are hidden visually; document names remain. Preview is an image-only, borderless lightbox over a dim black overlay, with Escape/outside-click/close, focus trapping and return. See [current image contract and verification](chat-images-2026-10-24.md).
+
+> **Image sizing follow-up:** The opened image fits within 1200px and available viewport dimensions. Fetch the authenticated `size=large` (1536px) PNG only on open; retain the default 384px thumbnail for message lists. Both variants share authorization, limits and metadata removal. Action icons are 13px with 28px desktop / 32px mobile controls. No metadata DTO or schema change.
+
+> **2026-10-24 chat-image amendment:** Upload validates/stores private PNG/JPEG attachments without inference. Send resolves owned pixels in authenticated user/university/conversation scope, normalizes orientation/removes metadata, and analyses against the actual question before chat generation. `vision_analyze` takes an owned attachment UUID; it cannot fetch model-supplied URLs or storage keys. Private authenticated previews use temporary browser blob URLs; no image bytes/tokens are persisted in client storage. assistant-ui attachment primitives supply composer/message tiles, preview dialogs, upload states and remove controls, using the shared palette. Privacy gates, global deadlines, scoped analysis caching and visible retryable failures apply. [Contract, evidence and open hosted journey](chat-images-2026-10-24.md).
+
+> **2026-10-22 provider policy amendment (user-approved):** Remove the Google/Gemini ZDR block, including generation, classification, vision, embeddings and ingestion eligibility. Free-service content may be retained, human-reviewed and used for product improvement; Google is not represented as ZDR verified. Keep other providers' ZDR attestations and all existing authorization, quota, safety and feature controls. Groq Global ZDR remains user-attested only for the ignored local credential. No hosted deployment or live inference is certified by this change. See the [privacy register](provider-privacy.md).
+
 > **Status**: ✅ Section 1 Complete — Stack Decisions Locked.
 > **Approach**: Contract-first parallel frontend/backend development on backend foundations; live integration and completion require executable verification.
 > **Budget**: Bootstrapped — $0. Every decision must have a free tier that works.
 
 > **2026-10-20 implementation amendment:** The [phase 0?7 remediation record](phase-0-7-remediation-2026-10-20.md) governs current implementation status and supersedes conflicting historical descriptions. The original feature inventory remains historical. Live feature release is gated on applicable migrated-database contracts, privacy eligibility, and the staging journey. Offline tests do not establish hosted readiness.
 
-> **2026-10-22 development amendment (user-approved):** Frontend coding may precede backend completion after agreeing typed contracts, states and acceptance criteria. Frontend fixtures and backend implementation may proceed in parallel; mocks must be synthetic and explicitly identified. Review legacy `../pansgpt-eli` flows and data shapes, then adapt selected code to this monorepo's design system, auth, tenancy, database and API patterns. This supersedes backend-first restrictions on frontend coding, while preserving integration/release gates, server-authoritative grading, API-only AI routing and strict ZDR blocking. See [AGENTS.md](../AGENTS.md) and [the legacy reuse handoff](legacy-reuse-and-parallel-development-2026-10-22.md). No live legacy data migration is authorized by this workflow change.
+> **2026-10-22 development amendment (user-approved):** Frontend coding may precede backend completion after agreeing typed contracts, states and acceptance criteria. Frontend fixtures and backend implementation may proceed in parallel; mocks must be synthetic and explicitly identified. Review legacy `../pansgpt-eli` flows and data shapes, then adapt selected code to this monorepo's design system, auth, tenancy, database and API patterns. This supersedes backend-first restrictions on frontend coding, while preserving integration/release gates, server-authoritative grading, API-only AI routing and the provider retention policy (including the explicit Google exception above). See [AGENTS.md](../AGENTS.md) and [the legacy reuse handoff](legacy-reuse-and-parallel-development-2026-10-22.md). No live legacy data migration is authorized by this workflow change.
 
-> **2026-10-22 shared-theme amendment (user-approved):** Promote Home's charcoal canvas to the shared dark `--bg-primary` in `packages/ui/src/styles/themes.css`, using the existing Figma gray-dark-mode-950 token. Remove the Home-only override so all consumers inherit the approved surface hierarchy. Keep generated Figma exports, Light/Sepia, green brand accents and auth artwork intact. Display the theme as Dark; retain persisted `oled_dark` values for compatibility. [Scope and verification](dashboard-refinement-2026-10-22.md).
+> **2026-10-22 Phase 11 amendment (user-approved):** Start the AI Chat Interface ahead of the remaining Phase 10 work, without marking those earlier gates complete. Use `@assistant-ui/react` primitives and ExternalStoreRuntime with the existing FastAPI session/history/SSE contracts; do not add assistant-ui Cloud or direct provider/client-tool execution. Preserve the approved chat design and shared themes. First scope: rich message parts, Markdown/GFM/math, native composer/cancellation, copy actions and managed scrolling. Persisted branches/edit/regeneration, virtualization, voice, attachments, tone/sharing and complete skill drawers retain separate backend/integration gates. [Implementation and verification](phase-11-assistant-ui-2026-10-22.md).
+> **2026-10-23 chat interactions amendment:** Native assistant-ui edit/regenerate/branch controls, durable feedback, private attachments, backend dictation and long-history virtualization are implemented with tested owner-authorized API contracts. That initial slice preserved the then-approved welcome while active conversations adopted the assistant-ui registry design. The later [chat layout/session-control direction](chat-session-controls-2026-10-23.md) now governs the welcome, input and session menus. `20261023090000_chat_interactions.sql` was applied to staging via CLI. Full Phase 11, hosted inference and CI replay remain separate gates. [Current contracts and verification](phase-11-chat-interactions-2026-10-23.md).
+
+> **2026-10-23 shared-theme refinement (user-directed):** Use neutral charcoal/gray dark surfaces through project semantic overrides in `packages/ui/src/styles/themes.css`: #111111 canvas, #181818 secondary surfaces and #1F1F1F raised controls. This supersedes the 22 October cool-charcoal canvas choice. Remove chat's tinted radial glow and neutralize supporting grays, retaining green brand accents, Light/Sepia, generated Figma exports, auth artwork and persisted `oled_dark` compatibility. [Scope and verification](neutral-dark-theme-2026-10-23.md).
 
 > **2026-10-22 document-preview amendment:** Home document cards use an authenticated `GET /api/v1/library/{document_id}/thumbnail` endpoint (also mounted under `/api/v1/documents`). It renders the first page of the authorized original/converted R2 PDF with bounded source size, image dimensions and subprocess runtime, and returns a private PNG without persisting a new storage object. Clients use revocable blob URLs and skip hidden covers. With no reading history, active university library documents appear under “From your library”; this does not invent opened-document records. [Implementation and verification](dashboard-refinement-2026-10-22.md). Full PDF-reader and Home aggregate/offline/performance gates remain separate.
 
@@ -2157,7 +2176,7 @@ CREATE TYPE quiz_job_status AS ENUM ('queued', 'retrieving', 'generating', 'savi
 | **Learn Mode Spaced Repetition** | `document_learn_progress`        | Section-level mastery state (`not_started`, `in_progress`, `needs_review`, `mastered`). |
 |                                  | `document_learn_pending_retests` | Spaced repetition retest queue for failed check questions.                              |
 | **AI Interactions & Skills**     | `chat_sessions`                  | Chat conversation threads with optional document scoping.                               |
-|                                  | `chat_messages`                  | Messages with JSONB tool calls, citations, and thinking traces.                         |
+|                                  | `chat_messages`                  | Messages with JSONB tool calls, citations, and public workflow progress.                |
 |                                  | `ai_skills`                      | Claude-style dynamic agent skills registry with on-demand instructions.                 |
 |                                  | `ai_telemetry`                   | Per-request token analytics, latency, provider, and error logs.                         |
 | **Academic Operations**          | `timetables`                     | Weekly lecture schedule per university/level/day.                                       |
@@ -2562,7 +2581,7 @@ CREATE TABLE public.chat_messages (
   image_metadata      jsonb,                         -- Dimensions, MIME type, OCR model telemetry
   tool_calls          jsonb,                           -- JSON array of invoked tools/skills and results
   citations           jsonb,                           -- JSON array of retrieved chunk citations
-  thinking_text       text,                            -- Planner chain-of-thought narrative
+  thinking_text       text,                            -- Public workflow progress; raw provider scratchpads are not stored
   edited_at           timestamptz,                     -- Set on user-role messages that are edits (null = original)
   created_at          timestamptz NOT NULL DEFAULT now()
 );
@@ -2883,7 +2902,7 @@ The engine uses a two-tier registry of **Always-Loaded Core Tools** and **Dynami
 | `rag_search`     | `query: str, doc_id: Optional[uuid], course_code: Optional[str], expand_full_segment: bool = false` | Multi-pool hybrid retrieval (Vector + FTS + Trigram with RRF $k=60$) over university materials with adaptive sibling expansion ($\pm 1$ default vs full segment on-demand). |
 | `read_document`  | `doc_id: Optional[uuid], file_url: Optional[str], format: str, page_range: Optional[str]`           | Reads and extracts text/content from diverse document formats (`.pdf`, `.docx`, `.pptx`, `.txt`, `.csv`, `.md`) across the study workspace.                                 |
 | `web_search`     | `query: str`                                                                                        | Verified scientific literature search (PubMed, DailyMed, BNF). Autonomous escalation fallback when syllabus match confidence is low/empty.                                  |
-| `vision_analyze` | `image_url: str, prompt: str`                                                                       | Analyzes uploaded histological slides, chemical structures, graphs, or handwritten equations.                                                                               |
+| `vision_analyze` | `attachment_id: uuid, prompt?: str`                                                                 | Analyses owned uploaded images using the actual question. Backend supplies authenticated user/university/session; arbitrary URLs and raw storage keys are rejected.         |
 
 #### 6.3.2 Specialized Workspace Skills (`ai_skills` Table Driven)
 
@@ -2902,26 +2921,29 @@ The engine uses a two-tier registry of **Always-Loaded Core Tools** and **Dynami
 
 ### 6.4 Intent Routing, Complexity Analysis & Multi-Turn Agentic Tool Loop
 
+> **25 October observed gap:** The implemented routing model can still confuse current web information with course evidence, producing irrelevant RAG citations and misleading absence wording. The football-score screenshots/logs expose this unresolved behavior. General-topic support is a pending product choice; neither the semantic-router implementation checkbox nor offline tests certify that behavior. See [open finding and proposed correction](live-information-routing-gap-2026-10-25.md).
+
 The AI determines the student's intent and place of call, assesses task complexity, selects the necessary tool(s) (if any), executes them, and streams back the final response or artifact:
+
+23 October semantic routing implementation: replace wording/length heuristics with a bounded **route-or-answer** model call using the current message and up to six selected user/assistant messages (6,000 history characters). Eligible Groq models are attempted first, then Google, then eligible OpenRouter models. This is independent of the deeper engine's Gemma-first order. A validated direct answer or clarification is reused from that same call; there is no second simple-response generation. Evidence/tool/complex requests hand off to the grounded engine, with a standalone retrieval query when needed. Clinical-risk decisions force the evidence path; backend scope, explicit retrieval/tool flags, privacy, credits and output guards remain authoritative. Explicit pinned document/course/attachment requests retain the grounded scope contract. Invalid/unavailable routing tries eligible models within the routing budget, then returns a retryable error with credit refund/run release; a provider outage must never trigger speculative RAG.
+
+The private decision schema is `SemanticDecision`; public SSE contracts remain unchanged. Defaults: 12s shared routing deadline, 8s maximum per model attempt, 4s HTTP connection timeout, 768 output tokens. Connection failures skip the affected provider for 30s. Retrieval has a separate 25s budget, and SQL timeouts propagate instead of starting compatibility/keyword/web fallbacks. See [outage corrections](semantic-routing-outages-2026-10-23.md). Strict decoding is used where supported, with local schema validation for every provider. Short direct answers are released after complete JSON validation; complex responses retain token streaming. Separate routing telemetry records estimated usage and latency, and logs include the actual provider/model without private reasoning. [Contracts, evaluation and limits](semantic-routing-2026-10-23.md).
 
 ```mermaid
 graph TD
-    A[Incoming User Request + Surface Context] --> B[Policy Guard: Injection & Safety Check]
-    B --> C[Resolve Intent & Place-of-Call Context]
-    C --> D{Determine Task Complexity}
-
-    D -- "Simple / Direct Query\n(Definitions, Explanations, Greetings)" --> E[Direct LLM Generation\n(Fast Path, Zero Tool Overhead)]
-    D -- "Complex / Tool Required\n(Retrieval, File Read, Artifact Gen, Math)" --> F[Model Inference with Active Tools & Skills]
-
-    F --> G{Did Model Call a Tool/Skill?}
-    G -- No --> E
-    G -- Yes --> H[Execute Tool Handler with RLS / Auth Scoping]
-    H --> I[Append Tool Result to Context]
+    A[Incoming Request and Surface Context] --> B[Backend Policy and Scope Checks]
+    B --> C[Semantic Route or Answer with Selected History]
+    C --> D{Validated Decision}
+    D -- Direct or Clarification --> E[Reuse Answer from Same Call]
+    D -- Evidence Tools or Deeper Work --> F[Grounded Model and Authorized Skills]
+    F --> G{Tool Call}
+    G -- Yes --> H[Execute with Ownership and Permission Checks]
+    H --> I[Append Tool Result]
     I --> F
-
-    E --> J[Post-Generation Policy Guard: Leak Check]
-    J --> K[Stream Response to Client via SSE]
-    K --> L[Async Telemetry & Token Logging]
+    G -- No --> J[Output Guards]
+    E --> J
+    J --> K[SSE Response and Persistence]
+    K --> L[Credit Settlement and Telemetry]
 ```
 
 #### 6.4.1 Hybrid Retrieval Engine Specification _(See [`retrieval_architecture_proposal.md`](retrieval_architecture_proposal.md))_
@@ -3049,7 +3071,7 @@ VISION_EXTRACTION_CASCADE = [
 2. **Post-LLM System Leak Check**: Evaluates generated stream chunks to prevent internal prompts or schema leakage.
 3. **Mandatory Educational / Clinical Disclaimer**: Injected as a standardized footnote on all clinical, dosing, and medical questions:  
    `> ⚠️ Educational Study Aid: PansGPT is designed for academic revision. Always verify clinical calculations with official departmental guidelines.`
-4. **Strict Zero Data Retention (ZDR)**: Every external AI/search provider is blocked until account and endpoint privacy evidence has been reviewed and its explicit `*_ZDR_CONFIRMED` attestation enabled. A custom header cannot establish ZDR, and no-training alone is not equivalent to no-retention. OpenRouter additionally requires `provider: {zdr: true, data_collection: "deny"}` on every text/vision request. No eligible endpoint means capability unavailable; never relax privacy to obtain a response. See [provider privacy register](provider-privacy.md).
+4. **Provider retention policy**: Google/Gemini is exempt from the ZDR gate by the user's explicit 22 October decision; disclose the applicable retention, human-review and product-improvement terms. Other external AI/search providers remain blocked until account/endpoint evidence supports their `*_ZDR_CONFIRMED` attestations. A custom header cannot establish ZDR, and no-training alone is not equivalent to no-retention. OpenRouter additionally requires `provider: {zdr: true, data_collection: "deny"}` on every text/vision request. No eligible endpoint means capability unavailable; only an explicit policy decision may change a provider's requirements. See [provider privacy register](provider-privacy.md).
 
 ---
 
@@ -3358,7 +3380,7 @@ graph TD
 #### Trajectory Reconstruction & Branch Navigation
 
 - Each message references its `parent_message_id`.
-- The session tracks `active_leaf_message_id`. The active linear conversation is reconstructed by traversing backwards from `active_leaf_message_id` to the root message (`parent_message_id IS NULL`), then reversing the list.
+- Current implementation stores the selected ancestor path with `chat_messages.is_active_branch`; it does not add a second `active_leaf_message_id` authority. The backend locks the owned session and recursively changes that path. Full-tree history (`include_branches=true`) supplies IDs and parent links to assistant-ui, while the default history endpoint returns only the selected path. `active_run_id`/`active_run_started_at` fence concurrent inference; prompt history comes from saved server ancestors, never the client history array.
 - **`assistant-ui` `<BranchPicker />` Integration**: Sibling message indices (`sibling_index` of `total_siblings`) map directly to `assistant-ui`'s native branch switcher (`< 1/2 >`), allowing seamless navigation across multiple regenerations without custom state synchronization.
 
 ---
@@ -3374,11 +3396,13 @@ PansGPT adopts **`assistant-ui`** as the client-side chat foundation across web,
 
 #### 8.2.1 Core Primitives & Components
 
-- `<Thread />`: Full conversation container handling auto-scrolling, virtualization, and status banners.
-- `<Message />`: Renders message bubbles, avatar indicators, timestamps, and collapsible reasoning/thinking blocks.
-- `<Composer />`: Multi-line text input with auto-resize, paste/attachment handling for histological slides and files, and speech-to-text dictation hooks.
-- `<BranchPicker />`: Renders sibling branch navigation buttons `< 1/2 >` for edited prompts and regenerated answers.
+- `<Thread />`: Native conversation viewport and scroll controls; TanStack Virtual supplies dynamic row measurement above 80 visible messages, rather than attributing virtualization to the primitive itself.
+- `<Message />`: Right-aligned user bubbles, unboxed assistant content and compact actions follow the assistant-ui registry composition. Shared PansGPT tokens provide colors. Keep the welcome greeting; the latest user request removes its subtitle. The latest user request removes prompt-action chips and four core-tool starters from welcome; compact workspace Tools sit below the input, with a vertically centered desktop welcome composition. Mobile retains Recent. The Brain/chevron Steps panel shows allowlisted public workflow updates as a plain list, with a streaming shimmer and automatic collapse unless manually controlled. Raw provider reasoning is discarded before SSE/persistence and filtered from legacy history; never render it as Markdown. No invented duration. Source chips show one document title per document, retaining page coordinates in the underlying citation data. Tool status, citations and artifacts remain supported.
+- `<Composer />`: Home, welcome and conversation share the original compact input styling (53px minimum height, 45rem desktop chat width, 6px padding, 14px type); the user reverted the later enlargement. Default/one-line inputs are fully pill-shaped. Native assistant-ui compact mode moves wrapped/multiline text above a stable bottom control row, using a rounded expanded container. Idle Send is an arrow, disabled/gray for empty or whitespace-only text; it changes to Stop during generation/submission while the separate microphone is disabled; a question/caption is required with attachments. Keyboard submission follows the same rule. The microphone controls recording; the primary Send/Stop slot controls generation. Multi-line input with auto-resize, private PDF/text/PNG/JPEG file picker (up to four files, 10 MB each; 40,000 extracted characters per file, 50,000 combined). Image analysis and voice transcription run only through FastAPI. MediaRecorder captures up to 60 seconds/10 MB; its authenticated transcription fills the draft without sending. No direct browser speech-provider calls or arbitrary attachment URLs. PDF reader snip integration remains a separate Phase 10 gate.
+- `<BranchPicker />`: Renders sibling branch navigation buttons `< 1/2 >` for edited prompts and regenerated answers beside the existing message actions. The user explicitly reverted the alternative placement; retain the original inline control.
 - `<ActionBar />`: Copy message button, thumbs up/down feedback buttons, retry/regenerate, and edit triggers.
+
+**23 October chat polish:** Send becomes Stop in the primary position during generation; keep the microphone separate, the restored compact input and original inline branch controls. Welcome greeting is at most 36px desktop/26px mobile. Title/sidebar popups use a compact regular-weight menu with a separated Delete row. Progress transport/persistence uses public stage codes and static labels; legacy raw thinking is filtered on read. Document source labels omit page numbers without discarding coordinates. [Verification and scope](chat-progress-and-controls-2026-10-23.md).
 
 #### 8.2.2 Generative UI for Skills (`makeAssistantToolUI`)
 
@@ -3415,9 +3439,9 @@ flowchart TD
     A[Incoming Chat Request: session_id + prompt + surface] --> B[1. Pre-LLM Guard: Injection & Safety Check]
     B --> C[2. Credit Balance Check & Reservation]
     C --> D[3. Load Active Conversation History Trajectory]
-    D --> E[4. Intent & Complexity Classifier]
+    D --> E[4. Semantic Route or Answer with Provider Failover]
 
-    E -- "Simple / Conversational" --> F[Direct Stream Generation\n(Fast Path, Zero Tool Latency)]
+    E -- "Simple or Clarification" --> F[Reuse Validated Answer from Routing Call]
     E -- "Complex / Tool Required" --> G[Multi-Turn Agentic Tool Loop]
 
     subgraph Tool_Loop["Multi-Turn Tool Execution Loop (Max 5 Turns)"]
@@ -3447,20 +3471,26 @@ All chat interactions communicate over `text/event-stream` with strict typing. A
 
 #### 8.4.1 SSE Event Schema
 
-| Event Name              | Payload Format                                                             | Description                                                                          |
-| ----------------------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `event: init`           | `{"session_id": "uuid", "user_message_id": "uuid"}`                        | Confirms message creation and active session ID.                                     |
-| `event: thinking_chunk` | `{"delta": "text"}`                                                        | Streamed chain-of-thought reasoning tokens (for models with thinking modes enabled). |
-| `event: text_chunk`     | `{"delta": "text"}`                                                        | Streamed markdown content tokens for the assistant's visible response.               |
-| `event: tool_start`     | `{"tool_name": "create_pptx", "tool_id": "call_123", "args": {...}}`       | Notifies client that a tool/skill has started executing.                             |
-| `event: tool_end`       | `{"tool_id": "call_123", "status": "success", "summary": "..."}`           | Notifies client of tool completion.                                                  |
-| `event: artifact_ready` | `{"artifact_id": "uuid", "type": "docx                                     | pdf                                                                                  | pptx                                     | graph", "title": "...", "download_url": "..."}` | Delivers a downloadable or interactive artifact card. |
-| `event: error`          | `{"code": "RATE_LIMIT                                                      | TIMEOUT", "message": "...", "retryable": true}`                                      | Emits graceful structured error payload. |
-| `event: done`           | `{"assistant_message_id": "uuid", "tokens": 420, "finish_reason": "stop"}` | Terminal event signaling stream closure.                                             |
+| Event Name              | Payload Format                                                                                                                                                                                                                                                                                  | Description                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `event: init`           | `{"session_id": "uuid", "user_message_id": "uuid"}`                                                                                                                                                                                                                                             | Confirms message creation and active session ID.                                                            |
+| `event: thinking_chunk` | `{"code":"checking_materials","delta":"Checking your course materials."}`                                                                                                                                                                                                                       | Allowlisted public workflow updates with a stage code; never raw provider reasoning.                        |
+| `event: text_chunk`     | `{"delta": "text"}`                                                                                                                                                                                                                                                                             | Streamed markdown content tokens for the assistant's visible response.                                      |
+| `event: tool_start`     | `{"call_id":"call_123","tool_name":"create_pptx","arguments":{}}`                                                                                                                                                                                                                               | Starts an authorized tool; show public status inside Steps.                                                 |
+| `event: tool_end`       | `{"call_id":"call_123","tool_name":"create_pptx","status":"success","result":{}}`                                                                                                                                                                                                               | Updates the matching tool status, including failures; no separate generic tool box.                         |
+| `event: artifact_ready` | `{"skill_name":"create_pptx","title":"Study slides","mime_type":"application/vnd.openxmlformats-officedocument.presentationml.presentation","file_extension":"pptx","storage_key":"artifacts/{university}/{owner}/pptx/{id}.pptx","download_url":"/api/v1/library/artifacts/download?key=..."}` | Downloadable files are announced after successful storage. Interactive artifacts may use `content` instead. |
+| `event: error`          | `{"code":"TIMEOUT","error":"Please try again.","retryable":true}`                                                                                                                                                                                                                               | Reports failure; optional code/retry metadata depends on the failure stage.                                 |
+| `event: done`           | `{"full_text":"...","citations_count":1,"provider":"google"}`                                                                                                                                                                                                                                   | Closes the stream; a preceding error remains a failure even if done follows.                                |
 
 ---
 
+Response failure placement (23 October): render generation/network/timeout errors inside the affected assistant turn, directly below Steps or partial text. Keep a single accessible alert and preserve any partial answer. Do not repeat response errors in the composer footer; input/voice/attachment and other operation feedback retains its own state. [Verification and database-log diagnosis](inline-chat-errors-2026-10-23.md).
+
+Generated-file delivery contract (23 October): clients download through the configured API origin's `/api/v1/library/artifacts/download` endpoint with the signed-in session token; never forward credentials to a URL supplied by a model. The API retains owner/university authorization, returns private non-cacheable attachment bytes and supports UTF-8 filenames. A missing object returns 404; storage outages return 503. Failed/unconfigured uploads never produce a download card, even locally. The card displays actionable failure/retry states. Successful `create_pptx`, `create_doc`, `create_pdf` and `create_md` calls finish with a brief server-owned confirmation; suppress the file-call turn's outline/preamble and skip the subsequent synthesis call. Keep internal planning private and combine public tool status with Steps. Existing historical files are not regenerated or rewritten automatically. [Verification](artifact-delivery-2026-10-23.md).
+
 ### 8.5 Available Tools & Skills in Chat Hub
+
+**Desktop welcome implementation (latest 23 October direction):** Show four compact workspace starters initially, expandable to eight total (seven workspace starters plus disabled Chemical structures). Remove Search course materials, Read a document, Search the web and Analyse an image from this welcome list; their backend capabilities remain available when eligible. Remove the prompt-action chips. Clicking a card only fills/focuses an editable draft. The chemical drawer remains Coming later. Keep the greeting and compact 44px Tools cards; retain the restored original compact pill input and center the desktop group vertically. Mobile retains Recent. The backend retains skill, privacy, ownership and quota authority. [Current controls and verification](chat-session-controls-2026-10-23.md).
 
 The Chat Hub provides access to the complete suite of PansGPT tools:
 
@@ -3572,20 +3602,36 @@ To guarantee reliable performance across model contexts without exceeding limits
 
 - Generates a cryptographically secure token and read-only URL (`/share/[token]`) enabling students to share full interactive conversation branches with study groups.
 
+**23 October implementation:** The chat header Share action opens a reviewable copy of the selected branch, with explicit Copy conversation and Download copy actions. Exclude other branches, reasoning/tool internals and attachment storage URLs. This does not create or publish a public link; the token-based sharing design above remains pending. The header displays the conversation title with a dropdown; title/sidebar menus persist pin/unpin, rename, archive/restore and soft-delete through owned FastAPI endpoints. An archived list supports recovery, while continuing an archived chat unarchives it. Expired/active run fencing protects archive/deletion. Default input corners are fully rounded; edited-message branch controls retain their original inline placement by user direction. [Contracts and verification](chat-session-controls-2026-10-23.md).
+
 ---
 
 ### 8.10 Credit Monetization Hook
 
-1. **Pre-Stream Balance Verification**: FastAPI checks `user_credits.balance >= 1` before opening the SSE stream.
-2. **Dynamic Turn Pricing**:
+1. **Atomic Pre-Stream Reservation (implemented)**: FastAPI reserves one credit through `deduct_user_credits` before opening the SSE stream, using the assistant-message reference for idempotency. A separate balance check is insufficient under concurrent requests.
+2. **Dynamic Turn Pricing (planned Phase 18; current chat turns reserve one credit)**:
    - Fast Chat Turn: 1 Credit
    - Deep Reasoning Turn: 2 Credits
    - File Generation Skill (`.docx`, `.pptx`, `.pdf`): Fixed skill fee (e.g. 5 credits per artifact)
-3. **Atomic Ledger Deduction**: Executed via the `deduct_user_credits` stored procedure upon stream completion (`event: done`).
+3. **Completion & Refund (implemented)**: Settle the reservation after successful assistant-message persistence and before `event: done`; refund unsuccessful/cancelled runs while releasing the run lease. This supersedes background or after-`done` deduction. Real hosted credit/failure journeys and the planned differentiated prices remain separate verification/implementation gates.
+
+Original proposal retained for traceability: “Atomic Ledger Deduction: Executed via the `deduct_user_credits` stored procedure upon stream completion (`event: done`).” The current lifecycle above documents the existing implementation and does not remove the future differentiated-pricing requirement.
 
 ---
 
 ### 8.11 API Endpoints Contract
+
+Implemented routes use `/api/v1/ai/chat` (shared DTOs: `packages/types/src/chat.ts`, backend schemas: `apps/api/app/models/chat.py`):
+
+- `POST /sessions`, `GET /sessions?archived=false|true` (pinned first), `GET /sessions/{id}?include_branches=true`, `GET /sessions/{id}/metadata`.
+- `PATCH /sessions/{id}`: non-empty changes to `title`, `is_pinned`, `archived`; strict values and owner/document authorization. `DELETE /sessions/{id}` soft-deletes; active leases reject archive/deletion with 409. Migration `20261023150000_chat_session_controls.sql` adds organization fields, retaining existing RLS/API-only writes.
+- `POST /sessions/{id}/stream`: normal send, `edit_message_id` (new sibling question), or `regenerate_message_id` (saved question reused). SSE `init` includes canonical user/assistant message IDs. Do not expose edit/regenerate on unsaved messages.
+- `POST /sessions/{id}/branch`: `{message_id}` selects the owned ancestor path; concurrent runs return 409.
+- `PUT /sessions/{id}/messages/{message_id}/feedback`: positive/negative rating with optional comment, assistant-only and owner-scoped.
+- `POST /sessions/{id}/attachments`, `DELETE /sessions/{id}/attachments/{attachment_id}` (unused uploads only). Private R2 keys and extracted text are never returned to clients. Deletions enqueue durable cleanup; unused uploads expire after 24 hours. Hourly/account and request/IP limits apply before expensive analysis/storage.
+- `POST /transcribe`: authenticated audio transcription, provider privacy/quota gates apply.
+
+The route list below is the remaining target design, not a claim that every route exists. In particular, current editing/regeneration share the fenced SSE endpoint instead of introducing duplicate mutation transports. Public-token sharing, full-text search and the remaining session-administration features remain open; rename/pin/archive/restore/soft-delete now use the implemented `/api/v1/ai/chat` routes above.
 
 ```
 POST   /api/chat/sessions                   ← Create new chat session
@@ -3610,6 +3656,8 @@ GET    /api/chat/search                     ← Search messages and sessions acr
 > The Home Page is the primary landing surface across Web, Desktop, and Mobile. It gives students an immediate overview of their daily academic responsibilities, recent study documents, notes, active AI chats, and upcoming timetable lectures, with a persistent floating "Ask AI" anchor.
 
 ---
+
+**23 October mobile visual amendment (user-requested):** Follow `Dark-Mode PansGPT Dashboard.png` for the mobile Home composition, preserving PansGPT's semantic colors and font family. Use a wordmark/account-ring header, five compact tool rows (Library, Learn, Quiz, Notes, Focus), four recent-document rows with metadata/dividers/chevrons, Activity tabs and a dated time/dot/status timeline above the fixed pill composer. The reduced type scale is 22px wordmark, 15px shortcuts, 13px section/recent titles and 11px supporting metadata. Account navigation is available through the avatar menu; mobile navigation also includes Learn, linking to the existing placeholder without marking the Learn backend complete. Desktop sidebar/thumbnails retain their composition. Home and chat now share the pill styling by the later user request. Sample schedules stay visibly labeled and never replace failed live requests. Without a known end time, do not invent an ongoing class status. Home's voice shortcut opens chat; actual microphone capture/transcription stays in the authenticated chat flow. [Verification record](mobile-home-reference-2026-10-23.md).
 
 ### 1. Visual Layout Architecture
 
@@ -6739,7 +6787,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
 ## ✅ SECTION 24 — SECURITY & COMPLIANCE
 
 > **Product Stance**: **Enterprise-Grade University Isolation & Data Privacy Protection**  
-> Aligns PansGPT with the **Nigeria Data Protection Act (NDPA) 2023** and **GDPR**, enqueues automated **Data Subject Access Requests (DSAR)** and cryptographic Right-to-be-Forgotten data purges, enforces **Zero Data Retention (ZDR)** contracts on all LLM inference endpoints, hardens **multi-tenant vector search RPCs**, generates **SHA-256 hashed per-client API keys**, and neutralizes XSS vectors via `rehype-sanitize`.
+> Aligns PansGPT with the **Nigeria Data Protection Act (NDPA) 2023** and **GDPR**, enqueues automated **Data Subject Access Requests (DSAR)** and cryptographic Right-to-be-Forgotten data purges, enforces the **provider retention policy** (Google/Gemini exception; verified ZDR for other providers), hardens **multi-tenant vector search RPCs**, generates **SHA-256 hashed per-client API keys**, and neutralizes XSS vectors via `rehype-sanitize`.
 
 ---
 
@@ -7053,7 +7101,7 @@ flowchart TB
 ### 27.5 Multimodal AI Chat & Low-Latency Streaming
 
 - **SSE Stream Reader**: Native chunked stream reader over React Native `fetch` with sub-100ms Time-to-First-Token.
-- **Thinking Blocks**: Collapsible reasoning badges with live stopwatch and typewriter rendering.
+- **Thinking Blocks**: Collapsible public workflow updates; allowlisted labels, no raw reasoning or invented stopwatch.
 - **Voice Transcription**: `expo-av` audio recorder transmitting 16kHz audio directly to Groq Whisper API (`whisper-large-v3-turbo`) with real-time waveform visualization.
 
 ---

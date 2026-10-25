@@ -2,6 +2,41 @@ import pytest
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize("google_key", [None, "configured-fixture"])
+async def test_readiness_uses_google_exception_but_still_requires_a_key(monkeypatch, google_key):
+    from contextlib import asynccontextmanager
+
+    from app import main
+    from app.core import database
+    from app.core.config import settings
+    from app.engines.storage import storage_engine
+
+    @asynccontextmanager
+    async def connect(**kwargs):
+        yield None
+
+    monkeypatch.setattr(main, "_readiness_cache", None)
+    monkeypatch.setattr(settings, "ENABLE_AI", True)
+    monkeypatch.setattr(settings, "ENABLE_INGESTION", True)
+    monkeypatch.setattr(settings, "GEMINI_API_KEY", google_key)
+    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "GROQ_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "OPENROUTER_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "REDIS_URL", None)
+    monkeypatch.setattr(settings, "UPSTASH_REDIS_URL", None)
+    monkeypatch.setattr(database, "get_db_connection", connect)
+    monkeypatch.setattr(type(storage_engine), "is_configured", property(lambda self: False))
+
+    payload = await main._readiness_payload()
+    expected = "ready" if google_key else "blocked"
+    assert payload["engines"]["chat"] == expected
+    assert payload["engines"]["embeddings"] == expected
+    assert (
+        payload["status"] == "degraded"
+    )  # Provider eligibility cannot fix missing infrastructure.
+
+
+@pytest.mark.asyncio
 async def test_health_live(client):
     response = await client.get("/health/live")
     assert response.status_code == 200

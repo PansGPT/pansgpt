@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { emailLink, openProfile, accountMenu } from "./support";
+import { emailLink, openProfile, accountMenu, openNavigation } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
 
 test("verified workspace navigation, profile, account themes, failures and mobile keyboard access", async ({
@@ -135,12 +135,15 @@ test("verified workspace navigation, profile, account themes, failures and mobil
         await consent.check();
         await page.getByRole("button", { name: "I Understand & Agree" }).click();
       }
-      await expect(page.locator(".study-chat-recent-card")).toHaveCount(4);
-      await expect(page.locator(".study-chat-suggestions button")).toHaveCount(4);
-      await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
+      if (width > 860) {
+        await expect(page.getByRole("heading", { name: "Tools", exact: true })).toBeVisible();
+        await expect(page.locator(".study-chat-tool-card")).toHaveCount(4);
+      } else await expect(page.locator(".study-chat-recent-card")).toHaveCount(4);
+      await expect(page.locator(".study-chat-suggestions button")).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeEnabled();
       await expect(
         page.getByRole("button", { name: "Attach study material", exact: true })
-      ).toBeDisabled();
+      ).toBeEnabled();
       await expect(page.locator("html")).toHaveAttribute("data-theme", value);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
@@ -151,20 +154,20 @@ test("verified workspace navigation, profile, account themes, failures and mobil
         animations: "disabled",
       });
       if (width === 1764 && value === "dark") {
-        await page.getByRole("button", { name: "Explain a concept", exact: true }).click();
+        await page.getByRole("button", { name: "See all", exact: true }).click();
+        await expect(page.locator(".study-chat-tool-card")).toHaveCount(8);
+        await page.getByRole("button", { name: "Show less", exact: true }).click();
+        await expect(page.locator(".study-chat-tool-card")).toHaveCount(4);
+        await page
+          .getByRole("button", {
+            name: "Create a document Word documents and assignments",
+            exact: true,
+          })
+          .click();
         await expect(page.getByLabel("Study question")).toHaveValue(
-          "Explain this concept from my course notes: "
+          "Create a downloadable Word document about: "
         );
         await expect(page.getByLabel("Study question")).toBeFocused();
-        await page.getByRole("button", { name: "See all", exact: true }).click();
-        await expect(page.locator(".study-chat-recent-card")).toHaveCount(6);
-        await page.getByRole("button", { name: "Show less", exact: true }).click();
-        await page.locator(".study-chat-recent-card").first().click();
-        await expect(
-          page.getByRole("dialog", { name: "Malaria drug management", exact: true })
-        ).toContainText("sample");
-        await page.keyboard.press("Escape");
-        await expect(page.locator(".study-chat-recent-card").first()).toBeFocused();
       }
       await page.goto("/app");
       await expect(page.locator(".dashboard-recent-card")).toHaveCount(6);
@@ -188,9 +191,9 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     data: { title: "My saved revision chat" },
   });
   expect(created.ok()).toBe(true);
-  const conversation: { id: string } = await created.json();
+  const conversation: { id: string; user_id: string } = await created.json();
   await page.reload();
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  await openNavigation(page);
   await page
     .getByRole("dialog", { name: "Workspace navigation", exact: true })
     .getByRole("link", { name: "My saved revision chat", exact: true })
@@ -206,7 +209,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     .locator(".shell-mobile-composer")
     .getByLabel("Message PansGPT", { exact: true })
     .fill("Keep this draft private");
-  await page.getByRole("button", { name: "Open chat", exact: true }).click();
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/chat$/);
   await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");
   expect(inferenceRequests).toBe(0);
@@ -214,17 +217,44 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain(
     "Keep this draft private"
   );
+  const syntheticAnswer = [
+    "Synthetic stream response.",
+    "## Synthetic study outline",
+    "| Item | Meaning |\n| --- | --- |\n| A | Sample |",
+    "$$C_0 = \\frac{D}{V}$$",
+    "```text\nsynthetic study example\n```",
+  ].join("\n\n");
+  const syntheticEvents = [
+    ["thinking_chunk", { token: "Reviewing synthetic study material." }],
+    ["tool_start", { call_id: "synthetic-tool", tool_name: "create_doc", arguments: {} }],
+    ["tool_end", { call_id: "synthetic-tool", tool_name: "create_doc", status: "success" }],
+    ["text_chunk", { token: syntheticAnswer }],
+    ["done", { full_text: syntheticAnswer }],
+  ]
+    .map(([event, data]) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+    .join("");
   let fakeStreamError = false;
   await page.route("**/api/v1/ai/chat/sessions/*/stream", (route) =>
     route.fulfill({
       contentType: "text/event-stream",
       body: fakeStreamError
         ? 'event: error\ndata: {"error":"Synthetic provider unavailable"}\n\n'
-        : 'event: text_chunk\ndata: {"token":"Synthetic stream response."}\n\nevent: done\ndata: {"full_text":"Synthetic stream response."}\n\n',
+        : syntheticEvents,
     })
   );
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   await expect(page.getByText("Synthetic stream response.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Synthetic study outline" })).toBeVisible();
+  await expect(page.locator(".study-chat-markdown table")).toHaveCount(1);
+  await expect(page.locator(".study-chat-markdown .katex")).toBeVisible();
+  await expect(page.locator(".study-chat-tool")).toContainText("Completed");
+  await expect(page.getByRole("button", { name: "Copy code", exact: true })).toBeEnabled();
+  await expect(
+    page
+      .locator('.study-chat-message[data-role="assistant"]')
+      .getByRole("button", { name: "Copy message", exact: true })
+  ).toBeEnabled();
+
   await expect(page.getByLabel("Study question")).toBeEnabled();
   await page.screenshot({
     path: "test-results/chat-conversation-375.png",
@@ -250,10 +280,40 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("button", { name: "New chat", exact: true }).click();
   await expect(page.getByText("Synthetic provider unavailable", { exact: true })).toHaveCount(0);
   expect(inferenceRequests).toBe(2);
+  // Hold creation until New chat aborts the old runtime. It must never dispatch inference afterwards.
+  let releaseCreation: () => void = () => {};
+  let creationStarted: () => void = () => {};
+  let creationSettled: () => void = () => {};
+  const started = new Promise<void>((resolve) => {
+    creationStarted = resolve;
+  });
+  const settled = new Promise<void>((resolve) => {
+    creationSettled = resolve;
+  });
+  await page.route("**/api/v1/ai/chat/sessions", async (route) => {
+    creationStarted();
+    await new Promise<void>((resolve) => {
+      releaseCreation = resolve;
+    });
+    await route
+      .fulfill({ json: { id: conversation.id, user_id: conversation.user_id } })
+      .catch(() => undefined);
+    creationSettled();
+  });
+  await page.getByLabel("Study question").fill("Cancel before a session is ready");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await started;
+  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  releaseCreation();
+  await settled;
+  await expect(page.getByLabel("Study question")).toHaveValue("");
+  await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
+  expect(inferenceRequests).toBe(2);
+  await page.unroute("**/api/v1/ai/chat/sessions");
   await page.unroute("**/api/v1/ai/chat/sessions/*/stream");
   await page.goto("/app");
 
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  await openNavigation(page);
   const mobile = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
   await expect(mobile.getByRole("link", { name: "Home", exact: true })).toHaveAttribute(
     "aria-current",
@@ -265,13 +325,16 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(mobile).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "Make room for your ideas" })).toBeVisible();
   await expect(page.getByRole("main")).toBeFocused();
-  await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
+  await expect(
+    page.getByRole("button", { name: "Open chat for voice input", exact: true })
+  ).toBeEnabled();
   await page.keyboard.press("Control+k");
-  const search = page.getByRole("dialog", { name: "Quick search", exact: true });
-  await search.getByLabel("Search pages").fill("zzzz");
-  await expect(search.getByRole("status")).toContainText("No matching pages");
-  await search.getByLabel("Search pages").fill("Library");
-  await search.getByRole("link", { name: /Library/ }).click();
+  const search = page.getByRole("dialog", { name: "Search conversations", exact: true });
+  await search.getByLabel("Search conversations", { exact: true }).fill("zzzz");
+  await expect(search.getByRole("status")).toContainText("No matching conversations");
+  await page.keyboard.press("Escape");
+  await openNavigation(page);
+  await mobile.getByRole("link", { name: "Library", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/library$/);
   await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Upload material" })).toHaveCount(0);

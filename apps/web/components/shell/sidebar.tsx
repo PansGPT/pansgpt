@@ -2,28 +2,48 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, MoreHorizontal, Search, PlusCircle } from "lucide-react";
-import { destinations, isCurrentDestination } from "./navigation";
+import { FileText, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
+import { destinations, mobileDestinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
+import { ArchivedChats, ChatSessionMenu } from "@/components/chat/session-menu";
 import { useChatDraft } from "./chat-draft";
+import type { ChatSessionSummary } from "@/lib/chat-sessions";
 
 export function SidebarLinks({
   close,
   openSearch,
+  mobile = false,
 }: {
+  mobile?: boolean;
   close: () => void;
   openSearch: () => void;
 }): React.ReactElement {
   const pathname = usePathname();
   const { startNewChat } = useChatDraft();
   const recentTitle = useId();
+  const pinnedTitle = useId();
   const { chats, loading, error } = useRecentChats();
   const { reload } = useDashboard();
   const [expanded, setExpanded] = useState(false);
   const [sample, setSample] = useState<string | null>(null);
   const examples = !loading && !error && !chats.length;
+  const pinned = chats.filter((chat) => chat.is_pinned);
+  const recent = chats.filter((chat) => !chat.is_pinned);
+  const chatRow = (chat: ChatSessionSummary) => (
+    <div className="shell-chat-row" key={chat.id}>
+      <Link href={`/app/chat?session=${encodeURIComponent(chat.id)}`} onClick={close}>
+        {chat.is_pinned ? (
+          <Pin size={16} aria-label="Pinned" />
+        ) : (
+          <FileText size={17} aria-hidden="true" />
+        )}
+        <span>{chat.title || "New chat"}</span>
+      </Link>
+      <ChatSessionMenu chat={chat} />
+    </div>
+  );
   const exampleChats = [
     ...sampleDocuments.map((item) => item.title),
     "Revision checklist",
@@ -32,7 +52,7 @@ export function SidebarLinks({
   return (
     <div className="reference-sidebar">
       <div className="shell-links">
-        {destinations
+        {(mobile ? mobileDestinations : destinations)
           .filter((item) => item.href !== "/app/chat")
           .map(({ href, label, icon: Icon }) => (
             <Link
@@ -48,7 +68,7 @@ export function SidebarLinks({
             </Link>
           ))}
       </div>
-      {pathname === "/app/chat" && (
+      <div className="shell-new-chat-section">
         <Link
           href="/app/chat"
           className="shell-nav-link shell-new-chat"
@@ -58,15 +78,24 @@ export function SidebarLinks({
             close();
           }}
         >
-          <PlusCircle size={22} aria-hidden="true" />
+          <SquarePen size={19} aria-hidden="true" />
           <span>New chat</span>
         </Link>
+      </div>
+      {!!pinned.length && (
+        <section className="shell-sidebar-group shell-pinned-chats" aria-labelledby={pinnedTitle}>
+          <div className="shell-recent-heading">
+            <h2 id={pinnedTitle}>Pinned</h2>
+          </div>
+          {pinned.map(chatRow)}
+        </section>
       )}
       <section className="shell-sidebar-group" aria-labelledby={recentTitle}>
         <div className="shell-recent-heading">
           <h2 id={recentTitle}>
             Recent chats {examples && <span className="dashboard-sample-badge">Sample</span>}
           </h2>
+          <ArchivedChats onNavigate={close} />
           <button
             aria-label="Quick search"
             onClick={() => {
@@ -85,25 +114,22 @@ export function SidebarLinks({
             <button onClick={reload}>Try again</button>
           </>
         ) : examples ? (
-          exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title) => (
-            <button key={title} onClick={() => setSample(title)}>
-              <FileText size={17} aria-hidden="true" />
-              <span>{title}</span>
-            </button>
+          exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title, index) => (
+            <div className="shell-chat-row" key={title}>
+              <button className="shell-sample-chat" onClick={() => setSample(title)}>
+                <FileText size={17} aria-hidden="true" />
+                <span>{title}</span>
+              </button>
+              <ChatSessionMenu
+                chat={{ id: `sample-${index}`, title, is_pinned: false, archived_at: null }}
+                disabled
+              />
+            </div>
           ))
         ) : (
-          chats.slice(0, expanded ? 30 : 6).map((chat) => (
-            <Link
-              key={chat.id}
-              href={`/app/chat?session=${encodeURIComponent(chat.id)}`}
-              onClick={close}
-            >
-              <FileText size={17} aria-hidden="true" />
-              <span>{chat.title || "Untitled chat"}</span>
-            </Link>
-          ))
+          recent.slice(0, expanded ? 30 : 6).map(chatRow)
         )}
-        {!loading && !error && (
+        {!loading && !error && (examples ? exampleChats.length : recent.length) > 6 && (
           <button
             onClick={() => {
               setExpanded((value) => !value);

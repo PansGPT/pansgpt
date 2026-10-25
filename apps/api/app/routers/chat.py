@@ -10,6 +10,7 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 import structlog
+from asyncpg import QueryCanceledError
 from fastapi import (
     APIRouter,
     BackgroundTasks,
@@ -32,11 +33,19 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
 from app.core.ids import uuid7  # [LEFTOVER FIX]
+from app.engines.chat_images import analyze_image
+from app.engines.chat_interactions import (
+    attachment_context,
+    prepare_turn,
+    release_turn,
+    select_path,
+)
+from app.engines.chat_progress import ChatProgress, public_progress_text
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
 from app.engines.rag import ABSENCE_NOTICE, rag_engine  # [CHAT FIX 2]
-from app.engines.thinking import strip_thinking_tokens
+from app.engines.thinking import ThinkingStreamParser, strip_thinking_tokens
 from app.models.chat import (
     ChatMessageResponse,
     ChatSessionCreateRequest,
@@ -46,6 +55,7 @@ from app.models.chat import (
     StreamChatRequest,
     VoiceTranscribeResponse,
 )
+from app.models.presentation import PresentationSource
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/ai/chat", tags=["AI & Chat Engine"])
@@ -90,28 +100,10 @@ async def _auto_generate_session_title(  # [TENANT FIX]
     message: str,  # [TENANT FIX]
     user_id: str,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
-    """Background task to set session title from user prompt if still default."""
-    try:
-        words = message.strip().split()
-        title = " ".join(words[:6])
-        if len(title) > 60:
-            title = title[:57] + "..."
+    """Use successful server-owned exchanges; never a first-words title."""
+    from app.engines.chat_titles import generate_title
 
-        async with get_db_connection(timeout=3.0) as conn:
-            if conn:
-                await conn.execute(
-                    """
-                    UPDATE public.chat_sessions
-                    SET title = CASE WHEN title = 'New Chat' THEN $2 ELSE title END,
-                        updated_at = now()
-                    WHERE id = $1 AND user_id = $3; -- [TENANT FIX]
-                    """,
-                    uuid.UUID(session_id),
-                    title,
-                    uuid.UUID(user_id),  # [TENANT FIX]
-                )
-    except Exception as exc:
-        logger.warning("background_title_update_failed", error=str(exc))
+    await generate_title(session_id, user_id)
 
 
 @router.post(
@@ -146,8 +138,8 @@ async def create_chat_session(
             try:
                 sql = """
                     INSERT INTO public.chat_sessions (
-                        id, user_id, document_id, title
-                    ) VALUES ($1, $2, $3, $4)
+                        id, user_id, document_id, title, title_source
+                    ) VALUES ($1, $2, $3, $4, $5)
                     RETURNING created_at::text, updated_at::text;
                 """
                 row = await conn.fetchrow(
@@ -156,6 +148,9 @@ async def create_chat_session(
                     uuid.UUID(user_id),
                     doc_uuid,
                     title,
+                    "manual"
+                    if "title" in payload.model_fields_set and payload.title
+                    else "pending",
                 )
                 if row:
                     now_str = row["created_at"]
@@ -169,6 +164,9 @@ async def create_chat_session(
         id=session_id,
         user_id=user_id,
         title=title,
+        title_source="manual"
+        if "title" in payload.model_fields_set and payload.title
+        else "pending",
         document_id=payload.document_id,
         created_at=now_str,
         updated_at=now_str,
@@ -182,6 +180,7 @@ async def create_chat_session(
 )
 async def list_chat_sessions(
     limit: int = Query(default=30, ge=1, le=100),
+    archived: bool = Query(default=False),
     current_user: UserContext = Depends(get_current_user),
 ) -> ChatSessionListResponse:
     """Returns a list of conversation threads for the student."""
@@ -190,23 +189,29 @@ async def list_chat_sessions(
     sessions: list[ChatSessionResponse] = []
 
     async with get_db_connection() as conn:
+        if conn is None and not current_user.dev_bypass:
+            raise HTTPException(503, "Conversation storage is unavailable.")
         if conn:
             try:
                 sql = """
                     SELECT id, user_id, document_id, title, summary,
-                           created_at::text, updated_at::text
+                           created_at::text, updated_at::text, is_pinned, archived_at::text,title_source,last_message_at::text
                     FROM public.chat_sessions
-                    WHERE user_id = $1 AND deleted_at IS NULL
-                    ORDER BY updated_at DESC
+                    WHERE user_id = $1 AND deleted_at IS NULL AND (archived_at IS NOT NULL) = $3
+                    ORDER BY is_pinned DESC, coalesce(last_message_at,created_at) DESC, id DESC
                     LIMIT $2;
                 """
-                rows = await conn.fetch(sql, uuid.UUID(user_id), limit)
+                rows = await conn.fetch(sql, uuid.UUID(user_id), limit, archived)
                 for r in rows:
                     sessions.append(
                         ChatSessionResponse(
                             id=str(r["id"]),
                             user_id=str(r["user_id"]),
                             title=r["title"],
+                            is_pinned=r.get("is_pinned", False),
+                            title_source=r.get("title_source", "pending"),
+                            last_message_at=r.get("last_message_at"),
+                            archived_at=r.get("archived_at"),
                             document_id=str(r["document_id"]) if r["document_id"] else None,
                             summary=r["summary"],
                             created_at=r["created_at"],
@@ -215,6 +220,7 @@ async def list_chat_sessions(
                     )
             except Exception as exc:
                 logger.warning("list_chat_sessions_db_failed", error=str(exc))
+                raise HTTPException(503, "Chat history could not be loaded. Please retry.") from exc
 
     return ChatSessionListResponse(sessions=sessions, total=len(sessions))
 
@@ -225,6 +231,7 @@ async def list_chat_sessions(
 )
 async def get_chat_session_details(
     session_id: str,
+    include_branches: bool = Query(default=False),
     current_user: UserContext = Depends(get_current_user),
 ) -> dict[str, Any]:
     """Retrieves session details and its active message tree."""
@@ -239,7 +246,7 @@ async def get_chat_session_details(
                 s_row = await conn.fetchrow(
                     """
                     SELECT id, user_id, document_id, title, summary,
-                           created_at::text, updated_at::text
+                           created_at::text, updated_at::text, is_pinned, archived_at::text,title_source,last_message_at::text
                     FROM public.chat_sessions
                     WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL; -- [TENANT FIX]
                     """,
@@ -251,6 +258,10 @@ async def get_chat_session_details(
                         "id": str(s_row["id"]),
                         "user_id": str(s_row["user_id"]),
                         "title": s_row["title"],
+                        "is_pinned": s_row.get("is_pinned", False),
+                        "title_source": s_row.get("title_source", "pending"),
+                        "last_message_at": s_row.get("last_message_at"),
+                        "archived_at": s_row.get("archived_at"),
                         "document_id": str(s_row["document_id"]) if s_row["document_id"] else None,
                         "summary": s_row["summary"],
                         "created_at": s_row["created_at"],
@@ -261,12 +272,16 @@ async def get_chat_session_details(
                         """
                         SELECT id, session_id, role, content, parent_message_id,
                                branch_index, is_active_branch, citations, thinking_text,
-                               created_at::text
+                               tool_calls, image_metadata, created_at::text,
+                               (SELECT f.rating FROM public.chat_message_feedback f
+                                WHERE f.message_id=chat_messages.id AND f.user_id=$3) AS feedback
                         FROM public.chat_messages
-                        WHERE session_id = $1 AND is_active_branch = true
-                        ORDER BY created_at ASC;
+                        WHERE session_id = $1 AND ($2 OR is_active_branch = true)
+                        ORDER BY created_at ASC, id ASC LIMIT 5000;
                         """,
                         uuid.UUID(session_id),
+                        include_branches,
+                        current_user.id,
                     )
                     for m in m_rows:
                         raw_cits = m["citations"]
@@ -287,12 +302,22 @@ async def get_chat_session_details(
                                 branch_index=m["branch_index"],
                                 is_active_branch=m["is_active_branch"],
                                 citations=cits_list,
-                                thinking_text=m["thinking_text"],
+                                thinking_text=public_progress_text(m["thinking_text"]) or None,
+                                feedback=m.get("feedback"),
                                 created_at=m["created_at"],
+                                extra_parts=json.loads(m["tool_calls"])
+                                if isinstance(m["tool_calls"], str)
+                                else m["tool_calls"],
+                                attachment_metadata=json.loads(m["image_metadata"])
+                                if isinstance(m["image_metadata"], str)
+                                else m["image_metadata"],
                             )
                         )
             except Exception as exc:
                 logger.warning("get_chat_session_details_db_failed", error=str(exc))
+                raise HTTPException(
+                    503, "Conversation history could not be loaded. Please retry."
+                ) from exc
 
     if not session_data:  # [TENANT FIX]
         raise HTTPException(status_code=404, detail="Conversation not found.")  # [TENANT FIX]
@@ -332,24 +357,22 @@ async def stream_chat_session(
             current_user,  # [TENANT FIX]
             active_only=True,  # [TENANT FIX]
         )  # [TENANT FIX]
-    user_message_id = str(uuid7())  # [LEFTOVER FIX]
-    assistant_message_id = str(uuid7())  # [LEFTOVER FIX]
-
+    turn = await prepare_turn(session_id, payload, current_user)
+    user_message_id = turn.user_id
+    assistant_message_id = turn.assistant_id
     credit_reserved = False
     credit_settled = False
-    if not current_user.dev_bypass and policy_guard.check_prompt_safety(payload.message)[0]:
-        await _deduct_user_credit(user_id, assistant_message_id)
-        credit_reserved = True
-
-    # Queue background operations
-    background_tasks.add_task(  # [TENANT FIX]
-        _auto_generate_session_title,  # [TENANT FIX]
-        session_id,  # [TENANT FIX]
-        payload.message,  # [TENANT FIX]
-        user_id,  # [TENANT FIX]
-    )  # [TENANT FIX]
+    try:
+        if not current_user.dev_bypass and policy_guard.check_prompt_safety(turn.prompt)[0]:
+            await _deduct_user_credit(user_id, assistant_message_id)
+            credit_reserved = True
+    except BaseException:
+        await release_turn(session_id, turn.run_id)
+        raise
 
     model_started = False  # [CHAT FIX 2]
+    persisted_parts: dict[str, list[Any]] = {"tools": [], "artifacts": []}
+    progress = ChatProgress()
 
     async def save_assistant_message(  # [CHAT FIX 2]
         text: str, citations: list[CitationItem], thinking: str | None = None
@@ -362,20 +385,29 @@ async def stream_chat_session(
                 raise RuntimeError("Message storage is unavailable")
             if conn:
                 try:
-                    await conn.execute(
-                        """
-                        INSERT INTO public.chat_messages (
-                            id, session_id, parent_message_id, role, content, citations, thinking_text
-                        ) VALUES ($1, $2, $3, 'assistant', $4, $5::jsonb, $6)
-                        ON CONFLICT (id) DO NOTHING;
-                        """,
-                        uuid.UUID(assistant_message_id),
-                        uuid.UUID(session_id),
-                        uuid.UUID(user_message_id),
-                        text,
-                        json.dumps([c.model_dump() for c in citations]) if citations else None,
-                        thinking,
-                    )
+                    async with conn.transaction():
+                        lease = await conn.fetchrow(
+                            """SELECT id FROM public.chat_sessions WHERE id=$1 AND user_id=$2
+                            AND active_run_id=$3 AND deleted_at IS NULL FOR UPDATE""",
+                            uuid.UUID(session_id),
+                            current_user.id,
+                            uuid.UUID(turn.run_id),
+                        )
+                        if lease is None:
+                            raise RuntimeError("The conversation run has been replaced")
+                        await conn.execute(
+                            """INSERT INTO public.chat_messages(
+                            id,session_id,parent_message_id,role,content,citations,thinking_text,tool_calls)
+                            VALUES($1,$2,$3,'assistant',$4,$5::jsonb,$6,$7::jsonb) ON CONFLICT(id) DO NOTHING""",
+                            uuid.UUID(assistant_message_id),
+                            uuid.UUID(session_id),
+                            uuid.UUID(user_message_id),
+                            text,
+                            json.dumps([c.model_dump() for c in citations]) if citations else None,
+                            progress.text or public_progress_text(thinking) or None,
+                            json.dumps(persisted_parts),
+                        )
+                        await select_path(conn, session_id, assistant_message_id)
                 except Exception as exc:
                     logger.warning(
                         "save_assistant_message_failed",
@@ -390,9 +422,11 @@ async def stream_chat_session(
 
         # 1. Yield init event
         yield f"event: init\ndata: {json.dumps({'session_id': session_id, 'user_message_id': user_message_id, 'assistant_message_id': assistant_message_id})}\n\n"
+        if update := progress.emit("reviewing_request"):
+            yield update
 
         # 2. Pre-LLM Security Check
-        is_safe, safety_reason = policy_guard.check_prompt_safety(payload.message)
+        is_safe, safety_reason = policy_guard.check_prompt_safety(turn.prompt)
         if not is_safe:
             err_msg = safety_reason or "Prompt blocked by clinical safety filter."
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
@@ -400,61 +434,97 @@ async def stream_chat_session(
             yield f"event: done\ndata: {json.dumps({'full_text': err_msg, 'citations_count': 0})}\n\n"
             return
 
-        # 3. Load active conversation history from payload or database
-        history_turns: list[dict[str, Any]] = []
-        if payload.history:
-            history_turns = payload.history
-        else:
-            async with get_db_connection() as conn:
-                if conn:
-                    try:
-                        h_rows = await conn.fetch(
-                            """
-                            SELECT role, content
-                            FROM public.chat_messages
-                            WHERE session_id = $1
-                              AND is_active_branch = true
-                            ORDER BY created_at DESC
-                            LIMIT 10;
-                            """,
-                            uuid.UUID(session_id),
+        image_attachments = [
+            row for row in turn.attachments if str(row.get("content_type", "")).startswith("image/")
+        ]
+        if image_attachments:
+            if update := progress.emit("analysing_image"):
+                yield update
+            try:
+                async with asyncio.timeout(settings.VISION_OVERALL_TIMEOUT_SECONDS):
+                    for image in image_attachments:
+                        image["extracted_text"] = await analyze_image(
+                            image, turn.prompt, session_id, user_id, university_id
                         )
-                        for hr in reversed(h_rows):
-                            history_turns.append(
-                                {"role": str(hr["role"]), "content": str(hr["content"])}
-                            )
-                    except Exception as h_err:
-                        logger.warning("fetch_chat_history_db_failed", error=str(h_err))
+            except Exception as exc:
+                logger.warning("chat_image_analysis_failed", error_type=type(exc).__name__)
+                error = {
+                    "error": "The image could not be analysed right now. Please try again.",
+                    "code": "IMAGE_ANALYSIS_UNAVAILABLE",
+                    "retryable": True,
+                }
+                yield f"event: error\ndata: {json.dumps(error)}\n\n"
+                yield 'event: done\ndata: {"full_text":""}\n\n'
+                return
 
-        # Asynchronously record user message to DB
-        async with get_db_connection() as conn:
-            if conn:
-                try:
+        # Only server-owned ancestors may enter model history; client-supplied history is ignored.
+        history_turns = turn.history
+        if not turn.regenerate:
+            async with get_db_connection() as conn:
+                if conn is None:
+                    raise RuntimeError("Message storage is unavailable")
+                async with conn.transaction():
                     await conn.execute(
-                        """
-                        INSERT INTO public.chat_messages (
-                            id, session_id, parent_message_id, role, content
-                        ) VALUES ($1, $2, $3, 'user', $4)
-                        ON CONFLICT (id) DO NOTHING;
-                        """,
+                        """INSERT INTO public.chat_messages(
+                        id,session_id,parent_message_id,role,content,is_active_branch,image_metadata,extracted_image_text)
+                        VALUES($1,$2,$3,'user',$4,false,$5::jsonb,$6) ON CONFLICT(id) DO NOTHING""",
                         uuid.UUID(user_message_id),
                         uuid.UUID(session_id),
-                        uuid.UUID(payload.parent_message_id) if payload.parent_message_id else None,
-                        payload.message,
+                        uuid.UUID(turn.parent_id) if turn.parent_id else None,
+                        turn.prompt,
+                        json.dumps(
+                            {
+                                "attachment_ids": [str(row["id"]) for row in turn.attachments],
+                                "attachments": [
+                                    {
+                                        "id": str(row["id"]),
+                                        "name": row["filename"],
+                                        "content_type": row["content_type"],
+                                        "size": row["byte_size"],
+                                    }
+                                    for row in turn.attachments
+                                ],
+                            }
+                        ),
+                        attachment_context(turn.attachments) or None,
                     )
-                except Exception as exc:
-                    logger.warning("save_user_message_failed", error=str(exc))
-                    raise
+                    if turn.attachments:
+                        await conn.execute(
+                            """UPDATE public.chat_attachments SET message_id=COALESCE(message_id,$2)
+                            WHERE session_id=$1 AND id=ANY($3::uuid[])""",
+                            uuid.UUID(session_id),
+                            uuid.UUID(user_message_id),
+                            [row["id"] for row in turn.attachments],
+                        )
 
         # 3b. Intent & Complexity Classification (Fast Path vs. Complex Path)
-        classification = intent_classifier.classify(
-            query=payload.message,
+        model_started = True
+        classification = await intent_classifier.classify(
+            query=turn.prompt,
             history=history_turns,
             document_id=payload.document_id,
             course_code=payload.course_code,
             user_enable_rag=payload.enable_rag,
             user_enable_tools=payload.enable_tools,
+            has_attachments=bool(turn.attachments),
         )
+        if await request.is_disconnected():
+            return
+        if classification.routing_source == "fallback":
+            logger.warning(
+                "chat_routing_unavailable",
+                retryable=True,
+                routing_latency_ms=classification.routing_latency_ms,
+            )
+            error = {
+                "error": "PansGPT could not start a response right now. Please try again.",
+                "code": "AI_ROUTING_UNAVAILABLE",
+                "retryable": True,
+            }
+            yield f"event: error\ndata: {json.dumps(error)}\n\n"
+            yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
+            return
+
         logger.info(
             "query_classified",
             intent=classification.intent.value,
@@ -462,29 +532,71 @@ async def stream_chat_session(
             requires_rag=classification.requires_rag,
             requires_tools=classification.requires_tools,
             confidence=classification.confidence,
+            routing_source=classification.routing_source,
+            routing_provider=classification.routing_provider,
+            routing_model=classification.routing_model,
         )
+        if classification.requires_tools and (
+            classification.intent.value == "skill_generation"
+            or classification.presentation is not None
+        ):
+            if update := progress.emit(
+                "planning_presentation" if classification.presentation else "creating_materials"
+            ):
+                yield update
+
+        if classification.routing_source == "model":
+            background_tasks.add_task(
+                llm_engine._record_telemetry,
+                classification.routing_provider or "google",
+                classification.routing_model or "unknown",
+                classification.routing_latency_ms,
+                classification.routing_prompt_tokens,
+                classification.routing_completion_tokens,
+                "success",
+                user_id,
+                university_id,
+            )
 
         # 4. RAG Retrieval & Context Assembly (with pronoun and context history resolution)
         rag_context = None
         citations: list[CitationItem] = []
-        if classification.requires_rag:
+        if classification.requires_rag and not image_attachments:
+            if update := progress.emit("checking_materials"):
+                yield update
             try:
-                rag_context, citations = await rag_engine.retrieve_context(
-                    query=payload.message,
-                    document_id=payload.document_id,
-                    university_id=university_id,
-                    course_code=payload.course_code,
-                    match_count=4,
-                    match_threshold=0.25,
-                    expand_siblings=True,
-                    expand_full_segment=payload.expand_full_segment,
-                    conversation_history=history_turns,
-                    user_id=user_id,
-                    role=current_user.role,
-                    levels=[current_user.current_level] if current_user.current_level else None,
-                )
+                async with asyncio.timeout(settings.CHAT_RETRIEVAL_TIMEOUT_S):
+                    rag_context, citations = await rag_engine.retrieve_context(
+                        query=classification.retrieval_query or turn.prompt,
+                        document_id=payload.document_id,
+                        university_id=university_id,
+                        course_code=payload.course_code,
+                        match_count=4,
+                        match_threshold=0.25,
+                        expand_siblings=True,
+                        expand_full_segment=payload.expand_full_segment,
+                        conversation_history=history_turns,
+                        user_id=user_id,
+                        role=current_user.role,
+                        levels=[current_user.current_level] if current_user.current_level else None,
+                    )
             except Exception as exc:
-                logger.warning("rag_pipeline_execution_error", error=str(exc))
+                timed_out = isinstance(exc, (TimeoutError, QueryCanceledError))
+                logger.warning(
+                    "rag_pipeline_execution_error",
+                    error_type=type(exc).__name__,
+                    timed_out=timed_out,
+                )
+                error = {
+                    "error": "The course-material search timed out. Please try again."
+                    if timed_out
+                    else "Course materials could not be searched right now. Please try again.",
+                    "code": "RETRIEVAL_TIMEOUT" if timed_out else "RETRIEVAL_UNAVAILABLE",
+                    "retryable": True,
+                }
+                yield f"event: error\ndata: {json.dumps(error)}\n\n"
+                yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
+                return
 
         # Yield retrieved citations if any exist
         if citations:
@@ -493,7 +605,8 @@ async def stream_chat_session(
 
         # 5. Build Clinical System Prompt Grounded in Course Chunks
         if (  # [CHAT FIX 2]
-            classification.requires_rag  # [CHAT FIX 2]
+            classification.requires_rag
+            and not turn.attachments  # [CHAT FIX 2]
             and not citations  # [CHAT FIX 2]
             and (  # [CHAT FIX 2]
                 not rag_context  # [CHAT FIX 2]
@@ -503,27 +616,77 @@ async def stream_chat_session(
             rag_context = ABSENCE_NOTICE  # [CHAT FIX 2]
             yield f"event: text_chunk\ndata: {json.dumps({'token': rag_context, 'delta': rag_context, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
             await save_assistant_message(rag_context, [])  # [CHAT FIX 2]
+            background_tasks.add_task(
+                _auto_generate_session_title, session_id, turn.prompt, user_id
+            )
             yield f"event: done\ndata: {json.dumps({'full_text': rag_context, 'citations_count': 0, 'provider': 'retrieval'})}\n\n"  # [CHAT FIX 2]
             return  # [CHAT FIX 2]
-        system_prompt = policy_guard.build_system_prompt(rag_context)
+        system_prompt = policy_guard.build_system_prompt(
+            rag_context, intent=classification.intent
+        ) + attachment_context(turn.attachments)
+
+        if image_attachments:
+            system_prompt += (
+                "\nThe authorized image observations in USER ATTACHMENTS are source evidence for this turn. "
+                "Answer the question from those observations; do not claim the image was absent from course material. "
+                "If a requested detail is unclear, request a clearer crop rather than inventing it."
+            )
 
         # 6. Stream tokens and agentic events from Multi-tier LLM Engine with full history
         collected_tokens: list[str] = []
-        collected_thinking: list[str] = []
-        last_provider = "google"
+        output_parser = ThinkingStreamParser()
+        is_fast_path = classification.route.value == "fast_path"
+        last_provider = "groq" if is_fast_path else "google"
 
-        try:
-            model_started = True  # [CHAT FIX 2]
-            async for event_type, data, provider in llm_engine.stream_agentic_chat(
+        async def response_events() -> AsyncGenerator[tuple[str, Any, str], None]:
+            if classification.direct_answer is not None:
+                # Reuse the route-or-answer completion, never generate a second simple reply.
+                parser = ThinkingStreamParser()
+                visible, _ = parser.feed(classification.direct_answer)
+                tail, _ = parser.flush()
+                _, answer = policy_guard.check_output_safety(visible + tail)
+                answer = policy_guard.filter_credential_leaks(answer)
+                if not answer.strip():
+                    yield (
+                        "error",
+                        {
+                            "error": "The response could not be completed. Please retry.",
+                            "code": "EMPTY_ANSWER",
+                            "retryable": True,
+                        },
+                        "router",
+                    )
+                    return
+                yield "text_chunk", {"token": answer}, classification.routing_provider or "router"
+                return
+            async for event in llm_engine.stream_agentic_chat(
                 system_prompt=system_prompt,
-                user_message=payload.message,
+                user_message=turn.prompt,
                 history=history_turns,
                 user_id=user_id,
                 university_id=university_id,
                 enable_tools=classification.requires_tools,
                 role=current_user.role,
                 levels=[current_user.current_level] if current_user.current_level else None,
+                fast_path=is_fast_path,
+                presentation_request=classification.presentation is not None,
+                validate_presentation_request=True,
+                presentation_slide_count=classification.presentation.slide_count
+                if classification.presentation
+                else None,
+                presentation_sources=[
+                    PresentationSource(
+                        title=item.title[:200], url=item.url if item.source_type == "web" else None
+                    )
+                    for item in citations
+                ],
+                session_id=session_id,
             ):
+                yield event
+
+        try:
+            model_started = True  # [CHAT FIX 2]
+            async for event_type, data, provider in response_events():
                 # Check client disconnect abort
                 if await request.is_disconnected():
                     logger.info("stream_chat_client_disconnected_aborting", session_id=session_id)
@@ -538,27 +701,51 @@ async def stream_chat_session(
                 last_provider = provider
 
                 if event_type == "text_chunk":
-                    token = data.get("token") or data.get("delta", "")
-                    collected_tokens.append(token)
-                    yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'delta': token, 'provider': provider})}\n\n"
+                    token, _ = output_parser.feed(data.get("token") or data.get("delta", ""))
+                    if token:
+                        if not any(
+                            item.get("skill_name") == "create_pptx"
+                            for item in persisted_parts["artifacts"]
+                        ):
+                            if update := progress.emit("writing_response"):
+                                yield update
+                        collected_tokens.append(token)
+                        yield f"event: text_chunk\ndata: {json.dumps({'token': token, 'delta': token, 'provider': provider})}\n\n"
                 elif event_type == "thinking_chunk":
-                    delta = data.get("delta") or data.get("token", "")
-                    collected_thinking.append(delta)
-                    yield f"event: thinking_chunk\ndata: {json.dumps({'delta': delta, 'token': delta})}\n\n"
+                    # Provider reasoning is untrusted private scratchpad, not a public progress update.
+                    continue
                 elif event_type == "tool_start":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    if update := progress.for_tool(str(dumped.get("tool_name", ""))):
+                        yield update
+                    persisted_parts["tools"].append({**dumped, "status": "running"})
                     yield f"event: tool_start\ndata: {json.dumps(dumped)}\n\n"
                 elif event_type == "tool_end":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    persisted_parts["tools"] = [
+                        {**item, **dumped} if item.get("call_id") == dumped.get("call_id") else item
+                        for item in persisted_parts["tools"]
+                    ]
                     yield f"event: tool_end\ndata: {json.dumps(dumped)}\n\n"
                 elif event_type == "artifact_ready":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
+                    persisted_parts["artifacts"].append(dumped)
+                    if dumped.get("skill_name") == "create_pptx":
+                        if update := progress.emit("presentation_ready"):
+                            yield update
                     yield f"event: artifact_ready\ndata: {json.dumps(dumped)}\n\n"
                 elif event_type == "error":  # [CHAT FIX]
                     yield f"event: error\ndata: {json.dumps(data)}\n\n"  # [CHAT FIX 2]
                     if data.get("code"):  # [CHAT FIX 2]
                         yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens), 'citations_count': len(citations), 'provider': provider})}\n\n"  # [CHAT FIX 2]
                     return  # [CHAT FIX 2]
+
+            tail, _ = output_parser.flush()
+            if tail:
+                if update := progress.emit("writing_response"):
+                    yield update
+                collected_tokens.append(tail)
+                yield f"event: text_chunk\ndata: {json.dumps({'token': tail, 'delta': tail, 'provider': last_provider})}\n\n"
 
         except Exception as exc:
             logger.error("stream_chat_unhandled_failure", error=str(exc))
@@ -568,13 +755,11 @@ async def stream_chat_session(
             return
 
         raw_response_text = "".join(collected_tokens)
-        clean_visible, residual_thinking = strip_thinking_tokens(raw_response_text)
-        if residual_thinking:
-            collected_thinking.append(residual_thinking)
+        clean_visible, _ = strip_thinking_tokens(raw_response_text)
 
         is_safe_output, sanitized_output = policy_guard.check_output_safety(clean_visible)
-        full_response_text = policy_guard.append_study_disclaimer(sanitized_output)
-        full_thinking_text = "".join(collected_thinking).strip() or None
+        full_response_text = sanitized_output
+        full_thinking_text = progress.text or None
 
         # 7. Asynchronously save assistant message to DB
         await save_assistant_message(
@@ -583,6 +768,10 @@ async def stream_chat_session(
 
         credit_settled = True
         await _finish_chat_credit(user_id, assistant_message_id, refund=False)
+        if full_response_text.strip():
+            background_tasks.add_task(
+                _auto_generate_session_title, session_id, turn.prompt, user_id
+            )
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
@@ -643,8 +832,11 @@ async def stream_chat_session(
         finally:
             producer.cancel()
             await asyncio.gather(producer, return_exceptions=True)
-            if credit_reserved and not credit_settled:
-                await _finish_chat_credit(user_id, assistant_message_id, refund=True)
+            try:
+                if credit_reserved and not credit_settled:
+                    await _finish_chat_credit(user_id, assistant_message_id, refund=True)
+            finally:
+                await release_turn(session_id, turn.run_id)
 
     return StreamingResponse(
         transport_events(),  # [CHAT FIX]

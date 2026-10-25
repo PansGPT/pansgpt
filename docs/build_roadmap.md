@@ -16,12 +16,13 @@ The [audit](phase-0-7-audit-2026-10-20.md) is historical evidence. The [remediat
 6. Run offline gates, replay the complete Supabase history/seed and real DB contracts, then verify approved providers and the staging journey.
 
 - [x] Implement source corrections and explicit unavailable behavior for unsupported clinical handlers.
-- [x] Enforce strict ZDR with every unverified provider blocked; the pilot may remain unavailable.
+- [x] Enforce provider privacy policy: Google/Gemini has a user-approved retention exception (22 October); every other unverified provider remains blocked. See [privacy register](provider-privacy.md#google-retention-exception---22-october-2026).
 - [x] Replay all 31 migrations and seed in disposable Supabase; 12 database contracts passed in [CI](https://github.com/PansGPT/pansgpt/actions/runs/39423479706).
 - [x] Import and commit authoritative CI-generated types on the verification branch; 50 table contracts, 18 RPC declarations and six TypeScript workspace checks passed.
 - [x] Apply the 15 pending staging migrations through the Supabase CLI; all 31 are recorded. Verify RLS/grants/indexes/schedules and preserve checksums for 4 documents and 275 chunks. See [database verification](database-verification-2026-10-20.md).
 - [x] Verify ARQ retries/restarts and cancellation on disposable GitHub Actions services: [24 checks passed](https://github.com/PansGPT/pansgpt/actions/runs/39512003760). No staging keys uploaded; Oracle hosting remains deferred. This does not certify hosted document ingestion or continuous worker availability.
 - [ ] Record provider privacy evidence, then test approved live integrations within an agreed budget.
+      Google/Gemini no longer requires ZDR by explicit user decision; live integration remains unverified. Local Groq Global ZDR was user-confirmed on 22 October; see the [scoped attestation](provider-privacy.md#local-groq-attestation---22-october-2026). Other providers still require ZDR; hosted verification and live integration gates remain open.
 - [ ] Verify native OAuth callback, refresh, secure persistence and logout on real devices; unit protocol tests are insufficient.
 - [ ] Confirm staging health, worker recovery, PDF conversion and upload ? approved ingestion ? chat in the deployed environment.
 - [x] Earlier remediation entries synchronized by the user's Notion-connected agent (reported receipt; not independently read back here).
@@ -888,8 +889,8 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Block every provider without an explicit verified account/endpoint attestation; enforce OpenRouter ZDR routing parameters in addition to verification
-- [ ] Verify provider account settings and policies; retain evidence in `docs/provider-privacy.md` before enabling any integration
+- [x] Apply the user-approved Google/Gemini retention exception; block all other providers without verified account/endpoint attestations and enforce OpenRouter ZDR routing parameters
+- [ ] Verify provider account settings and policies where ZDR is required; retain evidence and Google retention disclosure in `docs/provider-privacy.md` before certifying live integrations
 
 ### 6B.3 FTS Retrieval Pool (websearch_to_tsquery)
 
@@ -963,6 +964,8 @@ PR reviewed + CI green → merged to main
 > 📖 See implementation_plan.md § Advanced AI Engine
 
 - [x] Implement `vision_analyze` tool handler callable by the chat model
+- [x] 24 October: resolve owned `attachment_id` within authenticated account/university/conversation scope; analyse original pixels against the question at Send. No model-supplied URLs/storage keys or generic AI description at upload. Scoped cache, privacy-aware provider fallback, deadlines and visible failures are covered by offline API tests. A synthetic live diagram passed through Groq after Google timed out. [Contract and verification](chat-images-2026-10-24.md).
+- [ ] Hosted authenticated image upload → private R2 → question-aware answer → history/preview journey, including outage/cancellation and real student-device validation.
 
 ### 6B.15 Multi-Turn Agentic Tool Loop (max 5 turns)
 
@@ -1001,13 +1004,16 @@ PR reviewed + CI green → merged to main
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Implement Intent and Complexity Classifier to route queries
+- [x] Implement model-driven route-or-answer decisions with selected history, direct-answer reuse, eligible Groq/Google/OpenRouter fallback, and grounded handoffs. This replaces the regex classifier; backend scope/privacy/permissions remain authoritative. [Outage correction](semantic-routing-outages-2026-10-23.md): bounded retryable errors, provider cooldowns, no RAG on routing unavailability and separate retrieval deadlines. [23 October contracts and verification](semantic-routing-2026-10-23.md).
+- [ ] Correct the live-information routing gap found on 25 October: distinguish current web evidence from course retrieval, avoid unrelated document citations, and report unavailable search capabilities accurately. General-topic scope awaits user direction; no phrase catalogue or privacy bypass. [Observed screenshots/logs and proposed correction](live-information-routing-gap-2026-10-25.md).
 
-### 6B.21 Fire-and-Forget: Credit Deduction
+### 6B.21 Atomic Chat Credit Reservation & Finalization
 
 > 📖 See implementation_plan.md § Advanced AI Engine
 
-- [x] Dispatch credit deduction via `BackgroundTasks`
+- [x] Reserve a chat credit atomically before streaming, settle the ledger after successful persistence and refund failed/cancelled runs. This supersedes fire-and-forget deduction after `done`, which could allow concurrent uncharged work. | file: `apps/api/app/routers/chat.py`
+
+Superseded proposal retained for traceability: “Dispatch credit deduction via `BackgroundTasks`.” The checked entry records the existing implemented lifecycle, not a newly introduced pricing decision.
 
 ### 6B.22 Fire-and-Forget: Session Title Generation
 
@@ -1197,10 +1203,12 @@ PR reviewed + CI green → merged to main
 
 The inherited Figma library was added in `ad88683` on 11 October. Reuse its source contracts and assets. [Current verification](design-system/verification-2026-10-21.md) separates library maintenance from gated product integration. The checked items below cover the existing library contracts: all 117 Chromium checks and all seven CI jobs passed in [the verification run](https://github.com/PansGPT/pansgpt/actions/runs/39520508969). Tailwind mappings are generated and checked; application-level consumption remains integration work.
 
-- [x] Verify existing three-theme OKLCH foundations: Light, charcoal Dark and Sepia (shared Home canvas adopted on 22 October 2026). | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
+- [x] Verify existing three-theme OKLCH foundations: Light, neutral charcoal Dark and Sepia (dark surfaces refined on 23 October 2026). | files: `packages/ui/src/styles/tokens.css`, `packages/ui/src/styles/themes.css`
 - [x] Verify existing typography variables and exact source metrics; locally hosted Plus Jakarta Sans body/display and Roboto Mono snippets. | files: `packages/ui/src/styles/typography.css`, `packages/ui/src/styles/code-snippets.css`
 - [x] Verify existing Figma spacing/radius scales, including their smaller spacing steps. | files: `packages/ui/src/styles/tokens.css`
 - [x] Verify existing Tailwind v4 mappings for semantic colors, spacing, radius and typography. | file: `packages/ui/src/styles/tailwind.css`
+
+23 October palette follow-up: neutral #111111 canvas, #181818 sidebar/cards/composer and #1F1F1F raised surfaces replace the tinted dark gray ramp. Chat's radial glow is removed; brand green remains an accent. [Visual and contrast verification](neutral-dark-theme-2026-10-23.md).
 
 ### 9.2 Existing Atomic Component Library (Web - `packages/ui`)
 
@@ -1233,12 +1241,15 @@ User follow-up: restore the original legacy welcome composition with local asset
 
 User-selected references and the latest sidebar/card corrections are recorded in [app shell direction](design-system/app-shell-direction-2026-10-21.md). Implementation and verification are tracked in [the Phase 9.3 record](phase-9-3-app-shell-2026-10-21.md). Use the existing palette and explicitly labelled sample content where data is absent. All eight CI jobs and ten disposable auth/shell browser checks passed at `d4f626f` in [run 39596053267](https://github.com/PansGPT/pansgpt/actions/runs/39596053267). The background-swap experiment was reverted to that verified application source. Hosted rollout remains pending.
 
+23 October mobile Home refinement: match the top-to-bottom composition of the user-selected `Dark-Mode PansGPT Dashboard.png`, using the shared charcoal/green palette and the smaller type scale requested in follow-up. Mobile-only wordmark/account header, compact tool shortcuts (including Learn), four detailed document Recents, dated activity timeline and pill composer. Desktop document thumbnails and the approved chat welcome remain separate. [Implementation and verification](mobile-home-reference-2026-10-23.md).
+
 - [x] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
 - [x] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
+- [x] Shared menu polish for the profile popup, aligned New chat on Home/Chat, removal of the floating assistant launcher, and collapsed toggle outside the sidebar beside the logo. [Local UI verification](search-and-sidebar-polish-2026-10-24.md); hosted rollout remains open.
 - [x] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.
 - [x] Light / Dark / Sepia persisted locally and to `user_preferences.theme`, with `dark` to `oled_dark` mapping and sync retry.
 - [x] Route loading skeletons and friendly 404/error recovery.
-- [x] Bottom-right circular logo chat shortcut with "Message PansGPT" tooltip; mobile draft composer; keyboard page search.
+- [x] Shared Home/chat draft composer, sidebar New chat and keyboard page search. The user removed the earlier floating logo shortcut on 24 October; sidebar New chat is the current entry point.
 - [x] Framer Motion route transitions respect reduced motion.
 - [x] Reference-shaped document card grid, Learn cards and Activities study-streak/agenda preview; labelled samples never persist or invoke inference.
 
@@ -1257,19 +1268,19 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 
 ### 10.1 Layout & Navigation Shell
 
-- [ ] Implement app shell sidebar layout for web (collapsible)
-- [ ] Implement bottom tab navigation for mobile (5 tabs: Home, Library, Chat, Quiz, Profile)
-- [ ] Implement top bar with user avatar, initials badge, settings icon
-- [ ] Implement active route highlighting in navigation
-- [ ] Implement auth guard: redirect to /auth/login if no session
+- [x] Implement app shell sidebar layout for web (collapsible).
+- [x] Implement the user-approved responsive mobile navigation, including Learn and Home study-tool links; account access uses the profile menu. This supersedes the original fixed five-tab proposal.
+- [x] Implement the user-approved sidebar account/initials button with profile/settings/help/logout popup, superseding top-bar notification/profile icons.
+- [x] Implement active route highlighting in navigation.
+- [x] Implement auth/profile/onboarding guards; unauthenticated users go to `/login`.
 
 ### 10.2 Home Page Components
 
-- [ ] Implement greeting header with student name and university
-- [ ] Implement "Recent Documents" horizontal scroll carousel (last 5 opened)
-- [ ] Implement "Quick Chat" input bar routing to AI Chat
-- [ ] Implement "Today's Timetable" mini widget (next 3 class slots)
-- [ ] Implement "Pending Tasks" list (student_tasks table)
+- [x] Implement the approved greeting with student name; university/level details are available in the profile menu.
+- [x] Implement the approved five-column recent-document card grid with actual private PDF thumbnails, scoped browser caching and a labelled library fallback. This supersedes the original horizontal carousel.
+- [x] Implement the shared Home composer routing a memory-only draft into AI Chat.
+- [x] Implement the read-only timetable/task Activities widget with the next three entries, loading/error/retry states and visibly labelled sample previews when empty.
+- [x] Render pending `student_tasks` in the Activities task tab; task creation/completion remains Phase 15 work.
 - [ ] Implement "Continue Studying" card (last read document + page)
 - [ ] Implement AI usage summary mini widget (credits used today)
 
@@ -1278,7 +1289,8 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 - [ ] Server Component fetches: recent documents, timetable slots, pending tasks, study progress
 - [ ] Client Component fetches: credit balance (real-time via Supabase Realtime)
 - [ ] Implement Suspense boundaries with Skeleton placeholders for each widget
-- [ ] Implement error boundaries with retry actions
+- [x] Implement existing recent-document and schedule loading skeletons without certifying the planned server-component/Suspense aggregator above.
+- [x] Implement route error recovery plus recent-document/schedule error states with retry actions.
 
 ### 10.4 Offline Support
 
@@ -1343,13 +1355,27 @@ Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
 
 The user authorized a [reference-based visual refinement of the existing chat](chat-design-2026-10-21.md): centered greeting, pill composer, suggestion actions, Recent cards and New chat reset. All eight jobs and ten disposable auth/shell browser checks passed at `d6310f3` in [run 39686957184](https://github.com/PansGPT/pansgpt/actions/runs/39686957184). Reviewed desktop/mobile screenshots are linked in the record. This does not complete the full Phase 11 feature set below.
 
+22 October implementation: Phase 11 is in progress by user authorization while Phase 10 remains open. The first slice uses assistant-ui's external-store runtime over the existing authenticated FastAPI SSE/history contracts. Preserve the approved composition and shared themes. [Scope, contracts and verification](phase-11-assistant-ui-2026-10-22.md).
+
+Earlier 23 October interaction scope: [contracts and verification](phase-11-chat-interactions-2026-10-23.md). That slice preserved the then-approved welcome while adapting active conversations to assistant-ui; the later UI/session direction below is current. Staging migration applied through the CLI; real database/API rollback tests and local synthetic browser tests passed. Full Phase 11 and hosted release certification remain open.
+
+Latest 23 October follow-up: use a vertically centered desktop welcome with the original compact, fully rounded default input (the user reverted its enlargement); remove prompt-action chips and the four course-search/read-document/web-search/image-analysis welcome starters. Wrapped/multiline chat text sits above a stable bottom toolbar. Keep original inline branch switches by the user's later direction. Chat headers show the conversation name/dropdown and Share; title/sidebar menus persist pin/rename/archive/restore/soft-delete. Share currently copies/downloads the selected branch, without public publishing. The later public-progress boundary, smaller greeting and popup styling are recorded in [chat polish](chat-progress-and-controls-2026-10-23.md). Mobile Learn remains. [Current contracts and verification](chat-session-controls-2026-10-23.md).
+
+23 October artifact-delivery follow-up: generated files download through the owner-authorized `/api/v1/library/artifacts/download` route with visible failure/retry states. A download card is emitted only after storage succeeds, including local development. Presentation/document generation ends with a brief confirmation rather than repeating file content in chat; tool status is consolidated into Steps. [Delivery contract and verification](artifact-delivery-2026-10-23.md). Phase 11 remains in progress.
+
+25 October presentation workspace: new decks open beside chat on desktop; cards reopen actual-file previews, with a full-screen mobile dialog, slide thumbnails, navigation, fit/zoom, speaker notes, sources and authenticated download. Private bounded PPTX parsing supplies typed vector/text previews from R2, with explicit unsupported-media/error states. A styled 16:9 generator adds one cover and enforces requested total counts, including explicit document-context requests. Public stages describe progress; the authoring model writes a natural, deck-specific completion without a prescribed opener, and backend retrieval/tool results supply reference labels and safe links. [Contracts and local/live-synthetic verification](presentation-workspace-2026-10-25.md). Editing and hosted rollout remain separate gates.
+
 ### 11.1 `@assistant-ui/react` Components
 
-- [ ] `<Thread />` — full conversation container with auto-scroll + virtualization
-- [ ] `<Message />` — markdown + LaTeX rendering, thinking blocks, tool call indicators
-- [ ] `<Composer />` — multi-line input, auto-resize, file/image attachment, voice input hook
-- [ ] `<BranchPicker />` — `← 1/2 →` branch navigation for regenerations + edits
-- [ ] `<ActionBar />` — copy, thumbs up/down, regenerate, edit
+24 October sizing follow-up: opened images fit up to 1200px wide within the viewport and lazily request an owner-authorized 1536px preview; list thumbnails remain 96px and use the 384px API variant. Message actions use 13px icons and compact 28px desktop / 32px mobile buttons. [Current image contract](chat-images-2026-10-24.md).
+
+24 October image/attachment follow-up: assistant-ui attachment primitives and adapted element styling provide local composer thumbnails, file cards, removable pending files and authenticated saved-image previews. The latest reference correction places 96px sent image tiles above/outside the right-aligned text bubble, hides image filenames, and opens an image-only viewer over a dim black backdrop with accessible closing/focus handling. Message actions use compact ghost buttons/tooltips in the existing palette; the approved input geometry and inline branch switches remain. [Contracts and verification](chat-images-2026-10-24.md). Full Phase 11 certification remains open.
+
+- [x] `<Thread />` - native viewport/scrolling; TanStack dynamic virtualization above 80 visible messages, verified with 240 synthetic turns.
+- [x] `<Message />` - Markdown/GFM/math, reasoning, tool status, citations and artifacts; server-owned state. Response errors appear beside the failed turn rather than above the composer. [Inline error verification](inline-chat-errors-2026-10-23.md).
+- [x] `<Composer />` - multiline input, send/cancel, memory-only drafts, authenticated private file attachments and backend voice transcription. Shared input styling uses fully pill-shaped default corners; the original compact input geometry is restored, and multiline text moves above a stable toolbar. Send requires non-whitespace text; attachments need a question/caption. During generation the primary Send slot becomes Stop; microphone recording stays separate.
+- [x] `<BranchPicker />` - persisted owner-authorized navigation across regenerated answers and edited questions; selected path survives reload.
+- [x] `<ActionBar />` - copy, server-owned edits/regeneration, durable feedback with failure/retry handling. These checks certify local integration contracts, not hosted AI inference.
 
 ### 11.2 Generative UI for Skills & Pharmacy Drawers
 
@@ -1368,12 +1394,34 @@ export const CreatePptxToolUI = makeAssistantToolUI({
 
 ### 11.3 Voice Input, Sharing & Session Management
 
-- [ ] Voice input: Web Speech API → text fills Composer input (graceful degradation on unsupported browsers)
+- [x] Voice input: MediaRecorder -> authenticated FastAPI `/api/v1/ai/chat/transcribe` -> composer text. Maximum 60 seconds/10 MB in browser; no automatic send. Explicit permission, cancellation and unsupported-browser errors. Replaces browser Web Speech recognition to keep inference on the backend; real microphone/mobile-device verification remains open.
 - [ ] **AI Response Style & Tone Selector**: Header/composer dropdown enabling students to toggle AI pedagogical tone (_Concise_, _Exam-focused_, _Explain Like I'm 5_, _In-depth Academic_) which injects corresponding system modifiers
 - [ ] **Chat Session Sharing (`/share/[sessionId]`)**: Generate read-only public links allowing students to share AI study chats and clinical explanations with classmates
-- [ ] Session management: create, rename (AI auto-suggests 3–5 word title after first response), search, soft-delete
-- [ ] Full-text search across chat history (PostgreSQL `tsvector`)
-- [ ] Credit deduction hook: `deduct_user_credits` stored procedure called after `event: done`
+- [x] Owner-authorized create/rename/pin/archive/restore/soft-delete session APIs and title/sidebar menus; active-run guard, strict validation, staging CLI migration and rollback/API/browser verification. Hosted rollout remains open.
+- [x] Share selected conversation branch as a reviewable text/Markdown copy; no hidden branches, reasoning or private file URLs. Public-link sharing remains unchecked above.
+- [ ] Deployed frontend/backend session-management journey with real auth and required CI gates, including disposable replay of migration 33.
+- [x] Semantic 2–6 word titles after successful exchanges: greeting/social names are provisional (`pending`) and later study topics can replace them; substantive names become `generated` and manual names stay protected. Privacy-gated background generation and bounded header/sidebar refresh remain. The 25 October user-approved change supersedes leaving greetings as New chat. [Current title/progress contract](chat-titles-and-progress-2026-10-25.md); [original staging race checks](conversation-management-2026-10-24.md).
+- [x] Owner/university-scoped full-text title and selected-message search with snippets, pagination, optional archived results and matched-message navigation. Search reads server history rather than only loaded sidebar rows. PostgreSQL indexes and staging API checks verified; hosted authenticated browser rollout remains open.
+- [x] Reference-inspired search popup: recent chats before typing; compact title/snippet/date results with readable Markdown-free previews, Clear and functional All/Chats scopes using existing semantic colors. Heroicons' archive box with an inner arrow distinguishes Archive from Download and Delete. [UI refinement and verification](search-and-sidebar-polish-2026-10-24.md).
+- [x] Separate Pinned/Recent groups; pin/rename do not change activity order. Centred rename/delete dialogs, archive/delete Undo, and Deleted chats restore within the existing 30-day retention window. Versioned migrations 34–35 applied to staging via CLI; generated artifact cleanup respects remaining chat references. [Scope, evidence and limits](conversation-management-2026-10-24.md).
+- [x] Chat credit lifecycle: atomically reserve via `deduct_user_credits` before work, settle successful persisted turns and refund unsuccessful runs before releasing the run lease. The original after-`done` deduction proposal is superseded; hosted real-credit verification remains open.
+
+### 11.4 Attachments, Artifacts & Presentation Workspace
+
+The completed boxes below record tested implementation scope, not full Phase 11 or hosted release certification. See [images](chat-images-2026-10-24.md), [artifact delivery](artifact-delivery-2026-10-23.md) and [presentation verification](presentation-workspace-2026-10-25.md).
+
+- [x] Private image/file upload, assistant-ui composer attachments, saved image previews and backend image-pixel analysis scoped to the authenticated owner/university/conversation.
+- [x] Sent images outside the text bubble, image-only overlay viewer, responsive enlargement and compact message actions.
+- [x] Authenticated generated-file downloads with storage-before-card delivery, useful error/retry handling and cancellation cleanup.
+- [x] Read-only previews parsed from the actual owned PPTX, using isolated bounded ZIP/XML processing and typed allowlisted slide geometry/text.
+- [x] Desktop chat/preview workspace and mobile full-screen viewer with actual slide thumbnails, keyboard navigation, fit/zoom, speaker notes, sources and download.
+- [x] Consistent 16:9 presentation templates, one automatic cover, exact requested totals and duplicate-cover/text-fit validation. PansGPT header/footer branding is fixed in this template.
+- [x] Natural completion prose written by the authoring model for the actual deck, without a prescribed success opener, repeated slide contents or an extra inference request.
+- [x] Backend retrieval/search reference titles and safe links in deck notes, preview Sources and completion; deduplication and explicit absence when no references were attached.
+- [x] Public planning/design/readiness stages; discard private provider reasoning and keep tool status inside Steps.
+- [ ] Verify these journeys against matching deployed frontend/API/workers with real authentication and eligible hosted providers; complete required CI gates.
+
+25 October checkpoint: the latest completion refinement passed 604 offline API tests, API lint/format and both focused presentation browser journeys. The preceding workspace passed all 10 chat browser journeys, 25 web unit checks, six workspace type checks and a production build. CI results for the commit being prepared are separate evidence. Tone controls, public-link sharing, the remaining skill/pharmacy drawers, PDF Reader, Learn Mode and hosted/native gates remain open.
 
 ---
 

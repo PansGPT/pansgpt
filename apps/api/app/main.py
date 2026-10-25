@@ -21,6 +21,9 @@ from app.core.rate_limit import limiter, rate_limit_exceeded_handler
 from app.routers.admin import router as admin_router
 from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
+from app.routers.chat_discovery import router as chat_discovery_router
+from app.routers.chat_interactions import router as chat_interactions_router
+from app.routers.chat_sessions import router as chat_sessions_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
 
@@ -50,9 +53,24 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
     await prewarm_jwks_cache()
+    # Pre-warm FlashRank ONNX reranker in a background thread so the first
+    # real user request does not pay the 5-10s cold-start model load penalty.
+    await _prewarm_flashrank()
     yield
     # Shutdown: cleanly close database pool
     await close_db_pool()
+
+
+async def _prewarm_flashrank() -> None:
+    """Load the FlashRank ONNX cross-encoder at startup, not on first request."""
+    try:
+        from app.engines.reranker import candidate_reranker
+
+        await asyncio.to_thread(candidate_reranker._get_flashrank_client)
+        logger.info("flashrank_prewarmed")
+    except Exception as exc:
+        # Non-fatal: reranker heuristic fallback will cover any load failure.
+        logger.warning("flashrank_prewarm_failed", error=str(exc))
 
 
 app = FastAPI(
@@ -83,6 +101,9 @@ app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_interactions_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_sessions_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_discovery_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/health/live", tags=["Health"])
@@ -120,14 +141,14 @@ async def _readiness_payload() -> ReadinessPayload:
     }
     if settings.ENABLE_AI:
         eligible = bool(
-            (settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED)
-            or (settings.GROQ_API_KEY and settings.GROQ_ZDR_CONFIRMED)
-            or (settings.OPENROUTER_API_KEY and settings.OPENROUTER_ZDR_CONFIRMED)
+            (settings.GEMINI_API_KEY and settings.provider_privacy_allowed("google"))
+            or (settings.GROQ_API_KEY and settings.provider_privacy_allowed("groq"))
+            or (settings.OPENROUTER_API_KEY and settings.provider_privacy_allowed("openrouter"))
         )
         engines["chat"] = "ready" if eligible else "blocked"
     if settings.ENABLE_INGESTION:
         engines.update(redis="error", storage="error", embeddings="blocked")
-        if settings.GEMINI_API_KEY and settings.GOOGLE_ZDR_CONFIRMED:
+        if settings.GEMINI_API_KEY and settings.provider_privacy_allowed("google"):
             engines["embeddings"] = "ready"
 
     async def probe_database() -> None:

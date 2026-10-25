@@ -6,8 +6,10 @@
 import json
 import logging
 import uuid
+from urllib.parse import quote
 
 import asyncpg
+from botocore.exceptions import ClientError
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 
 from app.core.authorization import require_scoped_document, require_university  # [TENANT FIX]
@@ -21,6 +23,7 @@ from app.core.dependencies import (  # [TENANT FIX]
 )  # [TENANT FIX]
 from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
+from app.engines.presentations import presentation_preview
 from app.engines.storage import (
     DEFAULT_UNIVERSITY_ID,
     build_document_storage_key,
@@ -36,6 +39,7 @@ from app.models.library import (
     DocumentUploadResponse,
     PdfUrlResponse,
 )
+from app.models.presentation import PresentationPreviewResponse
 
 router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
 logger = logging.getLogger(__name__)
@@ -314,6 +318,12 @@ async def download_document_or_artifact(
     auth_user: UserContext = Depends(get_current_user),  # [CHAT FIX]
 ) -> Response:
     """Serve generated artifacts only to their verified owner or a super admin. [CHAT FIX]"""
+    _require_artifact_access(key, auth_user)
+    return await _download_storage_file(key, filename)
+
+
+def _require_artifact_access(key: str, auth_user: UserContext) -> None:
+    """Authorization precedes storage reads, including preview and legacy downloads."""
     parts = key.split("/")  # [CHAT FIX]
     if (  # [CHAT FIX]
         len(parts) != 5  # [CHAT FIX]
@@ -338,7 +348,33 @@ async def download_document_or_artifact(
         owner_id != auth_user.id or university_id != auth_user.university_id  # [CHAT FIX]
     ):  # [CHAT FIX]
         raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
-    return await _download_storage_file(key, filename)  # [CHAT FIX]
+
+
+@router.get("/artifacts/presentation", response_model=PresentationPreviewResponse)
+async def preview_presentation(
+    response: Response,
+    key: str = Query(min_length=1, max_length=500),
+    auth_user: UserContext = Depends(get_current_user),
+) -> PresentationPreviewResponse:
+    _require_artifact_access(key, auth_user)
+    if not key.endswith(".pptx") or key.split("/")[3] != "pptx":
+        raise HTTPException(404, "Presentation not found.")
+    try:
+        preview = await presentation_preview(key)
+    except ClientError as exc:
+        if str(exc.response.get("Error", {}).get("Code")) in {"NoSuchKey", "NotFound", "404"}:
+            raise HTTPException(404, "Presentation not found.") from exc
+        raise HTTPException(503, "Presentation storage is unavailable.") from exc
+    except ValueError as exc:
+        raise HTTPException(
+            422, "This presentation cannot be previewed. Download it to view the file."
+        ) from exc
+    except Exception as exc:
+        raise HTTPException(
+            503, "Presentation preview is temporarily unavailable. Please retry."
+        ) from exc
+    response.headers["Cache-Control"] = "private, no-store"
+    return preview
 
 
 async def _download_storage_file(key: str, filename: str | None) -> Response:  # [CHAT FIX]
@@ -362,20 +398,29 @@ async def _download_storage_file(key: str, filename: str | None) -> Response:  #
 
     try:
         data = await storage_engine.download_bytes(key)
-        return Response(
-            content=data,
-            media_type=media_types.get(ext, "application/octet-stream"),
-            headers={
-                "Content-Disposition": f'attachment; filename="{clean_filename}"',
-                "Content-Length": str(len(data)),
-                "Cache-Control": "no-cache",
-            },
-        )
+    except ClientError as exc:
+        if str(exc.response.get("Error", {}).get("Code")) in {"NoSuchKey", "NotFound", "404"}:
+            raise HTTPException(status_code=404, detail="File not found.") from exc
+        raise HTTPException(
+            status_code=503, detail="File storage is temporarily unavailable."
+        ) from exc
     except Exception as exc:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="File not found.",  # [CHAT FIX]
-        ) from exc  # [CHAT FIX]
+            status_code=503, detail="File storage is temporarily unavailable."
+        ) from exc
+    ascii_filename = clean_filename.encode("ascii", "ignore").decode() or f"PansGPT.{ext}"
+    return Response(
+        content=data,
+        media_type=media_types.get(ext, "application/octet-stream"),
+        headers={
+            "Content-Disposition": (
+                f'attachment; filename="{ascii_filename}"; '
+                f"filename*=UTF-8''{quote(clean_filename, safe='')}"
+            ),
+            "Content-Length": str(len(data)),
+            "Cache-Control": "private, no-store",
+        },
+    )
 
 
 @router.get(  # [TENANT FIX 2]

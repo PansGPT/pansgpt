@@ -23,7 +23,7 @@ async def enqueue_ingestion_job(
     (such as in local CI / test environments).
     """
     job_id = await record_job(document_id, storage_key, "ingest_document_job")
-    if not settings.ENABLE_INGESTION or not settings.GOOGLE_ZDR_CONFIRMED:
+    if not settings.ENABLE_INGESTION or not settings.provider_privacy_allowed("google"):
         return job_id
     redis_url = settings.UPSTASH_REDIS_URL or settings.REDIS_URL
     if not redis_url or "placeholder" in redis_url.lower() or "test" in redis_url.lower():

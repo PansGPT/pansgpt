@@ -57,6 +57,7 @@ def test_unbroken_text_is_bounded_and_overlaps() -> None:
 async def test_google_preserves_tools_results_and_output_ceiling(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
     captured = {}
 
     async def generate(**kwargs: object):
@@ -113,14 +114,14 @@ async def test_google_preserves_tools_results_and_output_ceiling(
 
 
 @pytest.mark.asyncio
-async def test_privacy_block_prevents_google_client_creation(
+async def test_privacy_block_still_prevents_groq_client_creation(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "GROQ_ZDR_CONFIRMED", False)
     client = MagicMock(side_effect=AssertionError("No provider network client may be created"))
-    monkeypatch.setattr("google.genai.Client", client)
+    monkeypatch.setattr("groq.AsyncGroq", client)
     with pytest.raises((RuntimeError, ValueError)):
-        await provider_adapters.google_turn("live-key", "model", [], None)
+        await provider_adapters.groq_turn("live-key", "model", [], None)
     client.assert_not_called()
 
 
@@ -405,10 +406,10 @@ async def test_empty_ingestion_never_replaces_existing_index(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_privacy_block_keeps_ingestion_durable_without_redis_delivery(monkeypatch):
+async def test_disabled_ingestion_keeps_jobs_durable_without_redis_delivery(monkeypatch):
     from app.engines import arq_producer
 
-    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "ENABLE_INGESTION", False)
     record = AsyncMock(return_value="durable-request")
     deliver = AsyncMock(side_effect=AssertionError("Blocked work must remain pending"))
     monkeypatch.setattr(arq_producer, "record_job", record)
@@ -416,3 +417,63 @@ async def test_privacy_block_keeps_ingestion_durable_without_redis_delivery(monk
     assert await arq_producer.enqueue_ingestion_job("document", "source.pdf") == "durable-request"
     record.assert_awaited_once()
     deliver.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_google_retention_exception_allows_ingestion_queue_delivery(monkeypatch):
+    from app.engines import arq_producer
+
+    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "ENABLE_INGESTION", True)
+    monkeypatch.setattr(settings, "UPSTASH_REDIS_URL", "redis://localhost:6379")
+    record = AsyncMock(return_value="durable-request")
+    pool = SimpleNamespace(aclose=AsyncMock())
+    create = AsyncMock(return_value=pool)
+    deliver = AsyncMock()
+    monkeypatch.setattr(arq_producer, "record_job", record)
+    monkeypatch.setattr(arq_producer, "create_pool", create)
+    monkeypatch.setattr(arq_producer, "deliver_job", deliver)
+
+    assert await arq_producer.enqueue_ingestion_job("document", "source.pdf") == "durable-request"
+    deliver.assert_awaited_once_with(
+        pool, "durable-request", "ingest_document_job", "document", "source.pdf"
+    )
+    pool.aclose.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_google_retention_exception_allows_pending_job_reconciliation(monkeypatch):
+    from app.engines import job_outbox
+
+    monkeypatch.setattr(settings, "GOOGLE_ZDR_CONFIRMED", False)
+    monkeypatch.setattr(settings, "ENABLE_INGESTION", True)
+    row = {
+        "id": "durable-request",
+        "job_name": "ingest_document_job",
+        "document_id": "document",
+        "storage_key": "source.pdf",
+    }
+    connection = SimpleNamespace(execute=AsyncMock(), fetch=AsyncMock(return_value=[row]))
+
+    @asynccontextmanager
+    async def connect():
+        yield connection
+
+    deliver = AsyncMock()
+    monkeypatch.setattr(job_outbox, "get_db_connection", connect)
+    monkeypatch.setattr(job_outbox, "deliver_job", deliver)
+    redis = object()
+    await job_outbox.reconcile_jobs({"redis": redis})
+    deliver.assert_awaited_once_with(
+        redis, "durable-request", "ingest_document_job", "document", "source.pdf"
+    )
+
+
+@pytest.mark.parametrize(
+    "provider", ["groq", "openrouter", "openai", "tavily", "cohere", "unknown"]
+)
+def test_google_exception_does_not_allow_unverified_other_providers(monkeypatch, provider):
+    if provider != "unknown":
+        monkeypatch.setattr(settings, f"{provider.upper()}_ZDR_CONFIRMED", False)
+    with pytest.raises(RuntimeError, match="ZDR has not been verified"):
+        settings.require_provider_privacy(provider)

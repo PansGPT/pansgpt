@@ -2,11 +2,13 @@
 # PansGPT 2.0 Core AI Tools & Function Calling Schemas (Phase 6)
 # ==============================================================================
 
+import asyncio
 import uuid
 from typing import Any
 
 import structlog
 
+from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.rag import rag_engine
 
@@ -109,16 +111,16 @@ CORE_TOOL_DEFINITIONS = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "image_key": {
+                    "attachment_id": {
                         "type": "string",
-                        "description": "Cloudflare R2 storage key or presigned URL of the image to analyze.",
+                        "description": "Owned image attachment UUID supplied in the current conversation context. Never a URL or storage key.",
                     },
                     "prompt": {
                         "type": "string",
                         "description": "Specific clinical or histological question about the image.",
                     },
                 },
-                "required": ["image_key"],
+                "required": ["attachment_id"],
             },
         },
     },
@@ -242,18 +244,30 @@ class ToolExecutionEngine:
 
     @staticmethod
     async def execute_vision_analyze(
-        image_key: str,
-        prompt: str = "Analyze this image",
-        user_id: str | None = None,
-    ) -> dict[str, Any]:
-        """Analyzes an image via multimodal vision with multi-tier failover."""
-        from app.engines.vision import vision_engine
+        attachment_id: str,
+        prompt: str,
+        user_id: str | None,
+        university_id: str | None,
+        session_id: str | None,
+    ) -> dict[str, object]:
+        from app.engines.chat_images import analyze_image, owned_image
 
-        return await vision_engine.analyze(
-            image_input=image_key,
-            prompt=prompt,
-            user_id=user_id,
-        )
+        if not user_id or not university_id or not session_id:
+            return {
+                "status": "error",
+                "error": "An owned image attachment in this conversation is required.",
+            }
+        try:
+            async with asyncio.timeout(settings.VISION_OVERALL_TIMEOUT_SECONDS):
+                image = await owned_image(attachment_id, session_id, user_id, university_id)
+                analysis = await analyze_image(image, prompt, session_id, user_id, university_id)
+            return {"status": "success", "attachment_id": attachment_id, "analysis": analysis}
+        except Exception as exc:
+            logger.warning("chat_image_tool_failed", error_type=type(exc).__name__)
+            return {
+                "status": "error",
+                "error": "This image could not be analysed in the current conversation. Please retry.",
+            }
 
     async def dispatch_tool(
         self,
@@ -263,6 +277,7 @@ class ToolExecutionEngine:
         user_id: str | None = None,
         role: str = "student",
         levels: list[str] | None = None,
+        session_id: str | None = None,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
         logger.info("tool_dispatch_requested", tool_name=tool_name)
@@ -292,15 +307,12 @@ class ToolExecutionEngine:
                     role=role,
                 )
             elif tool_name == "vision_analyze":
-                image_target = (
-                    arguments.get("image_key")
-                    or arguments.get("image_url")
-                    or arguments.get("image_data", "")
-                )
                 return await self.execute_vision_analyze(
-                    image_key=image_target,
+                    attachment_id=str(arguments.get("attachment_id", "")),
                     prompt=arguments.get("prompt", "Analyze this image"),
                     user_id=user_id,
+                    university_id=university_id,
+                    session_id=session_id,
                 )
             else:
                 return {"error": f"Unknown tool name: {tool_name}"}

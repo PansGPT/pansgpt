@@ -6,8 +6,38 @@
   --foreground: var(--text-primary-900);
   --primary: var(--bg-brand-solid);
 }
-/* Use the approved Home charcoal canvas across every dark-theme surface. */
-[data-theme="dark"] { --bg-primary: var(--figma-colors-gray-dark-mode-950); }
+/* Neutral charcoal layers: keep green in brand actions, not the canvas. */
+[data-theme="dark"] {
+  --bg-primary: oklch(17.8% 0 0);
+  --bg-secondary: oklch(20.9% 0 0);
+  --bg-tertiary: oklch(24% 0 0);
+  --bg-quaternary: oklch(29% 0 0);
+  --bg-primary-alt: var(--bg-secondary);
+  --bg-primary-solid: var(--bg-secondary);
+  --bg-secondary-alt: var(--bg-primary);
+  --bg-secondary-subtle: var(--bg-secondary);
+  --bg-primary-hover: var(--bg-tertiary);
+  --bg-secondary-hover: var(--bg-tertiary);
+  --bg-active: var(--bg-tertiary);
+  --bg-disabled: var(--bg-tertiary);
+  --bg-disabled-subtle: var(--bg-secondary);
+  --bg-overlay: var(--bg-tertiary);
+  --border-primary: oklch(34% 0 0);
+  --border-secondary: oklch(27% 0 0);
+  --border-disabled: var(--border-primary);
+  --border-disabled-subtle: var(--border-secondary);
+  --text-primary-900: oklch(96.5% 0 0);
+  --text-secondary-700: oklch(82% 0 0);
+  --text-tertiary-600: oklch(72% 0 0);
+  --text-quaternary-500: oklch(66% 0 0);
+  --text-placeholder: var(--text-quaternary-500);
+  --text-secondary-hover: var(--text-primary-900);
+  --text-tertiary-hover: var(--text-secondary-700);
+  --text-brand-secondary-700: var(--text-secondary-700);
+  --fg-secondary-700: var(--text-secondary-700);
+  --fg-tertiary-600: var(--text-tertiary-600);
+  --fg-quaternary-400: var(--text-quaternary-500);
+}
 [data-theme="sepia"] {
   --bg-primary: oklch(97.4% 0.011 80);
   --bg-primary-hover: oklch(94.8% 0.016 80);
