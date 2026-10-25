@@ -143,6 +143,7 @@ export function ChatSessionMenu({
           </button>
         </DropdownTrigger>
         <DropdownContent
+          data-chat-overlay
           aria-label="Conversation actions"
           className="study-chat-session-menu"
           align={titleTrigger ? "start" : "end"}

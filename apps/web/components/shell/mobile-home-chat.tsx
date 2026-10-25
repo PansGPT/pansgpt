@@ -162,6 +162,17 @@ export function MobileHomeChat(): React.ReactElement {
           <DialogPrimitive.Content
             ref={bindSheet}
             className="mobile-home-chat-sheet"
+            onInteractOutside={(event) => {
+              // Runtime controls use sibling React portals to preserve drafts on dismissal.
+              // Their popup layers belong to this sheet even when rendered into document.body.
+              const target = event.detail.originalEvent.target;
+              if (target instanceof Element && target.closest("[data-chat-overlay]"))
+                event.preventDefault();
+            }}
+            onEscapeKeyDown={(event) => {
+              if (document.querySelector('[data-chat-overlay][data-state="open"]'))
+                event.preventDefault();
+            }}
             onOpenAutoFocus={(event) => {
               event.preventDefault();
               sheet.current?.focus({ preventScroll: true });

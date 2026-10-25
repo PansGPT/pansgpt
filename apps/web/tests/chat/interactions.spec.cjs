@@ -741,7 +741,7 @@ test("semantic title arrival, pinned group, centred dialogs and archive/delete u
     chat.title_source = "pending";
     sessionStorage.setItem("session-metadata-fixture", JSON.stringify(window.__chatSessions));
   });
-  await page.reload({ waitUntil: "commit" });
+  await page.reload({ waitUntil: "load", timeout: 60000 });
   const title = page.getByRole("button", { name: "Conversation options", exact: true });
   await expect(title).toHaveText("New chat");
   await page.evaluate(() => {
@@ -820,7 +820,13 @@ test("semantic title arrival, pinned group, centred dialogs and archive/delete u
     .click();
   await expect(title).toHaveText("My clearance notes");
   await page.setViewportSize({ width: 390, height: 844 });
-  await title.click();
+  await expect(title).not.toBeVisible();
+  await expect(page.getByRole("button", { name: "Share", exact: true })).not.toBeVisible();
+  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  const mobileNavigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+  await mobileNavigation
+    .getByRole("button", { name: "Options for My clearance notes", exact: true })
+    .click();
   await page.getByRole("menuitem", { name: "Rename", exact: true }).click();
   await expect(rename).toBeVisible();
   await page.screenshot({ path: test.info().outputPath("rename-conversation-mobile.png") });
@@ -830,6 +836,7 @@ test("semantic title arrival, pinned group, centred dialogs and archive/delete u
   await expect(rename).toHaveCSS("font-family", /Plus Jakarta Sans/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await rename.getByRole("button", { name: "Cancel", exact: true }).click();
+  await page.keyboard.press("Escape");
   await page.setViewportSize({ width: 1440, height: 975 });
   await page.getByRole("link", { name: "New chat", exact: true }).click();
   await page.getByLabel("Study question").fill("Explain bioavailability");
@@ -2028,11 +2035,18 @@ test("mobile Home sheet opens a saved chat and keeps the first-chat notice usabl
     sheet.getByRole("button", { name: "Conversation options", exact: true })
   ).toBeEnabled();
   await sheet.getByRole("button", { name: "Conversation options", exact: true }).click();
+  await expect(page.locator(".mobile-home-chat-sheet")).toBeVisible();
   await page.getByRole("menuitem", { name: "Rename", exact: true }).click();
+  await expect(page.locator(".mobile-home-chat-sheet")).toBeVisible();
   await expect(
     page.getByRole("dialog", { name: "Rename chat", exact: true }).getByLabel("Chat name")
   ).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog", { name: "Rename chat", exact: true })).not.toBeVisible();
+  await expect(sheet).toBeVisible();
+  await sheet.getByRole("button", { name: "Conversation options", exact: true }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("menuitem", { name: "Rename", exact: true })).not.toBeVisible();
   await expect(sheet).toBeVisible();
   await page.setViewportSize({ width: 375, height: 500 });
   await expect
