@@ -160,6 +160,13 @@ jobs:
         run: python tooling/smoke-api-container.py
       - name: Verify real Office conversion as the runtime user
         run: docker exec --interactive pansgpt-api-ci python - < tooling/smoke-office-conversion.py
+      - name: Verify packaged reranker loads as the runtime user without downloading
+        run: >-
+          docker exec
+          --env HTTP_PROXY=http://127.0.0.1:1
+          --env HTTPS_PROXY=http://127.0.0.1:1
+          pansgpt-api-ci python -c
+          "from app.engines.reranker import candidate_reranker; assert candidate_reranker._get_flashrank_client() is not None"
       - name: Collect container logs
         if: always()
         run: docker logs pansgpt-api-ci

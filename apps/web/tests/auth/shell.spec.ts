@@ -362,14 +362,17 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   page.on("request", (outgoing) => {
     if (outgoing.url().includes("/api/v1/library/documents")) libraryRequests += 1;
   });
-  await page.route("**/api/v1/auth/me", (route) =>
-    route.fulfill({ status: 503, body: "Synthetic profile failure" })
-  );
+  let profileRequests = 0;
+  await page.route("**/api/v1/auth/me", (route) => {
+    profileRequests += 1;
+    return route.fulfill({ status: 503, body: "Synthetic profile failure" });
+  });
   await page.goto("/app/library");
   await expect(
-    page.getByRole("heading", { name: "We couldn't verify your profile" })
+    page.getByRole("heading", { name: "Your study service is temporarily unavailable" })
   ).toBeVisible();
   expect(libraryRequests).toBe(0);
+  expect(profileRequests).toBe(1);
   await page.unroute("**/api/v1/auth/me");
   await page.getByRole("button", { name: "Retry profile verification" }).click();
   await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();

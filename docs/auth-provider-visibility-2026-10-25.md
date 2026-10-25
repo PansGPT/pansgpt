@@ -16,6 +16,8 @@ Deployment repair: in the Vercel project serving `pansgpt-web.vercel.app`, repla
 
 Verification: all 33 web Node tests, web TypeScript and affected-file lint passed. Regressions cover enabled/disabled providers, 401/503 and malformed settings, cancellation and a real bounded timeout. Local `/login` and `/signup` both return 200 with the enabled Google button in their server HTML. Production build/browser checks are pending; external Google account authorization is not claimed.
 
+Follow-up evidence: the isolated production build and all nine CI jobs passed for `002273d` ([run](https://github.com/PansGPT/pansgpt/actions/runs/40198844956)). The user repaired the hosted public key: its settings request now returns 200 with Google enabled. The deployed callback without an authorization code redirects to the correct deployed login URL. A subsequent post-login failure was independently confirmed as a rejected CORS preflight; see [profile verification investigation](profile-verification-2026-10-25.md). These checks do not certify a completed hosted account journey.
+
 Notion handoff (connector unavailable):
 
 - **Session / Change Log:** Fix delayed/hidden OAuth options and diagnose deployed invalid public key. Date 2026-10-25; Area Web / Auth; Files: credentials form, server wrapper, public provider helpers, auth CSS/pages/tests, roadmap and this record. Verified for the checks above; hosted key repair pending.

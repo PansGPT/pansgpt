@@ -37,6 +37,7 @@ class Settings(BaseSettings):
         "https://pansgpt.com",
         "https://staging.pansgpt.com",
         "https://app.pansgpt.com",
+        "https://pansgpt-web.vercel.app",
     ]
 
     # Database (Supabase PostgreSQL Session/Transaction Pooler)
@@ -202,6 +203,7 @@ class Settings(BaseSettings):
     # Re-ranking Engine Configuration (Section 6B.7)
     RERANKER_PROVIDER: Literal["flashrank", "cohere", "heuristic"] = "flashrank"
     RERANKER_MODEL: str = "ms-marco-TinyBERT-L-2-v2"
+    RERANKER_CACHE_DIR: str | None = None
     COHERE_API_KEY: str | None = None
     COHERE_RERANK_MODEL: str = "rerank-v3.5"
     RERANKER_TIMEOUT_SECONDS: float = 0.30

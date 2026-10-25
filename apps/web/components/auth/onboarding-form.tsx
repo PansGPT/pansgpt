@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Checkbox, Input, RadioGroup, Select, Skeleton } from "@pansgpt/ui/auth";
 import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
+import { profileFailureMessage } from "@/lib/profile-verification";
 import { AuthAlert } from "./frame";
 import { OnboardingFrame } from "./onboarding-frame";
 interface University {
@@ -18,7 +19,7 @@ const levels = [100, 200, 300, 400, 500, 600].map((level) => ({
 export function OnboardingForm(): React.ReactElement {
   const router = useRouter();
   const params = useSearchParams();
-  const { session, profile, refreshProfile, signOut, loading } = useAuth();
+  const { session, profile, profileError, refreshProfile, signOut, loading } = useAuth();
   const [universities, setUniversities] = useState<University[]>([]);
   const [loadingUniversities, setLoadingUniversities] = useState(true);
   const [universityError, setUniversityError] = useState(false);
@@ -193,12 +194,20 @@ export function OnboardingForm(): React.ReactElement {
         </div>
       ) : !profile ? (
         <div className="auth-form">
-          <AuthAlert>Your profile could not be loaded. Please retry before continuing.</AuthAlert>
+          <AuthAlert>
+            {profileError
+              ? profileFailureMessage(profileError).description
+              : "Your profile could not be loaded. Please retry before continuing."}
+          </AuthAlert>
           <Button
             leadingIcon={null}
             trailingIcon={null}
             disabled={busy}
             onClick={async () => {
+              if (profileError?.code === "session_unavailable") {
+                window.location.reload();
+                return;
+              }
               setBusy(true);
               try {
                 await refreshProfile();

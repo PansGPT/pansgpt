@@ -4,11 +4,11 @@ Canonical execution order: [build roadmap](build_roadmap.md) and [implementation
 
 ## Environment boundaries
 
-| Environment | API                                | Database                                | Workers                                                    |
-| ----------- | ---------------------------------- | --------------------------------------- | ---------------------------------------------------------- |
-| Development | Local FastAPI                      | Local Supabase CLI/Docker               | Local ARQ during development                               |
+| Environment | API                                | Database                                | Workers                                                |
+| ----------- | ---------------------------------- | --------------------------------------- | ------------------------------------------------------ |
+| Development | Local FastAPI                      | Local Supabase CLI/Docker               | Local ARQ during development                           |
 | Staging     | `pansgpt-api-staging`, Render Free | Supabase project `nrzbjhqtcxlfiyvoeanb` | Actions disposable checks; Oracle worker host deferred |
-| Production  | Provision and verify before launch | Separate hosted Supabase project        | Separate host/configuration before launch                  |
+| Production  | Provision and verify before launch | Separate hosted Supabase project        | Separate host/configuration before launch              |
 
 The staging database is migrated and verified. The documented custom domains and previous Render deployment records do not certify that the current API revision is deployed. Production is outside this staging action.
 
@@ -54,6 +54,12 @@ All schema changes use versioned mirrored SQL and Supabase CLI deployment. Stagi
 ## Web configuration
 
 When the matching web deployment is verified, use the actual staging API URL, the staging Supabase public URL/anon key and the server-only client API key. Validate preview and production scopes separately. Never put provider credentials or a Supabase service-role key in public frontend variables.
+
+The current web alias is `https://pansgpt-web.vercel.app`. Its browser calls the staging Render API directly, so the Render service's `ALLOWED_ORIGINS` must contain that exact origin (without a trailing slash). Preserve other required origins; do not allow arbitrary Vercel sites. A confirmed preflight returned `400 Disallowed CORS origin` after the API was healthy, preventing `/api/v1/auth/me` from reaching token/profile verification. An explicit Render environment value overrides the source default and must be updated there before redeploying. The shared `AuthProfileResponse` mirrors the existing API response; profile loading uses bounded, identity-scoped requests and does not substitute cached roles during an outage.
+
+The free pilot container runs one async Uvicorn API process. Its validated TinyBERT FlashRank model is downloaded during image build and copied into a read-only runtime cache. Startup warming is bounded/non-fatal; writable local caches are isolated across processes. ARQ worker hosting remains separate. See [profile/startup verification](profile-verification-2026-10-25.md).
+
+The availability workflow requires repository variables `STAGING_API_HEALTH_URL=https://pansgpt-api-staging.onrender.com/health/ready` and `STAGING_WEB_URL=https://pansgpt-web.vercel.app`. Both public URL variables were configured on 25 October after finding them absent; a manual verification run was dispatched. No staging credentials are required by this workflow. Full readiness failures remain visible rather than being reported as application readiness success.
 
 ## Release evidence
 

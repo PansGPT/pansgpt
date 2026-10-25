@@ -55,7 +55,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await prewarm_jwks_cache()
     # Pre-warm FlashRank ONNX reranker in a background thread so the first
     # real user request does not pay the 5-10s cold-start model load penalty.
-    await _prewarm_flashrank()
+    if settings.ENABLE_AI and settings.RERANKER_PROVIDER == "flashrank":
+        await _prewarm_flashrank()
     yield
     # Shutdown: cleanly close database pool
     await close_db_pool()
@@ -66,11 +67,16 @@ async def _prewarm_flashrank() -> None:
     try:
         from app.engines.reranker import candidate_reranker
 
-        await asyncio.to_thread(candidate_reranker._get_flashrank_client)
-        logger.info("flashrank_prewarmed")
+        ranker = await asyncio.wait_for(
+            asyncio.to_thread(candidate_reranker._get_flashrank_client), timeout=10.0
+        )
+        if ranker is not None:
+            logger.info("flashrank_prewarmed")
+        else:
+            logger.warning("flashrank_prewarm_unavailable", fallback="heuristic")
     except Exception as exc:
         # Non-fatal: reranker heuristic fallback will cover any load failure.
-        logger.warning("flashrank_prewarm_failed", error=str(exc))
+        logger.warning("flashrank_prewarm_failed", error_type=type(exc).__name__)
 
 
 app = FastAPI(

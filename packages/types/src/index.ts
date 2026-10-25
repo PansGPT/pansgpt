@@ -3,6 +3,7 @@
 // ==============================================================================
 
 export * from "./supabase";
+export * from "./auth";
 
 // Re-export core helper types and application DTOs
 export type AppTheme = "light" | "dark" | "sepia";

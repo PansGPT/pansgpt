@@ -7,6 +7,8 @@
 
 import asyncio
 import re
+import tempfile
+import threading
 import time
 from typing import Any
 
@@ -30,21 +32,30 @@ class CandidateReranker:
 
     def __init__(self) -> None:
         self._flashrank_client: Any = None
-        self._flashrank_lock = asyncio.Lock()
-        self._initialized = False
+        self._flashrank_lock = threading.Lock()
+        self._flashrank_cache: tempfile.TemporaryDirectory[str] | None = None
 
     def _get_flashrank_client(self) -> Any:
         """Lazy thread-safe initialization of FlashRank Ranker model."""
-        if self._flashrank_client is None:
-            try:
-                from flashrank import Ranker
+        with self._flashrank_lock:
+            if self._flashrank_client is None:
+                try:
+                    from flashrank import Ranker
 
-                model_name = settings.RERANKER_MODEL or "ms-marco-TinyBERT-L-2-v2"
-                self._flashrank_client = Ranker(model_name=model_name)
-                logger.info("flashrank_model_loaded", model=model_name)
-            except Exception as exc:
-                logger.warning("flashrank_initialization_failed", error=str(exc))
-                self._flashrank_client = False
+                    model_name = settings.RERANKER_MODEL or "ms-marco-TinyBERT-L-2-v2"
+                    cache_dir = settings.RERANKER_CACHE_DIR
+                    if not cache_dir:
+                        # FlashRank downloads/unpacks non-atomically. Never share its
+                        # writable download directory across reload/server processes.
+                        self._flashrank_cache = tempfile.TemporaryDirectory(
+                            prefix="pansgpt-flashrank-"
+                        )
+                        cache_dir = self._flashrank_cache.name
+                    self._flashrank_client = Ranker(model_name=model_name, cache_dir=cache_dir)
+                    logger.info("flashrank_model_loaded", model=model_name)
+                except Exception as exc:
+                    logger.warning("flashrank_initialization_failed", error_type=type(exc).__name__)
+                    self._flashrank_client = False
         return self._flashrank_client if self._flashrank_client is not False else None
 
     @staticmethod
@@ -141,7 +152,7 @@ class CandidateReranker:
         self, query: str, candidates: list[dict[str, Any]]
     ) -> list[dict[str, Any]]:
         """Executes FlashRank cross-encoder in a background thread."""
-        ranker = self._get_flashrank_client()
+        ranker = await asyncio.to_thread(self._get_flashrank_client)
         if not ranker:
             raise RuntimeError("FlashRank model unavailable")
 
