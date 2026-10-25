@@ -1745,6 +1745,8 @@ _(Full architecture documented in `credits_pricing_architecture.md` — pricing 
 
 ## 🌐 PHASE 23 — Public Pages + SEO
 
+25 October: the user approved the branded coming-soon holding page with existing Log in / Sign up destinations. Verified sessions now redirect from `/` to `/app`; anonymous visitors keep the public page. All 28 web Node tests, web typecheck and affected-file lint passed. This does not complete the full marketing landing page below; hosted auth verification remains open. [Scope and verification limits](public-coming-soon-2026-10-25.md).
+
 - [ ] Landing page: hero, features, social proof, CTA
 - [ ] Pricing page: credit packages, plan comparison (updated once Section 5 is finalized)
 - [ ] About, University Partnerships pages

@@ -10,7 +10,12 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   const email = `auth-${Date.now()}@example.test`;
   const password = "Synthetic-Original-73!";
   const replacement = "Synthetic-Replacement-84!";
-  await page.goto("/signup");
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/$/);
+  await expect(
+    page.getByRole("heading", { name: /Less overwhelm\.\s*More understanding\./ })
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Sign up", exact: true }).click();
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByLabel(/^Confirm password\s*\*?$/).fill(password);
@@ -100,8 +105,17 @@ test("real signup, confirmation, onboarding retries, sign-out, recovery and pass
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Test$/ })
   ).toBeVisible();
+  await page.goto("/?next=https://untrusted.invalid");
+  await expect(page).toHaveURL(/\/app$/);
+  await expect(
+    page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Test$/ })
+  ).toBeVisible();
   await logout(page);
   await expect(page).toHaveURL(/\/login/);
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/$/);
+  await page.getByRole("link", { name: "Log in", exact: true }).click();
+  await expect(page).toHaveURL(/\/login$/);
   await page.getByLabel("Email address").fill(email);
   await page.getByLabel(/^Password\s*\*?$/).fill(password);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();

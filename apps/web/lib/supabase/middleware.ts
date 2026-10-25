@@ -47,6 +47,7 @@ export async function updateSession(request: NextRequest) {
     response.headers.set("Cache-Control", "private, no-store");
     return response;
   };
+  if (user && pathname === "/") return redirect("/app");
   if (!user && pathname === "/update-password")
     return redirect("/forgot-password?error=recovery_required");
   if (

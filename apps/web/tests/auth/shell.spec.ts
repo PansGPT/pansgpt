@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { emailLink, openProfile, accountMenu, openNavigation } from "./support";
+import { emailLink, openProfile, accountMenu, openNavigation, startNewChat } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
 
 test("verified workspace navigation, profile, account themes, failures and mobile keyboard access", async ({
@@ -49,9 +49,11 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(sidebar.getByText("Teamspaces", { exact: true })).toHaveCount(0);
   await expect(sidebar.getByText("Private", { exact: true })).toHaveCount(0);
   await expect(sidebar.getByText("PansGPT Workspace", { exact: true })).toHaveCount(0);
-  await page.getByRole("link", { name: "Message PansGPT", exact: true }).focus();
-  await expect(page.getByRole("tooltip")).toContainText("Message PansGPT");
-  await page.keyboard.press("Escape");
+  await expect(page.getByRole("link", { name: "Message PansGPT", exact: true })).toHaveCount(0);
+  const newChat = sidebar.getByRole("link", { name: "New chat", exact: true });
+  await newChat.focus();
+  await expect(newChat).toBeFocused();
+  await expect(newChat).toHaveAttribute("href", "/app/chat");
   await page.locator(".dashboard-recent-card").first().click();
   await expect(page.getByRole("dialog", { name: "Pharmacology Notes", exact: true })).toContainText(
     "Sample content"
@@ -108,7 +110,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await openProfile(page);
   await expect(profile.getByLabel("Workspace theme")).toHaveValue("dark");
   for (const [value, name] of [
-    ["dark", "OLED-Dark"],
+    ["dark", "Dark"],
     ["sepia", "Sepia"],
     ["light", "Light"],
   ] as const) {
@@ -225,7 +227,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     "```text\nsynthetic study example\n```",
   ].join("\n\n");
   const syntheticEvents = [
-    ["thinking_chunk", { token: "Reviewing synthetic study material." }],
+    ["progress", { code: "creating_materials" }],
     ["tool_start", { call_id: "synthetic-tool", tool_name: "create_doc", arguments: {} }],
     ["tool_end", { call_id: "synthetic-tool", tool_name: "create_doc", status: "success" }],
     ["text_chunk", { token: syntheticAnswer }],
@@ -247,7 +249,8 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByRole("heading", { name: "Synthetic study outline" })).toBeVisible();
   await expect(page.locator(".study-chat-markdown table")).toHaveCount(1);
   await expect(page.locator(".study-chat-markdown .katex")).toBeVisible();
-  await expect(page.locator(".study-chat-tool")).toContainText("Completed");
+  await page.getByRole("button", { name: "Steps", exact: true }).click();
+  await expect(page.locator(".aui-reasoning-content")).toContainText("Create document: Completed");
   await expect(page.getByRole("button", { name: "Copy code", exact: true })).toBeEnabled();
   await expect(
     page
@@ -261,7 +264,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
     fullPage: true,
     animations: "disabled",
   });
-  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await startNewChat(page);
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
   ).toBeVisible();
@@ -274,10 +277,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByRole("main").getByRole("alert")).toContainText(
     "Synthetic provider unavailable"
   );
-  await expect(page.getByText("No response was returned.", { exact: true })).toBeVisible();
+  await expect(page.getByText("No response was returned.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Generating response...", { exact: true })).toHaveCount(0);
   await expect(page.getByLabel("Study question")).toBeEnabled();
-  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await startNewChat(page);
   await expect(page.getByText("Synthetic provider unavailable", { exact: true })).toHaveCount(0);
   expect(inferenceRequests).toBe(2);
   // Hold creation until New chat aborts the old runtime. It must never dispatch inference afterwards.
@@ -303,7 +306,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByLabel("Study question").fill("Cancel before a session is ready");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   await started;
-  await page.getByRole("button", { name: "New chat", exact: true }).click();
+  await startNewChat(page);
   releaseCreation();
   await settled;
   await expect(page.getByLabel("Study question")).toHaveValue("");

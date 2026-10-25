@@ -29,6 +29,20 @@ export async function openProfile(page: Page): Promise<void> {
   await page.getByRole("menuitem", { name: "Profile", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Your profile", exact: true })).toBeVisible();
 }
+export async function startNewChat(page: Page): Promise<void> {
+  if ((page.viewportSize()?.width ?? 1440) <= 860) {
+    await openNavigation(page);
+    await page
+      .getByRole("dialog", { name: "Workspace navigation", exact: true })
+      .getByRole("link", { name: "New chat", exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole("complementary", { name: "Workspace sidebar", exact: true })
+      .getByRole("link", { name: "New chat", exact: true })
+      .click();
+  }
+}
 export async function logout(page: Page): Promise<void> {
   await accountMenu(page);
   await page.getByRole("menuitem", { name: "Log out", exact: true }).click();

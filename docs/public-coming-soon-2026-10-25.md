@@ -1,0 +1,20 @@
+# Public holding page and session redirect — 25 October 2026
+
+The user requested replacing the root Phase 0 placeholder before deciding on signed-in redirects. The full marketing landing page is not part of this slice.
+
+- `/` now shows “Less overwhelm. More understanding.”, a new-website notice, PansGPT's original logo/quiet watermark and real `/signup` and `/login` links. Copy distinguishes the upcoming website from the available study workspace.
+- Use existing Plus Jakarta Sans and shared charcoal/green tokens. The primary action uses shared brand 700 for readable white text (approximately 5.66:1 contrast calculated from the exported OKLCH token), with brand 800 on hover. No new logos, colours, fabricated testimonials, waitlist submission or AI/backend calls.
+- Responsive layout, visible keyboard focus, 48px account actions and reduced-motion handling. Mobile heading typography was refined after the initial viewport review.
+- The user approved the draft on 25 October. Visitors with a verified Supabase session now redirect from exactly `/` to `/app` through the existing session middleware. Refreshed cookies are preserved and the redirect is private/no-store. Anonymous visitors and unverifiable sessions retain the public landing page; app profile/onboarding guards continue to handle incomplete accounts. Root query parameters cannot choose another redirect destination. Logout still returns to `/login`.
+
+Redirect verification: all 28 web Node tests, web TypeScript and affected-file ESLint passed. Three new regression tests execute the real middleware with a synthetic auth service: verified root redirect/cookie preservation, anonymous/auth-outage landing access, and existing app/login/signup/recovery destinations. No live account credentials were used; a hosted signed-in browser journey is not claimed.
+
+CI preparation: the preceding run `40177101467` passed eight jobs but failed the disposable auth browser job because its shell test still waited for the removed floating chat button. Update those legacy selectors to the sidebar New chat link and unified Steps disclosure, retaining the existing assertions for navigation, cancellation and failure behavior. The real disposable auth journey now covers anonymous landing → signup, verified root → app, and logged-out root → login. These browser assertions await the next CI run; their presence alone is not verification.
+
+Verification: web TypeScript and affected-file ESLint passed; root HTTP readback returns the new heading, both auth destinations and no Phase 0 badge. Installed Chrome rendered the initial draft at 1440, 768, 390 and 320px without horizontal overflow, with local fonts loaded; keyboard focus and login navigation passed. Chrome crashed during signup navigation, and subsequent Chrome/Edge launch attempts closed immediately. Final browser re-verification after the contrast/mobile typography refinements is therefore not certified. Initial draft screenshots are retained under `design-system/public-coming-soon-2026-10-25`; they precede those refinements. No production build, hosted auth journey or new automated test suite was claimed for this reversible review draft.
+
+Notion handoff — no connector is available; synchronization is pending:
+
+- **Session / Change Log:** Replace the Phase 0 placeholder with the approved holding page and redirect verified root sessions to the app. Date 2026-10-25; Area Web / Public Pages / Auth; Files: root page, public component/CSS, session middleware, middleware regression tests, roadmap and this record. Verified for the checks above; hosted journey pending.
+- **Decision Log:** After user approval, redirect verified sessions at `/` server-side using the existing cookie-preserving middleware. Keep the public page for anonymous visitors and retain existing signup/logout flows. Alternatives: client-side session redirects, trusting an unverified cookie or changing logout behavior.
+- **Product Roadmap:** Phase 23 holding page approved and root-session redirect locally verified; full marketing landing-page scope remains open. No Knowledge Base change for this routine UI/auth-navigation edit.
