@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ActionBarPrimitive,
+  ActionBarMorePrimitive,
   BranchPickerPrimitive,
   MessagePrimitive,
   getExternalStoreMessages,
@@ -30,15 +31,15 @@ import {
   RotateCcw,
   ThumbsUp,
   ThumbsDown,
+  MoreHorizontal,
+  Download,
 } from "lucide-react";
 import { ArtifactRenderer } from "@/components/artifacts/ArtifactRenderer";
 import { externalSourceUrl } from "@/lib/sse-parser";
 import { documentSources, safeChatLink } from "@/lib/chat-message";
 import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
-import { ChatReasoning } from "./reasoning";
-import { ThinkingStatus, StreamRevealProvider, StreamingWord } from "./motion";
-import { rehypeStreamWords } from "@/lib/rehype-stream-words";
+import { ThinkingStatus } from "./motion";
 import { ChatAttachment } from "./attachment";
 
 function useOriginalMessage(): ChatMessageView | undefined {
@@ -86,17 +87,9 @@ function CodeHeader({ language, code }: CodeHeaderProps): React.ReactElement {
 }
 
 const remarkPlugins = [remarkGfm, remarkMath];
-const rehypePlugins = [rehypeKatex, rehypeStreamWords];
+const rehypePlugins = [rehypeKatex];
 const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> = {
   CodeHeader,
-  span: ({ node, children, ...props }) => {
-    const offset = node?.properties["data-stream-offset"];
-    return typeof offset === "number" ? (
-      <StreamingWord offset={offset}>{children}</StreamingWord>
-    ) : (
-      <span {...props}>{children}</span>
-    );
-  },
   a: ({ href, children }) => {
     const safe = safeChatLink(href);
     return safe ? (
@@ -115,27 +108,19 @@ const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> 
 };
 
 function ChatMarkdown(): React.ReactElement {
-  const streaming = useAuiState((state) => state.message.status?.type === "running");
-  const message = useOriginalMessage();
-  // Capture origin on mount: a fresh single-batch answer is already complete,
-  // whereas database history has no receipt time and must never replay.
-  const [animateArrival] = useState(
-    () => message?.receivedAt !== undefined && (streaming || Date.now() - message.receivedAt < 1000)
-  );
   return (
-    <StreamRevealProvider animate={animateArrival}>
-      <MarkdownTextPrimitive
-        className="study-chat-markdown"
-        remarkPlugins={remarkPlugins}
-        rehypePlugins={rehypePlugins}
-        components={markdownComponents}
-        smooth={false}
-      />
-    </StreamRevealProvider>
+    <MarkdownTextPrimitive
+      className="study-chat-markdown"
+      remarkPlugins={remarkPlugins}
+      rehypePlugins={rehypePlugins}
+      components={markdownComponents}
+      smooth
+      defer
+    />
   );
 }
 
-// Tool execution stays in the runtime; public status lives in the Steps panel.
+// Execution stays in FastAPI; the live activity line owns public waiting status.
 const ChatTool: ToolCallMessagePartComponent = () => null;
 
 function MessageExtras(): React.ReactElement | null {
@@ -184,15 +169,8 @@ function CopyAction(): React.ReactElement {
   const copied = useAuiState((state) => state.message.isCopied);
   const message = useOriginalMessage();
   const busy = useAuiState((state) => state.thread.isRunning || state.thread.isLoading);
-  const { submitFeedback } = useChatActions();
-  const [savingFeedback, setSavingFeedback] = useState(false);
-  const rate = (rating: "positive" | "negative") => {
-    if (!message || savingFeedback) return;
-    setSavingFeedback(true);
-    void submitFeedback(message.id, rating)
-      .catch(() => undefined)
-      .finally(() => setSavingFeedback(false));
-  };
+  const { feedbackPending } = useChatActions();
+  const savingFeedback = !!message && feedbackPending.has(message.id);
   return (
     <ActionBarPrimitive.Root className="study-chat-actions" hideWhenRunning autohide="never">
       <Tooltip content={copied ? "Copied" : "Copy message"}>
@@ -215,30 +193,51 @@ function CopyAction(): React.ReactElement {
               <RotateCcw size={15} />
             </ActionBarPrimitive.Reload>
           </Tooltip>
+          {/* Native actions dispatch feedback; pressed state follows the saved API result. */}
           <Tooltip content="Helpful">
-            <button
-              type="button"
-              onClick={() => rate("positive")}
+            <ActionBarPrimitive.FeedbackPositive
               aria-label="Helpful response"
               aria-pressed={message.feedback === "positive"}
+              data-submitted={message.feedback === "positive" ? "true" : undefined}
               disabled={busy || savingFeedback}
             >
               <ThumbsUp size={15} />
-            </button>
+            </ActionBarPrimitive.FeedbackPositive>
           </Tooltip>
           <Tooltip content="Unhelpful">
-            <button
-              type="button"
-              onClick={() => rate("negative")}
+            <ActionBarPrimitive.FeedbackNegative
               aria-label="Unhelpful response"
               aria-pressed={message.feedback === "negative"}
+              data-submitted={message.feedback === "negative" ? "true" : undefined}
               disabled={busy || savingFeedback}
             >
               <ThumbsDown size={15} />
-            </button>
+            </ActionBarPrimitive.FeedbackNegative>
           </Tooltip>
         </>
       )}
+      <ActionBarMorePrimitive.Root>
+        <Tooltip content="More message actions">
+          <ActionBarMorePrimitive.Trigger aria-label="More message actions" disabled={busy}>
+            <MoreHorizontal size={15} aria-hidden="true" />
+          </ActionBarMorePrimitive.Trigger>
+        </Tooltip>
+        <ActionBarMorePrimitive.Content
+          className="p-dropdown-menu study-chat-session-menu"
+          side="top"
+          align="start"
+        >
+          <ActionBarMorePrimitive.Item asChild>
+            <ActionBarPrimitive.ExportMarkdown
+              className="p-dropdown-item"
+              filename={`pansgpt-message-${message?.id ?? "reply"}.md`}
+            >
+              <Download size={16} aria-hidden="true" />
+              Export Markdown
+            </ActionBarPrimitive.ExportMarkdown>
+          </ActionBarMorePrimitive.Item>
+        </ActionBarMorePrimitive.Content>
+      </ActionBarMorePrimitive.Root>
       <BranchPickerPrimitive.Root className="study-chat-branches" hideWhenSingleBranch>
         <BranchPickerPrimitive.Previous aria-label="Previous branch" disabled={busy}>
           <ChevronLeft size={15} />
@@ -286,12 +285,7 @@ export function AssistantMessage(): React.ReactElement {
     ?.slice()
     .reverse()
     .find((update) => !message.activity || update.code === message.activity);
-  const empty =
-    !message?.content &&
-    !message?.thinking &&
-    !message?.progress?.length &&
-    !message?.artifacts?.length &&
-    !message?.tools?.length;
+  const empty = !message?.content && !message?.artifacts?.length;
   return (
     <MessagePrimitive.Root
       className="study-chat-message aui-assistant-message-root"
@@ -310,7 +304,6 @@ export function AssistantMessage(): React.ReactElement {
           <MessagePrimitive.Parts
             components={{
               Text: ChatMarkdown,
-              Reasoning: ChatReasoning,
               tools: { Fallback: ChatTool },
             }}
           />

@@ -10,10 +10,6 @@
   --think-base: #7c7c7c;
   --think-highlight: #0d0d0d;
   --think-ease: ease-in-out;
-  --stream-gap: 60ms;
-  --stream-fade: 350ms;
-  --stream-blur: 1px;
-  --stream-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --matrix-cycle: 1200ms;
   --matrix-base: #d9d9d9;
   --matrix-active: #85858f;
@@ -79,22 +75,6 @@
 @media (prefers-reduced-motion: reduce) {
   .t-think-text { transition: none !important; transform: none !important; filter: none !important; }
   .t-think-text::before { display: none !important; }
-}
-
-.t-stream-w {
-  opacity: 0;
-  filter: blur(var(--stream-blur));
-  transition:
-    opacity var(--stream-fade) var(--stream-ease),
-    filter var(--stream-fade) var(--stream-ease);
-}
-.t-stream-w.is-in {
-  opacity: 1;
-  filter: blur(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .t-stream-w { transition: none !important; filter: none !important; opacity: 1 !important; }
 }
 
 .t-matrix {

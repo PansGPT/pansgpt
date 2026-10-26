@@ -12,6 +12,20 @@
   color: var(--text-primary-900);
   background: var(--bg-primary);
 }
+.study-chat[data-dragging]::after {
+  content: "Drop files to attach";
+  position: absolute;
+  inset: 12px;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  border: 2px dashed var(--fg-brand-primary-600);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
+  color: var(--text-primary-900);
+  font: 500 15px/1.6 var(--font-body);
+}
 .study-chat-welcome {
   display: flex;
   flex: 1;
@@ -1165,66 +1179,6 @@ button.study-chat-attachment-tile:hover {
   line-height: 1.5;
   font-weight: 500;
 }
-.aui-reasoning-root {
-  margin: 6px 0 16px;
-}
-.aui-reasoning-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 36px;
-  padding: 4px 0;
-  border: 0;
-  background: transparent;
-  color: var(--text-tertiary-600);
-  font: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-.aui-reasoning-trigger > svg:last-child {
-  transform: rotate(-90deg);
-  transition: transform 200ms;
-}
-.aui-reasoning-trigger[data-state="open"] > svg:last-child {
-  transform: rotate(0);
-}
-.aui-reasoning-content {
-  overflow: hidden;
-}
-.aui-reasoning-scroll {
-  max-height: 240px;
-  overflow-y: auto;
-  padding: 0 12px;
-  border-left: 1px solid var(--border-secondary);
-  color: var(--text-tertiary-600);
-  font-size: 13px;
-}
-.aui-thinking-shimmer {
-  background: linear-gradient(
-    110deg,
-    var(--text-tertiary-600) 30%,
-    var(--text-primary-900) 50%,
-    var(--text-tertiary-600) 70%
-  );
-  background-size: 200% 100%;
-  background-clip: text;
-  color: transparent;
-  animation: aui-thinking-shimmer 2s linear infinite;
-}
-@keyframes aui-thinking-shimmer {
-  to {
-    background-position: -200% 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .aui-thinking-shimmer {
-    animation: none;
-    color: var(--text-tertiary-600);
-  }
-  .aui-reasoning-trigger > svg:last-child {
-    transition: none;
-  }
-}
 @media (min-width: 861px) and (max-width: 1100px) {
   .study-chat-tools-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1338,28 +1292,6 @@ button.study-chat-attachment-tile:hover {
   }
 }
 
-.aui-reasoning-scroll ol {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 4px 0;
-  list-style: none;
-}
-.aui-reasoning-scroll li {
-  display: flex;
-  align-items: baseline;
-  gap: 9px;
-  font-size: 12px;
-  line-height: 1.6;
-}
-.aui-reasoning-scroll li::before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  flex: none;
-  border-radius: 50%;
-  background: var(--text-quaternary-500);
-}
 .study-chat-title-menu[data-state="open"] {
   background: var(--bg-tertiary);
 }

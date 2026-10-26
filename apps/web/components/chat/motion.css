@@ -4,7 +4,6 @@
   --think-highlight: var(--text-primary-900);
   --matrix-base: color-mix(in srgb, var(--text-secondary-700) 26%, transparent);
   --matrix-active: var(--text-secondary-700);
-  --stream-max-stagger: 900ms;
 }
 .study-chat-thinking-state {
   display: inline-flex;
@@ -34,7 +33,4 @@
 .study-chat-thinking-state .t-think-text {
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.aui-reasoning-trigger:has(.study-chat-thinking-state) {
-  max-width: 100%;
 }
