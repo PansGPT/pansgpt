@@ -250,8 +250,13 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByRole("heading", { name: "Synthetic study outline" })).toBeVisible();
   await expect(page.locator(".study-chat-markdown table")).toHaveCount(1);
   await expect(page.locator(".study-chat-markdown .katex")).toBeVisible();
-  await page.getByRole("button", { name: "Steps", exact: true }).click();
-  await expect(page.locator(".aui-reasoning-content")).toContainText("Create document: Completed");
+  await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
+  await expect(
+    page.locator('.study-chat-message[data-role="assistant"]').getByRole("button", {
+      name: "More message actions",
+      exact: true,
+    })
+  ).toBeEnabled();
   await expect(page.getByRole("button", { name: "Copy code", exact: true })).toBeEnabled();
   await expect(
     page
