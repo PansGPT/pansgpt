@@ -206,40 +206,42 @@ function DetailsBody({
           {document.page_count > 0 ? ` of ${document.page_count}` : ""}
         </p>
       )}
-      <Button
-        leadingIcon={<ArrowUpRight size={16} />}
-        trailingIcon={null}
-        disabled={busy}
-        onClick={() => void openPdf()}
-      >
-        {busy ? "Opening PDF…" : "Open PDF"}
-      </Button>
-      {error && (
-        <p className="library-inline-error" role="alert">
-          {error}
-        </p>
-      )}
-      {fallback && (
-        <p role="status">
-          Your browser blocked the new tab.{" "}
-          <a
-            href={fallback}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => void recordOpening()}
-          >
-            Open your PDF
-          </a>
-        </p>
-      )}
-      {recentError && (
-        <p className="library-inline-error" role="status">
-          Your PDF opened, but Recent Documents couldn’t be updated.{" "}
-          <button type="button" onClick={() => void recordOpening()}>
-            Retry history update
-          </button>
-        </p>
-      )}
+      <div className="library-document-actions">
+        <Button
+          leadingIcon={<ArrowUpRight size={16} />}
+          trailingIcon={null}
+          disabled={busy}
+          onClick={() => void openPdf()}
+        >
+          {busy ? "Opening PDF…" : "Open PDF"}
+        </Button>
+        {error && (
+          <p className="library-inline-error" role="alert">
+            {error}
+          </p>
+        )}
+        {fallback && (
+          <p role="status">
+            Your browser blocked the new tab.{" "}
+            <a
+              href={fallback}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => void recordOpening()}
+            >
+              Open your PDF
+            </a>
+          </p>
+        )}
+        {recentError && (
+          <p className="library-inline-error" role="status">
+            Your PDF opened, but Recent Documents couldn’t be updated.{" "}
+            <button type="button" onClick={() => void recordOpening()}>
+              Retry history update
+            </button>
+          </p>
+        )}
+      </div>
     </div>
   );
 }

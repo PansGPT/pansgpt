@@ -1,5 +1,7 @@
 # Library browsing and next chat work
 
+27 October follow-up: [the mobile refinement record](library-mobile-2026-10-27.md) defines the latest header-to-footer composition and document-details sheet. This record retains the earlier implementation/verification history.
+
 User priority on 26 October: work on the library first. Resume assistant-ui improvements afterwards in this order: **tool-specific cards**, richer code/diagram rendering, then quoted replies. Do not lose this queue while doing library work.
 
 Design direction clarified by the user: improve the **existing legacy library UI**, rather than create a replacement layout. Preserve its desktop course navigation, Recent Documents view, search/session/semester toolbar, grid/list choices and document details panel; preserve mobile Recent/Courses navigation. Refine spacing, typography, responsive behavior and interaction consistency using this monorepo's semantic themes. Use actual authorized document thumbnails instead of the legacy synthetic covers. No invented reading progress, stars without persistence, or runtime legacy imports. After reviewing this direction, the user authorized implementation on a dedicated branch.

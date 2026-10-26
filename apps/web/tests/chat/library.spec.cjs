@@ -38,7 +38,15 @@ const courses = [
   { code: "PCT 402", title: "Pharmaceutical Technology", document_count: 29 },
 ];
 async function setup(page, { empty = false, failure = false, staff = false } = {}) {
-  const state = { empty, failure, requests: [], pdfFails: true, opened: [], thumbnails: 0 };
+  const state = {
+    empty,
+    failure,
+    requests: [],
+    pdfFails: true,
+    opened: [],
+    thumbnails: 0,
+    records: documents,
+  };
   await page.addInitScript(
     ({ staff, preview }) => {
       localStorage.setItem("pansgpt-theme", "dark");
@@ -61,7 +69,7 @@ async function setup(page, { empty = false, failure = false, staff = false } = {
       const p = url.searchParams;
       let items = state.empty
         ? []
-        : documents.filter(
+        : state.records.filter(
             (item) =>
               (p.get("collection") !== "recent" || item.last_opened_at) &&
               (!p.get("course_code") || item.course_code === p.get("course_code")) &&
@@ -358,6 +366,127 @@ test("library failures remain visible and retry can reach a genuine empty univer
   await expect(
     page.getByRole("heading", { name: "Your courses will appear here", exact: true })
   ).toBeVisible();
+});
+
+test("mobile Library follows the legacy header-to-footer flow with real date groups and a details sheet", async ({
+  page,
+}) => {
+  const state = await setup(page);
+  state.records = documents.slice(0, 6).map((item, index) => ({
+    ...item,
+    last_opened_at: ["2026-10-27T08:00:00Z", "2026-10-26T10:00:00Z", "2026-10-15T10:00:00Z"][
+      Math.floor(index / 2)
+    ],
+  }));
+  await page.clock.setFixedTime(new Date("2026-10-27T12:00:00+01:00"));
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app/library");
+  const header = page.locator(".library-mobile-topbar");
+  const search = page.getByLabel("Search your library", { exact: true });
+  const tabs = page.getByRole("navigation", { name: "Library sections", exact: true });
+  const actions = page.locator(".library-header");
+  const results = page.locator(".library-results");
+  const footer = page.locator(".shell-mobile-composer");
+  const docs = page.getByRole("list", { name: "Course documents", exact: true });
+  await expect(docs.getByRole("button")).toHaveCount(6);
+  await expect(page.locator(".library-date-group")).toHaveText(["Today", "Yesterday", "Earlier"]);
+  await expect(header.getByText("Library", { exact: true })).toBeVisible();
+  await expect(page.locator(".shell-mobile-brand")).not.toBeVisible();
+  for (const [width, height] of [
+    [390, 844],
+    [320, 568],
+    [430, 932],
+  ]) {
+    await page.setViewportSize({ width, height });
+    const bounds = await Promise.all(
+      [header, search, tabs, actions, results, footer].map((item) => item.boundingBox())
+    );
+    expect(bounds[0].y + bounds[0].height).toBeLessThanOrEqual(bounds[1].y + 1);
+    expect(bounds[1].y + bounds[1].height).toBeLessThanOrEqual(bounds[2].y + 1);
+    expect(bounds[2].y + bounds[2].height).toBeLessThanOrEqual(bounds[3].y + 1);
+    expect(bounds[4].y + bounds[4].height).toBeLessThanOrEqual(bounds[5].y + 1);
+    expect(
+      await page.evaluate(
+        () =>
+          document.scrollingElement.scrollHeight <= innerHeight + 1 &&
+          document.documentElement.scrollWidth <= innerWidth
+      )
+    ).toBe(true);
+    await expect(footer).toBeInViewport();
+    if (width === 390) {
+      await expect
+        .poll(() =>
+          docs
+            .locator("img")
+            .evaluateAll(
+              (images) => images.filter((image) => image.complete && image.naturalWidth > 0).length
+            )
+        )
+        .toBeGreaterThanOrEqual(2);
+      await page.screenshot({ path: test.info().outputPath("mobile-library-complete-390.png") });
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  const lastDocument = docs.getByRole("button").last();
+  await lastDocument.focus();
+  await expect(lastDocument).toBeInViewport();
+  const lastBox = await lastDocument.boundingBox();
+  const footerBox = await footer.boundingBox();
+  expect(lastBox.y + lastBox.height).toBeLessThanOrEqual(footerBox.y + 1);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await results.evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  const nav = header.getByRole("button", { name: "Open navigation", exact: true });
+  await nav.click();
+  await expect(
+    page.getByRole("dialog", { name: "Workspace navigation", exact: true })
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(nav).toBeFocused();
+  await nav.click();
+  await page
+    .getByRole("dialog", { name: "Workspace navigation", exact: true })
+    .getByRole("button", { name: "Account menu", exact: true })
+    .click();
+  await page.getByRole("menuitem", { name: "Help", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Help", exact: true })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(nav).toBeFocused();
+  await docs.getByRole("button").first().click();
+  const sheet = page.getByRole("dialog", { name: "Document details", exact: true });
+  await expect(sheet).toHaveCSS("border-top-left-radius", "24px");
+  const sheetBox = await sheet.boundingBox();
+  expect(sheetBox.y).toBeGreaterThan(20);
+  expect(Math.abs(sheetBox.y + sheetBox.height - 844)).toBeLessThan(1);
+  await expect(sheet.getByRole("button", { name: "Open PDF", exact: true })).toBeInViewport();
+  await expect(sheet.locator(".dashboard-document-thumbnail img")).toHaveAttribute("src", /^blob:/);
+  await page.screenshot({ path: test.info().outputPath("mobile-library-document-sheet.png") });
+  await page.keyboard.press("Escape");
+  await expect(docs.getByRole("button").first()).toBeFocused();
+  await tabs.getByRole("button", { name: "Courses", exact: true }).click();
+  const courseCards = page.getByRole("list", { name: "Courses", exact: true });
+  await expect(page.getByRole("group", { name: "Document layout", exact: true })).not.toBeVisible();
+  await expect(courseCards.getByRole("button")).toHaveCount(2);
+  const a = await courseCards.getByRole("button").first().boundingBox();
+  const b = await courseCards.getByRole("button").nth(1).boundingBox();
+  expect(Math.abs(a.y - b.y)).toBeLessThan(1);
+  await page.screenshot({ path: test.info().outputPath("mobile-library-course-folders.png") });
+  await courseCards.getByRole("button").first().click();
+  await page.getByRole("button", { name: "Academic filters", exact: true }).click();
+  await page.getByLabel("Semester", { exact: true }).selectOption("first");
+  await expect(page.getByRole("button", { name: "Academic filters", exact: true })).toHaveAttribute(
+    "aria-expanded",
+    "false"
+  );
+  await expect(
+    page.getByRole("button", { name: "Clear semester filter", exact: true })
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Clear semester filter", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Clear semester filter", exact: true })
+  ).toHaveCount(0);
 });
 
 for (const role of ["university_admin", "lecturer"]) {

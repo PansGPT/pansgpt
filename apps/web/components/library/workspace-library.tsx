@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -16,18 +16,21 @@ import {
   SlidersHorizontal,
   Upload,
   X,
+  PanelLeft,
 } from "lucide-react";
 import { Button, Skeleton } from "@pansgpt/ui/shell";
 import type { LibraryDocument, LibraryCourse } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
-import { fileSize, materialDate } from "@/lib/library-catalog";
+import { fileSize, materialDate, readingDateGroup } from "@/lib/library-catalog";
 import { DocumentUploadModal } from "@/components/DocumentUploadModal";
 import { DocumentDetails } from "./document-details";
 import { useCatalog } from "./use-catalog";
 import { DocumentThumbnail } from "@/components/shell/document-thumbnail";
 import { DocumentCard } from "@/components/shell/document-card";
 import { useDashboard } from "@/components/shell/dashboard-data";
+import { useWorkspaceNavigation } from "@/components/shell/workspace-navigation";
 import "./library.css";
+import "./library-mobile.css";
 
 type Location = { kind: "recent" | "courses" } | { kind: "course"; code: string };
 
@@ -48,6 +51,8 @@ export function WorkspaceLibrary({
 function LibraryContent({ initialQuery }: { initialQuery: string }): React.ReactElement {
   const { session, profile } = useAuth();
   const dashboard = useDashboard();
+  const openNavigation = useWorkspaceNavigation();
+  const [today] = useState(() => new Date());
   const [location, setLocation] = useState<Location>({ kind: "recent" });
   const [query, setQuery] = useState(initialQuery);
   const [search, setSearch] = useState(initialQuery.trim());
@@ -119,6 +124,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
     setAcademicSession("");
     setSemester("");
     setOffset(0);
+    setFiltersOpen(false);
   }
   const courseGrid = (items: LibraryCourse[]): React.ReactElement => (
     <ul className="library-course-grid" aria-label="Courses">
@@ -142,7 +148,12 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
     </ul>
   );
   return (
-    <section className="workspace-library library-workspace" aria-label="Your library">
+    <section
+      className="workspace-library library-workspace"
+      aria-label="Your library"
+      data-collection={location.kind}
+      data-folders={folders}
+    >
       <aside className="library-course-panel" aria-label="Library navigation">
         <div className="library-panel-title">
           <Library size={21} />
@@ -200,12 +211,45 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
         </p>
       </aside>
       <div className="library-main">
+        <header className="library-mobile-topbar">
+          <button
+            type="button"
+            className="library-mobile-nav-trigger"
+            aria-label="Open navigation"
+            onClick={(event) => openNavigation(event.currentTarget)}
+          >
+            <PanelLeft size={20} />
+          </button>
+          <strong>Library</strong>
+          <div className="library-mobile-top-actions">
+            <button
+              type="button"
+              className="library-icon-button"
+              aria-label="Refresh"
+              onClick={reload}
+              disabled={loading}
+            >
+              <RefreshCw size={18} />
+            </button>
+            {canUpload && (
+              <button
+                type="button"
+                className="library-icon-button"
+                aria-label="Upload material"
+                onClick={() => setUploadOpen(true)}
+              >
+                <Upload size={18} />
+              </button>
+            )}
+          </div>
+        </header>
         <header className="library-header">
           <div>
             {location.kind === "course" && !search && (
               <button
                 type="button"
                 className="library-back"
+                aria-label="Back to courses"
                 onClick={() => navigate({ kind: "courses" })}
               >
                 <ArrowLeft size={14} />
@@ -227,6 +271,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             <button
               type="button"
               className="library-icon-button"
+              data-library-refresh
               aria-label="Refresh"
               onClick={reload}
               disabled={loading}
@@ -262,6 +307,17 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
                 <List size={18} />
               </button>
             </div>
+            <button
+              type="button"
+              className="library-filter-toggle library-icon-button"
+              aria-label="Academic filters"
+              aria-expanded={filtersOpen}
+              aria-controls="library-academic-filters"
+              onClick={() => setFiltersOpen((value) => !value)}
+            >
+              <SlidersHorizontal size={18} />
+              {(academicSession || semester) && <span className="library-filter-dot" />}
+            </button>
           </div>
         </header>
         <div className="library-toolbar-v2">
@@ -282,17 +338,6 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
               </button>
             )}
           </label>
-          <button
-            type="button"
-            className="library-filter-toggle library-icon-button"
-            aria-label="Academic filters"
-            aria-expanded={filtersOpen}
-            aria-controls="library-academic-filters"
-            onClick={() => setFiltersOpen((value) => !value)}
-          >
-            <SlidersHorizontal size={18} />
-            {(academicSession || semester) && <span className="library-filter-dot" />}
-          </button>
           <div
             className="library-academic-filters"
             id="library-academic-filters"
@@ -306,6 +351,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
                 onChange={(event) => {
                   setAcademicSession(event.target.value);
                   setOffset(0);
+                  setFiltersOpen(false);
                 }}
               >
                 <option value="">All sessions</option>
@@ -325,6 +371,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
                 onChange={(event) => {
                   setSemester(event.target.value);
                   setOffset(0);
+                  setFiltersOpen(false);
                 }}
               >
                 <option value="">All semesters</option>
@@ -350,6 +397,36 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             Courses
           </button>
         </nav>
+        {(academicSession || semester) && (
+          <div className="library-filter-chips" aria-label="Active academic filters">
+            {academicSession && (
+              <button
+                type="button"
+                aria-label="Clear academic session filter"
+                onClick={() => {
+                  setAcademicSession("");
+                  setOffset(0);
+                }}
+              >
+                {academicSession}
+                <X size={12} />
+              </button>
+            )}
+            {semester && (
+              <button
+                type="button"
+                aria-label="Clear semester filter"
+                onClick={() => {
+                  setSemester("");
+                  setOffset(0);
+                }}
+              >
+                {semester === "first" ? "First semester" : "Second semester"}
+                <X size={12} />
+              </button>
+            )}
+          </div>
+        )}
         <div className="library-results-heading">
           <span role="status">
             {loading
@@ -400,8 +477,26 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             ) : (
               <div className="library-empty">
                 <FolderClosed size={30} />
-                <h2>Your courses will appear here</h2>
-                <p>Materials will be available when your university shares them.</p>
+                <h2>
+                  {academicSession || semester
+                    ? "No matching courses"
+                    : "Your courses will appear here"}
+                </h2>
+                <p>
+                  {academicSession || semester
+                    ? "Try another academic period or clear your filters."
+                    : "Materials will be available when your university shares them."}
+                </p>
+                {(academicSession || semester) && (
+                  <Button
+                    variant="secondary"
+                    leadingIcon={null}
+                    trailingIcon={null}
+                    onClick={resetFilters}
+                  >
+                    Clear filters
+                  </Button>
+                )}
               </div>
             )
           ) : (
@@ -427,74 +522,91 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
                     className={`library-materials library-materials-${view}`}
                     aria-label="Course documents"
                   >
-                    {data.items.map((item) => (
-                      <li key={item.id}>
-                        {view === "grid" ? (
-                          <DocumentCard
-                            documentId={item.id}
-                            revision={item.updated_at}
-                            title={item.title}
-                            date={
-                              recent && item.last_opened_at ? item.last_opened_at : item.created_at
-                            }
-                            label={`View details for ${item.title}`}
-                            className="library-material"
-                            selected={selected?.id === item.id}
-                            onClick={(event) => {
-                              selectionOpener.current = event.currentTarget;
-                              setSelected(item);
-                            }}
-                          />
-                        ) : (
-                          <button
-                            type="button"
-                            className="library-material"
-                            aria-label={`View details for ${item.title}`}
-                            aria-pressed={selected?.id === item.id}
-                            onClick={(event) => {
-                              selectionOpener.current = event.currentTarget;
-                              setSelected(item);
-                            }}
-                          >
-                            <span className="dashboard-recent-cover library-material-preview">
-                              <DocumentThumbnail documentId={item.id} revision={item.updated_at} />
-                            </span>
-                            <span className="dashboard-recent-body library-material-body">
-                              <FileText
-                                size={17}
-                                className="library-material-file-icon"
-                                aria-hidden="true"
-                              />
-                              <span className="library-material-copy">
-                                <strong>{item.title}</strong>
-                                <span className="library-course-label">{item.course_code}</span>
-                                <span className="library-material-meta">
-                                  {item.page_count > 0 ? `${item.page_count} pages · ` : ""}
-                                  {fileSize(item.file_size_bytes)}
-                                </span>
-                                {item.status !== "active" && (
-                                  <span className="library-status">
-                                    {item.status.replaceAll("_", " ")}
-                                  </span>
-                                )}
-                              </span>
-                            </span>
-                            <span className="library-material-lecturer">
-                              {item.lecturer_name || "—"}
-                            </span>
-                            <span className="library-material-date">
-                              {materialDate(
+                    {data.items.map((item, index) => (
+                      <Fragment key={item.id}>
+                        {recent &&
+                          (index === 0 ||
+                            readingDateGroup(
+                              data.items[index - 1]?.last_opened_at ?? null,
+                              today
+                            ) !== readingDateGroup(item.last_opened_at, today)) && (
+                            <li className="library-date-group" role="presentation">
+                              <h2>{readingDateGroup(item.last_opened_at, today)}</h2>
+                            </li>
+                          )}
+                        <li key={item.id}>
+                          {view === "grid" ? (
+                            <DocumentCard
+                              documentId={item.id}
+                              revision={item.updated_at}
+                              title={item.title}
+                              date={
                                 recent && item.last_opened_at
                                   ? item.last_opened_at
                                   : item.created_at
-                              )}
-                            </span>
-                            <span className="library-material-size">
-                              {fileSize(item.file_size_bytes)}
-                            </span>
-                          </button>
-                        )}
-                      </li>
+                              }
+                              label={`View details for ${item.title}`}
+                              className="library-material"
+                              selected={selected?.id === item.id}
+                              onClick={(event) => {
+                                selectionOpener.current = event.currentTarget;
+                                setSelected(item);
+                              }}
+                            />
+                          ) : (
+                            <button
+                              type="button"
+                              className="library-material"
+                              aria-label={`View details for ${item.title}`}
+                              aria-pressed={selected?.id === item.id}
+                              onClick={(event) => {
+                                selectionOpener.current = event.currentTarget;
+                                setSelected(item);
+                              }}
+                            >
+                              <span className="dashboard-recent-cover library-material-preview">
+                                <DocumentThumbnail
+                                  documentId={item.id}
+                                  revision={item.updated_at}
+                                />
+                              </span>
+                              <span className="dashboard-recent-body library-material-body">
+                                <FileText
+                                  size={17}
+                                  className="library-material-file-icon"
+                                  aria-hidden="true"
+                                />
+                                <span className="library-material-copy">
+                                  <strong>{item.title}</strong>
+                                  <span className="library-course-label">{item.course_code}</span>
+                                  <span className="library-material-meta">
+                                    {item.page_count > 0 ? `${item.page_count} pages · ` : ""}
+                                    {fileSize(item.file_size_bytes)}
+                                  </span>
+                                  {item.status !== "active" && (
+                                    <span className="library-status">
+                                      {item.status.replaceAll("_", " ")}
+                                    </span>
+                                  )}
+                                </span>
+                              </span>
+                              <span className="library-material-lecturer">
+                                {item.lecturer_name || "—"}
+                              </span>
+                              <span className="library-material-date">
+                                {materialDate(
+                                  recent && item.last_opened_at
+                                    ? item.last_opened_at
+                                    : item.created_at
+                                )}
+                              </span>
+                              <span className="library-material-size">
+                                {fileSize(item.file_size_bytes)}
+                              </span>
+                            </button>
+                          )}
+                        </li>
+                      </Fragment>
                     ))}
                   </ul>
                   {data.total > data.limit && (

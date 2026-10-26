@@ -71,6 +71,19 @@ export function materialDate(date: string): string {
     : parsed.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
+export function readingDateGroup(value: string | null, now: Date = new Date()): string {
+  if (!value) return "Earlier";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Earlier";
+  const day = (input: Date): number =>
+    Date.UTC(input.getFullYear(), input.getMonth(), input.getDate());
+  const days = (day(now) - day(date)) / 86400000;
+  if (days === 0) return "Today";
+  if (days === 1) return "Yesterday";
+  if (days > 1 && days <= 7) return "Previous 7 days";
+  return days < 0 ? materialDate(value) : "Earlier";
+}
+
 export async function libraryError(response: Response, fallback: string): Promise<Error> {
   if (response.status === 401) return new Error("Your session has expired. Please sign in again.");
   if (response.status === 403)

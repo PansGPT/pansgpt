@@ -18,6 +18,7 @@ import { ChatDraftProvider, useChatDraft } from "./chat-draft";
 import { SidebarLinks } from "./sidebar";
 import { AccountMenu } from "./account-menu";
 import { MobileHomeChat } from "./mobile-home-chat";
+import { WorkspaceNavigationContext } from "./workspace-navigation";
 
 function Brand(): React.ReactElement {
   return (
@@ -25,6 +26,22 @@ function Brand(): React.ReactElement {
       <BrandMark />
       <span>PansGPT</span>
     </Link>
+  );
+}
+
+function WorkspaceProviders({
+  profile,
+  openNavigation,
+  children,
+}: {
+  profile: UserProfile;
+  openNavigation: (opener: HTMLElement) => void;
+  children: ReactNode;
+}): React.ReactElement {
+  return (
+    <WorkspaceNavigationContext.Provider value={openNavigation}>
+      <DashboardProvider profile={profile}>{children}</DashboardProvider>
+    </WorkspaceNavigationContext.Provider>
   );
 }
 
@@ -82,7 +99,11 @@ function Workspace({
     else
       document
         .querySelector<HTMLButtonElement>(
-          pathname === "/app" ? ".shell-home-account .shell-account-menu" : ".shell-mobile-menu"
+          pathname === "/app"
+            ? ".shell-home-account .shell-account-menu"
+            : inLibrary
+              ? ".library-mobile-nav-trigger"
+              : ".shell-mobile-menu"
         )
         ?.focus();
   }
@@ -97,6 +118,15 @@ function Workspace({
   }
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
   const navigationOrigin = useRef(pathname);
+  const navigationReturn = useRef<HTMLElement | null>(null);
+  const openWorkspaceNavigation = useCallback(
+    (opener: HTMLElement) => {
+      navigationOrigin.current = pathname;
+      navigationReturn.current = opener;
+      setPanels((value) => ({ ...value, pathname, navigation: true }));
+    },
+    [pathname]
+  );
   const openSearch = useCallback(() => {
     searchReturn.current = {
       element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
@@ -185,7 +215,7 @@ function Workspace({
     />
   );
   return (
-    <DashboardProvider profile={profile}>
+    <WorkspaceProviders profile={profile} openNavigation={openWorkspaceNavigation}>
       <div
         className="app-shell"
         data-collapsed={collapsed}
@@ -254,10 +284,23 @@ function Workspace({
                 side="left"
                 open={navigationOpen}
                 onOpenChange={(open) => {
-                  if (open) navigationOrigin.current = pathname;
+                  if (open) {
+                    navigationOrigin.current = pathname;
+                    navigationReturn.current = null;
+                  }
                   setNavigationOpen(open);
                 }}
                 onCloseAutoFocus={(event) => {
+                  if (
+                    navigationOrigin.current === pathname &&
+                    navigationReturn.current?.isConnected &&
+                    !profileOpen &&
+                    !helpOpen
+                  ) {
+                    event.preventDefault();
+                    navigationReturn.current.focus();
+                    return;
+                  }
                   if (
                     pathname === "/app" &&
                     navigationOrigin.current === pathname &&
@@ -407,7 +450,7 @@ function Workspace({
         )}
         <ConversationUndo />
       </div>
-    </DashboardProvider>
+    </WorkspaceProviders>
   );
 }
 

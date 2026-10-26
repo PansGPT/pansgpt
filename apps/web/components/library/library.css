@@ -603,10 +603,10 @@
   overflow-wrap: anywhere;
   color: var(--text-secondary-700);
 }
-.library-details-body > .p-button {
+.library-document-actions > .p-button {
   width: 100%;
 }
-.library-details-body > p[role="status"] {
+.library-document-actions > p[role="status"] {
   font-size: 12px;
 }
 .library-details-body a {
