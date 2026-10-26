@@ -2,10 +2,11 @@
 # Cloudflare R2 Storage Engine (Phase 5)
 # S3-compatible async object storage for university lecture materials & notes
 # ==============================================================================
-
 import re
 import uuid
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 import aioboto3
 from botocore.config import Config
@@ -77,7 +78,7 @@ def build_artifact_storage_key(
 
 
 class R2StorageEngine:
-    def __init__(self):
+    def __init__(self) -> None:
         self._session = aioboto3.Session()
         self._client_config = Config(
             signature_version="s3v4",
@@ -90,7 +91,7 @@ class R2StorageEngine:
         return bool(settings.r2_endpoint_url and settings.r2_access_key and settings.r2_secret_key)
 
     @asynccontextmanager
-    async def get_client(self):
+    async def get_client(self) -> AsyncIterator[Any]:
         """Async context manager yielding an aioboto3 s3 client."""
         if not self.is_configured:
             raise RuntimeError(
@@ -143,15 +144,27 @@ class R2StorageEngine:
             )
             return url
 
-    async def download_bytes(self, key: str) -> bytes:
+    async def download_bytes(self, key: str, *, max_bytes: int | None = None) -> bytes:
         """Download raw bytes of an object from R2."""
         async with self.get_client() as s3:
             response = await s3.get_object(
                 Bucket=settings.r2_bucket_name,
                 Key=key,
             )
-            async with response["Body"] as stream:
-                return await stream.read()
+            body = response["Body"]
+            async with body:
+                if max_bytes is None:
+                    return await body.read()
+                if int(response.get("ContentLength", 0)) > max_bytes:
+                    raise ValueError("Object exceeds the download limit.")
+                chunks: list[bytes] = []
+                total = 0
+                while chunk := await body.read(min(1024 * 1024, max_bytes - total + 1)):
+                    total += len(chunk)
+                    if total > max_bytes:
+                        raise ValueError("Object exceeds the download limit.")
+                    chunks.append(chunk)
+                return b"".join(chunks)
 
     async def upload_bytes(
         self,

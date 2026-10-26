@@ -2,13 +2,16 @@
 # PansGPT 2.0 Core AI Tools & Function Calling Schemas (Phase 6)
 # ==============================================================================
 
+import asyncio
 import uuid
 from typing import Any
 
 import structlog
 
+from app.core.config import settings
 from app.core.database import get_db_connection
 from app.engines.rag import rag_engine
+from app.models.web_search import SearchScope
 
 logger = structlog.get_logger(__name__)
 
@@ -78,15 +81,15 @@ CORE_TOOL_DEFINITIONS = [
         "function": {
             "name": "web_search",
             "description": (
-                "Search real-time biomedical and pharmacological scientific literature "
-                "(PubMed, DailyMed, BNF, WHO guidelines) when syllabus materials lack coverage."
+                "Search public web facts using the backend-authorized general or biomedical scope. "
+                "Use a minimal standalone public query; never send patient details, private excerpts, credentials or private URLs."
             ),
             "parameters": {
                 "type": "object",
                 "properties": {
                     "query": {
                         "type": "string",
-                        "description": "The biomedical query to search on scientific databases.",
+                        "description": "A public standalone query, at most 400 characters; use explicit dates for time-sensitive facts.",
                     },
                     "num_results": {
                         "type": "integer",
@@ -109,16 +112,16 @@ CORE_TOOL_DEFINITIONS = [
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "image_key": {
+                    "attachment_id": {
                         "type": "string",
-                        "description": "Cloudflare R2 storage key or presigned URL of the image to analyze.",
+                        "description": "Owned image attachment UUID supplied in the current conversation context. Never a URL or storage key.",
                     },
                     "prompt": {
                         "type": "string",
                         "description": "Specific clinical or histological question about the image.",
                     },
                 },
-                "required": ["image_key"],
+                "required": ["attachment_id"],
             },
         },
     },
@@ -138,6 +141,9 @@ class ToolExecutionEngine:
         course_code: str | None = None,
         match_count: int = 4,
         university_id: str | None = None,
+        user_id: str | None = None,
+        role: str = "student",
+        levels: list[str] | None = None,
     ) -> dict[str, Any]:
         """Executes 3-pool hybrid RAG search against course notes."""
         context, citations = await rag_engine.retrieve_context(
@@ -146,7 +152,10 @@ class ToolExecutionEngine:
             university_id=university_id,
             course_code=course_code,
             match_count=min(max(match_count, 1), 8),
+            user_id=user_id,
+            role=role,
             expand_siblings=True,
+            levels=levels,
         )
         return {
             "found_chunks": len(citations),
@@ -223,6 +232,9 @@ class ToolExecutionEngine:
         num_results: int = 3,
         user_id: str | None = None,
         role: str = "student",
+        scope: SearchScope = "biomedical",
+        public_query: bool = False,
+        current_information: bool = False,
     ) -> dict[str, Any]:
         """Queries biomedical literature via Tavily with user daily quotas and MD5 caching."""
         from app.engines.web_search import web_search_engine
@@ -232,22 +244,37 @@ class ToolExecutionEngine:
             num_results=num_results,
             user_id=user_id,
             role=role,
+            scope=scope,
+            public_query=public_query,
+            current_information=current_information,
         )
 
     @staticmethod
     async def execute_vision_analyze(
-        image_key: str,
-        prompt: str = "Analyze this image",
-        user_id: str | None = None,
-    ) -> dict[str, Any]:
-        """Analyzes an image via multimodal vision with multi-tier failover."""
-        from app.engines.vision import vision_engine
+        attachment_id: str,
+        prompt: str,
+        user_id: str | None,
+        university_id: str | None,
+        session_id: str | None,
+    ) -> dict[str, object]:
+        from app.engines.chat_images import analyze_image, owned_image
 
-        return await vision_engine.analyze(
-            image_input=image_key,
-            prompt=prompt,
-            user_id=user_id,
-        )
+        if not user_id or not university_id or not session_id:
+            return {
+                "status": "error",
+                "error": "An owned image attachment in this conversation is required.",
+            }
+        try:
+            async with asyncio.timeout(settings.VISION_OVERALL_TIMEOUT_SECONDS):
+                image = await owned_image(attachment_id, session_id, user_id, university_id)
+                analysis = await analyze_image(image, prompt, session_id, user_id, university_id)
+            return {"status": "success", "attachment_id": attachment_id, "analysis": analysis}
+        except Exception as exc:
+            logger.warning("chat_image_tool_failed", error_type=type(exc).__name__)
+            return {
+                "status": "error",
+                "error": "This image could not be analysed in the current conversation. Please retry.",
+            }
 
     async def dispatch_tool(
         self,
@@ -256,9 +283,14 @@ class ToolExecutionEngine:
         university_id: str | None = None,
         user_id: str | None = None,
         role: str = "student",
+        levels: list[str] | None = None,
+        session_id: str | None = None,
+        web_search_scope: SearchScope = "biomedical",
+        public_web_search: bool = False,
+        current_information: bool = False,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
-        logger.info("tool_dispatch_requested", tool_name=tool_name, arguments=arguments)
+        logger.info("tool_dispatch_requested", tool_name=tool_name)
         try:
             if tool_name == "rag_search":
                 return await self.execute_rag_search(
@@ -267,6 +299,9 @@ class ToolExecutionEngine:
                     course_code=arguments.get("course_code"),
                     match_count=arguments.get("match_count", 4),
                     university_id=university_id,
+                    user_id=user_id,
+                    role=role,
+                    levels=levels,
                 )
             elif tool_name == "read_document":
                 return await self.execute_read_document(
@@ -280,17 +315,17 @@ class ToolExecutionEngine:
                     num_results=arguments.get("num_results", 3),
                     user_id=user_id,
                     role=role,
+                    scope=web_search_scope,
+                    public_query=public_web_search,
+                    current_information=current_information,
                 )
             elif tool_name == "vision_analyze":
-                image_target = (
-                    arguments.get("image_key")
-                    or arguments.get("image_url")
-                    or arguments.get("image_data", "")
-                )
                 return await self.execute_vision_analyze(
-                    image_key=image_target,
+                    attachment_id=str(arguments.get("attachment_id", "")),
                     prompt=arguments.get("prompt", "Analyze this image"),
                     user_id=user_id,
+                    university_id=university_id,
+                    session_id=session_id,
                 )
             else:
                 return {"error": f"Unknown tool name: {tool_name}"}

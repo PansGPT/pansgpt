@@ -21,6 +21,7 @@ from app.core.dependencies import (
 )
 from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.core.rate_limit import limiter
+from app.core.schemas import StrictRequest
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/admin", tags=["Institutional & Platform Admin"])
@@ -28,7 +29,7 @@ router = APIRouter(prefix="/admin", tags=["Institutional & Platform Admin"])
 DEFAULT_UNIJOS_ID = "01a07664-7a69-7ce0-ad6a-b219462cbde3"
 
 
-class LecturerInviteRequest(BaseModel):
+class LecturerInviteRequest(StrictRequest):
     email: str | None = Field(
         default=None,
         pattern=r"^[^@\s]+@[^@\s]+\.[^@\s]+$",
@@ -118,7 +119,7 @@ async def create_lecturer_invite(
     request: Request,
     payload: LecturerInviteRequest,
     current_user: UserContext = Depends(require_admin_or_super_admin),
-):
+) -> LecturerInviteResponse:
     """
     Creates a lecturer invitation record in public.invitations.
     - Restricted to institutional admins and platform super admins.
@@ -158,6 +159,8 @@ async def create_lecturer_invite(
 
     university_name = "University of Jos"
     async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Invitation storage is unavailable.")
         if conn:
             try:
                 # Fetch uni name
@@ -190,7 +193,10 @@ async def create_lecturer_invite(
                     now,
                 )
             except Exception as exc:
-                logger.warning("persist_invite_db_warning", error=str(exc))
+                logger.warning("persist_invite_db_warning", error_type=type(exc).__name__)
+                raise HTTPException(
+                    status_code=503, detail="Invitation could not be saved."
+                ) from exc
 
     email_sent = False
     if payload.email:

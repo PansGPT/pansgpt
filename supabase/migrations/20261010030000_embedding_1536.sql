@@ -4,7 +4,7 @@
 -- Model: gemini-embedding-2 (1536 dimensions) -- [DIM 1536]
 -- ============================================================================== -- [DIM 1536]
 -- -- [DIM 1536]
--- Preflight Checks (Run manually if needed): -- [DIM 1536]
+-- Read-only preflight checks (run through tooling/CLI): -- [DIM 1536]
 -- SELECT count(*) AS chunk_count FROM public.document_chunks; -- [DIM 1536]
 -- SELECT count(*) AS document_count FROM public.documents; -- [DIM 1536]
 -- -- [DIM 1536]
@@ -13,22 +13,35 @@ BEGIN; -- [DIM 1536]
 -- 1. Drop existing HNSW vector index -- [DIM 1536]
 DROP INDEX IF EXISTS public.idx_document_chunks_hnsw; -- [DIM 1536]
 -- -- [DIM 1536]
--- 2. Purge existing chunks (vectors cannot be cast across dimensions) -- [DIM 1536]
-TRUNCATE TABLE public.document_chunks; -- [DIM 1536 FIX]
--- -- [DIM 1536]
--- 3. Reset document embedding state to pending for worker re-ingestion -- [DIM 1536 FIX]
-UPDATE public.documents -- [DIM 1536 FIX]
-SET embedding_status = 'pending', -- [DIM 1536 FIX]
-    embedding_progress = 0, -- [DIM 1536 FIX]
-    total_chunks = 0, -- [DIM 1536 FIX]
-    ingestion_lock_id = NULL, -- [DIM 1536 FIX]
-    ingestion_heartbeat = NULL -- [DIM 1536 FIX]
-WHERE deleted_at IS NULL; -- [DIM 1536 FIX]
--- -- [DIM 1536]
--- 4. Alter column embedding to vector(1536) -- [DIM 1536]
-ALTER TABLE public.document_chunks -- [DIM 1536]
-  ALTER COLUMN embedding TYPE vector(1536); -- [DIM 1536]
--- -- [DIM 1536]
+-- 2. Change dimensions only on an empty legacy index. Some environments already
+-- have 1536-dimensional vectors despite incomplete CLI migration history.
+-- Preserve those rows and their completion state. Never delete a populated index
+-- to make a schema migration succeed; re-embedding requires a reviewed data plan.
+DO $$
+DECLARE
+    dimensions integer;
+BEGIN
+    SELECT atttypmod INTO dimensions
+    FROM pg_attribute
+    WHERE attrelid = 'public.document_chunks'::regclass
+      AND attname = 'embedding';
+
+    IF dimensions <> 1536 THEN
+        IF EXISTS (SELECT 1 FROM public.document_chunks) THEN
+            RAISE EXCEPTION 'Cannot change a populated legacy embedding index to 1536 dimensions; preserve and re-embed its data before retrying this migration';
+        END IF;
+
+        ALTER TABLE public.document_chunks
+            ALTER COLUMN embedding TYPE vector(1536);
+
+        UPDATE public.documents
+        SET embedding_status = 'pending', embedding_progress = 0,
+            total_chunks = 0, ingestion_lock_id = NULL, ingestion_heartbeat = NULL
+        WHERE deleted_at IS NULL;
+    END IF;
+END;
+$$;
+
 -- 5. Recreate HNSW index using halfvec(1536) cosine ops -- [DIM 1536]
 CREATE INDEX idx_document_chunks_hnsw -- [DIM 1536]
   ON public.document_chunks -- [DIM 1536]

@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { dateSources } from "../preview/date-source-data";
 import { layoutCalendarEvents, type CalendarEvent } from "../src/components/calendar-layout";
 test("overlap lanes separate connected groups and permit touching endpoints", () => {
@@ -25,7 +26,7 @@ test("overlap lanes separate connected groups and permit touching endpoints", ()
   expect(events.map((event) => event.id)).toEqual(["c", "a", "b", "d"]);
 });
 test("all 84 calendar specimens retain native root frames and SVG dimensions", async ({ page }) => {
-  await page.goto("/?section=calendars");
+  await openPreview(page, "/?section=calendars");
   await page.evaluate(() => document.fonts.ready);
   const families = dateSources.filter(
     (f) => !["1150:62", "1150:1925", "1150:16803", "1547:269867", "7365:57922"].includes(f.id)
@@ -68,7 +69,7 @@ test("all 84 calendar specimens retain native root frames and SVG dimensions", a
 test("calendar view selector, navigation, event and add callbacks work with keyboard", async ({
   page,
 }) => {
-  await page.goto("/?section=calendars");
+  await openPreview(page, "/?section=calendars");
   const live = page.getByTestId("live-calendar");
   const trigger = live.getByRole("button", { name: "Calendar view", exact: true });
   await trigger.focus();
@@ -89,7 +90,7 @@ test("calendar view selector, navigation, event and add callbacks work with keyb
 });
 test("mobile calendar specimens stay within 375px and expose event details", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 900 });
-  await page.goto("/?section=calendars");
+  await openPreview(page, "/?section=calendars");
   for (const id of ["8017:532765", "8017:532961", "8017:532978"]) {
     const root = page.locator(`[data-calendar-source-id="${id}"] .p-calendar`);
     expect(
@@ -101,7 +102,7 @@ test("mobile calendar specimens stay within 375px and expose event details", asy
   ).toContainText("Friday");
 });
 test("calendar year boundaries disable navigation beyond supported dates", async ({ page }) => {
-  await page.goto("/?section=calendars");
+  await openPreview(page, "/?section=calendars");
   await expect(
     page.getByTestId("first-year-calendar").getByRole("button", { name: "Previous period" })
   ).toBeDisabled();

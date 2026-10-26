@@ -1,10 +1,11 @@
 ﻿import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { applicationNavigationSources } from "../preview/application-navigation-source-data";
 test("mobile navigation traps focus, exposes actions, and restores its trigger on Escape", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/?section=applicationnavigation");
+  await openPreview(page, "/?section=applicationnavigation");
   const trigger = page
     .getByTestId("live-mobile-navigation")
     .getByRole("button", { name: "Open navigation" });
@@ -23,7 +24,7 @@ test("mobile navigation traps focus, exposes actions, and restores its trigger o
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
 });
 test("navigation primitives preserve source frames and native SVG sizes", async ({ page }) => {
-  await page.goto("/?section=applicationnavigation");
+  await openPreview(page, "/?section=applicationnavigation");
   await page.evaluate(() => document.fonts.ready);
   const failures: string[] = [];
   const families = applicationNavigationSources.filter((family) =>
@@ -95,7 +96,7 @@ test("navigation primitives preserve source frames and native SVG sizes", async 
   }
 });
 test("live navigation expands, switches accounts and returns keyboard focus", async ({ page }) => {
-  await page.goto("/?section=applicationnavigation");
+  await openPreview(page, "/?section=applicationnavigation");
   const live = page.getByTestId("live-application-navigation");
   const menu = live.getByRole("button", { name: "Open navigation" });
   await menu.focus();
@@ -124,7 +125,7 @@ test("live navigation expands, switches accounts and returns keyboard focus", as
 test("featured navigation cards expose project, consent, onboarding, referral and media actions", async ({
   page,
 }) => {
-  await page.goto("/?section=applicationnavigation");
+  await openPreview(page, "/?section=applicationnavigation");
   const result = page.getByTestId("app-nav-action");
   await page
     .locator('[data-app-nav-source-id="7910:530582"]')

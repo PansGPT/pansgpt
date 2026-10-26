@@ -8,6 +8,7 @@ import sys
 SERVICE_ENV: dict[str, str] = {
     "ENVIRONMENT": "development",
     "LOCAL_DEV_MODE": "false",
+    "ALLOWED_ORIGINS": '["http://localhost:3000","https://pansgpt-web.vercel.app"]',
     "DATABASE_URL": "offline-unit-test",
     "SUPABASE_URL": "https://example.supabase.co",
     "SUPABASE_ANON_KEY": "test-mock-key",
@@ -27,6 +28,7 @@ SERVICE_ENV: dict[str, str] = {
     "R2_PUBLIC_DOMAIN": "",
     "COHERE_API_KEY": "",
     "TAVILY_API_KEY": "",
+    "TAVILY_PUBLIC_SEARCH_ALLOWED": "false",
     "RESEND_API_KEY": "",
     "PAYSTACK_SECRET_KEY": "",
     "PAYSTACK_WEBHOOK_SECRET": "",

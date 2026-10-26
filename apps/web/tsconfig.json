@@ -2,10 +2,12 @@
   "extends": "@pansgpt/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "jsxImportSource": "react",
     "paths": {
       "@/*": ["./*"]
     },
-    "incremental": true
+    "incremental": true,
+    "types": ["node", "react", "react-dom"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]
 }

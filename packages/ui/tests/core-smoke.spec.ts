@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("core dialog traps keyboard focus, closes on Escape and restores its trigger", async ({
   page,
 }) => {
-  await page.goto("/?section=core");
+  await openPreview(page, "/?section=core");
   const trigger = page.getByRole("button", { name: "Open dialog", exact: true });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Blog post published" });
@@ -19,8 +20,8 @@ test("core dialog traps keyboard focus, closes on Escape and restores its trigge
   await expect(trigger).toBeFocused();
 });
 
-test("core appearance persists OLED and Sepia choices across reloads", async ({ page }) => {
-  await page.goto("/?section=core");
+test("core appearance persists Dark and Sepia choices across reloads", async ({ page }) => {
+  await openPreview(page, "/?section=core");
   const appearance = page.getByRole("combobox", { name: "Appearance", exact: true });
   for (const theme of ["dark", "sepia", "light"]) {
     await appearance.selectOption(theme);

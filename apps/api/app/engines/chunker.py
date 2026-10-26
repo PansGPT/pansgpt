@@ -28,15 +28,15 @@ class SemanticChunker:
     Splits document elements into vector retrieval chunks:
     - Tables: Atomic (1 Table = 1 Chunk, never split)
     - Diagrams: Atomic (1 Diagram = 1 Chunk, never split)
-    - Text: Segment-bounded recursive splitting (512 tokens, 64-token overlap)
+    - Text: Segment-bounded recursive splitting (512 tokens, approximately 10% overlap)
     """
 
     def __init__(
         self,
         max_tokens: int = 512,
-        overlap_tokens: int = 64,
+        overlap_tokens: int = 51,
         encoding_name: str = "cl100k_base",
-    ):
+    ) -> None:
         self.max_tokens = max_tokens
         self.overlap_tokens = overlap_tokens
         try:
@@ -61,51 +61,30 @@ class SemanticChunker:
         if self.count_tokens(text) <= max_tokens:
             return [text]
 
-        chunks: list[str] = []
-        # Split by double newline first
-        paragraphs = text.split("\n\n")
-        current_chunk: list[str] = []
-        current_tokens = 0
-
-        for p in paragraphs:
-            p_str = p.strip()
-            if not p_str:
-                continue
-            p_tokens = self.count_tokens(p_str)
-
-            if p_tokens > max_tokens:
-                # If a single paragraph is too large, split it by sentence
-                sentences = p_str.replace(". ", ".\n").split("\n")
-                for s in sentences:
-                    s_str = s.strip()
-                    if not s_str:
-                        continue
-                    s_tokens = self.count_tokens(s_str)
-                    if current_tokens + s_tokens > max_tokens and current_chunk:
-                        chunk_body = "\n\n".join(current_chunk)
-                        chunks.append(chunk_body)
-                        # Overlap: keep last piece if small
-                        current_chunk = (
-                            [current_chunk[-1]] if current_tokens > overlap_tokens else []
-                        )
-                        current_tokens = self.count_tokens("\n\n".join(current_chunk))
-                    current_chunk.append(s_str)
-                    current_tokens += s_tokens
-            else:
-                if current_tokens + p_tokens > max_tokens and current_chunk:
-                    chunk_body = "\n\n".join(current_chunk)
-                    chunks.append(chunk_body)
-                    current_chunk = [current_chunk[-1]] if current_tokens > overlap_tokens else []
-                    current_tokens = self.count_tokens("\n\n".join(current_chunk))
-                current_chunk.append(p_str)
-                current_tokens += p_tokens
-
-        if current_chunk:
-            chunk_body = "\n\n".join(current_chunk)
-            if not chunks or chunks[-1] != chunk_body:
-                chunks.append(chunk_body)
-
-        return chunks
+        if not 0 <= overlap_tokens < max_tokens:
+            raise ValueError("Overlap must be smaller than the chunk size")
+        if self._tokenizer:
+            tokens = self._tokenizer.encode(text, disallowed_special=())
+            chunks = []
+            start = 0
+            while start < len(tokens):
+                end = min(start + max_tokens, len(tokens))
+                # Prefer a paragraph/sentence boundary when one exists near the end.
+                if end < len(tokens):
+                    for boundary in range(end, start + max_tokens // 2, -1):
+                        suffix = self._tokenizer.decode(tokens[max(start, boundary - 2) : boundary])
+                        if suffix.endswith(("\n\n", ". ", "; ")):
+                            end = boundary
+                            break
+                chunks.append(self._tokenizer.decode(tokens[start:end]))
+                if end == len(tokens):
+                    break
+                start = max(start + 1, end - overlap_tokens)
+            return chunks
+        # Conservative character windows keep the fallback estimate bounded too.
+        width = max_tokens * 4
+        step = (max_tokens - overlap_tokens) * 4
+        return [text[start : start + width] for start in range(0, len(text), step)]
 
     def create_chunks_for_elements(
         self,
@@ -136,6 +115,10 @@ class SemanticChunker:
 
             # Invariant: Tables and Diagrams are ALWAYS atomic
             if ctype in ("table", "diagram"):
+                if self.count_tokens(content) > 8192:
+                    raise ValueError(
+                        "Atomic table or diagram exceeds the 8192-token embedding limit; simplify the source element before retrying"
+                    )
                 all_chunks.append(
                     DocumentChunkItem(
                         content=content,
@@ -156,7 +139,33 @@ class SemanticChunker:
                     max_tokens=self.max_tokens,
                     overlap_tokens=self.overlap_tokens,
                 )
+                cursor = 0
                 for split in text_splits:
+                    chunk_bbox = bbox
+                    start = content.find(split, cursor)
+                    if start >= 0:
+                        cursor = start + 1
+                        rects = [
+                            line["bbox"]
+                            for line in (bbox or {}).get("lines", [])
+                            if line["start"] < start + len(split) and line["end"] > start
+                        ]
+                        if rects:
+                            chunk_bbox = {
+                                key: value
+                                for key, value in bbox.items()
+                                if key not in {"lines", "rects", "bbox"}
+                            }
+                            chunk_bbox.update(
+                                rects=rects,
+                                bbox=[
+                                    min(r[0] for r in rects),
+                                    min(r[1] for r in rects),
+                                    max(r[2] for r in rects),
+                                    max(r[3] for r in rects),
+                                ],
+                                precision="line",
+                            )
                     all_chunks.append(
                         DocumentChunkItem(
                             content=split,
@@ -166,7 +175,7 @@ class SemanticChunker:
                             chunk_index=chunk_idx,
                             segment_id=seg_id,
                             element_id=el_id,
-                            bounding_box=bbox,
+                            bounding_box=chunk_bbox,
                         )
                     )
                     chunk_idx += 1

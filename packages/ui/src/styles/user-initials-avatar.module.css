@@ -1,0 +1,57 @@
+.avatar {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  user-select: none;
+  font: 600 14px/20px var(--font-body, sans-serif);
+}
+.avatar[data-size="sm"] {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+  line-height: 18px;
+}
+.avatar[data-size="lg"] {
+  width: 48px;
+  height: 48px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.avatar[data-tone="0"] {
+  background: var(--utility-success-50, #ecfdf5);
+  color: var(--utility-success-700, #047857);
+}
+.avatar[data-tone="1"] {
+  background: var(--utility-blue-50, #f0f9ff);
+  color: var(--utility-blue-700, #0369a1);
+}
+.avatar[data-tone="2"] {
+  background: var(--utility-indigo-50, #eef2ff);
+  color: var(--utility-indigo-700, #4338ca);
+}
+.avatar[data-tone="3"] {
+  background: var(--utility-purple-50, #f5f3ff);
+  color: var(--utility-purple-700, #6d28d9);
+}
+.avatar[data-tone="4"] {
+  background: var(--utility-warning-50, #fffbeb);
+  color: var(--utility-warning-700, #b45309);
+}
+.avatar[data-tone="5"] {
+  background: var(--utility-pink-50, #fff1f2);
+  color: var(--utility-pink-700, #be123c);
+}
+.avatar[data-tone="6"] {
+  background: var(--utility-brand-50, #f0fdfa);
+  color: var(--utility-brand-700, #0f766e);
+}
+.avatar[data-tone="7"] {
+  background: var(--utility-blue-light-50, #ecfeff);
+  color: var(--utility-blue-light-700, #0e7490);
+}

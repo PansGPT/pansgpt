@@ -1,13 +1,14 @@
 # ==============================================================================
 # PansGPT 2.0 FastAPI Core Engine Entrypoint
 # ==============================================================================
-
 import asyncio
 import logging
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import TypedDict
 
 import structlog
-from fastapi import FastAPI, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
@@ -20,6 +21,9 @@ from app.core.rate_limit import limiter, rate_limit_exceeded_handler
 from app.routers.admin import router as admin_router
 from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
+from app.routers.chat_discovery import router as chat_discovery_router
+from app.routers.chat_interactions import router as chat_interactions_router
+from app.routers.chat_sessions import router as chat_sessions_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
 
@@ -44,14 +48,35 @@ if settings.SENTRY_DSN:
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings.validate_local_dev_mode()  # [PRELAUNCH FIX]
     # Startup: initialize database pool & prewarm JWKS cache
     await init_db_pool()
     await prewarm_jwks_cache()
+    # Pre-warm FlashRank ONNX reranker in a background thread so the first
+    # real user request does not pay the 5-10s cold-start model load penalty.
+    if settings.ENABLE_AI and settings.RERANKER_PROVIDER == "flashrank":
+        await _prewarm_flashrank()
     yield
     # Shutdown: cleanly close database pool
     await close_db_pool()
+
+
+async def _prewarm_flashrank() -> None:
+    """Load the FlashRank ONNX cross-encoder at startup, not on first request."""
+    try:
+        from app.engines.reranker import candidate_reranker
+
+        ranker = await asyncio.wait_for(
+            asyncio.to_thread(candidate_reranker._get_flashrank_client), timeout=10.0
+        )
+        if ranker is not None:
+            logger.info("flashrank_prewarmed")
+        else:
+            logger.warning("flashrank_prewarm_unavailable", fallback="heuristic")
+    except Exception as exc:
+        # Non-fatal: reranker heuristic fallback will cover any load failure.
+        logger.warning("flashrank_prewarm_failed", error_type=type(exc).__name__)
 
 
 app = FastAPI(
@@ -82,61 +107,127 @@ app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_interactions_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_sessions_router, prefix=settings.API_V1_PREFIX)
+app.include_router(chat_discovery_router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/health/live", tags=["Health"])
-async def liveness_check():
+async def liveness_check() -> dict[str, str]:
     """Quick endpoint for keep-alive pingers to prevent host sleep."""
     return {"status": "ok", "environment": settings.ENVIRONMENT, "service": "api"}
 
 
-@app.get("/health/ready", tags=["Health"])
-async def readiness_check():
-    """Comprehensive readiness probe verifying database and downstream engines."""
-    db_status = "unconfigured"
-    db_details = None
+class ReadinessPayload(TypedDict):
+    status: str
+    environment: str
+    engines: dict[str, str]
 
-    if settings.DATABASE_URL:
+
+_readiness_cache: tuple[float, ReadinessPayload] | None = None
+
+
+async def _readiness_payload() -> ReadinessPayload:
+    """Cache dependency probes independently of which readiness view consumes them."""
+    import time
+
+    from app.engines.storage import storage_engine
+
+    global _readiness_cache
+    now = time.monotonic()
+    if _readiness_cache is not None and now - _readiness_cache[0] < 30:
+        return _readiness_cache[1]
+    engines = {
+        "api": "operational",
+        "database": "error",
+        "redis": "disabled",
+        "storage": "disabled",
+        "chat": "disabled",
+        "embeddings": "disabled",
+    }
+    if settings.ENABLE_AI:
+        eligible = bool(
+            (settings.GEMINI_API_KEY and settings.provider_privacy_allowed("google"))
+            or (settings.GROQ_API_KEY and settings.provider_privacy_allowed("groq"))
+            or (settings.OPENROUTER_API_KEY and settings.provider_privacy_allowed("openrouter"))
+        )
+        engines["chat"] = "ready" if eligible else "blocked"
+    if settings.ENABLE_INGESTION:
+        engines.update(redis="error", storage="error", embeddings="blocked")
+        if settings.GEMINI_API_KEY and settings.provider_privacy_allowed("google"):
+            engines["embeddings"] = "ready"
+
+    async def probe_database() -> None:
+        from app.core.database import get_db_connection
+
         try:
-            import asyncpg
+            async with asyncio.timeout(4):
+                async with get_db_connection(timeout=3) as conn:
+                    if conn is not None and await conn.fetchval("SELECT 1") == 1:
+                        engines["database"] = "ok"
+        except Exception:
+            pass
 
-            # Clean connection with statement_cache_size=0 for Supabase pooler compatibility
-            conn = await asyncio.wait_for(
-                asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0),
-                timeout=5.0,
-            )
-            val = await conn.fetchval("SELECT 1;")
-            await conn.close()
-            db_status = "ok" if val == 1 else "unexpected_result"
-        except Exception as e:
-            db_status = "error"
-            db_details = str(e)
-
-    redis_status = "unconfigured"
-    if settings.redis_connection_url:
+    async def probe_redis() -> None:
+        if not settings.ENABLE_INGESTION or not settings.redis_connection_url:
+            return
         try:
             import redis.asyncio as aioredis
 
-            r = aioredis.from_url(settings.redis_connection_url, socket_timeout=3.0)
-            pong = await r.ping()
-            await r.aclose()
-            redis_status = "ok" if pong else "error"
+            async with asyncio.timeout(4):
+                redis = aioredis.from_url(
+                    settings.redis_connection_url, socket_connect_timeout=2, socket_timeout=2
+                )
+                try:
+                    if await redis.ping():
+                        engines["redis"] = "ok"
+                finally:
+                    await redis.aclose()
         except Exception:
-            redis_status = "error"
+            pass
 
-    is_ready = db_status in ["ok", "unconfigured"]
-    status_code = status.HTTP_200_OK if is_ready else status.HTTP_503_SERVICE_UNAVAILABLE
+    async def probe_storage() -> None:
+        if not settings.ENABLE_INGESTION or not storage_engine.is_configured:
+            return
+        try:
+            async with asyncio.timeout(4):
+                async with storage_engine.get_client() as client:
+                    await client.head_bucket(Bucket=settings.r2_bucket_name)
+            engines["storage"] = "ok"
+        except Exception:
+            pass
 
-    return JSONResponse(
-        status_code=status_code,
-        content={
-            "status": "ok" if is_ready else "degraded",
-            "environment": settings.ENVIRONMENT,
-            "engines": {
-                "api": "operational",
-                "database": db_status,
-                "redis": redis_status,
-            },
-            **({"db_error": db_details} if db_details else {}),
-        },
-    )
+    # Render expects health responses within five seconds. Bound the probes and
+    # run independent dependencies concurrently rather than adding their waits.
+    await asyncio.gather(probe_database(), probe_redis(), probe_storage())
+    ready = all(value in {"operational", "ok", "ready", "disabled"} for value in engines.values())
+    payload: ReadinessPayload = {
+        "status": "ok" if ready else "degraded",
+        "environment": settings.ENVIRONMENT,
+        "engines": engines,
+    }
+    _readiness_cache = (now, payload)
+    return payload
+
+
+@app.get("/health/ready", tags=["Health"])
+async def readiness_check() -> JSONResponse:
+    """Full product readiness includes required provider privacy eligibility."""
+    payload = await _readiness_payload()
+    return JSONResponse(status_code=200 if payload["status"] == "ok" else 503, content=payload)
+
+
+@app.get("/health/infrastructure", tags=["Health"])
+async def infrastructure_check() -> JSONResponse:
+    """Hosting health requires dependencies; provider eligibility stays in full readiness."""
+    capabilities = await _readiness_payload()
+    engines = {
+        name: capabilities["engines"][name] for name in ("api", "database", "redis", "storage")
+    }
+    ready = all(value in {"operational", "ok", "disabled"} for value in engines.values())
+    payload: ReadinessPayload = {
+        "status": "ok" if ready else "degraded",
+        "environment": capabilities["environment"],
+        "engines": engines,
+    }
+    return JSONResponse(status_code=200 if ready else 503, content=payload)

@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+from app.core.schemas import StrictRequest
+
 UPLOAD_MIME_TYPES: dict[str, str] = {  # [PRELAUNCH FIX]
     "pdf": "application/pdf",  # [PRELAUNCH FIX]
     "doc": "application/msword",  # [PRELAUNCH FIX]
@@ -15,7 +17,7 @@ UPLOAD_MIME_TYPES: dict[str, str] = {  # [PRELAUNCH FIX]
 }  # [PRELAUNCH FIX]
 
 
-class DocumentUploadRequest(BaseModel):
+class DocumentUploadRequest(StrictRequest):
     title: str = Field(..., min_length=2, max_length=255, description="Document title")
     course_code: str = Field(..., min_length=2, max_length=20, description="e.g. PCL 401")
     course_title: str = Field(..., min_length=2, max_length=255, description="Full course title")
@@ -94,6 +96,10 @@ class DocumentDetailResponse(BaseModel):
     semester: str | None = None
     created_at: str
     segments: list[DocumentSegmentResponse] | None = None
+    image_counts: dict[str, int] | None = None
+    ingestion_completeness: Literal["pending", "partial", "complete", "failed", "unknown"] = (
+        "unknown"
+    )
 
 
 class ConfirmUploadResponse(BaseModel):
@@ -103,7 +109,7 @@ class ConfirmUploadResponse(BaseModel):
     message: str
 
 
-class DocumentPatchRequest(BaseModel):
+class DocumentPatchRequest(StrictRequest):
     title: str | None = Field(None, min_length=2, max_length=255)
     course_code: str | None = Field(None, min_length=2, max_length=20)
     course_title: str | None = Field(None, min_length=2, max_length=255)

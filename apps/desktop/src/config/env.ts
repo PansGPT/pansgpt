@@ -1,10 +1,11 @@
-// ==============================================================================
-// PansGPT 2.0 Desktop Environment Configuration
-// ==============================================================================
-
+function required(name: string): string {
+  const value = process.env[name];
+  if (!value || value.includes("placeholder")) throw new Error(`Missing desktop setting ${name}`);
+  return value;
+}
 export const desktopEnv = {
-  apiUrl: process.env.API_BASE_URL || "http://localhost:8000",
-  supabaseUrl: process.env.SUPABASE_URL || "https://nrzbjhqtcxlfiyvoeanb.supabase.co",
-  supabaseAnonKey: process.env.SUPABASE_ANON_KEY || "placeholder_anon_key",
-  sentryDsn: process.env.SENTRY_DSN,
+  apiUrl: required("API_BASE_URL"),
+  supabaseUrl: required("SUPABASE_URL"),
+  supabaseAnonKey: required("SUPABASE_ANON_KEY"),
+  webAppUrl: required("WEB_APP_URL"),
 };

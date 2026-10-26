@@ -1,61 +1,82 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
-test("every exported icon loads with its original dimensions", async ({ page }) => {
-  test.setTimeout(60000);
-  await page.goto("/?section=icons");
-  const library = page.getByRole("region", { name: "Original icon library" });
-  await expect(library.locator("figure")).toHaveCount(48);
-  const names = new Set<string>();
-  const ids = new Set<string>();
-  let count = 0;
-  for (let index = 0; index < 25; index++) {
-    const batch = await library.locator("figure").evaluateAll(async (figures) =>
-      Promise.all(
-        figures.map(async (figure) => {
-          const image = figure.querySelector("img");
-          const link = figure.querySelector("a");
-          if (!image || !link) throw Error("Missing original icon or source link");
-          await image.decode();
-          const rect = image.getBoundingClientRect();
-          if (
-            image.naturalWidth !== 24 ||
-            image.naturalHeight !== 24 ||
-            rect.width !== 24 ||
-            rect.height !== 24
-          )
-            throw Error(`Wrong original icon dimensions: ${image.src}`);
-          return {
-            name: figure.getAttribute("data-icon-name")!,
-            id: new URL(link.href).searchParams.get("node-id")!,
-          };
-        })
-      )
-    );
-    batch.forEach((icon) => {
-      names.add(icon.name);
-      ids.add(icon.id);
-      count++;
-    });
+type SourceIcon = { name: string; nodeId: string };
+const source = JSON.parse(
+  readFileSync(resolve(__dirname, "../design/figma-icons.manifest.json"), "utf8")
+) as { icons: SourceIcon[] };
+const pageSize = 48;
+const pageCount = Math.ceil(source.icons.length / pageSize);
+
+// Keep every original icon and the 60-second deadline. Smaller exhaustive ranges
+// bound each test's loading and trace cost on slower developer machines.
+for (let startPage = 0; startPage < pageCount; startPage += 5) {
+  const endPage = Math.min(startPage + 5, pageCount);
+  test(`exported icons on pages ${startPage + 1}-${endPage} load with original dimensions`, async ({
+    page,
+  }) => {
+    test.setTimeout(60000);
+    expect({
+      count: source.icons.length,
+      names: new Set(source.icons.map((icon) => icon.name)).size,
+      ids: new Set(source.icons.map((icon) => icon.nodeId)).size,
+    }).toEqual({ count: 1173, names: 1173, ids: 1173 });
+    await openPreview(page, "/?section=icons");
+    const library = page.getByRole("region", { name: "Original icon library" });
+    const figures = library.locator("figure");
     const next = library.getByRole("button", { name: "Next icons" });
-    if (index < 24) {
+    await expect(figures).toHaveCount(pageSize);
+    for (let skipped = 0; skipped < startPage; skipped++) {
       await next.click();
-      await expect(library.locator("figure").first()).not.toHaveAttribute(
+      await expect(figures.first()).toHaveAttribute(
         "data-icon-name",
-        batch[0].name
+        source.icons[(skipped + 1) * pageSize].name
       );
-    } else await expect(next).toBeDisabled();
-  }
-  expect({ count, names: names.size, ids: ids.size }).toEqual({
-    count: 1173,
-    names: 1173,
-    ids: 1173,
+    }
+    for (let index = startPage; index < endPage; index++) {
+      const expected = source.icons.slice(index * pageSize, (index + 1) * pageSize);
+      await expect(figures).toHaveCount(expected.length);
+      await expect(figures.first()).toHaveAttribute("data-icon-name", expected[0].name);
+      const batch = await figures.evaluateAll(async (nodes) =>
+        Promise.all(
+          nodes.map(async (figure) => {
+            const image = figure.querySelector("img");
+            const link = figure.querySelector("a");
+            if (!image || !link) throw Error("Missing original icon or source link");
+            await image.decode();
+            const rect = image.getBoundingClientRect();
+            if (
+              image.naturalWidth !== 24 ||
+              image.naturalHeight !== 24 ||
+              rect.width !== 24 ||
+              rect.height !== 24
+            )
+              throw Error(`Wrong original icon dimensions: ${image.src}`);
+            return {
+              name: figure.getAttribute("data-icon-name"),
+              id: new URL(link.href).searchParams.get("node-id"),
+            };
+          })
+        )
+      );
+      expect(batch).toEqual(
+        expected.map((icon) => ({ name: icon.name, id: icon.nodeId.replace(":", "-") }))
+      );
+      if (index === pageCount - 1) await expect(next).toBeDisabled();
+      else {
+        await expect(next).toBeEnabled();
+        if (index + 1 < endPage) await next.click();
+      }
+    }
   });
-});
+}
 
 test("icon search preserves duplicate names and pagination and works in all themes", async ({
   page,
 }) => {
-  await page.goto("/?section=icons");
+  await openPreview(page, "/?section=icons");
   const library = page.getByRole("region", { name: "Original icon library" });
   await expect(library.locator("figure")).toHaveCount(48);
   await expect(library.getByRole("button", { name: "Previous icons" })).toBeDisabled();

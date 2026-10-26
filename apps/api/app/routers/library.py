@@ -3,9 +3,13 @@
 # Multi-endpoint, Dual-Mounting Alias, Complete CRUD & Segment Inspection
 # ==============================================================================
 
+import json
+import logging
 import uuid
+from urllib.parse import quote
 
 import asyncpg
+from botocore.exceptions import ClientError
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 
 from app.core.authorization import require_scoped_document, require_university  # [TENANT FIX]
@@ -19,11 +23,13 @@ from app.core.dependencies import (  # [TENANT FIX]
 )  # [TENANT FIX]
 from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.arq_producer import enqueue_ingestion_job
+from app.engines.presentations import presentation_preview
 from app.engines.storage import (
     DEFAULT_UNIVERSITY_ID,
     build_document_storage_key,
     storage_engine,
 )
+from app.engines.thumbnail import document_thumbnail
 from app.models.library import (
     ConfirmUploadResponse,
     DocumentDetailResponse,
@@ -33,8 +39,52 @@ from app.models.library import (
     DocumentUploadResponse,
     PdfUrlResponse,
 )
+from app.models.presentation import PresentationPreviewResponse
 
 router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
+logger = logging.getLogger(__name__)
+
+
+@router.get("/{document_id}/thumbnail", response_class=Response)
+async def get_document_thumbnail(
+    document_id: str,
+    auth_user: UserContext = Depends(get_current_user),
+    _document_scope: str = Depends(require_scoped_document),
+) -> Response:
+    """Private first-page preview from the same authorized PDF used by the reader."""
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Preview is unavailable.")
+        can_review = bool(set(auth_user.roles) & {"lecturer", "university_admin", "super_admin"})
+        row = await conn.fetchrow(
+            "SELECT storage_key, converted_key FROM public.documents "
+            "WHERE id = $1 AND university_id = $2 AND deleted_at IS NULL "
+            "AND (status = 'active' OR $3);",
+            uuid.UUID(document_id),
+            require_university(auth_user),
+            can_review,
+        )
+    if row is None:
+        raise HTTPException(status_code=404, detail="Document not found.")
+    key = row["converted_key"] or row["storage_key"]
+    if not key or not key.lower().endswith(".pdf"):
+        raise HTTPException(status_code=404, detail="PDF preview is not ready.")
+    try:
+        image = await document_thumbnail(key)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail="Document preview is unavailable.") from exc
+    except Exception as exc:
+        logger.warning(
+            "document_thumbnail_failed document_id=%s error_type=%s",
+            document_id,
+            type(exc).__name__,
+        )
+        raise HTTPException(status_code=503, detail="Document preview is unavailable.") from exc
+    return Response(
+        image,
+        media_type="image/png",
+        headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -97,8 +147,8 @@ async def initialize_document_upload(
                 "INSERT INTO public.documents ("  # [PRELAUNCH FIX]
                 "id, university_id, title, course_code, course_title, topic, lecturer_name, "  # [PRELAUNCH FIX]
                 "storage_key, file_size_bytes, mime_type, target_levels, academic_session, "  # [PRELAUNCH FIX]
-                "semester, status, embedding_status) VALUES ("  # [PRELAUNCH FIX]
-                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending');",  # [PRELAUNCH FIX]
+                "semester, status, embedding_status, uploaded_by) VALUES ("  # [PRELAUNCH FIX]
+                "$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, 'pending', $15);",  # [PRELAUNCH FIX]
                 uuid.UUID(doc_id),  # [PRELAUNCH FIX]
                 uuid.UUID(university_id),  # [PRELAUNCH FIX]
                 payload.title,  # [PRELAUNCH FIX]
@@ -113,6 +163,7 @@ async def initialize_document_upload(
                 payload.academic_session,  # [PRELAUNCH FIX]
                 payload.semester,  # [PRELAUNCH FIX]
                 document_status,  # [PRELAUNCH FIX]
+                auth_user.id,
             )  # [PRELAUNCH FIX]
             if inserted != "INSERT 0 1":  # [PRELAUNCH FIX]
                 raise HTTPException(  # [PRELAUNCH FIX]
@@ -174,7 +225,7 @@ async def confirm_document_upload(
     document_id: str,
     auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> ConfirmUploadResponse:
     """
     Called by client immediately after successfully PUTting bytes directly to R2.
     Active documents enter ingestion; pending reviews wait for verified approval. [CHAT FIX 2]
@@ -211,14 +262,15 @@ async def confirm_document_upload(
                 """
                 UPDATE public.documents
                 SET embedding_status = 'pending', updated_at = now()
-                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL
+                WHERE id = $1 AND status = 'active' AND deleted_at IS NULL AND embedding_status='pending'
                 RETURNING storage_key; -- [CHAT FIX 2]
                 """,
                 uuid.UUID(document_id),
             )
             if not confirmed:
                 raise HTTPException(
-                    status_code=409, detail="Document approval changed. Retry confirmation."
+                    status_code=409,
+                    detail="Document is no longer awaiting ingestion. Use re-embed for a replacement run.",
                 )
         except HTTPException:
             raise
@@ -264,8 +316,14 @@ async def download_document_or_artifact(
         default=None, description="Override download filename (without extension)"
     ),
     auth_user: UserContext = Depends(get_current_user),  # [CHAT FIX]
-):
+) -> Response:
     """Serve generated artifacts only to their verified owner or a super admin. [CHAT FIX]"""
+    _require_artifact_access(key, auth_user)
+    return await _download_storage_file(key, filename)
+
+
+def _require_artifact_access(key: str, auth_user: UserContext) -> None:
+    """Authorization precedes storage reads, including preview and legacy downloads."""
     parts = key.split("/")  # [CHAT FIX]
     if (  # [CHAT FIX]
         len(parts) != 5  # [CHAT FIX]
@@ -290,7 +348,33 @@ async def download_document_or_artifact(
         owner_id != auth_user.id or university_id != auth_user.university_id  # [CHAT FIX]
     ):  # [CHAT FIX]
         raise HTTPException(status_code=404, detail="File not found.")  # [CHAT FIX]
-    return await _download_storage_file(key, filename)  # [CHAT FIX]
+
+
+@router.get("/artifacts/presentation", response_model=PresentationPreviewResponse)
+async def preview_presentation(
+    response: Response,
+    key: str = Query(min_length=1, max_length=500),
+    auth_user: UserContext = Depends(get_current_user),
+) -> PresentationPreviewResponse:
+    _require_artifact_access(key, auth_user)
+    if not key.endswith(".pptx") or key.split("/")[3] != "pptx":
+        raise HTTPException(404, "Presentation not found.")
+    try:
+        preview = await presentation_preview(key)
+    except ClientError as exc:
+        if str(exc.response.get("Error", {}).get("Code")) in {"NoSuchKey", "NotFound", "404"}:
+            raise HTTPException(404, "Presentation not found.") from exc
+        raise HTTPException(503, "Presentation storage is unavailable.") from exc
+    except ValueError as exc:
+        raise HTTPException(
+            422, "This presentation cannot be previewed. Download it to view the file."
+        ) from exc
+    except Exception as exc:
+        raise HTTPException(
+            503, "Presentation preview is temporarily unavailable. Please retry."
+        ) from exc
+    response.headers["Cache-Control"] = "private, no-store"
+    return preview
 
 
 async def _download_storage_file(key: str, filename: str | None) -> Response:  # [CHAT FIX]
@@ -314,20 +398,29 @@ async def _download_storage_file(key: str, filename: str | None) -> Response:  #
 
     try:
         data = await storage_engine.download_bytes(key)
-        return Response(
-            content=data,
-            media_type=media_types.get(ext, "application/octet-stream"),
-            headers={
-                "Content-Disposition": f'attachment; filename="{clean_filename}"',
-                "Content-Length": str(len(data)),
-                "Cache-Control": "no-cache",
-            },
-        )
+    except ClientError as exc:
+        if str(exc.response.get("Error", {}).get("Code")) in {"NoSuchKey", "NotFound", "404"}:
+            raise HTTPException(status_code=404, detail="File not found.") from exc
+        raise HTTPException(
+            status_code=503, detail="File storage is temporarily unavailable."
+        ) from exc
     except Exception as exc:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="File not found.",  # [CHAT FIX]
-        ) from exc  # [CHAT FIX]
+            status_code=503, detail="File storage is temporarily unavailable."
+        ) from exc
+    ascii_filename = clean_filename.encode("ascii", "ignore").decode() or f"PansGPT.{ext}"
+    return Response(
+        content=data,
+        media_type=media_types.get(ext, "application/octet-stream"),
+        headers={
+            "Content-Disposition": (
+                f'attachment; filename="{ascii_filename}"; '
+                f"filename*=UTF-8''{quote(clean_filename, safe='')}"
+            ),
+            "Content-Length": str(len(data)),
+            "Cache-Control": "private, no-store",
+        },
+    )
 
 
 @router.get(  # [TENANT FIX 2]
@@ -385,7 +478,7 @@ async def get_single_document(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> DocumentDetailResponse:
     """Fetch metadata and embedding status for a specific document."""
     try:
         doc_uuid = uuid.UUID(document_id)
@@ -409,7 +502,9 @@ async def get_single_document(
                    topic, lecturer_name, storage_key, page_count, file_size_bytes,
                    mime_type, status, embedding_status, embedding_progress,
                    total_chunks, target_levels, academic_session, semester,
-                   created_at::text
+                   created_at::text,
+                   (SELECT COALESCE(jsonb_object_agg(status,n),'{}'::jsonb)
+                    FROM (SELECT status,count(*)::int AS n FROM public.document_images WHERE document_id=$1 GROUP BY status) image_totals) AS image_counts
             FROM public.documents
             WHERE id = $1 AND deleted_at IS NULL;
             """,
@@ -445,6 +540,19 @@ async def get_single_document(
             )
             for s in segments_rows
         ]
+        counts = row.get("image_counts")
+        if isinstance(counts, str):
+            counts = json.loads(counts)
+        completeness = "unknown"
+        if counts is not None:
+            if row["embedding_status"] == "failed":
+                completeness = "failed"
+            elif row["embedding_status"] != "completed":
+                completeness = "pending"
+            elif any(counts.get(key, 0) for key in ("pending", "failed", "skipped")):
+                completeness = "partial"
+            else:
+                completeness = "complete"
 
         return DocumentDetailResponse(
             id=str(row["id"]),
@@ -467,6 +575,8 @@ async def get_single_document(
             semester=row["semester"],
             created_at=row["created_at"],
             segments=segments,
+            image_counts=counts,
+            ingestion_completeness=completeness,
         )
     except HTTPException:
         raise
@@ -489,7 +599,7 @@ async def update_document_metadata(
     document_id: str,
     payload: DocumentPatchRequest,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
-):
+) -> dict[str, str]:
     """Allows university admins to partially update document metadata."""
     if not settings.DATABASE_URL:
         raise HTTPException(
@@ -578,7 +688,7 @@ async def soft_delete_document(
     document_id: str,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> None:
     """Marks document as deleted (deleted_at = now()). Chunks remain for audit until hard purged."""
     if not settings.DATABASE_URL:
         return None
@@ -614,7 +724,7 @@ async def get_document_segments(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> list[DocumentSegmentResponse]:
     """Returns the ordered hierarchical chapter and topic segments of a document."""
     if not settings.DATABASE_URL:
         return []
@@ -663,7 +773,7 @@ async def get_document_pdf_stream_url(
     document_id: str,
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> PdfUrlResponse:
     storage_key = None
     if settings.DATABASE_URL:
         try:
@@ -726,7 +836,7 @@ async def get_document_pdf_stream_url(
 async def list_documents(
     course_code: str | None = Query(None, description="Optional course code filter (e.g. PCL 401)"),
     auth_user: UserContext = Depends(get_current_user),  # [TENANT FIX]
-):
+) -> list[DocumentDetailResponse]:
     target_uni = str(require_university(auth_user))  # [TENANT FIX]
     results: list[DocumentDetailResponse] = []
     if settings.DATABASE_URL:
@@ -791,13 +901,13 @@ async def list_documents(
 # ------------------------------------------------------------------------------
 @router.post(
     "/{document_id}/reembed",
-    summary="Flush existing chunks and re-run ingestion pipeline",
+    summary="Queue replacement ingestion while preserving the searchable index",
 )
 async def reembed_document(
     document_id: str,
     auth_user: UserContext = Depends(require_admin_or_super_admin),  # [TENANT FIX]
     _document_scope: str = Depends(require_scoped_document),  # [TENANT FIX]
-):
+) -> dict[str, str]:
     if settings.DATABASE_URL:
         try:
             conn = await asyncpg.connect(settings.DATABASE_URL, timeout=3.0, statement_cache_size=0)
@@ -812,13 +922,16 @@ async def reembed_document(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Failed to queue re-embedding: {e!s}",
             )
-    return {"status": "ok", "message": "Simulated re-embedding queued (no database configured)"}
+    raise HTTPException(status_code=503, detail="Job storage is unavailable.")
 
 
 # ------------------------------------------------------------------------------
 # 10. Documents Alias Router (Resolves Endpoint Path Discrepancy - Roadmap 5.2)
 # ------------------------------------------------------------------------------
 documents_router = APIRouter(prefix="/documents", tags=["Documents"])
+documents_router.add_api_route(
+    "/{document_id}/thumbnail", get_document_thumbnail, methods=["GET"], response_class=Response
+)
 documents_router.add_api_route(
     "/upload",
     initialize_document_upload,

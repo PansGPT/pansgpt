@@ -1,0 +1,39 @@
+{
+  "colors": {
+    "tokens": {
+      "bg-primary": [17, 17, 17],
+      "bg-secondary": [24, 24, 24],
+      "bg-tertiary": [31, 31, 31],
+      "bg-quaternary": [43, 43, 43],
+      "border-primary": [56, 56, 56],
+      "border-secondary": [38, 38, 38],
+      "text-primary-900": [243, 243, 243],
+      "text-secondary-700": [196, 196, 196],
+      "text-tertiary-600": [164, 164, 164],
+      "text-quaternary-500": [146, 146, 146],
+      "fg-brand-primary-600": [23, 178, 106]
+    },
+    "ratios": {
+      "text-primary-900/bg-primary": 17.01758275113729,
+      "text-secondary-700/bg-primary": 10.82649332964988,
+      "text-tertiary-600/bg-primary": 7.575482667598042,
+      "text-quaternary-500/bg-primary": 6.0684913435632275,
+      "text-primary-900/bg-secondary": 16.002103933696826,
+      "text-secondary-700/bg-secondary": 10.180451244578473,
+      "text-tertiary-600/bg-secondary": 7.123435964295301,
+      "text-quaternary-500/bg-secondary": 5.706370324184171,
+      "text-primary-900/bg-tertiary": 14.854606130725687,
+      "text-secondary-700/bg-tertiary": 9.450419400965158,
+      "text-tertiary-600/bg-tertiary": 6.612620189538235,
+      "text-quaternary-500/bg-tertiary": 5.297171169056055
+    },
+    "shell": [17, 17, 17],
+    "sidebar": [24, 24, 24]
+  },
+  "themeColors": {
+    "light": "oklch(1 4.00000e-8 0)",
+    "sepia": "oklch(0.974 0.011 80)",
+    "dark": "oklch(0.178 0 0)"
+  },
+  "errors": []
+}

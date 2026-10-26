@@ -26,7 +26,7 @@ class QueryExpansionEngine:
     - Strict 350ms circuit breaker with instant domain-aware heuristic fallback
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.groq_key = settings.GROQ_API_KEY
         self.gemini_key = settings.GEMINI_API_KEY
         self.groq_expansion_model = getattr(settings, "GROQ_EXPANSION_MODEL", "qwen/qwen3.8-27b")
@@ -130,6 +130,7 @@ class QueryExpansionEngine:
         try:
             from groq import AsyncGroq
 
+            settings.require_provider_privacy("groq")
             client = AsyncGroq(api_key=self.groq_key)
 
             response = await asyncio.wait_for(
@@ -168,6 +169,7 @@ class QueryExpansionEngine:
             from google.genai import types
             from google.genai.errors import ServerError as GoogleServerError
 
+            settings.require_provider_privacy("google")
             client = genai.Client(api_key=self.gemini_key)
 
             try:

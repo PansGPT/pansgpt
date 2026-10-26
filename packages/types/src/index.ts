@@ -3,6 +3,7 @@
 // ==============================================================================
 
 export * from "./supabase";
+export * from "./auth";
 
 // Re-export core helper types and application DTOs
 export type AppTheme = "light" | "dark" | "sepia";
@@ -15,3 +16,11 @@ export interface AuthSessionUser {
   universityId: string | null;
   level: string | null;
 }
+
+export * from "./chat";
+export * from "./presentations";
+export * from "./web-search";
+
+export type { ChatSessionMetadata, ChatSessionUpdateRequest } from "./chat";
+
+export type { ChatProgressCode } from "./chat";

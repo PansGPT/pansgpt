@@ -14,6 +14,7 @@ from arq import Retry
 from app.core.config import settings
 from app.engines.converter import convert_office_to_pdf  # [OFFICE PDF FIX]
 from app.engines.ingestion import document_ingestion_engine
+from app.engines.job_outbox import finish_job, record_job
 from app.engines.storage import build_converted_storage_key, storage_engine  # [OFFICE PDF FIX]
 
 logger = structlog.get_logger(__name__)
@@ -49,7 +50,9 @@ async def _claim_document(document_id: str, worker_id: uuid.UUID | None = None) 
         return False
 
 
-async def _update_document_status(document_id: str, status: str, progress: int | None = None):
+async def _update_document_status(
+    document_id: str, status: str, progress: int | None = None, worker_id: uuid.UUID | None = None
+) -> None:
     """Update document embedding_status and optional embedding_progress."""
     if not settings.DATABASE_URL:
         return
@@ -61,28 +64,30 @@ async def _update_document_status(document_id: str, status: str, progress: int |
                 """
                 UPDATE public.documents
                 SET embedding_status = $2, embedding_progress = $3, updated_at = now()
-                WHERE id = $1;
+                WHERE id = $1 AND ($4::uuid IS NULL OR ingestion_lock_id=$4);
                 """,
                 uuid.UUID(document_id),
                 status,
                 progress,
+                worker_id,
             )
         else:
             await conn.execute(
                 """
                 UPDATE public.documents
                 SET embedding_status = $2, updated_at = now()
-                WHERE id = $1;
+                WHERE id = $1 AND ($3::uuid IS NULL OR ingestion_lock_id=$3);
                 """,
                 uuid.UUID(document_id),
                 status,
+                worker_id,
             )
         await conn.close()
     except Exception as e:
         logger.warning("worker_status_update_failed", document_id=document_id, error=str(e))
 
 
-async def _heartbeat_loop(document_id: str, worker_id: uuid.UUID, interval: int = 30):
+async def _heartbeat_loop(document_id: str, worker_id: uuid.UUID, interval: int = 30) -> None:
     """
     Background heartbeat loop: calls `heartbeat_document_ingestion` every 30s
     to indicate the worker is actively processing and prevent stale timeout reclamation.
@@ -193,6 +198,9 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
     7. Transitions status to 'completed' (or 'failed' if retries exhausted)
     """
     job_try = ctx.get("job_try", 1) if isinstance(ctx, dict) else 1
+    if not settings.ENABLE_INGESTION or not settings.GOOGLE_ZDR_CONFIRMED:
+        logger.info("ingestion_blocked_by_privacy_policy", document_id=document_id)
+        return False
     logger.info(
         "worker_starting_ingest_job",
         document_id=document_id,
@@ -213,7 +221,7 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
         return False
 
     # 2. Initial status transition to 'processing'
-    await _update_document_status(document_id, status="processing", progress=5)
+    await _update_document_status(document_id, status="processing", progress=5, worker_id=worker_id)
 
     # 3. Start Heartbeat Loop as background task
     heartbeat_task = asyncio.create_task(_heartbeat_loop(document_id, worker_id, interval=30))
@@ -329,7 +337,10 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
         success = await document_ingestion_engine.ingest_document_from_r2(  # [OFFICE PDF FIX]
             document_id=document_id,  # [OFFICE PDF FIX]
             storage_key=key_to_ingest,  # [OFFICE PDF FIX]
+            worker_id=worker_id,
         )  # [OFFICE PDF FIX]
+        if not success:
+            raise RuntimeError("Ingestion did not publish replacement content")
         logger.info(  # [OFFICE PDF FIX]
             "worker_completed_ingest_job",  # [OFFICE PDF FIX]
             document_id=document_id,  # [OFFICE PDF FIX]
@@ -341,6 +352,9 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
         if success:  # [IMAGES PHASE]
             image_status = await get_image_status(document_id)  # [IMAGES PHASE]
             if image_status.get("pending", 0) > 0:  # [IMAGES PHASE]
+                image_job_id = await record_job(
+                    document_id, key_to_ingest, "describe_document_images_job"
+                )
                 redis_pool = ctx.get("redis") if isinstance(ctx, dict) else None  # [PHASE2 FIX]
                 if not redis_pool or not hasattr(redis_pool, "enqueue_job"):  # [PHASE2 FIX]
                     logger.error(  # [PHASE2 FIX]
@@ -357,6 +371,7 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
                             document_id,  # [QUEUE SPLIT]
                             key_to_ingest,  # [QUEUE SPLIT]
                             _queue_name=PICTURE_QUEUE_NAME,  # [QUEUE SPLIT]
+                            _job_id=image_job_id,
                         )  # [QUEUE SPLIT]
                         if job is None:  # [PHASE2 FIX]
                             logger.error(  # [PHASE2 FIX]
@@ -371,9 +386,12 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
                             error=str(enqueue_exc),  # [PHASE2 FIX]
                         )  # [PHASE2 FIX]
 
+        await finish_job(document_id, "ingest_document_job", job_id=ctx.get("job_id"))
         return success
     except StoredUploadError as exc:  # [LEFTOVER FIX]
-        await _update_document_status(document_id, status="failed", progress=0)  # [LEFTOVER FIX]
+        await _update_document_status(
+            document_id, status="failed", progress=0, worker_id=worker_id
+        )  # [LEFTOVER FIX]
         logger.error(  # [LEFTOVER FIX]
             "worker_rejected_stored_upload",  # [LEFTOVER FIX]
             document_id=document_id,  # [LEFTOVER FIX]
@@ -392,10 +410,15 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
         if job_try < 3:
             defer_delays = {1: 30, 2: 60}
             defer_secs = defer_delays.get(job_try, 120)
+            try:
+                await _release_document_for_retry(document_id, worker_id)
+            except Exception:
+                defer_secs = 601  # Reclaim an expired lease after a database outage.
             raise Retry(defer=defer_secs) from exc
 
+        await finish_job(document_id, "ingest_document_job", failed=True, job_id=ctx.get("job_id"))
         # All retries exhausted: mark as failed in database
-        await _update_document_status(document_id, status="failed", progress=0)
+        await _update_document_status(document_id, status="failed", progress=0, worker_id=worker_id)
         raise exc
     finally:
         # Cleanly stop heartbeat loop
@@ -444,6 +467,8 @@ async def describe_document_images_job(  # [IMAGES PHASE]
     raises Retry(defer=300), up to 6 tries.
     """
     job_try = ctx.get("job_try", 1) if isinstance(ctx, dict) else 1  # [IMAGES PHASE]
+    if not settings.ENABLE_INGESTION or not settings.GOOGLE_ZDR_CONFIRMED:
+        return "blocked"
     logger.info(  # [IMAGES PHASE]
         "worker_starting_describe_images_job",  # [IMAGES PHASE]
         document_id=document_id,  # [IMAGES PHASE]
@@ -465,4 +490,24 @@ async def describe_document_images_job(  # [IMAGES PHASE]
                 pending=counts.get("pending", 0),  # [IMAGES PHASE]
             )  # [IMAGES PHASE]
             raise Retry(defer=300)  # [IMAGES PHASE]
+    await finish_job(
+        document_id,
+        "describe_document_images_job",
+        failed=result != "completed",
+        job_id=ctx.get("job_id"),
+    )
     return result  # [IMAGES PHASE]
+
+
+async def _release_document_for_retry(document_id: str, worker_id: uuid.UUID) -> None:
+    from app.core.database import get_db_connection
+
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise RuntimeError("Cannot release ingestion lease")
+        await conn.execute(
+            "UPDATE public.documents SET embedding_status='pending', ingestion_lock_id=NULL, "
+            "ingestion_heartbeat=NULL, updated_at=now() WHERE id=$1 AND ingestion_lock_id=$2;",
+            uuid.UUID(document_id),
+            worker_id,
+        )

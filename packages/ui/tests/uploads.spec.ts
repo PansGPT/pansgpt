@@ -1,8 +1,9 @@
 import { Buffer } from "node:buffer";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=uploads");
+  await openPreview(page, "/?section=uploads");
   await page.evaluate(() => document.fonts.ready);
 });
 

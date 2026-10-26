@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("section labels match source frames and preserve native field/help/action behavior", async ({
   page,
 }) => {
-  await page.goto("/?section=sectionlabels");
+  await openPreview(page, "/?section=sectionlabels");
   await page.evaluate(() => document.fonts.ready);
   const frames = page.locator("[data-source-id]");
   await expect(frames).toHaveCount(4);

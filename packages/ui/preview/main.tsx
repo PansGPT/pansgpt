@@ -78,6 +78,7 @@ import { DatePickerFixtures } from "./date-picker-fixtures";
 import { CalendarFixtures } from "./calendar-fixtures";
 import { FoundationFixtures } from "./foundation-fixtures";
 import { SlideoutFixtures } from "./slideout-fixtures";
+import { AppPrimitivesFixtures } from "./app-primitives-fixtures";
 
 const items: TabItem[] = [
   { value: "details", label: "My details", content: "Details panel" },
@@ -88,6 +89,7 @@ const items: TabItem[] = [
 ];
 
 const previewFamilies = {
+  atoms: AppPrimitivesFixtures,
   fields: FieldFixtures,
   controls: ControlFixtures,
   tags: TagFixtures,
@@ -157,7 +159,7 @@ function PreviewHeader(): React.ReactElement {
             }}
           >
             <option value="light">Light</option>
-            <option value="dark">OLED Dark</option>
+            <option value="dark">Dark</option>
             <option value="sepia">Sepia</option>
           </select>
         </label>

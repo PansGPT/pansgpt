@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/?section=alerts");
+  await openPreview(page, "/?section=alerts");
   await page.evaluate(() => document.fonts.ready);
 });
 

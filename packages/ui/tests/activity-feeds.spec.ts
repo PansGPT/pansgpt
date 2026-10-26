@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { feedItemSources, feedLayoutSources } from "../preview/feed-source-data";
 
 test("sixteen feed items and six complete feeds preserve source frames and native artwork", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 2500, height: 1100 });
-  await page.goto("/?section=feeds");
+  await openPreview(page, "/?section=feeds");
   await page.evaluate(() => document.fonts.ready);
   await page.addStyleTag({ content: ".preview { max-width: none; }" });
   await page.evaluate(async () => {
@@ -56,7 +57,7 @@ test("sixteen feed items and six complete feeds preserve source frames and nativ
 test("activity actions, attachment opening, read state and live connectors work across themes and widths", async ({
   page,
 }) => {
-  await page.goto("/?section=feeds");
+  await openPreview(page, "/?section=feeds");
   const source = page.locator('[data-feed-source-id="1254:128621"]');
   await source.getByRole("button", { name: "Open Tech requirements.pdf" }).click();
   await expect(page.getByTestId("feed-selection")).toHaveText("Tech requirements.pdf");

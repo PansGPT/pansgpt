@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { fieldLayouts } from "../preview/field-layout-data";
 test("all 158 input and select source variants preserve frames and original SVG geometry", async ({
   page,
 }) => {
   test.setTimeout(120000);
-  await page.goto("/?section=fields");
+  await openPreview(page, "/?section=fields");
   await expect(page.locator("[data-field-source-id]")).toHaveCount(158);
   await page.evaluate(async () => {
     await document.fonts.ready;
@@ -66,7 +67,7 @@ test("all 158 input and select source variants preserve frames and original SVG 
 test("combobox searches accents, skips disabled options and submits selected values", async ({
   page,
 }) => {
-  await page.goto("/?section=fields");
+  await openPreview(page, "/?section=fields");
   const form = page.getByRole("form", { name: "Live composed fields" });
   const single = form.getByRole("combobox", { name: "Search team member" });
   await single.fill("Ore");
@@ -103,7 +104,7 @@ test("combobox searches accents, skips disabled options and submits selected val
 test("tag entry supports commit, dismissal, required validation and native addon form values", async ({
   page,
 }) => {
-  await page.goto("/?section=fields");
+  await openPreview(page, "/?section=fields");
   const form = page.getByRole("form", { name: "Live composed fields" });
   const topics = form.getByLabel("Study topics");
   await topics.fill("Toxicology");

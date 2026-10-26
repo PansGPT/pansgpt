@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.universities (
   created_at  timestamptz NOT NULL DEFAULT now(),
   updated_at  timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.universities ENABLE ROW LEVEL SECURITY;
 CREATE UNIQUE INDEX IF NOT EXISTS unq_universities_name_lower ON public.universities (lower(name));
 
 CREATE TRIGGER trg_universities_updated_at
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS public.academic_terms (
   updated_by        uuid,
   updated_at        timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.academic_terms ENABLE ROW LEVEL SECURITY;
 
 CREATE TRIGGER trg_academic_terms_updated_at
   BEFORE UPDATE ON public.academic_terms
@@ -51,6 +53,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   created_at        timestamptz NOT NULL DEFAULT now(),
   updated_at        timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_users_university ON public.users(university_id);
 CREATE INDEX IF NOT EXISTS idx_users_roles ON public.users USING GIN(roles);
@@ -74,5 +77,6 @@ CREATE TABLE IF NOT EXISTS public.invitations (
   expires_at      timestamptz,
   created_at      timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.invitations ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_invitations_token ON public.invitations(token) WHERE is_active IS TRUE;

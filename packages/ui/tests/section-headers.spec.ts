@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
+import { openPreview } from "./open-preview";
 
 test("all twelve section headers retain source geometry and local asset dimensions", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1800, height: 1100 });
-  await page.goto("/?section=sectionheaders");
+  await openPreview(page, "/?section=sectionheaders");
   await page.evaluate(() => document.fonts.ready);
   const sources = page.locator("[data-source-id]");
   await expect(sources).toHaveCount(12);
@@ -44,7 +45,7 @@ test("all twelve section headers retain source geometry and local asset dimensio
 });
 
 test("header search, action menu and mobile tabs work with shared state", async ({ page }) => {
-  await page.goto("/?section=sectionheaders");
+  await openPreview(page, "/?section=sectionheaders");
   await page.keyboard.press("Control+k");
   const search = page.getByRole("searchbox", { name: "Search team", exact: true });
   await expect(search).toBeFocused();

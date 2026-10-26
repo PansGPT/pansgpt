@@ -18,6 +18,7 @@ from app.core.dependencies import (
     set_cached_user_profile,
 )
 from app.core.rate_limit import limiter
+from app.core.schemas import StrictRequest
 
 logger = structlog.get_logger(__name__)
 router = APIRouter(prefix="/auth", tags=["Authentication & RBAC"])
@@ -47,7 +48,7 @@ class UniversityItem(BaseModel):
     slug: str = Field(description="URL slug")
 
 
-class OnboardingRequest(BaseModel):
+class OnboardingRequest(StrictRequest):
     first_name: str = Field(min_length=1, max_length=100, description="Student first name")
     last_name: str | None = Field(default=None, max_length=100, description="Student last name")
     university_id: str = Field(description="Selected institution UUID")
@@ -81,13 +82,15 @@ class UserProfileResponse(BaseModel):
     response_model=list[UniversityItem],
     summary="List active universities for student enrollment",
 )
-async def list_universities():
+async def list_universities() -> list[UniversityItem]:
     """
     Returns active universities available for student registration.
     The frontend renders this list for the student to select their institution.
     """
     universities: list[UniversityItem] = []
     async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="University storage is unavailable.")
         if conn:
             try:
                 rows = await conn.fetch(
@@ -109,17 +112,9 @@ async def list_universities():
                     )
             except Exception as exc:
                 logger.warning("fetch_universities_failed", error=str(exc))
-
-    if not universities:
-        # Fallback to seeded UNIJOS institution if DB is offline/in mock test mode
-        universities.append(
-            UniversityItem(
-                id=DEFAULT_UNIJOS_ID,
-                name="University of Jos",
-                short_name="UNIJOS",
-                slug="unijos",
-            )
-        )
+                raise HTTPException(
+                    status_code=503, detail="Universities could not be loaded."
+                ) from exc
 
     return universities
 
@@ -131,7 +126,7 @@ async def list_universities():
 )
 async def get_my_profile(
     current_user: UserContext = Depends(get_current_user),
-):
+) -> UserProfileResponse:
     """
     Returns verified user context, university tenancy, and RBAC roles.
     Requires valid Bearer JWT signed by Supabase.
@@ -163,7 +158,7 @@ async def complete_onboarding(
     request: Request,
     payload: OnboardingRequest,
     current_user: UserContext = Depends(get_current_user),
-):
+) -> UserProfileResponse:
     """
     Completes student onboarding:
     1. Validates mandatory Terms & Privacy Policy acceptance (cannot be False).
@@ -195,10 +190,16 @@ async def complete_onboarding(
             detail=f"Invalid university_id format: {payload.university_id}",
         ) from exc
 
+    if current_user.university_id is not None and current_user.university_id != uni_uuid:
+        raise HTTPException(
+            status_code=403, detail="Institution changes require administrator approval."
+        )
     terms_accepted_at_str = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
     # 4. Upsert into database
     async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Profile storage is unavailable.")
         if conn:
             try:
                 # Verify university exists
@@ -226,6 +227,7 @@ async def complete_onboarding(
                         current_level = EXCLUDED.current_level,
                         terms_accepted_at = COALESCE(public.users.terms_accepted_at, EXCLUDED.terms_accepted_at),
                         updated_at = now()
+                    WHERE public.users.university_id IS NULL OR public.users.university_id=EXCLUDED.university_id
                     RETURNING terms_accepted_at::text;
                 """
                 row = await conn.fetchrow(
@@ -237,12 +239,15 @@ async def complete_onboarding(
                     uni_uuid,
                     payload.current_level,
                 )
+                if not row:
+                    raise HTTPException(status_code=503, detail="Profile could not be saved.")
                 if row and row["terms_accepted_at"]:
                     terms_accepted_at_str = row["terms_accepted_at"]
             except HTTPException:
                 raise
             except Exception as exc:
-                logger.warning("onboarding_db_persist_warning", error=str(exc))
+                logger.warning("onboarding_db_persist_warning", error_type=type(exc).__name__)
+                raise HTTPException(status_code=503, detail="Profile could not be saved.") from exc
 
     # 5. Populate updated user profile into cache so subsequent /auth/me returns fresh data
     profile_data = {
@@ -278,7 +283,7 @@ async def complete_onboarding(
     summary="Validate invite token and fetch institutional details",
 )
 @limiter.limit("10/minute")
-async def get_invite_details(request: Request, token: str):
+async def get_invite_details(request: Request, token: str) -> InviteValidationResponse:
     """
     Validates institutional invite token:
     1. Looks up token in public.invitations.
@@ -292,37 +297,6 @@ async def get_invite_details(request: Request, token: str):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invite token cannot be empty.",
-        )
-
-    # In mock test mode: allow mock tokens to resolve deterministically without live DB
-    if clean_token.startswith("mock-valid-"):
-        return InviteValidationResponse(
-            token=clean_token,
-            university_id=DEFAULT_UNIJOS_ID,
-            university_name="University of Jos",
-            university_short_name="UNIJOS",
-            university_slug="unijos",
-            grant_roles=["lecturer"],
-            target_level="300",
-            is_valid=True,
-            expires_at="2099-01-01T00:00:00Z",
-            is_expired=False,
-            is_exhausted=False,
-        )
-    elif clean_token.startswith("mock-expired-"):
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Invitation has expired.",
-        )
-    elif clean_token.startswith("mock-exhausted-"):
-        raise HTTPException(
-            status_code=status.HTTP_410_GONE,
-            detail="Invitation maximum uses reached.",
-        )
-    elif clean_token.startswith("mock-invalid-"):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Invitation token not found or invalid.",
         )
 
     async with get_db_connection() as conn:
@@ -395,3 +369,71 @@ async def get_invite_details(request: Request, token: str):
         status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
         detail="Database unavailable for invite verification.",
     )
+
+
+@router.post("/invites/{token}/redeem")
+@limiter.limit("10/minute")
+async def redeem_invite(
+    request: Request, token: str, current_user: UserContext = Depends(get_current_user)
+) -> dict[str, object]:
+    from app.core.dependencies import invalidate_user_role_cache
+
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Invitation storage is unavailable.")
+        async with conn.transaction():
+            invite = await conn.fetchrow(
+                "SELECT i.* FROM public.invitations i JOIN public.universities u ON u.id=i.university_id WHERE i.token=$1 AND u.status='active' FOR UPDATE OF i;",
+                token,
+            )
+            if not invite:
+                raise HTTPException(status_code=404, detail="Invitation was not found.")
+            redeemed = await conn.fetchval(
+                "SELECT 1 FROM public.invitation_redemptions WHERE invitation_id=$1 AND user_id=$2;",
+                invite["id"],
+                current_user.id,
+            )
+            if not redeemed:
+                if (
+                    not invite["is_active"]
+                    or (invite["expires_at"] and invite["expires_at"] <= datetime.now(UTC))
+                    or (invite["max_uses"] > 0 and invite["current_uses"] >= invite["max_uses"])
+                ):
+                    raise HTTPException(
+                        status_code=410, detail="Invitation is no longer available."
+                    )
+                if set(invite["grant_roles"]) != {"lecturer"}:
+                    raise HTTPException(
+                        status_code=403, detail="This invitation cannot grant the requested role."
+                    )
+                # Lock the actor too: concurrent invitations cannot move one user across tenants.
+                actor = await conn.fetchrow(
+                    "SELECT university_id FROM public.users WHERE id=$1 AND deleted_at IS NULL FOR UPDATE;",
+                    current_user.id,
+                )
+                if actor is None:
+                    raise HTTPException(status_code=403, detail="An active profile is required.")
+                if (
+                    actor["university_id"] is not None
+                    and actor["university_id"] != invite["university_id"]
+                ):
+                    raise HTTPException(
+                        status_code=403, detail="Invitation belongs to another university."
+                    )
+                await conn.execute(
+                    "UPDATE public.users SET university_id=$2, roles=ARRAY(SELECT DISTINCT unnest(roles || ARRAY['lecturer']::public.user_role[])), current_level=COALESCE(current_level,$3), updated_at=now() WHERE id=$1;",
+                    current_user.id,
+                    invite["university_id"],
+                    invite["target_level"],
+                )
+                await conn.execute(
+                    "INSERT INTO public.invitation_redemptions(invitation_id,user_id) VALUES($1,$2);",
+                    invite["id"],
+                    current_user.id,
+                )
+                await conn.execute(
+                    "UPDATE public.invitations SET current_uses=current_uses+1 WHERE id=$1;",
+                    invite["id"],
+                )
+    await invalidate_user_role_cache(current_user.id)
+    return {"redeemed": True, "university_id": str(invite["university_id"])}

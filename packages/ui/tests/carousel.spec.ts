@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Source = [string, string, number, number, [string, number, number, number, number][]];
 const families = JSON.parse(
   readFileSync(resolve(__dirname, "../design/carousel-geometry.json"), "utf8")
@@ -9,7 +10,7 @@ const families = JSON.parse(
 test("four carousel arrows and both image layouts preserve source artwork and bounds", async ({
   page,
 }) => {
-  await page.goto("/?section=carousel");
+  await openPreview(page, "/?section=carousel");
   await expect(page.locator("[data-source-id]")).toHaveCount(6);
   await page.evaluate(async (families) => {
     const near = (actual: number, expected: number): void => {
@@ -70,7 +71,7 @@ test("four carousel arrows and both image layouts preserve source artwork and bo
 test("carousel arrows and dots support native keyboard selection, boundaries and looping", async ({
   page,
 }) => {
-  await page.goto("/?section=carousel");
+  await openPreview(page, "/?section=carousel");
   const demo = page.getByRole("group", { name: "Interactive carousels" });
   const collection = demo.getByRole("region", { name: "Plant collection", exact: true });
   await expect(

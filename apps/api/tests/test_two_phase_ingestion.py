@@ -78,6 +78,8 @@ class MockDBConnection:  # [IMAGES PHASE]
         return None  # [IMAGES PHASE]
 
     async def fetchval(self, query, *args):  # [IMAGES PHASE]
+        if "FOR UPDATE OF d,i" in query:
+            return 1
         if "MAX(order_index)" in query:  # [IMAGES PHASE]
             return 1  # [IMAGES PHASE]
         if "MAX(chunk_index)" in query:  # [IMAGES PHASE]
@@ -730,6 +732,7 @@ async def test_enqueue_passes_converted_key_and_skips_when_no_pending(monkeypatc
             doc_id,  # [QUEUE SPLIT]
             conv_key,  # [QUEUE SPLIT]
             _queue_name=PICTURE_QUEUE_NAME,  # [QUEUE SPLIT]
+            _job_id="018f3a30-0001-7000-8000-000000000001",
         )  # [QUEUE SPLIT]
 
     # Subcase 2: When no images are pending -> skipped
@@ -1026,3 +1029,16 @@ async def test_safety_block_skipped_without_retry(monkeypatch):  # [PHASE2 FIX]
     ]  # [PHASE2 FIX]
     assert len(skipped_updates) == 1  # [PHASE2 FIX]
     assert skipped_updates[0][1] == "blocked:SAFETY"  # [PHASE2 FIX]
+
+
+@pytest.fixture(autouse=True)
+def isolated_worker_outbox(monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from workers import tasks
+
+    monkeypatch.setattr(
+        tasks, "record_job", AsyncMock(return_value="018f3a30-0001-7000-8000-000000000001")
+    )
+    monkeypatch.setattr(tasks, "finish_job", AsyncMock())
+    monkeypatch.setattr(tasks, "_release_document_for_retry", AsyncMock())

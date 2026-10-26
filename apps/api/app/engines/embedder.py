@@ -75,7 +75,7 @@ class EmbeddingError(Exception):  # [EMBED FIX]
 class GeminiEmbeddingEngine:  # [EMBED FIX]
     """Generates 1536-dimensional dense vector embeddings using Google AI Studio."""  # [DIM 1536]
 
-    def __init__(self):  # [EMBED FIX]
+    def __init__(self) -> None:  # [EMBED FIX]
         raw_model = settings.GEMINI_EMBEDDING_MODEL
         if not raw_model or raw_model in (
             "gemini-embedding-002",
@@ -173,6 +173,7 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
         from google import genai  # [EMBED FIX]
         from google.genai import errors, types  # [EMBED FIX]
 
+        settings.require_provider_privacy("google")
         client = genai.Client(
             api_key=api_key,
             http_options=types.HttpOptions(api_version="v1"),

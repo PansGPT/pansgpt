@@ -71,7 +71,7 @@ def rsa_key_pair():
 
 
 @pytest.fixture
-def mock_jwks(monkeypatch, rsa_key_pair):
+def mock_jwks(monkeypatch, rsa_key_pair, authoritative_auth_store):
     """Mocks PyJWKClient to return the matching public key for cryptographic verification."""
     _, public_key = rsa_key_pair
 
@@ -109,7 +109,11 @@ def make_token(
     now = int(time.time())
     user_id = sub or str(uuid.uuid4())
     user_email = email or f"{role}_{user_id[:8]}@unijos.edu.ng"
+    from tests.auth_support import register_profile
+
+    register_profile(user_id, roles or [role], university_id)
     payload = {
+        "iss": f"{settings.SUPABASE_URL}/auth/v1",
         "sub": user_id,
         "email": user_email,
         "aud": "authenticated",
@@ -188,6 +192,23 @@ async def test_auth_me_valid_jwt_returns_profile(client, rsa_key_pair, mock_jwks
     assert "student" in data["roles"]
     assert data["university_id"] == "01a07664-7a69-7ce0-ad6a-b219462cbde3"
     assert data["dev_bypass"] is False
+    # Public DTO contract, distinct from database rows and caller-editable metadata.
+    assert set(data) == {
+        "id",
+        "email",
+        "role",
+        "roles",
+        "university_id",
+        "first_name",
+        "last_name",
+        "current_level",
+        "terms_accepted_at",
+        "is_onboarded",
+        "client_type",
+        "dev_bypass",
+    }
+    assert isinstance(data["is_onboarded"], bool)
+    assert data["client_type"] == "web"
 
 
 # ------------------------------------------------------------------------------

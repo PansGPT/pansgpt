@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { dateSources } from "../preview/date-source-data";
 import {
   addDateDays,
@@ -37,7 +38,7 @@ test("date-only arithmetic rejects impossible dates, clamps months, and orders r
 test("all 42 date-picker specimens preserve native frames and original SVG sizes", async ({
   page,
 }) => {
-  await page.goto("/?section=datepickers");
+  await openPreview(page, "/?section=datepickers");
   await page.evaluate(() => document.fonts.ready);
   const failures: string[] = [];
   for (const family of dateSources.filter((family) =>
@@ -93,7 +94,7 @@ test("all 42 date-picker specimens preserve native frames and original SVG sizes
 test("range drafts commit on Apply, discard on Cancel and restore popover focus", async ({
   page,
 }) => {
-  await page.goto("/?section=datepickers");
+  await openPreview(page, "/?section=datepickers");
   const trigger = page
     .getByTestId("live-date-range")
     .getByRole("button", { name: "Choose study dates" });
@@ -119,7 +120,7 @@ test("range drafts commit on Apply, discard on Cancel and restore popover focus"
 test("keyboard dates skip unavailable days, validate input and cross month boundaries", async ({
   page,
 }) => {
-  await page.goto("/?section=datepickers");
+  await openPreview(page, "/?section=datepickers");
   const calendar = page.getByTestId("live-bounded-calendar");
   const day = calendar.getByRole("gridcell", { name: "Friday, January 10, 2025", exact: true });
   await day.focus();
@@ -145,7 +146,7 @@ test("keyboard dates skip unavailable days, validate input and cross month bound
 });
 test("date modal restores focus and stays within a 375px viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.goto("/?section=datepickers");
+  await openPreview(page, "/?section=datepickers");
   const trigger = page.getByRole("button", { name: "Open date modal", exact: true });
   await trigger.click();
   const dialog = page.getByRole("dialog", { name: "Choose review date" });

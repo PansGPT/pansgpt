@@ -111,13 +111,15 @@ async def test_no_match_without_web_has_absence_notice_and_no_sources(  # [CHAT 
     retrieval_probe: SimpleNamespace,  # [CHAT FIX 2]
 ) -> None:  # [CHAT FIX 2]
     retrieval_probe.rows = []  # [CHAT FIX 2]
-    context, citations = await rag.rag_engine.retrieve_context(  # [CHAT FIX 2]
-        "unrelated topic",  # [CHAT FIX 2]
-        university_id=str(UNI),  # [CHAT FIX 2]
-        expand_siblings=False,  # [CHAT FIX 2]
-    )  # [CHAT FIX 2]
-    assert context and "not found in your course materials" in context  # [CHAT FIX 2]
-    assert citations == []  # [CHAT FIX 2]
+    from app.engines.web_grounding import WebSearchUnavailable
+
+    with pytest.raises(WebSearchUnavailable) as error:
+        await rag.rag_engine.retrieve_context(
+            "unrelated topic",
+            university_id=str(UNI),
+            expand_siblings=False,
+        )
+    assert error.value.result.status == "disabled"
     retrieval_probe.web.assert_not_awaited()  # [CHAT FIX 2]
 
 

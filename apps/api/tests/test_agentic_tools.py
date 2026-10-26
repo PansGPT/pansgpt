@@ -46,14 +46,15 @@ def test_confidence_classification_logic():
 @pytest.mark.asyncio
 async def test_hybrid_rag_acronym_and_fallback_retrieval():
     """Verify hybrid RAG retrieval normalizes acronyms and returns structured citations."""
-    context, citations = await rag_engine.retrieve_context(
-        query="What is the MOA of HCTZ in HTN?",
-        university_id=DEFAULT_UNIVERSITY_ID,  # [TENANT FIX]
-        match_count=2,
-    )
-    # Even if database is empty/offline in test, query normalization and function exit cleanly
-    assert context is None or isinstance(context, str)
-    assert isinstance(citations, list)
+    from app.engines.web_grounding import WebSearchUnavailable
+
+    with pytest.raises(WebSearchUnavailable) as error:
+        await rag_engine.retrieve_context(
+            query="What is the MOA of HCTZ in HTN?",
+            university_id=DEFAULT_UNIVERSITY_ID,
+            match_count=2,
+        )
+    assert error.value.result.status == "not_configured"
 
 
 # ------------------------------------------------------------------------------

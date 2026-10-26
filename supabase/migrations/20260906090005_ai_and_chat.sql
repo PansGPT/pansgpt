@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.ai_skills (
   created_at        timestamptz NOT NULL DEFAULT now(),
   updated_at        timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.ai_skills ENABLE ROW LEVEL SECURITY;
 
 CREATE TRIGGER trg_ai_skills_updated_at
   BEFORE UPDATE ON public.ai_skills
@@ -34,6 +35,7 @@ CREATE TABLE IF NOT EXISTS public.chat_sessions (
   created_at    timestamptz NOT NULL DEFAULT now(),
   updated_at    timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.chat_sessions ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_chat_sessions_user ON public.chat_sessions(user_id, updated_at DESC);
 CREATE INDEX IF NOT EXISTS idx_chat_sessions_deleted ON public.chat_sessions(deleted_at) WHERE deleted_at IS NOT NULL;
@@ -61,6 +63,7 @@ CREATE TABLE IF NOT EXISTS public.chat_messages (
   edited_at           timestamptz,
   created_at          timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.chat_messages ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON public.chat_messages(session_id, created_at ASC);
 CREATE INDEX IF NOT EXISTS idx_chat_messages_parent ON public.chat_messages(session_id, parent_message_id, is_active_branch);
@@ -82,6 +85,7 @@ CREATE TABLE IF NOT EXISTS public.ai_telemetry (
   error_message     text,
   created_at        timestamptz NOT NULL DEFAULT now()
 );
+ALTER TABLE public.ai_telemetry ENABLE ROW LEVEL SECURITY;
 
 CREATE INDEX IF NOT EXISTS idx_ai_telemetry_time ON public.ai_telemetry(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_ai_telemetry_user ON public.ai_telemetry(user_id, created_at DESC);

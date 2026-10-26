@@ -53,7 +53,7 @@ class IngestionPipelineResult:
         elements: list[dict],
         chunks: list[dict],
         images: list[dict] | None = None,  # [IMAGES PHASE]
-    ):
+    ) -> None:
         self.document_id = document_id
         self.pages = pages
         self.segments = segments
@@ -95,8 +95,8 @@ class DocumentIngestionEngine:
         )
 
         # Stage 2 & 3: Extract pages, native text, tables, and images
-        extracted_pages: list[ExtractedPage] = document_extractor.process_document(
-            file_bytes, file_format=file_format
+        extracted_pages: list[ExtractedPage] = await asyncio.to_thread(
+            document_extractor.process_document, file_bytes, file_format=file_format
         )
         total_images = sum(  # [IMAGE FIX]
             len(p.embedded_images) + (1 if p.full_page_render else 0)  # [IMAGE FIX]
@@ -150,6 +150,7 @@ class DocumentIngestionEngine:
                 lines = [line.strip() for line in page.native_text.split("\n") if line.strip()]
                 # Check first lines for uppercase / title-case heading
                 if lines and len(lines[0]) < 80 and (lines[0].isupper() or lines[0].istitle()):
+                    segments[-1]["end_page"] = max(segments[-1]["start_page"], page.page_number - 1)
                     heading_title = lines[0]
                     new_seg_id = str(uuid7())  # [LEFTOVER FIX]
                     segments.append(
@@ -165,25 +166,7 @@ class DocumentIngestionEngine:
                     )
                     active_seg_id = new_seg_id
                 else:
-                    # Page continues existing topic -> ensure title_source = 'inherited' on continuation
-                    if (
-                        page.page_number > 1
-                        and active_seg_id == default_seg_id
-                        and len(segments) > 1
-                    ):
-                        cont_seg_id = str(uuid7())  # [LEFTOVER FIX]
-                        segments.append(
-                            {
-                                "id": cont_seg_id,
-                                "document_id": document_id,
-                                "title": f"Continued: {segments[-1]['title']}",
-                                "title_source": "inherited",
-                                "start_page": page.page_number,
-                                "end_page": len(extracted_pages),
-                                "order_index": len(segments),
-                            }
-                        )
-                        active_seg_id = cont_seg_id
+                    pass  # Continue the current segment; its heading is inherited.
 
                 # Native text element
                 el_id = str(uuid7())  # [LEFTOVER FIX]
@@ -352,7 +335,9 @@ class DocumentIngestionEngine:
             images=pending_images,  # [IMAGES PHASE]
         )
 
-    async def ingest_document_from_r2(self, document_id: str, storage_key: str) -> bool:
+    async def ingest_document_from_r2(
+        self, document_id: str, storage_key: str, worker_id: uuid.UUID | None = None
+    ) -> bool:
         """
         Pulls file bytes from R2, runs 8-stage pipeline, and writes to database
         using optimized batch upsert queries.
@@ -368,7 +353,7 @@ class DocumentIngestionEngine:
         ext = storage_key.rsplit(".", 1)[-1].lower() if "." in storage_key else "pdf"
 
         # Intermediate progress callback persisting to DB
-        async def db_progress_callback(pct: int):
+        async def db_progress_callback(pct: int) -> None:
             if not settings.DATABASE_URL:
                 return
             try:
@@ -377,10 +362,12 @@ class DocumentIngestionEngine:
                     """
                     UPDATE public.documents
                     SET embedding_progress = $2, updated_at = now()
-                    WHERE id = $1 AND embedding_status = 'processing';
+                    WHERE id = $1 AND embedding_status = 'processing'
+                      AND ($3::uuid IS NULL OR ingestion_lock_id=$3);
                     """,
                     uuid.UUID(document_id),
                     pct,
+                    worker_id,
                 )
                 await conn.close()
             except Exception:
@@ -392,14 +379,42 @@ class DocumentIngestionEngine:
             file_format=ext,
             progress_callback=db_progress_callback,
         )
+        if not result.chunks and not result.images:
+            raise ValueError("The document contains no searchable text, tables, or images.")
 
         # ----------------------------------------------------------------------
         # Optimized Batch Upsert to Database (Roadmap 5.7)
         # ----------------------------------------------------------------------
         if settings.DATABASE_URL:
+            conn = None
             try:
                 conn = await asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0)
                 async with conn.transaction():
+                    if worker_id is not None:
+                        owns_lease = await conn.fetchval(
+                            "SELECT 1 FROM public.documents WHERE id=$1 AND ingestion_lock_id=$2 AND status='active' AND deleted_at IS NULL FOR UPDATE;",
+                            uuid.UUID(document_id),
+                            worker_id,
+                        )
+                        if not owns_lease:
+                            raise RuntimeError("Ingestion lease was lost")
+                    # Publish replacement content atomically. A failed transaction keeps the old index.
+                    await conn.execute(
+                        "DELETE FROM public.document_chunks WHERE document_id=$1;",
+                        uuid.UUID(document_id),
+                    )
+                    await conn.execute(
+                        "DELETE FROM public.document_elements WHERE document_id=$1;",
+                        uuid.UUID(document_id),
+                    )
+                    await conn.execute(
+                        "DELETE FROM public.document_segments WHERE document_id=$1;",
+                        uuid.UUID(document_id),
+                    )
+                    await conn.execute(
+                        "DELETE FROM public.document_pages WHERE document_id=$1;",
+                        uuid.UUID(document_id),
+                    )
                     # 0. Delete existing document_images for this document on re-run [PHASE2 FIX]
                     await conn.execute(  # [PHASE2 FIX]
                         "DELETE FROM public.document_images WHERE document_id = $1;",  # [PHASE2 FIX]
@@ -521,6 +536,11 @@ class DocumentIngestionEngine:
                             """,  # [IMAGES PHASE]
                             _sanitize_for_db(images_args),  # [IMAGES PHASE]
                         )  # [IMAGES PHASE]
+                        await conn.execute(
+                            "INSERT INTO public.background_jobs(document_id,job_name,storage_key) VALUES($1,'describe_document_images_job',$2) ON CONFLICT(document_id,job_name) DO UPDATE SET id=CASE WHEN background_jobs.status IN ('completed','failed') THEN public.uuid_generate_v7() ELSE background_jobs.id END, status='pending', storage_key=EXCLUDED.storage_key, updated_at=now();",
+                            uuid.UUID(document_id),
+                            storage_key,
+                        )
 
                     # 6. Mark document status: completed (or processing at 50 if 0 chunks and images pending) [IMAGES PHASE]
                     if len(result.chunks) == 0 and len(result.images) > 0:  # [IMAGES PHASE]
@@ -565,6 +585,10 @@ class DocumentIngestionEngine:
                 )
                 raise e
 
+            finally:
+                if conn is not None:
+                    await conn.close()
+
         return True
 
     async def process_pending_images(  # [IMAGES PHASE]
@@ -595,9 +619,12 @@ class DocumentIngestionEngine:
         try:  # [IMAGES PHASE]
             # Check if converted_key or storage_key should be used  # [IMAGES PHASE]
             doc_row = await conn.fetchrow(  # [IMAGES PHASE]
-                "SELECT id, storage_key, converted_key, embedding_status FROM public.documents WHERE id = $1;",  # [IMAGES PHASE]
+                "SELECT id, storage_key, converted_key, embedding_status, ingestion_lock_id FROM public.documents WHERE id = $1 AND status='active' AND deleted_at IS NULL;",
                 uuid.UUID(document_id),  # [IMAGES PHASE]
             )  # [IMAGES PHASE]
+            if doc_row is None:
+                return "superseded"
+            generation = doc_row.get("ingestion_lock_id")
             if not storage_key and doc_row:  # [IMAGES PHASE]
                 storage_key = (
                     doc_row["converted_key"] or doc_row["storage_key"] or ""
@@ -831,6 +858,14 @@ class DocumentIngestionEngine:
 
                 await _ensure_db()  # [PHASE2 FIX]
                 async with conn.transaction():  # [IMAGES PHASE]
+                    current = await conn.fetchval(
+                        "SELECT 1 FROM public.documents d JOIN public.document_images i ON i.document_id=d.id WHERE d.id=$1 AND i.id=$2 AND i.status IN ('pending','failed') AND d.status='active' AND d.deleted_at IS NULL AND d.ingestion_lock_id IS NOT DISTINCT FROM $3::uuid AND d.embedding_status<>'pending' FOR UPDATE OF d,i;",
+                        uuid.UUID(document_id),
+                        row_id,
+                        generation,
+                    )
+                    if not current:
+                        return "superseded"
                     max_el_order = await conn.fetchval(  # [IMAGES PHASE]
                         "SELECT COALESCE(MAX(order_index), 0) FROM public.document_elements WHERE document_id = $1;",  # [IMAGES PHASE]
                         uuid.UUID(document_id),  # [IMAGES PHASE]
@@ -954,12 +989,14 @@ class DocumentIngestionEngine:
                 await conn.execute(  # [IMAGES PHASE]
                     """
                     UPDATE public.documents
-                    SET embedding_status = 'completed',
-                        embedding_progress = 100,
+                    SET embedding_status = CASE WHEN total_chunks > 0 THEN 'completed' ELSE 'failed' END,
+                        embedding_progress = CASE WHEN total_chunks > 0 THEN 100 ELSE 0 END,
                         updated_at = now()
-                    WHERE id = $1 AND embedding_status = 'processing';
+                    WHERE id = $1 AND embedding_status = 'processing'
+                      AND ingestion_lock_id IS NOT DISTINCT FROM $2::uuid;
                     """,  # [IMAGES PHASE]
                     uuid.UUID(document_id),  # [IMAGES PHASE]
+                    generation,
                 )  # [IMAGES PHASE]
 
             elapsed_phase2 = round(time.monotonic() - phase2_start_time, 2)  # [IMAGES PHASE]

@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 import { badgeSources } from "../preview/badge-source-data";
 test("all 666 badge variants preserve source frames and native glyph geometry", async ({
   page,
 }) => {
-  await page.goto("/?section=badges");
+  await openPreview(page, "/?section=badges");
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].map((image) => image.decode()));
@@ -56,7 +57,7 @@ test("all 666 badge variants preserve source frames and native glyph geometry", 
 test("decorated badge dismissal is caller-owned and disabled dismissal stays unavailable", async ({
   page,
 }) => {
-  await page.goto("/?section=badges");
+  await openPreview(page, "/?section=badges");
   const live = page.getByTestId("live-decorated-badges");
   await live.getByRole("button", { name: "Remove pharmacy", exact: true }).focus();
   await page.keyboard.press("Enter");

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { expect, test } from "@playwright/test";
+import { openPreview } from "./open-preview";
 type Layer = [string, number, number, number, number];
 type Source = [string, string, number, number, Layer[]];
 const families = JSON.parse(
@@ -12,7 +13,7 @@ const layers = JSON.parse(
 test("live centered connectors update original stroke artwork and support three steps", async ({
   page,
 }) => {
-  await page.goto("/?section=steps");
+  await openPreview(page, "/?section=steps");
   const flow = page.getByRole("navigation", { name: "Centered live progress", exact: true });
   const desktop = flow.locator('[data-layout="desktop"]');
   const strokes = desktop.locator(".p-steps-live-line img");
@@ -77,7 +78,7 @@ test("live centered connectors update original stroke artwork and support three 
 test("all thirty-eight progress compositions match original layer and artwork geometry", async ({
   page,
 }) => {
-  await page.goto("/?section=steps");
+  await openPreview(page, "/?section=steps");
   await page.evaluate(() => document.fonts.ready);
   await expect(page.locator(".step-composition-fixture")).toHaveCount(38);
   await page.evaluate(
@@ -191,7 +192,7 @@ test("all thirty-eight progress compositions match original layer and artwork ge
 test("progress step actions preserve controlled and uncontrolled selection on mobile", async ({
   page,
 }) => {
-  await page.goto("/?section=steps");
+  await openPreview(page, "/?section=steps");
   const demo = page.getByRole("group", { name: "Interactive progress steps" });
   const flow = demo.getByRole("navigation", { name: "Setup flow", exact: true });
   const first = flow.getByRole("button", { name: "Your details", exact: true });
