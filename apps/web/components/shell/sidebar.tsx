@@ -82,15 +82,7 @@ export function SidebarLinks({
           <span>New chat</span>
         </Link>
       </div>
-      {!!pinned.length && (
-        <section className="shell-sidebar-group shell-pinned-chats" aria-labelledby={pinnedTitle}>
-          <div className="shell-recent-heading">
-            <h2 id={pinnedTitle}>Pinned</h2>
-          </div>
-          {pinned.map(chatRow)}
-        </section>
-      )}
-      <section className="shell-sidebar-group" aria-labelledby={recentTitle}>
+      <section className="shell-sidebar-group shell-chat-history" aria-labelledby={recentTitle}>
         <div className="shell-recent-heading">
           <h2 id={recentTitle}>
             Recent chats {examples && <span className="dashboard-sample-badge">Sample</span>}
@@ -106,39 +98,50 @@ export function SidebarLinks({
             <Search size={16} aria-hidden="true" />
           </button>
         </div>
-        {loading ? (
-          <p className="shell-sidebar-hint">Loading chats…</p>
-        ) : error ? (
-          <>
-            <p className="shell-sidebar-hint">Chat history is unavailable.</p>
-            <button onClick={reload}>Try again</button>
-          </>
-        ) : examples ? (
-          exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title, index) => (
-            <div className="shell-chat-row" key={title}>
-              <button className="shell-sample-chat" onClick={() => setSample(title)}>
-                <FileText size={17} aria-hidden="true" />
-                <span>{title}</span>
+        <div className="shell-chat-list" role="region" aria-label="Chat history" tabIndex={0}>
+          {!!pinned.length && (
+            <section className="shell-pinned-chats" aria-labelledby={pinnedTitle}>
+              <h2 id={pinnedTitle}>Pinned</h2>
+              {pinned.map(chatRow)}
+            </section>
+          )}
+          {loading ? (
+            <p className="shell-sidebar-hint">Loading chats…</p>
+          ) : error ? (
+            <>
+              <p className="shell-sidebar-hint">Chat history is unavailable.</p>
+              <button className="shell-history-more" onClick={reload}>
+                Try again
               </button>
-              <ChatSessionMenu
-                chat={{ id: `sample-${index}`, title, is_pinned: false, archived_at: null }}
-                disabled
-              />
-            </div>
-          ))
-        ) : (
-          recent.slice(0, expanded ? 30 : 6).map(chatRow)
-        )}
-        {!loading && !error && (examples ? exampleChats.length : recent.length) > 6 && (
-          <button
-            onClick={() => {
-              setExpanded((value) => !value);
-            }}
-          >
-            <MoreHorizontal size={18} aria-hidden="true" />
-            <span>{expanded ? "Less" : "More"}</span>
-          </button>
-        )}
+            </>
+          ) : examples ? (
+            exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title, index) => (
+              <div className="shell-chat-row" key={title}>
+                <button className="shell-sample-chat" onClick={() => setSample(title)}>
+                  <FileText size={17} aria-hidden="true" />
+                  <span>{title}</span>
+                </button>
+                <ChatSessionMenu
+                  chat={{ id: `sample-${index}`, title, is_pinned: false, archived_at: null }}
+                  disabled
+                />
+              </div>
+            ))
+          ) : (
+            recent.slice(0, expanded ? 30 : 6).map(chatRow)
+          )}
+          {!loading && !error && (examples ? exampleChats.length : recent.length) > 6 && (
+            <button
+              className="shell-history-more"
+              onClick={() => {
+                setExpanded((value) => !value);
+              }}
+            >
+              <MoreHorizontal size={18} aria-hidden="true" />
+              <span>{expanded ? "Less" : "More"}</span>
+            </button>
+          )}
+        </div>
       </section>
       <SamplePreview title={sample} onClose={() => setSample(null)}>
         <p className="sample-chat-bubble">

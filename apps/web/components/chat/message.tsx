@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ActionBarPrimitive,
-  ActionBarMorePrimitive,
   BranchPickerPrimitive,
   MessagePrimitive,
   getExternalStoreMessages,
@@ -31,8 +30,6 @@ import {
   RotateCcw,
   ThumbsUp,
   ThumbsDown,
-  MoreHorizontal,
-  Download,
 } from "lucide-react";
 import { ArtifactRenderer } from "@/components/artifacts/ArtifactRenderer";
 import { externalSourceUrl } from "@/lib/sse-parser";
@@ -216,28 +213,6 @@ function CopyAction(): React.ReactElement {
           </Tooltip>
         </>
       )}
-      <ActionBarMorePrimitive.Root>
-        <Tooltip content="More message actions">
-          <ActionBarMorePrimitive.Trigger aria-label="More message actions" disabled={busy}>
-            <MoreHorizontal size={15} aria-hidden="true" />
-          </ActionBarMorePrimitive.Trigger>
-        </Tooltip>
-        <ActionBarMorePrimitive.Content
-          className="p-dropdown-menu study-chat-session-menu"
-          side="top"
-          align="start"
-        >
-          <ActionBarMorePrimitive.Item asChild>
-            <ActionBarPrimitive.ExportMarkdown
-              className="p-dropdown-item"
-              filename={`pansgpt-message-${message?.id ?? "reply"}.md`}
-            >
-              <Download size={16} aria-hidden="true" />
-              Export Markdown
-            </ActionBarPrimitive.ExportMarkdown>
-          </ActionBarMorePrimitive.Item>
-        </ActionBarMorePrimitive.Content>
-      </ActionBarMorePrimitive.Root>
       <BranchPickerPrimitive.Root className="study-chat-branches" hideWhenSingleBranch>
         <BranchPickerPrimitive.Previous aria-label="Previous branch" disabled={busy}>
           <ChevronLeft size={15} />

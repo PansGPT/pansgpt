@@ -256,7 +256,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
       name: "More message actions",
       exact: true,
     })
-  ).toBeEnabled();
+  ).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Copy code", exact: true })).toBeEnabled();
   await expect(
     page

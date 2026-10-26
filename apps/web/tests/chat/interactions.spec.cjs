@@ -2448,9 +2448,7 @@ test("native paste and drop attach privately, reject unsupported files and uploa
   ).toBe(2);
 });
 
-test("native message overflow exports only selected public text with keyboard access", async ({
-  page,
-}) => {
+test("message actions omit More and still copy only selected public text", async ({ page }) => {
   await setupChat(page);
   await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
   await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
@@ -2499,23 +2497,30 @@ test("native message overflow exports only selected public text with keyboard ac
   });
   await page.reload({ waitUntil: "load", timeout: 60000 });
   const response = page.locator('.study-chat-message[data-role="assistant"]').last();
-  const more = response.getByRole("button", { name: "More message actions", exact: true });
-  await more.focus();
-  await page.keyboard.press("Enter");
-  const exporting = page.waitForEvent("download");
-  await page.getByRole("menuitem", { name: "Export Markdown", exact: true }).click();
-  const download = await exporting;
-  expect(download.suggestedFilename()).toBe(
-    "pansgpt-message-00000000-0000-4000-8000-000000000012.md"
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: async (text) => {
+          window.__messageCopy = text;
+        },
+      },
+    });
+  });
+  await expect(page.getByRole("button", { name: "More message actions", exact: true })).toHaveCount(
+    0
   );
-  expect(fs.readFileSync(await download.path(), "utf8")).toBe("Original synthetic answer");
+  await response.getByRole("button", { name: "Copy message", exact: true }).click();
+  await expect
+    .poll(() => page.evaluate(() => window.__messageCopy))
+    .toBe("Original synthetic answer");
   await expect(response).not.toContainText("PRIVATE RAW THINKING");
   await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
   await page.setViewportSize({ width: 390, height: 844 });
-  await more.click();
-  await expect(page.getByRole("menuitem", { name: "Export Markdown", exact: true })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(more).toBeFocused();
+  await expect(page.getByRole("button", { name: "More message actions", exact: true })).toHaveCount(
+    0
+  );
+  await expect(response.getByRole("button", { name: "Copy message", exact: true })).toBeEnabled();
 });
 
 test("long chat uses one conversation scrollbar without scrolling its page", async ({ page }) => {
@@ -2606,5 +2611,85 @@ test("long chat uses one conversation scrollbar without scrolling its page", asy
     await expect(page.getByLabel("Study question", { exact: true })).toBeInViewport();
     if (height === 500)
       await page.screenshot({ path: test.info().outputPath(`single-chat-scroll-${width}.png`) });
+  }
+});
+
+test("only sidebar chat history scrolls while navigation, search and account remain fixed", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(
+    ({ owner, session }) => {
+      const chats = Array.from({ length: 30 }, (_, index) => ({
+        id: index === 0 ? session : crypto.randomUUID(),
+        user_id: owner,
+        title: `Fixed sidebar study ${index}`,
+        title_source: "manual",
+        is_pinned: index < 2,
+        archived_at: null,
+        created_at: "2026-10-26T00:00:00Z",
+        updated_at: "2026-10-26T00:00:00Z",
+        last_message_at: "2026-10-26T00:00:00Z",
+      }));
+      sessionStorage.setItem("session-metadata-fixture", JSON.stringify(chats));
+    },
+    { owner, session }
+  );
+  for (const [width, height] of [
+    [1440, 975],
+    [1440, 500],
+    [390, 844],
+    [390, 500],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    if (width < 861)
+      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+    const sidebar =
+      width < 861
+        ? page.getByRole("dialog", { name: "Workspace navigation", exact: true })
+        : page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
+    const list = sidebar.getByRole("region", { name: "Chat history", exact: true });
+    await expect(list).toContainText("Fixed sidebar study 0");
+    await list.getByRole("button", { name: "More", exact: true }).click();
+    const fixed = [
+      sidebar.getByRole("link", { name: "PansGPT home", exact: true }),
+      sidebar.locator(".shell-links"),
+      sidebar.getByRole("link", { name: "New chat", exact: true }),
+      sidebar.locator(".shell-recent-heading"),
+      sidebar.getByRole("button", { name: "Account menu", exact: true }),
+    ];
+    for (const link of await sidebar.locator(".shell-links").getByRole("link").all()) {
+      await expect(link).toBeInViewport();
+    }
+    const before = await Promise.all(fixed.map((locator) => locator.boundingBox()));
+    expect(
+      await list.evaluate((el) => el.clientHeight),
+      `${width}x${height} chat list height`
+    ).toBeGreaterThan(36);
+    await expect(list).toHaveCSS("overflow-y", "auto");
+    await expect(list).toHaveCSS("scrollbar-width", "thin");
+    await expect(sidebar.locator(".p-app-nav-panel-top")).toHaveCSS("overflow-y", "hidden");
+    if (width < 861)
+      await expect(sidebar.locator(".p-slideout-body")).toHaveCSS("overflow-y", "hidden");
+    await list.evaluate((el) => {
+      el.scrollTop = 0;
+    });
+    await list.hover();
+    await page.mouse.wheel(0, 2000);
+    await expect.poll(() => list.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    const after = await Promise.all(fixed.map((locator) => locator.boundingBox()));
+    for (let index = 0; index < fixed.length; index++) {
+      expect(Math.abs(before[index].y - after[index].y)).toBeLessThan(1);
+      await expect(fixed[index]).toBeInViewport();
+    }
+    await list.focus();
+    await page.keyboard.press("End");
+    await expect(
+      list.getByRole("link", { name: "Fixed sidebar study 29", exact: true })
+    ).toBeInViewport();
+    await page.screenshot({ path: test.info().outputPath(`fixed-sidebar-${width}-${height}.png`) });
   }
 });

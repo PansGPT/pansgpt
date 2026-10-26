@@ -1,5 +1,7 @@
 # Assistant-ui adoption and native streaming
 
+Later user direction removed the optional per-message overflow/export menu and fixed the sidebar around a scrolling chat-history region. See [current scrollbar/sidebar scope](chat-scrollbars-and-sidebar-2026-10-26.md). The export verification below records the earlier implementation, not the current requested message toolbar.
+
 User direction: remove the duplicate Steps disclosure, use assistant-ui's fluid text streaming, and prefer its existing chat components over rebuilding their behavior. Keep the approved welcome, composer geometry, palette, image layout and mobile sheet navigation.
 
 ## Contract and acceptance
