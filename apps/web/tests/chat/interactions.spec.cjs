@@ -2517,3 +2517,94 @@ test("native message overflow exports only selected public text with keyboard ac
   await page.keyboard.press("Escape");
   await expect(more).toBeFocused();
 });
+
+test("long chat uses one conversation scrollbar without scrolling its page", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    const tree = [
+      {
+        id: "00000000-0000-4000-8000-000000000011",
+        role: "user",
+        content: "Explain this synthetic long study topic",
+        parent_message_id: null,
+        is_active_branch: true,
+      },
+      {
+        id: "00000000-0000-4000-8000-000000000012",
+        role: "assistant",
+        content:
+          "A synthetic paragraph for verifying long-response scrolling and composer access.\n\n".repeat(
+            120
+          ),
+        parent_message_id: "00000000-0000-4000-8000-000000000011",
+        is_active_branch: true,
+      },
+    ];
+    sessionStorage.setItem("interaction-tree", JSON.stringify(tree));
+  });
+  for (const [width, height] of [
+    [1440, 975],
+    [1440, 500],
+    [390, 844],
+    [390, 500],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    await expect(page.locator(".study-chat-markdown")).toContainText("A synthetic paragraph");
+    const layout = await page.evaluate(() => {
+      const selectors = [
+        "html",
+        "body",
+        ".app-shell",
+        ".shell-workspace",
+        ".shell-main",
+        ".shell-page",
+        ".shell-route-content",
+        ".study-presentation-workspace",
+        ".study-presentation-conversation",
+        ".study-chat",
+        ".study-chat-conversation",
+        ".study-chat-thread-content",
+      ];
+      return selectors.map((selector) => {
+        const el = document.querySelector(selector);
+        if (!el) return { selector, absent: true };
+        const style = getComputedStyle(el);
+        return {
+          selector,
+          height: el.clientHeight,
+          scrollHeight: el.scrollHeight,
+          overflow: style.overflowY,
+          top: el.getBoundingClientRect().top,
+          bottom: el.getBoundingClientRect().bottom,
+        };
+      });
+    });
+    expect(
+      await page.evaluate(() => document.scrollingElement.scrollHeight <= innerHeight + 1),
+      JSON.stringify(layout)
+    ).toBe(true);
+    await expect(page.getByLabel("Study question", { exact: true })).toBeInViewport();
+    const viewport = page.locator(".study-chat-conversation");
+    await expect(viewport).toHaveCSS("overflow-y", "auto");
+    expect(await viewport.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+    await viewport.evaluate((el) => {
+      el.scrollTop = 0;
+    });
+    await expect(
+      page.getByText("Explain this synthetic long study topic", { exact: true })
+    ).toBeInViewport();
+    await viewport.hover();
+    await page.mouse.wheel(0, 1200);
+    await expect.poll(() => viewport.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await viewport.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    await expect(page.getByLabel("Study question", { exact: true })).toBeInViewport();
+    if (height === 500)
+      await page.screenshot({ path: test.info().outputPath(`single-chat-scroll-${width}.png`) });
+  }
+});

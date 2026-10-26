@@ -232,6 +232,7 @@
   cursor: pointer;
 }
 .study-chat-conversation {
+  position: relative;
   min-height: 0;
   flex: 1;
   overflow-y: auto;
