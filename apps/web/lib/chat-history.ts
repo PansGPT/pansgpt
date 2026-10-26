@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { publicProgressLines } from "./chat-message";
 import type { ChatMessageView } from "@pansgpt/types";
+import { parsePublicProgressUpdates } from "./public-progress";
 
 export const chatAttachmentSchema = z.object({
   id: z.string().uuid(),
@@ -30,6 +31,7 @@ const historySchema = z.object({
       parent_message_id: z.string().uuid().nullable().optional(),
       is_active_branch: z.boolean().optional(),
       thinking_text: z.string().nullable().optional(),
+      public_progress: z.unknown().optional(),
       citations: z.array(citationSchema).nullable().optional(),
       feedback: z.enum(["positive", "negative"]).nullable().optional(),
       attachment_metadata: z
@@ -93,6 +95,7 @@ export function parseChatHistory(
         status: "complete",
         isSaved: true,
         thinking: publicProgressLines(item.thinking_text ?? undefined).join("\n") || undefined,
+        progress: parsePublicProgressUpdates(item.public_progress),
         citations: item.citations ?? undefined,
         tools: item.extra_parts?.tools,
         artifacts: item.extra_parts?.artifacts,

@@ -26,6 +26,7 @@ def decision(**changes: object) -> str:
         "answer": "Hello! What would you like to work on?",
         "retrieval_query": None,
         "presentation": None,
+        "public_progress": [],
     }
     result.update(changes)
     if "requires_rag" in result:

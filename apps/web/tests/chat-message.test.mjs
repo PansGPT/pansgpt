@@ -16,6 +16,36 @@ const pending = () => ({
   status: "running",
 });
 
+test("typed model progress stays separate from raw thoughts and survives terminal events", () => {
+  const update = {
+    code: "searching_sources",
+    label: "Looking up the match report",
+    source: "model",
+  };
+  const parser = new SSEEventStreamReader();
+  const events = parser.push(
+    `event: public_progress\ndata: ${JSON.stringify(update)}\n\nevent: public_progress\ndata: ${JSON.stringify(update)}\n\nevent: thinking_chunk\ndata: {"token":"PRIVATE REASONING"}\n\n`
+  );
+  const result = events.reduce(applyChatEvent, pending());
+  assert.deepEqual(result.progress, [update]);
+  assert.equal(result.thinking, undefined);
+  assert.deepEqual(applyChatEvent(result, { event: "error", data: { error: "Retry" } }).progress, [
+    update,
+  ]);
+  for (const bad of [
+    { ...update, source: "private" },
+    { ...update, code: "fake" },
+    { ...update, label: "<think>PRIVATE</think>" },
+    { ...update, label: "https://example.test/private" },
+    { ...update, label: "a".repeat(121) },
+  ]) {
+    assert.deepEqual(
+      new SSEEventStreamReader().push(`event: public_progress\ndata: ${JSON.stringify(bad)}\n\n`),
+      []
+    );
+  }
+});
+
 test("a provider error followed by done keeps partial content and the failure status", () => {
   const parser = new SSEEventStreamReader();
   const events = parser.push(

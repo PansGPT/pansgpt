@@ -9,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from app.core.schemas import StrictRequest
 from app.models.presentation import PresentationPlan
+from app.models.progress import PublicProgressLabel, PublicProgressUpdate
 from app.models.web_search import EvidenceSource, SearchScope
 
 
@@ -65,6 +66,7 @@ class QueryClassification(BaseModel):
     routing_prompt_tokens: int = Field(default=0, ge=0)
     routing_completion_tokens: int = Field(default=0, ge=0)
     routing_source: Literal["model", "server_context", "fallback"] = "fallback"
+    public_progress: list[PublicProgressLabel] = Field(default_factory=list, max_length=8)
 
 
 class SemanticDecision(BaseModel):
@@ -83,6 +85,28 @@ class SemanticDecision(BaseModel):
     answer: str = Field(max_length=4000)
     retrieval_query: str | None = Field(max_length=1000)
     presentation: PresentationPlan | None
+    public_progress: list[PublicProgressLabel] = Field(max_length=8)
+
+    @field_validator("public_progress", mode="before")
+    @classmethod
+    def optional_public_copy(cls, value: object) -> list[PublicProgressLabel]:
+        # Cosmetic metadata must not break otherwise valid route-or-answer decisions.
+        if not isinstance(value, list):
+            return []
+        labels: list[PublicProgressLabel] = []
+        for item in value[:8]:
+            try:
+                labels.append(PublicProgressLabel.model_validate(item))
+            except ValueError:
+                continue
+        return labels
+
+    @model_validator(mode="before")
+    @classmethod
+    def legacy_progress_default(cls, value: object) -> object:
+        if isinstance(value, dict) and "public_progress" not in value:
+            return {**value, "public_progress": []}
+        return value
 
 
 class BoundingBoxCoordinates(BaseModel):
@@ -226,6 +250,7 @@ class ChatMessageResponse(BaseModel):
     is_active_branch: bool = True
     citations: list[CitationItem] | None = None
     thinking_text: str | None = None
+    public_progress: list[PublicProgressUpdate] = Field(default_factory=list)
     extra_parts: dict[str, Any] | None = None
     attachment_metadata: dict[str, Any] | None = None
     feedback: Literal["positive", "negative"] | None = None
@@ -270,6 +295,7 @@ class ToolCallPayload(BaseModel):
     call_id: str
     tool_name: str
     arguments: dict[str, Any]
+    public_status: str | None = None
 
 
 class ToolResultPayload(BaseModel):

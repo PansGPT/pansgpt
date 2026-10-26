@@ -24,7 +24,6 @@ import {
   AlertCircle,
   Check,
   BookOpen,
-  Brain,
   ChevronLeft,
   ChevronRight,
   Pencil,
@@ -38,6 +37,8 @@ import { documentSources, safeChatLink } from "@/lib/chat-message";
 import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
 import { ChatReasoning } from "./reasoning";
+import { ThinkingStatus, StreamRevealProvider, StreamingWord } from "./motion";
+import { rehypeStreamWords } from "@/lib/rehype-stream-words";
 import { ChatAttachment } from "./attachment";
 
 function useOriginalMessage(): ChatMessageView | undefined {
@@ -85,9 +86,17 @@ function CodeHeader({ language, code }: CodeHeaderProps): React.ReactElement {
 }
 
 const remarkPlugins = [remarkGfm, remarkMath];
-const rehypePlugins = [rehypeKatex];
+const rehypePlugins = [rehypeKatex, rehypeStreamWords];
 const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> = {
   CodeHeader,
+  span: ({ node, children, ...props }) => {
+    const offset = node?.properties["data-stream-offset"];
+    return typeof offset === "number" ? (
+      <StreamingWord offset={offset}>{children}</StreamingWord>
+    ) : (
+      <span {...props}>{children}</span>
+    );
+  },
   a: ({ href, children }) => {
     const safe = safeChatLink(href);
     return safe ? (
@@ -106,14 +115,17 @@ const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> 
 };
 
 function ChatMarkdown(): React.ReactElement {
+  const streaming = useAuiState((state) => state.message.status?.type === "running");
   return (
-    <MarkdownTextPrimitive
-      className="study-chat-markdown"
-      remarkPlugins={remarkPlugins}
-      rehypePlugins={rehypePlugins}
-      components={markdownComponents}
-      smooth={false}
-    />
+    <StreamRevealProvider active={streaming}>
+      <MarkdownTextPrimitive
+        className="study-chat-markdown"
+        remarkPlugins={remarkPlugins}
+        rehypePlugins={rehypePlugins}
+        components={markdownComponents}
+        smooth={false}
+      />
+    </StreamRevealProvider>
   );
 }
 
@@ -264,6 +276,7 @@ export function AssistantMessage(): React.ReactElement {
   const empty =
     !message?.content &&
     !message?.thinking &&
+    !message?.progress?.length &&
     !message?.artifacts?.length &&
     !message?.tools?.length;
   return (
@@ -286,10 +299,7 @@ export function AssistantMessage(): React.ReactElement {
           {empty && message?.status !== "error" && (
             <p className="study-chat-response-state">
               {message?.status === "running" ? (
-                <>
-                  <Brain size={16} aria-hidden="true" />
-                  <span className="aui-thinking-shimmer">Thinking…</span>
-                </>
+                <ThinkingStatus />
               ) : message?.status === "cancelled" ? (
                 "Response stopped."
               ) : (

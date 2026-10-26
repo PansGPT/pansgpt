@@ -52,6 +52,72 @@ def stream_engine(monkeypatch: pytest.MonkeyPatch) -> MultiTierLlmEngine:  # [CH
     return engine  # [CHAT FIX 2]
 
 
+@pytest.mark.parametrize("allowed", [True, False])
+async def test_public_tool_status_is_request_local_and_never_enters_tool_arguments(
+    stream_engine: MultiTierLlmEngine, monkeypatch: pytest.MonkeyPatch, allowed: bool
+) -> None:
+    from app.engines import skill_registry
+    from app.engines.llm import tool_engine
+
+    definition = {
+        "type": "function",
+        "function": {
+            "name": "read_document",
+            "description": "Read synthetic evidence",
+            "parameters": {
+                "type": "object",
+                "properties": {"document_id": {"type": "string"}},
+                "required": ["document_id"],
+            },
+        },
+    }
+    monkeypatch.setattr(skill_registry, "available_tools", AsyncMock(return_value=[definition]))
+
+    async def chunks() -> AsyncIterator[str]:
+        yield "Synthetic explanation."
+
+    call = AsyncMock(
+        side_effect=[
+            (
+                [
+                    {
+                        "id": "read-1",
+                        "name": "read_document" if allowed else "unavailable_tool",
+                        "arguments": {
+                            "document_id": "owned-fixture",
+                            "_public_status": "Reading the enzyme sketch",
+                        },
+                    }
+                ],
+                None,
+            ),
+            ([], chunks()),
+        ]
+    )
+    dispatch = AsyncMock(return_value={"status": "success", "content": "Synthetic evidence"})
+    monkeypatch.setattr(stream_engine, "_call_gemma_turn", call)
+    monkeypatch.setattr(tool_engine, "dispatch_tool", dispatch)
+    events = [
+        event
+        async for event in stream_engine.stream_agentic_chat(
+            "Tutor", "Explain this sketch", enable_tools=True
+        )
+    ]
+    if allowed:
+        start = next(payload for kind, payload, _ in events if kind == "tool_start")
+        assert start.public_status == "Reading the enzyme sketch"
+        assert start.arguments == {"document_id": "owned-fixture"}
+        assert dispatch.call_args.args[1] == {"document_id": "owned-fixture"}
+    else:
+        assert not any(kind == "tool_start" for kind, _, _ in events)
+        dispatch.assert_not_awaited()
+    assert "_public_status" not in definition["function"]["parameters"]["properties"]
+    assert (
+        "_public_status"
+        in call.await_args_list[0].args[2][0]["function"]["parameters"]["properties"]
+    )
+
+
 async def test_chunks_arrive_before_the_model_finishes(  # [CHAT FIX 2]
     stream_engine: MultiTierLlmEngine,  # [CHAT FIX 2]
     monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]

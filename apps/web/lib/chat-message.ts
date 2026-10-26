@@ -4,6 +4,7 @@ import type {
   ChatProgressCode,
   CitationItem,
 } from "@pansgpt/types";
+import { parsePublicProgressUpdates } from "./public-progress.ts";
 
 export const CHAT_PROGRESS_LABELS: Record<ChatProgressCode, string> = {
   reviewing_request: "Reviewing your request.",
@@ -47,6 +48,11 @@ export function documentSources(citations: CitationItem[]): CitationItem[] {
 /** Apply only parser-validated events. A terminal error survives a later done frame. */
 export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent): ChatMessageView {
   switch (event.event) {
+    case "public_progress":
+      return {
+        ...message,
+        progress: parsePublicProgressUpdates([...(message.progress ?? []), event.data]),
+      };
     case "text_chunk":
       return {
         ...message,

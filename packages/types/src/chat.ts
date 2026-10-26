@@ -2,6 +2,7 @@ export type SSEEventType =
   | "init"
   | "citations"
   | "thinking_chunk"
+  | "public_progress"
   | "tool_start"
   | "tool_end"
   | "artifact_ready"
@@ -22,6 +23,13 @@ export type ChatProgressCode =
   | "creating_presentation"
   | "presentation_ready";
 // Presentation stages describe public workflow, never private provider reasoning.
+
+/** Model-authored public copy emitted only for an activity the backend actually starts. */
+export interface PublicProgressUpdate {
+  code: ChatProgressCode;
+  label: string;
+  source: "model";
+}
 
 export interface BoundingBoxCoordinates {
   page: number;
@@ -67,6 +75,7 @@ export interface SSEEventData {
   citations: CitationItem[];
   text_chunk: { token?: string; delta?: string };
   thinking_chunk: { code?: string; token?: string; delta?: string };
+  public_progress: PublicProgressUpdate;
   tool_start: Omit<ToolExecutionState, "status">;
   tool_end: Partial<ToolExecutionState> & { call_id: string };
   artifact_ready: ArtifactItem;
@@ -119,6 +128,7 @@ export interface ChatMessageView {
   isSaved?: boolean;
   /** Public allowlisted workflow labels only; never provider scratchpad text. */
   thinking?: string;
+  progress?: PublicProgressUpdate[];
   citations?: CitationItem[];
   tools?: ToolExecutionState[];
   artifacts?: ArtifactItem[];

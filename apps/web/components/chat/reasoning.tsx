@@ -12,6 +12,7 @@ import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from "@pansgp
 import type { ChatMessageView } from "@pansgpt/types";
 import { publicProgressLines } from "@/lib/chat-message";
 import { Brain, ChevronDown } from "lucide-react";
+import { ThinkingStatus } from "./motion";
 
 export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
   const streaming = useAuiState((state) => state.message.status?.type === "running");
@@ -32,6 +33,9 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
   };
   const tools = message?.tools ?? [];
   const steps = publicProgressLines(text);
+  const progress = message?.progress ?? [];
+  const waiting =
+    streaming && (!message?.content || tools.some((tool) => tool.status === "running"));
   const [manualOpen, setManualOpen] = useState<boolean | null>(null);
   const open = manualOpen ?? streaming;
   const root = useRef<HTMLDivElement>(null);
@@ -50,7 +54,7 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
     });
     return () => cancelAnimationFrame(frame);
   }, [text, open, streaming]);
-  if (!steps.length && !tools.length) return null;
+  if (!steps.length && !tools.length && !progress.length) return null;
   return (
     <CollapsibleRoot
       ref={root}
@@ -61,11 +65,18 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
         setManualOpen(next);
       }}
     >
-      <CollapsibleTrigger className="aui-reasoning-trigger">
-        <Brain size={16} aria-hidden="true" />
-        <span className={streaming ? "aui-thinking-shimmer" : undefined}>
-          {streaming ? "Thinking…" : "Steps"}
-        </span>
+      <CollapsibleTrigger
+        className="aui-reasoning-trigger"
+        aria-label={waiting ? (progress.at(-1)?.label ?? "Thinking…") : "Steps"}
+      >
+        {waiting ? (
+          <ThinkingStatus label={progress.at(-1)?.label} />
+        ) : (
+          <>
+            <Brain size={16} aria-hidden="true" />
+            <span>Steps</span>
+          </>
+        )}
         <ChevronDown size={14} aria-hidden="true" />
       </CollapsibleTrigger>
       <CollapsibleContent className="aui-reasoning-content" aria-busy={streaming}>
@@ -79,9 +90,11 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
           }}
         >
           <ol>
-            {steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
+            {(progress.length ? progress.map((update) => update.label) : steps).map(
+              (step, index) => (
+                <li key={`${index}:${step}`}>{step}</li>
+              )
+            )}
             {tools.map((tool) => (
               <li key={tool.call_id}>
                 {labels[tool.tool_name] || "Study tool"}

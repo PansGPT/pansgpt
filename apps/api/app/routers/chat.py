@@ -58,6 +58,7 @@ from app.models.chat import (
     VoiceTranscribeResponse,
 )
 from app.models.presentation import PresentationSource
+from app.models.progress import saved_public_progress
 from app.models.web_search import WebSearchResponse
 
 logger = structlog.get_logger(__name__)
@@ -299,6 +300,17 @@ async def get_chat_session_details(
                             c_data = json.loads(raw_cits) if isinstance(raw_cits, str) else raw_cits
                             cits_list = [CitationItem(**c) for c in c_data]
 
+                        extra_parts = (
+                            json.loads(m["tool_calls"])
+                            if isinstance(m["tool_calls"], str)
+                            else m["tool_calls"]
+                        )
+                        public_updates = saved_public_progress(extra_parts)
+                        if isinstance(extra_parts, dict) and "public_progress" in extra_parts:
+                            extra_parts = {
+                                **extra_parts,
+                                "public_progress": [item.model_dump() for item in public_updates],
+                            }
                         messages.append(
                             ChatMessageResponse(
                                 id=str(m["id"]),
@@ -312,11 +324,10 @@ async def get_chat_session_details(
                                 is_active_branch=m["is_active_branch"],
                                 citations=cits_list,
                                 thinking_text=public_progress_text(m["thinking_text"]) or None,
+                                public_progress=public_updates,
                                 feedback=m.get("feedback"),
                                 created_at=m["created_at"],
-                                extra_parts=json.loads(m["tool_calls"])
-                                if isinstance(m["tool_calls"], str)
-                                else m["tool_calls"],
+                                extra_parts=extra_parts,
                                 attachment_metadata=json.loads(m["image_metadata"])
                                 if isinstance(m["image_metadata"], str)
                                 else m["image_metadata"],
@@ -425,7 +436,14 @@ async def stream_chat_session(
                             text,
                             json.dumps([c.model_dump() for c in citations]) if citations else None,
                             progress.text or public_progress_text(thinking) or None,
-                            json.dumps(persisted_parts),
+                            json.dumps(
+                                {
+                                    **persisted_parts,
+                                    "public_progress": [
+                                        item.model_dump() for item in progress.updates
+                                    ],
+                                }
+                            ),
                         )
                         await select_path(conn, session_id, assistant_message_id)
                 except Exception as exc:
@@ -545,6 +563,7 @@ async def stream_chat_session(
             yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
             return
 
+        progress.configure(classification.public_progress)
         logger.info(
             "query_classified",
             intent=classification.intent.value,
@@ -586,14 +605,14 @@ async def stream_chat_session(
         web_context: str | None = None
         web_citations: list[CitationItem] = []
         if classification.requires_web:
-            if update := progress.emit("searching_sources"):
-                yield update
             if not payload.enable_tools:
                 web_result = WebSearchResponse(
                     status="tools_disabled",
                     message="Web search is disabled for this message. Enable tools to verify current information.",
                 )
             else:
+                if update := progress.emit("searching_sources"):
+                    yield update
                 web_result = WebSearchResponse.model_validate(
                     await web_search_engine.search(
                         query=classification.retrieval_query or "",
@@ -796,8 +815,12 @@ async def stream_chat_session(
                     # Provider reasoning is untrusted private scratchpad, not a public progress update.
                     continue
                 elif event_type == "tool_start":
-                    dumped = data.model_dump() if hasattr(data, "model_dump") else data
-                    if update := progress.for_tool(str(dumped.get("tool_name", ""))):
+                    dumped = data.model_dump() if hasattr(data, "model_dump") else dict(data)
+                    model_label = dumped.pop("public_status", None)
+                    if update := progress.for_tool(
+                        str(dumped.get("tool_name", "")),
+                        model_label if isinstance(model_label, str) else None,
+                    ):
                         yield update
                     persisted_parts["tools"].append({**dumped, "status": "running"})
                     yield f"event: tool_start\ndata: {json.dumps(dumped)}\n\n"

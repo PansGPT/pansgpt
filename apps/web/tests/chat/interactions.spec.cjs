@@ -385,6 +385,7 @@ async function setupChat(page) {
             );
           }
           if (window.__holdReasoning) {
+            if (window.__motionMode) answer.content = "";
             const encoder = new TextEncoder();
             const stream = new ReadableStream({
               start(controller) {
@@ -415,14 +416,24 @@ async function setupChat(page) {
                   code: window.__progressCode || "checking_materials",
                   token: "PRIVATE RAW THINKING",
                 });
+                window.__emitPublicProgress = (label, code = "checking_materials") => {
+                  const update = { code, label, source: "model" };
+                  answer.public_progress = [...(answer.public_progress || []), update];
+                  emit("public_progress", update);
+                };
+                window.__streamProse = (token) => {
+                  answer.content += token;
+                  emit("text_chunk", { token });
+                };
                 window.__moreReasoning = () =>
                   emit("thinking_chunk", {
                     code: "checking_materials",
                     token: "PRIVATE REPEATED THINKING",
                   });
                 window.__finishReasoning = () => {
-                  emit("text_chunk", { token: answer.content });
+                  if (!window.__motionMode) emit("text_chunk", { token: answer.content });
                   emit("done", { full_text: answer.content });
+                  store();
                   close();
                 };
               },
@@ -2241,3 +2252,94 @@ test("Home plus selects local attachments instead of opening search", async ({ p
     animations: "disabled",
   });
 });
+
+for (const [width, reduced] of [
+  [1440, false],
+  [390, true],
+]) {
+  test(`model-written status and streamed prose preserve formatting at ${width}px${reduced ? " with reduced motion" : ""}`, async ({
+    page,
+  }) => {
+    test.setTimeout(120000);
+    await setupChat(page);
+    await page.setViewportSize({ width, height: 975 });
+    await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
+    await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      window.__holdReasoning = true;
+      window.__motionMode = true;
+    });
+    await page
+      .getByLabel("Study question", { exact: true })
+      .fill("Compare the synthetic study diagram");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const response = page.locator('.study-chat-message[data-role="assistant"]').last();
+    const trigger = response.locator(".aui-reasoning-trigger");
+    await expect(response.locator(".t-matrix i")).toHaveCount(16);
+    await expect(response.locator(".t-matrix i").first()).toHaveCSS(
+      "animation-name",
+      reduced ? "none" : "t-matrix-pulse"
+    );
+    await page.evaluate(() => window.__emitPublicProgress("Comparing the synthetic diagram"));
+    await expect(response.locator(".t-think-text:not(.is-exit)")).toHaveAttribute(
+      "data-text",
+      "Comparing the synthetic diagram"
+    );
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await page.evaluate(() =>
+      window.__emitPublicProgress("Explaining the enzyme sketch", "writing_response")
+    );
+    await expect(response.locator(".t-think-text:not(.is-exit)")).toHaveAttribute(
+      "data-text",
+      "Explaining the enzyme sketch"
+    );
+    await expect(response.locator(".t-think-text:not(.is-exit)")).toHaveCSS("opacity", "1");
+    await expect(response.locator(".t-think-text:not(.is-exit)")).toHaveCSS(
+      "filter",
+      reduced ? "none" : "blur(0px)"
+    );
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expect(response).not.toContainText("PRIVATE RAW THINKING");
+    await page.screenshot({ path: test.info().outputPath(`model-progress-${width}.png`) });
+    await page.evaluate(() =>
+      window.__streamProse(
+        "A **clear** explanation with a [reference](https://example.test/notes).\n\n"
+      )
+    );
+    await expect(response.locator(".t-matrix")).toHaveCount(0);
+    await expect(response.locator("strong")).toHaveText("clear");
+    await expect(response.getByRole("link", { name: "reference", exact: true })).toHaveAttribute(
+      "href",
+      "https://example.test/notes"
+    );
+    await expect.poll(() => response.locator(".t-stream-w").count()).toBeGreaterThan(3);
+    await page.evaluate(() =>
+      window.__streamProse(
+        "```js\nconst sample = 1;\n```\n\n$x^2$\n\n| Topic | State |\n| --- | --- |\n| Sample | Ready |\n"
+      )
+    );
+    await expect(response.locator("pre code")).toContainText("const sample = 1;");
+    await expect(response.locator("pre .t-stream-w, .katex .t-stream-w")).toHaveCount(0);
+    await expect(response.locator(".katex")).toHaveCount(1);
+    await expect(response.getByRole("cell", { name: "Ready", exact: true })).toBeVisible();
+    await page.evaluate(() => window.__finishReasoning());
+    await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
+    await expect(response.locator(".t-stream-w:not(.is-in)")).toHaveCount(0);
+    if (reduced)
+      await expect(response.locator(".t-stream-w").first()).toHaveCSS("transition-duration", "0s");
+    await page.screenshot({ path: test.info().outputPath(`streamed-markdown-${width}.png`) });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    const saved = page.locator('.study-chat-message[data-role="assistant"]').last();
+    await expect(saved.locator("strong")).toHaveText("clear");
+    await expect(saved.locator(".t-matrix, .t-stream-w:not(.is-in)")).toHaveCount(0);
+    await saved.getByRole("button", { name: "Steps", exact: true }).click();
+    await expect(saved.locator(".aui-reasoning-content")).toContainText(
+      "Explaining the enzyme sketch"
+    );
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true
+    );
+  });
+}

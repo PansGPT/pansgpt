@@ -42,7 +42,7 @@ export function convertChatMessage(message: ChatMessageView): ThreadMessageLike 
       })),
     };
   const content: Exclude<ThreadMessageLike["content"], string>[number][] = [];
-  if (message.thinking || message.tools?.length)
+  if (message.thinking || message.progress?.length || message.tools?.length)
     content.push({ type: "reasoning", text: message.thinking || "Running a study tool." });
   for (const tool of message.tools ?? []) {
     content.push({
