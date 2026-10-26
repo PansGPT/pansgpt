@@ -1251,7 +1251,10 @@ User-selected references and the latest sidebar/card corrections are recorded in
 
 23 October mobile Home refinement: match the top-to-bottom composition of the user-selected `Dark-Mode PansGPT Dashboard.png`, using the shared charcoal/green palette and the smaller type scale requested in follow-up. Mobile-only wordmark/account header, compact tool shortcuts (including Learn), four detailed document Recents, dated activity timeline and pill composer. Desktop document thumbnails and the approved chat welcome remain separate. [Implementation and verification](mobile-home-reference-2026-10-23.md).
 
+26 October library direction: improve the legacy library layout, keeping its course panel visible. Opening Library automatically collapses the main app sidebar to the icon rail; other pages retain the user's sidebar choice. Manual expansion stays available. [Library scope and queued chat follow-ups](library-browsing-2026-10-26.md); library/reader completion remains open.
+
 - [x] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
+
 - [x] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
 - [x] Shared menu polish for the profile popup, aligned New chat on Home/Chat, removal of the floating assistant launcher, and collapsed toggle outside the sidebar beside the logo. [Local UI verification](search-and-sidebar-polish-2026-10-24.md); hosted rollout remains open.
 - [x] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.

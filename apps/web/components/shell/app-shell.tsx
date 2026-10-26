@@ -41,7 +41,25 @@ function Workspace({
   const { setDraft } = useChatDraft();
   const reduced = useReducedMotion();
   const main = useRef<HTMLElement>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [sidebar, setSidebar] = useState({
+    pathname,
+    preferredCollapsed: false,
+    libraryExpanded: false,
+  });
+  if (sidebar.pathname !== pathname) setSidebar({ ...sidebar, pathname, libraryExpanded: false });
+  const inLibrary = pathname === "/app/library" || pathname.startsWith("/app/library/");
+  // Library keeps its course navigation visible and starts with a compact app rail.
+  // A temporary expansion here must not overwrite the user's choice on other pages.
+  const collapsed = inLibrary
+    ? sidebar.pathname !== pathname || !sidebar.libraryExpanded
+    : sidebar.preferredCollapsed;
+  function toggleSidebar(): void {
+    setSidebar((value) =>
+      inLibrary
+        ? { ...value, libraryExpanded: !value.libraryExpanded }
+        : { ...value, preferredCollapsed: !value.preferredCollapsed }
+    );
+  }
   const [panels, setPanels] = useState({
     pathname,
     navigation: false,
@@ -149,7 +167,7 @@ function Workspace({
           className="shell-collapse shell-collapse-docked"
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           aria-expanded={!collapsed}
-          onClick={() => setCollapsed((value) => !value)}
+          onClick={toggleSidebar}
         >
           {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
         </button>

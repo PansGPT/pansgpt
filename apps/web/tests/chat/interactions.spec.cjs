@@ -526,6 +526,49 @@ async function setupChat(page) {
   );
 }
 
+test("Library starts with a compact app sidebar and preserves other pages' sidebar choice", async ({
+  page,
+}) => {
+  await setupChat(page);
+  // A direct link starts compact, before any manual toggle or route transition.
+  await page.goto("/app/library", { waitUntil: "load", timeout: 60000 });
+  const shell = page.locator(".app-shell");
+  const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
+  const home = sidebar.getByRole("link", { name: "Home", exact: true });
+  const library = sidebar.getByRole("link", { name: "Library", exact: true });
+  const expand = page.getByRole("button", { name: "Expand sidebar", exact: true });
+  const collapse = page.getByRole("button", { name: "Collapse sidebar", exact: true });
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await expect(expand).toHaveAttribute("aria-expanded", "false");
+  await expand.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+  await library.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+
+  await collapse.click();
+  await library.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await expand.click();
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/app\/library$/);
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
+  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  const drawer = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+  await expect(drawer.getByRole("link", { name: "Library", exact: true })).toBeVisible();
+  await drawer.getByRole("link", { name: "Home", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
+  await expect(drawer).not.toBeVisible();
+});
+
 test("home and chat share aligned navigation, docked toggle and polished account menus", async ({
   page,
 }) => {
