@@ -1314,6 +1314,23 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 - [ ] E2E Playwright: home page loads within 2s on staging
 - [ ] All 5 widgets render with real data on staging
 
+### 10.6 Library browsing — legacy UI refinement
+
+User-approved 26 October scope: [library browsing and verification](library-browsing-2026-10-26.md). Keep the legacy course panel and document details structure, the shared color palette and dividing lines. Omit the separate All materials destination. This slice does not certify the custom PDF reader below.
+
+- [x] Implement university-scoped catalog contracts with server search, academic filters, stable pagination, course/session facets and visible infrastructure failures.
+- [x] Preserve Recent Documents and course browsing, responsive grid/list views and a desktop details panel/mobile dialog.
+- [x] Share Home's document-card renderer, dimensions and actual first-page thumbnail crop with the Library grid.
+- [x] Reuse scoped persistent thumbnail caching across Home/Library; retain expiry/revision/logout handling and increase capacity to 96 covers.
+- [x] Collapse the main app sidebar on Library entry and put its hover/focus logo-to-toggle control inside the rail, preserving keyboard/reduced-motion behavior.
+- [x] Open authorized existing/converted PDFs and record owner-only opening timestamps without overwriting saved reading positions.
+- [x] Align staff upload forms with strict typed initialization, presigned PUT and confirmation; lecturer submissions retain approval semantics.
+- [x] Verify the final local library/navigation browser journeys, library API contracts, web unit tests, lint/typecheck and production build. See the verification record for broader-suite limitations.
+- [ ] Run disposable migrated-database catalog verification in the existing database CI job; no local Docker runtime is available.
+- [ ] Verify authenticated hosted library/PDF/R2/CORS journeys and full CI; full library/reader completion remains open.
+
+After the library work, resume assistant-ui improvements in the user-approved order: **tool-specific cards**, richer code/diagram rendering, then quoted replies.
+
 ---
 
 ## 📖 PHASE 10 — PDF Reader (Web)

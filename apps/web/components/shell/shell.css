@@ -2462,3 +2462,78 @@
     padding-inline-start: 56px;
   }
 }
+
+/* Library: the rail logo becomes its toggle, leaving course navigation unobstructed. */
+:root {
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+}
+.shell-library-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex: none;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  cursor: pointer;
+}
+.shell-library-toggle:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+.shell-library-toggle .t-icon-swap {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+}
+.shell-library-toggle .t-icon {
+  display: grid;
+  place-items: center;
+  grid-area: 1 / 1;
+  transition:
+    opacity var(--icon-swap-dur) var(--icon-swap-ease),
+    filter var(--icon-swap-dur) var(--icon-swap-ease),
+    transform var(--icon-swap-dur) var(--icon-swap-ease);
+}
+.shell-library-toggle .t-icon[data-icon="a"] > svg {
+  width: 25px;
+  height: 25px;
+  color: var(--fg-brand-primary-600);
+}
+.shell-library-toggle .t-icon-swap[data-state="a"] .t-icon[data-icon="a"],
+.shell-library-toggle .t-icon-swap[data-state="b"] .t-icon[data-icon="b"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+.shell-library-toggle .t-icon-swap[data-state="a"] .t-icon[data-icon="b"],
+.shell-library-toggle .t-icon-swap[data-state="b"] .t-icon[data-icon="a"] {
+  opacity: 0;
+  filter: blur(var(--icon-swap-blur));
+  transform: scale(var(--icon-swap-start-scale));
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell-library-toggle .t-icon {
+    transition: none !important;
+  }
+}
+@media (hover: none) {
+  .shell-library-toggle .t-icon-swap .t-icon[data-icon="a"] {
+    opacity: 0;
+    filter: none;
+    transform: scale(var(--icon-swap-start-scale));
+  }
+  .shell-library-toggle .t-icon-swap .t-icon[data-icon="b"] {
+    opacity: 1;
+    filter: none;
+    transform: scale(1);
+  }
+}

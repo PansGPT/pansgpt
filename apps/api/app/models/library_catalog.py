@@ -22,6 +22,8 @@ class LibraryDocument(BaseModel):
     semester: Literal["first", "second"] | None
     created_at: str
     updated_at: str
+    last_opened_at: str | None
+    last_page_read: int | None = Field(ge=1)
 
 
 class LibraryCourse(BaseModel):
@@ -37,3 +39,10 @@ class LibraryCatalogResponse(BaseModel):
     offset: int
     courses: list[LibraryCourse]
     academic_sessions: list[str]
+
+
+class LibraryOpenedResponse(BaseModel):
+    document_id: str
+    last_opened_at: str
+    last_page_read: int
+    total_pages: int

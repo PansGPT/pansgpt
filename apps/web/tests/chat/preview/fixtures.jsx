@@ -20,6 +20,19 @@ const profile = {
   ...globalThis.__PREVIEW_ACCOUNT__,
 };
 export function useAuth() {
+  useSyncExternalStore(
+    (notify) => {
+      window.addEventListener("fixture-account-changed", notify);
+      return () => window.removeEventListener("fixture-account-changed", notify);
+    },
+    () => window.__accountFixtureRevision || 0,
+    () => 0
+  );
+  globalThis.__changePreviewAccount = (next) => {
+    Object.assign(profile, next);
+    window.__accountFixtureRevision = (window.__accountFixtureRevision || 0) + 1;
+    window.dispatchEvent(new Event("fixture-account-changed"));
+  };
   return {
     profile,
     session: { user: { id: profile.id }, access_token: "invalid-fixture-not-an-access-token" },

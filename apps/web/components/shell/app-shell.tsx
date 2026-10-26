@@ -46,6 +46,8 @@ function Workspace({
     preferredCollapsed: false,
     libraryExpanded: false,
   });
+  const [railHovered, setRailHovered] = useState(false);
+  const [railToggleFocused, setRailToggleFocused] = useState(false);
   if (sidebar.pathname !== pathname) setSidebar({ ...sidebar, pathname, libraryExpanded: false });
   const inLibrary = pathname === "/app/library" || pathname.startsWith("/app/library/");
   // Library keeps its course navigation visible and starts with a compact app rail.
@@ -121,7 +123,40 @@ function Workspace({
     <ApplicationNavPanel
       logo={
         <div className="shell-brand-row">
-          <Brand />
+          {inLibrary && !mobile ? (
+            <>
+              {!collapsed && <Brand />}
+              <button
+                key="library-toggle"
+                type="button"
+                className="shell-library-toggle"
+                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                aria-expanded={!collapsed}
+                onClick={toggleSidebar}
+                onFocus={() => setRailToggleFocused(true)}
+                onBlur={() => setRailToggleFocused(false)}
+              >
+                {collapsed ? (
+                  <span
+                    className="t-icon-swap"
+                    data-state={railHovered || railToggleFocused ? "b" : "a"}
+                    aria-hidden="true"
+                  >
+                    <span className="t-icon" data-icon="a">
+                      <BrandMark />
+                    </span>
+                    <span className="t-icon" data-icon="b">
+                      <PanelLeftOpen size={21} />
+                    </span>
+                  </span>
+                ) : (
+                  <PanelLeftClose size={19} aria-hidden="true" />
+                )}
+              </button>
+            </>
+          ) : (
+            <Brand />
+          )}
         </div>
       }
       account={
@@ -156,21 +191,30 @@ function Workspace({
         data-collapsed={collapsed}
         data-chat={pathname === "/app/chat"}
         data-home={pathname === "/app"}
+        data-library={inLibrary}
+        data-preferred-collapsed={sidebar.preferredCollapsed}
       >
         <a href="#workspace-content" className="shell-skip">
           Skip to content
         </a>
-        <aside className="shell-sidebar" aria-label="Workspace sidebar">
+        <aside
+          className="shell-sidebar"
+          aria-label="Workspace sidebar"
+          onPointerEnter={() => setRailHovered(true)}
+          onPointerLeave={() => setRailHovered(false)}
+        >
           {panel()}
         </aside>
-        <button
-          className="shell-collapse shell-collapse-docked"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          aria-expanded={!collapsed}
-          onClick={toggleSidebar}
-        >
-          {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
-        </button>
+        {!inLibrary && (
+          <button
+            className="shell-collapse shell-collapse-docked"
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-expanded={!collapsed}
+            onClick={toggleSidebar}
+          >
+            {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+          </button>
+        )}
         <div className="shell-workspace">
           <header className="shell-topbar">
             <div className="shell-mobile-brand">

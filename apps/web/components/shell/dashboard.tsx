@@ -7,7 +7,6 @@ import {
   CalendarDays,
   ChevronRight,
   Clock3,
-  FileText,
   RefreshCw,
   PlayCircle,
   ClipboardList,
@@ -20,7 +19,7 @@ import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
 import { MobileActivityTimeline, type DashboardTimelineEvent } from "./mobile-activity-timeline";
 import { StudyActivity } from "./study-activity";
-import { DocumentThumbnail } from "./document-thumbnail";
+import { DocumentCard } from "./document-card";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { mobileDestinations } from "./navigation";
@@ -220,43 +219,24 @@ export function StudyDashboard(): React.ReactElement {
         ) : recentCards.length ? (
           <div className="dashboard-recent-grid">
             {recentCards.map((item) => (
-              <button
+              <DocumentCard
                 key={item.documents.id}
+                documentId={sampleRecent ? undefined : item.documents.id}
+                revision={item.documents.updated_at}
+                title={item.documents.title}
+                date={item.updated_at}
+                detail={
+                  <>
+                    Library <span aria-hidden="true">·</span>{" "}
+                    {data.recentSource === "library" && !sampleRecent ? "Added " : ""}
+                    {recentAge(item.updated_at)}
+                  </>
+                }
                 onClick={() => {
                   if (sampleRecent) setPreview(item.documents.title);
                   else router.push(`/app/library?q=${encodeURIComponent(item.documents.title)}`);
                 }}
-                className="dashboard-recent-card"
-              >
-                <div className="dashboard-recent-cover">
-                  <DocumentThumbnail
-                    documentId={sampleRecent ? undefined : item.documents.id}
-                    revision={item.documents.updated_at}
-                  />
-                </div>
-                <div className="dashboard-recent-body">
-                  <span className="dashboard-file-icon">
-                    <FileText size={19} aria-hidden="true" />
-                  </span>
-                  <div className="dashboard-recent-copy">
-                    <h3>{item.documents.title}</h3>
-                    <span className="dashboard-recent-detail">
-                      Library <span aria-hidden="true">·</span>{" "}
-                      {data.recentSource === "library" && !sampleRecent ? "Added " : ""}
-                      {recentAge(item.updated_at)}
-                    </span>
-                  </div>
-                  <div className="dashboard-card-meta">
-                    <span>
-                      {new Date(item.updated_at).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-                  <ChevronRight className="dashboard-recent-chevron" size={18} aria-hidden="true" />
-                </div>
-              </button>
+              />
             ))}
           </div>
         ) : (

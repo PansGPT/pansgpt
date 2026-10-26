@@ -12,7 +12,12 @@ from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
 from app.engines.storage import storage_engine
 from app.models.library import PdfUrlResponse
-from app.models.library_catalog import LibraryCatalogResponse, LibraryCourse, LibraryDocument
+from app.models.library_catalog import (
+    LibraryCatalogResponse,
+    LibraryCourse,
+    LibraryDocument,
+    LibraryOpenedResponse,
+)
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -20,7 +25,8 @@ logger = logging.getLogger(__name__)
 SCOPE = "university_id = $1 AND deleted_at IS NULL AND (status = 'active' OR $2)"
 FIELDS = """id::text, title, course_code, course_title, topic, lecturer_name,
     page_count, file_size_bytes, mime_type, status::text, embedding_status::text,
-    target_levels, academic_session, semester::text, created_at::text, updated_at::text"""
+    target_levels, academic_session, semester::text, created_at::text, updated_at::text,
+    last_opened_at::text, last_page_read"""
 ORDER = {
     "newest": "created_at DESC, id DESC",
     "oldest": "created_at ASC, id ASC",
@@ -42,6 +48,7 @@ async def catalog(
     sort: Literal["newest", "oldest", "title"] = "newest",
     limit: int = Query(24, ge=1, le=60),
     offset: int = Query(0, ge=0, le=1_000_000),
+    collection: Literal["all", "recent"] = "all",
     user: UserContext = Depends(get_current_user),
 ) -> LibraryCatalogResponse:
     university = require_university(user)
@@ -56,9 +63,23 @@ async def catalog(
         AND ($4::text IS NULL OR course_code = $4)
         AND ($5::text IS NULL OR academic_session = $5)
         AND ($6::text IS NULL OR semester::text = $6)
+        AND ($8::text = 'all' OR last_opened_at IS NOT NULL)
     """
     )
-    params = (university, can_review(user), search, course_code, academic_session, semester)
+    params = (
+        university,
+        can_review(user),
+        search,
+        course_code,
+        academic_session,
+        semester,
+        user.id,
+        collection,
+    )
+    source = """(SELECT d.*, p.updated_at AS last_opened_at, p.last_page_read
+        FROM public.documents d LEFT JOIN public.study_progress p
+        ON p.document_id = d.id AND p.user_id = $7) AS library"""
+    ordering = "last_opened_at DESC NULLS LAST, id DESC" if collection == "recent" else ORDER[sort]
     try:
         async with get_db_connection() as conn:
             if conn is None:
@@ -67,23 +88,25 @@ async def catalog(
                 )
             # One read snapshot keeps page, count and facets consistent during concurrent uploads.
             async with conn.transaction(isolation="repeatable_read", readonly=True):
-                total = await conn.fetchval(
-                    f"SELECT count(*) FROM public.documents WHERE {where}", *params
-                )
+                total = await conn.fetchval(f"SELECT count(*) FROM {source} WHERE {where}", *params)
                 rows = await conn.fetch(
-                    f"SELECT {FIELDS} FROM public.documents WHERE {where} "
-                    f"ORDER BY {ORDER[sort]} LIMIT $7 OFFSET $8",
+                    f"SELECT {FIELDS} FROM {source} WHERE {where} "
+                    f"ORDER BY {ordering} LIMIT $9 OFFSET $10",
                     *params,
                     limit,
                     offset,
                 )
-                # Facets describe the accessible catalog, not just the current 24-row page.
+                # Courses reflect academic filters across the catalog, never just one page.
                 courses = await conn.fetch(
                     "SELECT course_code AS code, max(course_title) AS title, "
                     "count(*)::int AS document_count FROM public.documents "
-                    f"WHERE {SCOPE} GROUP BY course_code ORDER BY course_code",
+                    f"WHERE {SCOPE} AND ($3::text IS NULL OR academic_session = $3) "
+                    "AND ($4::text IS NULL OR semester::text = $4) "
+                    "GROUP BY course_code ORDER BY course_code",
                     university,
                     can_review(user),
+                    academic_session,
+                    semester,
                 )
                 sessions = await conn.fetch(
                     "SELECT DISTINCT academic_session FROM public.documents "
@@ -137,6 +160,8 @@ async def catalog_pdf(
             raise HTTPException(409, "The PDF is still being prepared. Please try again shortly.")
         if not storage_engine.is_configured:
             raise HTTPException(503, "Document storage is temporarily unavailable.")
+        if await storage_engine.get_object_size(key) is None:
+            raise HTTPException(404, "This document's file is no longer available.")
         url = await storage_engine.generate_presigned_get_url(key, expires_in=900)
         parsed = urlsplit(url or "")
         if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
@@ -148,3 +173,38 @@ async def catalog_pdf(
         raise HTTPException(503, "Document storage is temporarily unavailable.") from exc
     response.headers["Cache-Control"] = "private, no-store"
     return PdfUrlResponse(document_id=str(document_id), presigned_url=url, expires_in_seconds=900)
+
+
+@router.post("/catalog/{document_id}/opened", response_model=LibraryOpenedResponse)
+async def record_opened(
+    document_id: uuid.UUID,
+    response: Response,
+    user: UserContext = Depends(get_current_user),
+) -> LibraryOpenedResponse:
+    university = require_university(user)
+    try:
+        async with get_db_connection() as conn:
+            if conn is None:
+                raise HTTPException(503, "Recent documents could not be updated.")
+            row = await conn.fetchrow(
+                "INSERT INTO public.study_progress(user_id,document_id,last_page_read,total_pages) "
+                "SELECT $4, id, 1, page_count FROM public.documents "
+                f"WHERE {SCOPE} AND id = $3 "
+                "ON CONFLICT (user_id,document_id) DO UPDATE SET updated_at = now() "
+                "RETURNING document_id::text, updated_at::text AS last_opened_at, last_page_read, total_pages",
+                university,
+                can_review(user),
+                document_id,
+                user.id,
+            )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning(
+            "library_recent_update_unavailable", extra={"error_type": type(exc).__name__}
+        )
+        raise HTTPException(503, "Recent documents could not be updated.") from exc
+    if row is None:
+        raise HTTPException(404, "Document not found.")
+    response.headers["Cache-Control"] = "private, no-store"
+    return LibraryOpenedResponse.model_validate(dict(row))
