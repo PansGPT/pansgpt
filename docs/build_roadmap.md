@@ -1387,6 +1387,8 @@ Latest 23 October follow-up: use a vertically centered desktop welcome with the 
 
 - [x] Add transitions.dev Streaming text, Thinking states and Matrix dot loader to shared desktop/mobile chat. The model writes bounded task-specific status labels in existing routing/tool calls; backend phase gates and typed SSE/history keep private reasoning separate. Prose reveals without delaying delivery, replaying saved answers or altering code/math. Local API/client/browser verification is recorded in [chat motion and progress](chat-motion-progress-2026-10-25.md); current-head CI, provider and hosted rollout remain separate gates.
 
+26 October repair: use the selected scattered-twinkle pattern, keep live model-authored labels above the closed Steps history, reveal fresh coalesced replies, and route extended writing to streamed generation without forcing search/tools. Verify actual CSS transition events in React Strict Mode, rather than classes alone. [Diagnosis and verification](chat-motion-repair-2026-10-26.md). Full Phase 11 and hosted release gates stay open.
+
 ### 11.2 Generative UI for Skills & Pharmacy Drawers
 
 ```tsx

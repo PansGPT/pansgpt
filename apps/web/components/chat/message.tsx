@@ -116,8 +116,14 @@ const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> 
 
 function ChatMarkdown(): React.ReactElement {
   const streaming = useAuiState((state) => state.message.status?.type === "running");
+  const message = useOriginalMessage();
+  // Capture origin on mount: a fresh single-batch answer is already complete,
+  // whereas database history has no receipt time and must never replay.
+  const [animateArrival] = useState(
+    () => message?.receivedAt !== undefined && (streaming || Date.now() - message.receivedAt < 1000)
+  );
   return (
-    <StreamRevealProvider active={streaming}>
+    <StreamRevealProvider animate={animateArrival}>
       <MarkdownTextPrimitive
         className="study-chat-markdown"
         remarkPlugins={remarkPlugins}
@@ -273,6 +279,13 @@ export function UserMessage(): React.ReactElement {
 
 export function AssistantMessage(): React.ReactElement {
   const message = useOriginalMessage();
+  const waiting =
+    message?.status === "running" &&
+    (!message.content || message.tools?.some((tool) => tool.status === "running"));
+  const currentProgress = message?.progress
+    ?.slice()
+    .reverse()
+    .find((update) => !message.activity || update.code === message.activity);
   const empty =
     !message?.content &&
     !message?.thinking &&
@@ -289,6 +302,11 @@ export function AssistantMessage(): React.ReactElement {
     >
       <div className="study-chat-turn">
         <div className="study-chat-bubble" data-role="assistant">
+          {waiting && (
+            <div className="study-chat-live-status">
+              <ThinkingStatus label={currentProgress?.label} />
+            </div>
+          )}
           <MessagePrimitive.Parts
             components={{
               Text: ChatMarkdown,
@@ -296,15 +314,9 @@ export function AssistantMessage(): React.ReactElement {
               tools: { Fallback: ChatTool },
             }}
           />
-          {empty && message?.status !== "error" && (
+          {empty && message?.status !== "error" && message?.status !== "running" && (
             <p className="study-chat-response-state">
-              {message?.status === "running" ? (
-                <ThinkingStatus />
-              ) : message?.status === "cancelled" ? (
-                "Response stopped."
-              ) : (
-                "No response was returned."
-              )}
+              {message?.status === "cancelled" ? "Response stopped." : "No response was returned."}
             </p>
           )}
           {message?.status === "error" && (

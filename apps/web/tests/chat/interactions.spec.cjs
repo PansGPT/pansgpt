@@ -877,10 +877,12 @@ test("artifact preparation is visible before tool execution without exposing pri
   await page.getByLabel("Study question").fill("Create a presentation from our discussion");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   const progress = page.locator(".aui-reasoning-root");
+  await expect(page.locator(".study-chat-live-status")).toContainText("Thinking");
+  await progress.getByRole("button", { name: "Steps", exact: true }).click();
   await expect(
     progress.getByText("Preparing your study materials.", { exact: true })
   ).toBeVisible();
-  await expect(progress.getByRole("button", { name: "Thinking…", exact: true })).toBeVisible();
+  await expect(progress.getByRole("button", { name: "Steps", exact: true })).toBeVisible();
   await expect(page.getByText("PRIVATE RAW THINKING", { exact: true })).toHaveCount(0);
   await expect(progress).not.toContainText("Working");
   await page.screenshot({ path: test.info().outputPath("artifact-preparation-desktop.png") });
@@ -1361,8 +1363,9 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         await page.getByLabel("Study question").fill("Synthetic reasoning disclosure test");
         await page.getByRole("button", { name: "Send message", exact: true }).click();
         const thinking = page.locator(".aui-reasoning-trigger").last();
-        await expect(thinking).toHaveAttribute("aria-expanded", "true");
-        await expect(thinking).toContainText("Thinking");
+        await expect(thinking).toHaveAttribute("aria-expanded", "false");
+        await expect(page.locator(".study-chat-live-status").last()).toContainText("Thinking");
+        await thinking.click();
         await expect(page.locator(".aui-reasoning-scroll li").last()).toHaveText(
           "Checking your course materials."
         );
@@ -1381,7 +1384,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
           await page.evaluate(() => window.__moreReasoning());
           await expect(thinking).toHaveAttribute("aria-expanded", "false");
           await thinking.click();
-        }
+        } else await thinking.click();
         await page.evaluate(() => window.__finishReasoning());
         await expect(thinking).toHaveText("Steps");
         await expect(thinking).toHaveAttribute("aria-expanded", manual ? "true" : "false");
@@ -1421,7 +1424,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         window.__holdReasoning = false;
       });
       console.log(
-        "PASS safe deduplicated progress auto-opens/collapses without code blocks, Stop uses the send position, mic stays separate, manual disclosure choices persist"
+        "PASS safe deduplicated progress starts closed without code blocks, Stop uses the send position, mic stays separate, manual disclosure choices persist"
       );
       expect(
         await page.evaluate(
@@ -2277,6 +2280,12 @@ for (const [width, reduced] of [
     const response = page.locator('.study-chat-message[data-role="assistant"]').last();
     const trigger = response.locator(".aui-reasoning-trigger");
     await expect(response.locator(".t-matrix i")).toHaveCount(16);
+    await expect(response.locator(".t-matrix")).toHaveAttribute("data-variant", "twinkle");
+    expect(
+      await response
+        .locator(".t-matrix i")
+        .evaluateAll((dots) => dots.slice(0, 4).map((dot) => getComputedStyle(dot).animationDelay))
+    ).toEqual(reduced ? ["0s", "0s", "0s", "0s"] : ["0.525s", "0.15s", "0.825s", "0.375s"]);
     await expect(response.locator(".t-matrix i").first()).toHaveCSS(
       "animation-name",
       reduced ? "none" : "t-matrix-pulse"
@@ -2286,6 +2295,9 @@ for (const [width, reduced] of [
       "data-text",
       "Comparing the synthetic diagram"
     );
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
     await trigger.click();
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await page.evaluate(() =>
@@ -2302,6 +2314,17 @@ for (const [width, reduced] of [
     );
     await expect(trigger).toHaveAttribute("aria-expanded", "false");
     await expect(response).not.toContainText("PRIVATE RAW THINKING");
+    await page.evaluate(() => window.__moreReasoning());
+    await expect(response.locator(".study-chat-live-status")).toContainText(
+      "Comparing the synthetic diagram"
+    );
+    await page.evaluate(() =>
+      window.__emitPublicProgress("Explaining the enzyme sketch", "writing_response")
+    );
+    await expect(response.locator(".study-chat-live-status")).toContainText(
+      "Explaining the enzyme sketch"
+    );
+    await expect(response.locator(".t-think-text:not(.is-exit)")).toHaveCSS("opacity", "1");
     await page.screenshot({ path: test.info().outputPath(`model-progress-${width}.png`) });
     await page.evaluate(() =>
       window.__streamProse(
@@ -2343,3 +2366,64 @@ for (const [width, reduced] of [
     );
   });
 }
+
+test("fresh text actually animates in Strict Mode and when SSE completion shares the same batch", async ({
+  page,
+}) => {
+  test.setTimeout(90000);
+  await setupChat(page);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    window.__wordTransitions = [];
+    document.addEventListener("transitionrun", (event) => {
+      if (event.target instanceof HTMLElement && event.target.classList.contains("t-stream-w"))
+        window.__wordTransitions.push(event.propertyName);
+    });
+    window.__holdReasoning = true;
+    window.__motionMode = true;
+  });
+  await page.getByLabel("Study question", { exact: true }).fill("Stream a synthetic explanation");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toBeVisible();
+  await page.evaluate(() => window.__streamProse("Strict mode must animate this new prose."));
+  await expect.poll(() => page.evaluate(() => window.__wordTransitions.length)).toBeGreaterThan(0);
+  await page.evaluate(() => {
+    window.__finishReasoning();
+    window.__holdReasoning = false;
+  });
+  await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
+  await page.evaluate(() => {
+    window.__wordTransitions = [];
+  });
+  await page
+    .getByLabel("Study question", { exact: true })
+    .fill("Return a single-batch synthetic reply");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__wordTransitions.length)).toBeGreaterThan(0);
+  const freshWords = page
+    .locator('.study-chat-message[data-role="assistant"]')
+    .last()
+    .locator(".t-stream-w");
+  expect(
+    await freshWords.evaluateAll((words) =>
+      words.map((word) => getComputedStyle(word).transitionDelay)
+    )
+  ).toEqual(["0s", "0.06s", "0.12s"]);
+  await expect
+    .poll(() =>
+      freshWords.evaluateAll((words) =>
+        words.every((word) => getComputedStyle(word).opacity === "1")
+      )
+    )
+    .toBe(true);
+  await page.reload({ waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  expect(
+    await page
+      .locator(".t-stream-w")
+      .evaluateAll((words) => words.flatMap((word) => word.getAnimations()).length)
+  ).toBe(0);
+});

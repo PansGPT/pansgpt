@@ -84,6 +84,16 @@ def test_history_public_updates_require_the_new_structured_field() -> None:
     assert len(updates) == 1 and updates[0].label == good["label"]
 
 
+def test_phase_reactivation_is_published_without_duplicating_saved_labels() -> None:
+    progress = ChatProgress()
+    progress.emit("writing_response")
+    progress.emit("reading_document")
+    resumed = progress.emit("writing_response")
+    assert resumed and '"code": "writing_response"' in resumed
+    assert progress.emit("writing_response") is None
+    assert progress.codes == ["writing_response", "reading_document"]
+
+
 def test_bad_status_metadata_does_not_break_a_valid_routing_answer() -> None:
     from tests.test_intent_classifier import decision
 
@@ -153,9 +163,15 @@ async def test_dynamic_progress_streams_and_persists_without_unexecuted_phases_o
     ]
     saved = json.loads(saves[-1][7])["public_progress"]
     assert [item["label"] for item in saved] == [
-        "Reading the revision diagram",
         "Explaining the revision diagram",
+        "Reading the revision diagram",
     ]
+    assert response.text.index("Explaining the revision diagram") < response.text.index(
+        "Reading the revision diagram"
+    )
+    assert response.text.rfind('"code": "writing_response"') > response.text.index(
+        "event: tool_end"
+    )
     assert all(item["source"] == "model" for item in saved)
     tenant_state.retrieval.assert_not_awaited()
 

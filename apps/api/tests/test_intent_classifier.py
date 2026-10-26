@@ -27,6 +27,7 @@ def decision(**changes: object) -> str:
         "retrieval_query": None,
         "presentation": None,
         "public_progress": [],
+        "response_mode": "brief",
     }
     result.update(changes)
     if "requires_rag" in result:
@@ -90,6 +91,54 @@ async def test_short_clinical_request_cannot_bypass_grounding_with_conflicting_a
     result = await engine.classify("Is this medicine safe in pregnancy?")
     assert result.route == RouteType.COMPLEX_PATH and result.requires_rag
     assert result.direct_answer is None
+
+
+@pytest.mark.parametrize("action", ["grounded", "answer"])
+async def test_extended_writing_streams_without_forcing_evidence_or_tools(
+    router: tuple[IntentClassifier, AsyncMock], action: str
+) -> None:
+    engine, completion = router
+    completion.return_value = decision(
+        action=action,
+        intent="general_assistance",
+        response_mode="extended",
+        answer="",
+        public_progress=[{"code": "writing_response", "label": "Organising your essay"}],
+    )
+    result = await engine.classify(
+        "write an essay on the benefits of surfactants in the household management"
+    )
+    assert result.route == RouteType.COMPLEX_PATH
+    assert result.response_mode == "extended" and result.direct_answer is None
+    assert result.intent.value == "general_assistance"
+    assert not result.requires_rag and not result.requires_tools and not result.requires_web
+    assert result.public_progress[0].label == "Organising your essay"
+    completion.assert_awaited_once()
+
+
+@pytest.mark.parametrize("answer", ["word " * 121, "x" * 1201])
+async def test_oversized_direct_output_is_handed_off_without_speculative_retrieval(
+    router: tuple[IntentClassifier, AsyncMock], answer: str
+) -> None:
+    engine, completion = router
+    completion.return_value = decision(intent="general_assistance", answer=answer)
+    result = await engine.classify("Help me write this")
+    assert result.route == RouteType.COMPLEX_PATH and result.response_mode == "extended"
+    assert result.direct_answer is None
+    assert not result.requires_rag and not result.requires_tools and not result.requires_web
+    completion.assert_awaited_once()
+
+
+async def test_extended_deliverable_can_still_need_a_brief_clarifying_question(
+    router: tuple[IntentClassifier, AsyncMock],
+) -> None:
+    engine, completion = router
+    completion.return_value = decision(
+        action="clarify", intent="general_assistance", answer="What topic should it cover?"
+    )
+    result = await engine.classify("Write a detailed essay about that")
+    assert result.route == RouteType.FAST_PATH and result.response_mode == "brief"
+    assert result.direct_answer == "What topic should it cover?"
 
 
 async def test_model_resolves_follow_up_from_selected_history(

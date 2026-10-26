@@ -369,7 +369,9 @@ export function useChatRuntime({
               );
               setHeadId(answer.id);
             }
+            const previousText = answer.content;
             answer = applyChatEvent(answer, event);
+            if (answer.content !== previousText) answer = { ...answer, receivedAt: Date.now() };
             if (event.event === "artifact_ready") onArtifactReady?.(event.data);
           }
           publish();

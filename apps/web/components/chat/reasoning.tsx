@@ -12,7 +12,6 @@ import { CollapsibleRoot, CollapsibleTrigger, CollapsibleContent } from "@pansgp
 import type { ChatMessageView } from "@pansgpt/types";
 import { publicProgressLines } from "@/lib/chat-message";
 import { Brain, ChevronDown } from "lucide-react";
-import { ThinkingStatus } from "./motion";
 
 export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
   const streaming = useAuiState((state) => state.message.status?.type === "running");
@@ -34,10 +33,7 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
   const tools = message?.tools ?? [];
   const steps = publicProgressLines(text);
   const progress = message?.progress ?? [];
-  const waiting =
-    streaming && (!message?.content || tools.some((tool) => tool.status === "running"));
-  const [manualOpen, setManualOpen] = useState<boolean | null>(null);
-  const open = manualOpen ?? streaming;
+  const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const scroll = useRef<HTMLDivElement>(null);
   const pinned = useRef(true);
@@ -53,7 +49,7 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
       if (scroll.current && pinned.current) scroll.current.scrollTop = scroll.current.scrollHeight;
     });
     return () => cancelAnimationFrame(frame);
-  }, [text, open, streaming]);
+  }, [text, progress.length, tools.length, open, streaming]);
   if (!steps.length && !tools.length && !progress.length) return null;
   return (
     <CollapsibleRoot
@@ -62,21 +58,12 @@ export const ChatReasoning: ReasoningMessagePartComponent = ({ text }) => {
       open={open}
       onOpenChange={(next) => {
         lockScroll();
-        setManualOpen(next);
+        setOpen(next);
       }}
     >
-      <CollapsibleTrigger
-        className="aui-reasoning-trigger"
-        aria-label={waiting ? (progress.at(-1)?.label ?? "Thinking…") : "Steps"}
-      >
-        {waiting ? (
-          <ThinkingStatus label={progress.at(-1)?.label} />
-        ) : (
-          <>
-            <Brain size={16} aria-hidden="true" />
-            <span>Steps</span>
-          </>
-        )}
+      <CollapsibleTrigger className="aui-reasoning-trigger" aria-label="Steps">
+        <Brain size={16} aria-hidden="true" />
+        <span>Steps</span>
         <ChevronDown size={14} aria-hidden="true" />
       </CollapsibleTrigger>
       <CollapsibleContent className="aui-reasoning-content" aria-busy={streaming}>

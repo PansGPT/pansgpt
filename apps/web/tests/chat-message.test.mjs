@@ -46,6 +46,24 @@ test("typed model progress stays separate from raw thoughts and survives termina
   }
 });
 
+test("reactivating a phase selects its existing model copy without duplicating progress history", () => {
+  let message = pending();
+  const reading = { code: "reading_document", label: "Reading the enzyme sketch", source: "model" };
+  const writing = { code: "writing_response", label: "Explaining the diagram", source: "model" };
+  message = applyChatEvent(message, { event: "public_progress", data: writing });
+  message = applyChatEvent(message, { event: "public_progress", data: reading });
+  message = applyChatEvent(message, {
+    event: "thinking_chunk",
+    data: { code: "writing_response" },
+  });
+  assert.equal(message.activity, "writing_response");
+  assert.deepEqual(message.progress, [writing, reading]);
+  assert.equal(
+    message.progress.find((item) => item.code === message.activity).label,
+    "Explaining the diagram"
+  );
+});
+
 test("a provider error followed by done keeps partial content and the failure status", () => {
   const parser = new SSEEventStreamReader();
   const events = parser.push(

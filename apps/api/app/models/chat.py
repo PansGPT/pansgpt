@@ -67,6 +67,7 @@ class QueryClassification(BaseModel):
     routing_completion_tokens: int = Field(default=0, ge=0)
     routing_source: Literal["model", "server_context", "fallback"] = "fallback"
     public_progress: list[PublicProgressLabel] = Field(default_factory=list, max_length=8)
+    response_mode: Literal["brief", "extended"] = "brief"
 
 
 class SemanticDecision(BaseModel):
@@ -86,6 +87,7 @@ class SemanticDecision(BaseModel):
     retrieval_query: str | None = Field(max_length=1000)
     presentation: PresentationPlan | None
     public_progress: list[PublicProgressLabel] = Field(max_length=8)
+    response_mode: Literal["brief", "extended"]
 
     @field_validator("public_progress", mode="before")
     @classmethod
@@ -104,8 +106,8 @@ class SemanticDecision(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def legacy_progress_default(cls, value: object) -> object:
-        if isinstance(value, dict) and "public_progress" not in value:
-            return {**value, "public_progress": []}
+        if isinstance(value, dict):
+            return {"public_progress": [], "response_mode": "brief", **value}
         return value
 
 

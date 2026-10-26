@@ -2,8 +2,9 @@
 .mobile-home-chat-sheet {
   --think-base: var(--text-tertiary-600);
   --think-highlight: var(--text-primary-900);
-  --matrix-base: var(--border-primary);
+  --matrix-base: color-mix(in srgb, var(--text-secondary-700) 26%, transparent);
   --matrix-active: var(--text-secondary-700);
+  --stream-max-stagger: 900ms;
 }
 .study-chat-thinking-state {
   display: inline-flex;
@@ -17,6 +18,11 @@
 }
 .study-chat-thinking-state .t-matrix {
   flex: none;
+  width: 14px;
+  height: 14px;
+}
+.study-chat-live-status {
+  margin: 6px 0 4px;
 }
 .study-chat-thinking-state .t-think {
   text-align: left;

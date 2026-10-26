@@ -31,6 +31,7 @@ class ChatProgress:
         self.codes: list[str] = []
         self.labels: dict[str, str] = {}
         self.updates: list[PublicProgressUpdate] = []
+        self.current_code: str | None = None
 
     def configure(self, labels: list[PublicProgressLabel]) -> None:
         self.labels = {item.code: item.label for item in labels}
@@ -43,12 +44,14 @@ class ChatProgress:
         if code not in PROGRESS_LABELS:
             return None
         frames: list[str] = []
-        if code not in self.codes:
-            self.codes.append(code)
+        if code not in self.codes or code != self.current_code:
+            if code not in self.codes:
+                self.codes.append(code)
             label = PROGRESS_LABELS[code] + "\n"
             frames.append(
                 f"event: thinking_chunk\ndata: {json.dumps({'code': code, 'token': label, 'delta': label})}\n\n"
             )
+        self.current_code = code
         candidate = model_label or self.labels.get(code)
         if candidate and len(self.updates) < 24:
             try:

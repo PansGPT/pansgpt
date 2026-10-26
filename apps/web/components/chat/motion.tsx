@@ -16,11 +16,13 @@ export function MatrixLoader(): React.ReactElement {
     if (!element) return;
     const cycle = motionMilliseconds(element, "--matrix-cycle", 1200);
     element.querySelectorAll<HTMLElement>("i").forEach((dot, index) => {
-      dot.style.setProperty("--d", String(Math.round(((index % 4) * cycle) / 10)));
+      // Upstream's second demo: a scattered twinkle, not the column-scan variant.
+      const order = [7, 2, 11, 5, 14, 9, 0, 12, 3, 15, 6, 10, 13, 1, 8, 4];
+      dot.style.setProperty("--d", String(Math.round(((order[index] ?? 0) * cycle) / 16)));
     });
   }, []);
   return (
-    <span ref={root} className="t-matrix" data-variant="scan" aria-hidden="true">
+    <span ref={root} className="t-matrix" data-variant="twinkle" aria-hidden="true">
       {Array.from({ length: 16 }, (_, index) => (
         <i key={index} />
       ))}
@@ -71,17 +73,83 @@ export function ThinkingStatus({ label = "Thinking…" }: { label?: string }): R
   );
 }
 
-const StreamReveal = createContext<{ active: boolean; seen: Set<number> } | null>(null);
+interface WordRevealer {
+  add: (element: HTMLSpanElement, offset: number) => () => void;
+  cancelPending: () => void;
+}
+
+function createWordRevealer(animate: boolean): WordRevealer {
+  const seen = new Set<number>();
+  const pending = new Map<number, HTMLSpanElement>();
+  let frame: number | undefined;
+  let nextReleaseAt = 0;
+  function cancelPending(): void {
+    if (frame !== undefined) cancelAnimationFrame(frame);
+    frame = undefined;
+    pending.clear();
+  }
+  return {
+    cancelPending,
+    add(element, offset) {
+      if (
+        !animate ||
+        seen.has(offset) ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        seen.add(offset);
+        element.style.transition = "none";
+        element.classList.add("is-in");
+        return () => {};
+      }
+      pending.set(offset, element);
+      if (frame === undefined)
+        frame = requestAnimationFrame(() => {
+          frame = undefined;
+          const words = [...pending].sort(([left], [right]) => left - right);
+          pending.clear();
+          const first = words[0]?.[1];
+          if (!first) return;
+          const now = performance.now();
+          const start = Math.max(now, nextReleaseAt);
+          const budget = Math.max(
+            0,
+            now + motionMilliseconds(first, "--stream-max-stagger", 900) - start
+          );
+          const gap = Math.min(
+            motionMilliseconds(first, "--stream-gap", 60),
+            budget / Math.max(words.length, 1)
+          );
+          nextReleaseAt = start + words.length * gap;
+          // One flush establishes all new words' rest state. Each arriving batch resolves
+          // in order, honoring the recipe's gap with a bounded visual catch-up window.
+          void first.offsetWidth;
+          words.forEach(([position, word], index) => {
+            if (!word.isConnected) return;
+            word.style.transitionDelay = `${Math.round(start - now + index * gap)}ms`;
+            word.classList.add("is-in");
+            // A cancelled effect has not revealed anything. Mark seen only after release,
+            // so React Strict Mode can safely clean up and subscribe again before paint.
+            seen.add(position);
+          });
+        });
+      return () => {
+        if (pending.get(offset) === element) pending.delete(offset);
+      };
+    },
+  };
+}
+
+const StreamReveal = createContext<WordRevealer | null>(null);
 
 export function StreamRevealProvider({
-  active,
+  animate,
   children,
 }: {
-  active: boolean;
+  animate: boolean;
   children: ReactNode;
 }): React.ReactElement {
-  const seen = useMemo(() => new Set<number>(), []);
-  const value = useMemo(() => ({ active, seen }), [active, seen]);
+  const value = useMemo(() => createWordRevealer(animate), [animate]);
+  useLayoutEffect(() => () => value.cancelPending(), [value]);
   return <StreamReveal.Provider value={value}>{children}</StreamReveal.Provider>;
 }
 
@@ -98,16 +166,7 @@ export function StreamingWord({
   useLayoutEffect(() => {
     const element = root.current;
     if (!element || !context) return;
-    if (!context.active || context.seen.has(offset)) {
-      context.seen.add(offset);
-      element.classList.add("is-in");
-      return;
-    }
-    context.seen.add(offset);
-    void element.offsetWidth;
-    // Reveal this arriving batch immediately; no artificial word queue or replay.
-    const frame = requestAnimationFrame(() => element.classList.add("is-in"));
-    return () => cancelAnimationFrame(frame);
+    return context.add(element, offset);
   }, [context, offset]);
   return (
     <span ref={root} className="t-stream-w" data-stream-offset={offset}>

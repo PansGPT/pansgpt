@@ -126,9 +126,13 @@ export interface ChatMessageView {
   attachments?: ChatAttachment[];
   feedback?: "positive" | "negative";
   isSaved?: boolean;
+  /** Memory-only receipt time for fresh text; omitted by saved history/API payloads. */
+  receivedAt?: number;
   /** Public allowlisted workflow labels only; never provider scratchpad text. */
   thinking?: string;
   progress?: PublicProgressUpdate[];
+  /** Current backend activity, independent of the deduplicated progress history. */
+  activity?: ChatProgressCode;
   citations?: CitationItem[];
   tools?: ToolExecutionState[];
   artifacts?: ArtifactItem[];

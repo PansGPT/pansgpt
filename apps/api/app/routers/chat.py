@@ -568,6 +568,7 @@ async def stream_chat_session(
             "query_classified",
             intent=classification.intent.value,
             route=classification.route.value,
+            response_mode=classification.response_mode,
             requires_rag=classification.requires_rag,
             requires_web=classification.requires_web,
             search_scope=classification.search_scope,
@@ -729,6 +730,16 @@ async def stream_chat_session(
         is_fast_path = classification.route.value == "fast_path"
         last_provider = "groq" if is_fast_path else "google"
 
+        # The model is starting this work now. Waiting until its first answer token
+        # made the status disappear in the same frame that it was first displayed.
+        artifact_request = (
+            classification.presentation is not None
+            or classification.intent.value == "skill_generation"
+        )
+        if classification.direct_answer is None and not artifact_request:
+            if update := progress.emit("writing_response"):
+                yield update
+
         async def response_events() -> AsyncGenerator[tuple[str, Any, str], None]:
             if classification.direct_answer is not None:
                 # Reuse the route-or-answer completion, never generate a second simple reply.
@@ -831,6 +842,9 @@ async def stream_chat_session(
                         for item in persisted_parts["tools"]
                     ]
                     yield f"event: tool_end\ndata: {json.dumps(dumped)}\n\n"
+                    if not artifact_request:
+                        if update := progress.emit("writing_response"):
+                            yield update
                 elif event_type == "artifact_ready":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     persisted_parts["artifacts"].append(dumped)

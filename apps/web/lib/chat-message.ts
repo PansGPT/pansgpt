@@ -52,6 +52,7 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
       return {
         ...message,
         progress: parsePublicProgressUpdates([...(message.progress ?? []), event.data]),
+        activity: event.data.code,
       };
     case "text_chunk":
       return {
@@ -59,12 +60,17 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
         content: message.content + (event.data.token ?? event.data.delta ?? ""),
       };
     case "thinking_chunk": {
-      const label = Object.entries(CHAT_PROGRESS_LABELS).find(
-        ([code]) => code === event.data.code
-      )?.[1];
+      const stage = Object.entries(CHAT_PROGRESS_LABELS).find(([code]) => code === event.data.code);
+      const label = stage?.[1];
       const incoming = label ? [label] : publicProgressLines(event.data.token ?? event.data.delta);
       const progress = [...new Set([...publicProgressLines(message.thinking), ...incoming])];
-      return incoming.length ? { ...message, thinking: progress.join("\n") } : message;
+      return incoming.length
+        ? {
+            ...message,
+            thinking: progress.join("\n"),
+            ...(stage ? { activity: stage[0] as ChatProgressCode } : {}),
+          }
+        : message;
     }
     case "citations":
       return { ...message, citations: event.data };
