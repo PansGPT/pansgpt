@@ -19,6 +19,7 @@ import { SidebarLinks } from "./sidebar";
 import { AccountMenu } from "./account-menu";
 import { MobileHomeChat } from "./mobile-home-chat";
 import { WorkspaceNavigationContext } from "./workspace-navigation";
+import { SettingsModal } from "./settings/settings-modal";
 
 function Brand(): React.ReactElement {
   return (
@@ -84,13 +85,22 @@ function Workspace({
     navigation: false,
     search: false,
     profile: false,
+    settings: false,
     help: false,
   });
   if (panels.pathname !== pathname)
-    setPanels({ pathname, navigation: false, search: false, profile: false, help: false });
+    setPanels({
+      pathname,
+      navigation: false,
+      search: false,
+      profile: false,
+      settings: false,
+      help: false,
+    });
   const navigationOpen = panels.pathname === pathname && panels.navigation;
   const searchOpen = panels.pathname === pathname && panels.search;
   const profileOpen = panels.pathname === pathname && panels.profile;
+  const settingsOpen = panels.pathname === pathname && panels.settings;
   const profileReturn = useRef<HTMLButtonElement | null>(null);
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
@@ -108,13 +118,37 @@ function Workspace({
         ?.focus();
   }
   function setProfileOpen(open: boolean): void {
-    setPanels((value) => ({ ...value, pathname, profile: open, navigation: false, help: false }));
+    setPanels((value) => ({
+      ...value,
+      pathname,
+      profile: open,
+      settings: false,
+      navigation: false,
+      help: false,
+    }));
+  }
+  function setSettingsOpen(open: boolean): void {
+    setPanels((value) => ({
+      ...value,
+      pathname,
+      settings: open,
+      profile: false,
+      navigation: false,
+      help: false,
+    }));
   }
   function setNavigationOpen(open: boolean): void {
     setPanels((value) => ({ ...value, pathname, navigation: open }));
   }
   function setSearchOpen(open: boolean): void {
-    setPanels((value) => ({ ...value, pathname, search: open }));
+    setPanels((value) => ({
+      ...value,
+      pathname,
+      search: open,
+      profile: false,
+      settings: false,
+      help: false,
+    }));
   }
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
   const navigationOrigin = useRef(pathname);
@@ -132,7 +166,14 @@ function Workspace({
       element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
       pathname,
     };
-    setPanels({ pathname, navigation: false, search: true, profile: false, help: false });
+    setPanels({
+      pathname,
+      navigation: false,
+      search: true,
+      profile: false,
+      settings: false,
+      help: false,
+    });
   }, [pathname]);
   const preferences = usePreferences(profile.id, profile.university_id);
   useEffect(() => {
@@ -196,9 +237,20 @@ function Workspace({
             profileReturn.current = opener;
             setProfileOpen(true);
           }}
+          openSettings={(opener) => {
+            profileReturn.current = opener;
+            setSettingsOpen(true);
+          }}
           openHelp={(opener) => {
             profileReturn.current = opener;
-            setPanels({ pathname, navigation: false, search: false, profile: false, help: true });
+            setPanels({
+              pathname,
+              navigation: false,
+              search: false,
+              profile: false,
+              settings: false,
+              help: true,
+            });
           }}
         />
       }
@@ -260,6 +312,10 @@ function Workspace({
                       profileReturn.current = opener;
                       setProfileOpen(true);
                     }}
+                    openSettings={(opener) => {
+                      profileReturn.current = opener;
+                      setSettingsOpen(true);
+                    }}
                     openHelp={(opener) => {
                       profileReturn.current = opener;
                       setPanels({
@@ -267,6 +323,7 @@ function Workspace({
                         navigation: false,
                         search: false,
                         profile: false,
+                        settings: false,
                         help: true,
                       });
                     }}
@@ -407,6 +464,13 @@ function Workspace({
           open={profileOpen}
           onOpenChange={setProfileOpen}
           hideTrigger
+          returnFocus={returnToAccount}
+        />
+        <SettingsModal
+          open={settingsOpen}
+          onOpenChange={setSettingsOpen}
+          profile={profile}
+          preferences={preferences}
           returnFocus={returnToAccount}
         />
         <Slideout

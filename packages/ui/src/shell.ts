@@ -11,6 +11,9 @@ export {
   DropdownContent,
   DropdownHeader,
   DropdownItem,
+  DropdownSub,
+  DropdownSubTrigger,
+  DropdownSubContent,
 } from "./components/dropdown";
 export { ApplicationNavPanel } from "./components/application-navigation-layout";
 export { ThemeProvider, useTheme, isThemeName } from "./components/theme";
