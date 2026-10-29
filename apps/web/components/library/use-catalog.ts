@@ -65,6 +65,7 @@ export function useCatalog(params: URLSearchParams, revision: number) {
     data: current?.data,
     error: current?.error,
     loading: !current,
+    refreshing: Boolean(token && owner && university && current && current.key !== key),
     owner: `${owner}:${university}`,
   };
 }

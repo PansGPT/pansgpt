@@ -107,6 +107,7 @@ export function StudyDashboard(): React.ReactElement {
   const data = useDashboard();
   const [today] = useState(localTodayIso);
   const [preview, setPreview] = useState<string | null>(null);
+  const [pressedDestination, setPressedDestination] = useState<string | null>(null);
   const sampleRecent = !data.loading && !data.recentError && !data.recent.length;
   const recentCards = sampleRecent
     ? sampleDocuments.map((document, index) => ({
@@ -169,7 +170,18 @@ export function StudyDashboard(): React.ReactElement {
                     ? LockKeyhole
                     : icon;
             return (
-              <Link href={href} key={href}>
+              <Link
+                href={href}
+                key={href}
+                className="shell-touch-feedback"
+                data-pressed={pressedDestination === href}
+                onPointerDown={() => setPressedDestination(href)}
+                onTouchStart={() => setPressedDestination(href)}
+                onPointerCancel={() => setPressedDestination(null)}
+                onTouchCancel={() => setPressedDestination(null)}
+                onPointerLeave={() => setPressedDestination(null)}
+                onBlur={() => setPressedDestination(null)}
+              >
                 <Icon size={26} aria-hidden="true" />
                 <span>{label}</span>
               </Link>

@@ -802,6 +802,15 @@
   box-shadow: none;
   background: var(--bg-tertiary);
 }
+@media (max-width: 860px) {
+  .shell-touch-feedback {
+    -webkit-tap-highlight-color: color-mix(in srgb, var(--text-primary-900) 10%, transparent);
+  }
+  .shell-touch-feedback:is(:hover, :active, [data-pressed="true"]) {
+    background: var(--bg-tertiary);
+    color: var(--text-primary-900);
+  }
+}
 .reference-sidebar {
   display: flex;
   flex-direction: column;
@@ -1990,6 +1999,9 @@
   }
   .app-shell[data-home="true"] .dashboard-mobile-destinations a {
     min-height: 38px;
+    padding-inline: 8px;
+    margin-inline: -8px;
+    border-radius: 8px;
     gap: 18px;
     font-size: 15px;
     line-height: 1.4;

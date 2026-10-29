@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowUpRight, BookOpen, X } from "lucide-react";
+import { Eye, FileText, X } from "lucide-react";
 import { Button, Slideout } from "@pansgpt/ui/shell";
 import type { LibraryDocument } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
@@ -12,14 +12,20 @@ import {
   pdfLinkSchema,
   openedSchema,
 } from "@/lib/library-catalog";
+import { ReadingProgress } from "./reading-progress";
 import { DocumentThumbnail } from "@/components/shell/document-thumbnail";
 
 function subscribeViewport(notify: () => void): () => void {
-  const media = window.matchMedia("(max-width: 860px)");
-  media.addEventListener("change", notify);
-  return () => media.removeEventListener("change", notify);
+  const media = [window.matchMedia("(max-width: 860px)"), window.matchMedia("(min-width: 1280px)")];
+  media.forEach((query) => query.addEventListener("change", notify));
+  return () => media.forEach((query) => query.removeEventListener("change", notify));
 }
-const mobileViewport = (): boolean => window.matchMedia("(max-width: 860px)").matches;
+const detailsViewport = (): "mobile" | "wide" | "compact" =>
+  window.matchMedia("(max-width: 860px)").matches
+    ? "mobile"
+    : window.matchMedia("(min-width: 1280px)").matches
+      ? "wide"
+      : "compact";
 
 function DetailsBody({
   document,
@@ -140,75 +146,73 @@ function DetailsBody({
   }
   return (
     <div className="library-details-body">
-      <DocumentThumbnail documentId={document.id} revision={document.updated_at} />
-      <span className="library-course-label">{document.course_code}</span>
-      <h3>{document.title}</h3>
-      {document.topic && document.topic !== document.title && (
-        <p className="library-topic">{document.topic}</p>
-      )}
-      <dl>
-        <div>
-          <dt>Course</dt>
-          <dd>{document.course_title}</dd>
+      <div className="library-file-scroll">
+        <div className="library-file-preview">
+          <DocumentThumbnail documentId={document.id} revision={document.updated_at} />
         </div>
-        {document.lecturer_name && (
-          <div>
-            <dt>Lecturer</dt>
-            <dd>{document.lecturer_name}</dd>
-          </div>
+        <h3>{document.topic || document.title}</h3>
+        {document.topic && document.topic !== document.title && (
+          <p className="library-topic">{document.title}</p>
         )}
-        <div>
-          <dt>Pages</dt>
-          <dd>{document.page_count || "Not available yet"}</dd>
-        </div>
-        <div>
-          <dt>File size</dt>
-          <dd>{fileSize(document.file_size_bytes)}</dd>
-        </div>
-        {document.academic_session && (
+        <dl>
           <div>
-            <dt>Session</dt>
-            <dd>{document.academic_session}</dd>
+            <dt>Course code</dt>
+            <dd>{document.course_code}</dd>
           </div>
-        )}
-        {document.semester && (
+          {document.lecturer_name && (
+            <div>
+              <dt>Lecturer</dt>
+              <dd>{document.lecturer_name}</dd>
+            </div>
+          )}
           <div>
-            <dt>Semester</dt>
-            <dd>{document.semester === "first" ? "First semester" : "Second semester"}</dd>
+            <dt>Pages</dt>
+            <dd>{document.page_count || "Not available yet"}</dd>
           </div>
-        )}
-        {!!document.target_levels.length && (
           <div>
-            <dt>Levels</dt>
-            <dd>{document.target_levels.join(", ")}</dd>
+            <dt>File size</dt>
+            <dd>{fileSize(document.file_size_bytes)}</dd>
           </div>
-        )}
-        <div>
-          <dt>Added</dt>
-          <dd>{materialDate(document.created_at)}</dd>
-        </div>
-        {document.last_opened_at && (
+          {document.academic_session && (
+            <div>
+              <dt>Session</dt>
+              <dd>{document.academic_session}</dd>
+            </div>
+          )}
+          {document.semester && (
+            <div>
+              <dt>Semester</dt>
+              <dd>{document.semester === "first" ? "First semester" : "Second semester"}</dd>
+            </div>
+          )}
+          {!!document.target_levels.length && (
+            <div>
+              <dt>Levels</dt>
+              <dd>{document.target_levels.join(", ")}</dd>
+            </div>
+          )}
           <div>
-            <dt>Last opened</dt>
-            <dd>{materialDate(document.last_opened_at)}</dd>
+            <dt>Added</dt>
+            <dd>{materialDate(document.created_at)}</dd>
           </div>
-        )}
-        {document.status !== "active" && (
-          <div>
-            <dt>Status</dt>
-            <dd>{document.status.replaceAll("_", " ")}</dd>
-          </div>
-        )}
-      </dl>
-      {document.last_page_read !== null && (
-        <p className="library-reading-state">
-          <BookOpen size={15} /> Saved position: page {document.last_page_read}
-          {document.page_count > 0 ? ` of ${document.page_count}` : ""}
-        </p>
-      )}
+          {document.last_opened_at && (
+            <div>
+              <dt>Last opened</dt>
+              <dd>{materialDate(document.last_opened_at)}</dd>
+            </div>
+          )}
+          {document.status !== "active" && (
+            <div>
+              <dt>Status</dt>
+              <dd>{document.status.replaceAll("_", " ")}</dd>
+            </div>
+          )}
+        </dl>
+        <ReadingProgress lastPage={document.last_page_read} totalPages={document.page_count} />
+      </div>
       <div className="library-document-actions">
         <Button
-          leadingIcon={<ArrowUpRight size={16} />}
+          leadingIcon={<Eye size={17} />}
           trailingIcon={null}
           disabled={busy}
           onClick={() => void openPdf()}
@@ -257,16 +261,28 @@ export function DocumentDetails({
   returnFocus: () => void;
   onOpened: () => void;
 }): React.ReactElement | null {
-  const mobile = useSyncExternalStore(subscribeViewport, mobileViewport, () => false);
-  if (!document) return null;
-  if (mobile)
+  const viewport = useSyncExternalStore(subscribeViewport, detailsViewport, () => "compact");
+  if (!document)
+    return viewport === "wide" ? (
+      <aside className="library-details library-details-empty" aria-label="File information">
+        <header>
+          <h2>File information</h2>
+        </header>
+        <div>
+          <FileText size={24} />
+          <h3>File information</h3>
+          <p>Select a document to see its details and reading progress.</p>
+        </div>
+      </aside>
+    ) : null;
+  if (viewport === "mobile")
     return (
       <Slideout
         open
         onOpenChange={(open) => {
           if (!open) onClose();
         }}
-        title="Document details"
+        title="File information"
         description={document.title}
         className="library-details-dialog"
         onCloseAutoFocus={(event) => {
@@ -278,9 +294,9 @@ export function DocumentDetails({
       </Slideout>
     );
   return (
-    <aside className="library-details" aria-label="Document details">
+    <aside className="library-details" aria-label="File information">
       <header>
-        <h2>Document details</h2>
+        <h2>File information</h2>
         <button
           type="button"
           className="library-icon-button"

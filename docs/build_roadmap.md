@@ -1316,7 +1316,9 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 
 ### 10.6 Library browsing — legacy UI refinement
 
-27 October mobile follow-up: refine the legacy Library from header through document details, preserving shared Home cards and caches. Dedicated mobile header, full-width search, Recent/Courses tabs, real date groups, compact course folders, filter chips and a document-details bottom sheet. Navigation uses the existing shell drawer with opener focus restoration. [Scope and local verification](library-mobile-2026-10-27.md); hosted/full-phase gates remain open.
+28 October navigation/detail refinement: URL-persisted Recent/Courses/course selection, edge-to-edge course-panel dividers, legacy list and File Information layout with filled covers, fixed PDF action, request-bound desktop refresh, mobile pull-to-refresh, a chevron/code/title course header and navigation touch feedback shared with the Library back button. [Scope and local verification](library-navigation-and-details-2026-10-28.md); overall Testing and hosted gates remain open.
+
+27 October mobile follow-up: the first visual adaptation was rejected in user review. Restore the actual legacy composition: separate search/filter area and rounded-top content panel, with layout/filter actions beside Recent/Courses. Follow-up adds Back to Home, a two-column course grid with matching skeletons and a simple Recent empty state; remove the Library composer. Retain shared Home cards/covers and document-detail focus recovery. [Correction and local verification](library-mobile-2026-10-27.md); visual acceptance and hosted/full-phase gates remain open.
 
 User-approved 26 October scope: [library browsing and verification](library-browsing-2026-10-26.md). Keep the legacy course panel and document details structure, the shared color palette and dividing lines. Omit the separate All materials destination. This slice does not certify the custom PDF reader below.
 

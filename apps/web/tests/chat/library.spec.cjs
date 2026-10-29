@@ -142,9 +142,9 @@ test("legacy library keeps course navigation, Home-sized document cards and real
   await expect(page.getByRole("button", { name: "Upload material" })).toHaveCount(0);
   await page.screenshot({ path: test.info().outputPath("library-desktop-recent.png") });
   await cards.first().click();
-  const details = page.getByRole("complementary", { name: "Document details" });
-  await expect(details).toContainText("Clinical Pharmacology");
-  await expect(details).toContainText("Saved position: page 3 of 16");
+  const details = page.getByRole("complementary", { name: "File information" });
+  await expect(details).toContainText("PCL 401");
+  await expect(details).toContainText("3 / 16 pages");
   await details.getByRole("button", { name: "Open PDF", exact: true }).click();
   await expect(details.getByRole("alert")).toContainText("couldn't open this PDF");
   state.pdfFails = false;
@@ -307,7 +307,7 @@ test("mobile library preserves Recent/Courses, filters, focused details and them
     .toBeGreaterThanOrEqual(4);
   await page.screenshot({ path: test.info().outputPath("library-mobile-recent.png") });
   await docs.getByRole("button").first().click();
-  const details = page.getByRole("dialog", { name: "Document details", exact: true });
+  const details = page.getByRole("dialog", { name: "File information", exact: true });
   await expect(details).toContainText("Autonomic pharmacology");
   await page.keyboard.press("Escape");
   await expect(docs.getByRole("button").first()).toBeFocused();
@@ -324,7 +324,13 @@ test("mobile library preserves Recent/Courses, filters, focused details and them
     .getByRole("button")
     .first()
     .click();
-  await expect(page.getByRole("heading", { name: "PCL 401", exact: true })).toBeVisible();
+  await expect(page.locator(".library-mobile-course-code")).toBeVisible();
+  await expect(page.locator(".library-mobile-course-title")).toHaveText("Clinical Pharmacology");
+  await expect(page.locator(".library-header")).not.toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Library sections", exact: true })
+  ).not.toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("library-mobile-course-header.png") });
   await page.getByRole("button", { name: "Academic filters", exact: true }).click();
   await page.getByLabel("Semester", { exact: true }).selectOption("second");
   await expect(
@@ -351,6 +357,7 @@ test("library failures remain visible and retry can reach a genuine empty univer
   page,
 }) => {
   const state = await setup(page, { failure: true });
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/app/library");
   await expect(
     page.getByRole("heading", { name: "We couldn't load your library", exact: true })
@@ -360,15 +367,21 @@ test("library failures remain visible and retry can reach a genuine empty univer
   state.empty = true;
   await page.getByRole("button", { name: "Retry library", exact: true }).click();
   await expect(
-    page.getByRole("heading", { name: "Your next chapter starts here", exact: true })
+    page.getByRole("heading", { name: "No recent documents", exact: true })
   ).toBeVisible();
-  await page.getByRole("button", { name: "Explore courses", exact: true }).click();
+  await expect(page.locator(".library-recent-empty > svg")).toHaveCount(0);
+  await expect(page.locator(".library-recent-empty")).toContainText(
+    "Documents you open will appear here."
+  );
+  await expect(page.locator(".library-recent-empty")).toHaveCSS("border-top-width", "0px");
+  await page.screenshot({ path: test.info().outputPath("mobile-library-empty-recent.png") });
+  await page.getByRole("button", { name: "Browse courses", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Your courses will appear here", exact: true })
   ).toBeVisible();
 });
 
-test("mobile Library follows the legacy header-to-footer flow with real date groups and a details sheet", async ({
+test("mobile Library keeps tab actions, a matching course grid and Home navigation", async ({
   page,
 }) => {
   const state = await setup(page);
@@ -385,14 +398,21 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
   const header = page.locator(".library-mobile-topbar");
   const search = page.getByLabel("Search your library", { exact: true });
   const tabs = page.getByRole("navigation", { name: "Library sections", exact: true });
-  const actions = page.locator(".library-header");
+  const actions = page.locator(".library-mobile-browse-actions");
+  const panel = page.locator(".library-content-panel");
   const results = page.locator(".library-results");
-  const footer = page.locator(".shell-mobile-composer");
+  await expect(page.locator(".shell-mobile-composer")).toHaveCount(0);
   const docs = page.getByRole("list", { name: "Course documents", exact: true });
   await expect(docs.getByRole("button")).toHaveCount(6);
   await expect(page.locator(".library-date-group")).toHaveText(["Today", "Yesterday", "Earlier"]);
   await expect(header.getByText("Library", { exact: true })).toBeVisible();
   await expect(page.locator(".shell-mobile-brand")).not.toBeVisible();
+  await expect(panel).toHaveCSS("border-top-left-radius", "28px");
+  await expect(panel).toHaveCSS("border-top-right-radius", "28px");
+  await expect(panel.locator(".library-mobile-tabs")).toBeVisible();
+  await expect(panel.locator(".library-results")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Grid view", exact: true })).not.toBeVisible();
+  await expect(page.getByRole("button", { name: "List view", exact: true })).toBeVisible();
   for (const [width, height] of [
     [390, 844],
     [320, 568],
@@ -400,12 +420,15 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
   ]) {
     await page.setViewportSize({ width, height });
     const bounds = await Promise.all(
-      [header, search, tabs, actions, results, footer].map((item) => item.boundingBox())
+      [header, search, tabs, actions, results].map((item) => item.boundingBox())
     );
     expect(bounds[0].y + bounds[0].height).toBeLessThanOrEqual(bounds[1].y + 1);
     expect(bounds[1].y + bounds[1].height).toBeLessThanOrEqual(bounds[2].y + 1);
-    expect(bounds[2].y + bounds[2].height).toBeLessThanOrEqual(bounds[3].y + 1);
-    expect(bounds[4].y + bounds[4].height).toBeLessThanOrEqual(bounds[5].y + 1);
+    expect(
+      Math.abs(bounds[2].y + bounds[2].height / 2 - (bounds[3].y + bounds[3].height / 2))
+    ).toBeLessThan(8);
+    expect(bounds[2].x + bounds[2].width).toBeLessThanOrEqual(bounds[3].x);
+    expect(bounds[4].y + bounds[4].height).toBeLessThanOrEqual(height);
     expect(
       await page.evaluate(
         () =>
@@ -413,7 +436,9 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
           document.documentElement.scrollWidth <= innerWidth
       )
     ).toBe(true);
-    await expect(footer).toBeInViewport();
+    await expect(
+      actions.getByRole("button", { name: "Academic filters", exact: true })
+    ).toBeInViewport();
     if (width === 390) {
       await expect
         .poll(() =>
@@ -432,30 +457,13 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
   await lastDocument.focus();
   await expect(lastDocument).toBeInViewport();
   const lastBox = await lastDocument.boundingBox();
-  const footerBox = await footer.boundingBox();
-  expect(lastBox.y + lastBox.height).toBeLessThanOrEqual(footerBox.y + 1);
+  expect(lastBox.y + lastBox.height).toBeLessThanOrEqual(845); // Allow subpixel scroll rounding.
   expect(await page.evaluate(() => window.scrollY)).toBe(0);
   await results.evaluate((element) => {
     element.scrollTop = 0;
   });
-  const nav = header.getByRole("button", { name: "Open navigation", exact: true });
-  await nav.click();
-  await expect(
-    page.getByRole("dialog", { name: "Workspace navigation", exact: true })
-  ).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(nav).toBeFocused();
-  await nav.click();
-  await page
-    .getByRole("dialog", { name: "Workspace navigation", exact: true })
-    .getByRole("button", { name: "Account menu", exact: true })
-    .click();
-  await page.getByRole("menuitem", { name: "Help", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Help", exact: true })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(nav).toBeFocused();
   await docs.getByRole("button").first().click();
-  const sheet = page.getByRole("dialog", { name: "Document details", exact: true });
+  const sheet = page.getByRole("dialog", { name: "File information", exact: true });
   await expect(sheet).toHaveCSS("border-top-left-radius", "24px");
   const sheetBox = await sheet.boundingBox();
   expect(sheetBox.y).toBeGreaterThan(20);
@@ -465,13 +473,37 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
   await page.screenshot({ path: test.info().outputPath("mobile-library-document-sheet.png") });
   await page.keyboard.press("Escape");
   await expect(docs.getByRole("button").first()).toBeFocused();
+  let releaseCourses;
+  const courseResponse = new Promise((resolve) => {
+    releaseCourses = resolve;
+  });
+  let holdCourses = true;
+  await page.route("**/api/v1/library/catalog?*", async (route) => {
+    if (holdCourses && new URL(route.request().url()).searchParams.get("collection") === "all") {
+      holdCourses = false;
+      await courseResponse;
+    }
+    await route.fallback();
+  });
   await tabs.getByRole("button", { name: "Courses", exact: true }).click();
+  const loading = page.getByLabel("Loading library", { exact: true });
+  await expect(loading).toBeVisible();
+  const skeleton = await loading.locator(".library-card-skeleton").first().boundingBox();
+  await page.screenshot({ path: test.info().outputPath("mobile-library-course-skeleton.png") });
+  releaseCourses();
   const courseCards = page.getByRole("list", { name: "Courses", exact: true });
   await expect(page.getByRole("group", { name: "Document layout", exact: true })).not.toBeVisible();
   await expect(courseCards.getByRole("button")).toHaveCount(2);
   const a = await courseCards.getByRole("button").first().boundingBox();
   const b = await courseCards.getByRole("button").nth(1).boundingBox();
   expect(Math.abs(a.y - b.y)).toBeLessThan(1);
+  expect(a.x + a.width).toBeLessThan(b.x);
+  expect(a.width).toBeGreaterThan(150);
+  expect(a.height).toBeGreaterThanOrEqual(190);
+  expect(Math.abs(a.width - skeleton.width)).toBeLessThan(1);
+  expect(Math.abs(a.height - skeleton.height)).toBeLessThan(1);
+
+  expect(Math.abs(a.width - b.width)).toBeLessThan(1);
   await page.screenshot({ path: test.info().outputPath("mobile-library-course-folders.png") });
   await courseCards.getByRole("button").first().click();
   await page.getByRole("button", { name: "Academic filters", exact: true }).click();
@@ -487,6 +519,9 @@ test("mobile Library follows the legacy header-to-footer flow with real date gro
   await expect(
     page.getByRole("button", { name: "Clear semester filter", exact: true })
   ).toHaveCount(0);
+  await header.getByRole("button", { name: "Back to Home", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
+  await expect(page.getByLabel("Message PansGPT", { exact: true })).toBeVisible();
 });
 
 for (const role of ["university_admin", "lecturer"]) {
@@ -601,7 +636,7 @@ test("switching accounts clears selected library details and rejects an older ca
   });
   await page.goto("/app/library");
   await page.getByRole("list", { name: "Course documents" }).getByRole("button").first().click();
-  await expect(page.getByRole("complementary", { name: "Document details" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "File information" })).toBeVisible();
   hold = true;
   await page.getByRole("button", { name: "Refresh", exact: true }).click();
   await expect.poll(() => delayed).toBe(true);
@@ -613,11 +648,203 @@ test("switching accounts clears selected library details and rejects an older ca
     })
   );
   await expect(
-    page.getByRole("heading", { name: "Your next chapter starts here", exact: true })
+    page.getByRole("heading", { name: "No recent documents", exact: true })
   ).toBeVisible();
   release();
   await expect.poll(() => delayed).toBe(false);
-  await expect(page.getByRole("complementary", { name: "Document details" })).toHaveCount(0);
+  await expect(page.locator(".library-details-empty")).toBeVisible();
+  await expect(page.locator(".library-file-preview")).toHaveCount(0);
   await expect(page.locator(".library-material")).toHaveCount(0);
   await expect(page.getByText("Autonomic pharmacology", { exact: true })).toHaveCount(0);
+});
+
+test("library URL selection survives reload and browser history", async ({ page }) => {
+  await setup(page);
+  await page.goto("/app/library?tab=courses");
+  const folders = page.getByRole("list", { name: "Courses", exact: true });
+  await expect(folders.getByRole("button")).toHaveCount(2);
+  await folders.getByRole("button").first().click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("course")).toBe("PCL 401");
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "PCL 401", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("list", { name: "Course documents" }).getByRole("button")
+  ).toHaveCount(24);
+  await expect(
+    page.getByRole("button", { name: "Back to courses", exact: true })
+  ).not.toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Library collections", exact: true })
+    .getByRole("button", { name: "Recent Documents", exact: true })
+    .click();
+  await expect.poll(() => new URL(page.url()).searchParams.get("tab")).toBe("recent");
+  expect(new URL(page.url()).searchParams.has("course")).toBe(false);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Recent Documents", exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("heading", { name: "PCL 401", exact: true })).toBeVisible();
+  await page.goForward();
+  await expect(page.getByRole("heading", { name: "Recent Documents", exact: true })).toBeVisible();
+});
+
+test("library refresh feedback, legacy file information and mobile pull gestures", async ({
+  page,
+}) => {
+  await setup(page);
+  let hold = false;
+  let release;
+  let requests = 0;
+  page.on("request", (request) => {
+    if (request.url().includes("/library/catalog?")) requests++;
+  });
+  await page.route("**/api/v1/library/catalog?*", async (route) => {
+    if (hold) {
+      hold = false;
+      await new Promise((resolve) => {
+        release = resolve;
+      });
+    }
+    await route.fallback();
+  });
+  await page.goto("/app/library?tab=courses&course=PCL+401");
+  const docs = page.getByRole("list", { name: "Course documents", exact: true });
+  await expect(docs.getByRole("button")).toHaveCount(24);
+  const libraryNav = page.getByRole("complementary", { name: "Library navigation" });
+  const navBox = await libraryNav.boundingBox();
+  const titleBox = await libraryNav.locator(".library-panel-title").boundingBox();
+  expect(Math.abs(navBox.x - titleBox.x)).toBeLessThan(1);
+  expect(Math.abs(navBox.width - 1 - titleBox.width)).toBeLessThan(1);
+  expect(titleBox.y - navBox.y).toBeLessThan(2);
+  await docs.getByRole("button").first().click();
+  const info = page.getByRole("complementary", { name: "File information", exact: true });
+  const image = info.locator(".library-file-preview img");
+  await expect(image).toHaveAttribute("src", /^blob:/);
+  await expect(image).toHaveCSS("object-fit", "cover");
+  await expect(info.getByRole("progressbar")).toHaveAttribute("value", "3");
+  const open = info.getByRole("button", { name: "Open PDF", exact: true });
+  const actionBefore = await open.boundingBox();
+  await info.locator(".library-file-scroll").evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  const actionAfter = await open.boundingBox();
+  expect(Math.abs(actionBefore.y - actionAfter.y)).toBeLessThan(1);
+  await page.screenshot({ path: test.info().outputPath("library-file-information-desktop.png") });
+  const refresh = page.getByRole("button", { name: "Refresh", exact: true });
+  hold = true;
+  await refresh.click();
+  await expect(refresh).toHaveAttribute("aria-busy", "true");
+  await expect(refresh.locator("svg")).toHaveCSS("animation-name", "library-refresh-spin");
+  await expect(docs.getByRole("button")).toHaveCount(24);
+  await expect.poll(() => typeof release).toBe("function");
+  release();
+  await expect(refresh).toHaveAttribute("aria-busy", "false");
+  await expect(info).toBeVisible();
+  await info.getByRole("button", { name: "Close document details", exact: true }).click();
+  await page.getByRole("button", { name: "List view", exact: true }).click();
+  await expect(docs.locator("img")).toHaveCount(0);
+  await expect(docs.locator(".library-list-file-icon")).toHaveCount(24);
+  await page.screenshot({ path: test.info().outputPath("library-legacy-list-desktop.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("button", { name: "Refresh", exact: true })).toHaveCount(0);
+  await expect(docs.locator(".library-reading-ring").first()).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("library-legacy-list-mobile.png") });
+  const results = page.locator(".library-results");
+  const box = await results.boundingBox();
+  const touch = await page.context().newCDPSession(page);
+  async function pull(dy, cancelled = false) {
+    const start = { x: box.x + 100, y: box.y + 80, id: 1 };
+    await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [start] });
+    for (let step = 1; step <= 6; step++) {
+      await touch.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [{ ...start, y: start.y + (dy * step) / 6 }],
+      });
+      await page.evaluate(() => new Promise(requestAnimationFrame));
+    }
+    await touch.send("Input.dispatchTouchEvent", {
+      type: cancelled ? "touchCancel" : "touchEnd",
+      touchPoints: [],
+    });
+  }
+  await results.evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  const before = requests;
+  await pull(50);
+  await expect(page.locator(".library-pull-refresh")).toHaveAttribute("data-active", "false");
+  expect(requests).toBe(before);
+  await pull(180, true);
+  await expect(page.locator(".library-pull-refresh")).toHaveAttribute("data-active", "false");
+  expect(requests).toBe(before);
+  await results.evaluate((element) => {
+    element.scrollTop = 180;
+  });
+  await pull(100);
+  expect(requests).toBe(before);
+  await results.evaluate((element) => {
+    element.scrollTop = 0;
+  });
+  hold = true;
+  release = undefined;
+  await pull(180);
+  await expect.poll(() => requests).toBe(before + 1);
+  await expect(page.getByText("Refreshing library...", { exact: true })).toBeVisible();
+  await expect.poll(() => typeof release).toBe("function");
+  release();
+  await expect(page.locator(".library-pull-refresh")).toHaveAttribute("data-active", "false");
+  await expect(docs.getByRole("button")).toHaveCount(24);
+  await touch.detach();
+});
+
+test("mobile navigation matches the Library back button during real touch presses", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app/library");
+  const back = page.getByRole("button", { name: "Back to Home", exact: true });
+  const touch = await page.context().newCDPSession(page);
+  await touch.send("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+  async function press(locator) {
+    const box = await locator.boundingBox();
+    await touch.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2, id: 1 }],
+    });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+  }
+  await back.hover();
+  await expect(back).not.toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  const reference = await back.evaluate((element) => ({
+    background: getComputedStyle(element).backgroundColor,
+    tap: getComputedStyle(element).webkitTapHighlightColor,
+  }));
+  await page.screenshot({ path: test.info().outputPath("library-back-touch-feedback.png") });
+  await back.click();
+  await expect(page).toHaveURL(/\/app$/);
+  const homeLibrary = page
+    .getByRole("navigation", { name: "Study tools", exact: true })
+    .getByRole("link", { name: "Library", exact: true });
+  await press(homeLibrary);
+  await expect(homeLibrary).toHaveCSS("background-color", reference.background);
+  await touch.send("Input.dispatchTouchEvent", { type: "touchCancel", touchPoints: [] });
+  await expect(homeLibrary).toHaveAttribute("data-pressed", "false");
+  await page.goto("/app/chat");
+  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+  const library = navigation.getByRole("link", { name: "Library", exact: true });
+  const normal = await library.evaluate((element) => getComputedStyle(element).backgroundColor);
+  await press(library);
+  await expect(library).toHaveCSS("background-color", reference.background);
+  await expect(library).toHaveCSS("-webkit-tap-highlight-color", reference.tap);
+  expect(reference.background).not.toBe(normal);
+  await page.screenshot({ path: test.info().outputPath("navigation-touch-feedback.png") });
+  await touch.send("Input.dispatchTouchEvent", { type: "touchCancel", touchPoints: [] });
+  await expect(library).toHaveAttribute("data-pressed", "false");
+  await expect(page).toHaveURL(/\/app\/chat$/);
+  await press(library);
+  await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  await expect(page).toHaveURL(/\/app\/library$/);
+  await touch.detach();
 });

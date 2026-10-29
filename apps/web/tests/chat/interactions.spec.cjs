@@ -561,12 +561,9 @@ test("Library starts with a compact app sidebar and preserves other pages' sideb
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-  const drawer = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  await expect(drawer.getByRole("link", { name: "Library", exact: true })).toBeVisible();
-  await drawer.getByRole("link", { name: "Home", exact: true }).click();
+  await expect(page.locator(".shell-mobile-composer")).toHaveCount(0);
+  await page.getByRole("button", { name: "Back to Home", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await expect(drawer).not.toBeVisible();
 });
 
 test("home and chat share aligned navigation, docked toggle and polished account menus", async ({
@@ -627,6 +624,17 @@ test("home and chat share aligned navigation, docked toggle and polished account
   await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();
   const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+  const pressedHome = navigation.getByRole("link", { name: "Home", exact: true });
+  await pressedHome.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    button: 0,
+    isPrimary: true,
+  });
+  await expect(pressedHome).toHaveAttribute("data-pressed", "true");
+  const pressColor = await pressedHome.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(pressColor).not.toBe("rgba(0, 0, 0, 0)");
+  await pressedHome.dispatchEvent("pointercancel");
+  await expect(pressedHome).toHaveAttribute("data-pressed", "false");
   await expect(navigation.getByRole("link", { name: "New chat", exact: true })).toBeVisible();
   expect(
     await navigation

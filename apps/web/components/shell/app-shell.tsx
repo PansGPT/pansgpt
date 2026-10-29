@@ -102,7 +102,7 @@ function Workspace({
           pathname === "/app"
             ? ".shell-home-account .shell-account-menu"
             : inLibrary
-              ? ".library-mobile-nav-trigger"
+              ? ".library-mobile-home-button"
               : ".shell-mobile-menu"
         )
         ?.focus();
@@ -343,7 +343,7 @@ function Workspace({
             </motion.div>
           </main>
           {pathname === "/app" && <MobileHomeChat />}
-          {pathname !== "/app/chat" && pathname !== "/app" && (
+          {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && (
             <form
               className="shell-mobile-composer p-study-composer"
               onSubmit={(event) => {

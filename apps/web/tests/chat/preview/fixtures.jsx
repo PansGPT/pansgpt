@@ -139,7 +139,7 @@ export function useRouter() {
     history[replace ? "replaceState" : "pushState"](null, "", url);
     window.dispatchEvent(new PopStateEvent("popstate"));
   };
-  return { push: navigate, replace: (url) => navigate(url, true), refresh: () => {} };
+  return { push: (url) => navigate(url), replace: (url) => navigate(url, true), refresh: () => {} };
 }
 export default function Link({ href, children, onClick, ...props }) {
   const router = useRouter();
