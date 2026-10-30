@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
-  ChevronLeft,
+  ArrowLeft,
   ChevronRight,
   Search,
   X,
@@ -103,8 +103,8 @@ export default function LearnPage(): React.ReactElement {
 
   return (
     <div className="learn-mobile-view">
-      {/* ─── Top Header ─── */}
-      <header className="learn-mobile-header">
+      {/* ─── Top Header (Library Mobile Style) ─── */}
+      <header className="learn-mobile-topbar">
         <button
           type="button"
           onClick={() => {
@@ -114,25 +114,25 @@ export default function LearnPage(): React.ReactElement {
               router.push("/app");
             }
           }}
-          className="learn-mobile-nav-btn"
-          aria-label="Go back"
+          className="learn-mobile-home-button shell-touch-feedback"
+          aria-label="Back to Home"
         >
-          <ChevronLeft size={20} aria-hidden="true" />
+          <ArrowLeft size={20} aria-hidden="true" />
         </button>
 
-        <h1 className="learn-mobile-title">Learn</h1>
+        <strong className="learn-mobile-topbar-title">Learn</strong>
 
-        <div className="learn-mobile-header-actions">
+        <div className="learn-mobile-top-actions">
           <button
             type="button"
-            className="learn-mobile-nav-btn"
+            className="learn-icon-button"
             onClick={() => setShowSearch((prev) => !prev)}
             aria-label="Toggle search"
             aria-expanded={showSearch}
           >
-            <Search size={16} aria-hidden="true" />
+            <Search size={18} aria-hidden="true" />
           </button>
-          <div className="shell-home-account">
+          <div className="shell-home-account learn-profile-wrap">
             {profile ? (
               <MobileProfileButton
                 profile={profile}
@@ -145,9 +145,15 @@ export default function LearnPage(): React.ReactElement {
                 }}
               />
             ) : (
-              <span
+              <button
+                type="button"
                 className="shell-account shell-account-menu shell-account-compact shell-credit-profile"
                 aria-label="Account profile"
+                onClick={() => {
+                  window.dispatchEvent(
+                    new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
+                  );
+                }}
               >
                 <svg viewBox="0 0 36 36" className="shell-credit-ring" aria-hidden="true">
                   <circle className="shell-credit-profile-track" cx="18" cy="18" r="16" />
@@ -155,248 +161,241 @@ export default function LearnPage(): React.ReactElement {
                 <span className="shell-account-initial" aria-hidden="true">
                   {userInitial}
                 </span>
-              </span>
+              </button>
             )}
           </div>
         </div>
       </header>
 
-      {/* ─── Search input (expandable) ─── */}
-      {showSearch && (
-        <div className="learn-mobile-search-bar">
-          <Search size={16} className="learn-search-icon" aria-hidden="true" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search clinical guides, techniques, career..."
-            autoFocus
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery("")}
-              className="learn-search-clear"
-              aria-label="Clear search"
-            >
-              <X size={15} />
-            </button>
-          )}
-        </div>
-      )}
+      <div className="learn-body-content">
+        {/* ─── Search input (expandable) ─── */}
+        {showSearch && (
+          <div className="learn-mobile-search-bar">
+            <Search size={16} className="learn-search-icon" aria-hidden="true" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search clinical guides, techniques, career..."
+              autoFocus
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="learn-search-clear"
+                aria-label="Clear search"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+        )}
 
-      {/* ─── Horizontal Filter Carousel ─── */}
-      <nav className="learn-filter-carousel" aria-label="Categories">
-        {/* All Tab */}
-        <button
-          type="button"
-          className="learn-filter-pill-btn"
-          data-active={activeTab === "all" ? "true" : "false"}
-          onClick={() => setActiveTab("all")}
-          aria-pressed={activeTab === "all"}
-        >
-          <Briefcase size={12} aria-hidden="true" />
-          <span>All</span>
-        </button>
-
-        {/* Academics / Study Techniques */}
-        <button
-          type="button"
-          className="learn-filter-icon-btn"
-          data-active={activeTab === "academics" ? "true" : "false"}
-          onClick={() => setActiveTab("academics")}
-          aria-label="Study Techniques"
-          aria-pressed={activeTab === "academics"}
-        >
-          <GraduationCap size={13} aria-hidden="true" />
-        </button>
-
-        {/* Clinical Skills */}
-        <button
-          type="button"
-          className="learn-filter-icon-btn"
-          data-active={activeTab === "clinical" ? "true" : "false"}
-          onClick={() => setActiveTab("clinical")}
-          aria-label="Clinical Skills"
-          aria-pressed={activeTab === "clinical"}
-        >
-          <Target size={13} aria-hidden="true" />
-        </button>
-
-        {/* Career & Mindset */}
-        <button
-          type="button"
-          className="learn-filter-icon-btn"
-          data-active={activeTab === "career" ? "true" : "false"}
-          onClick={() => setActiveTab("career")}
-          aria-label="Career & Mindset"
-          aria-pressed={activeTab === "career"}
-        >
-          <TrendingUp size={13} aria-hidden="true" />
-        </button>
-
-        {/* Saved / Bookmarks */}
-        <button
-          type="button"
-          className="learn-filter-icon-btn"
-          data-active={activeTab === "saved" ? "true" : "false"}
-          onClick={() => setActiveTab("saved")}
-          aria-label="Saved articles"
-          aria-pressed={activeTab === "saved"}
-        >
-          <Bookmark size={12} aria-hidden="true" />
-        </button>
-
-        {/* Starred / Featured */}
-        <button
-          type="button"
-          className="learn-filter-icon-btn"
-          data-active={activeTab === "featured" ? "true" : "false"}
-          onClick={() => setActiveTab("featured")}
-          aria-label="Featured guides"
-          aria-pressed={activeTab === "featured"}
-        >
-          <Star size={12} aria-hidden="true" />
-        </button>
-      </nav>
-
-      {/* ─── Subheader / Controls Row ─── */}
-      <div className="learn-controls-row">
-        <button
-          type="button"
-          className="learn-sort-btn"
-          onClick={toggleSort}
-          aria-label={`Sorted by ${sortMode === "recent" ? "Recent" : "Duration"}`}
-        >
-          <ArrowUpDown size={11} aria-hidden="true" />
-          <span>{sortMode === "recent" ? "RECENT" : "DURATION"}</span>
-        </button>
-
-        <button
-          type="button"
-          className="learn-view-toggle-btn"
-          onClick={() => setViewMode((prev) => (prev === "grid" ? "list" : "grid"))}
-          aria-label={viewMode === "grid" ? "Switch to list view" : "Switch to grid view"}
-        >
-          {viewMode === "grid" ? (
-            <LayoutGrid size={15} aria-hidden="true" />
-          ) : (
-            <List size={15} aria-hidden="true" />
-          )}
-        </button>
-      </div>
-
-      {/* ─── Main Content Grid / List ─── */}
-      {filteredArticles.length === 0 ? (
-        <div className="learn-empty-state">
-          <BookOpen size={36} aria-hidden="true" />
-          <p>No guides found in this category.</p>
-          <button type="button" onClick={() => setActiveTab("all")}>
-            View all guides
+        {/* ─── Horizontal Filter Carousel ─── */}
+        <nav className="learn-filter-carousel" aria-label="Categories">
+          {/* All Tab */}
+          <button
+            type="button"
+            className="learn-filter-pill-btn"
+            data-active={activeTab === "all" ? "true" : "false"}
+            onClick={() => setActiveTab("all")}
+            aria-pressed={activeTab === "all"}
+          >
+            <Briefcase size={13} aria-hidden="true" />
+            <span>All</span>
           </button>
-        </div>
-      ) : (
-        <div
-          className={`learn-cards-container ${viewMode === "list" ? "is-list-view" : "is-grid-view"}`}
-        >
-          {filteredArticles.map((article) => {
-            const isBookmarked = bookmarkedSlugs.has(article.slug);
-            return (
-              <Link
-                key={article.slug}
-                href={`/app/learn/${article.slug}`}
-                className="learn-pastel-card"
-                data-theme={article.theme}
-              >
-                {/* Eyebrow */}
-                <div className="learn-card-eyebrow">
-                  <span>{article.category.toUpperCase()}</span>
-                  <span className="learn-eyebrow-dot">•</span>
-                  <span>{article.duration.toUpperCase()}</span>
-                </div>
 
-                {/* Title */}
-                <h2 className="learn-card-headline">{article.title}</h2>
+          {/* Academics / Study Techniques */}
+          <button
+            type="button"
+            className="learn-filter-icon-btn"
+            data-active={activeTab === "academics" ? "true" : "false"}
+            onClick={() => setActiveTab("academics")}
+            aria-label="Study Techniques"
+            aria-pressed={activeTab === "academics"}
+          >
+            <GraduationCap size={14} aria-hidden="true" />
+          </button>
 
-                {/* Description */}
-                <p className="learn-card-summary">{article.description}</p>
+          {/* Clinical Skills */}
+          <button
+            type="button"
+            className="learn-filter-icon-btn"
+            data-active={activeTab === "clinical" ? "true" : "false"}
+            onClick={() => setActiveTab("clinical")}
+            aria-label="Clinical Skills"
+            aria-pressed={activeTab === "clinical"}
+          >
+            <Target size={14} aria-hidden="true" />
+          </button>
 
-                {/* Spot Artwork */}
-                <div className="learn-card-spot-art" data-art={article.artKind}>
-                  <StudyArt kind={article.artKind} />
-                </div>
+          {/* Career & Mindset */}
+          <button
+            type="button"
+            className="learn-filter-icon-btn"
+            data-active={activeTab === "career" ? "true" : "false"}
+            onClick={() => setActiveTab("career")}
+            aria-label="Career & Mindset"
+            aria-pressed={activeTab === "career"}
+          >
+            <TrendingUp size={14} aria-hidden="true" />
+          </button>
 
-                {/* Card Footer */}
-                <div className="learn-card-footer">
-                  <div className="learn-card-footer-left">
-                    <button
-                      type="button"
-                      className="learn-card-bookmark-btn"
-                      data-bookmarked={isBookmarked ? "true" : "false"}
-                      onClick={(e) => toggleBookmark(article.slug, e)}
-                      aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this guide"}
-                    >
-                      <Bookmark
-                        size={13}
-                        fill={isBookmarked ? "currentColor" : "none"}
-                        aria-hidden="true"
-                      />
-                    </button>
-                    <span className="learn-card-duration-text">{article.duration}</span>
-                  </div>
+          {/* Saved / Bookmarks */}
+          <button
+            type="button"
+            className="learn-filter-icon-btn"
+            data-active={activeTab === "saved" ? "true" : "false"}
+            onClick={() => setActiveTab("saved")}
+            aria-label="Saved articles"
+            aria-pressed={activeTab === "saved"}
+          >
+            <Bookmark size={13} aria-hidden="true" />
+          </button>
 
-                  <span className="learn-card-arrow-circle" aria-hidden="true">
-                    <ArrowRight size={11} />
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      )}
+          {/* Starred / Featured */}
+          <button
+            type="button"
+            className="learn-filter-icon-btn"
+            data-active={activeTab === "featured" ? "true" : "false"}
+            onClick={() => setActiveTab("featured")}
+            aria-label="Featured guides"
+            aria-pressed={activeTab === "featured"}
+          >
+            <Star size={13} aria-hidden="true" />
+          </button>
+        </nav>
 
-      {/* ─── Floating Bottom Dock: "Recently Read" ─── */}
-      {showRecentDock && recentArticle && (
-        <aside className="learn-bottom-dock" aria-label="Recently read guide">
-          <Link href={`/app/learn/${recentArticle.slug}`} className="learn-dock-content">
-            {/* Mini Book Cover Thumbnail */}
-            <div className="learn-dock-thumb">
-              <span className="learn-dock-thumb-spine" />
-              <span className="learn-dock-thumb-title">PansGPT</span>
-            </div>
-
-            {/* Title & Progress */}
-            <div className="learn-dock-info">
-              <span className="learn-dock-eyebrow">Recently read</span>
-              <span className="learn-dock-title">{recentArticle.title}</span>
-              <div
-                className="learn-dock-progress-bar"
-                role="progressbar"
-                aria-valuenow={45}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label="Reading progress"
-              >
-                <div className="learn-dock-progress-fill" style={{ width: "45%" }} />
-              </div>
-            </div>
-
-            {/* Right Chevron */}
-            <div className="learn-dock-action">
-              <ChevronRight size={18} aria-hidden="true" />
-            </div>
-          </Link>
+        {/* ─── Subheader / Controls Row ─── */}
+        <div className="learn-controls-row">
+          <button
+            type="button"
+            className="learn-sort-btn"
+            onClick={toggleSort}
+            aria-label={`Sorted by ${sortMode === "recent" ? "Recent" : "Duration"}`}
+          >
+            <ArrowUpDown size={11} aria-hidden="true" />
+            <span>{sortMode === "recent" ? "RECENT" : "DURATION"}</span>
+          </button>
 
           <button
             type="button"
-            className="learn-dock-close"
-            onClick={() => setShowRecentDock(false)}
-            aria-label="Dismiss recently read"
+            className="learn-view-toggle-btn"
+            onClick={() => setViewMode((prev) => (prev === "grid" ? "list" : "grid"))}
+            aria-label={viewMode === "grid" ? "Switch to list view" : "Switch to grid view"}
           >
-            <X size={13} />
+            {viewMode === "grid" ? (
+              <LayoutGrid size={15} aria-hidden="true" />
+            ) : (
+              <List size={15} aria-hidden="true" />
+            )}
           </button>
-        </aside>
-      )}
+        </div>
+
+        {/* ─── Main Content Grid / List ─── */}
+        {filteredArticles.length === 0 ? (
+          <div className="learn-empty-state">
+            <BookOpen size={36} aria-hidden="true" />
+            <p>No guides found in this category.</p>
+            <button type="button" onClick={() => setActiveTab("all")}>
+              View all guides
+            </button>
+          </div>
+        ) : (
+          <div
+            className={`learn-cards-container ${viewMode === "list" ? "is-list-view" : "is-grid-view"}`}
+          >
+            {filteredArticles.map((article) => {
+              const isBookmarked = bookmarkedSlugs.has(article.slug);
+              return (
+                <Link
+                  key={article.slug}
+                  href={`/app/learn/${article.slug}`}
+                  className="learn-pastel-card"
+                  data-theme={article.theme}
+                >
+                  {/* Eyebrow */}
+                  <div className="learn-card-eyebrow">
+                    <span>{article.category.toUpperCase()}</span>
+                    <span className="learn-eyebrow-dot">•</span>
+                    <span>{article.duration.toUpperCase()}</span>
+                  </div>
+
+                  {/* Title */}
+                  <h2 className="learn-card-headline">{article.title}</h2>
+
+                  {/* Description */}
+                  <p className="learn-card-summary">{article.description}</p>
+
+                  {/* Spot Artwork */}
+                  <div className="learn-card-spot-art" data-art={article.artKind}>
+                    <StudyArt kind={article.artKind} />
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="learn-card-footer">
+                    <div className="learn-card-footer-left">
+                      <button
+                        type="button"
+                        className="learn-card-bookmark-btn"
+                        data-bookmarked={isBookmarked ? "true" : "false"}
+                        onClick={(e) => toggleBookmark(article.slug, e)}
+                        aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this guide"}
+                      >
+                        <Bookmark
+                          size={13}
+                          fill={isBookmarked ? "currentColor" : "none"}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      <span className="learn-card-duration-text">{article.duration}</span>
+                    </div>
+
+                    <span className="learn-card-arrow-circle" aria-hidden="true">
+                      <ArrowRight size={11} />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
+        {/* ─── Floating Bottom Dock: "Recently Read" ─── */}
+        {showRecentDock && recentArticle && (
+          <aside className="learn-bottom-dock" aria-label="Recently read guide">
+            <Link href={`/app/learn/${recentArticle.slug}`} className="learn-dock-content">
+              {/* Mini Book Cover Thumbnail */}
+              <div className="learn-dock-thumb">
+                <span className="learn-dock-thumb-spine" />
+                <span className="learn-dock-thumb-title">PansGPT</span>
+              </div>
+
+              {/* Title & Progress */}
+              <div className="learn-dock-info">
+                <span className="learn-dock-eyebrow">Recently read</span>
+                <span className="learn-dock-title">{recentArticle.title}</span>
+                <div
+                  className="learn-dock-progress-bar"
+                  role="progressbar"
+                  aria-valuenow={45}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label="Reading progress"
+                >
+                  <div className="learn-dock-progress-fill" style={{ width: "45%" }} />
+                </div>
+              </div>
+
+              {/* Right Chevron */}
+              <div className="learn-dock-action">
+                <ChevronRight size={18} aria-hidden="true" />
+              </div>
+            </Link>
+          </aside>
+        )}
+      </div>
     </div>
   );
 }

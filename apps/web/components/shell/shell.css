@@ -2037,7 +2037,7 @@
   .app-shell[data-home="true"] .shell-mobile-brand .shell-brand span::after {
     content: none;
   }
-  .app-shell[data-home="true"] .shell-home-account {
+  .app-shell:is([data-home="true"], [data-learn="true"]) .shell-home-account {
     display: block;
   }
   .app-shell[data-home="true"] .shell-mobile-menu {
