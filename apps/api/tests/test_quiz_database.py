@@ -889,17 +889,29 @@ async def test_real_capacity_deferral_preserves_progress_without_spending_attemp
     assert blocked.value.status_code == 409
 
 
-async def test_real_ingestion_warms_hidden_inventory_once(quiz_database, monkeypatch):
+@pytest.mark.parametrize(
+    ("roles", "eligible"),
+    [(["student"], True), (["lecturer", "student"], True), (["lecturer"], False)],
+)
+async def test_real_ingestion_warms_hidden_inventory_once(
+    quiz_database, monkeypatch, roles, eligible
+):
     from workers import quiz_inventory
 
     conn, user, document = quiz_database
+    await conn.execute(
+        "UPDATE public.users SET roles=$2::public.user_role[] WHERE id=$1", user.id, roles
+    )
     monkeypatch.setattr(quiz_inventory, "database", service.database)
     monkeypatch.setattr(settings, "ENABLE_AI", True)
     await quiz_inventory.warm_quiz_inventory({}, str(document))
     rows = await conn.fetch(
         "SELECT request_payload FROM public.quiz_generation_jobs WHERE user_id=$1", user.id
     )
-    assert len(rows) == 1
+    assert len(rows) == int(eligible)
+    if not eligible:
+        assert (await service.history(user)).jobs == []
+        return
     payload = service.unpack(rows[0]["request_payload"])
     assert (
         payload["bank_refill"]

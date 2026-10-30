@@ -28,7 +28,7 @@ async def warm_quiz_inventory(ctx: dict[str, object], document_id: str | None = 
                     """SELECT d.id AS document_id,d.course_code,'' AS topic,'objective' AS question_format,'medium' AS difficulty,
                 u.id,u.email,u.university_id,u.current_level FROM public.documents d JOIN public.users u ON u.university_id=d.university_id
                 WHERE d.id=$1 AND d.status='active' AND d.embedding_status='completed' AND d.deleted_at IS NULL
-                AND u.deleted_at IS NULL AND u.role='student' AND u.current_level IS NOT NULL
+                AND u.deleted_at IS NULL AND 'student'=ANY(u.roles) AND u.current_level IS NOT NULL
                 AND (cardinality(d.target_levels)=0 OR u.current_level=ANY(d.target_levels)) ORDER BY u.id LIMIT 1""",
                     UUID(document_id),
                 )

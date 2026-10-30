@@ -51,3 +51,13 @@ Notion additions pending the unavailable connector: Session / Change Log (2026-1
 The latest real matrix retry stopped after three failed deliveries with **4 of 10 questions preserved** (up from two). It is not ready to start. Remaining failures include terms absent from cited evidence, upstream structured-output rejection and Google timeout/server errors. Synthetic success and passing regressions do not certify live completion or launch readiness. Further evidence-matching diagnostics and a complete hosted journey remain open.
 
 Workspace lint and all six TypeScript typecheck tasks pass. Both local frontend and backend readiness endpoints return HTTP 200. CI now includes the real database retry-bound tests alongside the lifecycle suite. Temporary logs and the isolated PostgreSQL cluster are excluded from version control. This branch is being submitted as a draft PR with the live limitation explicit; no deployment is included.
+
+### 30 October: merge follow-up and migrated role contract
+
+The user requested merging PRs #4 and #5 into `main`. PR #4 merged at `75671eb` after its nine CI jobs passed; its failed Vercel preview remains a separate deployment issue. PR #5's migrated-database job exposed a real inventory bug: `warm_quiz_inventory` queried `users.role`, while the canonical schema stores `users.roles` as a `user_role[]`.
+
+Inventory admission now checks student membership in the existing roles array. The isolated PostgreSQL baseline uses that same enum-array contract, and the real database regression covers student-only, multiple-role student and lecturer-only accounts. No migration or hosted database mutation is required. Merge approval does not certify the incomplete saved live matrix request, hosted journeys or provider readiness.
+
+Local verification: **38 database lifecycle/retry tests passed, one Redis-dependent test skipped** on disposable loopback PostgreSQL 18. The offline API suite passed **774 tests, 67 skipped**. API Ruff lint/format, all 36 migration mirrors and diff checks passed. Hosted Supabase replay and the new PR-head CI run remain separate verification.
+
+Notion synchronization remains pending because no Notion connector is available. Session / Change Log: 2026-10-30; Quiz / CI; align inventory role filtering and its local fixture with the migrated schema; files `workers/quiz_inventory.py`, `tests/test_quiz_database.py`, `tests/fixtures/quiz-baseline.sql` and this audit; Verified: local checks above. Product Roadmap & Features: CI correction locally verified; hosted CI, saved live generation and hosted release gates remain open.
