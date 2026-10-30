@@ -18,6 +18,9 @@ async def startup(ctx: dict[str, Any]) -> None:
 
 
 async def shutdown(ctx: dict[str, Any]) -> None:
+    from app.engines.provider_capacity import close_capacity
+
+    await close_capacity()
     await close_db_pool()
 
 

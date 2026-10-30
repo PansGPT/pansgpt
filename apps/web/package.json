@@ -9,7 +9,8 @@
     "lint": "eslint app lib components env.ts proxy.ts next.config.ts --ext .ts,.tsx",
     "test:auth": "playwright test",
     "test:chat": "playwright test --config playwright.chat.config.ts",
-    "test": "node --experimental-strip-types --experimental-default-type=module --test tests/*.test.mjs",
+    "test:quiz": "playwright test --config playwright.quiz.config.ts",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

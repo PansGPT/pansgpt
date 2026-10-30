@@ -27,12 +27,37 @@ The staging database is migrated and verified. The documented custom domains and
 
 ## Worker operation
 
+Local development now uses `pnpm dev` from the repository root for frontend, API
+and the supervised main quiz worker. No separate worker terminal is needed.
+`pnpm dev:worker` runs just that worker. Stop existing manually launched services
+before starting the combined session; Windows Ctrl+C gets a short grace period
+before remaining owned process trees are terminated. Saved jobs retain their
+normal lease/reconciliation recovery if a process is terminated.
+
+For an **existing Docker host** with the reviewed application revision and a
+host-specific root `.env`, the optional worker-only configuration is:
+
+```sh
+docker compose -f compose.worker.yml up -d --build
+docker compose -f compose.worker.yml logs -f worker
+docker compose -f compose.worker.yml stop
+```
+
+It starts `workers.runner`, uses `restart: unless-stopped` and gives shutdown
+120 seconds. Docker itself must be configured to start on host boot. This file
+does not provision hosting, enable quizzes, bypass provider gates, or add a paid
+Render service. It must use the same database/Redis/environment as its API.
+Its inherited API HTTP health check is disabled; verify worker subscription and
+actual job pickup. Do not run a second worker against the same queue accidentally.
+The Docker configuration has not been runtime-tested on the current Windows
+machine because Docker is not installed.
+
 Use the same application revision and staging configuration on the selected worker host:
 
 ```sh
 cd apps/api
 uv sync --frozen --no-dev
-uv run arq workers.settings.WorkerSettings
+uv run python -m workers.runner
 ```
 
 Run the picture queue separately when required:
@@ -41,7 +66,7 @@ Run the picture queue separately when required:
 uv run arq workers.settings.PictureWorkerSettings
 ```
 
-The main worker initializes a small Postgres pool, reconciles the durable outbox and schedules cleanup. The picture worker drains its separate queue and exits. Do not grant provider eligibility just to make a worker health check pass. Privacy-blocked ingestion stays durable until its dependencies and eligible provider are available.
+The main worker subscribes to quiz wake notifications, preserving durable queue polling/reconciliation if a notification is lost. It initializes a small Postgres pool, reconciles the durable outbox and schedules cleanup. The picture worker drains its separate queue and exits. Do not grant provider eligibility just to make a worker health check pass. Privacy-blocked ingestion stays durable until its dependencies and eligible provider are available.
 
 The user selected GitHub Actions now and Oracle later. [Worker Verification (Disposable Services)](../.github/workflows/worker-verification.yml) runs finite checks on a disposable local Supabase database and Redis inside the GitHub runner. It verifies isolated queue retries/restarts and cancellation without receiving existing staging credentials. It never connects to hosted staging data or R2. See [the worker runbook](worker-verification-2026-10-20.md) for execution and evidence.
 

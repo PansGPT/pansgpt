@@ -11,7 +11,7 @@
 
 param(
     [Parameter(Position=0)]
-    [ValidateSet("help", "dev", "dev-web", "dev-api", "test", "test-api", "lint", "typecheck", "docker-up", "docker-down", "clean")]
+    [ValidateSet("help", "dev", "dev-web", "dev-api", "dev-worker", "test", "test-api", "lint", "typecheck", "docker-up", "docker-down", "clean")]
     [string]$Command = "help"
 )
 
@@ -27,7 +27,8 @@ $Ruff = if (Test-Path $VenvRuff) { $VenvRuff } else { "ruff" }
 function Show-Help {
     Write-Host "PansGPT 2.0 Monorepo Developer Commands (PowerShell)" -ForegroundColor Cyan
     Write-Host "----------------------------------------------------" -ForegroundColor DarkCyan
-    Write-Host "  .\scripts\dev.ps1 dev         - Start all workspaces concurrently (Turbo)"
+    Write-Host "  .\scripts\dev.ps1 dev         - Start frontend, API and quiz worker together"
+    Write-Host "  .\scripts\dev.ps1 dev-worker  - Start the supervised quiz worker"
     Write-Host "  .\scripts\dev.ps1 dev-web     - Start Next.js web application on port 3000"
     Write-Host "  .\scripts\dev.ps1 dev-api     - Start FastAPI backend on port 8000 with reload"
     Write-Host "  .\scripts\dev.ps1 test        - Run all tests across monorepo"
@@ -44,18 +45,16 @@ switch ($Command) {
         Show-Help
     }
     "dev" {
-        pnpm dev
+        node "$RepoRoot\tooling\dev.mjs"
     }
     "dev-web" {
-        pnpm --filter=@pansgpt/web dev
+        node "$RepoRoot\tooling\dev.mjs" web
     }
     "dev-api" {
-        Push-Location "$RepoRoot\apps\api"
-        try {
-            & $Uvicorn app.main:app --reload --port 8000
-        } finally {
-            Pop-Location
-        }
+        node "$RepoRoot\tooling\dev.mjs" api
+    }
+    "dev-worker" {
+        node "$RepoRoot\tooling\dev.mjs" worker
     }
     "test" {
         pnpm test

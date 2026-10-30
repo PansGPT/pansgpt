@@ -26,6 +26,7 @@ from app.routers.chat_interactions import router as chat_interactions_router
 from app.routers.chat_sessions import router as chat_sessions_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
+from app.routers.quiz import router as quiz_router
 
 # Suppress SDK-level AFC deprecation warnings from google.genai.models
 logging.getLogger("google.genai.models").setLevel(logging.ERROR)
@@ -58,7 +59,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     if settings.ENABLE_AI and settings.RERANKER_PROVIDER == "flashrank":
         await _prewarm_flashrank()
     yield
-    # Shutdown: cleanly close database pool
+    # Shutdown: cleanly close database and provider capacity pools
+    from app.engines.provider_capacity import close_capacity
+
+    await close_capacity()
     await close_db_pool()
 
 
@@ -103,6 +107,7 @@ app.add_middleware(
 
 # Register API v1 Routers
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
+app.include_router(quiz_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)

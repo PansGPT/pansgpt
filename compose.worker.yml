@@ -1,0 +1,12 @@
+# Optional worker on an existing Docker host. No hosting is provisioned here.
+services:
+  worker:
+    build: ./apps/api
+    env_file: .env
+    command: ["python", "-m", "workers.runner"]
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 120s
+    # The API image's inherited HTTP health check does not apply to a worker.
+    healthcheck:
+      disable: true

@@ -9,6 +9,8 @@ from arq.connections import RedisSettings
 from app.core.config import settings
 from app.engines.job_outbox import reconcile_jobs
 from workers.maintenance import cleanup_storage, shutdown, startup
+from workers.quiz import dispatch_quiz_jobs, generate_quiz_job
+from workers.quiz_inventory import warm_quiz_inventory
 from workers.tasks import describe_document_images_job, ingest_document_job  # [PHASE2 FIX]
 
 PICTURE_QUEUE_NAME = "arq:picture_queue"  # [QUEUE SPLIT]
@@ -28,12 +30,14 @@ def get_redis_settings() -> RedisSettings:
 
 
 class WorkerSettings:  # [QUEUE SPLIT]
-    """Configuration class for main arq worker process: `python -m arq workers.settings.WorkerSettings`."""  # [QUEUE SPLIT]
+    """Main worker settings; launch with `python -m workers.runner` for instant quiz pickup."""  # [QUEUE SPLIT]
 
     on_startup = startup
     on_shutdown = shutdown
     cron_jobs = [
         cron(reconcile_jobs, second={0}),
+        cron(dispatch_quiz_jobs, second={15}, run_at_startup=True),
+        cron(warm_quiz_inventory, minute={0, 10, 20, 30, 40, 50}, second={5}),
         cron(
             cleanup_storage,
             minute={0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55},
@@ -42,6 +46,7 @@ class WorkerSettings:  # [QUEUE SPLIT]
     ]
     functions = [  # [QUEUE SPLIT]
         func(ingest_document_job, timeout=1800),  # [QUEUE SPLIT]
+        func(generate_quiz_job, timeout=1800),
     ]  # [QUEUE SPLIT]
     redis_settings = get_redis_settings()
     max_jobs = 3  # Free tier single-worker concurrency limit

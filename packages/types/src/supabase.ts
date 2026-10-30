@@ -28,6 +28,128 @@ export type Database = {
   };
   public: {
     Tables: {
+      quiz_result_shares: {
+        Row: {
+          created_at: string;
+          id: string;
+          result_id: string;
+          revoked_at: string | null;
+          token_hash: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          result_id: string;
+          revoked_at?: string | null;
+          token_hash: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          result_id?: string;
+          revoked_at?: string | null;
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quiz_result_shares_result_id_fkey";
+            columns: ["result_id"];
+            isOneToOne: false;
+            referencedRelation: "quiz_attempts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_result_shares_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      quiz_sessions: {
+        Row: {
+          answers: Json;
+          deadline_at: string | null;
+          flagged_ids: string[];
+          grading_lease: string | null;
+          grading_until: string | null;
+          id: string;
+          quiz_id: string;
+          result_id: string | null;
+          revision: number;
+          started_at: string;
+          status: string;
+          submitted_at: string | null;
+          university_id: string;
+          user_id: string;
+        };
+        Insert: {
+          answers?: Json;
+          deadline_at?: string | null;
+          flagged_ids?: string[];
+          grading_lease?: string | null;
+          grading_until?: string | null;
+          id?: string;
+          quiz_id: string;
+          result_id?: string | null;
+          revision?: number;
+          started_at?: string;
+          status?: string;
+          submitted_at?: string | null;
+          university_id: string;
+          user_id: string;
+        };
+        Update: {
+          answers?: Json;
+          deadline_at?: string | null;
+          flagged_ids?: string[];
+          grading_lease?: string | null;
+          grading_until?: string | null;
+          id?: string;
+          quiz_id?: string;
+          result_id?: string | null;
+          revision?: number;
+          started_at?: string;
+          status?: string;
+          submitted_at?: string | null;
+          university_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quiz_sessions_quiz_id_fkey";
+            columns: ["quiz_id"];
+            isOneToOne: false;
+            referencedRelation: "quizzes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_result_id_fkey";
+            columns: ["result_id"];
+            isOneToOne: false;
+            referencedRelation: "quiz_attempts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       chat_message_feedback: {
         Row: {
           comment: string | null;
@@ -1750,33 +1872,39 @@ export type Database = {
         Row: {
           answers: Json;
           completed_at: string;
+          feedback: Json;
           id: string;
           max_score: number;
           percentage: number;
           quiz_id: string;
           score: number;
+          session_id: string | null;
           time_taken_sec: number | null;
           user_id: string;
         };
         Insert: {
           answers: Json;
           completed_at?: string;
+          feedback?: Json;
           id?: string;
           max_score: number;
           percentage: number;
           quiz_id: string;
           score: number;
+          session_id?: string | null;
           time_taken_sec?: number | null;
           user_id: string;
         };
         Update: {
           answers?: Json;
           completed_at?: string;
+          feedback?: Json;
           id?: string;
           max_score?: number;
           percentage?: number;
           quiz_id?: string;
           score?: number;
+          session_id?: string | null;
           time_taken_sec?: number | null;
           user_id?: string;
         };
@@ -1786,6 +1914,13 @@ export type Database = {
             columns: ["quiz_id"];
             isOneToOne: false;
             referencedRelation: "quizzes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_attempts_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: true;
+            referencedRelation: "quiz_sessions";
             referencedColumns: ["id"];
           },
           {
@@ -1799,44 +1934,59 @@ export type Database = {
       };
       quiz_generation_jobs: {
         Row: {
+          attempts: number;
           completed_at: string | null;
           created_at: string;
           current_step: string | null;
           document_id: string | null;
           error_message: string | null;
           id: string;
+          lease_id: string | null;
+          lease_until: string | null;
           progress: number;
           quiz_id: string | null;
+          request_key: string | null;
           request_payload: Json;
           status: Database["public"]["Enums"]["quiz_job_status"];
+          university_id: string | null;
           updated_at: string;
           user_id: string;
         };
         Insert: {
+          attempts?: number;
           completed_at?: string | null;
           created_at?: string;
           current_step?: string | null;
           document_id?: string | null;
           error_message?: string | null;
           id?: string;
+          lease_id?: string | null;
+          lease_until?: string | null;
           progress?: number;
           quiz_id?: string | null;
+          request_key?: string | null;
           request_payload: Json;
           status?: Database["public"]["Enums"]["quiz_job_status"];
+          university_id?: string | null;
           updated_at?: string;
           user_id: string;
         };
         Update: {
+          attempts?: number;
           completed_at?: string | null;
           created_at?: string;
           current_step?: string | null;
           document_id?: string | null;
           error_message?: string | null;
           id?: string;
+          lease_id?: string | null;
+          lease_until?: string | null;
           progress?: number;
           quiz_id?: string | null;
+          request_key?: string | null;
           request_payload?: Json;
           status?: Database["public"]["Enums"]["quiz_job_status"];
+          university_id?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -1856,6 +2006,13 @@ export type Database = {
             referencedColumns: ["id"];
           },
           {
+            foreignKeyName: "quiz_generation_jobs_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+          {
             foreignKeyName: "quiz_generation_jobs_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: false;
@@ -1866,6 +2023,8 @@ export type Database = {
       };
       quiz_questions: {
         Row: {
+          answer_key: Json;
+          concept: string;
           correct_answer: string;
           explanation: string | null;
           id: string;
@@ -1875,8 +2034,11 @@ export type Database = {
           question_order: number;
           question_type: string;
           quiz_id: string;
+          sources: Json;
         };
         Insert: {
+          answer_key?: Json;
+          concept?: string;
           correct_answer: string;
           explanation?: string | null;
           id?: string;
@@ -1886,8 +2048,11 @@ export type Database = {
           question_order: number;
           question_type: string;
           quiz_id: string;
+          sources?: Json;
         };
         Update: {
+          answer_key?: Json;
+          concept?: string;
           correct_answer?: string;
           explanation?: string | null;
           id?: string;
@@ -1897,6 +2062,7 @@ export type Database = {
           question_order?: number;
           question_type?: string;
           quiz_id?: string;
+          sources?: Json;
         };
         Relationships: [
           {
@@ -1919,8 +2085,11 @@ export type Database = {
           id: string;
           level: Database["public"]["Enums"]["university_level"];
           num_questions: number;
+          question_format: string;
           time_limit_sec: number | null;
           title: string;
+          topic: string;
+          university_id: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -1934,8 +2103,11 @@ export type Database = {
           id?: string;
           level: Database["public"]["Enums"]["university_level"];
           num_questions: number;
+          question_format?: string;
           time_limit_sec?: number | null;
           title: string;
+          topic?: string;
+          university_id?: string | null;
           updated_at?: string;
           user_id: string;
         };
@@ -1949,8 +2121,11 @@ export type Database = {
           id?: string;
           level?: Database["public"]["Enums"]["university_level"];
           num_questions?: number;
+          question_format?: string;
           time_limit_sec?: number | null;
           title?: string;
+          topic?: string;
+          university_id?: string | null;
           updated_at?: string;
           user_id?: string;
         };
@@ -1960,6 +2135,13 @@ export type Database = {
             columns: ["document_id"];
             isOneToOne: false;
             referencedRelation: "documents";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quizzes_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
             referencedColumns: ["id"];
           },
           {

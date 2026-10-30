@@ -4,7 +4,12 @@
   "description": "PansGPT 2.0 Monorepo — Intelligent Pharmacy Education Platform",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "node tooling/dev.mjs",
+    "dev:web": "node tooling/dev.mjs web",
+    "dev:api": "node tooling/dev.mjs api",
+    "dev:worker": "node tooling/dev.mjs worker",
+    "dev:workspaces": "turbo run dev",
+    "test:dev": "node --test tooling/dev.test.mjs",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",

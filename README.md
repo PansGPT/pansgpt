@@ -29,19 +29,19 @@ pansgpt/
 
 ### Core Tech Stack Matrix
 
-| Layer               | Technology                            | Cost / Strategy                     |
-| :------------------ | :------------------------------------ | :---------------------------------- |
-| **Monorepo**        | Turborepo + pnpm workspaces           | Zero build overhead, remote caching |
-| **API Engine**      | FastAPI (Python 3.12) + Pydantic v2  | Render Free Web Service ($0)        |
+| Layer               | Technology                                | Cost / Strategy                     |
+| :------------------ | :---------------------------------------- | :---------------------------------- |
+| **Monorepo**        | Turborepo + pnpm workspaces               | Zero build overhead, remote caching |
+| **API Engine**      | FastAPI (Python 3.12) + Pydantic v2       | Render Free Web Service ($0)        |
 | **Web Frontend**    | Next.js 16.3.8, React 19, Tailwind CSS v4 | Vercel Hobby ($0)                   |
-| **Mobile App**      | Expo SDK 52+, React Native            | EAS Free Tier ($0)                  |
-| **Desktop App**     | Electron 33, better-sqlite3           | GitHub Releases packaging ($0)      |
-| **Database**        | Supabase PostgreSQL + pgvector        | Free Tier ($0) with UUIDv7 + HNSW   |
-| **Document Store**  | Cloudflare R2 (S3-compatible)         | 10 GB free ($0 egress fees)         |
-| **AI Primary**      | Gemma 4 via Google AI Studio          | $0 Free Tier                        |
-| **AI Fallback**     | LLaMA 3.3 70B via Groq                | $0 Free Tier (sub-second TTFT)      |
-| **Background Jobs** | ARQ + Upstash Serverless Redis        | 10,000 cmds/day free ($0)           |
-| **Email**           | Resend + React Email                  | 3,000 free emails/mo ($0)           |
+| **Mobile App**      | Expo SDK 52+, React Native                | EAS Free Tier ($0)                  |
+| **Desktop App**     | Electron 33, better-sqlite3               | GitHub Releases packaging ($0)      |
+| **Database**        | Supabase PostgreSQL + pgvector            | Free Tier ($0) with UUIDv7 + HNSW   |
+| **Document Store**  | Cloudflare R2 (S3-compatible)             | 10 GB free ($0 egress fees)         |
+| **AI Primary**      | Gemma 4 via Google AI Studio              | $0 Free Tier                        |
+| **AI Fallback**     | LLaMA 3.3 70B via Groq                    | $0 Free Tier (sub-second TTFT)      |
+| **Background Jobs** | ARQ + Upstash Serverless Redis            | 10,000 cmds/day free ($0)           |
+| **Email**           | Resend + React Email                      | 3,000 free emails/mo ($0)           |
 
 ---
 
@@ -81,24 +81,37 @@ cp .env.example .env
 ### 4. Running Services
 
 ```bash
-# Start all services concurrently via Turborepo
+# Start frontend, FastAPI (reload), and the quiz/ingestion worker together
 pnpm dev
 
 # Or run specific targets:
-pnpm dev --filter=@pansgpt/web    # Next.js at http://localhost:3000
-pnpm dev --filter=@pansgpt/api    # FastAPI at http://localhost:8000
+pnpm dev:web                   # Next.js at http://localhost:3000
+pnpm dev:api                   # FastAPI at http://localhost:8000
+pnpm dev:worker                # Supervised quiz/ingestion worker
 ```
+
+Keep this terminal open. Ctrl+C stops the session's process trees. A worker exit
+restarts with backoff (up to five consecutive short-lived failures); a frontend/API
+exit or exhausted restart budget stops the stack with an error. Existing services
+on ports 3000/8000 must be stopped first; the launcher does not take over unrelated
+processes. API and worker load the root `.env`; Next.js uses its own environment.
+Backend source reload is enabled; restart the session after changing worker code.
+`pnpm dev:workspaces` retains the old Turbo-only command for other workspace work.
 
 ### 5. Running Background Workers <!-- [QUEUE SPLIT] -->
 
 ```bash
-# Main document ingestion worker (always-on, tuned poll delay):
-python -m arq workers.settings.WorkerSettings
+# Main quiz/ingestion worker is included in pnpm dev. To run it alone from root:
+pnpm dev:worker
 
 # Picture worker (on-demand, burst mode):
 # The picture worker is started by hand when pictures are waiting and stops by itself; it can run on a local computer.
 python -m arq workers.settings.PictureWorkerSettings
 ```
+
+The picture worker command runs from `apps/api`. For an existing Docker worker
+host, `docker compose -f compose.worker.yml up -d --build` starts the main worker
+with automatic restart. See [worker hosting setup](docs/environments-setup.md#worker-operation).
 
 ---
 

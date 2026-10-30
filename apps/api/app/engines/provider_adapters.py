@@ -8,6 +8,7 @@ from typing import Any
 import httpx
 
 from app.core.config import settings
+from app.engines.provider_capacity import observe, provider_budget
 
 
 def finalize_calls(calls: list[dict[str, Any]]) -> None:
@@ -92,27 +93,40 @@ async def google_turn(
 
     async def stream() -> AsyncIterator[str]:
         try:
-            response = await client.aio.models.generate_content_stream(
-                model=model, contents=contents, config=config
-            )
-            async for chunk in response:
-                for candidate in chunk.candidates or []:
-                    for part in (candidate.content.parts if candidate.content else []) or []:
-                        if part.function_call:
-                            calls.append(
-                                {
-                                    "id": getattr(part.function_call, "id", None)
-                                    or f"call_{uuid.uuid4().hex}",
-                                    "name": part.function_call.name,
-                                    "arguments": part.function_call.args or {},
-                                }
-                            )
-                        if part.text:
-                            yield f"<think>{part.text}</think>" if part.thought else part.text
-                if getattr(chunk, "usage_metadata", None) is not None:
-                    from app.engines.llm import MultiTierLlmEngine
+            async with provider_budget(
+                "google",
+                model,
+                {"messages": messages, "tools": tools},
+                settings.TEXT_CHAT_MAX_TOKENS,
+            ):
+                response = await client.aio.models.generate_content_stream(
+                    model=model, contents=contents, config=config
+                )
+                async for chunk in response:
+                    for candidate in chunk.candidates or []:
+                        for part in (candidate.content.parts if candidate.content else []) or []:
+                            if part.function_call:
+                                calls.append(
+                                    {
+                                        "id": getattr(part.function_call, "id", None)
+                                        or f"call_{uuid.uuid4().hex}",
+                                        "name": part.function_call.name,
+                                        "arguments": part.function_call.args or {},
+                                    }
+                                )
+                            if part.text:
+                                yield f"<think>{part.text}</think>" if part.thought else part.text
+                    if getattr(chunk, "usage_metadata", None) is not None:
+                        from app.engines.llm import MultiTierLlmEngine
 
-                    MultiTierLlmEngine._log_provider_usage("google", model, chunk.usage_metadata)
+                        await observe(
+                            {},
+                            getattr(chunk.usage_metadata, "prompt_token_count", None),
+                            getattr(chunk.usage_metadata, "candidates_token_count", None),
+                        )
+                        MultiTierLlmEngine._log_provider_usage(
+                            "google", model, chunk.usage_metadata
+                        )
         finally:
             await client.aio.aclose()
 
@@ -130,29 +144,39 @@ async def groq_turn(
 
     async def stream() -> AsyncIterator[str]:
         try:
-            kwargs: dict[str, Any] = {
-                "model": model,
-                "messages": messages,
-                "stream": True,
-                "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
-                "temperature": 0.2,
-            }
-            if tools:
-                kwargs.update(tools=tools, tool_choice="auto")
-            response = await client.chat.completions.create(**kwargs)
-            async for chunk in response:
-                usage = getattr(chunk, "usage", None) or getattr(
-                    getattr(chunk, "x_groq", None), "usage", None
-                )
-                if usage is not None:
-                    from app.engines.llm import MultiTierLlmEngine
+            async with provider_budget(
+                "groq", model, {"messages": messages, "tools": tools}, settings.TEXT_CHAT_MAX_TOKENS
+            ):
+                kwargs: dict[str, Any] = {
+                    "model": model,
+                    "messages": messages,
+                    "stream": True,
+                    "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
+                    "temperature": 0.2,
+                }
+                if tools:
+                    kwargs.update(tools=tools, tool_choice="auto")
+                response = await client.chat.completions.create(**kwargs)
+                async for chunk in response:
+                    usage = getattr(chunk, "usage", None) or getattr(
+                        getattr(chunk, "x_groq", None), "usage", None
+                    )
+                    if usage is not None:
+                        from app.engines.llm import MultiTierLlmEngine
 
-                    MultiTierLlmEngine._log_provider_usage("groq", model, usage)
-                if chunk.choices:
-                    text = openai_delta(chunk.choices[0].delta.model_dump(exclude_none=True), calls)
-                    if text:
-                        yield text
-            finalize_calls(calls)
+                        await observe(
+                            {},
+                            getattr(usage, "prompt_tokens", None),
+                            getattr(usage, "completion_tokens", None),
+                        )
+                        MultiTierLlmEngine._log_provider_usage("groq", model, usage)
+                    if chunk.choices:
+                        text = openai_delta(
+                            chunk.choices[0].delta.model_dump(exclude_none=True), calls
+                        )
+                        if text:
+                            yield text
+                finalize_calls(calls)
         finally:
             await client.close()
 
@@ -176,32 +200,36 @@ async def openrouter_turn(
         payload.update(tools=tools, tool_choice="auto")
 
     async def stream() -> AsyncIterator[str]:
-        async with httpx.AsyncClient(timeout=settings.CHAT_CHUNK_GAP_TIMEOUT_S) as client:
-            async with client.stream(
-                "POST",
-                "https://openrouter.ai/api/v1/chat/completions",
-                headers={"Authorization": f"Bearer {key}"},
-                json=payload,
-            ) as response:
-                response.raise_for_status()
-                async for line in response.aiter_lines():
-                    if not line.startswith("data:"):
-                        continue
-                    body = line[5:].strip()
-                    if body == "[DONE]":
-                        finalize_calls(calls)
-                        return
-                    data = json.loads(body)
-                    if data.get("usage"):
-                        from app.engines.llm import MultiTierLlmEngine
+        async with provider_budget("openrouter", model, payload, settings.TEXT_CHAT_MAX_TOKENS):
+            async with httpx.AsyncClient(timeout=settings.CHAT_CHUNK_GAP_TIMEOUT_S) as client:
+                async with client.stream(
+                    "POST",
+                    "https://openrouter.ai/api/v1/chat/completions",
+                    headers={"Authorization": f"Bearer {key}"},
+                    json=payload,
+                ) as response:
+                    await observe(response.headers)
+                    response.raise_for_status()
+                    async for line in response.aiter_lines():
+                        if not line.startswith("data:"):
+                            continue
+                        body = line[5:].strip()
+                        if body == "[DONE]":
+                            finalize_calls(calls)
+                            return
+                        data = json.loads(body)
+                        if data.get("usage"):
+                            from app.engines.llm import MultiTierLlmEngine
 
-                        MultiTierLlmEngine._log_provider_usage("openrouter", model, data["usage"])
-                    if data.get("error"):
-                        raise RuntimeError("OpenRouter reported a streaming error")
-                    if data.get("choices"):
-                        text = openai_delta(data["choices"][0].get("delta") or {}, calls)
-                        if text:
-                            yield text
-                finalize_calls(calls)
+                            MultiTierLlmEngine._log_provider_usage(
+                                "openrouter", model, data["usage"]
+                            )
+                        if data.get("error"):
+                            raise RuntimeError("OpenRouter reported a streaming error")
+                        if data.get("choices"):
+                            text = openai_delta(data["choices"][0].get("delta") or {}, calls)
+                            if text:
+                                yield text
+                    finalize_calls(calls)
 
     return calls, stream()

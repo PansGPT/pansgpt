@@ -2,7 +2,6 @@
 # PansGPT 2.0 Database Connection & Query Helper (Supabase PostgreSQL)
 # ==============================================================================
 
-import asyncio
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -13,6 +12,7 @@ import structlog
 from app.core.config import settings
 
 logger = structlog.get_logger(__name__)
+CONNECT_TIMEOUT_S = 10.0
 
 
 _db_pool: asyncpg.Pool | None = None
@@ -31,13 +31,13 @@ async def init_db_pool(min_size: int = 1, max_size: int = 10) -> asyncpg.Pool | 
             statement_cache_size=0,
             min_size=min_size,
             max_size=max_size,
-            timeout=10.0,
+            timeout=CONNECT_TIMEOUT_S,
             command_timeout=15.0,
         )
         logger.info("database_connection_pool_initialized", min_size=min_size, max_size=max_size)
         return _db_pool
     except Exception as exc:
-        logger.warning("database_pool_initialization_failed", error=str(exc))
+        logger.warning("database_pool_initialization_failed", error_type=type(exc).__name__)
         return None
 
 
@@ -56,7 +56,9 @@ async def get_db_connection(
 ) -> AsyncGenerator[asyncpg.Connection | None, None]:
     """
     Async context manager yielding an active asyncpg connection.
-    Acquires from pooled connections if pool initialized; falls back to single connection.
+    Uses the bounded pool when initialized, or a direct connection before pool startup.
+    The caller's queue-wait allowance is separate from the cold-connection budget:
+    asyncpg acquire also includes DNS/TCP/TLS/authentication for a new connection.
     CRITICAL: statement_cache_size=0 is required for Supabase pgbouncer / connection pooler.
     """
     if not settings.DATABASE_URL:
@@ -66,9 +68,17 @@ async def get_db_connection(
     # Catch acquisition errors only. Exceptions raised by the caller must propagate.
     if _db_pool is not None:
         try:
-            pooled_conn = await _db_pool.acquire(timeout=timeout)
+            pooled_conn = await _db_pool.acquire(timeout=timeout + CONNECT_TIMEOUT_S)
         except Exception as exc:
-            logger.warning("pooled_connection_acquire_failed_falling_back", error=str(exc))
+            logger.warning(
+                "pooled_connection_acquire_failed",
+                error_type=type(exc).__name__,
+                timeout_s=timeout + CONNECT_TIMEOUT_S,
+            )
+            # Opening extra direct connections when the pool is saturated defeats
+            # its limit and can exhaust the hosted free-tier connection allowance.
+            yield None
+            return
         else:
             try:
                 yield pooled_conn
@@ -79,12 +89,14 @@ async def get_db_connection(
     # 2. Transient single-connection fallback
     conn: asyncpg.Connection | None = None
     try:
-        conn = await asyncio.wait_for(
-            asyncpg.connect(settings.DATABASE_URL, statement_cache_size=0),
-            timeout=timeout,
+        conn = await asyncpg.connect(
+            settings.DATABASE_URL,
+            statement_cache_size=0,
+            timeout=max(timeout, CONNECT_TIMEOUT_S),
+            command_timeout=15.0,
         )
     except Exception as exc:
-        logger.warning("database_connection_failed", error=str(exc))
+        logger.warning("database_connection_failed", error_type=type(exc).__name__)
     if conn is None:
         yield None
         return

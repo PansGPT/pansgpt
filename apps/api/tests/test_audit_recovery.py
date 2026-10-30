@@ -228,6 +228,8 @@ async def test_openrouter_preserves_fragmented_tool_calls_and_zdr_routing(
     captured = {}
 
     class Response:
+        headers = {}
+
         def raise_for_status(self) -> None:
             pass
 

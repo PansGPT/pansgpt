@@ -13,6 +13,12 @@ const { outputText } = ts.transpileModule(source, {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 });
 
+test("quiz API transport delegates bearer verification without refreshing cookie sessions", async () => {
+  const response = await requestSession("/api/quiz/history", { unavailable: true });
+  assert.equal(response.status, 200);
+  assert.equal(response.cookies.get("synthetic-session"), undefined);
+});
+
 // Run the real middleware with only its auth service and environment replaced.
 // No hosted credentials, account creation or network requests are needed.
 async function requestSession(path, { authenticated = false, unavailable = false } = {}) {
