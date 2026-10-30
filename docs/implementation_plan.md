@@ -1,5 +1,7 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).
+
 > **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).
 
 > **2026-10-29 development startup:** `pnpm dev` includes frontend, API and supervised quiz worker; an optional Docker worker config supports an existing host. [Lifecycle checks and hosting limits](development-startup-2026-10-29.md).
@@ -15,6 +17,12 @@
 > **2026-10-28 quiz reliability:** Compact strict Groq output, matrix token/batch sizing, adaptive malformed-batch recovery and durable capacity retries are locally verified. API, real PostgreSQL and browser evidence plus remaining hosted gates: [quiz reliability hardening](quiz-reliability-2026-10-28.md).
 
 > **2026-10-26 quiz implementation:** The quiz engine and web journey are implemented on `feat/quiz-system`; [the implementation contract](quiz-system.md) supersedes Section 11's illustrative legacy transport and delivery details. Generation uses the current shared provider layer, validated JSON and fast local schema, key-shape, source-ID and duplicate checks. Quiz tables are API-only; answers autosave into server-timed sessions and immutable submissions receive retry-safe grading. Public web calls use a same-origin server proxy for client identity. Local tests do not certify hosted activation or live question quality. After explicit user approval, the staging migration was applied through Supabase CLI and the local quiz API/worker were enabled. Catalog, data-count, API, queue and proxy checks passed; production is unchanged.
+
+> **2026-10-28 Library navigation and details:** Persist collection/course in URL query parameters, tighten the course sidebar with full-width dividers, restore legacy file-icon list rows and File Information layout with filled thumbnails, retain a fixed file action, and remove the desktop course-back row. Desktop refresh reflects outstanding catalog requests; mobile uses pull-to-refresh, shared back-button/navigation touch feedback and a compact chevron/code/title course header. [Scope and verification](library-navigation-and-details-2026-10-28.md). Full phase and hosted gates remain open.
+
+> **2026-10-27 mobile Library refinement:** After user review rejected the first visual adaptation, restore the legacy mobile composition: Library header with Back to Home, separate pill search and filters, then a 28px rounded-top content panel with browsing controls alongside Recent/Courses. Use a two-column course grid with matching skeletons and a simple Recent empty state. Omit the Library composer; preserve the explicitly requested Home cards/cache and authenticated document-details flow. [Scope, correction and local verification](library-mobile-2026-10-27.md); visual acceptance and full release gates remain open.
+
+> **2026-10-26 library layout direction:** Improve the legacy library UI with current theme tokens and real document covers. Keep Recent Documents/course navigation and omit the separate All materials destination. Home and Library grids share one document-card renderer and persistent scoped thumbnail cache (96 entries, 24-hour expiry). Keep the course panel visible; automatically collapse the main desktop sidebar on entry, putting its hover/focus logo-to-toggle control in the logo slot and restoring the previous choice outside Library. Authenticated paginated catalog search, safe PDF links, owner-only opening timestamps that preserve saved pages, and typed staff upload contracts run through FastAPI. [Scope, verification and follow-up order](library-browsing-2026-10-26.md). Full library, hosted and PDF-reader gates remain open.
 
 > **Latest 2026-10-26 scrollbar/sidebar direction:** Keep one conversation scroller, style native scrollbars with the semantic palette, and scroll only pinned/recent chat rows within the sidebar. Logo, primary destinations, New chat, history search/archive controls and account footer remain fixed. Remove the optional per-message More/Markdown-export menu; retain native copy/edit/regeneration/feedback/branches and conversation sharing. [Scope and verification](chat-scrollbars-and-sidebar-2026-10-26.md). This supersedes the message-export portion of the earlier assistant-ui adoption note.
 
@@ -5604,6 +5612,8 @@ POST   /api/admin/material-submissions/batch-approve  ← Bulk approval of verif
 ---
 
 ### 16.1 System Architecture & Route Topology
+
+29 October 2026 UI amendment: the web settings preview uses a shared modal with the original three navigation groups and nine separate sections, including standalone Security. Storage/download and privacy management controls remain part of the design. About excludes onboarding and shortcut lists; the account menu provides optional help and shortcuts. Settings action buttons use compact sizing and softly rounded corners. This is UI scope only; the route topology below remains historical planned topology, and persistence/security/export acceptance remains open. See [settings UI refinement](settings-ui-refinement-2026-10-29.md).
 
 ```
 frontend/app/(app)/settings/

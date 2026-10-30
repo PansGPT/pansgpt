@@ -346,10 +346,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await openNavigation(page);
   await mobile.getByRole("link", { name: "Library", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/library$/);
-  await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recent Documents", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Upload material" })).toHaveCount(0);
   await page.route(
-    "**/api/v1/library/documents",
+    "**/api/v1/library/catalog?*",
     (route) => route.fulfill({ status: 503, body: "Synthetic unavailable" }),
     { times: 1 }
   );
@@ -367,7 +367,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
 
   let libraryRequests = 0;
   page.on("request", (outgoing) => {
-    if (outgoing.url().includes("/api/v1/library/documents")) libraryRequests += 1;
+    if (outgoing.url().includes("/api/v1/library/catalog")) libraryRequests += 1;
   });
   let profileRequests = 0;
   await page.route("**/api/v1/auth/me", (route) => {
@@ -382,7 +382,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(profileRequests).toBe(1);
   await page.unroute("**/api/v1/auth/me");
   await page.getByRole("button", { name: "Retry profile verification" }).click();
-  await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recent Documents", exact: true })).toBeVisible();
   await openProfile(page);
   await profile.getByRole("button", { name: "Sign Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);
