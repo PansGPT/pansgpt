@@ -1,5 +1,6 @@
 "use client";
 import { useId } from "react";
+import { Button } from "@pansgpt/ui/shell";
 import type { usePreferences } from "@/components/shell/use-preferences";
 import type { DraftSectionProps } from "../settings-types";
 import { SettingsSection } from "../settings-section";
@@ -47,11 +48,21 @@ export function AppearanceSection({
           {preferences.status === "saving"
             ? "Saving theme..."
             : preferences.status === "local"
-              ? "Theme saved on this device."
+              ? "Theme saved on this device. Account sync is unavailable."
               : preferences.status === "loading"
                 ? "Loading your theme..."
                 : "Your theme is saved."}
         </p>
+        {preferences.status === "local" && (
+          <Button
+            variant="secondary"
+            leadingIcon={null}
+            trailingIcon={null}
+            onClick={() => preferences.save(preferences.theme)}
+          >
+            Retry theme sync
+          </Button>
+        )}
       </SettingsSection>
       <SettingsSection title="Text & motion">
         <SettingsRow title="Interface font">

@@ -24,6 +24,8 @@ All six TypeScript workspace checks passed before the follow-up; web typecheck p
 
 The focused mobile Settings journey passed with installed Chrome after focus synchronization, covering the existing 320/390/430px assertions and keyboard selection. Learn-page formatting and diff checks also passed.
 
+The corrected head passed eight CI jobs, including combined migrated database contracts and the chat/Library/Settings browser suite. The auth job first hit a disposable Supabase port collision; its isolated rerun reached the actual journey and exposed obsolete Help/Profile menu selectors. The auth journey now uses Get help, Settings Account/Appearance, the mobile Settings back/menu flow and current Library navigation while preserving account verification, theme persistence/failure/retry, keyboard focus, privacy and logout assertions. Appearance also restores the existing honest account-sync-unavailable message and retry action that were missing when theme controls moved from the old profile drawer. A fresh complete CI run is required for this follow-up.
+
 ## Notion handoff
 
 No Notion connector is available; remote synchronization remains pending.
