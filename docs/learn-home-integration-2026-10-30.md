@@ -7,12 +7,22 @@ The user requested merging the current `feat/learn-home` branch into `main`. Its
 - Export both quiz and library DTOs from `packages/types`.
 - Run both library catalog and quiz lifecycle/retry contracts in disposable database CI.
 - Preserve both branches' architecture amendments in the implementation plan.
+- Escape literal quotes in Learn article JSX to satisfy the existing lint rule without changing rendered copy.
+- Keep synthetic Learn bookmarks/reading progress in an explicit demo adapter and label them visibly as sample activity; they are never persisted as live progress.
+- Give each disposable university fixture a unique name as well as a unique slug, allowing the Library test's two tenants to coexist under the migrated name constraint.
+- Wait for the selected Settings option to receive focus before keyboard navigation, retaining both keyboard movement and final-value assertions.
 
 Existing Library/Settings UI preview boundaries, hosted and device verification, and the incomplete live quiz generation gate remain open. A branch merge does not certify those features complete. No hosted migration, provider call, data import or feature-flag change is included.
 
 ## Verification
 
 API Ruff lint and formatting (155 files), all 36 migration mirrors and whitespace checks passed on the combined tree. Full API, TypeScript, lint, build and browser checks must pass on the integration PR before merging; their final results are recorded by GitHub CI.
+
+The initial local API run reported 809 passed, 68 skipped and three failures while dependencies were installing. Presentation parsing and stream timing passed in the focused rerun; the pre-existing 20ms cancellation test still failed locally. The initial integration CI backend job passed. No timeout or assertion was relaxed. The initial CI lint failure identified the Learn JSX quoting corrected above; the corrected head must pass a fresh complete CI run.
+
+All six TypeScript workspace checks passed before the follow-up; web typecheck passed again after the explicit Learn demo adapter. Focused Learn lint and all 54 web unit tests passed. The first CI database/browser runs exposed the fixture-name collision and dropdown focus race corrected above; the corrected head must repeat those complete CI jobs.
+
+The focused mobile Settings journey passed with installed Chrome after focus synchronization, covering the existing 320/390/430px assertions and keyboard selection. Learn-page formatting and diff checks also passed.
 
 ## Notion handoff
 

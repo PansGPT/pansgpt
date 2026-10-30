@@ -325,7 +325,9 @@ test("mobile settings retains grouped menus, separate Security and usable storag
       await expect(level).toBeFocused();
       await expect(modal.getByRole("heading", { name: "Account", exact: true })).toBeVisible();
       await level.click();
+      await expect(page.getByRole("option", { name: "200 Level", exact: true })).toBeFocused();
       await page.keyboard.press("ArrowDown");
+      await expect(page.getByRole("option", { name: "300 Level", exact: true })).toBeFocused();
       await page.keyboard.press("Enter");
       await expect(level).toHaveText("300 Level");
       await chooseSetting(page, "Academic level", "Not set");

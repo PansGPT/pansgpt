@@ -6,6 +6,12 @@
   position: relative;
 }
 
+.learn-preview-notice {
+  margin: 0 0 12px;
+  color: var(--text-secondary-700);
+  font-size: 12px;
+}
+
 /* ─── Topbar Matching Library Mobile View ──────────────────────────── */
 .learn-mobile-topbar {
   display: flex;

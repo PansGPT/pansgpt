@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ChevronRight,
@@ -17,21 +16,20 @@ import {
   ArrowUpDown,
   LayoutGrid,
   List,
-  ArrowRight,
-  PlayCircle,
   BookOpen,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
-import { StudyArt } from "@/components/shell/study-art";
-import { learnArticles, type LearnArticle } from "@/components/learn/learn-content";
+import { getArticleBySlug, learnArticles } from "@/components/learn/learn-content";
+import { getLearnDemoActivity } from "@/components/learn/learn-demo";
 import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
 
 type FilterTab = "all" | "academics" | "clinical" | "career" | "saved" | "featured";
 
+const demoActivity = getLearnDemoActivity();
+
 export default function LearnPage(): React.ReactElement {
-  const router = useRouter();
   const { profile } = useAuth();
   const userInitial =
     Array.from(profile?.first_name || profile?.email || "P")[0]?.toUpperCase() || "P";
@@ -39,11 +37,10 @@ export default function LearnPage(): React.ReactElement {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortMode, setSortMode] = useState<"recent" | "duration">("recent");
   const [bookmarkedSlugs, setBookmarkedSlugs] = useState<Set<string>>(
-    new Set(["clinical-case", "pharmacy-beyond-counter"])
+    new Set(demoActivity.bookmarkedSlugs)
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [showRecentDock, setShowRecentDock] = useState(true);
 
   const toggleBookmark = (slug: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -100,7 +97,7 @@ export default function LearnPage(): React.ReactElement {
     return list;
   }, [activeTab, searchQuery, sortMode, bookmarkedSlugs]);
 
-  const recentArticle = learnArticles[0]; // "How to approach a clinical case"
+  const recentArticle = getArticleBySlug(demoActivity.recentArticleSlug);
 
   return (
     <div className="learn-mobile-view">
@@ -162,6 +159,7 @@ export default function LearnPage(): React.ReactElement {
       </header>
 
       <div className="learn-body-content">
+        <p className="learn-preview-notice">Sample bookmarks and reading progress</p>
         {/* ─── Search input (expandable) ─── */}
         {showSearch && (
           <div className="learn-mobile-search-bar">
@@ -312,8 +310,8 @@ export default function LearnPage(): React.ReactElement {
         )}
 
         {/* ─── Floating Bottom Dock: "Recently Read" ─── */}
-        {showRecentDock && recentArticle && (
-          <aside className="learn-bottom-dock" aria-label="Recently read guide">
+        {recentArticle && (
+          <aside className="learn-bottom-dock" aria-label="Sample recently read guide">
             <Link href={`/app/learn/${recentArticle.slug}`} className="learn-dock-content">
               {/* Mini Book Cover Thumbnail */}
               <div className="learn-dock-thumb">
@@ -323,17 +321,20 @@ export default function LearnPage(): React.ReactElement {
 
               {/* Title & Progress */}
               <div className="learn-dock-info">
-                <span className="learn-dock-eyebrow">Recently read</span>
+                <span className="learn-dock-eyebrow">Sample reading activity</span>
                 <span className="learn-dock-title">{recentArticle.title}</span>
                 <div
                   className="learn-dock-progress-bar"
                   role="progressbar"
-                  aria-valuenow={45}
+                  aria-valuenow={demoActivity.readingProgressPercent}
                   aria-valuemin={0}
                   aria-valuemax={100}
-                  aria-label="Reading progress"
+                  aria-label="Sample reading progress"
                 >
-                  <div className="learn-dock-progress-fill" style={{ width: "45%" }} />
+                  <div
+                    className="learn-dock-progress-fill"
+                    style={{ width: `${demoActivity.readingProgressPercent}%` }}
+                  />
                 </div>
               </div>
 
