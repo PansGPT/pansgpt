@@ -1,114 +1,93 @@
 "use client";
-
-import { useState } from "react";
-import { Monitor, Sun, Moon } from "lucide-react";
-import type { ThemeName } from "@pansgpt/ui/shell";
+import { useId } from "react";
 import type { usePreferences } from "@/components/shell/use-preferences";
+import type { DraftSectionProps } from "../settings-types";
 import { SettingsSection } from "../settings-section";
 import { SettingsRow } from "../settings-row";
-
+import { SettingsSelect } from "../settings-select";
 export function AppearanceSection({
   preferences,
-}: {
-  preferences: ReturnType<typeof usePreferences>;
-}): React.ReactElement {
-  const [motion, setMotion] = useState<"system" | "reduced" | "full">(() => {
-    if (typeof window === "undefined") return "system";
-    try {
-      const saved = localStorage.getItem("pansgpt-pref-motion");
-      return saved === "system" || saved === "reduced" || saved === "full" ? saved : "system";
-    } catch {
-      return "system";
-    }
-  });
-
-  const [responseFont, setResponseFont] = useState("Sans · Inter");
-  const [interfaceFont, setInterfaceFont] = useState("Default · Plus Jakarta Sans");
-
-  function handleMotionChange(mode: "system" | "reduced" | "full") {
-    setMotion(mode);
-    try {
-      localStorage.setItem("pansgpt-pref-motion", mode);
-    } catch {}
-  }
-
+  draft,
+  onDraftChange,
+}: DraftSectionProps & { preferences: ReturnType<typeof usePreferences> }): React.ReactElement {
+  const themeId = useId();
   return (
     <div className="settings-section-container">
-      <SettingsSection title="Appearance">
-        <SettingsRow title="Theme">
-          <div className="settings-theme-icons-toggle" role="radiogroup" aria-label="Theme mode">
-            <button
-              type="button"
-              className={`settings-theme-icon-btn${preferences.theme === "light" ? " is-active" : ""}`}
-              onClick={() => preferences.save("light")}
-              title="Light theme"
-              aria-label="Light theme"
-              aria-checked={preferences.theme === "light"}
-              role="radio"
-            >
-              <Sun size={16} />
-            </button>
-            <button
-              type="button"
-              className={`settings-theme-icon-btn${preferences.theme === "dark" ? " is-active" : ""}`}
-              onClick={() => preferences.save("dark")}
-              title="Dark theme"
-              aria-label="Dark theme"
-              aria-checked={preferences.theme === "dark"}
-              role="radio"
-            >
-              <Moon size={16} />
-            </button>
-            <button
-              type="button"
-              className={`settings-theme-icon-btn${preferences.theme === "sepia" ? " is-active" : ""}`}
-              onClick={() => preferences.save("sepia" as ThemeName)}
-              title="Sepia warm reading"
-              aria-label="Sepia theme"
-              aria-checked={preferences.theme === "sepia"}
-              role="radio"
-            >
-              <Monitor size={16} />
-            </button>
-          </div>
-        </SettingsRow>
-
+      <SettingsSection
+        title="Theme"
+        description="Choose the look that feels comfortable to study in."
+        mobileDescription={null}
+      >
+        <fieldset className="settings-theme-options">
+          <legend className="p-sr-only">Theme</legend>
+          {(["light", "dark", "sepia"] as const).map((theme) => (
+            <label className="settings-theme-option" key={theme} data-choice={theme}>
+              <input
+                type="radio"
+                name={themeId}
+                value={theme}
+                checked={preferences.theme === theme}
+                disabled={!preferences.ready}
+                onChange={() => preferences.save(theme)}
+                aria-label={`${theme[0]?.toUpperCase()}${theme.slice(1)} theme`}
+              />
+              <span className="settings-theme-preview" aria-hidden="true">
+                <span>Aa</span>
+                <i />
+                <i />
+              </span>
+              <span className="settings-theme-name">
+                {theme[0]?.toUpperCase()}
+                {theme.slice(1)}
+              </span>
+            </label>
+          ))}
+        </fieldset>
+        <p className="settings-preference-status" role="status">
+          {preferences.status === "saving"
+            ? "Saving theme..."
+            : preferences.status === "local"
+              ? "Theme saved on this device."
+              : preferences.status === "loading"
+                ? "Loading your theme..."
+                : "Your theme is saved."}
+        </p>
+      </SettingsSection>
+      <SettingsSection title="Text & motion">
         <SettingsRow title="Interface font">
-          <select
-            className="settings-select"
-            value={interfaceFont}
-            onChange={(e) => setInterfaceFont(e.target.value)}
-            aria-label="Interface font"
-          >
-            <option value="Default · Plus Jakarta Sans">Default · Plus Jakarta Sans</option>
-            <option value="System Sans">System Sans</option>
-          </select>
+          <SettingsSelect
+            label="Interface font"
+            value={draft.interfaceFont}
+            onValueChange={(interfaceFont) => onDraftChange({ interfaceFont })}
+            options={[
+              { value: "default", label: "Default" },
+              { value: "system", label: "System" },
+            ]}
+          />
         </SettingsRow>
-
         <SettingsRow title="Response font">
-          <select
-            className="settings-select"
-            value={responseFont}
-            onChange={(e) => setResponseFont(e.target.value)}
-            aria-label="Response font"
-          >
-            <option value="Sans · Inter">Sans · Inter</option>
-            <option value="Serif · Merriweather">Serif · Merriweather</option>
-            <option value="Mono · JetBrains Mono">Mono · JetBrains Mono</option>
-          </select>
+          <SettingsSelect
+            label="Response font"
+            value={draft.responseFont}
+            onValueChange={(responseFont) => onDraftChange({ responseFont })}
+            options={[
+              { value: "sans", label: "Sans serif" },
+              { value: "serif", label: "Serif" },
+              { value: "mono", label: "Monospace" },
+            ]}
+          />
         </SettingsRow>
-
         <SettingsRow title="Motion">
-          <select
-            className="settings-select"
-            value={motion}
-            onChange={(e) => handleMotionChange(e.target.value as "system" | "reduced" | "full")}
-            aria-label="Motion preference"
-          >
-            <option value="system">System</option>
-            <option value="reduced">Reduced</option>
-            <option value="full">Dynamic</option>
-          </select>
+          <SettingsSelect
+            label="Motion preference"
+            value={draft.motion}
+            onValueChange={(motion) => onDraftChange({ motion })}
+            options={[
+              { value: "system", label: "Follow system" },
+              { value: "reduced", label: "Reduced" },
+              { value: "full", label: "Full" },
+            ]}
+          />
         </SettingsRow>
       </SettingsSection>
     </div>

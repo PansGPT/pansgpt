@@ -43,6 +43,20 @@ export function useAuth() {
 }
 export function usePreferences() {
   const { theme, setTheme, ready } = useTheme();
+  useSyncExternalStore(
+    (notify) => {
+      window.addEventListener("fixture-credits-changed", notify);
+      return () => window.removeEventListener("fixture-credits-changed", notify);
+    },
+    () => window.__creditsFixtureRevision || 0,
+    () => 0
+  );
+  globalThis.__changePreviewCredits = (balance, total) => {
+    window.__previewCredits = { balance, total };
+    window.__creditsFixtureRevision = (window.__creditsFixtureRevision || 0) + 1;
+    window.dispatchEvent(new Event("fixture-credits-changed"));
+  };
+  const creditPreview = window.__previewCredits || { balance: 20, total: 50 };
   useEffect(() => {
     globalThis.__setChatTestTheme = setTheme;
     return () => {
@@ -55,7 +69,8 @@ export function usePreferences() {
     save: setTheme,
     status: "saved",
     university: "Sample University",
-    credits: 20,
+    credits: creditPreview.balance,
+    creditsTotal: creditPreview.total,
   };
 }
 export function DashboardProvider({ children }) {

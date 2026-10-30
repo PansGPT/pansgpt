@@ -1628,6 +1628,12 @@ The completed boxes below record tested implementation scope, not full Phase 11 
 
 ### 17.1 Settings + Profile
 
+UI preview (29 October 2026): separate settings categories, standalone Security, retained storage/privacy management controls and compact actions are under review. See [settings UI refinement](settings-ui-refinement-2026-10-29.md). This preview does not complete the live acceptance items below.
+
+Settings navigation follow-up: field-level search uses a floating result list with section/setting labels and direct focus. Mobile uses the profile card as its single Account entry; Account no longer contains Log out.
+
+Settings visual follow-up: Credits uses the balance coin icon; shared custom scrollbars include settings and nested content. The Account reference informs simpler grouped rows on mobile, preserving card backgrounds/corners and internal dividers while removing outer borders and duplicate mobile headings. Desktop retains its earlier form layout and flat sections; shared custom dropdowns and the on-demand feedback row remain.
+
 - [ ] Profile editor: first_name, last_name, current_level, university_id
 - [ ] `<UserInitialsAvatar />` — first initial from `first_name`, deterministic color
 - [ ] AI response style preference: `concise | balanced | detailed` → stored in user preferences

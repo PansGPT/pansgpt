@@ -1,70 +1,28 @@
 "use client";
-
-import { useState } from "react";
+import type { DraftSectionProps } from "../settings-types";
 import { SettingsSection } from "../settings-section";
-import { SettingsRow, SettingsToggle } from "../settings-row";
-
-export function AiChatSection(): React.ReactElement {
-  const [responseStyle, setResponseStyle] = useState("Balanced");
-  const [showThinking, setShowThinking] = useState(true);
-  const [webGrounding, setWebGrounding] = useState(true);
-  const [localTerminology, setLocalTerminology] = useState(true);
-
+import { SettingsRow } from "../settings-row";
+import { SettingsSelect } from "../settings-select";
+export function AiChatSection({ draft, onDraftChange }: DraftSectionProps): React.ReactElement {
   return (
-    <div className="settings-section-container">
-      <SettingsSection
-        title="Your PansGPT"
-        description="Fine-tune how PansGPT analyzes clinical cases, explains drug interactions, and delivers answers."
+    <SettingsSection title="Chat preferences">
+      <SettingsRow
+        className="settings-response-detail-row"
+        title="Response detail"
+        description="How much explanation you prefer in an answer."
+        mobileDescription="Choose how much explanation you get."
       >
-        <SettingsRow
-          title="Explanation depth"
-          description="Default detail level when answering pharmacotherapy questions."
-        >
-          <select
-            className="settings-select"
-            value={responseStyle}
-            onChange={(e) => setResponseStyle(e.target.value)}
-            aria-label="Explanation depth"
-          >
-            <option value="Direct">Direct</option>
-            <option value="Balanced">Balanced</option>
-            <option value="Comprehensive">Comprehensive</option>
-          </select>
-        </SettingsRow>
-
-        <SettingsRow
-          title="Show reasoning steps"
-          description="Display clinical step-by-step logic and calculation proofs before the final answer."
-        >
-          <SettingsToggle
-            checked={showThinking}
-            onChange={setShowThinking}
-            aria-label="Toggle showing reasoning steps"
-          />
-        </SettingsRow>
-
-        <SettingsRow
-          title="Public web grounding"
-          description="Allow PansGPT to cross-reference recent clinical drug monographs and public trials."
-        >
-          <SettingsToggle
-            checked={webGrounding}
-            onChange={setWebGrounding}
-            aria-label="Toggle web grounding"
-          />
-        </SettingsRow>
-
-        <SettingsRow
-          title="Nigerian clinical nomenclature"
-          description="Recognize BAN/INN generic standards and Nigerian essential medicine list trade names."
-        >
-          <SettingsToggle
-            checked={localTerminology}
-            onChange={setLocalTerminology}
-            aria-label="Toggle local clinical terminology"
-          />
-        </SettingsRow>
-      </SettingsSection>
-    </div>
+        <SettingsSelect
+          label="Response detail"
+          value={draft.responseStyle}
+          onValueChange={(responseStyle) => onDraftChange({ responseStyle })}
+          options={[
+            { value: "concise", label: "Concise" },
+            { value: "balanced", label: "Balanced" },
+            { value: "detailed", label: "Detailed" },
+          ]}
+        />
+      </SettingsRow>
+    </SettingsSection>
   );
 }

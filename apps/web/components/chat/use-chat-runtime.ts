@@ -373,6 +373,7 @@ export function useChatRuntime({
               questionId = event.data.user_message_id!;
               answer = { ...answer, id: event.data.assistant_message_id!, parentId: questionId };
               canonical = true;
+              window.dispatchEvent(new Event("pansgpt-credits-changed"));
               setMessages((previous) =>
                 previous.map((item) =>
                   item.id === oldQuestionId ? { ...item, id: questionId } : item
@@ -412,6 +413,7 @@ export function useChatRuntime({
           // Response failures render with their message; composer errors have separate state.
           setIsRunning(false);
           active.current = null;
+          window.dispatchEvent(new Event("pansgpt-credits-changed"));
           if (answer.status === "complete") onSessionChanged();
         }
       }

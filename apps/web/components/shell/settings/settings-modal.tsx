@@ -1,27 +1,27 @@
 "use client";
-
-import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
+import { useState, useRef, useEffect, useId, useSyncExternalStore, type ReactNode } from "react";
 import { X, ChevronLeft, Info } from "lucide-react";
 import { DialogPrimitive } from "@pansgpt/ui/shell";
-import type { SettingsModalProps, SettingsSectionId } from "./settings-types";
+import type { SettingsModalProps, SettingsSectionId, SettingsDraft } from "./settings-types";
 import { SettingsNav } from "./settings-nav";
+import type { SettingsSearchField } from "./settings-search";
 import { SettingsMenu } from "./settings-menu";
-import { DeleteHistoryDialog } from "./delete-history-dialog";
-
+import { SecuritySection } from "./sections/security-section";
 import { ProfileSection } from "./sections/profile-section";
 import { AppearanceSection } from "./sections/appearance-section";
+import { AiChatSection } from "./sections/ai-chat-section";
 import { NotificationsSection } from "./sections/notifications-section";
-import { PrivacySection } from "./sections/privacy-section";
 import { WellbeingSection } from "./sections/wellbeing-section";
+import { PrivacySection } from "./sections/privacy-section";
+import { CreditsSection } from "./sections/account-section";
 import { DataStorageSection } from "./sections/data-storage-section";
-import { AccountSection } from "./sections/account-section";
 import { AboutSection } from "./sections/about-section";
-
 import "./settings-modal.css";
 
-const SECTION_TITLES: Record<SettingsSectionId, string> = {
+const TITLES: Record<SettingsSectionId, string> = {
   account: "Account",
-  billing: "Billing & Credits",
+  security: "Security",
+  billing: "Credits",
   appearance: "Appearance",
   notifications: "Notifications",
   privacy: "Privacy & Data",
@@ -29,6 +29,28 @@ const SECTION_TITLES: Record<SettingsSectionId, string> = {
   "data-storage": "Data & Storage",
   about: "About PansGPT",
 };
+function subscribeViewport(notify: () => void): () => void {
+  const query = window.matchMedia("(max-width: 860px)");
+  query.addEventListener("change", notify);
+  return () => query.removeEventListener("change", notify);
+}
+const mobileViewport = (): boolean => window.matchMedia("(max-width: 860px)").matches;
+function initialDraft(profile: SettingsModalProps["profile"]): SettingsDraft {
+  return {
+    fullName: [profile.first_name, profile.last_name].filter(Boolean).join(" "),
+    academicLevel: profile.current_level ?? "",
+    interfaceFont: "default",
+    responseFont: "sans",
+    motion: "system",
+    responseStyle: "balanced",
+    replies: true,
+    generatedFiles: true,
+    courseUpdates: true,
+    studyReminders: false,
+    studyBreaks: false,
+    nightStudy: false,
+  };
+}
 
 export function SettingsModal({
   open,
@@ -40,32 +62,39 @@ export function SettingsModal({
 }: SettingsModalProps): React.ReactElement {
   const [activeSection, setActiveSection] = useState<SettingsSectionId>(initialSection);
   const [searchQuery, setSearchQuery] = useState("");
-  const [inMobileSection, setInMobileSection] = useState(false);
-  const [deleteHistoryOpen, setDeleteHistoryOpen] = useState(false);
+  const [searchSelection, setSearchSelection] = useState<SettingsSearchField | null>(null);
+  const [inMobileSection, setInMobileSection] = useState(initialSection !== "account");
   const [prevOpen, setPrevOpen] = useState(open);
-
+  const [draft, setDraft] = useState(() => initialDraft(profile));
+  const mobile = useSyncExternalStore(subscribeViewport, mobileViewport, () => false);
   const dialogRef = useRef<HTMLDivElement>(null);
-
-  // Sync initial section when opening
+  const contentRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const menuOpener = useRef<HTMLElement | null>(null);
+  const descriptionId = useId();
+  const touchOrigin = useRef<{ x: number; y: number } | null>(null);
   if (open !== prevOpen) {
     setPrevOpen(open);
     if (open) {
       setActiveSection(initialSection);
       setSearchQuery("");
-      setInMobileSection(false);
+      setSearchSelection(null);
+      setInMobileSection(initialSection !== "account");
+      setDraft(initialDraft(profile));
     }
   }
-
-  // Adjust viewport height for mobile keyboards
   useEffect(() => {
     if (!open) return;
     const viewport = window.visualViewport;
     const update = () => {
       dialogRef.current?.style.setProperty(
-        "--chat-viewport-height",
+        "--settings-viewport-height",
         `${viewport?.height ?? window.innerHeight}px`
       );
-      dialogRef.current?.style.setProperty("--chat-viewport-top", `${viewport?.offsetTop ?? 0}px`);
+      dialogRef.current?.style.setProperty(
+        "--settings-viewport-top",
+        `${viewport?.offsetTop ?? 0}px`
+      );
     };
     update();
     viewport?.addEventListener("resize", update);
@@ -75,228 +104,233 @@ export function SettingsModal({
       viewport?.removeEventListener("scroll", update);
     };
   }, [open]);
-
-  // Handle mobile swipe down on the drag handle / top bar
-  const handleTouchStart = useRef<{ y: number; time: number } | null>(null);
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    if (!touch) return;
-    const target = e.target as HTMLElement;
-    if (target.closest(".settings-mobile-header-btn")) return;
-    if (target.closest(".settings-modal-handle, .settings-mobile-header")) {
-      handleTouchStart.current = { y: touch.clientY, time: performance.now() };
-    }
-  }, []);
-
-  const onTouchMove = useCallback((e: React.TouchEvent) => {
-    if (!handleTouchStart.current) return;
-    const touch = e.touches[0];
-    if (!touch) return;
-    const dy = touch.clientY - handleTouchStart.current.y;
-    if (dy > 0 && dialogRef.current) {
-      dialogRef.current.style.setProperty("--sheet-swipe-y", `${dy}px`);
-    }
-  }, []);
-
-  const onTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      if (!handleTouchStart.current) return;
-      const touch = e.changedTouches[0];
-      const dy = touch ? touch.clientY - handleTouchStart.current.y : 0;
-      handleTouchStart.current = null;
-      if (dialogRef.current) {
-        dialogRef.current.style.removeProperty("--sheet-swipe-y");
-      }
-      if (dy > 80) {
-        onOpenChange(false);
-      }
-    },
-    [onOpenChange]
-  );
-
-  const selectSection = (id: SettingsSectionId) => {
+  useEffect(() => {
+    if (!open || searchSelection?.section !== activeSection) return;
+    const pane = contentRef.current;
+    const target = Array.from(
+      pane?.querySelectorAll<HTMLElement>("[data-settings-label]") ?? []
+    ).find((element) => element.dataset.settingsLabel === searchSelection.target);
+    if (!target) return;
+    target.dataset.settingsMatch = "";
+    target.scrollIntoView({ block: "nearest" });
+    const control = target.querySelector<HTMLElement>(
+      "input:not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), a[href]"
+    );
+    (control ?? (target.matches(":disabled") ? pane : target))?.focus({ preventScroll: true });
+    return () => {
+      delete target.dataset.settingsMatch;
+    };
+  }, [open, activeSection, searchSelection]);
+  function selectSection(id: SettingsSectionId): void {
+    setSearchSelection(null);
+    menuOpener.current =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     setActiveSection(id);
     setInMobileSection(true);
+    requestAnimationFrame(() => titleRef.current?.focus({ preventScroll: true }));
+  }
+  function backToMenu(): void {
+    setInMobileSection(false);
+    requestAnimationFrame(() => menuOpener.current?.focus({ preventScroll: true }));
+  }
+  function resetSwipe(): void {
+    touchOrigin.current = null;
+    dialogRef.current?.style.removeProperty("--settings-swipe-y");
+  }
+  const draftProps = {
+    draft,
+    onDraftChange: (patch: Partial<SettingsDraft>) =>
+      setDraft((current) => ({ ...current, ...patch })),
   };
-
-  const renderActiveSection = (): ReactNode => {
-    switch (activeSection) {
-      case "account":
-        return (
-          <ProfileSection
-            profile={profile}
-            preferences={preferences}
-            onClose={() => onOpenChange(false)}
-          />
-        );
-      case "billing":
-        return (
-          <AccountSection
-            profile={profile}
-            preferences={preferences}
-            onClose={() => onOpenChange(false)}
-          />
-        );
-      case "appearance":
-        return <AppearanceSection preferences={preferences} />;
-      case "notifications":
-        return <NotificationsSection />;
-      case "privacy":
-        return <PrivacySection />;
-      case "wellbeing":
-        return <WellbeingSection />;
-      case "data-storage":
-        return <DataStorageSection onRequestDeleteHistory={() => setDeleteHistoryOpen(true)} />;
-      case "about":
-        return <AboutSection />;
-      default:
-        return (
-          <ProfileSection
-            profile={profile}
-            preferences={preferences}
-            onClose={() => onOpenChange(false)}
-          />
-        );
-    }
-  };
-
+  let content: ReactNode;
+  switch (activeSection) {
+    case "account":
+      content = <ProfileSection profile={profile} preferences={preferences} {...draftProps} />;
+      break;
+    case "security":
+      content = <SecuritySection />;
+      break;
+    case "appearance":
+      content = <AppearanceSection preferences={preferences} {...draftProps} />;
+      break;
+    case "wellbeing":
+      content = (
+        <div className="settings-section-container">
+          <AiChatSection {...draftProps} />
+          <WellbeingSection {...draftProps} />
+        </div>
+      );
+      break;
+    case "billing":
+      content = <CreditsSection preferences={preferences} />;
+      break;
+    case "notifications":
+      content = (
+        <div className="settings-section-container">
+          <NotificationsSection {...draftProps} />
+        </div>
+      );
+      break;
+    case "data-storage":
+      content = <DataStorageSection />;
+      break;
+    case "privacy":
+      content = <PrivacySection />;
+      break;
+    case "about":
+      content = <AboutSection />;
+      break;
+  }
   return (
-    <>
-      <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
-        <DialogPrimitive.Portal>
-          <DialogPrimitive.Overlay className="settings-overlay" />
-          <DialogPrimitive.Content
-            ref={dialogRef}
-            className="settings-modal-dialog"
-            aria-describedby="settings-desc"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
-            onCloseAutoFocus={(event) => {
-              if (returnFocus) {
-                event.preventDefault();
-                returnFocus();
-              }
-            }}
-            onEscapeKeyDown={(e) => {
-              if (inMobileSection) {
-                e.preventDefault();
-                setInMobileSection(false);
-              }
-            }}
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="settings-overlay" />
+        <DialogPrimitive.Content
+          ref={dialogRef}
+          className="settings-modal-dialog"
+          aria-describedby={descriptionId}
+          onCloseAutoFocus={(event) => {
+            if (returnFocus) {
+              event.preventDefault();
+              returnFocus();
+            }
+          }}
+          onEscapeKeyDown={(event) => {
+            // Radix observes Escape before the input's React key handler.
+            if (
+              event.target instanceof Element &&
+              event.target.matches('.settings-nav-search[aria-expanded="true"]')
+            ) {
+              event.preventDefault();
+              return;
+            }
+            if (mobile && inMobileSection) {
+              event.preventDefault();
+              backToMenu();
+            }
+          }}
+          onTouchStart={(event) => {
+            if (!mobile || event.touches.length !== 1 || !(event.target instanceof Element)) return;
+            if (event.target.closest("button")) {
+              if (!event.target.closest(".settings-modal-handle")) return;
+            }
+            if (!event.target.closest(".settings-modal-handle, .settings-mobile-header")) return;
+            const point = event.touches[0];
+            if (point) touchOrigin.current = { x: point.clientX, y: point.clientY };
+          }}
+          onTouchMove={(event) => {
+            const origin = touchOrigin.current,
+              point = event.touches[0];
+            if (!origin || !point) return;
+            const dy = point.clientY - origin.y;
+            if (event.touches.length !== 1 || dy < 0 || Math.abs(point.clientX - origin.x) > dy) {
+              resetSwipe();
+              return;
+            }
+            dialogRef.current?.style.setProperty("--settings-swipe-y", `${Math.min(220, dy)}px`);
+          }}
+          onTouchEnd={(event) => {
+            const origin = touchOrigin.current,
+              point = event.changedTouches[0];
+            const dismiss = origin && point && point.clientY - origin.y > 80;
+            resetSwipe();
+            if (dismiss) onOpenChange(false);
+          }}
+          onTouchCancel={resetSwipe}
+        >
+          <DialogPrimitive.Title className="p-sr-only">Settings</DialogPrimitive.Title>
+          <DialogPrimitive.Description id={descriptionId} className="p-sr-only">
+            Your account, appearance and study preferences.
+          </DialogPrimitive.Description>
+          <button
+            type="button"
+            className="settings-modal-handle"
+            aria-label="Dismiss settings"
+            onClick={() => onOpenChange(false)}
           >
-            <DialogPrimitive.Title className="p-sr-only">Settings</DialogPrimitive.Title>
-            <DialogPrimitive.Description id="settings-desc" className="p-sr-only">
-              Configure your study workspace, appearance, clinical AI, and account preferences.
-            </DialogPrimitive.Description>
-
-            {/* Mobile drag handle matching mobile-home-chat */}
+            <span />
+          </button>
+          <header className="settings-modal-header">
+            <h2>Settings</h2>
             <button
               type="button"
-              className="mobile-home-chat-handle settings-modal-handle"
-              aria-label="Drag to dismiss settings"
+              className="settings-close-button"
+              aria-label="Close settings"
               onClick={() => onOpenChange(false)}
             >
-              <span />
+              <X size={18} />
             </button>
-
-            {/* Desktop Header */}
-            <header className="settings-modal-header">
-              <h2 className="settings-modal-title">Settings</h2>
+          </header>
+          <header className="settings-mobile-header">
+            <button
+              type="button"
+              className="settings-mobile-header-btn"
+              aria-label={inMobileSection ? "Back to settings menu" : "Close settings"}
+              onClick={() => (inMobileSection ? backToMenu() : onOpenChange(false))}
+            >
+              {inMobileSection ? <ChevronLeft size={21} /> : <X size={18} />}
+            </button>
+            <h2 ref={titleRef} tabIndex={-1} hidden={!inMobileSection}>
+              {TITLES[activeSection]}
+            </h2>
+            {inMobileSection ? (
+              <span className="settings-mobile-header-spacer" />
+            ) : (
               <button
                 type="button"
-                className="settings-close-button"
-                aria-label="Close settings"
-                onClick={() => onOpenChange(false)}
+                className="settings-mobile-header-btn"
+                aria-label="About PansGPT"
+                onClick={() => selectSection("about")}
               >
-                <X size={18} aria-hidden="true" />
+                <Info size={18} />
               </button>
-            </header>
-
-            {/* Mobile Header (exact Claude iOS pattern from Images 1, 2, 3) */}
-            <header className="settings-mobile-header">
-              {inMobileSection ? (
-                <button
-                  type="button"
-                  className="settings-mobile-header-btn"
-                  aria-label="Back to settings menu"
-                  onClick={() => setInMobileSection(false)}
-                >
-                  <ChevronLeft size={20} aria-hidden="true" />
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="settings-mobile-header-btn"
-                  aria-label="Close settings"
-                  onClick={() => onOpenChange(false)}
-                >
-                  <X size={18} aria-hidden="true" />
-                </button>
-              )}
-
-              <h2 className="settings-mobile-title">
-                {inMobileSection ? SECTION_TITLES[activeSection] : "Settings"}
-              </h2>
-
-              {inMobileSection ? (
-                <div className="settings-mobile-header-spacer" aria-hidden="true" />
-              ) : (
-                <button
-                  type="button"
-                  className="settings-mobile-header-btn"
-                  aria-label="About PansGPT"
-                  onClick={() => {
-                    setActiveSection("about");
-                    setInMobileSection(true);
-                  }}
-                >
-                  <Info size={18} aria-hidden="true" />
-                </button>
-              )}
-            </header>
-
-            {/* Body */}
-            <div className="settings-modal-body">
-              {/* Desktop Left Rail Navigation */}
-              <SettingsNav
-                activeSection={activeSection}
-                onSelectSection={setActiveSection}
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-              />
-
-              {/* Mobile Sliding Views (Menu vs Active Section) / Desktop Content Pane */}
-              <div className="settings-mobile-views" data-in-section={inMobileSection}>
-                {/* Mobile Menu List (left pane of the track) */}
-                <div className="settings-mobile-menu-pane">
-                  <SettingsMenu
-                    profile={profile}
-                    preferences={preferences}
-                    onSelectSection={selectSection}
-                    onClose={() => onOpenChange(false)}
-                  />
+            )}
+          </header>
+          <div className="settings-modal-body">
+            <SettingsNav
+              activeSection={activeSection}
+              onSelectSection={(id) => {
+                setSearchSelection(null);
+                setActiveSection(id);
+                if (contentRef.current) contentRef.current.scrollTop = 0;
+              }}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              onSelectField={(field) => {
+                setActiveSection(field.section);
+                setInMobileSection(true);
+                setSearchSelection({ ...field });
+              }}
+            />
+            <div className="settings-mobile-views" data-in-section={inMobileSection}>
+              <div
+                className="settings-mobile-menu-pane"
+                inert={mobile && inMobileSection}
+                aria-hidden={mobile && inMobileSection ? true : undefined}
+              >
+                <SettingsMenu
+                  profile={profile}
+                  preferences={preferences}
+                  onSelectSection={selectSection}
+                  onClose={() => onOpenChange(false)}
+                />
+              </div>
+              <div
+                ref={contentRef}
+                className="settings-content-pane"
+                tabIndex={-1}
+                inert={mobile && !inMobileSection}
+                aria-hidden={mobile && !inMobileSection ? true : undefined}
+              >
+                <div className="settings-content-heading">
+                  <h2>{TITLES[activeSection]}</h2>
                 </div>
-
-                {/* Right content pane: active section */}
-                <div className="settings-content-pane">{renderActiveSection()}</div>
+                {content}
               </div>
             </div>
-          </DialogPrimitive.Content>
-        </DialogPrimitive.Portal>
-      </DialogPrimitive.Root>
-
-      {/* Delete conversation history confirmation dialog on top */}
-      <DeleteHistoryDialog
-        open={deleteHistoryOpen}
-        onOpenChange={setDeleteHistoryOpen}
-        onConfirm={() => {
-          // Trigger custom event so any active chat sessions can clear
-          if (typeof window !== "undefined") {
-            window.dispatchEvent(new CustomEvent("pansgpt-chats-cleared"));
-          }
-        }}
-      />
-    </>
+          </div>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }

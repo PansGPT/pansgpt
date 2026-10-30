@@ -46,6 +46,7 @@ export function SettingsMenu({
       {/* Profile summary card */}
       <button
         type="button"
+        aria-label="Edit profile"
         className="settings-menu-profile-card"
         onClick={() => onSelectSection("account")}
       >
@@ -63,28 +64,29 @@ export function SettingsMenu({
           <div key={groupIndex} className="settings-menu-group">
             {group.label && <span className="settings-menu-group-title">{group.label}</span>}
             <div className="settings-menu-group-card">
-              {group.items.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className="settings-menu-row"
-                  onClick={() => onSelectSection(item.id)}
-                >
-                  <span className="settings-menu-row-icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                  <span className="settings-menu-row-label">{item.label}</span>
-                  {item.badge && <span className="settings-menu-row-badge">{item.badge}</span>}
-                  {item.id === "billing" && (
-                    <span className="settings-menu-row-credits">
-                      {preferences.credits === null
-                        ? "Unlimited"
-                        : `${preferences.credits.toLocaleString()} credits`}
+              {group.items
+                .filter((item) => item.id !== "account")
+                .map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="settings-menu-row"
+                    onClick={() => onSelectSection(item.id)}
+                  >
+                    <span className="settings-menu-row-icon" aria-hidden="true">
+                      {item.icon}
                     </span>
-                  )}
-                  <ChevronRight size={16} className="settings-menu-chevron" aria-hidden="true" />
-                </button>
-              ))}
+                    <span className="settings-menu-row-label">{item.label}</span>
+                    {item.id === "billing" && (
+                      <span className="settings-menu-row-credits">
+                        {preferences.credits === null
+                          ? "Unavailable"
+                          : `${preferences.credits.toLocaleString()} credits`}
+                      </span>
+                    )}
+                    <ChevronRight size={16} className="settings-menu-chevron" aria-hidden="true" />
+                  </button>
+                ))}
             </div>
           </div>
         ))}

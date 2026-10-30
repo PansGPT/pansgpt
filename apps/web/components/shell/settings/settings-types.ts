@@ -4,6 +4,7 @@ import type { usePreferences } from "@/components/shell/use-preferences";
 
 export type SettingsSectionId =
   | "account"
+  | "security"
   | "billing"
   | "appearance"
   | "notifications"
@@ -12,13 +13,33 @@ export type SettingsSectionId =
   | "data-storage"
   | "about";
 
+export interface SettingsDraft {
+  fullName: string;
+  academicLevel: string;
+  interfaceFont: string;
+  responseFont: string;
+  motion: string;
+  responseStyle: string;
+  replies: boolean;
+  generatedFiles: boolean;
+  courseUpdates: boolean;
+  studyReminders: boolean;
+  studyBreaks: boolean;
+  nightStudy: boolean;
+}
+
+export interface DraftSectionProps {
+  draft: SettingsDraft;
+  onDraftChange: (patch: Partial<SettingsDraft>) => void;
+}
+
 export interface SettingsNavGroup {
   label?: string;
   items: {
     id: SettingsSectionId;
     label: string;
     icon: ReactNode;
-    badge?: string;
+    keywords?: string;
   }[];
 }
 

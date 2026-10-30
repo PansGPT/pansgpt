@@ -1,71 +1,73 @@
 "use client";
-
-import { ExternalLink, MessageSquare, BookOpen, Bug } from "lucide-react";
-import { SettingsSection } from "../settings-section";
+import { useId, useRef, useState } from "react";
+import { X } from "lucide-react";
+import { Button, DialogPrimitive } from "@pansgpt/ui/shell";
 import { SettingsRow } from "../settings-row";
-
 export function HelpSection(): React.ReactElement {
+  const [open, setOpen] = useState(false);
+  const opener = useRef<HTMLElement | null>(null);
+  const message = useRef<HTMLTextAreaElement>(null);
+  const messageId = useId();
+  const descriptionId = useId();
   return (
-    <div className="settings-section-container">
-      <SettingsSection
-        title="Help & Learning Resources"
-        description="Guides and support for using PansGPT clinical features effectively."
-      >
-        <SettingsRow
-          title="Getting started with PansGPT"
-          description="Learn how to upload monographs, snip PDF text to chat, and practice with quizzes."
-          chevron
-          onClick={() => {
-            window.open(
-              "https://pansgpt.edu.ng/docs/getting-started",
-              "_blank",
-              "noopener,noreferrer"
-            );
-          }}
-        >
-          <ExternalLink size={15} aria-hidden="true" />
-        </SettingsRow>
-
-        <SettingsRow
-          title="Clinical tools & calculation guides"
-          description="How to format dosing regimens, check drug interactions, and render chemical structures."
-          chevron
-          onClick={() => {
-            window.open(
-              "https://pansgpt.edu.ng/docs/clinical-tools",
-              "_blank",
-              "noopener,noreferrer"
-            );
-          }}
-        >
-          <BookOpen size={15} aria-hidden="true" />
-        </SettingsRow>
-
-        <SettingsRow
-          title="Report a bug or dosage discrepancy"
-          description="Flag incorrect clinical calculations or application glitches directly to the engineering team."
-          chevron
-          onClick={() => {
-            window.open("mailto:support@pansgpt.edu.ng?subject=PansGPT%20Feedback", "_blank");
-          }}
-        >
-          <Bug size={15} aria-hidden="true" />
-        </SettingsRow>
-
-        <SettingsRow
-          title="Contact pharmacy faculty support"
-          description="Need access to additional monograph collections or course materials?"
-          chevron
-          onClick={() => {
-            window.open(
-              "mailto:faculty@pansgpt.edu.ng?subject=Course%20Material%20Inquiry",
-              "_blank"
-            );
-          }}
-        >
-          <MessageSquare size={15} aria-hidden="true" />
-        </SettingsRow>
-      </SettingsSection>
-    </div>
+    <>
+      <SettingsRow
+        title="Send feedback"
+        description="Share an idea or report a problem."
+        chevron
+        onClick={() => {
+          opener.current =
+            document.activeElement instanceof HTMLElement ? document.activeElement : null;
+          setOpen(true);
+        }}
+      />
+      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="settings-confirm-overlay" />
+          <DialogPrimitive.Content
+            className="settings-confirm-dialog settings-feedback-dialog"
+            aria-describedby={descriptionId}
+            onOpenAutoFocus={(event) => {
+              event.preventDefault();
+              message.current?.focus();
+            }}
+            onCloseAutoFocus={(event) => {
+              if (opener.current) {
+                event.preventDefault();
+                opener.current.focus();
+              }
+            }}
+          >
+            <div className="settings-shortcuts-header">
+              <DialogPrimitive.Title className="settings-confirm-title">
+                Send feedback
+              </DialogPrimitive.Title>
+              <DialogPrimitive.Close className="settings-close-button" aria-label="Close feedback">
+                <X size={18} />
+              </DialogPrimitive.Close>
+            </div>
+            <DialogPrimitive.Description
+              id={descriptionId}
+              className="settings-confirm-description"
+            >
+              Share an idea or report a problem.
+            </DialogPrimitive.Description>
+            <div className="settings-feedback">
+              <label htmlFor={messageId}>Your message</label>
+              <textarea
+                ref={message}
+                id={messageId}
+                className="settings-input"
+                rows={4}
+                placeholder="Share an idea or describe a problem..."
+              />
+              <Button leadingIcon={null} trailingIcon={null} disabled>
+                Send feedback
+              </Button>
+            </div>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+    </>
   );
 }

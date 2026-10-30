@@ -57,7 +57,7 @@ export function SidebarLinks({
     <div className="reference-sidebar">
       <div className="shell-links">
         {(mobile ? mobileDestinations : destinations)
-          .filter((item) => item.href !== "/app/chat")
+          .filter((item) => !["/app/chat", "/app/notes", "/app/focus"].includes(item.href))
           .map(({ href, label, icon: Icon }) => (
             <Link
               key={href}

@@ -1,0 +1,787 @@
+/* ==========================================================================
+   Telegram Bot UI — Authentic Conversational Commerce Experience
+   Pixel-accurate replication of Telegram Bot interface (e.g. Gmail Bot, Wallet Bots)
+   Styled with PansGPT OKLCH Design Tokens (Dark, Light, Sepia)
+   ========================================================================== */
+
+.purchase-chat {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  background: var(--bg-primary);
+  color: var(--text-primary-900);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. Telegram Top App Bar (Header)
+   ========================================================================== */
+.telegram-bot-header {
+  flex: none;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background: #18261f;
+  border-bottom: 1px solid #24342a;
+  z-index: 10;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .telegram-bot-header {
+  background: #18261f;
+  border-bottom: 1px solid #24342a;
+}
+
+[data-theme="light"] .telegram-bot-header {
+  background: #0d5c3a;
+  border-bottom: 1px solid #0a482d;
+  color: #ffffff;
+}
+
+[data-theme="sepia"] .telegram-bot-header {
+  background: #433322;
+  border-bottom: 1px solid #332719;
+  color: #ffffff;
+}
+
+.telegram-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.telegram-header-back-btn {
+  background: transparent;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease;
+}
+
+.telegram-header-back-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.telegram-header-avatar {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #23372b;
+  color: #6ee7b7;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+[data-theme="light"] .telegram-header-avatar {
+  background: #167a4d;
+  color: #ffffff;
+}
+
+.telegram-header-title-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.telegram-header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.telegram-header-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.telegram-verified-badge {
+  color: #38bdf8; /* Telegram signature blue check badge */
+  flex: none;
+}
+
+.telegram-header-subtitle {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.2;
+}
+
+.telegram-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.telegram-header-credits-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.telegram-header-action-btn {
+  background: transparent;
+  border: 0;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms ease;
+}
+
+.telegram-header-action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Close button shown ONLY on mobile view */
+.telegram-header-close-btn {
+  display: none !important;
+}
+
+@media (max-width: 860px) {
+  .telegram-header-close-btn {
+    display: flex !important;
+  }
+}
+
+/* ==========================================================================
+   2. Telegram Chat Canvas with Subtle Pattern Background
+   ========================================================================== */
+.telegram-chat-canvas {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 12px 14px 18px;
+  box-sizing: border-box;
+  background-color: #0f1713;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 80%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2322c55e' fill-opacity='0.035' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .telegram-chat-canvas {
+  background-color: #dbe7e0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(13, 92, 58, 0.04) 0%, transparent 80%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230d5c3a' fill-opacity='0.045' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+[data-theme="sepia"] .telegram-chat-canvas {
+  background-color: #eee0c9;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(90, 60, 30, 0.04) 0%, transparent 80%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235a3c1e' fill-opacity='0.04' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.telegram-chat-thread {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Telegram Date / Topic Pill */
+.telegram-date-pill-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 2px 0 6px;
+  user-select: none;
+}
+
+.telegram-date-pill {
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 3px 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+[data-theme="light"] .telegram-date-pill {
+  background: rgba(0, 0, 0, 0.35);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   3. Telegram Message Turns & Bubbles (Speech tails)
+   ========================================================================== */
+.telegram-msg-row {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.telegram-msg-row.is-bot {
+  align-items: flex-start;
+}
+
+.telegram-msg-row.is-user {
+  align-items: flex-end;
+}
+
+/* Bot Message Bubble (Speech notch on bottom-left) */
+.telegram-bubble-bot {
+  position: relative;
+  max-width: 86%;
+  padding: 9px 13px 7px;
+  border-radius: 14px 14px 14px 3px;
+  background: #1e2922;
+  border: 1px solid #2a3a30;
+  color: #f1f5f3;
+  font-size: 13.5px;
+  line-height: 1.48;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+  word-break: break-word;
+}
+
+[data-theme="light"] .telegram-bubble-bot {
+  background: #ffffff;
+  border: 1px solid #e1e8e4;
+  color: #111827;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="sepia"] .telegram-bubble-bot {
+  background: #fbf0d9;
+  border: 1px solid #e2d2b5;
+  color: #382d20;
+}
+
+/* User Message Bubble (Telegram green pill with speech notch on bottom-right) */
+.telegram-bubble-user {
+  position: relative;
+  max-width: 82%;
+  padding: 8px 12px 6px;
+  border-radius: 14px 14px 3px 14px;
+  background: #1e4a32;
+  border: 1px solid #286343;
+  color: #ffffff;
+  font-size: 13.5px;
+  line-height: 1.45;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+  word-break: break-word;
+}
+
+[data-theme="light"] .telegram-bubble-user {
+  background: #2ea043;
+  border: 1px solid #238636;
+  color: #ffffff;
+}
+
+.telegram-bubble-bot p,
+.telegram-bubble-user p {
+  margin: 0 0 5px;
+}
+
+.telegram-bubble-bot p:last-child,
+.telegram-bubble-user p:last-child {
+  margin-bottom: 0;
+}
+
+.telegram-bubble-bot a {
+  color: #38bdf8;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+[data-theme="light"] .telegram-bubble-bot a {
+  color: #0284c7;
+}
+
+/* Timestamps & Telegram Delivery Ticks */
+.telegram-msg-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  float: right;
+  margin-left: 8px;
+  margin-top: 3px;
+  user-select: none;
+  font-size: 10.5px;
+  line-height: 1;
+}
+
+.telegram-bubble-bot .telegram-msg-meta {
+  color: #8da495;
+}
+
+.telegram-bubble-user .telegram-msg-meta {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.telegram-ticks {
+  color: #6ee7b7; /* Double mint green checkmarks */
+}
+
+/* Attached Image in User Message */
+.telegram-receipt-attachment {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.telegram-receipt-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  flex: none;
+}
+
+.telegram-receipt-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Status Callouts */
+.telegram-callout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 7px 11px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.telegram-callout.is-verifying {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+}
+
+.telegram-callout.is-confirmed {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+}
+
+.telegram-spin {
+  animation: telegram-spin-anim 1s linear infinite;
+}
+
+@keyframes telegram-spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   4. Telegram-Style Inline Keyboards (Attached directly under Bot Bubble)
+   ========================================================================== */
+.telegram-inline-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 3px; /* Signature tight 3px Telegram keyboard gap */
+  width: 86%; /* Matches bot message bubble width */
+  margin-top: 3px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 860px) {
+  .telegram-inline-keyboard {
+    width: 92%;
+  }
+}
+
+/* Single Inline Button */
+.telegram-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 12px;
+  border-radius: 7px; /* Telegram signature 7px rounded corners */
+  background: rgba(55, 78, 65, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 120ms ease, transform 80ms ease;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+[data-theme="dark"] .telegram-btn {
+  background: #25332a;
+  border-color: #34483b;
+  color: #f1f5f3;
+}
+
+[data-theme="dark"] .telegram-btn:hover {
+  background: #2e4034;
+  border-color: #435c4b;
+}
+
+[data-theme="light"] .telegram-btn {
+  background: #4a6b82;
+  border-color: #3d586c;
+  color: #ffffff;
+}
+
+[data-theme="light"] .telegram-btn:hover {
+  background: #3d586c;
+}
+
+.telegram-btn:active {
+  transform: scale(0.99);
+}
+
+/* 2-Column Row of Inline Buttons (Like Subject: & Message: in inspiration!) */
+.telegram-btn-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  width: 100%;
+}
+
+/* Package Selection Row (Left: credits, Right: price) */
+.telegram-btn.is-package {
+  justify-content: space-between;
+  padding: 9px 12px;
+}
+
+.telegram-pkg-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telegram-pkg-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.telegram-pkg-badge {
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.25);
+  color: #10b981;
+}
+
+.telegram-pkg-price {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+[data-theme="light"] .telegram-pkg-price {
+  color: #d1fae5;
+}
+
+/* Copy Bank Details Inline Button */
+.telegram-btn.is-copy {
+  justify-content: space-between;
+}
+
+.telegram-btn.is-copy.is-copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+}
+
+.telegram-copy-label {
+  font-family: var(--font-mono, monospace);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.telegram-copy-action {
+  font-size: 11px;
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Primary Brand Action Button */
+.telegram-btn.is-brand {
+  background: #166534;
+  border-color: #22c55e;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.telegram-btn.is-brand:hover {
+  background: #15803d;
+}
+
+/* ==========================================================================
+   5. Telegram Bottom Bar (≡ Menu Pill + Message Composer + Circle Action)
+   ========================================================================== */
+.telegram-bottom-bar {
+  flex: none;
+  padding: 8px 12px max(10px, env(safe-area-inset-bottom));
+  background: #141c17;
+  border-top: 1px solid #202c24;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+[data-theme="dark"] .telegram-bottom-bar {
+  background: #141c17;
+  border-top: 1px solid #202c24;
+}
+
+[data-theme="light"] .telegram-bottom-bar {
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+}
+
+[data-theme="sepia"] .telegram-bottom-bar {
+  background: #fbf0d9;
+  border-top: 1px solid #e2d2b5;
+}
+
+/* Telegram Bright Pill "≡ Menu" Button */
+.telegram-menu-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 19px; /* Signature Telegram rounded pill */
+  background: #10b981; /* PansGPT emerald brand pill */
+  border: 0;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: none;
+  transition: background 120ms ease, transform 80ms ease;
+  white-space: nowrap;
+}
+
+.telegram-menu-pill:hover {
+  background: #059669;
+}
+
+.telegram-menu-pill:active {
+  transform: scale(0.97);
+}
+
+/* Composer Pill Input Box */
+.telegram-composer-pill {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  height: 38px;
+  border-radius: 19px;
+  background: #1f2b23;
+  border: 1px solid #2d3e33;
+  padding: 0 6px 0 10px;
+  gap: 6px;
+  box-sizing: border-box;
+  transition: border-color 130ms ease;
+}
+
+[data-theme="light"] .telegram-composer-pill {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+}
+
+[data-theme="sepia"] .telegram-composer-pill {
+  background: #f4e5c8;
+  border: 1px solid #ddcca8;
+}
+
+.telegram-composer-pill:focus-within {
+  border-color: #10b981;
+}
+
+.telegram-composer-icon-btn {
+  background: transparent;
+  border: 0;
+  color: #8da495;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  transition: color 120ms ease;
+}
+
+.telegram-composer-icon-btn:hover {
+  color: #ffffff;
+}
+
+[data-theme="light"] .telegram-composer-icon-btn {
+  color: #6b7280;
+}
+
+[data-theme="light"] .telegram-composer-icon-btn:hover {
+  color: #111827;
+}
+
+.telegram-composer-text-input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--text-primary-900);
+  font: 400 13.5px var(--font-body);
+  outline: none;
+  padding: 0;
+}
+
+@media (max-width: 860px) {
+  .telegram-composer-text-input {
+    font-size: 16px; /* prevent iOS auto-zoom */
+  }
+}
+
+/* Outside Circular Action Button (Mic or Send Arrow) */
+.telegram-circle-action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 0;
+  background: #1f2b23;
+  color: #8da495;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex: none;
+  transition: background 130ms ease, color 130ms ease, transform 80ms ease;
+}
+
+.telegram-circle-action-btn:hover {
+  color: #ffffff;
+}
+
+.telegram-circle-action-btn.is-send {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.telegram-circle-action-btn.is-send:hover {
+  background: #059669;
+}
+
+[data-theme="light"] .telegram-circle-action-btn {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+[data-theme="light"] .telegram-circle-action-btn.is-send {
+  background: #0d5c3a;
+  color: #ffffff;
+}
+
+.telegram-circle-action-btn:active {
+  transform: scale(0.95);
+}
+
+/* Attachment preview chip inside bottom bar */
+.telegram-attachment-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 2px 7px 2px 3px;
+  border-radius: 12px;
+  font-size: 11px;
+}
+
+.telegram-attachment-chip-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   6. Fullscreen Lightbox Modal
+   ========================================================================== */
+.purchase-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.purchase-lightbox-dialog {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.purchase-lightbox-img {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  display: block;
+}
+
+.purchase-lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

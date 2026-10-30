@@ -17,8 +17,10 @@ import { DashboardProvider } from "./dashboard-data";
 import { ChatDraftProvider, useChatDraft } from "./chat-draft";
 import { SidebarLinks } from "./sidebar";
 import { AccountMenu } from "./account-menu";
+import { MobileProfileButton } from "./mobile-profile-button";
 import { MobileHomeChat } from "./mobile-home-chat";
 import { WorkspaceNavigationContext } from "./workspace-navigation";
+import type { SettingsSectionId } from "./settings/settings-types";
 import { SettingsModal } from "./settings/settings-modal";
 
 function Brand(): React.ReactElement {
@@ -101,6 +103,7 @@ function Workspace({
   const searchOpen = panels.pathname === pathname && panels.search;
   const profileOpen = panels.pathname === pathname && panels.profile;
   const settingsOpen = panels.pathname === pathname && panels.settings;
+  const [settingsSection, setSettingsSection] = useState<SettingsSectionId>("account");
   const profileReturn = useRef<HTMLButtonElement | null>(null);
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
@@ -237,8 +240,9 @@ function Workspace({
             profileReturn.current = opener;
             setProfileOpen(true);
           }}
-          openSettings={(opener) => {
+          openSettings={(opener, section = "account") => {
             profileReturn.current = opener;
+            setSettingsSection(section);
             setSettingsOpen(true);
           }}
           openHelp={(opener) => {
@@ -305,31 +309,14 @@ function Workspace({
             <div className="shell-header-actions">
               {pathname === "/app" && (
                 <div className="shell-home-account">
-                  <AccountMenu
+                  <MobileProfileButton
                     profile={profile}
-                    compact
-                    openProfile={(opener) => {
+                    credits={preferences.credits}
+                    creditsTotal={preferences.creditsTotal}
+                    onOpen={(opener) => {
                       profileReturn.current = opener;
-                      setProfileOpen(true);
-                    }}
-                    openSettings={(opener) => {
-                      profileReturn.current = opener;
+                      setSettingsSection("account");
                       setSettingsOpen(true);
-                    }}
-                    openHelp={(opener) => {
-                      profileReturn.current = opener;
-                      setPanels({
-                        pathname,
-                        navigation: false,
-                        search: false,
-                        profile: false,
-                        settings: false,
-                        help: true,
-                      });
-                    }}
-                    openNavigation={() => {
-                      navigationOrigin.current = pathname;
-                      setNavigationOpen(true);
                     }}
                   />
                 </div>
@@ -468,6 +455,7 @@ function Workspace({
         />
         <SettingsModal
           open={settingsOpen}
+          initialSection={settingsSection}
           onOpenChange={setSettingsOpen}
           profile={profile}
           preferences={preferences}

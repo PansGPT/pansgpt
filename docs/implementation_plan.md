@@ -5595,6 +5595,8 @@ POST   /api/admin/material-submissions/batch-approve  ← Bulk approval of verif
 
 ### 16.1 System Architecture & Route Topology
 
+29 October 2026 UI amendment: the web settings preview uses a shared modal with the original three navigation groups and nine separate sections, including standalone Security. Storage/download and privacy management controls remain part of the design. About excludes onboarding and shortcut lists; the account menu provides optional help and shortcuts. Settings action buttons use compact sizing and softly rounded corners. This is UI scope only; the route topology below remains historical planned topology, and persistence/security/export acceptance remains open. See [settings UI refinement](settings-ui-refinement-2026-10-29.md).
+
 ```
 frontend/app/(app)/settings/
 ├── layout.tsx                ← Shared Settings Sidebar & Mobile Tab Navigation

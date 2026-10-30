@@ -594,7 +594,7 @@ test("home and chat share aligned navigation, docked toggle and polished account
   await expect(account.getByRole("separator")).toHaveCount(1);
   expect(await account.evaluate((element) => getComputedStyle(element).borderRadius)).toBe("14px");
   await page.screenshot({ path: test.info().outputPath("profile-menu-desktop.png") });
-  await account.getByRole("menuitem", { name: "Help", exact: true }).click();
+  await account.getByRole("menuitem", { name: "Get help", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Help", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Account menu", exact: true })).toBeFocused();

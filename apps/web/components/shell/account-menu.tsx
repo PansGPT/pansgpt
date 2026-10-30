@@ -12,7 +12,6 @@ import {
   Smartphone,
   Monitor,
   Share2,
-  Sparkles,
   Command,
   FileText,
   Info,
@@ -29,6 +28,8 @@ import {
   UserInitialsAvatar,
 } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
+import type { SettingsSectionId } from "./settings/settings-types";
+import { ShortcutsDialog } from "./shortcuts-dialog";
 import { IosInstructionsDialog } from "./ios-instructions-dialog";
 
 export function AccountMenu({
@@ -41,7 +42,7 @@ export function AccountMenu({
 }: {
   profile: UserProfile;
   openProfile: (opener: HTMLButtonElement | null) => void;
-  openSettings?: (opener: HTMLButtonElement | null) => void;
+  openSettings?: (opener: HTMLButtonElement | null, section?: SettingsSectionId) => void;
   openHelp: (opener: HTMLButtonElement | null) => void;
   compact?: boolean;
   openNavigation?: () => void;
@@ -53,6 +54,7 @@ export function AccountMenu({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
   const [iosModalOpen, setIosModalOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
 
   const name = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || "Your account";
 
@@ -103,7 +105,7 @@ export function AccountMenu({
 
           {openNavigation && (
             <DropdownItem
-              icon={<Menu size={17} />}
+              icon={<Menu size={16} />}
               onSelect={() => transfer(() => openNavigation())}
             >
               Navigation
@@ -112,56 +114,48 @@ export function AccountMenu({
 
           {/* Settings */}
           <DropdownItem
-            icon={<Settings size={17} />}
+            icon={<Settings size={16} />}
             onSelect={() => transfer((opener) => (openSettings ?? openProfile)(opener))}
           >
             Settings
           </DropdownItem>
 
           {/* Get help */}
-          <DropdownItem icon={<HelpCircle size={17} />} onSelect={() => transfer(openHelp)}>
+          <DropdownItem icon={<HelpCircle size={16} />} onSelect={() => transfer(openHelp)}>
             Get help
           </DropdownItem>
 
           {/* Learn more (Hover Submenu) */}
           <DropdownSub>
-            <DropdownSubTrigger icon={<BookOpen size={17} />}>Learn more</DropdownSubTrigger>
-            <DropdownSubContent className="shell-account-popup" style={{ width: "220px" }}>
+            <DropdownSubTrigger icon={<BookOpen size={16} />}>Learn more</DropdownSubTrigger>
+            <DropdownSubContent className="shell-account-popup" style={{ width: "196px" }}>
               <DropdownItem
-                icon={<Info size={16} />}
-                onSelect={() => transfer((opener) => openSettings?.(opener))}
+                icon={<Info size={15} />}
+                onSelect={() => transfer((opener) => openSettings?.(opener, "about"))}
               >
-                About PansGPT 2.0
+                About PansGPT
               </DropdownItem>
               <DropdownItem
-                icon={<Sparkles size={16} />}
-                onSelect={() => window.open("/terms#ai-capabilities", "_blank")}
-              >
-                Pharmacy Clinical AI
-              </DropdownItem>
-              <DropdownItem
-                icon={<Command size={16} />}
-                onSelect={() => {
-                  window.dispatchEvent(new CustomEvent("pansgpt-open-shortcuts"));
-                }}
+                icon={<Command size={15} />}
+                onSelect={() => transfer(() => setShortcutsOpen(true))}
               >
                 Keyboard shortcuts
               </DropdownItem>
               <DropdownItem
-                icon={<FileText size={16} />}
-                onSelect={() => window.open("/privacy", "_blank")}
+                icon={<FileText size={15} />}
+                onSelect={() => transfer((opener) => openSettings?.(opener, "privacy"))}
               >
-                Privacy & Data terms
+                Privacy & Data
               </DropdownItem>
             </DropdownSubContent>
           </DropdownSub>
 
           {/* Download (Hover Submenu) */}
           <DropdownSub>
-            <DropdownSubTrigger icon={<Download size={17} />}>Download app</DropdownSubTrigger>
-            <DropdownSubContent className="shell-account-popup" style={{ width: "230px" }}>
+            <DropdownSubTrigger icon={<Download size={16} />}>Download app</DropdownSubTrigger>
+            <DropdownSubContent className="shell-account-popup" style={{ width: "206px" }}>
               <DropdownItem
-                icon={<Smartphone size={16} />}
+                icon={<Smartphone size={15} />}
                 onSelect={() => {
                   // Direct download link or prompt
                   window.open("/downloads/pansgpt-android.apk", "_blank");
@@ -170,7 +164,7 @@ export function AccountMenu({
                 Download for Android
               </DropdownItem>
               <DropdownItem
-                icon={<Monitor size={16} />}
+                icon={<Monitor size={15} />}
                 onSelect={() => {
                   // Direct desktop app link
                   window.open("/downloads/pansgpt-desktop.exe", "_blank");
@@ -179,7 +173,7 @@ export function AccountMenu({
                 Download Desktop App
               </DropdownItem>
               <DropdownItem
-                icon={<Share2 size={16} />}
+                icon={<Share2 size={15} />}
                 onSelect={() => {
                   // Open iOS home screen instructions dialog
                   setIosModalOpen(true);
@@ -195,7 +189,7 @@ export function AccountMenu({
           {/* Log out */}
           <DropdownItem
             className="shell-account-logout"
-            icon={<LogOut size={17} />}
+            icon={<LogOut size={16} />}
             disabled={busy}
             onSelect={(event) => {
               event.preventDefault();
@@ -223,6 +217,11 @@ export function AccountMenu({
         </DropdownContent>
       </Dropdown>
 
+      <ShortcutsDialog
+        open={shortcutsOpen}
+        onOpenChange={setShortcutsOpen}
+        returnFocus={() => trigger.current?.focus()}
+      />
       {/* iOS Installation Instructions Dialog */}
       <IosInstructionsDialog open={iosModalOpen} onOpenChange={setIosModalOpen} />
     </>
