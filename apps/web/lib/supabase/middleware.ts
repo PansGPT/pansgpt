@@ -5,6 +5,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@pansgpt/types";
 
 export async function updateSession(request: NextRequest) {
+  // Quiz transport forwards the explicit bearer token to FastAPI. Rechecking
+  // cookie auth here would call Supabase on every autosave/progress request.
+  if (
+    request.nextUrl.pathname === "/api/quiz" ||
+    request.nextUrl.pathname.startsWith("/api/quiz/")
+  ) {
+    return NextResponse.next({ request });
+  }
   let supabaseResponse = NextResponse.next({
     request,
   });

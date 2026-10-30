@@ -1,5 +1,19 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).
+
+> **2026-10-29 development startup:** `pnpm dev` includes frontend, API and supervised quiz worker; an optional Docker worker config supports an existing host. [Lifecycle checks and hosting limits](development-startup-2026-10-29.md).
+
+> **2026-10-28 Gemma correction:** Bounded 30-second Google quiz attempts, explicit minimal thinking, isolated local timeouts and sanitized upstream status reporting. [Verification and live outcome](quiz-gemma-deadlines-2026-10-28.md).
+
+> **2026-10-28 queue incident:** Automatic inventory is now opt-in to preserve shared daily capacity; preparation shows AI service waits. [Runtime evidence, fixes and remaining provider blockage](quiz-capacity-incident-2026-10-28.md).
+
+> **2026-10-28 complete quiz delivery:** New attempts require the complete requested question set. Internal batches remain recoverable; progress-aware capacity rechecks avoid unnecessary durable waits. [Behavior, validation and remaining latency limits](quiz-complete-set-2026-10-28.md).
+
+> **2026-10-28 course coverage/freshness:** Course-neutral instructions, stratified material sampling, spread-out generation batches, versioned bank reuse and owner-scoped full generated-question history are locally verified. [Contract, evidence and limits](quiz-coverage-and-freshness-2026-10-28.md).
+
+> **2026-10-28 quiz reliability:** Compact strict Groq output, matrix token/batch sizing, adaptive malformed-batch recovery and durable capacity retries are locally verified. API, real PostgreSQL and browser evidence plus remaining hosted gates: [quiz reliability hardening](quiz-reliability-2026-10-28.md).
+
 > **Source of Truth**: Every decision in this roadmap is drawn directly from [`implementation_plan.md`](implementation_plan.md).
 > **Core Philosophy**: Backend foundations and API tests gate live integration. Frontend and backend coding may proceed in parallel against agreed typed contracts and explicit sample data.
 > **Budget**: $0 pilot with operator-managed workers. Provider privacy eligibility and account compute allocation must be verified before hosted use.
@@ -161,7 +175,7 @@ PR reviewed + CI green → merged to main
 | **10** | PDF Reader (Web)              |               ⏳ Pending                | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
 | **11** | AI Chat Interface (Web)       |               ⏳ Pending                | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
 | **12** | Learn Mode (Web)              |               ⏳ Pending                | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
-| **13** | Quiz System (Web)             |               ⏳ Pending                | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
+| **13** | Quiz System (Web)             |               In Progress               | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
 | **14** | Notes (Web)                   |               ⏳ Pending                | Tiptap editor, idb-keyval offline, sync-on-reconnect                                                     | Student writes, edits, and syncs a note                                        |
 | **15** | Timetable + Dashboard (Web)   |               ⏳ Pending                | Schedule engine, home page, recents carousel, tasks list                                                 | Home page shows real timetable and recent activity                             |
 | **16** | Portals                       |               ⏳ Pending                | Lecturer submission, admin management, super admin                                                       | Lecturer submits → admin approves → document enters ingestion                  |
@@ -1473,44 +1487,51 @@ The completed boxes below record tested implementation scope, not full Phase 11 
 
 ---
 
-## ❓ PHASE 13 — Quiz System
+## PHASE 13 - Quiz System
 
-> ⚠️ **Scope Clarification (Option A)**: Phase 13 builds **BOTH the Backend Quiz Generation Engine & ARQ Workers (`apps/api/app/routers/quiz.py`, `apps/api/app/engines/quiz.py`) AND the Frontend Quiz Interface**.
+> 26 October implementation checkpoint: implemented on `feat/quiz-system`, with local PostgreSQL and synthetic browser verification. Approved staging migration and local API/worker activation are verified; complete live-provider and hosted journeys remain open. See [implementation, decisions and evidence](quiz-system.md).
 
-> **22 October development amendment:** Frontend coding may start against agreed shared DTOs and explicit synthetic fixtures while the backend is implemented. The legacy quiz flow is a reference, not a compatible API. Phase 13 remains Pending; [the handoff](legacy-reuse-and-parallel-development-2026-10-22.md) records the outstanding contract and security work.
+### 13.0 Contracts and storage
 
-### 13.0 Contracts & Legacy Adaptation
+- [x] Shared request/response DTOs, safe taking questions, typed answers and result/review payloads
+- [x] Five reconciled formats and explicit scoring rules; stable option identifiers
+- [x] Forward migration for server-owned sessions, job leases and revocable shares; mirrored database contracts
+- [x] Restrict quiz-table access to the backend; verify authenticated/anonymous grants and owner/tenant API isolation
 
-- [ ] Agree shared request/response DTOs, job and SSE states, timing units, scoring rules and acceptance criteria before frontend/backend implementation diverges
-- [ ] Reconcile Section 11's five planned formats with existing database constraints using forward CLI migrations; distinguish multi-select from per-option True/False negative marking
-- [ ] Define taking DTOs without answer keys/explanations, authorized result DTOs, submission retry semantics and opt-in minimal public sharing
-- [ ] Restrict database access so clients cannot read unreleased answer keys or write authoritative questions, grades and job state; verify grants/RLS and cross-user/tenant access in real database tests
-- [ ] Build an explicit frontend fixture adapter covering success, empty, loading, partial generation, failure, cancellation, privacy hold and expired session states
+### 13.1 Backend quiz lifecycle
 
-### 13.1 Backend Quiz Engine & Generation Pipeline (`apps/api/app/routers/quiz.py`)
+- [x] Durable Postgres generation jobs, ARQ dispatch, bounded retries, leases and cancellation checks before batch writes
+- [x] University/level-scoped source retrieval; topic vector search and diversified course coverage
+- [x] Structured JSON validation, duplicate rejection and a separate source/novelty verification pass
+- [x] Authenticated job polling and progress SSE; no session tokens in URLs
+- [x] Start/resume server-timed attempts, revision-checked autosave and immutable submitted answers
+- [x] Deterministic grading and bounded semantic written grading; failed grading preserves answers for retry
+- [x] Idempotent submission, paginated attempt history and aggregate statistics independent of the page
+- [x] Opt-in, revocable minimal public score sharing
 
-- [ ] Async background quiz generation ARQ worker (`generate_quiz_task`)
-- [ ] RAG-grounded topic question generation using tagged XML blocks (`<question>QUESTION: ... TYPE: ... A: ... ANSWER: ... EXPLANATION: ...</question>`)
-- [ ] Pydantic `QuizQuestionModel` validation & deduplication engine
-- [ ] Question formats: Standard MCQ, 5-option Nigerian medical negative marking MCQ, True/False, Multi-Select, Short Answer
-- [ ] Live question SSE streaming endpoint (`GET /api/quiz/{id}/events`) with signed JWT stream token (`POST /api/quiz/{id}/stream-token`)
-- [ ] Job management endpoints: `POST /api/quiz/jobs`, `GET /api/quiz/jobs/{job_id}`, `POST /api/quiz/jobs/{job_id}/cancel`
-- [ ] Quiz submission & grading engine (`POST /api/quiz/submit`) calculating penalties, raw scores, and persisting attempt in `quiz_attempts`
-- [ ] Quiz history & share endpoints (`GET /api/quiz/history`, `GET /api/quiz/{quiz_id}`, `GET /api/quiz/results/{result_id}`, `GET /api/quiz/share/{quiz_id}`)
+### 13.2 Frontend quiz workspace
 
-### 13.2 Frontend Quiz System Interface (`apps/web/app/app/quiz/`)
+- [x] Course/topic, format, question count, difficulty and timer builder
+- [x] Generation progress, cancellation, explicit errors and ready-to-begin state
+- [x] Five question interactions, navigator, flags, autosave, refresh recovery and expiry submission
+- [x] Results, option-level points, reference answers, explanations and source excerpts
+- [x] Weak-concept revision, deliberate retakes, history and course filtering
+- [x] Downloadable square PNG score card and private-by-default share links
+- [x] Same-origin server transport adds client identity without exposing the API key to the browser
+- [x] Desktop/mobile browser checks across light, dark and sepia; account-switch and failure-state coverage
 
-- [ ] Quiz builder modal: select topics, difficulty, count, time limit, question formats
-- [ ] Submit the agreed job request to FastAPI; the backend durably enqueues generation and returns the agreed typed job response
-- [ ] Client polls `GET /api/quiz/jobs/{id}` or subscribes to Supabase Realtime for progress
-- [ ] Consume typed, sanitized question DTOs; tagged-block parsing and Pydantic question validation run in the backend
-- [ ] Validate API responses at the frontend boundary against the agreed DTOs
-- [ ] Render Section 11 formats: Objective, Multi-Select, per-option True/False with negative marking, single True/False and Short Answer; existing fill-blank/clinical schema values require explicit scope reconciliation before adding UI
-- [ ] Timed interface: countdown timer, question navigator, flag-for-review
-- [ ] Auto-submit on timer expiry
-- [ ] Results: score, per-question breakdown, explanations for wrong answers
-- [ ] Quiz history + attempt tracking in `quiz_attempts`
-- [ ] Shareable result card via `@vercel/og`
+### 13.3 Activation and release gates
+
+Generation reliability: repaired provider schema compatibility, bounded prompt size, terminal failure copy and same-request retry with versioned Redis delivery IDs. Synthetic live multi-select generation/source audit and 674 API, 14 database, 50 web unit and 14 browser checks pass. Operator replay of the original private-course request awaits explicit provider-data approval after automatic review rejection. See [verification](quiz-generation-reliability-2026-10-26.md).
+
+Authorization reliability follow-up: fixed cold Supabase connection acquisition timeouts while retaining bounded pools and fail-closed role checks. Verified eight concurrent staging profile reads, quiz course/history reads and 671 API tests. Existing materials currently target level 400. See [verification](quiz-authorization-reliability-2026-10-26.md).
+
+- [x] Explicitly approved staging migration applied through Supabase CLI; local quiz API and ARQ worker enabled and health-checked
+- [ ] Full disposable Supabase replay in CI, including vector retrieval and generated-type comparison
+- [ ] Real authenticated web/backend quiz journey and bounded live-provider quality verification
+- [ ] Hosted/native/offline release gates; no production deployment is claimed
+
+Following explicit user approval, Supabase CLI applied `20261026100000_quiz_lifecycle.sql` to staging. Six-table RLS/grants and preserved document/chunk counts were checked. Local `ENABLE_QUIZ=true`, API health, worker/Redis connectivity and the server-only web proxy are verified; production remains unchanged.
 
 ---
 
@@ -2001,3 +2022,11 @@ All decisions locked in `implementation_plan.md` Section 1:
 | Testing (Web)     | Vitest + React Testing Library + Playwright E2E              |
 | Testing (Mobile)  | Jest + React Native Testing Library + Maestro E2E            |
 | Testing (Desktop) | Vitest + Playwright (Electron mode)                          |
+
+> **2026-10-27 quiz performance update:** User requested removal of the second AI review. Generation uses one model pass per batch, bounded provider failover/cooldown, two concurrent batches and bulk writes. Main worker launch is `python -m workers.runner` (immediate notification plus durable fallback). Eligible question-bank reuse avoids AI calls and creates globally bounded, hidden background replenishment; source eligibility is rechecked locally. Untimed attempts can start after the first batch, while timers and submission wait for the full set. See [implementation and verification](quiz-performance-2026-10-27.md).
+
+> **2026-10-27 quiz UX:** Simplify the dashboard and result presentation, remove promotional copy and decorative artwork, and replace the three-step builder with one settings form. Behavior for generation, early practice, timers, autosave and grading is preserved. See [UX implementation](quiz-ux-2026-10-27.md).
+
+> **2026-10-27 quiz capacity:** Shared provider token/request admission and reset headers, compact provider-only generation, valid-sibling retention, scoped request coalescing and idle/ingestion inventory warming are implemented. Capacity waits preserve questions and attempts. Google synthetic probes still returned internal errors; a shared cooldown avoids repeated user-facing waits. See [capacity implementation and verification](quiz-capacity-2026-10-27.md).
+
+> **2026-10-27 matrix ordering:** Matrix questions use three true/two false statements with independently shuffled statement/key pairs persisted on the server. Generation now targets plausible near-miss distractors with content-based explanations. Old matrix inventory is excluded from new quiz assembly; existing attempts and results stay unchanged. See [implementation and verification](quiz-matrix-randomization-2026-10-27.md).

@@ -3,7 +3,7 @@
 help:
 	@echo "PansGPT 2.0 Monorepo Developer Commands"
 	@echo "---------------------------------------"
-	@echo "  make dev         - Start all services concurrently (Turbo)"
+	@echo "  make dev         - Start frontend, API and quiz worker together"
 	@echo "  make dev-web     - Start Next.js web application"
 	@echo "  make dev-api     - Start FastAPI backend with reload"
 	@echo "  make test        - Run all tests across monorepo"
@@ -18,10 +18,13 @@ dev:
 	pnpm dev
 
 dev-web:
-	pnpm --filter=@pansgpt/web dev
+	pnpm dev:web
 
 dev-api:
-	cd apps/api && uvicorn app.main:app --reload --port 8000
+	pnpm dev:api
+
+dev-worker:
+	pnpm dev:worker
 
 test:
 	pnpm test

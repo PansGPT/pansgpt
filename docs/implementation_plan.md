@@ -1,5 +1,21 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).
+
+> **2026-10-29 development startup:** `pnpm dev` includes frontend, API and supervised quiz worker; an optional Docker worker config supports an existing host. [Lifecycle checks and hosting limits](development-startup-2026-10-29.md).
+
+> **2026-10-28 Gemma correction:** Bounded 30-second Google quiz attempts, explicit minimal thinking, isolated local timeouts and sanitized upstream status reporting. [Verification and live outcome](quiz-gemma-deadlines-2026-10-28.md).
+
+> **2026-10-28 queue incident:** Automatic inventory is now opt-in to preserve shared daily capacity; preparation shows AI service waits. [Runtime evidence, fixes and remaining provider blockage](quiz-capacity-incident-2026-10-28.md).
+
+> **2026-10-28 complete quiz delivery:** New attempts require the complete requested question set. Internal batches remain recoverable; progress-aware capacity rechecks avoid unnecessary durable waits. [Behavior, validation and remaining latency limits](quiz-complete-set-2026-10-28.md).
+
+> **2026-10-28 course coverage/freshness:** Course-neutral instructions, stratified material sampling, spread-out generation batches, versioned bank reuse and owner-scoped full generated-question history are locally verified. [Contract, evidence and limits](quiz-coverage-and-freshness-2026-10-28.md).
+
+> **2026-10-28 quiz reliability:** Compact strict Groq output, matrix token/batch sizing, adaptive malformed-batch recovery and durable capacity retries are locally verified. API, real PostgreSQL and browser evidence plus remaining hosted gates: [quiz reliability hardening](quiz-reliability-2026-10-28.md).
+
+> **2026-10-26 quiz implementation:** The quiz engine and web journey are implemented on `feat/quiz-system`; [the implementation contract](quiz-system.md) supersedes Section 11's illustrative legacy transport and delivery details. Generation uses the current shared provider layer, validated JSON and fast local schema, key-shape, source-ID and duplicate checks. Quiz tables are API-only; answers autosave into server-timed sessions and immutable submissions receive retry-safe grading. Public web calls use a same-origin server proxy for client identity. Local tests do not certify hosted activation or live question quality. After explicit user approval, the staging migration was applied through Supabase CLI and the local quiz API/worker were enabled. Catalog, data-count, API, queue and proxy checks passed; production is unchanged.
+
 > **Latest 2026-10-26 scrollbar/sidebar direction:** Keep one conversation scroller, style native scrollbars with the semantic palette, and scroll only pinned/recent chat rows within the sidebar. Logo, primary destinations, New chat, history search/archive controls and account footer remain fixed. Remove the optional per-message More/Markdown-export menu; retain native copy/edit/regeneration/feedback/branches and conversation sharing. [Scope and verification](chat-scrollbars-and-sidebar-2026-10-26.md). This supersedes the message-export portion of the earlier assistant-ui adoption note.
 
 > **Latest 2026-10-26 assistant-ui direction:** Remove the duplicate Steps disclosure and synthetic reasoning parts from the client adapter. Use assistant-ui's native smooth/deferred Markdown rendering instead of the custom word-blur scheduler; completed short responses and saved history follow native immediate rendering. Keep the chosen twinkle loader and a single model-authored waiting line. Prefer native attachment paste/drop, feedback and message-export/overflow primitives over parallel implementations, with server-confirmed mutations and authenticated FastAPI adapters. [Component audit, acceptance and verification](assistant-ui-adoption-2026-10-26.md). This supersedes the earlier custom streaming/Steps presentation below; backend routing/progress contracts and release gates remain unchanged.
@@ -7165,3 +7181,11 @@ flowchart TB
 - CI must run actual web lint scope, TS, Python lint/format/annotations, offline pytest, web/desktop regressions, the production build, and disposable Supabase migration/RLS/RPC/type-contract gates. Generated type artifacts and deployment/native evidence remain required before certification. See the remediation record for exact evidence and outstanding checks.
 
 Provider catalog quota/latency figures above are historical planning estimates, not verified account limits. Active chat fallback defaults to Groq `llama-3.3-70b-versatile` as required by AGENTS.md; the secondary/vision route uses `qwen/qwen3.8-27b`. Verify models and actual free-account limits before activation; privacy attestations remain false.
+
+> **2026-10-27 quiz performance update:** User requested removal of the second AI review. Generation uses one model pass per batch, bounded provider failover/cooldown, two concurrent batches and bulk writes. Main worker launch is `python -m workers.runner` (immediate notification plus durable fallback). Eligible question-bank reuse avoids AI calls and creates globally bounded, hidden background replenishment; source eligibility is rechecked locally. Untimed attempts can start after the first batch, while timers and submission wait for the full set. See [implementation and verification](quiz-performance-2026-10-27.md).
+
+> **2026-10-27 quiz UX:** Simplify the dashboard and result presentation, remove promotional copy and decorative artwork, and replace the three-step builder with one settings form. Behavior for generation, early practice, timers, autosave and grading is preserved. See [UX implementation](quiz-ux-2026-10-27.md).
+
+> **2026-10-27 quiz capacity:** Shared provider token/request admission and reset headers, compact provider-only generation, valid-sibling retention, scoped request coalescing and idle/ingestion inventory warming are implemented. Capacity waits preserve questions and attempts. Google synthetic probes still returned internal errors; a shared cooldown avoids repeated user-facing waits. See [capacity implementation and verification](quiz-capacity-2026-10-27.md).
+
+> **2026-10-27 matrix ordering:** Matrix questions use three true/two false statements with independently shuffled statement/key pairs persisted on the server. Generation now targets plausible near-miss distractors with content-based explanations. Old matrix inventory is excluded from new quiz assembly; existing attempts and results stay unchanged. See [implementation and verification](quiz-matrix-randomization-2026-10-27.md).

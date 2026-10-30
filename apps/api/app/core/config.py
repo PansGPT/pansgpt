@@ -15,6 +15,34 @@ class Settings(BaseSettings):
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
     LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
     ENABLE_AI: bool = True
+    ENABLE_QUIZ: bool = False
+    # Speculative generation spends the same daily allowance as student requests.
+    ENABLE_QUIZ_INVENTORY: bool = False
+    AI_CAPACITY_ENABLED: bool = True
+    AI_CAPACITY_SCOPE: str = "pansgpt"
+    # Conservative application ceilings; observed provider headers can lower them.
+    AI_PROVIDER_BUDGETS: dict[str, dict[str, int]] = Field(
+        default_factory=lambda: {
+            "google": {"rpm": 10, "rpd": 1000, "tpm": 15000, "tpd": 500000},
+            "groq": {"rpm": 30, "rpd": 1000, "tpm": 8000, "tpd": 200000},
+            "openrouter": {"rpm": 10, "rpd": 50, "tpm": 8000, "tpd": 100000},
+        }
+    )
+
+    @field_validator("AI_PROVIDER_BUDGETS")
+    @classmethod
+    def validate_provider_budgets(
+        cls, value: dict[str, dict[str, int]]
+    ) -> dict[str, dict[str, int]]:
+        for provider in ("google", "groq", "openrouter"):
+            budget = value.get(provider, {})
+            if any(
+                type(budget.get(key)) is not int or budget[key] <= 0
+                for key in ("rpm", "rpd", "tpm", "tpd")
+            ):
+                raise ValueError("Every provider requires positive rpm, rpd, tpm and tpd budgets")
+        return value
+
     ENABLE_INGESTION: bool = True
     MAX_UPLOAD_MB: int = Field(default=50, ge=1)  # [PRELAUNCH FIX]
 

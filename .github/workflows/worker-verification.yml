@@ -67,7 +67,7 @@ jobs:
         working-directory: apps/api
         run: >-
           uv run pytest tests/test_worker_verification.py
-          tests/test_worker_verification_live.py --allow-live-services -q
+          tests/test_worker_verification_live.py tests/test_worker_pickup_recovery.py tests/test_provider_capacity.py tests/test_quiz_database.py tests/test_quiz_retry_bounds.py --allow-live-services -q
       - name: Stop disposable Supabase
         if: always()
         run: pnpm exec supabase stop --no-backup

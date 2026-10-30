@@ -386,6 +386,9 @@ async def ingest_document_job(  # [OFFICE PDF FIX]
                             error=str(enqueue_exc),  # [PHASE2 FIX]
                         )  # [PHASE2 FIX]
 
+        from workers.quiz_inventory import warm_quiz_inventory
+
+        await warm_quiz_inventory(ctx, document_id)
         await finish_job(document_id, "ingest_document_job", job_id=ctx.get("job_id"))
         return success
     except StoredUploadError as exc:  # [LEFTOVER FIX]

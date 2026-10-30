@@ -41,6 +41,9 @@ jobs:
       - name: Verify migration mirror
         run: python tooling/check-migrations.py
 
+      - name: Verify development service lifecycle
+        run: pnpm test:dev
+
   api-tests:
     name: Backend Lint & Pytest Suite
     runs-on: ubuntu-latest
@@ -123,7 +126,7 @@ jobs:
         working-directory: apps/api
         env:
           CHAT_INTERACTIONS_TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
-        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py tests/test_worker_verification_live.py tests/test_conversation_discovery_live.py --allow-live-services -q
+        run: uv run pytest tests/test_rls_security.py tests/test_database_contracts.py tests/test_worker_verification_live.py tests/test_conversation_discovery_live.py tests/test_quiz_database.py tests/test_quiz_retry_bounds.py --allow-live-services -q
       - name: Compare committed contracts with the migrated catalog
         run: uv run --project apps/api python tooling/check-db-contracts.py
       - name: Generate actual database types
@@ -225,6 +228,8 @@ jobs:
       - run: pnpm --filter @pansgpt/web exec playwright install --with-deps chromium
       - name: Verify synthetic chat interactions without hosted credentials
         run: pnpm --filter @pansgpt/web test:chat
+      - name: Verify quiz practice journeys without hosted credentials
+        run: pnpm --filter @pansgpt/web test:quiz
 
   build-web:
     name: Web Smoke Build Check

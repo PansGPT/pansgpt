@@ -8,10 +8,14 @@ import structlog
 from pydantic import BaseModel, Field
 
 from app.core.config import settings
+from app.engines.provider_capacity import observe, provider_budget
 from app.models.chat import SemanticDecision
 from app.models.presentation import PresentationPlan
 
 logger = structlog.get_logger(__name__)
+
+
+STRICT_GROQ_MODELS = {"openai/gpt-oss-20b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"}
 
 
 class RoutingTransportError(RuntimeError):
@@ -42,9 +46,62 @@ async def routing_completion(
     system: str,
     context: str,
     response_schema: type[BaseModel] = SemanticDecision,
+    *,
+    max_output_tokens: int | None = None,
+    timeout_s: float | None = None,
+    constrained_json: bool = True,
+    structured_schema: dict[str, object] | None = None,
+    google_thinking_level: Literal["minimal"] | None = None,
+) -> str:
+    settings.require_provider_privacy(provider)
+    sent_schema = (
+        (
+            structured_schema
+            if structured_schema is not None
+            else response_schema.model_json_schema()
+        )
+        if constrained_json and provider == "groq" and model in STRICT_GROQ_MODELS
+        else None
+    )
+    async with provider_budget(
+        provider,
+        model,
+        {"system": system, "context": context, "schema": sent_schema},
+        max_output_tokens or settings.INTENT_ROUTER_MAX_TOKENS,
+    ):
+        return await _routing_completion(
+            provider,
+            model,
+            key,
+            system,
+            context,
+            response_schema,
+            max_output_tokens=max_output_tokens,
+            timeout_s=timeout_s,
+            constrained_json=constrained_json,
+            structured_schema=structured_schema,
+            google_thinking_level=google_thinking_level,
+        )
+
+
+async def _routing_completion(
+    provider: str,
+    model: str,
+    key: str,
+    system: str,
+    context: str,
+    response_schema: type[BaseModel] = SemanticDecision,
+    *,
+    max_output_tokens: int | None = None,
+    timeout_s: float | None = None,
+    constrained_json: bool = True,
+    structured_schema: dict[str, object] | None = None,
+    google_thinking_level: Literal["minimal"] | None = None,
 ) -> str:
     """JSON is validated by the caller before any content reaches the student."""
     settings.require_provider_privacy(provider)
+    token_limit = max_output_tokens or settings.INTENT_ROUTER_MAX_TOKENS
+    attempt_timeout = timeout_s or settings.INTENT_ROUTER_ATTEMPT_TIMEOUT_S
     if provider == "google":
         from google import genai
         from google.genai import types
@@ -54,7 +111,7 @@ async def routing_completion(
             http_options=types.HttpOptions(
                 # Google rejects advertised server deadlines below 10s. The outer
                 # routing deadline still cancels this call at its smaller budget.
-                timeout=max(10000, round(settings.INTENT_ROUTER_ATTEMPT_TIMEOUT_S * 1000)),
+                timeout=max(10000, round(attempt_timeout * 1000)),
                 retry_options=types.HttpRetryOptions(attempts=1),
             ),
         )
@@ -65,18 +122,20 @@ async def routing_completion(
                 config=types.GenerateContentConfig(
                     system_instruction=system,
                     temperature=0,
-                    max_output_tokens=settings.INTENT_ROUTER_MAX_TOKENS,
+                    max_output_tokens=token_limit,
+                    thinking_config=types.ThinkingConfig(thinking_level=google_thinking_level)
+                    if google_thinking_level and model.startswith("gemma-4-")
+                    else None,
                     automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
                 ),
             )
-            # Gemma models need not support constrained JSON decoding. Validate locally.
-            if not response.candidates or str(response.candidates[0].finish_reason) not in {
-                "STOP",
-                "FinishReason.STOP",
-            }:
-                raise ValueError("Routing completion did not finish")
             usage = getattr(response, "usage_metadata", None)
             if usage is not None:
+                await observe(
+                    {},
+                    getattr(usage, "prompt_token_count", None),
+                    getattr(usage, "candidates_token_count", None),
+                )
                 logger.info(
                     "intent_provider_usage",
                     provider=provider,
@@ -84,6 +143,19 @@ async def routing_completion(
                     prompt_tokens=getattr(usage, "prompt_token_count", None),
                     completion_tokens=getattr(usage, "candidates_token_count", None),
                 )
+            # Account for returned usage even when the answer was truncated.
+            if not response.candidates or str(response.candidates[0].finish_reason) not in {
+                "STOP",
+                "FinishReason.STOP",
+            }:
+                logger.warning(
+                    "google_completion_incomplete",
+                    model=model,
+                    finish_reason=str(response.candidates[0].finish_reason)
+                    if response.candidates
+                    else "NO_CANDIDATES",
+                )
+                raise ValueError("Routing completion did not finish")
             return response.text or ""
         finally:
             await client.aio.aclose()
@@ -100,15 +172,11 @@ async def routing_completion(
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": context}],
         "response_format": {"type": "json_object"},
         "temperature": 0,
-        "max_tokens": settings.INTENT_ROUTER_MAX_TOKENS,
+        "max_tokens": token_limit,
         "stream": False,
     }
     # Strict output is supported on these Groq models; other configured models use JSON mode.
-    if provider == "groq" and model in {
-        "openai/gpt-oss-20b",
-        "openai/gpt-oss-120b",
-        "qwen/qwen3.8-27b",
-    }:
+    if constrained_json and provider == "groq" and model in STRICT_GROQ_MODELS:
         payload["response_format"] = {
             "type": "json_schema",
             "json_schema": {
@@ -118,7 +186,9 @@ async def routing_completion(
                 if response_schema is PresentationPlan
                 else "pansgpt_title",
                 "strict": True,
-                "schema": response_schema.model_json_schema(),
+                "schema": structured_schema
+                if structured_schema is not None
+                else response_schema.model_json_schema(),
             },
         }
     if provider == "groq" and model.startswith("openai/gpt-oss-"):
@@ -135,7 +205,7 @@ async def routing_completion(
         if event.endswith(".started"):
             phase = event
 
-    timeout = httpx.Timeout(settings.INTENT_ROUTER_ATTEMPT_TIMEOUT_S, connect=4.0)
+    timeout = httpx.Timeout(attempt_timeout, connect=4.0)
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(
@@ -144,6 +214,7 @@ async def routing_completion(
                 json=payload,
                 extensions={"trace": trace},
             )
+            await observe(response.headers)
             response.raise_for_status()
             phase = "response_validation"
             result = CompletionEnvelope.model_validate_json(response.text)
@@ -154,6 +225,13 @@ async def routing_completion(
     except httpx.RequestError as exc:
         raise RoutingTransportError(phase, type(exc).__name__) from exc
     if result.usage:
+        input_tokens = result.usage.get("prompt_tokens")
+        output_tokens = result.usage.get("completion_tokens")
+        await observe(
+            {},
+            input_tokens if isinstance(input_tokens, int) else None,
+            output_tokens if isinstance(output_tokens, int) else None,
+        )
         logger.info(
             "intent_provider_usage",
             provider=provider,

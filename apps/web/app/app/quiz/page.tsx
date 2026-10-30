@@ -1,11 +1,9 @@
-import { Sparkles } from "lucide-react";
-import { ComingSoon } from "@/components/shell/coming-soon";
+import { Suspense } from "react";
+import { QuizWorkspace } from "@/components/quiz/workspace";
 export default function QuizPage(): React.ReactElement {
   return (
-    <ComingSoon
-      title="A little practice goes a long way"
-      description="Your quizzes and revision sessions will live here. For now, keep exploring your course materials."
-      icon={Sparkles}
-    />
+    <Suspense fallback={<p role="status">Opening your practice space…</p>}>
+      <QuizWorkspace />
+    </Suspense>
   );
 }

@@ -141,6 +141,61 @@ async def test_google_fallback_finishes_and_closes_its_client(
     )
 
 
+@pytest.mark.parametrize(
+    "model,level,expected",
+    [
+        ("gemma-4-31b-it", "minimal", "MINIMAL"),
+        ("gemma-4-26b-a4b-it", "minimal", "MINIMAL"),
+        ("gemma-4-31b-it", None, None),
+        ("other-model", "minimal", None),
+    ],
+)
+async def test_quiz_thinking_is_explicit_and_gemma_scoped(monkeypatch, model, level, expected):
+    from types import SimpleNamespace
+
+    from google import genai
+
+    generate = AsyncMock(
+        return_value=SimpleNamespace(text="{}", candidates=[SimpleNamespace(finish_reason="STOP")])
+    )
+    client = SimpleNamespace(
+        aio=SimpleNamespace(models=SimpleNamespace(generate_content=generate), aclose=AsyncMock())
+    )
+    monkeypatch.setattr(genai, "Client", lambda **kwargs: client)
+    await routing_completion(
+        "google", model, "fixture", "JSON", "Synthetic", google_thinking_level=level
+    )
+    config = generate.call_args.kwargs["config"]
+    assert (
+        config.thinking_config.thinking_level.value if config.thinking_config else None
+    ) == expected
+
+
+async def test_truncated_google_response_still_reports_usage(monkeypatch):
+    from types import SimpleNamespace
+
+    from google import genai
+
+    from app.engines import routing_provider as transport
+
+    generate = AsyncMock(
+        return_value=SimpleNamespace(
+            candidates=[SimpleNamespace(finish_reason="MAX_TOKENS")],
+            usage_metadata=SimpleNamespace(prompt_token_count=50, candidates_token_count=100),
+        )
+    )
+    client = SimpleNamespace(
+        aio=SimpleNamespace(models=SimpleNamespace(generate_content=generate), aclose=AsyncMock())
+    )
+    monkeypatch.setattr(genai, "Client", lambda **kwargs: client)
+    observation = AsyncMock()
+    monkeypatch.setattr(transport, "observe", observation)
+    with pytest.raises(ValueError, match="did not finish"):
+        await routing_completion("google", "fixture", "fixture", "JSON", "Synthetic")
+    observation.assert_awaited_once_with({}, 50, 100)
+    client.aio.aclose.assert_awaited_once()
+
+
 async def test_transport_failure_reports_only_stage_without_request_content(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -163,3 +218,84 @@ async def test_transport_failure_reports_only_stage_without_request_content(
     assert error.value.phase == "connection.connect_tcp.started"
     assert error.value.error_type == "ConnectTimeout"
     assert "PRIVATE" not in str(error.value)
+
+
+async def test_quiz_maps_can_use_json_mode_without_unsupported_constrained_schema(monkeypatch):
+    from app.models.quiz import QuestionBatch
+
+    requests = []
+
+    def respond(request):
+        requests.append(request)
+        return httpx.Response(
+            200,
+            json={
+                "choices": [{"finish_reason": "stop", "message": {"content": '{"questions":[]}'}}]
+            },
+        )
+
+    real = httpx.AsyncClient
+    monkeypatch.setattr(
+        httpx,
+        "AsyncClient",
+        lambda **kwargs: real(transport=httpx.MockTransport(respond), **kwargs),
+    )
+    await routing_completion(
+        "groq",
+        "openai/gpt-oss-120b",
+        "fixture",
+        "Return JSON",
+        "Synthetic quiz",
+        QuestionBatch,
+        constrained_json=False,
+        max_output_tokens=4000,
+        timeout_s=30,
+    )
+    payload = json.loads(requests[0].content)
+    assert payload["response_format"] == {"type": "json_object"}
+    assert payload["max_tokens"] == 4000
+    # Local QuestionBatch validation still rejects this provider's invalid output.
+    with pytest.raises(ValidationError):
+        QuestionBatch.model_validate_json('{"questions":[]}')
+
+
+@pytest.mark.parametrize(
+    "model,strict", [("openai/gpt-oss-120b", True), ("fixture-unsupported", False)]
+)
+async def test_quiz_schema_transport_and_budget_include_only_sent_schema(
+    monkeypatch, model, strict
+):
+    from contextlib import asynccontextmanager
+
+    from app.engines import routing_provider as transport
+    from app.engines.quiz_wire import WireBatch, strict_batch_schema
+
+    requests, budgets = [], []
+
+    @asynccontextmanager
+    async def budget(provider, chosen, payload, output):
+        budgets.append(payload)
+        yield
+
+    monkeypatch.setattr(transport, "provider_budget", budget)
+
+    def respond(request):
+        requests.append(json.loads(request.content))
+        return httpx.Response(
+            200, json={"choices": [{"finish_reason": "stop", "message": {"content": "{}"}}]}
+        )
+
+    real = httpx.AsyncClient
+    monkeypatch.setattr(
+        httpx, "AsyncClient", lambda **kw: real(transport=httpx.MockTransport(respond), **kw)
+    )
+    schema = strict_batch_schema("short_answer")
+    await routing_completion(
+        "groq", model, "fixture", "Return JSON", "Synthetic", WireBatch, structured_schema=schema
+    )
+    assert budgets[0]["schema"] == (schema if strict else None)
+    if strict:
+        assert requests[0]["response_format"]["json_schema"]["strict"] is True
+        assert requests[0]["response_format"]["json_schema"]["schema"] == schema
+    else:
+        assert requests[0]["response_format"] == {"type": "json_object"}

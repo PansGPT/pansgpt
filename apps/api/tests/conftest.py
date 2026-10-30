@@ -39,6 +39,7 @@ def mock_offline_llm_defaults(
         "COHERE_ZDR_CONFIRMED",
     ):
         monkeypatch.setattr(settings, provider, True)
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", False)
     monkeypatch.setattr(settings, "EMBEDDER_FAKE_MODE", True)  # [EMBED FIX]
     monkeypatch.setattr(settings, "VISION_FAKE_MODE", True)  # [IMAGE FIX]
     for field in ("GEMINI_API_KEY", "GROQ_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY"):

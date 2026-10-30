@@ -68,3 +68,6 @@ Thumbs.db
 # Automated browser test outputs
 **/test-results/
 **/playwright-report/
+
+# Local verification logs, scripts and isolated test databases
+.tmp/

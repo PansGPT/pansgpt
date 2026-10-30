@@ -25,6 +25,16 @@ class ModelCircuits:
         self.failures[model] = (count + 1, time.monotonic())
         self.probes.pop(model, None)
 
+    def retry_after(self, model: str) -> float:
+        count, at = self.failures.get(model, (0, 0))
+        if count < self.threshold:
+            return 0
+        return max(
+            0,
+            self.cooldown - (time.monotonic() - at),
+            30 - (time.monotonic() - self.probes.get(model, -1e9)),
+        )
+
     def succeeded(self, model: str) -> None:
         self.failures.pop(model, None)
         self.probes.pop(model, None)
