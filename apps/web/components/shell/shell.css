@@ -1510,9 +1510,13 @@
   .dashboard-region-empty > a {
     flex-basis: 100%;
   }
-  .dashboard-learn-section,
   .dashboard-events {
     display: none;
+  }
+  .dashboard-learn-section {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 22px;
   }
   .dashboard-mobile-activity {
     display: block;
