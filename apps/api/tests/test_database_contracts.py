@@ -42,9 +42,11 @@ async def make_user(connection: asyncpg.Connection, university: uuid.UUID) -> uu
 
 
 async def make_university(connection: asyncpg.Connection) -> uuid.UUID:
+    identity = uuid.uuid4()
     return await connection.fetchval(
-        "INSERT INTO public.universities(name,slug,status) VALUES('Contract University',$1,'active') RETURNING id",
-        f"contract-{uuid.uuid4()}",
+        "INSERT INTO public.universities(name,slug,status) VALUES($1,$2,'active') RETURNING id",
+        f"Contract University {identity}",
+        f"contract-{identity}",
     )
 
 

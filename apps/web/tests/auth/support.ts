@@ -3,11 +3,13 @@ export async function openNavigation(page: Page): Promise<void> {
   const trigger = page.getByRole("button", { name: "Open navigation", exact: true });
   if (await trigger.isVisible()) await trigger.click();
   else {
+    // Home now uses its Study tools links and a direct Settings profile button.
     await page
-      .locator(".shell-home-account")
-      .getByRole("button", { name: "Account menu", exact: true })
+      .getByRole("navigation", { name: "Study tools", exact: true })
+      .getByRole("link", { name: "Quiz", exact: true })
       .click();
-    await page.getByRole("menuitem", { name: "Navigation", exact: true }).click();
+    await expect(page).toHaveURL(/\/app\/quiz$/);
+    await trigger.click();
   }
 }
 export async function accountMenu(page: Page): Promise<void> {
@@ -25,9 +27,49 @@ export async function accountMenu(page: Page): Promise<void> {
   } else await page.getByRole("button", { name: "Account menu", exact: true }).click();
 }
 export async function openProfile(page: Page): Promise<void> {
-  await accountMenu(page);
-  await page.getByRole("menuitem", { name: "Profile", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Your profile", exact: true })).toBeVisible();
+  await openSettings(page);
+  await selectSettingsSection(page, "Account");
+}
+export async function openSettings(page: Page): Promise<void> {
+  const direct = page.getByRole("button", { name: "Open settings", exact: true });
+  if (await direct.isVisible()) await direct.click();
+  else {
+    await accountMenu(page);
+    await page.getByRole("menuitem", { name: "Settings", exact: true }).click();
+  }
+  await expect(page.getByRole("dialog", { name: "Settings", exact: true })).toBeVisible();
+}
+export async function selectSettingsSection(
+  page: Page,
+  section: "Account" | "Appearance"
+): Promise<void> {
+  const modal = page.getByRole("dialog", { name: "Settings", exact: true });
+  if ((page.viewportSize()?.width ?? 1440) <= 860) {
+    const back = modal.getByRole("button", { name: "Back to settings menu", exact: true });
+    if (await back.isVisible()) await back.click();
+    await modal
+      .locator(".settings-mobile-menu-pane")
+      .getByRole("button", { name: section === "Account" ? "Edit profile" : section, exact: true })
+      .click();
+  } else {
+    await modal
+      .getByRole("navigation", { name: "Settings navigation", exact: true })
+      .getByRole("button", { name: section, exact: true })
+      .click();
+  }
+}
+export async function openAppearance(page: Page): Promise<void> {
+  await openSettings(page);
+  await selectSettingsSection(page, "Appearance");
+}
+export async function closeSettings(page: Page): Promise<void> {
+  const modal = page.getByRole("dialog", { name: "Settings", exact: true });
+  await page.keyboard.press("Escape");
+  if ((page.viewportSize()?.width ?? 1440) <= 860) {
+    await expect(modal.locator(".settings-mobile-menu-pane")).not.toHaveAttribute("inert", "");
+    await page.keyboard.press("Escape");
+  }
+  await expect(modal).not.toBeVisible();
 }
 export async function startNewChat(page: Page): Promise<void> {
   if ((page.viewportSize()?.width ?? 1440) <= 860) {

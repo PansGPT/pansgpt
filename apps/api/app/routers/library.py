@@ -40,8 +40,10 @@ from app.models.library import (
     PdfUrlResponse,
 )
 from app.models.presentation import PresentationPreviewResponse
+from app.routers.library_catalog import router as catalog_router
 
 router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
+router.include_router(catalog_router)
 logger = logging.getLogger(__name__)
 
 

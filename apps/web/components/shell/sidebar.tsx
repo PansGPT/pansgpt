@@ -28,6 +28,10 @@ export function SidebarLinks({
   const { reload } = useDashboard();
   const [expanded, setExpanded] = useState(false);
   const [sample, setSample] = useState<string | null>(null);
+  const [pressed, setPressed] = useState<{ href: string; pathname: string } | null>(null);
+  function press(href: string): void {
+    if (mobile) setPressed({ href, pathname });
+  }
   const examples = !loading && !error && !chats.length;
   const pinned = chats.filter((chat) => chat.is_pinned);
   const recent = chats.filter((chat) => !chat.is_pinned);
@@ -53,15 +57,25 @@ export function SidebarLinks({
     <div className="reference-sidebar">
       <div className="shell-links">
         {(mobile ? mobileDestinations : destinations)
-          .filter((item) => item.href !== "/app/chat")
+          .filter((item) => !["/app/chat", "/app/notes", "/app/focus"].includes(item.href))
           .map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
-              className="shell-nav-link"
+              className="shell-nav-link shell-touch-feedback"
               aria-label={label}
               aria-current={isCurrentDestination(pathname, href) ? "page" : undefined}
-              onClick={close}
+              data-pressed={mobile && pressed?.pathname === pathname && pressed.href === href}
+              onPointerDown={() => press(href)}
+              onTouchStart={() => press(href)}
+              onTouchCancel={() => setPressed(null)}
+              onPointerCancel={() => setPressed(null)}
+              onPointerLeave={() => setPressed(null)}
+              onBlur={() => setPressed(null)}
+              onClick={() => {
+                press(href);
+                close();
+              }}
             >
               <Icon size={19} aria-hidden="true" />
               <span>{label}</span>
@@ -71,9 +85,17 @@ export function SidebarLinks({
       <div className="shell-new-chat-section">
         <Link
           href="/app/chat"
-          className="shell-nav-link shell-new-chat"
+          className="shell-nav-link shell-new-chat shell-touch-feedback"
           aria-label="New chat"
+          data-pressed={mobile && pressed?.pathname === pathname && pressed.href === "/app/chat"}
+          onPointerDown={() => press("/app/chat")}
+          onTouchStart={() => press("/app/chat")}
+          onTouchCancel={() => setPressed(null)}
+          onPointerCancel={() => setPressed(null)}
+          onPointerLeave={() => setPressed(null)}
+          onBlur={() => setPressed(null)}
           onClick={() => {
+            press("/app/chat");
             startNewChat();
             close();
           }}
