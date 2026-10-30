@@ -25,6 +25,7 @@ import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
 import { StudyArt } from "@/components/shell/study-art";
 import { learnArticles, type LearnArticle } from "@/components/learn/learn-content";
+import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
 
 type FilterTab = "all" | "academics" | "clinical" | "career" | "saved" | "featured";
@@ -299,58 +300,14 @@ export default function LearnPage(): React.ReactElement {
           <div
             className={`learn-cards-container ${viewMode === "list" ? "is-list-view" : "is-grid-view"}`}
           >
-            {filteredArticles.map((article) => {
-              const isBookmarked = bookmarkedSlugs.has(article.slug);
-              return (
-                <Link
-                  key={article.slug}
-                  href={`/app/learn/${article.slug}`}
-                  className="learn-pastel-card"
-                  data-theme={article.theme}
-                >
-                  {/* Eyebrow */}
-                  <div className="learn-card-eyebrow">
-                    <span>{article.shortTag}</span>
-                  </div>
-
-                  {/* Split Row: Headline & Summary on Left, Thematic Art on Right */}
-                  <div className="learn-card-body-row">
-                    <div className="learn-card-copy">
-                      <h2 className="learn-card-headline">{article.title}</h2>
-                      <p className="learn-card-summary">{article.description}</p>
-                    </div>
-
-                    <div className="learn-card-art-col" data-art={article.artKind}>
-                      <StudyArt kind={article.artKind} variant="square" />
-                    </div>
-                  </div>
-
-                  {/* Card Footer */}
-                  <div className="learn-card-footer">
-                    <div className="learn-card-footer-left">
-                      <button
-                        type="button"
-                        className="learn-card-bookmark-btn"
-                        data-bookmarked={isBookmarked ? "true" : "false"}
-                        onClick={(e) => toggleBookmark(article.slug, e)}
-                        aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this guide"}
-                      >
-                        <Bookmark
-                          size={13}
-                          fill={isBookmarked ? "currentColor" : "none"}
-                          aria-hidden="true"
-                        />
-                      </button>
-                      <span className="learn-card-duration-text">{article.duration}</span>
-                    </div>
-
-                    <span className="learn-card-arrow-circle" aria-hidden="true">
-                      <ArrowRight size={11} />
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+            {filteredArticles.map((article) => (
+              <LearnCard
+                key={article.slug}
+                article={article}
+                isBookmarked={bookmarkedSlugs.has(article.slug)}
+                onBookmarkToggle={toggleBookmark}
+              />
+            ))}
           </div>
         )}
 

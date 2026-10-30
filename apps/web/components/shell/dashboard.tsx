@@ -17,7 +17,9 @@ import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/u
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
-import { kindToSlug } from "@/components/learn/learn-content";
+import { learnArticles } from "@/components/learn/learn-content";
+import { LearnCard } from "@/components/learn/learn-card";
+import "@/components/learn/learn.css";
 import { MobileActivityTimeline, type DashboardTimelineEvent } from "./mobile-activity-timeline";
 import { StudyActivity } from "./study-activity";
 import { DocumentCard } from "./document-card";
@@ -35,17 +37,6 @@ function recentAge(value: string): string {
   const days = Math.floor(hours / 24);
   return `${days} ${days === 1 ? "day" : "days"} ago`;
 }
-
-const guides = [
-  { title: "How to approach a clinical case", kind: "case", duration: "4 min watch", video: true },
-  {
-    title: "Active recall for better retention",
-    kind: "recall",
-    duration: "3 min read",
-    video: false,
-  },
-  { title: "Creating effective study notes", kind: "notes", duration: "6 min watch", video: true },
-] as const;
 
 function ScheduleState({
   loading,
@@ -116,6 +107,19 @@ export function StudyDashboard(): React.ReactElement {
       }))
     : data.recent;
   const [activityTab, setActivityTab] = useState<"timetable" | "tasks">("timetable");
+  const [bookmarkedSlugs, setBookmarkedSlugs] = useState<Set<string>>(
+    () => new Set(["clinical-case", "pharmacy-beyond-counter"])
+  );
+  const toggleBookmark = (slug: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setBookmarkedSlugs((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      return next;
+    });
+  };
   const [period] = useState(() => {
     const hour = new Date().getHours();
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
@@ -276,35 +280,14 @@ export function StudyDashboard(): React.ReactElement {
             <ChevronRight size={17} aria-hidden="true" />
           </Link>
         </div>
-        <div className="dashboard-learn-grid">
-          {guides.map((guide) => (
-            <button
-              className="dashboard-learn-card"
-              key={guide.kind}
-              onClick={() => router.push(`/app/learn/${kindToSlug[guide.kind] ?? ""}`)}
-            >
-              <div className="dashboard-learn-cover" data-art={guide.kind}>
-                <StudyArt kind={guide.kind} variant="banner" />
-                <span className="dashboard-guide-label" aria-hidden="true">
-                  {guide.kind === "case"
-                    ? "Connect the dots"
-                    : guide.kind === "recall"
-                      ? "Put it into practice"
-                      : "Make it your own"}
-                </span>
-              </div>
-              <div className="dashboard-learn-body">
-                <h3>{guide.title}</h3>
-                <span>
-                  {guide.video ? (
-                    <PlayCircle size={16} aria-hidden="true" />
-                  ) : (
-                    <BookOpen size={16} aria-hidden="true" />
-                  )}
-                  {guide.duration}
-                </span>
-              </div>
-            </button>
+        <div className="learn-cards-container is-grid-view">
+          {learnArticles.map((article) => (
+            <LearnCard
+              key={article.slug}
+              article={article}
+              isBookmarked={bookmarkedSlugs.has(article.slug)}
+              onBookmarkToggle={toggleBookmark}
+            />
           ))}
         </div>
       </section>
