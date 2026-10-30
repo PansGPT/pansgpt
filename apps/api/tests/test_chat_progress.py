@@ -2,11 +2,23 @@
 
 import json
 import uuid
+from collections.abc import AsyncIterator
 from unittest.mock import AsyncMock
 
+import pytest
+from httpx import AsyncClient
+
 from app.engines.chat_progress import ChatProgress, public_progress_text
-from app.models.chat import ComplexityLevel, IntentType, QueryClassification, RouteType
+from app.models.chat import (
+    ComplexityLevel,
+    IntentType,
+    QueryClassification,
+    RouteType,
+    SemanticDecision,
+)
+from app.models.progress import PublicProgressLabel, saved_public_progress
 from app.routers import chat
+from tests.conftest import TenantTestState
 
 
 def test_public_progress_is_allowlisted_and_deduplicated():
@@ -22,6 +34,146 @@ def test_public_progress_is_allowlisted_and_deduplicated():
         )
         == "Reviewing your request."
     )
+
+
+def test_model_copy_waits_for_its_actual_phase_and_invalid_copy_is_ignored() -> None:
+    progress = ChatProgress()
+    progress.configure(
+        [
+            PublicProgressLabel(code="searching_sources", label="Looking up the match report"),
+            PublicProgressLabel(
+                code="creating_presentation", label="Laying out your revision slides"
+            ),
+        ]
+    )
+    assert not progress.updates
+    assert "public_progress" not in progress.emit("checking_materials")
+    update = progress.emit("searching_sources")
+    assert "Looking up the match report" in update
+    assert progress.emit("searching_sources") is None
+    assert progress.updates[0].source == "model"
+    assert "slides" not in str(progress.updates)
+    assert (
+        progress.for_tool("read_document", "<think>private</think>").count("public_progress") == 0
+    )
+    assert progress.for_tool("read_document", "Reading the enzyme diagram")
+    assert [item.label for item in progress.updates] == [
+        "Looking up the match report",
+        "Reading the enzyme diagram",
+    ]
+
+
+def test_history_public_updates_require_the_new_structured_field() -> None:
+    good = {
+        "code": "checking_materials",
+        "label": "Checking the lecture evidence",
+        "source": "model",
+    }
+    assert saved_public_progress("PRIVATE RAW THINKING") == []
+    updates = saved_public_progress(
+        {
+            "public_progress": [
+                good,
+                good,
+                {**good, "source": "private"},
+                {**good, "label": "```PRIVATE```"},
+                {**good, "code": "invented"},
+            ]
+        }
+    )
+    assert len(updates) == 1 and updates[0].label == good["label"]
+
+
+def test_phase_reactivation_is_published_without_duplicating_saved_labels() -> None:
+    progress = ChatProgress()
+    progress.emit("writing_response")
+    progress.emit("reading_document")
+    resumed = progress.emit("writing_response")
+    assert resumed and '"code": "writing_response"' in resumed
+    assert progress.emit("writing_response") is None
+    assert progress.codes == ["writing_response", "reading_document"]
+
+
+def test_bad_status_metadata_does_not_break_a_valid_routing_answer() -> None:
+    from tests.test_intent_classifier import decision
+
+    value = SemanticDecision.model_validate_json(
+        decision(public_progress=[{"code": "writing_response", "label": "```bad```"}])
+    )
+    assert value.answer and value.public_progress == []
+
+
+async def test_dynamic_progress_streams_and_persists_without_unexecuted_phases_or_private_thoughts(
+    client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    classification = QueryClassification(
+        intent=IntentType.GENERAL_ASSISTANCE,
+        complexity=ComplexityLevel.COMPLEX,
+        route=RouteType.COMPLEX_PATH,
+        requires_rag=False,
+        requires_tools=True,
+        confidence=0.95,
+        routing_source="model",
+        public_progress=[
+            PublicProgressLabel(code="checking_materials", label="UNEXECUTED ACTIVITY"),
+            PublicProgressLabel(code="writing_response", label="Explaining the revision diagram"),
+        ],
+    )
+    monkeypatch.setattr(chat.intent_classifier, "classify", AsyncMock(return_value=classification))
+    monkeypatch.setattr(chat.llm_engine, "_record_telemetry", AsyncMock())
+
+    async def inference(**kwargs: object) -> AsyncIterator[tuple[str, dict[str, object], str]]:
+        yield (
+            "thinking_chunk",
+            {"token": "PRIVATE MODEL REASONING", "source": "model", "label": "PRIVATE"},
+            "mock",
+        )
+        yield (
+            "tool_start",
+            {
+                "call_id": "diagram",
+                "tool_name": "read_document",
+                "arguments": {},
+                "public_status": "Reading the revision diagram",
+            },
+            "mock",
+        )
+        yield (
+            "tool_end",
+            {"call_id": "diagram", "tool_name": "read_document", "status": "success"},
+            "mock",
+        )
+        yield "text_chunk", {"token": "Visible explanation."}, "mock"
+
+    monkeypatch.setattr(chat.llm_engine, "stream_agentic_chat", inference)
+    response = await client.post(
+        "/api/v1/ai/chat/sessions/018f3a30-0001-7000-8000-000000000001/stream",
+        json={"message": "Explain the diagram"},
+    )
+    assert response.status_code == 200
+    assert "PRIVATE" not in response.text and "UNEXECUTED" not in response.text
+    assert "event: public_progress" in response.text
+    assert response.text.index("Reading the revision diagram") < response.text.index(
+        "event: tool_start"
+    )
+    saves = [
+        call.args
+        for call in tenant_state.connection.execute.await_args_list
+        if "INSERT INTO public.chat_messages" in call.args[0] and "'assistant'" in call.args[0]
+    ]
+    saved = json.loads(saves[-1][7])["public_progress"]
+    assert [item["label"] for item in saved] == [
+        "Explaining the revision diagram",
+        "Reading the revision diagram",
+    ]
+    assert response.text.index("Explaining the revision diagram") < response.text.index(
+        "Reading the revision diagram"
+    )
+    assert response.text.rfind('"code": "writing_response"') > response.text.index(
+        "event: tool_end"
+    )
+    assert all(item["source"] == "model" for item in saved)
+    tenant_state.retrieval.assert_not_awaited()
 
 
 async def test_raw_provider_scratchpad_never_streams_or_persists(client, tenant_state, monkeypatch):
@@ -77,7 +229,22 @@ async def test_legacy_raw_thinking_is_not_returned_in_history(client, tenant_sta
                 "is_active_branch": True,
                 "citations": None,
                 "thinking_text": "PRIVATE SAVED PLAN\n    raw code block",
-                "tool_calls": None,
+                "tool_calls": json.dumps(
+                    {
+                        "public_progress": [
+                            {
+                                "code": "reading_document",
+                                "label": "Reading the enzyme sketch",
+                                "source": "model",
+                            },
+                            {
+                                "code": "reading_document",
+                                "label": "<think>PRIVATE</think>",
+                                "source": "model",
+                            },
+                        ]
+                    }
+                ),
                 "image_metadata": None,
                 "created_at": "2026-10-23T00:00:00Z",
             }
@@ -86,6 +253,9 @@ async def test_legacy_raw_thinking_is_not_returned_in_history(client, tenant_sta
     response = await client.get(f"/api/v1/ai/chat/sessions/{session_id}")
     assert response.status_code == 200
     assert response.json()["messages"][0]["thinking_text"] is None
+    assert response.json()["messages"][0]["public_progress"] == [
+        {"code": "reading_document", "label": "Reading the enzyme sketch", "source": "model"}
+    ]
     assert "PRIVATE" not in response.text
 
 

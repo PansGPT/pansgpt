@@ -18,6 +18,55 @@
 .app-shell a {
   text-decoration: none;
 }
+/* Native scrolling with theme-aware thumbs; includes portalled navigation and chat sheets. */
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel),
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel) * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-quaternary-500) transparent;
+}
+:where(
+  .app-shell,
+  .shell-navigation-drawer,
+  .mobile-home-chat-sheet,
+  .study-presentation-panel
+)::-webkit-scrollbar,
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel)
+  *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+:where(
+  .app-shell,
+  .shell-navigation-drawer,
+  .mobile-home-chat-sheet,
+  .study-presentation-panel
+)::-webkit-scrollbar-track,
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel)
+  *::-webkit-scrollbar-track {
+  background: transparent;
+}
+:where(
+  .app-shell,
+  .shell-navigation-drawer,
+  .mobile-home-chat-sheet,
+  .study-presentation-panel
+)::-webkit-scrollbar-thumb,
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel)
+  *::-webkit-scrollbar-thumb {
+  background: var(--text-quaternary-500);
+  border-radius: 999px;
+}
+:where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel)
+  *::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary-600);
+}
+@media (forced-colors: active) {
+  :where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel),
+  :where(.app-shell, .shell-navigation-drawer, .mobile-home-chat-sheet, .study-presentation-panel)
+    * {
+    scrollbar-color: auto;
+  }
+}
 .app-shell :is(a, button, input, select):focus-visible,
 .shell-profile :is(button, select):focus-visible,
 .shell-command a:focus-visible {
@@ -1525,18 +1574,96 @@
 }
 .reference-sidebar {
   min-height: 0;
+  flex: 1;
+  overflow: hidden;
 }
 .shell-sidebar .p-app-nav-panel-footer {
   display: flex;
   padding: 14px 12px;
   border-top: 1px solid var(--border-secondary);
 }
-.shell-sidebar .p-app-nav-panel-top {
+:is(.shell-sidebar, .shell-navigation-drawer) .p-app-nav-panel-top {
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
-.shell-sidebar .p-app-nav-panel-links {
-  padding-bottom: 16px;
+:is(.shell-sidebar, .shell-navigation-drawer) .p-app-nav-panel-header {
+  flex: none;
+}
+:is(.shell-sidebar, .shell-navigation-drawer) .p-app-nav-panel-links {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.reference-sidebar > :is(.shell-links, .shell-new-chat-section) {
+  flex: none;
+}
+.shell-chat-history {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-top: 0;
+  padding: 12px 0 0;
+  border-top: 0;
+}
+.shell-chat-history > .shell-recent-heading {
+  flex: none;
+}
+.shell-chat-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 4px 12px;
+}
+.shell-chat-list:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+.shell-pinned-chats {
+  margin-bottom: 12px;
+}
+.shell-history-more {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 31px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary-700);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.shell-history-more:hover {
+  background: var(--bg-tertiary);
+}
+@media (max-height: 650px) {
+  :is(.shell-sidebar, .shell-navigation-drawer) .p-app-nav-panel-top {
+    padding-top: 8px;
+    gap: 8px;
+  }
+  :is(.shell-sidebar, .shell-navigation-drawer) .shell-nav-link {
+    min-height: 32px;
+    padding-block: 5px;
+  }
+  :is(.shell-sidebar, .shell-navigation-drawer) .shell-new-chat-section {
+    margin-top: 8px;
+    padding-block: 8px;
+  }
+  :is(.shell-sidebar, .shell-navigation-drawer) .shell-chat-history {
+    padding-top: 8px;
+  }
+  :is(.shell-sidebar, .shell-navigation-drawer) .p-app-nav-panel-footer {
+    padding-block: 8px;
+  }
 }
 .shell-account-menu {
   width: 100%;
@@ -1575,6 +1702,22 @@
 }
 .shell-navigation-drawer .p-app-nav-panel {
   width: 100%;
+  height: auto;
+  flex: 1;
+}
+.shell-navigation-drawer .p-slideout-body {
+  overflow: hidden;
+}
+@media (max-height: 650px) {
+  .shell-navigation-drawer > .p-slideout-header {
+    z-index: 1;
+  }
+  .shell-navigation-drawer .p-slideout-header-inner {
+    padding-block: 0;
+  }
+  .shell-navigation-drawer .p-slideout-header-copy {
+    display: none;
+  }
 }
 .shell-navigation-drawer :is(a, button):focus-visible {
   outline: 2px solid var(--focus-ring);

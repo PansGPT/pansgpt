@@ -10,4 +10,8 @@ function Preview() {
   const pathname = usePathname();
   return <AppShell>{pathname === "/app" ? <StudyDashboard /> : <ChatPage />}</AppShell>;
 }
-createRoot(document.getElementById("root")).render(<Preview />);
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <Preview />
+  </React.StrictMode>
+);

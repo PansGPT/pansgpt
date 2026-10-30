@@ -82,6 +82,37 @@ async def test_clinical_handoff_discards_speculative_answer_and_uses_retrieval(
     assert tenant_state.ai.call_args.kwargs["fast_path"] is False
 
 
+async def test_essay_emits_model_status_before_streamed_generation_without_retrieval(
+    client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    completion = semantic_router(
+        monkeypatch,
+        decision(
+            action="grounded",
+            response_mode="extended",
+            intent="general_assistance",
+            answer="",
+            public_progress=[
+                {"code": "writing_response", "label": "Connecting surfactants to household uses"}
+            ],
+        ),
+    )
+    response = await client.post(
+        "/api/v1/ai/chat/sessions/018f3a30-0001-7000-8000-000000000001/stream",
+        json={
+            "message": "write an essay on the benefits of surfactants in the household management"
+        },
+    )
+    assert response.status_code == 200
+    assert "Connecting surfactants to household uses" in response.text
+    assert response.text.index("event: public_progress") < response.text.index("event: text_chunk")
+    assert "Scoped test answer." in response.text and "event: done" in response.text
+    tenant_state.retrieval.assert_not_awaited()
+    tenant_state.ai.assert_called_once()
+    assert tenant_state.ai.call_args.kwargs["enable_tools"] is False
+    completion.assert_awaited_once()
+
+
 async def test_follow_up_tool_request_can_use_history_without_forcing_a_new_search(
     client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:

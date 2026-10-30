@@ -1,5 +1,7 @@
 # Semantic route-or-answer — 23 October 2026
 
+26 October follow-up: the private decision now includes semantic `response_mode=brief|extended`. Extended deliverables use the existing streamed generator even when no evidence or tools are needed; brief answers still reuse one completion. A 120-word/1200-character direct-output bound prevents an oversized router answer from bypassing generation. Neither input length nor phrase matching selects the route. Missing mode remains compatible with older decisions. [Exact essay diagnosis and verification](chat-motion-repair-2026-10-26.md).
+
 The user confirmed that PansGPT should interpret intent and context rather than require developers to anticipate every greeting or simple question. This replaces the regex classifier, which routed “hello chat” into retrieval and returned a course-material absence notice before reaching an answer model.
 
 - FastAPI calls a bounded semantic router with the current message and up to six selected user/assistant messages, capped at 6,000 history characters. System messages, tool arguments and private reasoning are excluded. The model chooses a direct answer, a clarification or a grounded handoff; message length and phrase matches do not choose the route.

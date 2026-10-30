@@ -9,6 +9,7 @@ import json
 import time
 import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable  # [CHAT FIX]
+from copy import deepcopy
 from typing import Any
 
 import structlog
@@ -30,6 +31,7 @@ from app.models.chat import (
     VoiceTranscribeResponse,
 )
 from app.models.presentation import PresentationSource
+from app.models.progress import validate_public_label
 from app.models.web_search import SearchScope
 
 logger = structlog.get_logger(__name__)
@@ -593,6 +595,22 @@ class MultiTierLlmEngine:
             else:
                 active_tools = ALL_TOOL_DEFINITIONS
 
+        if active_tools:
+            # This copy is request-local; never mutate the shared/cached tool registry.
+            active_tools = deepcopy(active_tools)
+            for definition in active_tools:
+                definition["function"]["parameters"].setdefault("properties", {})[
+                    "_public_status"
+                ] = {
+                    "type": "string",
+                    "description": "Optional short public activity label in your own words, specific to this tool and the student's topic. One plain-text line, at most 120 characters and 16 words. Describe work starting now, never private reasoning, patient details, credentials, links, invented results or completed work.",
+                }
+            system_prompt += (
+                "\nFor tool calls, write _public_status as a brief public activity summary "
+                "in your own task-specific words. It is separate from private reasoning. "
+                "Do not invent progress, results or completion. It never authorizes a tool."
+            )
+
         for turn in range(MAX_AGENT_TURNS):
             turn_handled = False
             tool_calls: list[dict[str, Any]] = []
@@ -821,15 +839,30 @@ class MultiTierLlmEngine:
                 for tc in tool_calls:
                     call_id = tc["id"]
                     t_name = tc["name"]
-                    t_args = tc.get("arguments", {})
-
-                    yield (
-                        "tool_start",
-                        ToolCallPayload(call_id=call_id, tool_name=t_name, arguments=t_args),
-                        active_provider,
-                    )
-
+                    raw_args = tc.get("arguments", {})
+                    t_args = dict(raw_args) if isinstance(raw_args, dict) else raw_args
+                    public_status = None
                     allowed_names = {tool["function"]["name"] for tool in tools_for_turn or []}
+                    if isinstance(t_args, dict):
+                        label = t_args.pop("_public_status", None)
+                        if isinstance(label, str) and t_name in allowed_names:
+                            try:
+                                public_status = validate_public_label(label)
+                            except ValueError:
+                                pass
+
+                    if t_name in allowed_names:
+                        yield (
+                            "tool_start",
+                            ToolCallPayload(
+                                call_id=call_id,
+                                tool_name=t_name,
+                                arguments=t_args,
+                                public_status=public_status,
+                            ),
+                            active_provider,
+                        )
+
                     if t_name not in allowed_names:
                         tool_res = {
                             "status": "error",

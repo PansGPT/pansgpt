@@ -116,7 +116,12 @@ async def test_tools_disabled_prevents_network_and_unverified_current_answer(
     client: httpx.AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     semantic_router(
-        monkeypatch, web_decision(action="answer", answer="An unverified memorized result")
+        monkeypatch,
+        web_decision(
+            action="answer",
+            answer="An unverified memorized result",
+            public_progress=[{"code": "searching_sources", "label": "Looking up the match report"}],
+        ),
     )
     web = AsyncMock()
     monkeypatch.setattr(chat.web_search_engine, "search", web)
@@ -125,6 +130,9 @@ async def test_tools_disabled_prevents_network_and_unverified_current_answer(
         json={"message": "The result yesterday?", "enable_tools": False},
     )
     assert "WEB_SEARCH_TOOLS_DISABLED" in response.text and "memorized" not in response.text
+    assert (
+        "event: public_progress" not in response.text and "searching_sources" not in response.text
+    )
     web.assert_not_awaited()
     tenant_state.retrieval.assert_not_awaited()
     tenant_state.ai.assert_not_called()
