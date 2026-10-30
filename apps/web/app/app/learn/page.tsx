@@ -105,20 +105,13 @@ export default function LearnPage(): React.ReactElement {
     <div className="learn-mobile-view">
       {/* ─── Top Header (Library Mobile Style) ─── */}
       <header className="learn-mobile-topbar">
-        <button
-          type="button"
-          onClick={() => {
-            if (typeof window !== "undefined" && window.history.length > 1) {
-              router.back();
-            } else {
-              router.push("/app");
-            }
-          }}
+        <Link
+          href="/app"
           className="learn-mobile-home-button shell-touch-feedback"
           aria-label="Back to Home"
         >
           <ArrowLeft size={20} aria-hidden="true" />
-        </button>
+        </Link>
 
         <strong className="learn-mobile-topbar-title">Learn</strong>
 
@@ -317,20 +310,19 @@ export default function LearnPage(): React.ReactElement {
                 >
                   {/* Eyebrow */}
                   <div className="learn-card-eyebrow">
-                    <span>{article.category.toUpperCase()}</span>
-                    <span className="learn-eyebrow-dot">•</span>
-                    <span>{article.duration.toUpperCase()}</span>
+                    <span>{article.shortTag}</span>
                   </div>
 
-                  {/* Title */}
-                  <h2 className="learn-card-headline">{article.title}</h2>
+                  {/* Split Row: Headline & Summary on Left, Thematic Art on Right */}
+                  <div className="learn-card-body-row">
+                    <div className="learn-card-copy">
+                      <h2 className="learn-card-headline">{article.title}</h2>
+                      <p className="learn-card-summary">{article.description}</p>
+                    </div>
 
-                  {/* Description */}
-                  <p className="learn-card-summary">{article.description}</p>
-
-                  {/* Spot Artwork */}
-                  <div className="learn-card-spot-art" data-art={article.artKind}>
-                    <StudyArt kind={article.artKind} />
+                    <div className="learn-card-art-col" data-art={article.artKind}>
+                      <StudyArt kind={article.artKind} variant="square" />
+                    </div>
                   </div>
 
                   {/* Card Footer */}

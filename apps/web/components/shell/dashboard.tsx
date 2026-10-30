@@ -284,7 +284,7 @@ export function StudyDashboard(): React.ReactElement {
               onClick={() => router.push(`/app/learn/${kindToSlug[guide.kind] ?? ""}`)}
             >
               <div className="dashboard-learn-cover" data-art={guide.kind}>
-                <StudyArt kind={guide.kind} />
+                <StudyArt kind={guide.kind} variant="banner" />
                 <span className="dashboard-guide-label" aria-hidden="true">
                   {guide.kind === "case"
                     ? "Connect the dots"
@@ -381,7 +381,7 @@ export function StudyDashboard(): React.ReactElement {
       </section>
       <SamplePreview title={preview} onClose={() => setPreview(null)}>
         <div className="dashboard-preview-art">
-          <StudyArt kind="document" />
+          <StudyArt kind="document" variant="banner" />
         </div>
         <p>
           This sample shows how your study content will look. It is not part of your library and has
