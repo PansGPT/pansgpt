@@ -24,7 +24,6 @@ import {
   AlertCircle,
   Check,
   BookOpen,
-  Brain,
   ChevronLeft,
   ChevronRight,
   Pencil,
@@ -37,7 +36,7 @@ import { externalSourceUrl } from "@/lib/sse-parser";
 import { documentSources, safeChatLink } from "@/lib/chat-message";
 import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
-import { ChatReasoning } from "./reasoning";
+import { ThinkingStatus } from "./motion";
 import { ChatAttachment } from "./attachment";
 
 function useOriginalMessage(): ChatMessageView | undefined {
@@ -112,12 +111,13 @@ function ChatMarkdown(): React.ReactElement {
       remarkPlugins={remarkPlugins}
       rehypePlugins={rehypePlugins}
       components={markdownComponents}
-      smooth={false}
+      smooth
+      defer
     />
   );
 }
 
-// Tool execution stays in the runtime; public status lives in the Steps panel.
+// Execution stays in FastAPI; the live activity line owns public waiting status.
 const ChatTool: ToolCallMessagePartComponent = () => null;
 
 function MessageExtras(): React.ReactElement | null {
@@ -166,15 +166,8 @@ function CopyAction(): React.ReactElement {
   const copied = useAuiState((state) => state.message.isCopied);
   const message = useOriginalMessage();
   const busy = useAuiState((state) => state.thread.isRunning || state.thread.isLoading);
-  const { submitFeedback } = useChatActions();
-  const [savingFeedback, setSavingFeedback] = useState(false);
-  const rate = (rating: "positive" | "negative") => {
-    if (!message || savingFeedback) return;
-    setSavingFeedback(true);
-    void submitFeedback(message.id, rating)
-      .catch(() => undefined)
-      .finally(() => setSavingFeedback(false));
-  };
+  const { feedbackPending } = useChatActions();
+  const savingFeedback = !!message && feedbackPending.has(message.id);
   return (
     <ActionBarPrimitive.Root className="study-chat-actions" hideWhenRunning autohide="never">
       <Tooltip content={copied ? "Copied" : "Copy message"}>
@@ -197,27 +190,26 @@ function CopyAction(): React.ReactElement {
               <RotateCcw size={15} />
             </ActionBarPrimitive.Reload>
           </Tooltip>
+          {/* Native actions dispatch feedback; pressed state follows the saved API result. */}
           <Tooltip content="Helpful">
-            <button
-              type="button"
-              onClick={() => rate("positive")}
+            <ActionBarPrimitive.FeedbackPositive
               aria-label="Helpful response"
               aria-pressed={message.feedback === "positive"}
+              data-submitted={message.feedback === "positive" ? "true" : undefined}
               disabled={busy || savingFeedback}
             >
               <ThumbsUp size={15} />
-            </button>
+            </ActionBarPrimitive.FeedbackPositive>
           </Tooltip>
           <Tooltip content="Unhelpful">
-            <button
-              type="button"
-              onClick={() => rate("negative")}
+            <ActionBarPrimitive.FeedbackNegative
               aria-label="Unhelpful response"
               aria-pressed={message.feedback === "negative"}
+              data-submitted={message.feedback === "negative" ? "true" : undefined}
               disabled={busy || savingFeedback}
             >
               <ThumbsDown size={15} />
-            </button>
+            </ActionBarPrimitive.FeedbackNegative>
           </Tooltip>
         </>
       )}
@@ -261,11 +253,14 @@ export function UserMessage(): React.ReactElement {
 
 export function AssistantMessage(): React.ReactElement {
   const message = useOriginalMessage();
-  const empty =
-    !message?.content &&
-    !message?.thinking &&
-    !message?.artifacts?.length &&
-    !message?.tools?.length;
+  const waiting =
+    message?.status === "running" &&
+    (!message.content || message.tools?.some((tool) => tool.status === "running"));
+  const currentProgress = message?.progress
+    ?.slice()
+    .reverse()
+    .find((update) => !message.activity || update.code === message.activity);
+  const empty = !message?.content && !message?.artifacts?.length;
   return (
     <MessagePrimitive.Root
       className="study-chat-message aui-assistant-message-root"
@@ -276,25 +271,20 @@ export function AssistantMessage(): React.ReactElement {
     >
       <div className="study-chat-turn">
         <div className="study-chat-bubble" data-role="assistant">
+          {waiting && (
+            <div className="study-chat-live-status">
+              <ThinkingStatus label={currentProgress?.label} />
+            </div>
+          )}
           <MessagePrimitive.Parts
             components={{
               Text: ChatMarkdown,
-              Reasoning: ChatReasoning,
               tools: { Fallback: ChatTool },
             }}
           />
-          {empty && message?.status !== "error" && (
+          {empty && message?.status !== "error" && message?.status !== "running" && (
             <p className="study-chat-response-state">
-              {message?.status === "running" ? (
-                <>
-                  <Brain size={16} aria-hidden="true" />
-                  <span className="aui-thinking-shimmer">Thinking…</span>
-                </>
-              ) : message?.status === "cancelled" ? (
-                "Response stopped."
-              ) : (
-                "No response was returned."
-              )}
+              {message?.status === "cancelled" ? "Response stopped." : "No response was returned."}
             </p>
           )}
           {message?.status === "error" && (

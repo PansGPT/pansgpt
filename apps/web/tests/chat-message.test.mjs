@@ -16,6 +16,54 @@ const pending = () => ({
   status: "running",
 });
 
+test("typed model progress stays separate from raw thoughts and survives terminal events", () => {
+  const update = {
+    code: "searching_sources",
+    label: "Looking up the match report",
+    source: "model",
+  };
+  const parser = new SSEEventStreamReader();
+  const events = parser.push(
+    `event: public_progress\ndata: ${JSON.stringify(update)}\n\nevent: public_progress\ndata: ${JSON.stringify(update)}\n\nevent: thinking_chunk\ndata: {"token":"PRIVATE REASONING"}\n\n`
+  );
+  const result = events.reduce(applyChatEvent, pending());
+  assert.deepEqual(result.progress, [update]);
+  assert.equal(result.thinking, undefined);
+  assert.deepEqual(applyChatEvent(result, { event: "error", data: { error: "Retry" } }).progress, [
+    update,
+  ]);
+  for (const bad of [
+    { ...update, source: "private" },
+    { ...update, code: "fake" },
+    { ...update, label: "<think>PRIVATE</think>" },
+    { ...update, label: "https://example.test/private" },
+    { ...update, label: "a".repeat(121) },
+  ]) {
+    assert.deepEqual(
+      new SSEEventStreamReader().push(`event: public_progress\ndata: ${JSON.stringify(bad)}\n\n`),
+      []
+    );
+  }
+});
+
+test("reactivating a phase selects its existing model copy without duplicating progress history", () => {
+  let message = pending();
+  const reading = { code: "reading_document", label: "Reading the enzyme sketch", source: "model" };
+  const writing = { code: "writing_response", label: "Explaining the diagram", source: "model" };
+  message = applyChatEvent(message, { event: "public_progress", data: writing });
+  message = applyChatEvent(message, { event: "public_progress", data: reading });
+  message = applyChatEvent(message, {
+    event: "thinking_chunk",
+    data: { code: "writing_response" },
+  });
+  assert.equal(message.activity, "writing_response");
+  assert.deepEqual(message.progress, [writing, reading]);
+  assert.equal(
+    message.progress.find((item) => item.code === message.activity).label,
+    "Explaining the diagram"
+  );
+});
+
 test("a provider error followed by done keeps partial content and the failure status", () => {
   const parser = new SSEEventStreamReader();
   const events = parser.push(

@@ -36,13 +36,14 @@ export function ChatComposer({ initialDraft }: { initialDraft?: string }): React
         rows={1}
         maxLength={10000}
         autoFocus={false}
-        addAttachmentOnPaste={false}
+        addAttachmentOnPaste={!busy}
       />
       <div className="p-study-composer-toolbar">
         <ComposerPrimitive.AddAttachment
           type="button"
           className="p-study-composer-control"
           aria-label="Attach study material"
+          disabled={busy}
           title="Attach PDF, text, PNG or JPEG (up to 4 files, 10 MB each)"
         >
           <Plus size={25} aria-hidden="true" />

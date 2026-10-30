@@ -385,6 +385,7 @@ async function setupChat(page) {
             );
           }
           if (window.__holdReasoning) {
+            if (window.__motionMode) answer.content = "";
             const encoder = new TextEncoder();
             const stream = new ReadableStream({
               start(controller) {
@@ -415,14 +416,24 @@ async function setupChat(page) {
                   code: window.__progressCode || "checking_materials",
                   token: "PRIVATE RAW THINKING",
                 });
+                window.__emitPublicProgress = (label, code = "checking_materials") => {
+                  const update = { code, label, source: "model" };
+                  answer.public_progress = [...(answer.public_progress || []), update];
+                  emit("public_progress", update);
+                };
+                window.__streamProse = (token) => {
+                  answer.content += token;
+                  emit("text_chunk", { token });
+                };
                 window.__moreReasoning = () =>
                   emit("thinking_chunk", {
                     code: "checking_materials",
                     token: "PRIVATE REPEATED THINKING",
                   });
                 window.__finishReasoning = () => {
-                  emit("text_chunk", { token: answer.content });
+                  if (!window.__motionMode) emit("text_chunk", { token: answer.content });
                   emit("done", { full_text: answer.content });
+                  store();
                   close();
                 };
               },
@@ -865,21 +876,20 @@ test("artifact preparation is visible before tool execution without exposing pri
   });
   await page.getByLabel("Study question").fill("Create a presentation from our discussion");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
-  const progress = page.locator(".aui-reasoning-root");
-  await expect(
-    progress.getByText("Preparing your study materials.", { exact: true })
-  ).toBeVisible();
-  await expect(progress.getByRole("button", { name: "Thinking…", exact: true })).toBeVisible();
+  const progress = page.locator(".study-chat-live-status");
+  await page.evaluate(() =>
+    window.__emitPublicProgress("Preparing the requested study presentation", "creating_materials")
+  );
+  await expect(progress).toContainText("Preparing the requested study presentation");
+  await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
   await expect(page.getByText("PRIVATE RAW THINKING", { exact: true })).toHaveCount(0);
-  await expect(progress).not.toContainText("Working");
   await page.screenshot({ path: test.info().outputPath("artifact-preparation-desktop.png") });
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(
-    progress.getByText("Preparing your study materials.", { exact: true })
-  ).toBeVisible();
+  await expect(progress).toContainText("Preparing the requested study presentation");
   await page.screenshot({ path: test.info().outputPath("artifact-preparation-mobile.png") });
   await page.evaluate(() => window.__finishReasoning());
-  await expect(progress.getByRole("button", { name: "Steps", exact: true })).toBeVisible();
+  await expect(progress).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
 });
 
 test("image tiles preview locally, upload securely, reopen and recover", async ({ page }) => {
@@ -1342,59 +1352,30 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         path: test.info().outputPath("chat-welcome-1440-dark.png"),
         fullPage: true,
       });
-      // Stream real reasoning parts through the runtime, including manual disclosure ownership.
-      for (const manual of [false, true]) {
-        await page.evaluate(() => {
-          window.__holdReasoning = true;
-        });
-        await page.getByLabel("Study question").fill("Synthetic reasoning disclosure test");
-        await page.getByRole("button", { name: "Send message", exact: true }).click();
-        const thinking = page.locator(".aui-reasoning-trigger").last();
-        await expect(thinking).toHaveAttribute("aria-expanded", "true");
-        await expect(thinking).toContainText("Thinking");
-        await expect(page.locator(".aui-reasoning-scroll li").last()).toHaveText(
-          "Checking your course materials."
-        );
-        await expect(
-          page.locator(".aui-reasoning-scroll pre, .aui-reasoning-scroll code")
-        ).toHaveCount(0);
-        await expect(
-          page.getByRole("button", { name: "Stop generating", exact: true })
-        ).toHaveClass(/p-study-composer-submit/);
-        await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
-        await expect(
-          page.getByRole("button", { name: "Stop generating", exact: true })
-        ).toBeEnabled();
-        if (manual) {
-          await thinking.click();
-          await page.evaluate(() => window.__moreReasoning());
-          await expect(thinking).toHaveAttribute("aria-expanded", "false");
-          await thinking.click();
-        }
-        await page.evaluate(() => window.__finishReasoning());
-        await expect(thinking).toHaveText("Steps");
-        await expect(thinking).toHaveAttribute("aria-expanded", manual ? "true" : "false");
-        if (!manual) await thinking.click();
-        await expect(page.locator(".aui-reasoning-scroll li").last()).toHaveText(
-          "Checking your course materials."
-        );
-        await expect(
-          page.locator(".aui-reasoning-scroll pre, .aui-reasoning-scroll code")
-        ).toHaveCount(0);
-        await expect(
-          page.getByRole("button", { name: "Stop generating", exact: true })
-        ).toHaveCount(0);
-        await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeEnabled();
-        await expect(
-          page.getByRole("button", { name: "Send message", exact: true })
-        ).toBeDisabled();
-        await page.screenshot({
-          path: test
-            .info()
-            .outputPath(`reasoning-${manual ? "manual" : "automatic"}-1440-dark.png`),
-        });
-        await page.getByRole("link", { name: "New chat", exact: true }).click();
-      }
+      // Legacy progress and private scratchpads never create a second status disclosure.
+      await page.evaluate(() => {
+        window.__holdReasoning = true;
+      });
+      await page.getByLabel("Study question").fill("Synthetic progress visibility test");
+      await page.getByRole("button", { name: "Send message", exact: true }).click();
+      await expect(page.locator(".study-chat-live-status").last()).toContainText("Thinking");
+      await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveClass(
+        /p-study-composer-submit/
+      );
+      await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeDisabled();
+      await page.evaluate(() => window.__moreReasoning());
+      await expect(page.locator(".aui-reasoning-root")).toHaveCount(0);
+      await expect(page.locator(".study-chat-message").last()).not.toContainText(
+        "PRIVATE RAW THINKING"
+      );
+      await page.evaluate(() => window.__finishReasoning());
+      await expect(page.locator(".study-chat-live-status")).toHaveCount(0);
+      await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(
+        0
+      );
+      await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeEnabled();
+      await page.getByRole("link", { name: "New chat", exact: true }).click();
       await page.getByLabel("Study question").fill("Cancel synthetic response");
       await page.getByRole("button", { name: "Send message", exact: true }).click();
       await expect(
@@ -1410,7 +1391,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         window.__holdReasoning = false;
       });
       console.log(
-        "PASS safe deduplicated progress auto-opens/collapses without code blocks, Stop uses the send position, mic stays separate, manual disclosure choices persist"
+        "PASS a single live status replaces Steps, private reasoning stays hidden, Stop uses the send position and mic stays separate"
       );
       expect(
         await page.evaluate(
@@ -1711,7 +1692,9 @@ test("presentation workspace previews actual slides, navigates, retries and clea
   await expect(preview).not.toBeVisible();
 });
 
-test("presentation download retries and tool status stays inside Steps", async ({ page }) => {
+test("presentation download retries and completed tool results need no Steps panel", async ({
+  page,
+}) => {
   await setupChat(page);
   await page.goto(`http://127.0.0.1:4178/?session=${session}`, {
     waitUntil: "commit",
@@ -1733,10 +1716,7 @@ test("presentation download retries and tool status stays inside Steps", async (
   await expect(reference).toHaveAttribute("href", "https://example.test/study");
   await expect(page.getByText("References supplied with this deck", { exact: true })).toBeVisible();
   await expect(page.locator(".study-chat-tool")).toHaveCount(0);
-  await page.getByRole("button", { name: "Steps", exact: true }).click();
-  await expect(page.locator(".aui-reasoning-content")).toContainText(
-    "Create presentation: Completed"
-  );
+  await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Download", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("This file is unavailable.");
   await page.screenshot({ path: test.info().outputPath("artifact-download-retry-desktop.png") });
@@ -1792,7 +1772,11 @@ test("timeout feedback stays with its response on desktop and mobile", async ({ 
       const alert = element.querySelector('[role="alert"]');
       const previous = alert.previousElementSibling;
       return {
-        gap: alert.getBoundingClientRect().top - previous.getBoundingClientRect().bottom,
+        gap:
+          alert.getBoundingClientRect().top -
+          (previous
+            ? previous.getBoundingClientRect().bottom
+            : alert.parentElement.getBoundingClientRect().top),
         fontSize: getComputedStyle(alert).fontSize,
       };
     });
@@ -1831,8 +1815,7 @@ test("general web answers show web references and actionable lookup failures", a
     "href",
     "https://example.test/report"
   );
-  await response.getByRole("button", { name: "Steps", exact: true }).click();
-  await expect(response).toContainText("Checking external sources.");
+  await expect(response.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
   await expect(response).not.toContainText("Checking your course materials.");
   await page.screenshot({ path: test.info().outputPath("general-web-answer-desktop.png") });
   await page.setViewportSize({ width: 390, height: 844 });
@@ -2240,4 +2223,473 @@ test("Home plus selects local attachments instead of opening search", async ({ p
     path: test.info().outputPath("home-plus-attachment.png"),
     animations: "disabled",
   });
+});
+
+for (const [width, reduced] of [
+  [1440, false],
+  [390, false],
+  [390, true],
+]) {
+  test(`native Markdown and a single model-written status at ${width}px${reduced ? " with reduced motion" : ""}`, async ({
+    page,
+  }) => {
+    test.setTimeout(120000);
+    await setupChat(page);
+    await page.setViewportSize({ width, height: 975 });
+    await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
+    await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      window.__holdReasoning = true;
+      window.__motionMode = true;
+    });
+    await page
+      .getByLabel("Study question", { exact: true })
+      .fill("write an essay on the benefits of surfactants in the household management");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const response = page.locator('.study-chat-message[data-role="assistant"]').last();
+    await expect(response.locator(".t-matrix i")).toHaveCount(16);
+    await expect(response.locator(".t-matrix")).toHaveAttribute("data-variant", "twinkle");
+    expect(
+      await response
+        .locator(".t-matrix i")
+        .evaluateAll((dots) => dots.slice(0, 4).map((dot) => getComputedStyle(dot).animationDelay))
+    ).toEqual(reduced ? ["0s", "0s", "0s", "0s"] : ["0.525s", "0.15s", "0.825s", "0.375s"]);
+    await expect(response.locator(".t-matrix i").first()).toHaveCSS(
+      "animation-name",
+      reduced ? "none" : "t-matrix-pulse"
+    );
+    await page.evaluate(() =>
+      window.__emitPublicProgress("Composing your household surfactants essay", "writing_response")
+    );
+    const label = response.locator(".t-think-text:not(.is-exit)");
+    await expect(label).toHaveAttribute("data-text", "Composing your household surfactants essay");
+    await expect(label).toHaveCSS("opacity", "1");
+    await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
+    await expect(response).not.toContainText("PRIVATE RAW THINKING");
+    await page.screenshot({
+      path: test.info().outputPath(`single-model-status-${width}-${reduced}.png`),
+    });
+    await page.evaluate(() =>
+      window.__streamProse(
+        "A **clear** explanation with a [reference](https://example.test/notes).\n\n"
+      )
+    );
+    await expect(response.locator(".t-matrix")).toHaveCount(0);
+    await expect(response.locator("strong")).toHaveText("clear");
+    await expect(response.getByRole("link", { name: "reference", exact: true })).toHaveAttribute(
+      "href",
+      "https://example.test/notes"
+    );
+    await expect(response.locator(".t-stream-w, [data-stream-offset]")).toHaveCount(0);
+    await page.evaluate(() =>
+      window.__streamProse(
+        "```js\nconst sample = 1;\n```\n\n$x^2$\n\n| Topic | State |\n| --- | --- |\n| Sample | Ready |\n"
+      )
+    );
+    await expect(response.locator("pre code")).toContainText("const sample = 1;");
+    await expect(response.locator(".katex")).toHaveCount(1);
+    await expect(response.getByRole("cell", { name: "Ready", exact: true })).toBeVisible();
+    await page.evaluate(() => window.__finishReasoning());
+    await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
+    await expect(response.locator(".study-chat-markdown")).toHaveAttribute(
+      "data-status",
+      "complete"
+    );
+    await page.screenshot({
+      path: test.info().outputPath(`native-markdown-${width}-${reduced}.png`),
+    });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    const saved = page.locator('.study-chat-message[data-role="assistant"]').last();
+    await expect(saved.locator("strong")).toHaveText("clear");
+    await expect(saved.locator(".study-chat-markdown")).toHaveAttribute("data-status", "complete");
+    await expect(saved.locator(".study-chat-live-status, .aui-reasoning-root")).toHaveCount(0);
+    await expect(saved).not.toContainText("PRIVATE RAW THINKING");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true
+    );
+  });
+}
+
+for (const reduced of [false, true]) {
+  test(`native smoothing reveals intermediate text and settles safely${reduced ? " with reduced motion" : ""}`, async ({
+    page,
+  }) => {
+    test.setTimeout(90000);
+    await setupChat(page);
+    await page.emulateMedia({ reducedMotion: reduced ? "reduce" : "no-preference" });
+    await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      window.__holdReasoning = true;
+      window.__motionMode = true;
+    });
+    await page.getByLabel("Study question", { exact: true }).fill("Stream a synthetic explanation");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toBeVisible();
+    const source = "Smooth streaming keeps this synthetic explanation readable as it arrives. "
+      .repeat(40)
+      .trim();
+    await page.evaluate((text) => {
+      window.__nativePrefixes = [];
+      const response = Array.from(
+        document.querySelectorAll('.study-chat-message[data-role="assistant"]')
+      ).at(-1);
+      window.__nativeObserver = new MutationObserver(() => {
+        const value = response.querySelector(".study-chat-markdown")?.textContent?.trim();
+        if (value && window.__nativePrefixes.at(-1) !== value) window.__nativePrefixes.push(value);
+      });
+      window.__nativeObserver.observe(response, {
+        subtree: true,
+        childList: true,
+        characterData: true,
+      });
+      window.__streamProse(text);
+    }, source);
+    const markdown = page
+      .locator('.study-chat-message[data-role="assistant"]')
+      .last()
+      .locator(".study-chat-markdown");
+    await expect(markdown).toHaveText(source);
+    const prefixes = await page.evaluate(() => window.__nativePrefixes);
+    expect(prefixes.every((prefix) => source.startsWith(prefix))).toBe(true);
+    expect(
+      prefixes.every((prefix, index) => index === 0 || prefix.length > prefixes[index - 1].length)
+    ).toBe(true);
+    if (reduced) expect(prefixes).toEqual([source]);
+    else
+      expect(prefixes.filter((prefix) => prefix.length < source.length).length).toBeGreaterThan(1);
+    await page.evaluate(() => {
+      window.__nativeObserver.disconnect();
+      window.__finishReasoning();
+      window.__holdReasoning = false;
+    });
+    await expect(markdown).toHaveAttribute("data-status", "complete");
+    // A completed response received in one batch follows native behavior: immediate, never blank.
+    await page.getByLabel("Study question", { exact: true }).fill("Return a completed short reply");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+    await expect(
+      page
+        .locator('.study-chat-message[data-role="assistant"]')
+        .last()
+        .locator(".study-chat-markdown")
+    ).toHaveAttribute("data-status", "complete");
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    await expect(page.getByText(source, { exact: true })).toBeVisible();
+    await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+    await expect(page.locator(".t-stream-w, .aui-reasoning-root")).toHaveCount(0);
+  });
+}
+
+test("native paste and drop attach privately, reject unsupported files and upload only on Send", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  const base64 = imageFixture.toString("base64");
+  await page.evaluate((data) => {
+    const bytes = Uint8Array.from(atob(data), (char) => char.charCodeAt(0));
+    const files = new DataTransfer();
+    files.items.add(new File([bytes], "pasted-diagram.png", { type: "image/png" }));
+    document
+      .querySelector('[aria-label="Study question"]')
+      .dispatchEvent(
+        new ClipboardEvent("paste", { bubbles: true, cancelable: true, clipboardData: files })
+      );
+  }, base64);
+  await expect(page.locator(".study-chat-composer .study-chat-attachment-card")).toHaveCount(1);
+  await page.evaluate((data) => {
+    const bytes = Uint8Array.from(atob(data), (char) => char.charCodeAt(0));
+    const files = new DataTransfer();
+    files.items.add(new File([bytes], "dropped-diagram.png", { type: "image/png" }));
+    window.__dropFiles = files;
+    document
+      .querySelector(".study-chat")
+      .dispatchEvent(
+        new DragEvent("dragenter", { bubbles: true, cancelable: true, dataTransfer: files })
+      );
+  }, base64);
+  await expect(page.locator(".study-chat")).toHaveAttribute("data-dragging", "true");
+  await page.evaluate(() =>
+    document
+      .querySelector(".study-chat")
+      .dispatchEvent(
+        new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer: window.__dropFiles })
+      )
+  );
+  await expect(page.locator(".study-chat-composer .study-chat-attachment-card")).toHaveCount(2);
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.method === "POST").length)
+  ).toBe(0);
+  await page.evaluate(() => {
+    const files = new DataTransfer();
+    files.items.add(
+      new File(["unsupported"], "unsupported.exe", { type: "application/octet-stream" })
+    );
+    document
+      .querySelector(".study-chat")
+      .dispatchEvent(
+        new DragEvent("drop", { bubbles: true, cancelable: true, dataTransfer: files })
+      );
+  });
+  await expect(page.getByRole("alert")).toContainText(
+    "Choose a PDF, text, PNG or JPEG file up to 10 MB."
+  );
+  await expect(page.locator(".study-chat-composer .study-chat-attachment-card")).toHaveCount(2);
+  await page.getByLabel("Study question", { exact: true }).fill("Explain these synthetic diagrams");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => window.__calls.find((call) => call.url.endsWith("/stream")).body.attachment_ids.length
+    )
+  ).toBe(2);
+});
+
+test("message actions omit More and still copy only selected public text", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    const tree = JSON.parse(sessionStorage.getItem("interaction-tree") || "[]");
+    // Initial fixtures have not been mutated yet; provide explicit synthetic saved metadata.
+    const messages = tree.length
+      ? tree
+      : [
+          {
+            id: "00000000-0000-4000-8000-000000000011",
+            role: "user",
+            content: "Original synthetic question",
+            parent_message_id: null,
+            is_active_branch: true,
+          },
+          {
+            id: "00000000-0000-4000-8000-000000000012",
+            role: "assistant",
+            content: "Original synthetic answer",
+            parent_message_id: "00000000-0000-4000-8000-000000000011",
+            is_active_branch: true,
+          },
+        ];
+    messages[1].thinking_text = "PRIVATE RAW THINKING";
+    messages[1].tool_calls = {
+      tools: [
+        {
+          call_id: "fixture-call",
+          tool_name: "read_document",
+          arguments: { query: "HIDDEN TOOL ARGUMENT" },
+          result: { text: "HIDDEN TOOL RESULT" },
+          status: "success",
+        },
+      ],
+      artifacts: [],
+    };
+    messages.push({
+      id: "00000000-0000-4000-8000-000000000013",
+      role: "assistant",
+      content: "HIDDEN BRANCH ANSWER",
+      parent_message_id: messages[0].id,
+      is_active_branch: false,
+    });
+    sessionStorage.setItem("interaction-tree", JSON.stringify(messages));
+  });
+  await page.reload({ waitUntil: "load", timeout: 60000 });
+  const response = page.locator('.study-chat-message[data-role="assistant"]').last();
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: {
+        writeText: async (text) => {
+          window.__messageCopy = text;
+        },
+      },
+    });
+  });
+  await expect(page.getByRole("button", { name: "More message actions", exact: true })).toHaveCount(
+    0
+  );
+  await response.getByRole("button", { name: "Copy message", exact: true }).click();
+  await expect
+    .poll(() => page.evaluate(() => window.__messageCopy))
+    .toBe("Original synthetic answer");
+  await expect(response).not.toContainText("PRIVATE RAW THINKING");
+  await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("button", { name: "More message actions", exact: true })).toHaveCount(
+    0
+  );
+  await expect(response.getByRole("button", { name: "Copy message", exact: true })).toBeEnabled();
+});
+
+test("long chat uses one conversation scrollbar without scrolling its page", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    const tree = [
+      {
+        id: "00000000-0000-4000-8000-000000000011",
+        role: "user",
+        content: "Explain this synthetic long study topic",
+        parent_message_id: null,
+        is_active_branch: true,
+      },
+      {
+        id: "00000000-0000-4000-8000-000000000012",
+        role: "assistant",
+        content:
+          "A synthetic paragraph for verifying long-response scrolling and composer access.\n\n".repeat(
+            120
+          ),
+        parent_message_id: "00000000-0000-4000-8000-000000000011",
+        is_active_branch: true,
+      },
+    ];
+    sessionStorage.setItem("interaction-tree", JSON.stringify(tree));
+  });
+  for (const [width, height] of [
+    [1440, 975],
+    [1440, 500],
+    [390, 844],
+    [390, 500],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    await expect(page.locator(".study-chat-markdown")).toContainText("A synthetic paragraph");
+    const layout = await page.evaluate(() => {
+      const selectors = [
+        "html",
+        "body",
+        ".app-shell",
+        ".shell-workspace",
+        ".shell-main",
+        ".shell-page",
+        ".shell-route-content",
+        ".study-presentation-workspace",
+        ".study-presentation-conversation",
+        ".study-chat",
+        ".study-chat-conversation",
+        ".study-chat-thread-content",
+      ];
+      return selectors.map((selector) => {
+        const el = document.querySelector(selector);
+        if (!el) return { selector, absent: true };
+        const style = getComputedStyle(el);
+        return {
+          selector,
+          height: el.clientHeight,
+          scrollHeight: el.scrollHeight,
+          overflow: style.overflowY,
+          top: el.getBoundingClientRect().top,
+          bottom: el.getBoundingClientRect().bottom,
+        };
+      });
+    });
+    expect(
+      await page.evaluate(() => document.scrollingElement.scrollHeight <= innerHeight + 1),
+      JSON.stringify(layout)
+    ).toBe(true);
+    await expect(page.getByLabel("Study question", { exact: true })).toBeInViewport();
+    const viewport = page.locator(".study-chat-conversation");
+    await expect(viewport).toHaveCSS("overflow-y", "auto");
+    expect(await viewport.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true);
+    await viewport.evaluate((el) => {
+      el.scrollTop = 0;
+    });
+    await expect(
+      page.getByText("Explain this synthetic long study topic", { exact: true })
+    ).toBeInViewport();
+    await viewport.hover();
+    await page.mouse.wheel(0, 1200);
+    await expect.poll(() => viewport.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await viewport.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    await expect(page.getByLabel("Study question", { exact: true })).toBeInViewport();
+    if (height === 500)
+      await page.screenshot({ path: test.info().outputPath(`single-chat-scroll-${width}.png`) });
+  }
+});
+
+test("only sidebar chat history scrolls while navigation, search and account remain fixed", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`, { waitUntil: "load", timeout: 60000 });
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(
+    ({ owner, session }) => {
+      const chats = Array.from({ length: 30 }, (_, index) => ({
+        id: index === 0 ? session : crypto.randomUUID(),
+        user_id: owner,
+        title: `Fixed sidebar study ${index}`,
+        title_source: "manual",
+        is_pinned: index < 2,
+        archived_at: null,
+        created_at: "2026-10-26T00:00:00Z",
+        updated_at: "2026-10-26T00:00:00Z",
+        last_message_at: "2026-10-26T00:00:00Z",
+      }));
+      sessionStorage.setItem("session-metadata-fixture", JSON.stringify(chats));
+    },
+    { owner, session }
+  );
+  for (const [width, height] of [
+    [1440, 975],
+    [1440, 500],
+    [390, 844],
+    [390, 500],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload({ waitUntil: "load", timeout: 60000 });
+    if (width < 861)
+      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+    const sidebar =
+      width < 861
+        ? page.getByRole("dialog", { name: "Workspace navigation", exact: true })
+        : page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
+    const list = sidebar.getByRole("region", { name: "Chat history", exact: true });
+    await expect(list).toContainText("Fixed sidebar study 0");
+    await list.getByRole("button", { name: "More", exact: true }).click();
+    const fixed = [
+      sidebar.getByRole("link", { name: "PansGPT home", exact: true }),
+      sidebar.locator(".shell-links"),
+      sidebar.getByRole("link", { name: "New chat", exact: true }),
+      sidebar.locator(".shell-recent-heading"),
+      sidebar.getByRole("button", { name: "Account menu", exact: true }),
+    ];
+    for (const link of await sidebar.locator(".shell-links").getByRole("link").all()) {
+      await expect(link).toBeInViewport();
+    }
+    const before = await Promise.all(fixed.map((locator) => locator.boundingBox()));
+    expect(
+      await list.evaluate((el) => el.clientHeight),
+      `${width}x${height} chat list height`
+    ).toBeGreaterThan(36);
+    await expect(list).toHaveCSS("overflow-y", "auto");
+    await expect(list).toHaveCSS("scrollbar-width", "thin");
+    await expect(sidebar.locator(".p-app-nav-panel-top")).toHaveCSS("overflow-y", "hidden");
+    if (width < 861)
+      await expect(sidebar.locator(".p-slideout-body")).toHaveCSS("overflow-y", "hidden");
+    await list.evaluate((el) => {
+      el.scrollTop = 0;
+    });
+    await list.hover();
+    await page.mouse.wheel(0, 2000);
+    await expect.poll(() => list.evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    const after = await Promise.all(fixed.map((locator) => locator.boundingBox()));
+    for (let index = 0; index < fixed.length; index++) {
+      expect(Math.abs(before[index].y - after[index].y)).toBeLessThan(1);
+      await expect(fixed[index]).toBeInViewport();
+    }
+    await list.focus();
+    await page.keyboard.press("End");
+    await expect(
+      list.getByRole("link", { name: "Fixed sidebar study 29", exact: true })
+    ).toBeInViewport();
+    await page.screenshot({ path: test.info().outputPath(`fixed-sidebar-${width}-${height}.png`) });
+  }
 });

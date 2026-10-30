@@ -3,7 +3,13 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AssistantRuntimeProvider, ThreadPrimitive, useAuiState } from "@assistant-ui/react";
+import {
+  AssistantRuntimeProvider,
+  ComposerPrimitive,
+  ThreadPrimitive,
+  useAui,
+  useAuiState,
+} from "@assistant-ui/react";
 import type { ChatMessageView } from "@pansgpt/types";
 import { ArrowDown, AlertCircle } from "lucide-react";
 import { z } from "zod";
@@ -37,13 +43,28 @@ function ChatThread({
   sessionId,
   initialTitle,
   embedded = false,
+  onAttachmentError,
 }: {
   embedded?: boolean;
   name: string;
   error: string | null;
   sessionId: string | null;
   initialTitle?: string;
+  onAttachmentError: (message: string | null) => void;
 }): React.ReactElement {
+  const aui = useAui();
+  useEffect(() => {
+    const rejected = aui.on("composer.attachmentAddError", () =>
+      onAttachmentError("Choose a PDF, text, PNG or JPEG file up to 10 MB.")
+    );
+    const added = aui.on("composer.attachmentAdd", () => onAttachmentError(null));
+    const started = aui.on("thread.runStart", () => onAttachmentError(null));
+    return () => {
+      rejected();
+      added();
+      started();
+    };
+  }, [aui, onAttachmentError]);
   const desktop = useSyncExternalStore(
     subscribeDesktop,
     () => window.matchMedia(desktopQuery).matches,
@@ -58,67 +79,69 @@ function ChatThread({
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
   });
   return (
-    <ThreadPrimitive.Root ref={root} className="study-chat" data-empty={empty}>
-      {empty ? (
-        <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
-          <div className="study-chat-intro">
-            <h1 id="chat-welcome-title">
-              Good {period}, <span>{name}</span>
-            </h1>
-          </div>
-          <ChatComposer />
-          {desktop && <ChatTools />}
-          {error && (
-            <p className="study-chat-error" role="alert">
-              <AlertCircle size={17} aria-hidden="true" />
-              {error}
-            </p>
-          )}
-        </section>
-      ) : (
-        <>
-          {!embedded && <ChatHeader sessionId={sessionId} initialTitle={initialTitle} />}
-          <ThreadPrimitive.Viewport
-            ref={setViewport}
-            className="study-chat-conversation"
-            turnAnchor="top"
-            data-slot="aui_thread-viewport"
-          >
-            <div className="study-chat-thread-content">
-              <div className="study-chat-messages" data-slot="aui_message-group">
-                <ChatMessages viewport={viewport} />
-                <span className="p-sr-only" role="status">
-                  {running ? "PansGPT is responding" : ""}
-                </span>
-              </div>
-              <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
-                <ThreadPrimitive.ScrollToBottom
-                  className="study-chat-scroll-bottom"
-                  aria-label="Scroll to latest message"
-                  title="Scroll to latest message"
-                >
-                  <ArrowDown size={16} aria-hidden="true" />
-                </ThreadPrimitive.ScrollToBottom>
-                {error && (
-                  <p className="study-chat-error" role="alert">
-                    <AlertCircle size={17} aria-hidden="true" />
-                    {error}
-                  </p>
-                )}
-                <ChatComposer />
-                {desktop && (
-                  <p>
-                    PansGPT supports your studies. Verify clinical facts and dosages with official
-                    monographs.
-                  </p>
-                )}
-              </ThreadPrimitive.ViewportFooter>
+    <ComposerPrimitive.AttachmentDropzone asChild disabled={running}>
+      <ThreadPrimitive.Root ref={root} className="study-chat" data-empty={empty}>
+        {empty ? (
+          <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
+            <div className="study-chat-intro">
+              <h1 id="chat-welcome-title">
+                Good {period}, <span>{name}</span>
+              </h1>
             </div>
-          </ThreadPrimitive.Viewport>
-        </>
-      )}
-      {empty && !desktop && !embedded && <ChatRecent />}
-    </ThreadPrimitive.Root>
+            <ChatComposer />
+            {desktop && <ChatTools />}
+            {error && (
+              <p className="study-chat-error" role="alert">
+                <AlertCircle size={17} aria-hidden="true" />
+                {error}
+              </p>
+            )}
+          </section>
+        ) : (
+          <>
+            {!embedded && <ChatHeader sessionId={sessionId} initialTitle={initialTitle} />}
+            <ThreadPrimitive.Viewport
+              ref={setViewport}
+              className="study-chat-conversation"
+              turnAnchor="top"
+              data-slot="aui_thread-viewport"
+            >
+              <div className="study-chat-thread-content">
+                <div className="study-chat-messages" data-slot="aui_message-group">
+                  <ChatMessages viewport={viewport} />
+                  <span className="p-sr-only" role="status">
+                    {running ? "PansGPT is responding" : ""}
+                  </span>
+                </div>
+                <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
+                  <ThreadPrimitive.ScrollToBottom
+                    className="study-chat-scroll-bottom"
+                    aria-label="Scroll to latest message"
+                    title="Scroll to latest message"
+                  >
+                    <ArrowDown size={16} aria-hidden="true" />
+                  </ThreadPrimitive.ScrollToBottom>
+                  {error && (
+                    <p className="study-chat-error" role="alert">
+                      <AlertCircle size={17} aria-hidden="true" />
+                      {error}
+                    </p>
+                  )}
+                  <ChatComposer />
+                  {desktop && (
+                    <p>
+                      PansGPT supports your studies. Verify clinical facts and dosages with official
+                      monographs.
+                    </p>
+                  )}
+                </ThreadPrimitive.ViewportFooter>
+              </div>
+            </ThreadPrimitive.Viewport>
+          </>
+        )}
+        {empty && !desktop && !embedded && <ChatRecent />}
+      </ThreadPrimitive.Root>
+    </ComposerPrimitive.AttachmentDropzone>
   );
 }
 
@@ -175,7 +198,7 @@ export function ChatContent({
     () => true
   );
   useEffect(() => () => setDraft(""), [setDraft]);
-  const { runtime, error, submitFeedback, currentSessionId } = useChatRuntime({
+  const { runtime, error, feedbackPending, currentSessionId } = useChatRuntime({
     active: active,
     token: session?.access_token,
     ownerId: userId,
@@ -248,6 +271,7 @@ export function ChatContent({
         sessionId={currentSessionId}
         initialTitle={initialTitle}
         embedded={!!renderThread}
+        onAttachmentError={setAttachmentError}
       />
       <FirstChatDisclaimerModal
         isOpen={active && userId !== "anonymous" && !accepted && !acknowledgedHere}
@@ -261,7 +285,7 @@ export function ChatContent({
   );
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <ChatActionsContext.Provider value={{ submitFeedback, sessionId: currentSessionId }}>
+      <ChatActionsContext.Provider value={{ feedbackPending, sessionId: currentSessionId }}>
         {renderThread
           ? renderThread(
               thread,

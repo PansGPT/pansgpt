@@ -1,0 +1,36 @@
+.study-chat,
+.mobile-home-chat-sheet {
+  --think-base: var(--text-tertiary-600);
+  --think-highlight: var(--text-primary-900);
+  --matrix-base: color-mix(in srgb, var(--text-secondary-700) 26%, transparent);
+  --matrix-active: var(--text-secondary-700);
+}
+.study-chat-thinking-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.study-chat-thinking-state .t-matrix {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+.study-chat-live-status {
+  margin: 6px 0 4px;
+}
+.study-chat-thinking-state .t-think {
+  text-align: left;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+.study-chat-thinking-state .t-think-sizer,
+.study-chat-thinking-state .t-think-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

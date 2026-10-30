@@ -3,6 +3,7 @@
 // ==============================================================================
 
 import type { CitationItem, SSEParsedEvent } from "@pansgpt/types";
+import { parsePublicProgress } from "./public-progress.ts";
 export type {
   SSEEventType,
   BoundingBoxCoordinates,
@@ -60,6 +61,10 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
   }
   if (!isRecord(value)) return undefined;
   switch (event) {
+    case "public_progress": {
+      const update = parsePublicProgress(value);
+      return update ? { event, data: update } : undefined;
+    }
     case "init":
       return {
         event,

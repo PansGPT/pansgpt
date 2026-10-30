@@ -4,6 +4,7 @@ import type {
   ChatProgressCode,
   CitationItem,
 } from "@pansgpt/types";
+import { parsePublicProgressUpdates } from "./public-progress.ts";
 
 export const CHAT_PROGRESS_LABELS: Record<ChatProgressCode, string> = {
   reviewing_request: "Reviewing your request.",
@@ -47,18 +48,29 @@ export function documentSources(citations: CitationItem[]): CitationItem[] {
 /** Apply only parser-validated events. A terminal error survives a later done frame. */
 export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent): ChatMessageView {
   switch (event.event) {
+    case "public_progress":
+      return {
+        ...message,
+        progress: parsePublicProgressUpdates([...(message.progress ?? []), event.data]),
+        activity: event.data.code,
+      };
     case "text_chunk":
       return {
         ...message,
         content: message.content + (event.data.token ?? event.data.delta ?? ""),
       };
     case "thinking_chunk": {
-      const label = Object.entries(CHAT_PROGRESS_LABELS).find(
-        ([code]) => code === event.data.code
-      )?.[1];
+      const stage = Object.entries(CHAT_PROGRESS_LABELS).find(([code]) => code === event.data.code);
+      const label = stage?.[1];
       const incoming = label ? [label] : publicProgressLines(event.data.token ?? event.data.delta);
       const progress = [...new Set([...publicProgressLines(message.thinking), ...incoming])];
-      return incoming.length ? { ...message, thinking: progress.join("\n") } : message;
+      return incoming.length
+        ? {
+            ...message,
+            thinking: progress.join("\n"),
+            ...(stage ? { activity: stage[0] as ChatProgressCode } : {}),
+          }
+        : message;
     }
     case "citations":
       return { ...message, citations: event.data };

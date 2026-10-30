@@ -25,6 +25,14 @@ import { SSEEventStreamReader } from "@/lib/sse-parser";
 import { createVoiceAdapter } from "./voice-adapter";
 
 const toolArgsSchema = z.record(z.string(), z.json());
+const acceptedFiles = new Set([
+  "application/pdf",
+  "text/plain",
+  "text/markdown",
+  "text/csv",
+  "image/png",
+  "image/jpeg",
+]);
 
 export function convertChatMessage(message: ChatMessageView): ThreadMessageLike {
   if (message.role === "user")
@@ -42,8 +50,6 @@ export function convertChatMessage(message: ChatMessageView): ThreadMessageLike 
       })),
     };
   const content: Exclude<ThreadMessageLike["content"], string>[number][] = [];
-  if (message.thinking || message.tools?.length)
-    content.push({ type: "reasoning", text: message.thinking || "Running a study tool." });
   for (const tool of message.tools ?? []) {
     content.push({
       type: "tool-call",
@@ -116,6 +122,8 @@ export function useChatRuntime({
   const [error, setError] = useState<string | null>(null);
   const [isSwitching, setIsSwitching] = useState(false);
   const [branchRevision, setBranchRevision] = useState(0);
+  const pendingFeedback = useRef(new Set<string>());
+  const [feedbackPending, setFeedbackPending] = useState<ReadonlySet<string>>(new Set());
   const sessionId = useRef(initialSessionId);
   const [currentSessionId, setCurrentSessionId] = useState(initialSessionId);
   const sessionPromise = useRef<Promise<string> | null>(null);
@@ -170,7 +178,10 @@ export function useChatRuntime({
     () => ({
       accept: "application/pdf,text/plain,text/markdown,text/csv,image/png,image/jpeg",
       async add({ file }) {
-        if (!file.size || file.size > 10 * 1024 * 1024) throw new Error("Use a file up to 10 MB.");
+        if (!file.size || file.size > 10 * 1024 * 1024 || !acceptedFiles.has(file.type)) {
+          const message = "Choose a PDF, text, PNG or JPEG file up to 10 MB.";
+          throw new Error(message);
+        }
         return {
           id: crypto.randomUUID(),
           name: file.name,
@@ -507,6 +518,9 @@ export function useChatRuntime({
   const submitFeedback = useCallback(
     async (messageId: string, rating: "positive" | "negative", comment?: string): Promise<void> => {
       if (!sessionId.current || !token) throw new Error("Reopen this chat before rating it.");
+      if (pendingFeedback.current.has(messageId)) return;
+      pendingFeedback.current.add(messageId);
+      setFeedbackPending(new Set(pendingFeedback.current));
       try {
         const response = await fetch(
           `${base}/sessions/${sessionId.current}/messages/${messageId}/feedback`,
@@ -530,6 +544,9 @@ export function useChatRuntime({
             failure instanceof Error ? failure.message : "Feedback was not saved. Please retry."
           );
         throw failure;
+      } finally {
+        pendingFeedback.current.delete(messageId);
+        if (!lifetime.current?.signal.aborted) setFeedbackPending(new Set(pendingFeedback.current));
       }
     },
     [headers, token]
@@ -558,5 +575,5 @@ export function useChatRuntime({
       },
     },
   });
-  return { runtime, isRunning, error, submitFeedback, currentSessionId };
+  return { runtime, isRunning, error, feedbackPending, currentSessionId };
 }
