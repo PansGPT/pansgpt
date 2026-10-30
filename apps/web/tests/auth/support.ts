@@ -6,9 +6,9 @@ export async function openNavigation(page: Page): Promise<void> {
     // Home now uses its Study tools links and a direct Settings profile button.
     await page
       .getByRole("navigation", { name: "Study tools", exact: true })
-      .getByRole("link", { name: "Notes", exact: true })
+      .getByRole("link", { name: "Quiz", exact: true })
       .click();
-    await expect(page).toHaveURL(/\/app\/notes$/);
+    await expect(page).toHaveURL(/\/app\/quiz$/);
     await trigger.click();
   }
 }

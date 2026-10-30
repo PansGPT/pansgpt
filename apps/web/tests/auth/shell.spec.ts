@@ -338,7 +338,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
 
   await openNavigation(page);
   const mobile = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  await expect(mobile.getByRole("link", { name: "Notes", exact: true })).toHaveAttribute(
+  await expect(mobile.getByRole("link", { name: "Quiz", exact: true })).toHaveAttribute(
     "aria-current",
     "page"
   );
