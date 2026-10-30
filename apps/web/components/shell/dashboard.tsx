@@ -281,7 +281,7 @@ export function StudyDashboard(): React.ReactElement {
           </Link>
         </div>
         <div className="learn-cards-container is-grid-view">
-          {learnArticles.slice(0, 3).map((article) => (
+          {learnArticles.slice(0, 4).map((article) => (
             <LearnCard
               key={article.slug}
               article={article}
