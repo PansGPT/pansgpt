@@ -17,6 +17,7 @@ import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/u
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
+import { kindToSlug } from "@/components/learn/learn-content";
 import { MobileActivityTimeline, type DashboardTimelineEvent } from "./mobile-activity-timeline";
 import { StudyActivity } from "./study-activity";
 import { DocumentCard } from "./document-card";
@@ -36,7 +37,6 @@ function recentAge(value: string): string {
 }
 
 const guides = [
-  { title: "Renal system overview", kind: "renal", duration: "5 min read", video: false },
   { title: "How to approach a clinical case", kind: "case", duration: "4 min watch", video: true },
   {
     title: "Active recall for better retention",
@@ -271,7 +271,6 @@ export function StudyDashboard(): React.ReactElement {
             <BookOpen size={20} aria-hidden="true" />
             Learn
           </h2>
-          <span className="dashboard-sample-badge">Sample</span>
           <Link href="/app/learn">
             See all
             <ChevronRight size={17} aria-hidden="true" />
@@ -282,18 +281,16 @@ export function StudyDashboard(): React.ReactElement {
             <button
               className="dashboard-learn-card"
               key={guide.kind}
-              onClick={() => setPreview(guide.title)}
+              onClick={() => router.push(`/app/learn/${kindToSlug[guide.kind] ?? ""}`)}
             >
               <div className="dashboard-learn-cover" data-art={guide.kind}>
                 <StudyArt kind={guide.kind} />
                 <span className="dashboard-guide-label" aria-hidden="true">
-                  {guide.kind === "renal"
-                    ? "Explore the essentials"
-                    : guide.kind === "case"
-                      ? "Connect the dots"
-                      : guide.kind === "recall"
-                        ? "Put it into practice"
-                        : "Make it your own"}
+                  {guide.kind === "case"
+                    ? "Connect the dots"
+                    : guide.kind === "recall"
+                      ? "Put it into practice"
+                      : "Make it your own"}
                 </span>
               </div>
               <div className="dashboard-learn-body">

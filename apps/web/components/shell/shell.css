@@ -1167,7 +1167,7 @@
 }
 .dashboard-learn-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 .dashboard-learn-card {
@@ -2087,6 +2087,16 @@
   }
   .app-shell[data-home="true"] .shell-main {
     padding: 0 21px 112px;
+  }
+  .app-shell[data-learn="true"] .shell-topbar {
+    display: none !important;
+  }
+  .app-shell[data-learn="true"] .shell-main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .app-shell[data-learn="true"] .shell-workspace {
+    padding: 0 !important;
   }
   .app-shell[data-home="true"] .dashboard-mobile-destinations {
     padding: 0 0 10px;

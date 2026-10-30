@@ -70,6 +70,7 @@ function Workspace({
   const [railToggleFocused, setRailToggleFocused] = useState(false);
   if (sidebar.pathname !== pathname) setSidebar({ ...sidebar, pathname, libraryExpanded: false });
   const inLibrary = pathname === "/app/library" || pathname.startsWith("/app/library/");
+  const inLearn = pathname === "/app/learn" || pathname.startsWith("/app/learn/");
   // Library keeps its course navigation visible and starts with a compact app rail.
   // A temporary expansion here must not overwrite the user's choice on other pages.
   const collapsed = inLibrary
@@ -193,6 +194,20 @@ function Workspace({
     window.addEventListener("keydown", keydown);
     return () => window.removeEventListener("keydown", keydown);
   }, [openSearch]);
+
+  useEffect(() => {
+    function handleOpenSettings(event: Event) {
+      const customEvent = event as CustomEvent<{ section?: SettingsSectionId }>;
+      if (customEvent.detail?.section) {
+        setSettingsSection(customEvent.detail.section);
+      } else {
+        setSettingsSection("account");
+      }
+      setSettingsOpen(true);
+    }
+    window.addEventListener("pansgpt:open-settings", handleOpenSettings);
+    return () => window.removeEventListener("pansgpt:open-settings", handleOpenSettings);
+  }, []);
   const panel = (mobile = false): React.ReactElement => (
     <ApplicationNavPanel
       logo={
@@ -278,6 +293,7 @@ function Workspace({
         data-chat={pathname === "/app/chat"}
         data-home={pathname === "/app"}
         data-library={inLibrary}
+        data-learn={inLearn}
         data-preferred-collapsed={sidebar.preferredCollapsed}
       >
         <a href="#workspace-content" className="shell-skip">
@@ -302,79 +318,81 @@ function Workspace({
           </button>
         )}
         <div className="shell-workspace">
-          <header className="shell-topbar">
-            <div className="shell-mobile-brand">
-              <Brand />
-            </div>
-            <div className="shell-header-actions">
-              {pathname === "/app" && (
-                <div className="shell-home-account">
-                  <MobileProfileButton
-                    profile={profile}
-                    credits={preferences.credits}
-                    creditsTotal={preferences.creditsTotal}
-                    onOpen={(opener) => {
-                      profileReturn.current = opener;
-                      setSettingsSection("account");
-                      setSettingsOpen(true);
-                    }}
-                  />
-                </div>
-              )}
-              <Slideout
-                title="Workspace navigation"
-                className="shell-navigation-drawer"
-                description="Find your study tools."
-                side="left"
-                open={navigationOpen}
-                onOpenChange={(open) => {
-                  if (open) {
-                    navigationOrigin.current = pathname;
-                    navigationReturn.current = null;
+          {!inLearn && (
+            <header className="shell-topbar">
+              <div className="shell-mobile-brand">
+                <Brand />
+              </div>
+              <div className="shell-header-actions">
+                {pathname === "/app" && (
+                  <div className="shell-home-account">
+                    <MobileProfileButton
+                      profile={profile}
+                      credits={preferences.credits}
+                      creditsTotal={preferences.creditsTotal}
+                      onOpen={(opener) => {
+                        profileReturn.current = opener;
+                        setSettingsSection("account");
+                        setSettingsOpen(true);
+                      }}
+                    />
+                  </div>
+                )}
+                <Slideout
+                  title="Workspace navigation"
+                  className="shell-navigation-drawer"
+                  description="Find your study tools."
+                  side="left"
+                  open={navigationOpen}
+                  onOpenChange={(open) => {
+                    if (open) {
+                      navigationOrigin.current = pathname;
+                      navigationReturn.current = null;
+                    }
+                    setNavigationOpen(open);
+                  }}
+                  onCloseAutoFocus={(event) => {
+                    if (
+                      navigationOrigin.current === pathname &&
+                      navigationReturn.current?.isConnected &&
+                      !profileOpen &&
+                      !helpOpen
+                    ) {
+                      event.preventDefault();
+                      navigationReturn.current.focus();
+                      return;
+                    }
+                    if (
+                      pathname === "/app" &&
+                      navigationOrigin.current === pathname &&
+                      !profileOpen &&
+                      !helpOpen
+                    ) {
+                      event.preventDefault();
+                      document
+                        .querySelector<HTMLButtonElement>(".shell-home-account .shell-account-menu")
+                        ?.focus();
+                      return;
+                    }
+                    if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
+                      event.preventDefault();
+                      if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
+                    }
+                  }}
+                  trigger={
+                    <button
+                      className="shell-icon-button shell-mobile-menu"
+                      aria-label="Open navigation"
+                    >
+                      <Menu size={22} />
+                    </button>
                   }
-                  setNavigationOpen(open);
-                }}
-                onCloseAutoFocus={(event) => {
-                  if (
-                    navigationOrigin.current === pathname &&
-                    navigationReturn.current?.isConnected &&
-                    !profileOpen &&
-                    !helpOpen
-                  ) {
-                    event.preventDefault();
-                    navigationReturn.current.focus();
-                    return;
-                  }
-                  if (
-                    pathname === "/app" &&
-                    navigationOrigin.current === pathname &&
-                    !profileOpen &&
-                    !helpOpen
-                  ) {
-                    event.preventDefault();
-                    document
-                      .querySelector<HTMLButtonElement>(".shell-home-account .shell-account-menu")
-                      ?.focus();
-                    return;
-                  }
-                  if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
-                    event.preventDefault();
-                    if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
-                  }
-                }}
-                trigger={
-                  <button
-                    className="shell-icon-button shell-mobile-menu"
-                    aria-label="Open navigation"
-                  >
-                    <Menu size={22} />
-                  </button>
-                }
-              >
-                {panel(true)}
-              </Slideout>
-            </div>
-          </header>
+                >
+                  {panel(true)}
+                </Slideout>
+              </div>
+            </header>
+          )}
           <main id="workspace-content" tabIndex={-1} ref={main} className="shell-main">
             <motion.div
               key={pathname}
@@ -387,7 +405,7 @@ function Workspace({
             </motion.div>
           </main>
           {pathname === "/app" && <MobileHomeChat />}
-          {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && (
+          {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && !inLearn && (
             <form
               className="shell-mobile-composer p-study-composer"
               onSubmit={(event) => {
