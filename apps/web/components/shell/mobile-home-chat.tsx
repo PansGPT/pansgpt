@@ -14,8 +14,14 @@ import "./mobile-home-chat.css";
 
 /** The modal stays mounted across conversation changes; only its runtime changes. */
 export function MobileHomeChat(): React.ReactElement {
-  const [open, setOpen] = useState(false);
-  const [started, setStarted] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const sessionParam = searchParams.get("session");
+  const chatParam = searchParams.get("chat");
+  const shouldOpenInitial = Boolean(sessionParam || chatParam === "new");
+
+  const [open, setOpen] = useState(shouldOpenInitial);
+  const [started, setStarted] = useState(shouldOpenInitial);
   const { revision, startNewChat } = useChatDraft();
   const trigger = useRef<HTMLInputElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
@@ -24,8 +30,6 @@ export function MobileHomeChat(): React.ReactElement {
     sheet.current = node;
     setTouchSurface(node);
   }, []);
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const dismiss = useCallback(() => {
     setOpen(false);
     if (typeof window !== "undefined") {
@@ -34,16 +38,16 @@ export function MobileHomeChat(): React.ReactElement {
         params.delete("session");
         params.delete("chat");
         const nextQuery = params.toString();
-        window.history.replaceState(
-          null,
-          "",
-          nextQuery ? `?${nextQuery}` : window.location.pathname
-        );
+        const nextUrl = nextQuery
+          ? `${window.location.pathname}?${nextQuery}`
+          : window.location.pathname;
+        window.history.replaceState(null, "", nextUrl);
+        router.replace(nextUrl, { scroll: false });
       }
     }
-  }, []);
+  }, [router]);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(sessionParam || null);
   const [chatTarget, setChatTarget] = useState<HTMLDivElement | null>(null);
   const [menuTarget, setMenuTarget] = useState<HTMLDivElement | null>(null);
   const [historySearch, setHistorySearch] = useState(false);
@@ -63,7 +67,12 @@ export function MobileHomeChat(): React.ReactElement {
       const params = new URLSearchParams(window.location.search);
       if (!selectedId && !params.has("session")) {
         params.set("chat", "new");
-        window.history.replaceState(null, "", `?${params.toString()}`);
+        const nextQuery = params.toString();
+        const nextUrl = nextQuery
+          ? `${window.location.pathname}?${nextQuery}`
+          : window.location.pathname;
+        window.history.replaceState(null, "", nextUrl);
+        router.replace(nextUrl, { scroll: false });
       }
     }
   }
@@ -75,12 +84,15 @@ export function MobileHomeChat(): React.ReactElement {
       const params = new URLSearchParams(window.location.search);
       params.delete("session");
       params.set("chat", "new");
-      window.history.replaceState(null, "", `?${params.toString()}`);
+      const nextQuery = params.toString();
+      const nextUrl = nextQuery
+        ? `${window.location.pathname}?${nextQuery}`
+        : window.location.pathname;
+      window.history.replaceState(null, "", nextUrl);
+      router.replace(nextUrl, { scroll: false });
     }
     startNewChat();
   }
-  const sessionParam = searchParams.get("session");
-  const chatParam = searchParams.get("chat");
   const [prevParam, setPrevParam] = useState<string | null>(sessionParam);
   const [prevChatParam, setPrevChatParam] = useState<string | null>(chatParam);
 
@@ -99,6 +111,9 @@ export function MobileHomeChat(): React.ReactElement {
       setHistoryOpen(false);
       setStarted(true);
       setOpen(true);
+    } else {
+      setOpen(false);
+      setSelectedId(null);
     }
   }
   useEffect(() => {
@@ -120,17 +135,17 @@ export function MobileHomeChat(): React.ReactElement {
             params.set("chat", "new");
           }
           const nextQuery = params.toString();
-          window.history.replaceState(
-            null,
-            "",
-            nextQuery ? `?${nextQuery}` : window.location.pathname
-          );
+          const nextUrl = nextQuery
+            ? `${window.location.pathname}?${nextQuery}`
+            : window.location.pathname;
+          window.history.replaceState(null, "", nextUrl);
+          router.replace(nextUrl, { scroll: false });
         }
       }
     };
     window.addEventListener("pansgpt-open-chat", handleOpenChat);
     return () => window.removeEventListener("pansgpt-open-chat", handleOpenChat);
-  }, []);
+  }, [router]);
   useEffect(() => {
     const removed = (event: Event) => {
       if (event instanceof CustomEvent && event.detail?.id === selectedId) {
@@ -141,18 +156,18 @@ export function MobileHomeChat(): React.ReactElement {
           if (params.get("session") === selectedId) {
             params.delete("session");
             const nextQuery = params.toString();
-            window.history.replaceState(
-              null,
-              "",
-              nextQuery ? `?${nextQuery}` : window.location.pathname
-            );
+            const nextUrl = nextQuery
+              ? `${window.location.pathname}?${nextQuery}`
+              : window.location.pathname;
+            window.history.replaceState(null, "", nextUrl);
+            router.replace(nextUrl, { scroll: false });
           }
         }
       }
     };
     window.addEventListener("pansgpt-chat-removed", removed);
     return () => window.removeEventListener("pansgpt-chat-removed", removed);
-  }, [selectedId]);
+  }, [selectedId, router]);
   useEffect(() => {
     if (!open) return;
     const viewport = window.visualViewport;
@@ -174,9 +189,14 @@ export function MobileHomeChat(): React.ReactElement {
         const session = params.get("session");
         if (session) {
           router.replace(`/app/chat?session=${encodeURIComponent(session)}`);
+        } else if (params.get("chat") === "new") {
+          router.replace("/app/chat");
         }
       }
     };
+    if (desktop.matches) {
+      closeOnDesktop();
+    }
     desktop.addEventListener("change", closeOnDesktop);
     return () => {
       viewport?.removeEventListener("resize", update);
@@ -352,7 +372,12 @@ export function MobileHomeChat(): React.ReactElement {
                         const params = new URLSearchParams(window.location.search);
                         params.set("session", id);
                         params.delete("chat");
-                        window.history.replaceState(null, "", `?${params.toString()}`);
+                        const nextQuery = params.toString();
+                        const nextUrl = nextQuery
+                          ? `${window.location.pathname}?${nextQuery}`
+                          : window.location.pathname;
+                        window.history.replaceState(null, "", nextUrl);
+                        router.replace(nextUrl, { scroll: false });
                       }
                       sheet.current?.focus({ preventScroll: true });
                     }}
