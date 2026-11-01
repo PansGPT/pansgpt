@@ -9,6 +9,7 @@ import {
   Pencil,
   Pin,
   PinOff,
+  Share2,
   Trash2,
 } from "lucide-react";
 import {
@@ -29,6 +30,7 @@ import {
   type ChatSessionSummary,
 } from "@/lib/chat-sessions";
 import { ConversationDialog } from "./dialog";
+import { ShareDialog } from "./share-dialog";
 import { ArchiveIcon } from "./archive-icon";
 import { offerConversationUndo } from "./undo-notice";
 import { chatSessionUrl } from "@/lib/chat-navigation";
@@ -52,7 +54,7 @@ export function ChatSessionMenu({
   const request = useRef<AbortController | null>(null);
   const transferring = useRef(false);
   const frame = useRef<number | null>(null);
-  const [panel, setPanel] = useState<"rename" | "delete" | null>(null);
+  const [panel, setPanel] = useState<"rename" | "delete" | "share" | null>(null);
   const [name, setName] = useState(chat.title);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export function ChatSessionMenu({
     },
     [profile?.id, profile?.university_id]
   );
-  function openPanel(next: "rename" | "delete"): void {
+  function openPanel(next: "rename" | "delete" | "share"): void {
     transferring.current = true;
     setName(chat.title);
     setError(null);
@@ -170,6 +172,13 @@ export function ChatSessionMenu({
           </DropdownItem>
           <DropdownItem
             disabled={busy}
+            icon={<Share2 size={16} />}
+            onSelect={() => openPanel("share")}
+          >
+            Share
+          </DropdownItem>
+          <DropdownItem
+            disabled={busy}
             icon={chat.archived_at ? <ArchiveRestore size={16} /> : <ArchiveIcon />}
             onSelect={() => {
               void apply({ archived: !chat.archived_at });
@@ -193,8 +202,15 @@ export function ChatSessionMenu({
           {error}
         </span>
       )}
+      <ShareDialog
+        open={panel === "share"}
+        onOpenChange={(open) => {
+          if (!open) setPanel(null);
+        }}
+        chat={chat}
+      />
       <ConversationDialog
-        open={panel !== null}
+        open={panel === "rename" || panel === "delete"}
         onOpenChange={(open) => {
           if (!open && !busy) setPanel(null);
         }}

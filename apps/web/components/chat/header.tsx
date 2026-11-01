@@ -2,14 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getExternalStoreMessages, useAuiState } from "@assistant-ui/react";
-import { Share2 } from "lucide-react";
-import { Slideout } from "@pansgpt/ui/shell";
 import type { ChatMessageView } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
 import { useRecentChats } from "@/components/shell/dashboard-data";
 import { useDashboard } from "@/components/shell/dashboard-data";
 import { requestSession, type ChatSessionSummary } from "@/lib/chat-sessions";
 import { ChatSessionMenu } from "./session-menu";
+import { ShareDialog } from "./share-dialog";
 
 export function ChatHeader({
   sessionId,
@@ -29,7 +28,6 @@ export function ChatHeader({
   const [metadataError, setMetadataError] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [sharing, setSharing] = useState(false);
-  const [copyStatus, setCopyStatus] = useState<string | null>(null);
   const shareTrigger = useRef<HTMLButtonElement>(null);
   const listed = chats.find((chat) => chat.id === sessionId);
   const publishedTitle = useRef("");
@@ -112,24 +110,6 @@ export function ChatHeader({
         .join("\n\n")
     );
   }, [sharing, title, messages]);
-  async function copy(): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(transcript);
-      setCopyStatus("Conversation copied.");
-    } catch {
-      setCopyStatus("Copy is unavailable. Select the text below and copy it manually.");
-    }
-  }
-  function download(): void {
-    const url = URL.createObjectURL(
-      new Blob([transcript], { type: "text/markdown;charset=utf-8" })
-    );
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "pansgpt-conversation.md";
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
   if (variant === "sheet") {
     if (!sessionId) return null;
     return (
@@ -165,42 +145,12 @@ export function ChatHeader({
         className="study-chat-share"
         disabled={running}
         onClick={() => {
-          setCopyStatus(null);
           setSharing(true);
         }}
       >
-        <Share2 size={16} aria-hidden="true" />
         Share
       </button>
-      <Slideout
-        open={sharing}
-        onOpenChange={setSharing}
-        title="Share conversation"
-        onCloseAutoFocus={(event) => {
-          event.preventDefault();
-          shareTrigger.current?.focus();
-        }}
-        description="Share a copy of this branch. Review the messages before sharing."
-      >
-        <div className="study-chat-share-copy">
-          <p>Includes messages and attachment names. Attached files are not included.</p>
-          <label>
-            Conversation preview
-            <textarea readOnly value={transcript} rows={14} />
-          </label>
-          <div>
-            <button
-              onClick={() => {
-                void copy();
-              }}
-            >
-              Copy conversation
-            </button>
-            <button onClick={download}>Download copy</button>
-          </div>
-          {copyStatus && <p role="status">{copyStatus}</p>}
-        </div>
-      </Slideout>
+      <ShareDialog open={sharing} onOpenChange={setSharing} chat={chat} transcript={transcript} />
     </header>
   );
 }

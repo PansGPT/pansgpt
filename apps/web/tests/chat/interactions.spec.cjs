@@ -1535,17 +1535,8 @@ test("session menus persist organization and share only the selected conversatio
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const share = page.getByRole("dialog", { name: "Share conversation", exact: true });
-  await expect(share.getByLabel("Conversation preview")).toContainText("Original synthetic answer");
-  expect(await share.getByLabel("Conversation preview").inputValue()).not.toMatch(
-    /PRIVATE OTHER BRANCH|PRIVATE INTERNAL REASONING/
-  );
-  await share.getByRole("button", { name: "Copy conversation", exact: true }).click();
-  expect(await page.evaluate(() => window.__copiedTranscript)).toContain(
-    "Original synthetic question"
-  );
-  const download = page.waitForEvent("download");
-  await share.getByRole("button", { name: "Download copy", exact: true }).click();
-  await (await download).saveAs(test.info().outputPath("shared-conversation.md"));
+  await share.getByRole("button", { name: "Copy link", exact: true }).click();
+  expect(await page.evaluate(() => window.__copiedTranscript)).toContain(session);
   await page.keyboard.press("Escape");
   await title.click();
   await page.getByRole("menuitem", { name: "Pin", exact: true }).click();
