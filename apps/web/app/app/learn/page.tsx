@@ -17,13 +17,10 @@ import {
   ArrowUpDown,
   LayoutGrid,
   List,
-  ArrowRight,
-  PlayCircle,
   BookOpen,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
-import { StudyArt } from "@/components/shell/study-art";
 import { learnArticles, type LearnArticle } from "@/components/learn/learn-content";
 import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
@@ -100,7 +97,7 @@ export default function LearnPage(): React.ReactElement {
     return list;
   }, [activeTab, searchQuery, sortMode, bookmarkedSlugs]);
 
-  const recentArticle = learnArticles[0]; // "How to approach a clinical case"
+  const recentArticle = learnArticles[0];
 
   return (
     <div className="learn-mobile-view">
@@ -183,39 +180,6 @@ export default function LearnPage(): React.ReactElement {
       </header>
 
       <div className="learn-body-content">
-        {/* ─── Desktop Spotlight Hero Banner (Option A) ─── */}
-        {recentArticle && (
-          <aside className="learn-desktop-spotlight" aria-label="Continue reading">
-            <div className="learn-spotlight-content">
-              <div className="learn-spotlight-copy">
-                <div className="learn-spotlight-eyebrow">
-                  <span className="learn-spotlight-badge">CONTINUE STUDYING</span>
-                  <span className="learn-spotlight-tag">{recentArticle.shortTag}</span>
-                </div>
-                <h2 className="learn-spotlight-title">{recentArticle.title}</h2>
-                <p className="learn-spotlight-desc">{recentArticle.description}</p>
-                <div className="learn-spotlight-footer">
-                  <span className="learn-spotlight-duration">
-                    {recentArticle.video ? (
-                      <PlayCircle size={15} aria-hidden="true" />
-                    ) : (
-                      <BookOpen size={15} aria-hidden="true" />
-                    )}
-                    {recentArticle.duration}
-                  </span>
-                  <Link href={`/app/learn/${recentArticle.slug}`} className="learn-spotlight-cta">
-                    <span>Resume Guide</span>
-                    <ArrowRight size={14} aria-hidden="true" />
-                  </Link>
-                </div>
-              </div>
-              <div className="learn-spotlight-art" data-art={recentArticle.artKind}>
-                <StudyArt kind={recentArticle.artKind} variant="banner" />
-              </div>
-            </div>
-          </aside>
-        )}
-
         {/* ─── Search input (expandable) ─── */}
         {showSearch && (
           <div className="learn-mobile-search-bar">
