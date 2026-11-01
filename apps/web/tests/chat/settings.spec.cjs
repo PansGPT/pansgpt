@@ -70,6 +70,7 @@ test("settings keeps separate categories, student-facing content and a bounded d
   await nav.getByRole("button", { name: "Appearance", exact: true }).click();
   await chooseSetting(page, "Interface font", "System");
   await chooseSetting(page, "Response font", "Serif");
+  await chooseSetting(page, "Text size", "Large");
   await chooseSetting(page, "Motion preference", "Reduced");
   await modal.getByText("Sepia", { exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");

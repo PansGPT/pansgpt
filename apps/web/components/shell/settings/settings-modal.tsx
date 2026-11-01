@@ -41,6 +41,7 @@ function initialDraft(profile: SettingsModalProps["profile"]): SettingsDraft {
     academicLevel: profile.current_level ?? "",
     interfaceFont: "default",
     responseFont: "sans",
+    textSize: "default",
     motion: "system",
     responseStyle: "balanced",
     replies: true,
