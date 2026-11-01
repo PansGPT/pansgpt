@@ -157,7 +157,10 @@ export function StudyDashboard(): React.ReactElement {
   events.sort(
     (left, right) => left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail)
   );
-  const agenda = events.slice(0, 3);
+  const filteredEvents = events.filter(
+    (event) => event.kind === (activityTab === "tasks" ? "task" : "class")
+  );
+  const agenda = filteredEvents.slice(0, 3);
   return (
     <div className="study-dashboard">
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
@@ -306,7 +309,26 @@ export function StudyDashboard(): React.ReactElement {
           <div className="dashboard-agenda" aria-live="polite">
             <div className="dashboard-agenda-heading">
               <h3>Up next</h3>
-              <span>Classes &amp; tasks</span>
+              <div className="dashboard-agenda-tabs" role="tablist" aria-label="Up next view">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activityTab === "timetable"}
+                  className="dashboard-agenda-tab"
+                  onClick={() => setActivityTab("timetable")}
+                >
+                  Activity
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activityTab === "tasks"}
+                  className="dashboard-agenda-tab"
+                  onClick={() => setActivityTab("tasks")}
+                >
+                  Tasks
+                </button>
+              </div>
             </div>
             {data.loading || data.eventsError ? (
               <ScheduleState
@@ -333,7 +355,12 @@ export function StudyDashboard(): React.ReactElement {
                 </div>
               ))
             ) : (
-              <ScheduleState loading={false} error={false} onRetry={data.reload} />
+              <ScheduleState
+                loading={false}
+                error={false}
+                onRetry={data.reload}
+                kind={activityTab}
+              />
             )}
           </div>
         </div>
@@ -343,7 +370,7 @@ export function StudyDashboard(): React.ReactElement {
               aria-pressed={activityTab === "timetable"}
               onClick={() => setActivityTab("timetable")}
             >
-              Timetable
+              Activity
             </button>
             <button aria-pressed={activityTab === "tasks"} onClick={() => setActivityTab("tasks")}>
               Tasks
