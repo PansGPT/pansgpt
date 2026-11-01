@@ -114,7 +114,28 @@ export default function LearnPage(): React.ReactElement {
           <ArrowLeft size={20} aria-hidden="true" />
         </Link>
 
-        <strong className="learn-mobile-topbar-title">Learn</strong>
+        <h1 className="learn-mobile-topbar-title">Learn</h1>
+
+        <div className="learn-desktop-search">
+          <Search size={15} className="learn-search-icon" aria-hidden="true" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search clinical guides, techniques, career..."
+            aria-label="Search guides"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="learn-desktop-search-clear"
+              aria-label="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
 
         <div className="learn-mobile-top-actions">
           <button
@@ -162,6 +183,39 @@ export default function LearnPage(): React.ReactElement {
       </header>
 
       <div className="learn-body-content">
+        {/* ─── Desktop Spotlight Hero Banner (Option A) ─── */}
+        {recentArticle && (
+          <aside className="learn-desktop-spotlight" aria-label="Continue reading">
+            <div className="learn-spotlight-content">
+              <div className="learn-spotlight-copy">
+                <div className="learn-spotlight-eyebrow">
+                  <span className="learn-spotlight-badge">CONTINUE STUDYING</span>
+                  <span className="learn-spotlight-tag">{recentArticle.shortTag}</span>
+                </div>
+                <h2 className="learn-spotlight-title">{recentArticle.title}</h2>
+                <p className="learn-spotlight-desc">{recentArticle.description}</p>
+                <div className="learn-spotlight-footer">
+                  <span className="learn-spotlight-duration">
+                    {recentArticle.video ? (
+                      <PlayCircle size={15} aria-hidden="true" />
+                    ) : (
+                      <BookOpen size={15} aria-hidden="true" />
+                    )}
+                    {recentArticle.duration}
+                  </span>
+                  <Link href={`/app/learn/${recentArticle.slug}`} className="learn-spotlight-cta">
+                    <span>Resume Guide</span>
+                    <ArrowRight size={14} aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+              <div className="learn-spotlight-art" data-art={recentArticle.artKind}>
+                <StudyArt kind={recentArticle.artKind} variant="banner" />
+              </div>
+            </div>
+          </aside>
+        )}
+
         {/* ─── Search input (expandable) ─── */}
         {showSearch && (
           <div className="learn-mobile-search-bar">
