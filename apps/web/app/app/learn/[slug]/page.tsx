@@ -410,7 +410,7 @@ export default async function LearnLessonPage({
 
       <div className="learn-lesson-layout">
         <article className="learn-lesson-main">
-          <div className="learn-lesson-hero" data-art={article.artKind}>
+          <div className="learn-lesson-hero" data-theme={article.theme} data-art={article.artKind}>
             <StudyArt kind={article.artKind} variant="banner" />
             <span className="learn-lesson-hero-label" aria-hidden="true">
               {article.categoryLabel}
@@ -443,7 +443,11 @@ export default async function LearnLessonPage({
                 href={`/app/learn/${guide.slug}`}
                 className="learn-sidebar-item"
               >
-                <div className="learn-sidebar-thumb" data-art={guide.artKind}>
+                <div
+                  className="learn-sidebar-thumb"
+                  data-theme={guide.theme}
+                  data-art={guide.artKind}
+                >
                   <StudyArt kind={guide.artKind} variant="square" />
                 </div>
                 <div className="learn-sidebar-details">

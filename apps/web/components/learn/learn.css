@@ -516,34 +516,60 @@
 
 .learn-dock-thumb {
   position: relative;
-  width: 32px;
-  height: 44px;
-  border-radius: 4px;
-  background: linear-gradient(135deg, #b91c1c, #991b1b);
-  color: #ffffff;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   flex-shrink: 0;
   overflow: hidden;
+  padding: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: transform 120ms ease;
 }
 
-.learn-dock-thumb-spine {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: rgba(0, 0, 0, 0.25);
+.learn-dock-thumb[data-theme="teal"] {
+  background: #edf8f8;
+  border-color: #d4ebeb;
+  color: #0f766e;
 }
 
-.learn-dock-thumb-title {
-  font-size: 7.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transform: rotate(-90deg);
+.learn-dock-thumb[data-theme="brand"] {
+  background: #eff7f2;
+  border-color: #d5ebd9;
+  color: #047857;
+}
+
+.learn-dock-thumb[data-theme="blue"] {
+  background: #eff5fc;
+  border-color: #d7e4f8;
+  color: #1d4ed8;
+}
+
+.learn-dock-thumb[data-theme="amber"] {
+  background: #fbf5eb;
+  border-color: #f2e3cb;
+  color: #b45309;
+}
+
+.learn-dock-thumb[data-theme="purple"] {
+  background: #f5f2fb;
+  border-color: #e8dffc;
+  color: #6d28d9;
+}
+
+.learn-dock-thumb[data-theme="slate"] {
+  background: #f1f4f7;
+  border-color: #dbe2e8;
+  color: #334155;
+}
+
+.learn-dock-thumb svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .learn-dock-info {
@@ -897,8 +923,49 @@
   overflow: hidden;
   color: var(--fg-brand-primary-600);
   background: var(--bg-tertiary);
+  border: 1px solid var(--border-secondary);
   padding: 16px 12px 40px;
   margin-bottom: 28px;
+}
+
+.learn-lesson-hero[data-theme="teal"] {
+  background: #edf8f8;
+  border-color: #d4ebeb;
+  color: #0f766e;
+}
+
+.learn-lesson-hero[data-theme="brand"] {
+  background: #eff7f2;
+  border-color: #d5ebd9;
+  color: #047857;
+}
+
+.learn-lesson-hero[data-theme="blue"] {
+  background: #eff5fc;
+  border-color: #d7e4f8;
+  color: #1d4ed8;
+}
+
+.learn-lesson-hero[data-theme="amber"] {
+  background: #fbf5eb;
+  border-color: #f2e3cb;
+  color: #b45309;
+}
+
+.learn-lesson-hero[data-theme="purple"] {
+  background: #f5f2fb;
+  border-color: #e8dffc;
+  color: #6d28d9;
+}
+
+.learn-lesson-hero[data-theme="slate"] {
+  background: #f1f4f7;
+  border-color: #dbe2e8;
+  color: #334155;
+}
+
+.learn-lesson-hero .learn-lesson-hero-label {
+  color: currentColor;
 }
 
 .learn-lesson-hero-label {
@@ -1073,6 +1140,42 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.learn-sidebar-thumb[data-theme="teal"] {
+  background: #edf8f8;
+  color: #0f766e;
+  border-color: #d4ebeb;
+}
+
+.learn-sidebar-thumb[data-theme="brand"] {
+  background: #eff7f2;
+  color: #047857;
+  border-color: #d5ebd9;
+}
+
+.learn-sidebar-thumb[data-theme="blue"] {
+  background: #eff5fc;
+  color: #1d4ed8;
+  border-color: #d7e4f8;
+}
+
+.learn-sidebar-thumb[data-theme="amber"] {
+  background: #fbf5eb;
+  color: #b45309;
+  border-color: #f2e3cb;
+}
+
+.learn-sidebar-thumb[data-theme="purple"] {
+  background: #f5f2fb;
+  color: #6d28d9;
+  border-color: #e8dffc;
+}
+
+.learn-sidebar-thumb[data-theme="slate"] {
+  background: #f1f4f7;
+  color: #334155;
+  border-color: #dbe2e8;
 }
 
 .learn-sidebar-thumb[data-art="pills"] {

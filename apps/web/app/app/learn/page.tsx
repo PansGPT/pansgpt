@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { StudyArt } from "@/components/shell/study-art";
 import { learnArticles, type LearnArticle } from "@/components/learn/learn-content";
 import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
@@ -333,10 +334,13 @@ export default function LearnPage(): React.ReactElement {
         {showRecentDock && recentArticle && (
           <aside className="learn-bottom-dock" aria-label="Recently read guide">
             <Link href={`/app/learn/${recentArticle.slug}`} className="learn-dock-content">
-              {/* Mini Book Cover Thumbnail */}
-              <div className="learn-dock-thumb">
-                <span className="learn-dock-thumb-spine" />
-                <span className="learn-dock-thumb-title">PansGPT</span>
+              {/* Mini Card Thumbnail */}
+              <div
+                className="learn-dock-thumb"
+                data-theme={recentArticle.theme}
+                data-art={recentArticle.artKind}
+              >
+                <StudyArt kind={recentArticle.artKind} variant="square" />
               </div>
 
               {/* Title & Progress */}
