@@ -1930,15 +1930,12 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
     .toBeLessThanOrEqual(845);
   expect((await sheet.boundingBox()).y).toBeGreaterThanOrEqual(14);
   await expect(sheet.locator(".mobile-home-chat-header .auth-brand-mark")).toHaveCount(0);
-  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCSS(
-    "border-radius",
-    "50%"
-  );
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCount(0);
+  await expect(
+    sheet.getByRole("button", { name: "Conversation options", exact: true })
+  ).toHaveCount(0);
   const input = sheet.getByLabel("Study question", { exact: true });
   await expect(input).toHaveCSS("font-size", "16px");
-  expect(
-    (await sheet.getByRole("button", { name: "New chat", exact: true }).boundingBox()).height
-  ).toBe(40);
   await input.fill("A private unfinished question");
   await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
   const history = sheet.getByRole("region", { name: "Chat history", exact: true });
@@ -2000,6 +1997,13 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
   await expect(sheet.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
   await expect(sheet.getByText(/PansGPT supports your studies/)).toHaveCount(0);
   await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toBeInViewport();
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCSS(
+    "border-radius",
+    "50%"
+  );
+  expect(
+    (await sheet.getByRole("button", { name: "New chat", exact: true }).boundingBox()).height
+  ).toBe(40);
   expect((await sheet.locator(".study-chat").boundingBox()).x).toBeGreaterThanOrEqual(0);
   await page.screenshot({
     path: test.info().outputPath("mobile-home-chat-sheet-answer.png"),

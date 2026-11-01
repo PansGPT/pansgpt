@@ -19,7 +19,7 @@ export function ChatHeader({
   sessionId: string | null;
   initialTitle?: string;
   variant?: "header" | "sheet";
-}): React.ReactElement {
+}): React.ReactElement | null {
   const { session, profile } = useAuth();
   const { chats } = useRecentChats();
   const { reload } = useDashboard();
@@ -130,15 +130,17 @@ export function ChatHeader({
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  if (variant === "sheet")
+  if (variant === "sheet") {
+    if (!sessionId) return null;
     return (
       <ChatSessionMenu
         chat={chat}
         compactTrigger
-        disabled={!sessionId || running || metadataError}
+        disabled={running || metadataError}
         onChanged={setSaved}
       />
     );
+  }
   return (
     <header className="study-chat-thread-heading">
       <div className="study-chat-heading-copy">

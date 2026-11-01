@@ -16,8 +16,16 @@ import "./mobile-home-chat.css";
 export function MobileHomeChat(): React.ReactElement {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const sessionParam = searchParams.get("session");
-  const chatParam = searchParams.get("chat");
+  const sessionParam =
+    searchParams.get("session") ||
+    (typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("session")
+      : null);
+  const chatParam =
+    searchParams.get("chat") ||
+    (typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("chat")
+      : null);
   const shouldOpenInitial = Boolean(sessionParam || chatParam === "new");
 
   const [open, setOpen] = useState(shouldOpenInitial);
@@ -93,6 +101,23 @@ export function MobileHomeChat(): React.ReactElement {
     }
     startNewChat();
   }
+  const handleSessionCreated = useCallback(
+    (newId: string) => {
+      setSelectedId(newId);
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        params.set("session", newId);
+        params.delete("chat");
+        const nextQuery = params.toString();
+        const nextUrl = nextQuery
+          ? `${window.location.pathname}?${nextQuery}`
+          : window.location.pathname;
+        window.history.replaceState(null, "", nextUrl);
+        router.replace(nextUrl, { scroll: false });
+      }
+    },
+    [router]
+  );
   const [prevParam, setPrevParam] = useState<string | null>(sessionParam);
   const [prevChatParam, setPrevChatParam] = useState<string | null>(chatParam);
 
@@ -291,9 +316,12 @@ export function MobileHomeChat(): React.ReactElement {
             ref={bindSheet}
             className="mobile-home-chat-sheet"
             onInteractOutside={(event) => {
-              // Runtime controls use sibling React portals to preserve drafts on dismissal.
-              // Their popup layers belong to this sheet even when rendered into document.body.
-              const target = event.detail.originalEvent.target;
+              const original = event.detail.originalEvent;
+              if (original && "type" in original && original.type === "focusin") {
+                event.preventDefault();
+                return;
+              }
+              const target = original?.target;
               if (target instanceof Element && target.closest("[data-chat-overlay]"))
                 event.preventDefault();
             }}
@@ -345,9 +373,11 @@ export function MobileHomeChat(): React.ReactElement {
                 </button>
               ) : (
                 <div className="mobile-home-chat-actions">
-                  <button className="shell-icon-button" aria-label="New chat" onClick={newChat}>
-                    <SquarePen size={25} aria-hidden="true" />
-                  </button>
+                  {Boolean(selectedId || pendingFiles) && (
+                    <button className="shell-icon-button" aria-label="New chat" onClick={newChat}>
+                      <SquarePen size={25} aria-hidden="true" />
+                    </button>
+                  )}
                   <div ref={setMenuTarget} />
                 </div>
               )}
@@ -396,6 +426,7 @@ export function MobileHomeChat(): React.ReactElement {
               id={selectedId}
               active={open}
               renderThread={renderThread}
+              onSessionCreated={handleSessionCreated}
               pendingFiles={pendingFiles}
               onFilesConsumed={consumeFiles}
             />
@@ -403,6 +434,7 @@ export function MobileHomeChat(): React.ReactElement {
             <ChatContent
               active={open}
               renderThread={renderThread}
+              onSessionCreated={handleSessionCreated}
               pendingFiles={pendingFiles}
               onFilesConsumed={consumeFiles}
             />

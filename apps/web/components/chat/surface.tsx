@@ -151,11 +151,13 @@ export function ChatContent({
   initialTitle,
   active = true,
   renderThread,
+  onSessionCreated,
   pendingFiles,
   onFilesConsumed,
 }: {
   active?: boolean;
   renderThread?: (thread: ReactNode, controls?: ReactNode) => ReactNode;
+  onSessionCreated?: (sessionId: string) => void;
   initialSessionId?: string | null;
   initialMessages?: ChatMessageView[];
   initialTitle?: string;
@@ -249,6 +251,11 @@ export function ChatContent({
     runtime.thread.composer.setText(initialDraft);
   }, [runtime, initialDraft]);
   useEffect(() => {
+    if (currentSessionId && currentSessionId !== initialSessionId) {
+      onSessionCreated?.(currentSessionId);
+    }
+  }, [currentSessionId, initialSessionId, onSessionCreated]);
+  useEffect(() => {
     function removed(event: Event): void {
       if (
         event instanceof CustomEvent &&
@@ -305,12 +312,14 @@ export function ChatHistory({
   id,
   active = true,
   renderThread,
+  onSessionCreated,
   pendingFiles,
   onFilesConsumed,
 }: {
   id: string;
   active?: boolean;
   renderThread?: (thread: ReactNode, controls?: ReactNode) => ReactNode;
+  onSessionCreated?: (sessionId: string) => void;
   pendingFiles?: { id: string; files: File[] } | null;
   onFilesConsumed?: (id: string) => void;
 }): React.ReactElement {
@@ -374,6 +383,7 @@ export function ChatHistory({
       initialTitle={title}
       active={active}
       renderThread={renderThread}
+      onSessionCreated={onSessionCreated}
       pendingFiles={pendingFiles}
       onFilesConsumed={onFilesConsumed}
     />

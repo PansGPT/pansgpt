@@ -17,7 +17,12 @@ function subscribeDesktop(notify: () => void): () => void {
 
 function ChatRoute(): React.ReactElement {
   const router = useRouter();
-  const id = useSearchParams().get("session");
+  const searchParams = useSearchParams();
+  const id =
+    searchParams.get("session") ||
+    (typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("session")
+      : null);
   const { revision } = useChatDraft();
   const { profile } = useAuth();
 

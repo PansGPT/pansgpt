@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
@@ -410,7 +410,11 @@ function Workspace({
               <div className="shell-route-content">{children}</div>
             </motion.div>
           </main>
-          {pathname === "/app" && <MobileHomeChat />}
+          {pathname === "/app" && (
+            <Suspense fallback={null}>
+              <MobileHomeChat />
+            </Suspense>
+          )}
           {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && !inLearn && (
             <form
               className="shell-mobile-composer p-study-composer"
