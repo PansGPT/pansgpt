@@ -2069,7 +2069,7 @@
     background: color-mix(in srgb, var(--bg-primary) 94%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-secondary);
+    border: 0;
     min-height: 64px;
     padding: max(12px, env(safe-area-inset-top, 0px)) 21px 10px;
   }
@@ -2146,7 +2146,7 @@
     padding: 0 !important;
   }
   .app-shell[data-home="true"] .dashboard-mobile-destinations {
-    padding: 0 0 10px;
+    padding: 5px 0 10px;
   }
   .app-shell[data-home="true"] .dashboard-mobile-destinations a {
     min-height: 38px;
