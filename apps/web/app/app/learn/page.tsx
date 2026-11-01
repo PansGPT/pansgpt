@@ -28,6 +28,20 @@ import "@/components/learn/learn.css";
 
 type FilterTab = "all" | "academics" | "clinical" | "career" | "saved" | "featured";
 
+const filterTabs: Array<{
+  id: FilterTab;
+  label: string;
+  icon: typeof Briefcase;
+  iconSize: number;
+}> = [
+  { id: "all", label: "All", icon: Briefcase, iconSize: 13 },
+  { id: "academics", label: "Academics", icon: GraduationCap, iconSize: 14 },
+  { id: "clinical", label: "Clinical", icon: Target, iconSize: 14 },
+  { id: "career", label: "Career", icon: TrendingUp, iconSize: 14 },
+  { id: "saved", label: "Saved", icon: Bookmark, iconSize: 13 },
+  { id: "featured", label: "Featured", icon: Star, iconSize: 13 },
+];
+
 export default function LearnPage(): React.ReactElement {
   const router = useRouter();
   const { profile } = useAuth();
@@ -207,77 +221,23 @@ export default function LearnPage(): React.ReactElement {
 
         {/* ─── Horizontal Filter Carousel ─── */}
         <nav className="learn-filter-carousel" aria-label="Categories">
-          {/* All Tab */}
-          <button
-            type="button"
-            className="learn-filter-pill-btn"
-            data-active={activeTab === "all" ? "true" : "false"}
-            onClick={() => setActiveTab("all")}
-            aria-pressed={activeTab === "all"}
-          >
-            <Briefcase size={13} aria-hidden="true" />
-            <span>All</span>
-          </button>
-
-          {/* Academics / Study Techniques */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "academics" ? "true" : "false"}
-            onClick={() => setActiveTab("academics")}
-            aria-label="Study Techniques"
-            aria-pressed={activeTab === "academics"}
-          >
-            <GraduationCap size={14} aria-hidden="true" />
-          </button>
-
-          {/* Clinical Skills */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "clinical" ? "true" : "false"}
-            onClick={() => setActiveTab("clinical")}
-            aria-label="Clinical Skills"
-            aria-pressed={activeTab === "clinical"}
-          >
-            <Target size={14} aria-hidden="true" />
-          </button>
-
-          {/* Career & Mindset */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "career" ? "true" : "false"}
-            onClick={() => setActiveTab("career")}
-            aria-label="Career & Mindset"
-            aria-pressed={activeTab === "career"}
-          >
-            <TrendingUp size={14} aria-hidden="true" />
-          </button>
-
-          {/* Saved / Bookmarks */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "saved" ? "true" : "false"}
-            onClick={() => setActiveTab("saved")}
-            aria-label="Saved articles"
-            aria-pressed={activeTab === "saved"}
-          >
-            <Bookmark size={13} aria-hidden="true" />
-          </button>
-
-          {/* Starred / Featured */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "featured" ? "true" : "false"}
-            onClick={() => setActiveTab("featured")}
-            aria-label="Featured guides"
-            aria-pressed={activeTab === "featured"}
-          >
-            <Star size={13} aria-hidden="true" />
-          </button>
+          {filterTabs.map(({ id, label, icon: Icon, iconSize }) => {
+            const isActive = activeTab === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                className={isActive ? "learn-filter-pill-btn" : "learn-filter-icon-btn"}
+                data-active={isActive ? "true" : "false"}
+                onClick={() => setActiveTab(id)}
+                aria-label={label}
+                aria-pressed={isActive}
+              >
+                <Icon size={iconSize} aria-hidden="true" />
+                {isActive && <span>{label}</span>}
+              </button>
+            );
+          })}
         </nav>
 
         {/* ─── Subheader / Controls Row ─── */}

@@ -203,7 +203,7 @@
   background: #ffffff;
   color: #0f172a;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  transition: transform 120ms ease;
+  transition: all 120ms ease;
 }
 
 .learn-filter-pill-btn[data-active="false"] {
@@ -527,7 +527,7 @@
   padding: 4px;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  transition: transform 120ms ease;
+  transition: all 120ms ease;
 }
 
 .learn-dock-thumb[data-theme="teal"] {
