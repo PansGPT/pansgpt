@@ -18,6 +18,12 @@
   --primary: #b45309;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 html,
 body {
   overscroll-behavior-y: none;
