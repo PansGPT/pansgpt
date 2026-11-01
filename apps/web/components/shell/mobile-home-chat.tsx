@@ -371,16 +371,14 @@ export function MobileHomeChat(): React.ReactElement {
                 >
                   <Search size={24} aria-hidden="true" />
                 </button>
-              ) : (
+              ) : selectedId || pendingFiles ? (
                 <div className="mobile-home-chat-actions">
-                  {Boolean(selectedId || pendingFiles) && (
-                    <button className="shell-icon-button" aria-label="New chat" onClick={newChat}>
-                      <SquarePen size={25} aria-hidden="true" />
-                    </button>
-                  )}
+                  <button className="shell-icon-button" aria-label="New chat" onClick={newChat}>
+                    <SquarePen size={25} aria-hidden="true" />
+                  </button>
                   <div ref={setMenuTarget} />
                 </div>
-              )}
+              ) : null}
             </header>
             <div className="mobile-home-chat-views" data-history={historyOpen}>
               <div className="mobile-home-chat-track">

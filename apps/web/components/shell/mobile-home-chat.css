@@ -102,6 +102,9 @@
   height: 44px;
   justify-content: space-evenly;
 }
+.mobile-home-chat-header .mobile-home-chat-actions:empty {
+  display: none;
+}
 .mobile-home-chat-header .mobile-home-chat-actions button {
   border-radius: 50%;
   width: 52px;
