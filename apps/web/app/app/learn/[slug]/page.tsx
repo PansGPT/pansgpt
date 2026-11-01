@@ -12,8 +12,8 @@ function ClinicalCaseBody(): React.ReactElement {
     <div className="learn-lesson-content">
       <p>
         Clinical cases can feel overwhelming at first — a wall of patient information with no
-        obvious starting point. The good news: experienced clinicians don't magically process
-        information faster than you. They use a framework. Here's the one that works.
+        obvious starting point. The good news: experienced clinicians don&apos;t magically process
+        information faster than you. They use a framework. Here&apos;s the one that works.
       </p>
 
       <h2>1. Read the stem twice</h2>
@@ -28,25 +28,25 @@ function ClinicalCaseBody(): React.ReactElement {
         Before you even think about a diagnosis, summarise the patient in a single sentence. For
         example:{" "}
         <em>
-          "A 58-year-old man with a 30-pack-year smoking history presents with progressive
-          exertional dyspnoea and a productive cough over three months."
+          &quot;A 58-year-old man with a 30-pack-year smoking history presents with progressive
+          exertional dyspnoea and a productive cough over three months.&quot;
         </em>{" "}
         This forces clarity and reveals your knowledge gaps.
       </p>
 
       <h2>3. Generate a problem representation</h2>
       <p>
-        Translate raw findings into clinical language. "BP 80/50" becomes "hypotension." Group
-        findings by system: cardiovascular, respiratory, neurological. This abstraction is what
-        separates a differential from a guess.
+        Translate raw findings into clinical language. &quot;BP 80/50&quot; becomes
+        &quot;hypotension.&quot; Group findings by system: cardiovascular, respiratory,
+        neurological. This abstraction is what separates a differential from a guess.
       </p>
 
       <div className="learn-lesson-tip">
         <Lightbulb size={18} aria-hidden="true" />
         <span>
           <strong>Illness scripts:</strong> Build a mental library of disease patterns. When a case
-          matches a script — the epidemiology, time course, and key findings — you'll recognise it
-          faster under exam pressure.
+          matches a script — the epidemiology, time course, and key findings — you&apos;ll recognise
+          it faster under exam pressure.
         </span>
       </div>
 
@@ -61,23 +61,23 @@ function ClinicalCaseBody(): React.ReactElement {
           <strong>Most likely</strong> — the diagnosis that best fits the complete picture
         </li>
         <li>
-          <strong>Other possibilities</strong> — what you'd consider if the likely diagnosis is
+          <strong>Other possibilities</strong> — what you&apos;d consider if the likely diagnosis is
           ruled out
         </li>
       </ul>
 
       <h2>5. Justify each investigation</h2>
       <p>
-        Don't list every test you know. For each investigation, ask: "What am I looking for, and how
-        will this result change my management?" Examiners want to see clinical reasoning, not a
-        shotgun approach.
+        Don&apos;t list every test you know. For each investigation, ask: &quot;What am I looking
+        for, and how will this result change my management?&quot; Examiners want to see clinical
+        reasoning, not a shotgun approach.
       </p>
 
       <h2>6. Synthesise and manage</h2>
       <p>
         Your management plan should flow logically from your diagnosis. Immediate stabilisation
         first (airway, breathing, circulation), then investigations, then definitive treatment. Show
-        that you're thinking about the whole patient — safety netting, follow-up, and patient
+        that you&apos;re thinking about the whole patient — safety netting, follow-up, and patient
         education matter too.
       </p>
 
@@ -142,7 +142,7 @@ function ActiveRecallBody(): React.ReactElement {
       <h2>The biggest mistake</h2>
       <p>
         Starting a study session by reviewing old material before doing active recall. Flip it: test
-        yourself first, then review what you couldn't remember. This is harder and feels less
+        yourself first, then review what you couldn&apos;t remember. This is harder and feels less
         comfortable — which is exactly why it works.
       </p>
 
@@ -158,9 +158,9 @@ function StudyNotesBody(): React.ReactElement {
   return (
     <div className="learn-lesson-content">
       <p>
-        The best study notes aren't a transcript of your lecture — they're a tool for retrieval.
-        Every formatting decision you make should ask: "Will this help me remember and apply this
-        information?" Here's how to build notes that actually work.
+        The best study notes aren&apos;t a transcript of your lecture — they&apos;re a tool for
+        retrieval. Every formatting decision you make should ask: &quot;Will this help me remember
+        and apply this information?&quot; Here&apos;s how to build notes that actually work.
       </p>
 
       <h2>Principle 1: Write less, think more</h2>
@@ -181,12 +181,13 @@ function StudyNotesBody(): React.ReactElement {
           contraindications, key side effects, monitoring.
         </li>
         <li>
-          <strong>Clinical reasoning</strong> → decision trees or if/then frameworks. "If the
-          patient has X, then consider Y before Z."
+          <strong>Clinical reasoning</strong> → decision trees or if/then frameworks. &quot;If the
+          patient has X, then consider Y before Z.&quot;
         </li>
         <li>
           <strong>Mnemonics</strong> → sparingly, only for lists that genuinely need them. Build
-          your own rather than memorising someone else's — the act of creating it aids retention.
+          your own rather than memorising someone else&apos;s — the act of creating it aids
+          retention.
         </li>
       </ul>
 
@@ -207,7 +208,7 @@ function StudyNotesBody(): React.ReactElement {
         notes into a self-test.
       </p>
 
-      <h2>Principle 4: Review and refine, don't rewrite</h2>
+      <h2>Principle 4: Review and refine, don&apos;t rewrite</h2>
       <p>
         Rewriting notes from scratch feels productive but rarely is. Instead, within 24 hours of a
         lecture, add connections to other topics, correct errors, and highlight the 3–5 most
@@ -263,9 +264,10 @@ function PharmacyBeyondCounterBody(): React.ReactElement {
 
       <h2>3. Health Economics &amp; Outcomes Research (HEOR)</h2>
       <p>
-        It is no longer enough for a drug to work — governments and HMOs ask: "Is it cost-effective
-        compared to standard care?" HEOR pharmacists model survival curves, quality-adjusted life
-        years (QALYs), and shape formularies that determine which medications patients can access.
+        It is no longer enough for a drug to work — governments and HMOs ask: &quot;Is it
+        cost-effective compared to standard care?&quot; HEOR pharmacists model survival curves,
+        quality-adjusted life years (QALYs), and shape formularies that determine which medications
+        patients can access.
       </p>
 
       <Link href="/app/chat" className="learn-lesson-cta">
@@ -280,24 +282,25 @@ function CareerMindsetBody(): React.ReactElement {
   return (
     <div className="learn-lesson-content">
       <p>
-        Many pharmacy students fall into the "waiting trap" — waiting for graduation, waiting for
-        internship matching, waiting for someone to hand them a title before doing meaningful work.
-        The most successful students start building their clinical reputation long before their
-        final exams.
+        Many pharmacy students fall into the &quot;waiting trap&quot; — waiting for graduation,
+        waiting for internship matching, waiting for someone to hand them a title before doing
+        meaningful work. The most successful students start building their clinical reputation long
+        before their final exams.
       </p>
 
       <h2>Action precedes motivation</h2>
       <p>
-        Waiting until you "feel ready" to tackle clinical journal reviews or clinical audits usually
-        means waiting indefinitely. Clinical confidence is the byproduct of repeated small actions:
-        presenting a mini-case, auditing an antimicrobial guideline, or drafting a study monograph.
+        Waiting until you &quot;feel ready&quot; to tackle clinical journal reviews or clinical
+        audits usually means waiting indefinitely. Clinical confidence is the byproduct of repeated
+        small actions: presenting a mini-case, auditing an antimicrobial guideline, or drafting a
+        study monograph.
       </p>
 
       <h2>How to build clinical presence now</h2>
       <ul>
         <li>
-          <strong>Audit one drug class per week</strong>: Don't just cram for exams. Pick a drug
-          class and dissect its clinical trials, renal cutoffs, and therapeutic drug monitoring
+          <strong>Audit one drug class per week</strong>: Don&apos;t just cram for exams. Pick a
+          drug class and dissect its clinical trials, renal cutoffs, and therapeutic drug monitoring
           parameters.
         </li>
         <li>
@@ -313,9 +316,9 @@ function CareerMindsetBody(): React.ReactElement {
       <div className="learn-lesson-tip">
         <Lightbulb size={18} aria-hidden="true" />
         <span>
-          <strong>The builder's mindset:</strong> You don't need a license to think like a
-          clinician. Approach every lecture slide with the question: "How does this prevent a
-          patient error?"
+          <strong>The builder&apos;s mindset:</strong> You don&apos;t need a license to think like a
+          clinician. Approach every lecture slide with the question: &quot;How does this prevent a
+          patient error?&quot;
         </span>
       </div>
 
@@ -338,25 +341,25 @@ function BuildCvBody(): React.ReactElement {
 
       <h2>1. Lead with clinical competencies, not just coursework</h2>
       <p>
-        Instead of listing "Attended Clinical Pharmacy lectures," highlight hands-on experience:
-        "Conducted medication reconciliation for 25+ patient cases during hospital clinical
-        rotation, identifying 4 potential drug-drug interactions involving narrow-therapeutic-index
-        agents."
+        Instead of listing &quot;Attended Clinical Pharmacy lectures,&quot; highlight hands-on
+        experience: &quot;Conducted medication reconciliation for 25+ patient cases during hospital
+        clinical rotation, identifying 4 potential drug-drug interactions involving
+        narrow-therapeutic-index agents.&quot;
       </p>
 
       <h2>2. Quantify your contributions</h2>
       <ul>
         <li>
-          <strong>Leadership</strong>: "Led a 4-person student team in university compounding lab
-          optimising topical formulation yield by 18%."
+          <strong>Leadership</strong>: &quot;Led a 4-person student team in university compounding
+          lab optimising topical formulation yield by 18%.&quot;
         </li>
         <li>
-          <strong>Research</strong>: "Co-authored clinical audit on community antibiotic adherence
-          presented at faculty symposium."
+          <strong>Research</strong>: &quot;Co-authored clinical audit on community antibiotic
+          adherence presented at faculty symposium.&quot;
         </li>
         <li>
-          <strong>Community</strong>: "Screened 120+ individuals for hypertension and diabetes
-          during student outreach clinic."
+          <strong>Community</strong>: &quot;Screened 120+ individuals for hypertension and diabetes
+          during student outreach clinic.&quot;
         </li>
       </ul>
 

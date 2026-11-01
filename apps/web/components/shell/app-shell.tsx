@@ -203,7 +203,13 @@ function Workspace({
       } else {
         setSettingsSection("account");
       }
-      setSettingsOpen(true);
+      setPanels((value) => ({
+        ...value,
+        settings: true,
+        profile: false,
+        navigation: false,
+        help: false,
+      }));
     }
     window.addEventListener("pansgpt:open-settings", handleOpenSettings);
     return () => window.removeEventListener("pansgpt:open-settings", handleOpenSettings);
@@ -413,7 +419,16 @@ function Workspace({
                 const prompt = message.trim();
                 if (!prompt) return;
                 setDraft(prompt.slice(0, 4000));
-                router.push("/app/chat");
+                const isMobile =
+                  typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches;
+                if (isMobile) {
+                  router.push("/app?chat=new");
+                  window.dispatchEvent(
+                    new CustomEvent("pansgpt-open-chat", { detail: { id: null } })
+                  );
+                } else {
+                  router.push("/app/chat");
+                }
                 setMessage("");
               }}
             >
@@ -445,7 +460,17 @@ function Workspace({
                   }
                   onClick={() => {
                     setDraft(message.trim().slice(0, 4000));
-                    router.push("/app/chat");
+                    const isMobile =
+                      typeof window !== "undefined" &&
+                      window.matchMedia("(max-width: 860px)").matches;
+                    if (isMobile) {
+                      router.push("/app?chat=new");
+                      window.dispatchEvent(
+                        new CustomEvent("pansgpt-open-chat", { detail: { id: null } })
+                      );
+                    } else {
+                      router.push("/app/chat");
+                    }
                     setMessage("");
                   }}
                 >

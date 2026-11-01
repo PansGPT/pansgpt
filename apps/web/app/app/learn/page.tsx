@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ChevronRight,
@@ -22,7 +21,7 @@ import {
 import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
 import { StudyArt } from "@/components/shell/study-art";
-import { learnArticles, type LearnArticle } from "@/components/learn/learn-content";
+import { learnArticles } from "@/components/learn/learn-content";
 import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
 
@@ -43,7 +42,6 @@ const filterTabs: Array<{
 ];
 
 export default function LearnPage(): React.ReactElement {
-  const router = useRouter();
   const { profile } = useAuth();
   const userInitial =
     Array.from(profile?.first_name || profile?.email || "P")[0]?.toUpperCase() || "P";
@@ -55,7 +53,7 @@ export default function LearnPage(): React.ReactElement {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [showRecentDock, setShowRecentDock] = useState(true);
+  const [showRecentDock] = useState(true);
 
   const toggleBookmark = (slug: string, e: React.MouseEvent) => {
     e.preventDefault();

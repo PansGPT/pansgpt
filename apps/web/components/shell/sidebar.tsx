@@ -10,6 +10,7 @@ import { SamplePreview } from "./sample-preview";
 import { ArchivedChats, ChatSessionMenu } from "@/components/chat/session-menu";
 import { useChatDraft } from "./chat-draft";
 import type { ChatSessionSummary } from "@/lib/chat-sessions";
+import { chatSessionUrl, newChatUrl } from "@/lib/chat-navigation";
 
 export function SidebarLinks({
   close,
@@ -37,7 +38,15 @@ export function SidebarLinks({
   const recent = chats.filter((chat) => !chat.is_pinned);
   const chatRow = (chat: ChatSessionSummary) => (
     <div className="shell-chat-row" key={chat.id}>
-      <Link href={`/app/chat?session=${encodeURIComponent(chat.id)}`} onClick={close}>
+      <Link
+        href={chatSessionUrl(chat.id, Boolean(mobile))}
+        onClick={() => {
+          close();
+          if (mobile) {
+            window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } }));
+          }
+        }}
+      >
         {chat.is_pinned ? (
           <Pin size={16} aria-label="Pinned" />
         ) : (
@@ -84,20 +93,25 @@ export function SidebarLinks({
       </div>
       <div className="shell-new-chat-section">
         <Link
-          href="/app/chat"
+          href={newChatUrl(Boolean(mobile))}
           className="shell-nav-link shell-new-chat shell-touch-feedback"
           aria-label="New chat"
-          data-pressed={mobile && pressed?.pathname === pathname && pressed.href === "/app/chat"}
-          onPointerDown={() => press("/app/chat")}
-          onTouchStart={() => press("/app/chat")}
+          data-pressed={
+            mobile && pressed?.pathname === pathname && pressed.href === newChatUrl(true)
+          }
+          onPointerDown={() => press(newChatUrl(Boolean(mobile)))}
+          onTouchStart={() => press(newChatUrl(Boolean(mobile)))}
           onTouchCancel={() => setPressed(null)}
           onPointerCancel={() => setPressed(null)}
           onPointerLeave={() => setPressed(null)}
           onBlur={() => setPressed(null)}
           onClick={() => {
-            press("/app/chat");
+            press(newChatUrl(Boolean(mobile)));
             startNewChat();
             close();
+            if (mobile) {
+              window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: null } }));
+            }
           }}
         >
           <SquarePen size={19} aria-hidden="true" />

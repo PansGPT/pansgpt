@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal, flushSync } from "react-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowUp, ChevronRight, History, Search, Mic, Plus, SquarePen } from "lucide-react";
 import { DialogPrimitive } from "@pansgpt/ui/shell";
 import { ChatContent, ChatHistory } from "@/components/chat/surface";
@@ -23,7 +24,24 @@ export function MobileHomeChat(): React.ReactElement {
     sheet.current = node;
     setTouchSurface(node);
   }, []);
-  const dismiss = useCallback(() => setOpen(false), []);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const dismiss = useCallback(() => {
+    setOpen(false);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("session") || params.has("chat")) {
+        params.delete("session");
+        params.delete("chat");
+        const nextQuery = params.toString();
+        window.history.replaceState(
+          null,
+          "",
+          nextQuery ? `?${nextQuery}` : window.location.pathname
+        );
+      }
+    }
+  }, []);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [chatTarget, setChatTarget] = useState<HTMLDivElement | null>(null);
@@ -41,18 +59,95 @@ export function MobileHomeChat(): React.ReactElement {
     setHistoryOpen(false);
     setStarted(true);
     setOpen(true);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (!selectedId && !params.has("session")) {
+        params.set("chat", "new");
+        window.history.replaceState(null, "", `?${params.toString()}`);
+      }
+    }
   }
   function newChat(): void {
     setPendingFiles(null);
     setHistoryOpen(false);
     setSelectedId(null);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("session");
+      params.set("chat", "new");
+      window.history.replaceState(null, "", `?${params.toString()}`);
+    }
     startNewChat();
   }
+  const sessionParam = searchParams.get("session");
+  const chatParam = searchParams.get("chat");
+  const [prevParam, setPrevParam] = useState<string | null>(sessionParam);
+  const [prevChatParam, setPrevChatParam] = useState<string | null>(chatParam);
+
+  if (sessionParam !== prevParam || chatParam !== prevChatParam) {
+    setPrevParam(sessionParam);
+    setPrevChatParam(chatParam);
+    if (sessionParam) {
+      setPendingFiles(null);
+      setSelectedId(sessionParam);
+      setHistoryOpen(false);
+      setStarted(true);
+      setOpen(true);
+    } else if (chatParam === "new") {
+      setPendingFiles(null);
+      setSelectedId(null);
+      setHistoryOpen(false);
+      setStarted(true);
+      setOpen(true);
+    }
+  }
+  useEffect(() => {
+    const handleOpenChat = (event: Event) => {
+      if (event instanceof CustomEvent) {
+        const id = event.detail?.id as string | null | undefined;
+        setPendingFiles(null);
+        setSelectedId(id || null);
+        setHistoryOpen(false);
+        setStarted(true);
+        setOpen(true);
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          if (id) {
+            params.set("session", id);
+            params.delete("chat");
+          } else {
+            params.delete("session");
+            params.set("chat", "new");
+          }
+          const nextQuery = params.toString();
+          window.history.replaceState(
+            null,
+            "",
+            nextQuery ? `?${nextQuery}` : window.location.pathname
+          );
+        }
+      }
+    };
+    window.addEventListener("pansgpt-open-chat", handleOpenChat);
+    return () => window.removeEventListener("pansgpt-open-chat", handleOpenChat);
+  }, []);
   useEffect(() => {
     const removed = (event: Event) => {
       if (event instanceof CustomEvent && event.detail?.id === selectedId) {
         setSelectedId(null);
         setHistoryOpen(false);
+        if (typeof window !== "undefined") {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get("session") === selectedId) {
+            params.delete("session");
+            const nextQuery = params.toString();
+            window.history.replaceState(
+              null,
+              "",
+              nextQuery ? `?${nextQuery}` : window.location.pathname
+            );
+          }
+        }
       }
     };
     window.addEventListener("pansgpt-chat-removed", removed);
@@ -73,7 +168,14 @@ export function MobileHomeChat(): React.ReactElement {
     viewport?.addEventListener("scroll", update);
     const desktop = window.matchMedia("(min-width: 861px)");
     const closeOnDesktop = () => {
-      if (desktop.matches) setOpen(false);
+      if (desktop.matches) {
+        setOpen(false);
+        const params = new URLSearchParams(window.location.search);
+        const session = params.get("session");
+        if (session) {
+          router.replace(`/app/chat?session=${encodeURIComponent(session)}`);
+        }
+      }
     };
     desktop.addEventListener("change", closeOnDesktop);
     return () => {
@@ -81,7 +183,7 @@ export function MobileHomeChat(): React.ReactElement {
       viewport?.removeEventListener("scroll", update);
       desktop.removeEventListener("change", closeOnDesktop);
     };
-  }, [open]);
+  }, [open, router]);
   const renderThread = (thread: ReactNode, controls?: ReactNode): ReactNode => (
     <>
       {chatTarget && createPortal(thread, chatTarget)}
@@ -156,7 +258,13 @@ export function MobileHomeChat(): React.ReactElement {
           if (files.length) setPendingFiles({ id: crypto.randomUUID(), files });
         }}
       />
-      <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
+      <DialogPrimitive.Root
+        open={open}
+        onOpenChange={(next) => {
+          if (!next) dismiss();
+          else setOpen(true);
+        }}
+      >
         <DialogPrimitive.Portal>
           <DialogPrimitive.Overlay className="mobile-home-chat-overlay" />
           <DialogPrimitive.Content
@@ -240,6 +348,12 @@ export function MobileHomeChat(): React.ReactElement {
                       setPendingFiles(null);
                       setSelectedId(id);
                       setHistoryOpen(false);
+                      if (typeof window !== "undefined") {
+                        const params = new URLSearchParams(window.location.search);
+                        params.set("session", id);
+                        params.delete("chat");
+                        window.history.replaceState(null, "", `?${params.toString()}`);
+                      }
                       sheet.current?.focus({ preventScroll: true });
                     }}
                   />

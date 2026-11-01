@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Clock3,
   RefreshCw,
-  PlayCircle,
   ClipboardList,
   NotebookText,
   LockKeyhole,

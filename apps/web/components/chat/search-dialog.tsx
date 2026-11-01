@@ -8,6 +8,7 @@ import { searchConversations } from "@/lib/chat-sessions";
 import { searchPreviewText } from "@/lib/search-preview";
 import { useRecentChats } from "@/components/shell/dashboard-data";
 import { ConversationDialog } from "./dialog";
+import { chatSessionUrl } from "@/lib/chat-navigation";
 
 function Highlight({ text, query }: { text: string; query: string }): React.ReactElement {
   const index = text.toLowerCase().indexOf(query.toLowerCase());
@@ -48,6 +49,7 @@ export function ConversationSearch({
   const input = useRef<HTMLInputElement>(null);
   const list = useRef<HTMLDivElement>(null);
   const choosing = useRef(false);
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches;
   useEffect(() => {
     if (!open || query.trim().length < 2) return;
     const controller = new AbortController();
@@ -218,8 +220,15 @@ export function ConversationSearch({
                   data-search-result
                   className="study-chat-search-recent"
                   key={chat.id}
-                  href={`/app/chat?session=${chat.id}`}
-                  onClick={choose}
+                  href={chatSessionUrl(chat.id, isMobile)}
+                  onClick={() => {
+                    choose();
+                    if (isMobile) {
+                      window.dispatchEvent(
+                        new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } })
+                      );
+                    }
+                  }}
                 >
                   <MessageCircle size={18} aria-hidden="true" />
                   <span>
@@ -249,8 +258,19 @@ export function ConversationSearch({
               <Link
                 data-search-result
                 key={result.session_id}
-                href={`/app/chat?session=${result.session_id}${result.message_id ? `&message=${result.message_id}` : ""}`}
-                onClick={choose}
+                href={
+                  isMobile
+                    ? chatSessionUrl(result.session_id, true)
+                    : `/app/chat?session=${result.session_id}${result.message_id ? `&message=${result.message_id}` : ""}`
+                }
+                onClick={() => {
+                  choose();
+                  if (isMobile) {
+                    window.dispatchEvent(
+                      new CustomEvent("pansgpt-open-chat", { detail: { id: result.session_id } })
+                    );
+                  }
+                }}
               >
                 <MessageCircle size={18} aria-hidden="true" />
                 <span>

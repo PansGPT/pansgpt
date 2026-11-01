@@ -31,6 +31,7 @@ import {
 import { ConversationDialog } from "./dialog";
 import { ArchiveIcon } from "./archive-icon";
 import { offerConversationUndo } from "./undo-notice";
+import { chatSessionUrl } from "@/lib/chat-navigation";
 
 export function ChatSessionMenu({
   chat,
@@ -362,10 +363,22 @@ export function ArchivedChats({ onNavigate }: { onNavigate?: () => void }): Reac
                   <span>{chat.title}</span>
                 ) : (
                   <Link
-                    href={`/app/chat?session=${chat.id}`}
+                    href={chatSessionUrl(
+                      chat.id,
+                      typeof window !== "undefined" &&
+                        window.matchMedia("(max-width: 860px)").matches
+                    )}
                     onClick={() => {
                       setOpen(false);
                       onNavigate?.();
+                      if (
+                        typeof window !== "undefined" &&
+                        window.matchMedia("(max-width: 860px)").matches
+                      ) {
+                        window.dispatchEvent(
+                          new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } })
+                        );
+                      }
                     }}
                   >
                     {chat.title}
