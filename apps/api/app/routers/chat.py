@@ -54,10 +54,13 @@ from app.models.chat import (
     ChatSessionListResponse,
     ChatSessionResponse,
     CitationItem,
+    ComplexityLevel,
+    IntentType,
+    RouteType,
     StreamChatRequest,
     VoiceTranscribeResponse,
 )
-from app.models.presentation import PresentationSource
+from app.models.presentation import PresentationPlan, PresentationSource
 from app.models.progress import saved_public_progress
 from app.models.web_search import WebSearchResponse
 
@@ -69,6 +72,16 @@ class RequestDeadlineExceeded(TimeoutError):
 
 
 router = APIRouter(prefix="/ai/chat", tags=["AI & Chat Engine"])
+
+CHAT_ACTION_CONFIG: dict[str, tuple[str, str]] = {
+    "create_document": ("Create a Word document", "create_doc"),
+    "make_slides": ("Make a PowerPoint presentation", "create_pptx"),
+    "create_flashcards": ("Create a flashcard deck", "generate_flashcards"),
+    "plot_graph": ("Plot a graph", "plot_graph"),
+    "create_study_notes": ("Create structured study notes", "create_md"),
+    "make_revision_sheet": ("Create a printable revision sheet", "create_pdf"),
+    "create_mnemonics": ("Create study mnemonics", "generate_mnemonics"),
+}
 
 
 async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
@@ -371,6 +384,8 @@ async def stream_chat_session(
     user_id = str(current_user.id)  # [TENANT FIX]
     university_id = str(require_university(current_user))  # [TENANT FIX]
     await require_owned_session(session_id, current_user, payload.parent_message_id)  # [TENANT FIX]
+    if payload.action_mode and not payload.enable_tools:
+        raise HTTPException(422, "Enable study tools to use this action.")
     if payload.document_id:  # [TENANT FIX]
         await check_document_scope(  # [TENANT FIX]
             payload.document_id,  # [TENANT FIX]
@@ -545,6 +560,7 @@ async def stream_chat_session(
             user_enable_rag=payload.enable_rag,
             user_enable_tools=payload.enable_tools,
             has_attachments=bool(turn.attachments),
+            action_mode=payload.action_mode,
         )
         if await client_disconnected():
             return
@@ -562,6 +578,27 @@ async def stream_chat_session(
             yield f"event: error\ndata: {json.dumps(error)}\n\n"
             yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
             return
+
+        selected_action = CHAT_ACTION_CONFIG.get(payload.action_mode or "")
+        if selected_action and not classification.clarification_required:
+            action_label, skill_name = selected_action
+            classification.intent = IntentType.SKILL_GENERATION
+            classification.complexity = ComplexityLevel.COMPLEX
+            classification.route = RouteType.COMPLEX_PATH
+            classification.requires_tools = True
+            classification.direct_answer = None
+            classification.response_mode = "extended"
+            classification.suggested_skills = [skill_name]
+            if payload.action_mode == "make_slides":
+                slide_count = (
+                    classification.presentation.slide_count if classification.presentation else None
+                )
+                classification.presentation = PresentationPlan(slide_count=slide_count)
+            else:
+                classification.presentation = None
+        else:
+            action_label = ""
+            skill_name = ""
 
         progress.configure(classification.public_progress)
         logger.info(
@@ -716,6 +753,17 @@ async def stream_chat_session(
             general=classification.search_scope == "general",
             has_web_sources=any(item.source_type == "web" for item in citations),
         ) + attachment_context(turn.attachments)
+
+        if selected_action and not classification.clarification_required:
+            system_prompt += (
+                f"\n\nSTUDENT-SELECTED STUDY ACTION: {action_label}. "
+                "The student's chat message is their own topic and instructions; do not replace it "
+                "or ask them to restate the selected action. Create the actual requested deliverable "
+                f"using the backend skill tool `{skill_name}`. Do not substitute a plain-text outline "
+                "or ordinary answer for the deliverable. Follow any retrieved course evidence and "
+                "clinical-safety requirements. If the topic cannot be determined from the current "
+                "message or selected conversation, ask one concise clarification instead of inventing it."
+            )
 
         if image_attachments:
             system_prompt += (

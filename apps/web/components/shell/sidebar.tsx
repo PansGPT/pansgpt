@@ -2,7 +2,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
+import { MessageCircle, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
 import { destinations, mobileDestinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
@@ -50,7 +50,7 @@ export function SidebarLinks({
         {chat.is_pinned ? (
           <Pin size={16} aria-label="Pinned" />
         ) : (
-          <FileText size={17} aria-hidden="true" />
+          <MessageCircle size={16} aria-hidden="true" />
         )}
         <span>{chat.title || "New chat"}</span>
       </Link>
@@ -158,7 +158,7 @@ export function SidebarLinks({
             exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title, index) => (
               <div className="shell-chat-row" key={title}>
                 <button className="shell-sample-chat" onClick={() => setSample(title)}>
-                  <FileText size={17} aria-hidden="true" />
+                  <MessageCircle size={16} aria-hidden="true" />
                   <span>{title}</span>
                 </button>
                 <ChatSessionMenu

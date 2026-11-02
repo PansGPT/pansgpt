@@ -2,7 +2,7 @@
 import { Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Menu, PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
+import { PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ApplicationNavPanel, Button, Slideout, ThemeProvider } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
@@ -107,7 +107,6 @@ function Workspace({
       settings: false,
       help: false,
     });
-  const navigationOpen = panels.pathname === pathname && panels.navigation;
   const searchOpen = panels.pathname === pathname && panels.search;
   const profileOpen = panels.pathname === pathname && panels.profile;
   const settingsOpen = panels.pathname === pathname && panels.settings;
@@ -131,7 +130,7 @@ function Workspace({
             ? ".shell-home-account .shell-account-menu"
             : inLibrary
               ? ".library-mobile-home-button"
-              : ".shell-mobile-menu"
+              : ".shell-home-account .shell-account-menu"
         )
         ?.focus();
   }
@@ -155,9 +154,6 @@ function Workspace({
       help: false,
     }));
   }
-  function setNavigationOpen(open: boolean): void {
-    setPanels((value) => ({ ...value, pathname, navigation: open }));
-  }
   function setSearchOpen(open: boolean): void {
     setPanels((value) => ({
       ...value,
@@ -169,16 +165,7 @@ function Workspace({
     }));
   }
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
-  const navigationOrigin = useRef(pathname);
-  const navigationReturn = useRef<HTMLElement | null>(null);
-  const openWorkspaceNavigation = useCallback(
-    (opener: HTMLElement) => {
-      navigationOrigin.current = pathname;
-      navigationReturn.current = opener;
-      setPanels((value) => ({ ...value, pathname, navigation: true }));
-    },
-    [pathname]
-  );
+  const openWorkspaceNavigation = useCallback((_opener: HTMLElement) => {}, []);
   const openPlannerModal = useCallback(
     (tab: PlannerTab, opener?: HTMLElement) => {
       if (activePlannerModal && plannerTab === tab && modalQuery === "planner") return;
@@ -344,15 +331,7 @@ function Workspace({
         />
       }
       label={mobile ? "Mobile navigation" : "Primary navigation"}
-      navigation={
-        <SidebarLinks
-          mobile={mobile}
-          close={() => {
-            if (mobile) setNavigationOpen(false);
-          }}
-          openSearch={openSearch}
-        />
-      }
+      navigation={<SidebarLinks mobile={mobile} close={() => {}} openSearch={openSearch} />}
     />
   );
   return (
@@ -412,58 +391,6 @@ function Workspace({
                     />
                   </div>
                 )}
-                <Slideout
-                  title="Workspace navigation"
-                  className="shell-navigation-drawer"
-                  description="Find your study tools."
-                  side="left"
-                  open={navigationOpen}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      navigationOrigin.current = pathname;
-                      navigationReturn.current = null;
-                    }
-                    setNavigationOpen(open);
-                  }}
-                  onCloseAutoFocus={(event) => {
-                    if (
-                      navigationOrigin.current === pathname &&
-                      navigationReturn.current?.isConnected &&
-                      !profileOpen &&
-                      !helpOpen
-                    ) {
-                      event.preventDefault();
-                      navigationReturn.current.focus();
-                      return;
-                    }
-                    if (
-                      pathname === "/app" &&
-                      navigationOrigin.current === pathname &&
-                      !profileOpen &&
-                      !helpOpen
-                    ) {
-                      event.preventDefault();
-                      document
-                        .querySelector<HTMLButtonElement>(".shell-home-account .shell-account-menu")
-                        ?.focus();
-                      return;
-                    }
-                    if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
-                      event.preventDefault();
-                      if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
-                    }
-                  }}
-                  trigger={
-                    <button
-                      className="shell-icon-button shell-mobile-menu"
-                      aria-label="Open navigation"
-                    >
-                      <Menu size={22} />
-                    </button>
-                  }
-                >
-                  {panel(true)}
-                </Slideout>
               </div>
             </header>
           )}

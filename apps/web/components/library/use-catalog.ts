@@ -5,7 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { env } from "@/env";
 import { catalogSchema, libraryError } from "@/lib/library-catalog";
 
-export function useCatalog(params: URLSearchParams, revision: number) {
+export function useCatalog(params: URLSearchParams, revision: number, enabled = true) {
   const { session, profile } = useAuth();
   const token = session?.access_token;
   const owner = profile?.id === session?.user.id ? profile?.id : undefined;
@@ -20,7 +20,7 @@ export function useCatalog(params: URLSearchParams, revision: number) {
     error?: string;
   } | null>(null);
   useEffect(() => {
-    if (!token || !owner || !university) return;
+    if (!enabled || !token || !owner || !university) return;
     let active = true;
     const controller = new AbortController();
     const timer = window.setTimeout(
@@ -58,14 +58,14 @@ export function useCatalog(params: URLSearchParams, revision: number) {
       window.clearTimeout(timer);
       controller.abort();
     };
-  }, [key, scope, owner, university, token, path]);
+  }, [enabled, key, scope, owner, university, token, path]);
   // Retain authorized rows during same-filter refreshes so selection/focus survives.
   const current = result?.scope === scope ? result : null;
   return {
     data: current?.data,
     error: current?.error,
-    loading: !current,
-    refreshing: Boolean(token && owner && university && current && current.key !== key),
+    loading: enabled && !current,
+    refreshing: Boolean(enabled && token && owner && university && current && current.key !== key),
     owner: `${owner}:${university}`,
   };
 }

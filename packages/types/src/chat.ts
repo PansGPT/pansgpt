@@ -87,9 +87,19 @@ export type SSEParsedEvent = {
   [Kind in SSEEventType]: { event: Kind; data: SSEEventData[Kind] };
 }[SSEEventType];
 
+export type ChatActionMode =
+  | "create_document"
+  | "make_slides"
+  | "create_flashcards"
+  | "plot_graph"
+  | "create_study_notes"
+  | "make_revision_sheet"
+  | "create_mnemonics";
+
 /** The existing FastAPI stream request; clients never supply provider configuration. */
 export interface ChatStreamRequest {
   message: string;
+  action_mode?: ChatActionMode | null;
   parent_message_id?: string | null;
   document_id?: string | null;
   course_code?: string | null;

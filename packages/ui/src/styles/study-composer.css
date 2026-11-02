@@ -11,9 +11,6 @@
   color: var(--text-primary-900);
   box-shadow: var(--effect-shadow-sm);
 }
-.p-study-composer:focus-within {
-  border-color: var(--border-brand);
-}
 .p-study-composer-row {
   display: flex;
   align-items: center;
