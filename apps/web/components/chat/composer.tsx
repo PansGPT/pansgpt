@@ -1,7 +1,14 @@
 "use client";
-import { useEffect } from "react";
-import { ComposerPrimitive, useAui, useAuiState } from "@assistant-ui/react";
-import { ArrowUp, Mic, Plus, Square } from "lucide-react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import {
+  ComposerPrimitive,
+  getExternalStoreMessages,
+  useAui,
+  useAuiState,
+} from "@assistant-ui/react";
+import { ArrowUp, Info, Mic, Plus, Square } from "lucide-react";
+import type { ChatMessageView } from "@pansgpt/types";
+import { Tooltip } from "@pansgpt/ui/shell";
 import { ChatAttachment } from "./attachment";
 
 /** Native assistant-ui controls, shared Home pill styling. */
@@ -96,13 +103,86 @@ export function ChatComposer({ initialDraft }: { initialDraft?: string }): React
 }
 
 export function ChatEditComposer(): React.ReactElement {
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const text = useAuiState((state) => state.composer.text);
+  const originalText = useAuiState(
+    (state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]?.content ?? ""
+  );
+  const changed = text.trim().length > 0 && text !== originalText;
+
+  useLayoutEffect(() => {
+    const input = inputRef.current;
+    const measure = measureRef.current;
+    if (!input || !measure) return;
+    fitEditInput(input, measure);
+  }, [text]);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    const measure = measureRef.current;
+    const parent = input?.closest(".study-chat-edit")?.parentElement;
+    if (!input || !measure || !parent || typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(() => fitEditInput(input, measure));
+    observer.observe(parent);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <ComposerPrimitive.Root className="study-chat-edit">
-      <ComposerPrimitive.Input aria-label="Edit question" maxLength={10000} rows={3} />
-      <div>
-        <ComposerPrimitive.Cancel>Cancel edit</ComposerPrimitive.Cancel>
-        <ComposerPrimitive.Send>Save as new branch</ComposerPrimitive.Send>
+      <div className="study-chat-edit-input-area">
+        <ComposerPrimitive.Input
+          ref={inputRef}
+          aria-label="Edit question"
+          autoFocus
+          maxLength={10000}
+          rows={1}
+          onInput={(event) => {
+            const measure = measureRef.current;
+            if (measure) fitEditInput(event.currentTarget, measure);
+          }}
+        />
+        <span ref={measureRef} className="study-chat-edit-measure" aria-hidden="true">
+          {text || " "}
+        </span>
+      </div>
+      <div className="study-chat-edit-actions">
+        <Tooltip content="Sending creates a new branch from this question.">
+          <span
+            className="study-chat-edit-info"
+            role="img"
+            aria-label="Editing creates a new branch"
+          >
+            <Info size={15} aria-hidden="true" />
+          </span>
+        </Tooltip>
+        <ComposerPrimitive.Cancel>Cancel</ComposerPrimitive.Cancel>
+        <ComposerPrimitive.Send disabled={!changed}>Send</ComposerPrimitive.Send>
       </div>
     </ComposerPrimitive.Root>
   );
+}
+
+function fitEditInput(input: HTMLTextAreaElement, measure: HTMLSpanElement): void {
+  const form = input.closest<HTMLElement>(".study-chat-edit");
+  const inputArea = input.closest<HTMLElement>(".study-chat-edit-input-area");
+  const parentWidth = form?.parentElement?.clientWidth ?? 760;
+  const areaStyle = inputArea ? getComputedStyle(inputArea) : null;
+  const inputStyle = getComputedStyle(input);
+  const areaPadding = areaStyle
+    ? Number.parseFloat(areaStyle.paddingLeft) + Number.parseFloat(areaStyle.paddingRight)
+    : 0;
+  const areaBorder = areaStyle
+    ? Number.parseFloat(areaStyle.borderLeftWidth) + Number.parseFloat(areaStyle.borderRightWidth)
+    : 0;
+  const inputPadding =
+    Number.parseFloat(inputStyle.paddingLeft) + Number.parseFloat(inputStyle.paddingRight);
+  const inputBorder =
+    Number.parseFloat(inputStyle.borderLeftWidth) + Number.parseFloat(inputStyle.borderRightWidth);
+  const maximumFormWidth = Math.min(760, parentWidth * 0.85);
+  const maximumInputWidth = Math.max(48, maximumFormWidth - areaPadding - areaBorder);
+  const contentWidth = measure.getBoundingClientRect().width + inputPadding + inputBorder;
+  input.style.width = `${Math.min(Math.max(48, contentWidth), maximumInputWidth)}px`;
+  input.style.height = "auto";
+  input.style.height = `${input.scrollHeight}px`;
 }

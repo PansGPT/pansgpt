@@ -937,35 +937,90 @@ button.study-chat-attachment-tile:hover {
   padding: 4px;
 }
 .study-chat-edit {
-  width: min(100%, 760px);
-  padding: 16px;
-  border: 1px solid var(--border-brand);
-  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: fit-content;
+  max-width: min(100%, 760px);
+}
+.study-chat-edit-input-area {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 14px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 10px;
   background: var(--bg-secondary);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.study-chat-edit-input-area:focus-within {
+  border-color: var(--border-brand);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg-brand-primary-600) 22%, transparent);
 }
 .study-chat-edit textarea {
-  width: 100%;
-  resize: vertical;
-  min-height: 100px;
-  padding: 10px;
+  display: block;
+  width: max-content;
+  min-width: 48px;
+  max-width: 100%;
+  min-height: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  resize: none;
+  box-sizing: border-box;
+  padding: 4px;
   color: var(--text-primary-900);
   background: var(--bg-primary);
   border: 1px solid var(--border-secondary);
   border-radius: 8px;
+  font: inherit;
+  line-height: 1.5;
 }
-.study-chat-edit > div {
+.study-chat-edit-measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: none;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+  font: inherit;
+  line-height: 1.6;
+}
+.study-chat-edit-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 10px;
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+}
+.study-chat-edit-info {
+  display: inline-grid;
+  place-items: center;
+  color: var(--text-tertiary-600);
+  cursor: help;
 }
 .study-chat-edit button {
-  padding: 8px 12px;
-  color: var(--text-primary-900);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-secondary);
-  border-radius: 8px;
+  min-height: 30px;
+  padding: 4px 2px;
+  color: var(--text-secondary-700);
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  font: inherit;
+  font-size: 12px;
   cursor: pointer;
+}
+.study-chat-edit-actions button:last-child {
+  padding: 6px 12px;
+  background: var(--fg-brand-primary-600);
+  color: var(--bg-primary);
+}
+.study-chat-edit-actions button:last-child:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary-600);
+  cursor: not-allowed;
 }
 .study-chat-virtual {
   position: relative;
@@ -1068,21 +1123,26 @@ button.study-chat-attachment-tile:hover {
   box-shadow: var(--effect-shadow-sm);
 }
 .study-chat[data-empty="false"] .study-chat-edit {
-  width: 85%;
+  width: fit-content;
+  max-width: 85%;
   align-self: flex-end;
   margin-inline-start: auto;
-  padding: 12px;
-  border-color: var(--border-primary);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.study-chat[data-empty="false"] .study-chat-edit-input-area {
+  padding: 8px 14px;
+  background: var(--bg-primary);
 }
 .study-chat[data-empty="false"] .study-chat-edit textarea {
   border: 0;
   background: transparent;
   resize: none;
   padding: 4px;
+  line-height: inherit;
 }
-.study-chat[data-empty="false"] .study-chat-edit button:last-child {
-  background: var(--fg-brand-primary-600);
-  color: var(--bg-primary);
+.study-chat[data-empty="false"] .study-chat-edit-measure {
+  line-height: inherit;
 }
 @media (max-width: 860px) {
   .study-chat-thread-content {
@@ -1092,6 +1152,9 @@ button.study-chat-attachment-tile:hover {
     padding: 12px 16px;
   }
   .study-chat[data-empty="false"] .study-chat-bubble {
+    font-size: 14px;
+  }
+  .study-chat[data-empty="false"] .study-chat-edit {
     font-size: 14px;
   }
   .study-chat[data-empty="false"] .study-chat-actions button {
