@@ -317,7 +317,7 @@ export function StudyDashboard(): React.ReactElement {
                   className="dashboard-agenda-tab"
                   onClick={() => setActivityTab("timetable")}
                 >
-                  Activity
+                  Timetable
                 </button>
                 <button
                   type="button"
@@ -370,7 +370,7 @@ export function StudyDashboard(): React.ReactElement {
               aria-pressed={activityTab === "timetable"}
               onClick={() => setActivityTab("timetable")}
             >
-              Activity
+              Timetable
             </button>
             <button aria-pressed={activityTab === "tasks"} onClick={() => setActivityTab("tasks")}>
               Tasks
