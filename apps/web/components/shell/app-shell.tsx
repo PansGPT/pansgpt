@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Menu, PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ApplicationNavPanel, Button, Slideout, ThemeProvider } from "@pansgpt/ui/shell";
@@ -22,6 +22,8 @@ import { MobileHomeChat } from "./mobile-home-chat";
 import { WorkspaceNavigationContext } from "./workspace-navigation";
 import type { SettingsSectionId } from "./settings/settings-types";
 import { SettingsModal } from "./settings/settings-modal";
+import { PlannerComingSoon, PlannerModal } from "./planner-modal";
+import { PlannerModalProvider, type PlannerTab } from "./planner-modal-context";
 
 function Brand(): React.ReactElement {
   return (
@@ -35,15 +37,19 @@ function Brand(): React.ReactElement {
 function WorkspaceProviders({
   profile,
   openNavigation,
+  openPlannerModal,
   children,
 }: {
   profile: UserProfile;
   openNavigation: (opener: HTMLElement) => void;
+  openPlannerModal: (tab: PlannerTab, opener?: HTMLElement) => void;
   children: ReactNode;
 }): React.ReactElement {
   return (
     <WorkspaceNavigationContext.Provider value={openNavigation}>
-      <DashboardProvider profile={profile}>{children}</DashboardProvider>
+      <PlannerModalProvider value={openPlannerModal}>
+        <DashboardProvider profile={profile}>{children}</DashboardProvider>
+      </PlannerModalProvider>
     </WorkspaceNavigationContext.Provider>
   );
 }
@@ -57,6 +63,7 @@ function Workspace({
 }): React.ReactElement {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
   const { setDraft } = useChatDraft();
   const reduced = useReducedMotion();
@@ -106,6 +113,13 @@ function Workspace({
   const settingsOpen = panels.pathname === pathname && panels.settings;
   const [settingsSection, setSettingsSection] = useState<SettingsSectionId>("account");
   const profileReturn = useRef<HTMLButtonElement | null>(null);
+  const plannerReturn = useRef<HTMLElement | null>(null);
+  const plannerOpenedFromShell = useRef(false);
+  const modalQuery = searchParams.get("modal");
+  const activePlannerModal =
+    modalQuery === "planner" || modalQuery === "tasks" || modalQuery === "timetable";
+  const plannerTab: PlannerTab =
+    modalQuery === "timetable" || searchParams.get("tab") === "timetable" ? "timetable" : "tasks";
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
     if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
@@ -165,6 +179,56 @@ function Workspace({
     },
     [pathname]
   );
+  const openPlannerModal = useCallback(
+    (tab: PlannerTab, opener?: HTMLElement) => {
+      if (activePlannerModal && plannerTab === tab && modalQuery === "planner") return;
+      if (!activePlannerModal) {
+        plannerReturn.current =
+          opener ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+        plannerOpenedFromShell.current = true;
+      }
+      const target = new URL(window.location.href);
+      target.searchParams.set("modal", "planner");
+      target.searchParams.set("tab", tab);
+      const url = `${target.pathname}${target.search}${target.hash}`;
+      if (activePlannerModal) router.replace(url, { scroll: false });
+      else router.push(url, { scroll: false });
+    },
+    [activePlannerModal, modalQuery, plannerTab, router]
+  );
+  function setPlannerTab(tab: PlannerTab): void {
+    const target = new URL(window.location.href);
+    target.searchParams.set("modal", "planner");
+    target.searchParams.set("tab", tab);
+    router.replace(`${target.pathname}${target.search}${target.hash}`, { scroll: false });
+  }
+  function setPlannerModalOpen(open: boolean): void {
+    if (open) return;
+    if (plannerOpenedFromShell.current) {
+      plannerOpenedFromShell.current = false;
+      router.back();
+      return;
+    }
+    const target = new URL(window.location.href);
+    target.searchParams.delete("modal");
+    target.searchParams.delete("tab");
+    const query = target.searchParams.toString();
+    router.replace(`${target.pathname}${query ? `?${query}` : ""}${target.hash}`, {
+      scroll: false,
+    });
+  }
+  function returnFromPlanner(event: Event): void {
+    event.preventDefault();
+    if (plannerReturn.current?.isConnected && plannerReturn.current.getClientRects().length) {
+      plannerReturn.current.focus({ preventScroll: true });
+      plannerReturn.current = null;
+    } else {
+      main.current?.focus({ preventScroll: true });
+    }
+  }
+  useEffect(() => {
+    if (!activePlannerModal) plannerOpenedFromShell.current = false;
+  }, [activePlannerModal]);
   const openSearch = useCallback(() => {
     searchReturn.current = {
       element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
@@ -292,7 +356,11 @@ function Workspace({
     />
   );
   return (
-    <WorkspaceProviders profile={profile} openNavigation={openWorkspaceNavigation}>
+    <WorkspaceProviders
+      profile={profile}
+      openNavigation={openWorkspaceNavigation}
+      openPlannerModal={openPlannerModal}
+    >
       <div
         className="app-shell"
         data-collapsed={collapsed}
@@ -508,6 +576,27 @@ function Workspace({
           preferences={preferences}
           returnFocus={returnToAccount}
         />
+        {activePlannerModal && (
+          <PlannerModal
+            open
+            title="Study planner"
+            description="View your weekly timetable and manage your study tasks."
+            tab={plannerTab}
+            onTabChange={setPlannerTab}
+            onOpenChange={setPlannerModalOpen}
+            onCloseAutoFocus={returnFromPlanner}
+          >
+            <div
+              id="planner-panel"
+              className="planner-modal-panel"
+              role="tabpanel"
+              aria-label={plannerTab === "tasks" ? "Tasks" : "Timetable"}
+              tabIndex={0}
+            >
+              <PlannerComingSoon tab={plannerTab} />
+            </div>
+          </PlannerModal>
+        )}
         <Slideout
           title="Help"
           description="Find your way around PansGPT."
@@ -616,7 +705,9 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
 export function AppShell({ children }: { children: ReactNode }): React.ReactElement {
   return (
     <ThemeProvider initialTheme="dark">
-      <VerifiedWorkspace>{children}</VerifiedWorkspace>
+      <Suspense fallback={<WorkspaceLoading />}>
+        <VerifiedWorkspace>{children}</VerifiedWorkspace>
+      </Suspense>
     </ThemeProvider>
   );
 }

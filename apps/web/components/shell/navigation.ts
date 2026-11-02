@@ -38,7 +38,12 @@ export const destinations = [
   },
 ] as const;
 
-type Destination = { href: string; label: string; icon: LucideIcon; description: string };
+type Destination = {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  description: string;
+};
 export const mobileDestinations: readonly Destination[] = destinations.flatMap<Destination>(
   (item) =>
     item.href === "/app/library"

@@ -11,8 +11,10 @@ import {
   ClipboardList,
   NotebookText,
   LockKeyhole,
+  Check,
 } from "lucide-react";
-import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
+import { Skeleton, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
+import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
@@ -25,6 +27,7 @@ import { DocumentCard } from "./document-card";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { mobileDestinations } from "./navigation";
+import { useOpenPlannerModal } from "./planner-modal-context";
 type UpcomingEvent = DashboardTimelineEvent;
 
 function recentAge(value: string): string {
@@ -95,8 +98,10 @@ export function StudyDashboard(): React.ReactElement {
   const { profile } = useAuth();
   const router = useRouter();
   const data = useDashboard();
-  const [today] = useState(localTodayIso);
+  const openPlannerModal = useOpenPlannerModal();
+  const today = data.today || localTodayIso();
   const [preview, setPreview] = useState<string | null>(null);
+  const [taskActionError, setTaskActionError] = useState(false);
   const [pressedDestination, setPressedDestination] = useState<string | null>(null);
   const sampleRecent = !data.loading && !data.recentError && !data.recent.length;
   const recentCards = sampleRecent
@@ -123,36 +128,39 @@ export function StudyDashboard(): React.ReactElement {
     const hour = new Date().getHours();
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
   });
-  const events: UpcomingEvent[] = data.tasks.map((task) => ({
-    kind: "task",
-    id: task.id,
-    title: task.title,
-    date: task.due_date,
-    time: task.due_time,
-    detail: [task.due_time?.slice(0, 5), task.subtitle].filter(Boolean).join(" · "),
-  }));
-  for (let offset = 0; offset < 21; offset += 1) {
-    const date = addDateDays(today, offset);
-    const weekday = formatDateOnly(date, { weekday: "long" }).toLowerCase();
-    for (const slot of data.timetable) {
-      if (
-        slot.day.trim().toLowerCase() === weekday ||
-        slot.day.trim().toLowerCase() === weekday.slice(0, 3)
-      )
-        events.push({
-          kind: "class",
-          id: `${slot.id}-${date}`,
-          title: slot.course_title,
-          date,
-          time: slot.start_time || slot.time_slot,
-          timeSlot: slot.time_slot,
-          detail: [slot.start_time?.slice(0, 5) || slot.time_slot, slot.venue]
-            .filter(Boolean)
-            .join(" · "),
-        });
+  async function completeFromActivity(taskId: string): Promise<void> {
+    setTaskActionError(false);
+    try {
+      await data.completeTask(taskId, true);
+    } catch {
+      setTaskActionError(true);
     }
   }
-  const sampleEvents = !data.loading && !data.eventsError && !events.length;
+  const events: UpcomingEvent[] = [
+    ...data.tasks
+      .filter((task) => !task.is_completed)
+      .map((task) => ({
+        kind: "task" as const,
+        id: task.id,
+        title: task.title,
+        date: task.due_date,
+        time: task.due_time,
+        detail: [task.due_time?.slice(0, 5), task.subtitle].filter(Boolean).join(" · "),
+      })),
+    ...data.timetable.map((slot) => ({
+      kind: "class" as const,
+      id: slot.id,
+      title: slot.course_title,
+      date: slot.date,
+      time: slot.start_time_local || slot.start_time,
+      timeSlot: slot.time_slot,
+      detail: [slot.start_time_local?.slice(0, 5) || slot.time_slot, slot.venue]
+        .filter(Boolean)
+        .join(" · "),
+    })),
+  ];
+  const sampleEvents =
+    env.NEXT_PUBLIC_DEMO_MODE === "true" && !data.loading && !data.eventsError && !events.length;
   if (sampleEvents) events.push(...sampleActivities(today));
   events.sort(
     (left, right) => left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail)
@@ -302,6 +310,11 @@ export function StudyDashboard(): React.ReactElement {
           </h2>
           {sampleEvents && <span className="dashboard-sample-badge">Sample</span>}
         </div>
+        {taskActionError && (
+          <p className="dashboard-task-action-error" role="alert">
+            That task could not be marked complete. Try again.
+          </p>
+        )}
         <div className="dashboard-events">
           <div className="dashboard-calendar">
             <StudyActivity today={today} />
@@ -329,6 +342,19 @@ export function StudyDashboard(): React.ReactElement {
                   Tasks
                 </button>
               </div>
+              <Link
+                className="dashboard-agenda-manage"
+                href={`?modal=planner&tab=${activityTab === "tasks" ? "tasks" : "timetable"}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  openPlannerModal(
+                    activityTab === "tasks" ? "tasks" : "timetable",
+                    event.currentTarget
+                  );
+                }}
+              >
+                View all
+              </Link>
             </div>
             {data.loading || data.eventsError ? (
               <ScheduleState
@@ -352,6 +378,16 @@ export function StudyDashboard(): React.ReactElement {
                     <h3>{event.title}</h3>
                     <p>{event.detail || "All day"}</p>
                   </div>
+                  {event.kind === "task" && !sampleEvents && (
+                    <button
+                      type="button"
+                      className="dashboard-task-complete"
+                      aria-label={`Mark ${event.title} complete`}
+                      onClick={() => void completeFromActivity(event.id)}
+                    >
+                      <Check size={16} aria-hidden="true" />
+                    </button>
+                  )}
                 </div>
               ))
             ) : (
@@ -384,6 +420,7 @@ export function StudyDashboard(): React.ReactElement {
               tab={activityTab}
               today={today}
               sample={sampleEvents}
+              onCompleteTask={completeFromActivity}
             />
           )}
         </div>

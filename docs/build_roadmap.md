@@ -1290,8 +1290,8 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 - [x] Implement the approved greeting with student name; university/level details are available in the profile menu.
 - [x] Implement the approved five-column recent-document card grid with actual private PDF thumbnails, scoped browser caching and a labelled library fallback. This supersedes the original horizontal carousel.
 - [x] Implement the shared Home composer routing a memory-only draft into AI Chat.
-- [x] Implement the read-only timetable/task Activities widget with the next three entries, loading/error/retry states and visibly labelled sample previews when empty.
-- [x] Render pending `student_tasks` in the Activities task tab; task creation/completion remains Phase 15 work.
+- [x] Implement the timetable/task Activities widget with loading/error/retry states and sample previews only when `NEXT_PUBLIC_DEMO_MODE=true`.
+- [x] Render owner-scoped tasks in the Activities task tab; creation and completion use Phase 15 FastAPI endpoints.
 - [ ] Implement "Continue Studying" card (last read document + page)
 - [ ] Implement AI usage summary mini widget (credits used today)
 
@@ -1310,7 +1310,7 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 
 ### 10.5 Verification
 
-- [ ] Pytest API: `GET /api/v1/home/summary` returns correct user data
+- [ ] Pytest API: `GET /api/v1/home/dashboard` returns timezone-aware streak activity, owner tasks and university/level timetable occurrences
 - [ ] E2E Playwright: home page loads within 2s on staging
 - [ ] All 5 widgets render with real data on staging
 
@@ -1562,23 +1562,26 @@ The completed boxes below record tested implementation scope, not full Phase 11 
 
 ## 🗓️ PHASE 15 — Timetable + Student Dashboard
 
-### 15.1 Backend Timetable & Dashboard APIs (`apps/api/app/routers/timetable.py` & `dashboard.py`)
+2 November 2026 implementation slice: student task CRUD, task favorites, the recurring timetable read/admin CRUD APIs, a bounded weekly timetable and task manager inside one Settings-sized Study Planner modal, and a completed-task streak heatmap are implemented. The modal uses `/app?modal=planner&tab=tasks` or `/app?modal=planner&tab=timetable`; separate Tasks/Timetable navigation entries are omitted. The API is versioned under `/api/v1`; student task changes derive user/university scope from the verified API identity. Streak activity follows the selected browser IANA timezone and reflects completed tasks only; actual study duration is not recorded. `NEXT_PUBLIC_DEMO_MODE` defaults to `false`. The new timetable columns and task favorite field are in a mirrored migration. API tests, migration application, staging/device journeys and the full Home aggregator (including recents) remain open.
 
-- [ ] Timetable CRUD endpoints: `/api/timetable` (filtered by `university_id`, `level`, `day`)
-- [ ] Single aggregator endpoint: `GET /api/home/dashboard` returns student info + recents + tasks in one call (< 150ms)
-- [ ] Student task CRUD endpoints: `GET /api/tasks`, `POST /api/tasks`, `PATCH /api/tasks/{id}/toggle`
+### 15.1 Backend Timetable & Dashboard APIs (`apps/api/app/routers/academic.py`)
+
+- [x] Student timetable occurrences: `GET /api/v1/timetable` (bounded dates, verified university and level)
+- [x] University-admin timetable CRUD: `/api/v1/admin/timetables`
+- [~] `GET /api/v1/home/dashboard` returns tasks, recurring class occurrences, timezone-aware task activity and current streak; student identity, recent documents/chats, and the <150ms full-home target remain open.
+- [x] Student task CRUD: `GET|POST /api/v1/tasks`, `PATCH|DELETE /api/v1/tasks/{id}`; completion accepts the desired boolean state.
 - [ ] Upcoming class/exam context injected into AI system prompt (via `get_timetable` tool)
 
-### 15.2 Timetable UI & Student Dashboard (`apps/web/app/app/timetable/` & `apps/web/app/app/page.tsx`)
+### 15.2 Timetable UI & Student Dashboard (`apps/web/components/shell/timetable-modal-content.tsx`, `apps/web/components/shell/tasks-modal-content.tsx`)
 
-- [ ] Timetable stored by `university_id`, `level`, `day`, `time_slot`, `course_code`, `venue`
-- [ ] Admin UI to manage timetable per university
-- [ ] Student weekly timetable grid view (`/timetable`)
-- [ ] "Today's Classes" summary widget on Home
+- [x] Add typed `start_time_local`, `end_time_local` and optional effective date bounds while retaining legacy `time_slot`/`start_time` values.
+- [x] Admin UI to create, edit and delete weekly classes for an authorized university.
+- [x] One Settings-sized Study Planner modal contains Timetable and Tasks tabs (`/app?modal=planner&tab=timetable|tasks`); the Home activity card opens the matching tab and closing restores the previous URL state.
+- [x] Home activity tabs use the same server-resolved class occurrences and support optimistic task completion.
 - [ ] `exam_restrictions` — time-locked windows that disable AI assistance during exams
 - [ ] **Omni-recent carousel** (polymorphic): Document (last read page) | Note | AI Chat | Quiz — horizontal scroll
-- [ ] **Unified tasks list**: timetable events + custom `student_tasks` + urgency badges (Today 🔴 / Tomorrow 🟠 / Upcoming ⚪)
-- [ ] Task checkbox → optimistic UI update → `PATCH /api/tasks/{id}/toggle`
+- [x] Keep timetable classes and personal tasks in the approved separate activity tabs; overdue tasks remain visible in the task manager.
+- [x] Task checkbox → optimistic UI update → `PATCH /api/v1/tasks/{id}` with `is_completed`.
 - [ ] Floating action bar: Quick Search | Ask AI | New Note/Task
 
 ---
@@ -1891,7 +1894,7 @@ Core events tracked (behaviour only — never PII):
 
 - [ ] Load test: `POST /api/chat/sessions/{id}/messages` — 100 concurrent users, SSE streaming
 - [ ] Load test: `POST /api/quiz/generate` — job enqueue throughput
-- [ ] Load test: `GET /api/home/dashboard` — aggregator query under real data volume
+- [ ] Load test: `GET /api/v1/home/dashboard` — full aggregator query under real data volume
 - [ ] Target: **p95 API latency < 500ms at 100 concurrent users**
 
 ### 26.3 Database Query Performance

@@ -521,15 +521,29 @@ CREATE TABLE IF NOT EXISTS public.timetables (
   day           text NOT NULL CHECK (day IN ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday')),
   time_slot     text NOT NULL, -- e.g. '08:00 - 10:00'
   start_time    text,
+  start_time_local time,
+  end_time_local time,
+  effective_from date,
+  effective_until date,
   course_code   text NOT NULL,
   course_title  text NOT NULL,
   venue         text,
   created_at    timestamptz NOT NULL DEFAULT now(),
   updated_at    timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (university_id, level, day, time_slot, course_code)
+  UNIQUE (university_id, level, day, time_slot, course_code),
+  CHECK (
+    (start_time_local IS NULL AND end_time_local IS NULL)
+    OR (
+      start_time_local IS NOT NULL
+      AND end_time_local IS NOT NULL
+      AND end_time_local > start_time_local
+    )
+  ),
+  CHECK (effective_from IS NULL OR effective_until IS NULL OR effective_until >= effective_from)
 );
 
 CREATE INDEX IF NOT EXISTS idx_timetables_lookup ON public.timetables(university_id, level, day);
+CREATE INDEX IF NOT EXISTS idx_timetables_effective_lookup ON public.timetables(university_id, level, day, effective_from, effective_until);
 
 CREATE TRIGGER trg_timetables_updated_at
   BEFORE UPDATE ON public.timetables
@@ -548,6 +562,7 @@ CREATE TABLE IF NOT EXISTS public.student_tasks (
   due_date              date NOT NULL,
   due_time              time,
   is_completed          boolean NOT NULL DEFAULT false,
+  is_favorite           boolean NOT NULL DEFAULT false,
   completed_at          timestamptz,
   source                text NOT NULL DEFAULT 'custom' CHECK (source IN ('custom', 'timetable', 'ai_generated')),
   linked_resource_type  text NOT NULL DEFAULT 'none' CHECK (linked_resource_type IN ('document', 'note', 'chat_session', 'quiz', 'none')),
@@ -558,6 +573,7 @@ CREATE TABLE IF NOT EXISTS public.student_tasks (
 
 CREATE INDEX IF NOT EXISTS idx_student_tasks_active ON public.student_tasks(user_id, due_date ASC) WHERE is_completed IS FALSE;
 CREATE INDEX IF NOT EXISTS idx_student_tasks_user ON public.student_tasks(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_student_tasks_due_lookup ON public.student_tasks(user_id, university_id, due_date, due_time) WHERE is_completed IS FALSE;
 
 CREATE TRIGGER trg_student_tasks_updated_at
   BEFORE UPDATE ON public.student_tasks
@@ -977,9 +993,8 @@ CREATE POLICY chat_messages_owner ON public.chat_messages
   );
 
 CREATE POLICY student_tasks_owner ON public.student_tasks
-  FOR ALL TO authenticated
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
+  FOR SELECT TO authenticated
+  USING (user_id = auth.uid());
 
 CREATE POLICY general_notes_owner ON public.general_notes
   FOR ALL TO authenticated
@@ -998,6 +1013,10 @@ CREATE POLICY ai_skills_select ON public.ai_skills
 CREATE POLICY settings_select ON public.system_settings
   FOR SELECT TO authenticated
   USING (true);
+
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER
+  ON TABLE public.student_tasks, public.timetables FROM PUBLIC, anon, authenticated;
+GRANT SELECT ON TABLE public.student_tasks, public.timetables TO authenticated;
 
 
 -- ========================================================

@@ -21,6 +21,7 @@ export * from "./chat";
 export * from "./presentations";
 export * from "./web-search";
 export * from "./library";
+export * from "./academic";
 
 export type { ChatSessionMetadata, ChatSessionUpdateRequest } from "./chat";
 

@@ -67,29 +67,33 @@ export function SidebarLinks({
       <div className="shell-links">
         {(mobile ? mobileDestinations : destinations)
           .filter((item) => !["/app/chat", "/app/notes", "/app/focus"].includes(item.href))
-          .map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="shell-nav-link shell-touch-feedback"
-              aria-label={label}
-              aria-current={isCurrentDestination(pathname, href) ? "page" : undefined}
-              data-pressed={mobile && pressed?.pathname === pathname && pressed.href === href}
-              onPointerDown={() => press(href)}
-              onTouchStart={() => press(href)}
-              onTouchCancel={() => setPressed(null)}
-              onPointerCancel={() => setPressed(null)}
-              onPointerLeave={() => setPressed(null)}
-              onBlur={() => setPressed(null)}
-              onClick={() => {
-                press(href);
-                close();
-              }}
-            >
-              <Icon size={19} aria-hidden="true" />
-              <span>{label}</span>
-            </Link>
-          ))}
+          .map(({ href, label, icon: Icon }) => {
+            const target = href;
+            const active = isCurrentDestination(pathname, href);
+            return (
+              <Link
+                key={href}
+                href={target}
+                className="shell-nav-link shell-touch-feedback"
+                aria-label={label}
+                aria-current={active ? "page" : undefined}
+                data-pressed={mobile && pressed?.pathname === pathname && pressed.href === target}
+                onPointerDown={() => press(target)}
+                onTouchStart={() => press(target)}
+                onTouchCancel={() => setPressed(null)}
+                onPointerCancel={() => setPressed(null)}
+                onPointerLeave={() => setPressed(null)}
+                onBlur={() => setPressed(null)}
+                onClick={() => {
+                  press(target);
+                  close();
+                }}
+              >
+                <Icon size={19} aria-hidden="true" />
+                <span>{label}</span>
+              </Link>
+            );
+          })}
       </div>
       <div className="shell-new-chat-section">
         <Link

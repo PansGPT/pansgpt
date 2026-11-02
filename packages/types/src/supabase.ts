@@ -2004,6 +2004,7 @@ export type Database = {
           due_time: string | null;
           id: string;
           is_completed: boolean;
+          is_favorite: boolean;
           linked_resource_id: string | null;
           linked_resource_type: string;
           source: string;
@@ -2022,6 +2023,7 @@ export type Database = {
           due_time?: string | null;
           id?: string;
           is_completed?: boolean;
+          is_favorite?: boolean;
           linked_resource_id?: string | null;
           linked_resource_type?: string;
           source?: string;
@@ -2040,6 +2042,7 @@ export type Database = {
           due_time?: string | null;
           id?: string;
           is_completed?: boolean;
+          is_favorite?: boolean;
           linked_resource_id?: string | null;
           linked_resource_type?: string;
           source?: string;
@@ -2283,9 +2286,13 @@ export type Database = {
           course_title: string;
           created_at: string;
           day: string;
+          effective_from: string | null;
+          effective_until: string | null;
+          end_time_local: string | null;
           id: string;
           level: Database["public"]["Enums"]["university_level"];
           start_time: string | null;
+          start_time_local: string | null;
           time_slot: string;
           university_id: string;
           updated_at: string;
@@ -2296,9 +2303,13 @@ export type Database = {
           course_title: string;
           created_at?: string;
           day: string;
+          effective_from?: string | null;
+          effective_until?: string | null;
+          end_time_local?: string | null;
           id?: string;
           level: Database["public"]["Enums"]["university_level"];
           start_time?: string | null;
+          start_time_local?: string | null;
           time_slot: string;
           university_id: string;
           updated_at?: string;
@@ -2309,9 +2320,13 @@ export type Database = {
           course_title?: string;
           created_at?: string;
           day?: string;
+          effective_from?: string | null;
+          effective_until?: string | null;
+          end_time_local?: string | null;
           id?: string;
           level?: Database["public"]["Enums"]["university_level"];
           start_time?: string | null;
+          start_time_local?: string | null;
           time_slot?: string;
           university_id?: string;
           updated_at?: string;

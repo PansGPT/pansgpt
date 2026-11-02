@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Check, Circle } from "lucide-react";
 import { formatDateOnly } from "@pansgpt/ui/shell";
 
 export type DashboardTimelineEvent = {
@@ -21,6 +22,8 @@ type TimelineRow = {
   timeLabel?: string;
   detail: string;
   status: string;
+  kind: "task" | "class";
+  eventId: string;
   tone: "brand" | "blue" | "purple" | "neutral";
 };
 
@@ -68,11 +71,13 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
   }
   return {
     id: event.id,
+    eventId: event.id,
     title: event.title,
     date: event.date,
     minutes,
     timeLabel: minutes === null ? event.timeSlot : undefined,
     detail: event.kind === "class" ? "Lecture" : "Task",
+    kind: event.kind,
     status,
     tone: ongoing ? "brand" : event.kind === "task" ? "purple" : "blue",
   };
@@ -85,6 +90,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-pharmacology",
       title: "Pharmacology",
       date: today,
+      eventId: "sample-mobile-pharmacology",
+      kind: "class",
       minutes: 540,
       detail: "Lecture",
       status: "Ongoing",
@@ -94,6 +101,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-clinical",
       title: "Clinical Pharmacy",
       date: today,
+      eventId: "sample-mobile-clinical",
+      kind: "class",
       minutes: 660,
       detail: "Lecture",
       status: "1h 59m",
@@ -103,6 +112,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-study",
       title: "Self Study",
       date: today,
+      eventId: "sample-mobile-study",
+      kind: "task",
       minutes: 840,
       detail: "Library",
       status: "3h",
@@ -112,6 +123,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-notes",
       title: "Review Notes",
       date: today,
+      eventId: "sample-mobile-notes",
+      kind: "task",
       minutes: 960,
       detail: "Notes",
       status: "1h",
@@ -132,11 +145,13 @@ export function MobileActivityTimeline({
   tab,
   today,
   sample,
+  onCompleteTask,
 }: {
   events: DashboardTimelineEvent[];
   tab: "timetable" | "tasks";
   today: string;
   sample: boolean;
+  onCompleteTask: (taskId: string) => Promise<void>;
 }): React.ReactElement {
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
@@ -194,6 +209,17 @@ export function MobileActivityTimeline({
                       <h4>{row.title}</h4>
                       <p>{row.detail}</p>
                     </div>
+                    {row.kind === "task" && !sample && (
+                      <button
+                        type="button"
+                        className="dashboard-timeline-complete"
+                        aria-label={`Mark ${row.title} complete`}
+                        onClick={() => void onCompleteTask(row.eventId)}
+                      >
+                        <Circle size={18} aria-hidden="true" />
+                        <Check size={12} aria-hidden="true" />
+                      </button>
+                    )}
                     <span
                       className="dashboard-timeline-status"
                       data-ongoing={row.status === "Ongoing"}
