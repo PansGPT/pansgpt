@@ -23,6 +23,7 @@ import { WorkspaceNavigationContext } from "./workspace-navigation";
 import type { SettingsSectionId } from "./settings/settings-types";
 import { SettingsModal } from "./settings/settings-modal";
 import { PlannerComingSoon, PlannerModal } from "./planner-modal";
+import { TasksModalView } from "./tasks-modal-view";
 import { PlannerModalProvider, type PlannerTab } from "./planner-modal-context";
 
 function Brand(): React.ReactElement {
@@ -520,7 +521,7 @@ function Workspace({
               aria-label={plannerTab === "tasks" ? "Tasks" : "Timetable"}
               tabIndex={0}
             >
-              <PlannerComingSoon tab={plannerTab} />
+              {plannerTab === "tasks" ? <TasksModalView /> : <PlannerComingSoon tab={plannerTab} />}
             </div>
           </PlannerModal>
         )}

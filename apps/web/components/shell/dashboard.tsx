@@ -411,6 +411,19 @@ export function StudyDashboard(): React.ReactElement {
             <button aria-pressed={activityTab === "tasks"} onClick={() => setActivityTab("tasks")}>
               Tasks
             </button>
+            <Link
+              className="dashboard-agenda-manage"
+              href={`?modal=planner&tab=${activityTab === "tasks" ? "tasks" : "timetable"}`}
+              onClick={(event) => {
+                event.preventDefault();
+                openPlannerModal(
+                  activityTab === "tasks" ? "tasks" : "timetable",
+                  event.currentTarget
+                );
+              }}
+            >
+              View all
+            </Link>
           </div>
           {data.loading || data.eventsError ? (
             <ScheduleState loading={data.loading} error={data.eventsError} onRetry={data.reload} />
