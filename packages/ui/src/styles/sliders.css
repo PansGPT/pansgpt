@@ -12,7 +12,7 @@
 }
 .p-slider-thumb:focus-visible {
   outline: none;
-  box-shadow: var(--effect-focus-ring-shadow-sm);
+  box-shadow: none;
 }
 .p-slider-value {
   position: absolute;
@@ -45,7 +45,7 @@
   cursor: default;
 }
 .p-slider-handle-reference[data-state="focused"] .p-slider-thumb {
-  box-shadow: var(--effect-focus-ring-shadow-sm);
+  box-shadow: none;
 }
 .p-slider-handle-reference > .p-slider-value[data-position="bottom"] {
   top: 32px;

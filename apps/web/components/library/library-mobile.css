@@ -21,41 +21,68 @@
     background: var(--bg-primary);
   }
   .library-mobile-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 25;
     display: flex;
     flex: none;
     align-items: center;
     gap: 12px;
     min-height: 64px;
-    padding: 12px 16px;
+    padding: max(12px, env(safe-area-inset-top, 0px)) 16px 12px;
     border-bottom: 1px solid var(--border-secondary);
-    background: var(--bg-secondary);
+    background: color-mix(in srgb, var(--bg-primary) 94%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
-  .library-mobile-topbar > strong {
+  .library-mobile-topbar > strong,
+  .library-mobile-topbar-title {
     flex: 1;
+    margin: 0;
     color: var(--text-primary-900);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.4px;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
   }
-  .library-mobile-home-button,
-  .library-mobile-top-actions .library-icon-button {
+  .library-mobile-home-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     border: 0;
     border-radius: 8px;
     color: var(--text-secondary-700);
     background: transparent;
+    cursor: pointer;
+    flex: none;
+  }
+  .library-mobile-home-button:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary-900);
+  }
+  .library-mobile-top-actions .library-icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    color: var(--text-secondary-700);
+    background: transparent;
+    cursor: pointer;
   }
   .library-mobile-top-actions {
     display: flex;
-    gap: 4px;
+    align-items: center;
+    gap: 6px;
   }
   .library-mobile-top-actions .library-icon-button:hover {
     background: var(--bg-tertiary);
+    color: var(--text-primary-900);
   }
   .library-toolbar-v2 {
     display: flex;

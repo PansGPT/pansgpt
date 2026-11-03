@@ -40,7 +40,7 @@
 }
 .p-vertical-tab:focus-visible {
   outline: none;
-  box-shadow: var(--effect-focus-ring-shadow-xs);
+  box-shadow: none;
 }
 .p-vertical-tab:disabled {
   color: var(--text-disabled);

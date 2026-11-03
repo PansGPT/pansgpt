@@ -846,8 +846,8 @@
   color: var(--text-primary-900);
 }
 .shell-collapse-docked:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: none;
 }
 .app-shell[data-collapsed="true"] .shell-collapse-docked {
   left: calc(var(--shell-sidebar-width) + 12px);
@@ -1293,8 +1293,8 @@
   box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
 }
 .dashboard-agenda-tab:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: 1px;
+  outline: none;
+  box-shadow: none;
 }
 .dashboard-agenda-heading > span {
   font-size: 10px;
@@ -1567,6 +1567,7 @@
     margin-bottom: 20px;
   }
   .dashboard-activity-tabs button {
+
     min-height: 44px;
     padding: 10px 0;
     border: 0;
@@ -1576,6 +1577,11 @@
     font: inherit;
     font-size: 13px;
     cursor: pointer;
+  }
+  .dashboard-activity-tabs button:focus,
+  .dashboard-activity-tabs button:focus-visible {
+    outline: none;
+    box-shadow: none;
   }
   .dashboard-activity-tabs button[aria-pressed="true"] {
     border-bottom-color: var(--fg-brand-primary-600);
@@ -1988,11 +1994,11 @@
   color: var(--figma-colors-gray-light-mode-950);
 }
 .study-activity-grid button[aria-current="date"] {
-  outline: 1px solid var(--fg-brand-primary-600);
+  outline: 1px solid var(--border-primary);
   outline-offset: 2px;
 }
 .study-activity-grid button[aria-pressed="true"] {
-  outline: 2px solid var(--focus-ring);
+  outline: 1px solid var(--border-primary);
   outline-offset: 2px;
 }
 .study-activity-grid button:disabled {
@@ -2096,7 +2102,7 @@
   .app-shell[data-home="true"] .shell-mobile-brand .shell-brand span::after {
     content: none;
   }
-  .app-shell:is([data-home="true"], [data-learn="true"]) .shell-home-account {
+  .app-shell:is([data-home="true"], [data-learn="true"], [data-library="true"]) .shell-home-account {
     display: block;
   }
   .app-shell[data-home="true"] .shell-mobile-menu {

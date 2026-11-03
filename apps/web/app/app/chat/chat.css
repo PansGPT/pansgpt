@@ -108,7 +108,7 @@
 }
 .study-chat-load-error-actions button:focus-visible,
 .study-chat-load-error-actions a:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
+  outline: 2px solid var(--border-primary);
   outline-offset: 3px;
 }
 .study-chat[data-dragging]::after {
@@ -1027,8 +1027,8 @@ button.study-chat-attachment-tile:hover {
 }
 .study-chat-actions button:focus-visible,
 .study-chat-attachment-card button:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: none;
 }
 .study-chat-actions button:disabled {
   opacity: 0.4;
@@ -1214,8 +1214,8 @@ button.study-chat-attachment-tile:hover {
   color: var(--text-primary-900);
 }
 .study-chat-action-item:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: -2px;
+  outline: none;
+  box-shadow: none;
 }
 .study-chat-action-item > svg {
   flex: none;
@@ -1305,8 +1305,8 @@ button.study-chat-attachment-tile:hover {
   color: var(--text-primary-900);
 }
 .study-chat-action-mode-chip > button:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: none;
 }
 .study-chat-library-context {
   display: flex;
@@ -2064,9 +2064,9 @@ button.study-chat-attachment-tile:hover {
     white-space: nowrap;
   }
   .study-chat-action-source-tile:focus-visible {
-    outline: 2px solid var(--fg-brand-primary-600);
-    outline-offset: 2px;
-  }
+  outline: none;
+  box-shadow: none;
+}
   .study-chat-action-divider {
     flex: none;
     margin: 5px 2px 3px;

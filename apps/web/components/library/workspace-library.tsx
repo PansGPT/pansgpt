@@ -22,6 +22,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Skeleton } from "@pansgpt/ui/shell";
 import type { LibraryDocument, LibraryCourse } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
+import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { usePreferences } from "@/components/shell/use-preferences";
 import { fileSize, materialDate, readingDateGroup } from "@/lib/library-catalog";
 import { DocumentUploadModal } from "@/components/DocumentUploadModal";
 import { DocumentDetails } from "./document-details";
@@ -54,6 +56,7 @@ export function WorkspaceLibrary({
 
 function LibraryContent({ initialQuery }: { initialQuery: string }): React.ReactElement {
   const { session, profile } = useAuth();
+  const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const dashboard = useDashboard();
   const router = useRouter();
   const [today] = useState(() => new Date());
@@ -263,9 +266,9 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             aria-label="Back to Home"
             onClick={() => router.push("/app")}
           >
-            <ArrowLeft size={20} />
+            <ChevronLeft size={20} aria-hidden="true" />
           </button>
-          <strong>Library</strong>
+          <strong className="library-mobile-topbar-title">Library</strong>
           <div className="library-mobile-top-actions">
             {canUpload && (
               <button
@@ -276,6 +279,20 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
               >
                 <Upload size={18} />
               </button>
+            )}
+            {profile && (
+              <div className="shell-home-account">
+                <MobileProfileButton
+                  profile={profile}
+                  credits={preferences.credits}
+                  creditsTotal={preferences.creditsTotal}
+                  onOpen={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
+                    );
+                  }}
+                />
+              </div>
             )}
           </div>
         </header>
