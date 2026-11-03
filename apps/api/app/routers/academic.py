@@ -78,14 +78,14 @@ async def _load_tasks(
         where += " AND is_completed IS FALSE"
     if upcoming_days is not None:
         values.append(today + timedelta(days=upcoming_days))
-        where += f" AND due_date <= ${len(values)}"
+        where += f" AND (due_date IS NULL OR due_date <= ${len(values)})"
     if include_completed:
-        ordering = "due_date DESC, due_time DESC NULLS LAST, created_at DESC"
+        ordering = "due_date DESC NULLS LAST, due_time DESC NULLS LAST, created_at DESC"
     else:
         values.append(today)
         ordering = (
-            f"CASE WHEN due_date < ${len(values)} THEN 0 ELSE 1 END, "
-            "due_date ASC, due_time ASC NULLS LAST, created_at ASC"
+            f"CASE WHEN due_date IS NOT NULL AND due_date < ${len(values)} THEN 0 ELSE 1 END, "
+            "due_date ASC NULLS LAST, due_time ASC NULLS LAST, created_at ASC"
         )
     values.append(limit)
     rows = await conn.fetch(
@@ -310,10 +310,10 @@ async def update_task(
         raise HTTPException(422, "Task title cannot be blank.")
     if any(
         updates[field] is None
-        for field in ("task_type", "due_date", "is_completed", "is_favorite")
+        for field in ("task_type", "is_completed", "is_favorite")
         if field in updates
     ):
-        raise HTTPException(422, "Task type, due date and task state cannot be cleared.")
+        raise HTTPException(422, "Task type and task state cannot be cleared.")
     assignments: list[str] = []
     values: list[Any] = [task_id, user.id, university_id]
     for field, value in updates.items():

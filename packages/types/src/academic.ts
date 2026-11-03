@@ -15,7 +15,7 @@ export interface StudentTaskDto {
   subtitle: string | null;
   course_code: string | null;
   task_type: StudentTaskType;
-  due_date: string;
+  due_date: string | null;
   due_time: string | null;
   is_completed: boolean;
   is_favorite: boolean;
@@ -29,7 +29,7 @@ export interface StudentTaskCreateRequest {
   subtitle?: string | null;
   course_code?: string | null;
   task_type?: StudentTaskType;
-  due_date: string;
+  due_date?: string | null;
   due_time?: string | null;
 }
 

@@ -36,7 +36,7 @@ class StudentTaskCreate(StrictRequest):
     subtitle: str | None = Field(default=None, max_length=300)
     course_code: str | None = Field(default=None, max_length=30)
     task_type: TaskType = "custom"
-    due_date: date
+    due_date: date | None = None
     due_time: time | None = None
 
     @field_validator("due_date", mode="before")
@@ -95,8 +95,8 @@ class StudentTask(StrictRequest):
     subtitle: str | None
     course_code: str | None
     task_type: TaskType
-    due_date: date
-    due_time: time | None
+    due_date: date | None = None
+    due_time: time | None = None
     is_completed: bool
     is_favorite: bool
     completed_at: datetime | None

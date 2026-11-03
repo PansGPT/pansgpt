@@ -25,6 +25,17 @@ import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
 import { createTask, deleteTask, getTasks, updateTask } from "@/lib/academic";
 import { useDashboard } from "./dashboard-data";
+import { SettingsSelect } from "./settings/settings-select";
+
+const CATEGORY_OPTIONS = [
+  { value: "custom", label: "General Task" },
+  { value: "assignment", label: "Assignment" },
+  { value: "reading", label: "Reading" },
+  { value: "lab", label: "Lab Practical" },
+  { value: "presentation", label: "Presentation" },
+  { value: "class", label: "Class" },
+  { value: "meeting", label: "Meeting" },
+] as const;
 
 function localTodayIso(): string {
   const now = new Date();
@@ -34,16 +45,13 @@ function localTodayIso(): string {
   return `${year}-${month}-${day}`;
 }
 
-function parseNaturalDue(
-  rawText: string,
-  todayIso: string
-): {
+function parseNaturalDue(rawText: string): {
   title: string;
-  dueDate: string;
+  dueDate: string | null;
   dueTime: string | null;
 } {
   const text = rawText.trim();
-  let dueDate = todayIso;
+  let dueDate: string | null = null;
   let dueTime: string | null = null;
   let cleanedTitle = text;
 
@@ -59,6 +67,10 @@ function parseNaturalDue(
     dueDate = `${y}-${m}-${d}`;
     cleanedTitle = cleanedTitle.replace(/\btomorrow\b/i, "").trim();
   } else if (/\btoday\b/i.test(cleanedTitle)) {
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    dueDate = `${y}-${m}-${d}`;
     cleanedTitle = cleanedTitle.replace(/\btoday\b/i, "").trim();
   } else {
     // Match weekday names (e.g. "by Friday", "on Monday")
@@ -105,14 +117,16 @@ function parseNaturalDue(
 }
 
 function formatTaskDue(
-  dueDate: string,
+  dueDate: string | null,
   dueTime: string | null,
   todayIso: string
 ): {
   label: string;
   isOverdue: boolean;
   isToday: boolean;
-} {
+} | null {
+  if (!dueDate) return null;
+
   const isToday = dueDate === todayIso;
   const isOverdue = dueDate < todayIso;
 
@@ -229,7 +243,15 @@ export function TasksModalView(): React.ReactElement {
     return tasks
       .filter((task) => !task.is_completed)
       .sort((a, b) => {
-        if (a.due_date !== b.due_date) return a.due_date.localeCompare(b.due_date);
+        // Tasks with due dates first
+        if (a.due_date && b.due_date) {
+          const cmp = a.due_date.localeCompare(b.due_date);
+          if (cmp !== 0) return cmp;
+        } else if (a.due_date && !b.due_date) {
+          return -1;
+        } else if (!a.due_date && b.due_date) {
+          return 1;
+        }
         return a.created_at.localeCompare(b.created_at);
       });
   }, [tasks]);
@@ -268,7 +290,7 @@ export function TasksModalView(): React.ReactElement {
         is_completed: nextCompleted,
       });
       reloadDashboard();
-    } catch (err) {
+    } catch {
       // Rollback
       setTasks((prev) =>
         prev.map((t) => (t.id === task.id ? { ...t, is_completed: task.is_completed } : t))
@@ -314,7 +336,7 @@ export function TasksModalView(): React.ReactElement {
     if (!text || submitting || !token) return;
 
     setSubmitting(true);
-    const parsed = parseNaturalDue(text, todayIso);
+    const parsed = parseNaturalDue(text);
 
     const payload: StudentTaskCreateRequest = {
       title: parsed.title,
@@ -387,8 +409,8 @@ export function TasksModalView(): React.ReactElement {
                       aria-label={`Mark "${task.title}" as complete`}
                       onClick={() => handleToggleComplete(task)}
                     >
-                      <Circle size={19} className="planner-task-circle" />
-                      <Check size={13} className="planner-task-check-icon" />
+                      <Circle size={18} className="planner-task-circle" />
+                      <Check size={12} className="planner-task-check-icon" />
                     </button>
 
                     <div
@@ -410,14 +432,16 @@ export function TasksModalView(): React.ReactElement {
                         {task.course_code && (
                           <span className="planner-task-course-badge">{task.course_code}</span>
                         )}
-                        <span
-                          className={`planner-task-due-badge ${
-                            dueInfo.isOverdue ? "is-overdue" : dueInfo.isToday ? "is-today" : ""
-                          }`}
-                        >
-                          {dueInfo.isOverdue && <Clock size={11} />}
-                          {dueInfo.label}
-                        </span>
+                        {dueInfo && (
+                          <span
+                            className={`planner-task-due-badge ${
+                              dueInfo.isOverdue ? "is-overdue" : dueInfo.isToday ? "is-today" : ""
+                            }`}
+                          >
+                            {dueInfo.isOverdue && <Clock size={11} />}
+                            {dueInfo.label}
+                          </span>
+                        )}
                         {task.subtitle && (
                           <span className="planner-task-notes-indicator" title="Has notes">
                             <FileText size={11} />
@@ -470,8 +494,8 @@ export function TasksModalView(): React.ReactElement {
                             aria-label={`Mark "${task.title}" as incomplete`}
                             onClick={() => handleToggleComplete(task)}
                           >
-                            <Circle size={19} className="planner-task-circle" />
-                            <Check size={13} className="planner-task-check-icon" />
+                            <Circle size={18} className="planner-task-circle" />
+                            <Check size={12} className="planner-task-check-icon" />
                           </button>
 
                           <div
@@ -601,7 +625,7 @@ function TaskDetailSidebar({
   onToggleComplete: () => void;
 }): React.ReactElement {
   const [title, setTitle] = useState(task.title);
-  const [dueDate, setDueDate] = useState(task.due_date);
+  const [dueDate, setDueDate] = useState<string | null>(task.due_date);
   const [dueTime, setDueTime] = useState(task.due_time || "");
   const [courseCode, setCourseCode] = useState(task.course_code || "");
   const [taskType, setTaskType] = useState<StudentTaskType>(task.task_type || "custom");
@@ -633,8 +657,7 @@ function TaskDetailSidebar({
     }
   };
 
-  const handleDueDateChange = (newDate: string) => {
-    if (!newDate) return;
+  const handleDueDateChange = (newDate: string | null) => {
     setDueDate(newDate);
     if (newDate !== task.due_date) {
       void onUpdate(task.id, { due_date: newDate });
@@ -723,10 +746,21 @@ function TaskDetailSidebar({
               <input
                 type="date"
                 className="planner-sidebar-input"
-                value={dueDate}
-                onChange={(e) => handleDueDateChange(e.target.value)}
+                value={dueDate || ""}
+                onChange={(e) => handleDueDateChange(e.target.value || null)}
               />
             </div>
+            {dueDate && (
+              <button
+                type="button"
+                className="planner-sidebar-clear-btn"
+                onClick={() => handleDueDateChange(null)}
+                title="Clear due date"
+                aria-label="Clear due date"
+              >
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* Due Time */}
@@ -749,6 +783,7 @@ function TaskDetailSidebar({
                 className="planner-sidebar-clear-btn"
                 onClick={() => handleDueTimeChange("")}
                 title="Clear time"
+                aria-label="Clear time"
               >
                 <X size={13} />
               </button>
@@ -774,26 +809,19 @@ function TaskDetailSidebar({
             </div>
           </div>
 
-          {/* Category */}
+          {/* Category with SettingsSelect */}
           <div className="planner-sidebar-row">
             <span className="planner-sidebar-row-icon">
               <Tag size={16} />
             </span>
             <div className="planner-sidebar-row-content">
               <span className="planner-sidebar-row-label">Category</span>
-              <select
-                className="planner-sidebar-select"
+              <SettingsSelect
+                label="Category"
                 value={taskType}
-                onChange={(e) => handleTaskTypeChange(e.target.value as StudentTaskType)}
-              >
-                <option value="custom">General Task</option>
-                <option value="assignment">Assignment</option>
-                <option value="reading">Reading</option>
-                <option value="lab">Lab Practical</option>
-                <option value="presentation">Presentation</option>
-                <option value="class">Class</option>
-                <option value="meeting">Meeting</option>
-              </select>
+                options={CATEGORY_OPTIONS}
+                onValueChange={(val) => handleTaskTypeChange(val as StudentTaskType)}
+              />
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import { formatDateOnly } from "@pansgpt/ui/shell";
 export type DashboardTimelineEvent = {
   id: string;
   title: string;
-  date: string;
+  date: string | null;
   detail: string;
   kind: "task" | "class";
   time?: string | null;
@@ -17,7 +17,7 @@ export type DashboardTimelineEvent = {
 type TimelineRow = {
   id: string;
   title: string;
-  date: string;
+  date: string | null;
   minutes: number | null;
   timeLabel?: string;
   detail: string;
@@ -49,7 +49,7 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
   const minutes =
     (/:|am|pm/i.test(explicitTime) ? timeMinutes(explicitTime) : null) ??
     (/:|am|pm/i.test(slotStart) ? timeMinutes(slotStart) : null);
-  const start = minutes === null ? null : new Date(`${event.date}T00:00:00`);
+  const start = minutes === null || !event.date ? null : new Date(`${event.date}T00:00:00`);
   start?.setMinutes(minutes ?? 0);
   const endMinutes = range.length === 2 ? timeMinutes(range[1] || "") : null;
   const end =
@@ -58,7 +58,7 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
       : null;
   const difference = start ? Math.ceil((start.getTime() - now) / 60000) : null;
   const ongoing = !!start && !!end && start.getTime() <= now && end.getTime() > now;
-  let status = event.timeSlot ? "Scheduled" : "All day";
+  let status = event.timeSlot ? "Scheduled" : !event.date ? "No due date" : "All day";
   if (ongoing) status = "Ongoing";
   else if (difference !== null) {
     if (difference > 1440) status = "Upcoming";
@@ -163,10 +163,14 @@ export function MobileActivityTimeline({
     : events
         .filter((event) => event.kind === (tab === "tasks" ? "task" : "class"))
         .map((event) => eventRow(event, now))
-        .sort(
-          (left, right) =>
+        .sort((left, right) => {
+          if (!left.date && !right.date) return (left.minutes ?? 1440) - (right.minutes ?? 1440);
+          if (!left.date) return 1;
+          if (!right.date) return -1;
+          return (
             left.date.localeCompare(right.date) || (left.minutes ?? 1440) - (right.minutes ?? 1440)
-        )
+          );
+        })
         .slice(0, 5);
   const dates = [...new Set(rows.map((row) => row.date))];
   if (!rows.length)
@@ -182,10 +186,18 @@ export function MobileActivityTimeline({
       aria-label={`${sample ? "Sample " : ""}${tab === "tasks" ? "tasks" : "timetable"}`}
     >
       {dates.map((date) => (
-        <section key={date} className="dashboard-timeline-day">
+        <section key={date || "no-due-date"} className="dashboard-timeline-day">
           <header>
-            <h3>{date === today ? "Today" : formatDateOnly(date, { weekday: "long" })}</h3>
-            <p>{formatDateOnly(date, { weekday: "short", day: "numeric", month: "short" })}</p>
+            <h3>
+              {!date
+                ? "No due date"
+                : date === today
+                  ? "Today"
+                  : formatDateOnly(date, { weekday: "long" })}
+            </h3>
+            {date ? (
+              <p>{formatDateOnly(date, { weekday: "short", day: "numeric", month: "short" })}</p>
+            ) : null}
           </header>
           <ol>
             {rows
@@ -194,9 +206,11 @@ export function MobileActivityTimeline({
                 <li key={row.id} data-tone={row.tone}>
                   <time
                     dateTime={
-                      row.minutes === null
-                        ? date
-                        : `${date}T${String(Math.floor(row.minutes / 60)).padStart(2, "0")}:${String(row.minutes % 60).padStart(2, "0")}`
+                      !date
+                        ? undefined
+                        : row.minutes === null
+                          ? date
+                          : `${date}T${String(Math.floor(row.minutes / 60)).padStart(2, "0")}:${String(row.minutes % 60).padStart(2, "0")}`
                     }
                   >
                     {row.timeLabel || clockLabel(row.minutes)}

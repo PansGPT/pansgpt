@@ -162,9 +162,12 @@ export function StudyDashboard(): React.ReactElement {
   const sampleEvents =
     env.NEXT_PUBLIC_DEMO_MODE === "true" && !data.loading && !data.eventsError && !events.length;
   if (sampleEvents) events.push(...sampleActivities(today));
-  events.sort(
-    (left, right) => left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail)
-  );
+  events.sort((left, right) => {
+    if (!left.date && !right.date) return left.detail.localeCompare(right.detail);
+    if (!left.date) return 1;
+    if (!right.date) return -1;
+    return left.date.localeCompare(right.date) || left.detail.localeCompare(right.detail);
+  });
   const filteredEvents = events.filter(
     (event) => event.kind === (activityTab === "tasks" ? "task" : "class")
   );
@@ -309,6 +312,20 @@ export function StudyDashboard(): React.ReactElement {
             <span className="dashboard-mobile-label">Activity</span>
           </h2>
           {sampleEvents && <span className="dashboard-sample-badge">Sample</span>}
+          <Link
+            className="dashboard-mobile-view-all"
+            href={`?modal=planner&tab=${activityTab === "tasks" ? "tasks" : "timetable"}`}
+            onClick={(event) => {
+              event.preventDefault();
+              openPlannerModal(
+                activityTab === "tasks" ? "tasks" : "timetable",
+                event.currentTarget
+              );
+            }}
+          >
+            View all
+            <ChevronRight size={17} aria-hidden="true" />
+          </Link>
         </div>
         {taskActionError && (
           <p className="dashboard-task-action-error" role="alert">
@@ -367,11 +384,17 @@ export function StudyDashboard(): React.ReactElement {
                 <div className="dashboard-event" key={event.id}>
                   <div className="dashboard-event-date">
                     <strong>
-                      {event.date === today
-                        ? "Today"
-                        : formatDateOnly(event.date, { weekday: "short" })}
+                      {!event.date
+                        ? "—"
+                        : event.date === today
+                          ? "Today"
+                          : formatDateOnly(event.date, { weekday: "short" })}
                     </strong>
-                    <span>{formatDateOnly(event.date, { month: "short", day: "numeric" })}</span>
+                    <span>
+                      {event.date
+                        ? formatDateOnly(event.date, { month: "short", day: "numeric" })
+                        : "No date"}
+                    </span>
                   </div>
                   <span className="dashboard-event-dot" aria-hidden="true" />
                   <div>
@@ -411,19 +434,6 @@ export function StudyDashboard(): React.ReactElement {
             <button aria-pressed={activityTab === "tasks"} onClick={() => setActivityTab("tasks")}>
               Tasks
             </button>
-            <Link
-              className="dashboard-agenda-manage"
-              href={`?modal=planner&tab=${activityTab === "tasks" ? "tasks" : "timetable"}`}
-              onClick={(event) => {
-                event.preventDefault();
-                openPlannerModal(
-                  activityTab === "tasks" ? "tasks" : "timetable",
-                  event.currentTarget
-                );
-              }}
-            >
-              View all
-            </Link>
           </div>
           {data.loading || data.eventsError ? (
             <ScheduleState loading={data.loading} error={data.eventsError} onRetry={data.reload} />

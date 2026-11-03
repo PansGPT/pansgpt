@@ -1587,6 +1587,14 @@
   }
 }
 
+.dashboard-mobile-view-all {
+  display: none;
+}
+@media (max-width: 860px) {
+  .dashboard-mobile-view-all {
+    display: inline-flex;
+  }
+}
 .dashboard-mobile-label {
   display: none;
 }
@@ -2962,7 +2970,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 14px;
+  min-height: 48px;
+  padding: 8px 12px;
   border-radius: 8px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-secondary);
@@ -2986,8 +2995,8 @@
   display: grid;
   place-items: center;
   flex: none;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -3020,12 +3029,13 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
-  gap: 3px;
+  gap: 2px;
   cursor: pointer;
   text-align: left;
 }
 .planner-task-title-text {
-  font-size: 14px;
+  font-size: 13.5px;
+  line-height: 1.25;
   font-weight: 450;
   color: var(--text-primary-900);
   overflow: hidden;
@@ -3354,6 +3364,20 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.planner-sidebar-row .settings-select-trigger {
+  width: 100%;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 2px 0;
+  min-height: 24px;
+  font-size: 13.5px;
+  color: var(--text-primary-900);
+  box-shadow: none !important;
+}
+.planner-sidebar-row .settings-select-trigger:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
 .planner-sidebar-input,
 .planner-sidebar-select {
   width: 100%;
@@ -3461,11 +3485,11 @@
   @keyframes taskSidebarMobileIn {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateX(100%);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0);
     }
   }
 }
