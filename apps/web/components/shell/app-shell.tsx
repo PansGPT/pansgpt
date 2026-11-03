@@ -174,7 +174,7 @@ function Workspace({
     }));
   }
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
-  const openWorkspaceNavigation = useCallback((_opener: HTMLElement) => {}, []);
+  const openWorkspaceNavigation = useCallback(() => {}, []);
   const openPlannerModal = useCallback(
     (tab: PlannerTab, opener?: HTMLElement, taskId?: string) => {
       setPlannerTaskId(taskId ?? null);

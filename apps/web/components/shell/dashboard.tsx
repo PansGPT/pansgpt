@@ -17,6 +17,7 @@ import {
   Check,
 } from "lucide-react";
 import { Skeleton, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
+import type { StudentTaskDto } from "@pansgpt/types";
 import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
@@ -98,6 +99,80 @@ function ScheduleState({
   );
 }
 
+function DashboardTasksList({
+  tasks,
+  today,
+  onComplete,
+  onSelect,
+}: {
+  tasks: StudentTaskDto[];
+  today: string;
+  onComplete: (taskId: string) => Promise<void>;
+  onSelect: (taskId: string, target?: HTMLElement) => void;
+}): React.ReactElement {
+  return (
+    <div className="planner-tasks-list dashboard-tasks-embed" role="list">
+      {tasks.map((task) => {
+        const dueInfo = formatTaskDue(task.due_date, task.due_time, today);
+        return (
+          <div
+            key={task.id}
+            className="planner-task-row dashboard-task-card"
+            role="button"
+            tabIndex={0}
+            onClick={(e) => {
+              onSelect(task.id, e.currentTarget);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSelect(task.id, e.currentTarget);
+              }
+            }}
+          >
+            <button
+              type="button"
+              className="planner-task-checkbox"
+              aria-label={`Mark "${task.title}" as complete`}
+              onClick={(e) => {
+                e.stopPropagation();
+                void onComplete(task.id);
+              }}
+            >
+              <Circle size={18} className="planner-task-circle" />
+              <Check size={12} className="planner-task-check-icon" />
+            </button>
+
+            <div className="planner-task-content">
+              <span className="planner-task-title-text">{task.title}</span>
+              <div className="planner-task-meta">
+                {task.course_code && (
+                  <span className="planner-task-course-badge">{task.course_code}</span>
+                )}
+                {dueInfo && (
+                  <span
+                    className={`planner-task-due-badge ${
+                      dueInfo.isOverdue ? "is-overdue" : dueInfo.isToday ? "is-today" : ""
+                    }`}
+                  >
+                    {dueInfo.isOverdue && <Clock size={11} />}
+                    {dueInfo.label}
+                  </span>
+                )}
+                {task.subtitle && (
+                  <span className="planner-task-notes-indicator" title="Has notes">
+                    <FileText size={11} />
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function StudyDashboard(): React.ReactElement {
   const { profile } = useAuth();
   const router = useRouter();
@@ -133,6 +208,7 @@ export function StudyDashboard(): React.ReactElement {
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
   });
   async function completeFromActivity(taskId: string): Promise<void> {
+    if (taskId.startsWith("sample-")) return;
     setTaskActionError(false);
     try {
       await data.completeTask(taskId, true);
@@ -189,6 +265,42 @@ export function StudyDashboard(): React.ReactElement {
       })
       .slice(0, 4);
   }, [data.tasks]);
+
+  const sampleTasksList = useMemo<StudentTaskDto[]>(() => {
+    if (!sampleEvents) return [];
+    return [
+      {
+        id: "sample-task-1",
+        title: "Self Study - Pharmacology",
+        subtitle: "Review mechanisms of action",
+        course_code: "PCO 411",
+        task_type: "reading",
+        due_date: today,
+        due_time: "14:00:00",
+        is_completed: false,
+        is_favorite: false,
+        completed_at: null,
+        source: "custom",
+        created_at: today,
+      },
+      {
+        id: "sample-task-2",
+        title: "Review Notes - Clinical Pharmacy",
+        subtitle: null,
+        course_code: "PCH 401",
+        task_type: "assignment",
+        due_date: today,
+        due_time: "16:00:00",
+        is_completed: false,
+        is_favorite: false,
+        completed_at: null,
+        source: "custom",
+        created_at: today,
+      },
+    ];
+  }, [sampleEvents, today]);
+
+  const displayedTasks = activeTasksList.length ? activeTasksList : sampleTasksList;
   return (
     <div className="study-dashboard">
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
@@ -397,70 +509,13 @@ export function StudyDashboard(): React.ReactElement {
                 onRetry={data.reload}
               />
             ) : activityTab === "tasks" ? (
-              activeTasksList.length ? (
-                <div className="planner-tasks-list dashboard-tasks-embed" role="list">
-                  {activeTasksList.map((task) => {
-                    const dueInfo = formatTaskDue(task.due_date, task.due_time, today);
-                    return (
-                      <div
-                        key={task.id}
-                        className="planner-task-row dashboard-task-card"
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => {
-                          openPlannerModal("tasks", e.currentTarget, task.id);
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            openPlannerModal("tasks", e.currentTarget, task.id);
-                          }
-                        }}
-                      >
-                        <button
-                          type="button"
-                          className="planner-task-checkbox"
-                          aria-label={`Mark "${task.title}" as complete`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void completeFromActivity(task.id);
-                          }}
-                        >
-                          <Circle size={18} className="planner-task-circle" />
-                          <Check size={12} className="planner-task-check-icon" />
-                        </button>
-
-                        <div className="planner-task-content">
-                          <span className="planner-task-title-text">{task.title}</span>
-                          <div className="planner-task-meta">
-                            {task.course_code && (
-                              <span className="planner-task-course-badge">{task.course_code}</span>
-                            )}
-                            {dueInfo && (
-                              <span
-                                className={`planner-task-due-badge ${
-                                  dueInfo.isOverdue
-                                    ? "is-overdue"
-                                    : dueInfo.isToday
-                                      ? "is-today"
-                                      : ""
-                                }`}
-                              >
-                                {dueInfo.isOverdue && <Clock size={11} />}
-                                {dueInfo.label}
-                              </span>
-                            )}
-                            {task.subtitle && (
-                              <span className="planner-task-notes-indicator" title="Has notes">
-                                <FileText size={11} />
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+              displayedTasks.length ? (
+                <DashboardTasksList
+                  tasks={displayedTasks}
+                  today={today}
+                  onComplete={completeFromActivity}
+                  onSelect={(taskId, target) => openPlannerModal("tasks", target, taskId)}
+                />
               ) : (
                 <ScheduleState loading={false} error={false} onRetry={data.reload} kind="tasks" />
               )
@@ -512,10 +567,24 @@ export function StudyDashboard(): React.ReactElement {
           </div>
           {data.loading || data.eventsError ? (
             <ScheduleState loading={data.loading} error={data.eventsError} onRetry={data.reload} />
+          ) : activityTab === "tasks" ? (
+            displayedTasks.length ? (
+              <DashboardTasksList
+                tasks={displayedTasks}
+                today={today}
+                onComplete={completeFromActivity}
+                onSelect={(taskId, target) => openPlannerModal("tasks", target, taskId)}
+              />
+            ) : (
+              <div className="dashboard-mobile-empty">
+                <h3>No upcoming tasks</h3>
+                <p>Your tasks will appear here when available.</p>
+              </div>
+            )
           ) : (
             <MobileActivityTimeline
               events={events}
-              tab={activityTab}
+              tab="timetable"
               today={today}
               sample={sampleEvents}
               onCompleteTask={completeFromActivity}
