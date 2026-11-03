@@ -90,7 +90,14 @@
   color: var(--text-tertiary-600);
 }
 .settings-nav-search-label:focus-within {
-  border-color: var(--border-brand);
+  border-color: var(--border-primary);
+  box-shadow: none;
+}
+.settings-nav-search:focus,
+.settings-nav-search:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: 0;
 }
 .settings-nav-search-wrap {
   position: relative;

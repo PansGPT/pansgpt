@@ -123,9 +123,11 @@ function Workspace({
   const plannerTab: PlannerTab =
     modalQuery === "timetable" || searchParams.get("tab") === "timetable" ? "timetable" : "tasks";
 
-  useEffect(() => {
+  const [prevTaskIdQuery, setPrevTaskIdQuery] = useState(taskIdQuery);
+  if (prevTaskIdQuery !== taskIdQuery) {
+    setPrevTaskIdQuery(taskIdQuery);
     setPlannerTaskId(taskIdQuery);
-  }, [taskIdQuery]);
+  }
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
     if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
@@ -193,7 +195,7 @@ function Workspace({
       if (activePlannerModal) router.replace(url, { scroll: false });
       else router.push(url, { scroll: false });
     },
-    [activePlannerModal, router]
+    [activePlannerModal, router, setPlannerTaskId]
   );
   function setPlannerTab(tab: PlannerTab): void {
     const target = new URL(window.location.href);

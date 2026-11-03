@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { usePreferences } from "@/components/shell/use-preferences";
 import { StudyArt } from "@/components/shell/study-art";
 import { learnArticles } from "@/components/learn/learn-content";
 import { LearnCard } from "@/components/learn/learn-card";
@@ -43,8 +44,7 @@ const filterTabs: Array<{
 
 export default function LearnPage(): React.ReactElement {
   const { profile } = useAuth();
-  const userInitial =
-    Array.from(profile?.first_name || profile?.email || "P")[0]?.toUpperCase() || "P";
+  const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortMode, setSortMode] = useState<"recent" | "duration">("recent");
@@ -157,38 +157,20 @@ export default function LearnPage(): React.ReactElement {
           >
             <Search size={18} aria-hidden="true" />
           </button>
-          <div className="shell-home-account learn-profile-wrap">
-            {profile ? (
+          {profile && (
+            <div className="shell-home-account">
               <MobileProfileButton
                 profile={profile}
-                credits={null}
-                creditsTotal={null}
+                credits={preferences.credits}
+                creditsTotal={preferences.creditsTotal}
                 onOpen={() => {
                   window.dispatchEvent(
                     new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
                   );
                 }}
               />
-            ) : (
-              <button
-                type="button"
-                className="shell-account shell-account-menu shell-account-compact shell-credit-profile"
-                aria-label="Account profile"
-                onClick={() => {
-                  window.dispatchEvent(
-                    new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
-                  );
-                }}
-              >
-                <svg viewBox="0 0 36 36" className="shell-credit-ring" aria-hidden="true">
-                  <circle className="shell-credit-profile-track" cx="18" cy="18" r="16" />
-                </svg>
-                <span className="shell-account-initial" aria-hidden="true">
-                  {userInitial}
-                </span>
-              </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </header>
 

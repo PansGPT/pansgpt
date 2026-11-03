@@ -322,6 +322,10 @@
   color: var(--text-tertiary-600);
   margin-bottom: 12px;
 }
+.mobile-home-history-search:focus-within {
+  border-color: var(--border-primary);
+  box-shadow: none;
+}
 .mobile-home-history-search input {
   min-width: 0;
   width: 100%;
@@ -331,6 +335,12 @@
   color: var(--text-primary-900);
   font: inherit;
   font-size: 16px;
+}
+.mobile-home-history-search input:focus,
+.mobile-home-history-search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: 0;
 }
 .mobile-home-history-row small {
   display: block;

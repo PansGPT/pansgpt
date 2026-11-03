@@ -51,7 +51,7 @@ type ChatComposerSlot = {
 };
 
 const ChatComposerSlotContext = createContext<ChatComposerSlot | null>(null);
-function ignoreActionModeChange(_actionMode: ChatActionMode | null): void {}
+function ignoreActionModeChange(): void {}
 
 export function ChatComposerSlotProvider({
   children,
@@ -187,9 +187,11 @@ export function ChatComposer({
   );
   useEffect(() => {
     if (!composerSlot?.mobileEditing) return;
-    closeMenu();
-    setLibraryOpen(false);
-    onActionModeChange(null);
+    queueMicrotask(() => {
+      closeMenu();
+      setLibraryOpen(false);
+      onActionModeChange(null);
+    });
   }, [composerSlot?.mobileEditing, closeMenu, onActionModeChange]);
   function selectAction(selectedMode: ChatActionMode): void {
     onActionModeChange(selectedMode);

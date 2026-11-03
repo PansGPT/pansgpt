@@ -2933,7 +2933,7 @@
   width: 100%;
 }
 .dashboard-task-card:focus-visible {
-  outline: 2px solid var(--border-brand);
+  outline: 2px solid var(--border-primary);
   outline-offset: 1px;
 }
 .planner-tasks-scroll-content {

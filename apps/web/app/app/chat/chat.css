@@ -1068,8 +1068,8 @@ button.study-chat-attachment-tile:hover {
     box-shadow 120ms ease;
 }
 .study-chat-edit-input-area:focus-within {
-  border-color: var(--border-brand);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg-brand-primary-600) 22%, transparent);
+  border-color: var(--border-primary);
+  box-shadow: none;
 }
 .study-chat-edit textarea {
   display: block;
@@ -1372,7 +1372,8 @@ button.study-chat-attachment-tile:hover {
   color: var(--text-tertiary-600);
 }
 .study-chat-library-search:focus-within {
-  border-color: var(--border-brand);
+  border-color: var(--border-primary);
+  box-shadow: none;
 }
 .study-chat-library-search input {
   width: 100%;

@@ -376,7 +376,14 @@
   color: var(--text-tertiary-600);
 }
 .library-search:focus-within {
-  border-color: var(--fg-brand-primary-600);
+  border-color: var(--border-primary);
+  box-shadow: none;
+}
+.library-search input:focus,
+.library-search input:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: 0;
 }
 .library-search input {
   width: 100%;

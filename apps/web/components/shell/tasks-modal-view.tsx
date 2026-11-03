@@ -219,12 +219,13 @@ export function TasksModalView({
   const [submitting, setSubmitting] = useState(false);
 
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(initialTaskId ?? null);
-
-  useEffect(() => {
+  const [prevInitialTaskId, setPrevInitialTaskId] = useState(initialTaskId);
+  if (initialTaskId !== prevInitialTaskId) {
+    setPrevInitialTaskId(initialTaskId);
     if (initialTaskId !== undefined) {
       setSelectedTaskId(initialTaskId);
     }
-  }, [initialTaskId]);
+  }
 
   useEffect(() => {
     onSelectedTaskChange?.(selectedTaskId);
@@ -681,22 +682,16 @@ function TaskDetailSidebar({
   const [taskType, setTaskType] = useState<StudentTaskType>(task.task_type || "custom");
   const [notes, setNotes] = useState(task.subtitle || "");
 
-  useEffect(() => {
+  const [prevTask, setPrevTask] = useState(task);
+  if (prevTask !== task) {
+    setPrevTask(task);
     setTitle(task.title);
     setDueDate(task.due_date);
     setDueTime(task.due_time || "");
     setCourseCode(task.course_code || "");
     setTaskType(task.task_type || "custom");
     setNotes(task.subtitle || "");
-  }, [
-    task.id,
-    task.title,
-    task.due_date,
-    task.due_time,
-    task.course_code,
-    task.task_type,
-    task.subtitle,
-  ]);
+  }
 
   const handleTitleBlur = () => {
     const trimmed = title.trim();
