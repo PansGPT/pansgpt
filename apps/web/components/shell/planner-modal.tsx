@@ -99,7 +99,9 @@ export function PlannerModal({
             {tabs}
             <span className="settings-mobile-header-spacer" />
           </header>
-          <div className="planner-modal-body">{children}</div>
+          <div className={`planner-modal-body ${tab === "tasks" ? "is-tasks-tab" : ""}`}>
+            {children}
+          </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

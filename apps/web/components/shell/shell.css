@@ -2839,19 +2839,34 @@
 
 }
 
-/* Task Manager Modal View (Microsoft To Do style list) */
+/* Task Manager Modal View (Microsoft To Do style list with native right sidebar) */
+.planner-modal-body.is-tasks-tab {
+  padding: 0;
+  overflow: hidden;
+}
 .planner-tasks-view {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex: 1;
   min-height: 0;
   height: 100%;
+  overflow: hidden;
+}
+.planner-tasks-main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 20px 24px 22px;
+  overflow: hidden;
 }
 .planner-tasks-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .planner-tasks-title-group {
   display: flex;
@@ -2864,14 +2879,6 @@
   font-weight: 600;
   color: var(--text-primary-900);
   letter-spacing: -0.02em;
-}
-.planner-tasks-count-pill {
-  font-size: 11.5px;
-  font-weight: 500;
-  color: var(--text-tertiary-600);
-  background: var(--bg-tertiary);
-  padding: 2px 8px;
-  border-radius: 999px;
 }
 .planner-tasks-error-banner {
   display: flex;
@@ -2896,7 +2903,7 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-right: 2px;
+  padding-right: 4px;
   display: flex;
   flex-direction: column;
 }
@@ -2908,8 +2915,9 @@
 }
 .planner-task-skeleton {
   height: 48px;
-  border-radius: 10px;
-  background: var(--bg-tertiary);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
   opacity: 0.6;
   animation: pulse 1.5s ease-in-out infinite;
 }
@@ -2948,34 +2956,38 @@
 .planner-tasks-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 .planner-task-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: transparent;
-  transition: background-color 0.14s ease;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+  transition: background-color 0.14s ease, border-color 0.14s ease;
   user-select: none;
 }
 .planner-task-row:hover {
-  background: var(--bg-secondary);
+  background: var(--bg-tertiary);
+  border-color: var(--border-primary);
 }
-.planner-task-row.is-favorite {
-  background: color-mix(in srgb, var(--bg-secondary) 85%, transparent);
+.planner-task-row.is-selected {
+  background: var(--bg-tertiary);
+  border-color: var(--border-primary);
+  box-shadow: 0 0 0 1px var(--border-primary);
 }
 .planner-task-row.is-completed {
-  opacity: 0.6;
+  opacity: 0.65;
 }
 .planner-task-checkbox {
   position: relative;
   display: grid;
   place-items: center;
   flex: none;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -3055,31 +3067,17 @@
   color: var(--text-error-primary-600);
   font-weight: 500;
 }
+.planner-task-notes-indicator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-tertiary-600);
+  margin-left: 2px;
+}
 .planner-task-actions {
   display: flex;
   align-items: center;
   gap: 4px;
   flex: none;
-}
-.planner-task-star-btn {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-quaternary-500);
-  cursor: pointer;
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-.planner-task-star-btn:hover {
-  color: var(--text-primary-900);
-  background: var(--bg-tertiary);
-}
-.planner-task-star-btn.is-active {
-  color: #f59e0b;
 }
 .planner-task-delete-btn {
   display: grid;
@@ -3088,7 +3086,7 @@
   height: 32px;
   padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--text-tertiary-600);
   cursor: pointer;
@@ -3138,12 +3136,12 @@
 .planner-tasks-completed-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   margin-top: 6px;
 }
 .planner-tasks-footer {
   margin-top: auto;
-  padding-top: 16px;
+  padding-top: 14px;
 }
 .planner-task-add-trigger {
   display: flex;
@@ -3153,7 +3151,7 @@
   min-height: 48px;
   padding: 12px 16px;
   border: 1px solid var(--border-secondary);
-  border-radius: 12px;
+  border-radius: 8px;
   background: var(--bg-secondary);
   color: var(--text-tertiary-600);
   font: inherit;
@@ -3174,10 +3172,10 @@
   width: 100%;
   min-height: 48px;
   padding: 6px 12px 6px 16px;
-  border: 1px solid var(--fg-brand-primary-600);
-  border-radius: 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
   background: var(--bg-secondary);
-  box-shadow: 0 0 0 1px var(--fg-brand-primary-600);
+  box-shadow: none;
 }
 .planner-task-add-circle {
   display: grid;
@@ -3188,8 +3186,9 @@
 .planner-task-add-input {
   flex: 1;
   min-width: 0;
-  border: 0;
-  outline: none;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
   background: transparent;
   color: var(--text-primary-900);
   font: inherit;
@@ -3197,6 +3196,14 @@
 }
 .planner-task-add-input::placeholder {
   color: var(--text-tertiary-600);
+}
+.planner-task-add-input:focus,
+.planner-task-add-input:focus-visible,
+.settings-modal-dialog .planner-task-add-input:focus-visible,
+.planner-modal-dialog .planner-task-add-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
 }
 .planner-task-add-controls {
   display: flex;
@@ -3206,15 +3213,19 @@
 }
 .planner-task-add-submit-btn {
   padding: 6px 14px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--fg-brand-primary-600);
-  color: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 6px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
   font: inherit;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 550;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.planner-task-add-submit-btn:hover:not(:disabled) {
+  background: var(--bg-primary);
+  border-color: var(--border-primary);
 }
 .planner-task-add-submit-btn:disabled {
   opacity: 0.5;
@@ -3223,7 +3234,7 @@
 .planner-task-add-cancel-btn {
   padding: 6px 10px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   background: transparent;
   color: var(--text-tertiary-600);
   font: inherit;
@@ -3234,128 +3245,227 @@
   color: var(--text-primary-900);
 }
 
-/* Task Detail Dialog Overlay */
-.planner-task-detail-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 70;
-  display: grid;
-  place-items: center;
-  padding: 20px;
-  background: rgb(0 0 0 / 55%);
-  backdrop-filter: blur(4px);
-}
-.planner-task-detail-dialog {
-  width: min(440px, calc(100vw - 32px));
-  border-radius: 16px;
-  border: 1px solid var(--border-secondary);
+/* Task Detail Sidebar (docked native right panel) */
+.planner-task-sidebar {
+  width: 350px;
+  flex: none;
+  height: 100%;
+  border-left: 1px solid var(--border-secondary);
   background: var(--bg-primary);
-  color: var(--text-primary-900);
-  box-shadow: 0 20px 48px rgb(0 0 0 / 40%);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+  animation: taskSidebarIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.planner-task-detail-header {
+@keyframes taskSidebarIn {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.planner-task-sidebar-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
+  gap: 10px;
+  padding: 16px 18px 14px;
   border-bottom: 1px solid var(--border-secondary);
 }
-.planner-task-detail-header h3 {
-  margin: 0;
+.planner-task-sidebar-title-input {
+  flex: 1;
+  min-width: 0;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  color: var(--text-primary-900);
+  font: inherit;
   font-size: 16px;
   font-weight: 600;
+  padding: 2px 0;
 }
-.planner-task-detail-header button {
+.settings-modal-dialog .planner-task-sidebar-title-input:focus-visible,
+.planner-modal-dialog .planner-task-sidebar-title-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.planner-task-sidebar-close {
+  display: grid;
+  place-items: center;
+  padding: 5px;
   border: 0;
+  border-radius: 6px;
   background: transparent;
   color: var(--text-tertiary-600);
   cursor: pointer;
-  display: grid;
-  place-items: center;
-  padding: 4px;
-  border-radius: 6px;
+  transition: color 0.14s ease, background-color 0.14s ease;
 }
-.planner-task-detail-header button:hover {
+.planner-task-sidebar-close:hover {
   color: var(--text-primary-900);
   background: var(--bg-secondary);
 }
-.planner-task-detail-form {
+.planner-task-sidebar-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
+  gap: 14px;
 }
-.planner-task-detail-form label {
+.planner-sidebar-section {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 12.5px;
-  color: var(--text-secondary-700);
-}
-.planner-task-detail-form input {
-  padding: 9px 12px;
-  border: 1px solid var(--border-secondary);
-  border-radius: 8px;
+  border-radius: 10px;
   background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+  overflow: hidden;
+}
+.planner-sidebar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-secondary);
+}
+.planner-sidebar-row:last-child {
+  border-bottom: 0;
+}
+.planner-sidebar-row-icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--text-tertiary-600);
+}
+.planner-sidebar-row-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.planner-sidebar-row-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-tertiary-600);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.planner-sidebar-input,
+.planner-sidebar-select {
+  width: 100%;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
   color: var(--text-primary-900);
   font: inherit;
   font-size: 13.5px;
-  outline: none;
+  padding: 2px 0;
 }
-.planner-task-detail-form input:focus {
-  border-color: var(--fg-brand-primary-600);
+.settings-modal-dialog :is(.planner-sidebar-input, .planner-sidebar-select):focus-visible,
+.planner-modal-dialog :is(.planner-sidebar-input, .planner-sidebar-select):focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
-.planner-task-detail-row {
+.planner-sidebar-clear-btn {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.planner-task-detail-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border-secondary);
-}
-.planner-task-detail-delete-btn {
-  padding: 7px 12px;
+  place-items: center;
+  padding: 4px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 4px;
   background: transparent;
-  color: var(--text-error-primary-600);
-  font: inherit;
-  font-size: 12.5px;
-  font-weight: 500;
+  color: var(--text-tertiary-600);
   cursor: pointer;
 }
-.planner-task-detail-delete-btn:hover {
-  background: color-mix(in srgb, var(--text-error-primary-600) 12%, transparent);
+.planner-sidebar-clear-btn:hover {
+  color: var(--text-primary-900);
+  background: var(--bg-tertiary);
 }
-.planner-task-detail-actions {
+.planner-sidebar-notes-card {
+  padding: 12px 14px;
+  gap: 8px;
+}
+.planner-sidebar-notes-header {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.planner-task-detail-actions button[type="button"] {
-  padding: 7px 12px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text-secondary-700);
-  font: inherit;
-  font-size: 12.5px;
-  cursor: pointer;
-}
-.planner-task-detail-save-btn {
-  padding: 7px 16px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--fg-brand-primary-600);
-  color: var(--bg-primary);
-  font: inherit;
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 600;
+  color: var(--text-tertiary-600);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.planner-sidebar-notes-textarea {
+  width: 100%;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent;
+  color: var(--text-primary-900);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: none;
+}
+.settings-modal-dialog .planner-sidebar-notes-textarea:focus-visible,
+.planner-modal-dialog .planner-sidebar-notes-textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.planner-task-sidebar-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border-secondary);
+  background: var(--bg-primary);
+}
+.planner-sidebar-created-text {
+  font-size: 11.5px;
+  color: var(--text-tertiary-600);
+}
+.planner-sidebar-delete-btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-tertiary-600);
   cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.planner-sidebar-delete-btn:hover {
+  color: var(--text-error-primary-600);
+  background: color-mix(in srgb, var(--text-error-primary-600) 12%, transparent);
+}
+
+@media (max-width: 767px) {
+  .planner-tasks-main {
+    padding: 14px 14px 20px;
+  }
+  .planner-task-sidebar {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    width: 100%;
+    border-left: 0;
+    animation: taskSidebarMobileIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes taskSidebarMobileIn {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
