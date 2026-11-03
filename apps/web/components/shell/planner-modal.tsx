@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import { CalendarDays, ListTodo, X } from "lucide-react";
+import { CalendarDays, ChevronLeft, ListTodo, X } from "lucide-react";
 import { DialogPrimitive } from "@pansgpt/ui/shell";
 import type { PlannerTab } from "./planner-modal-context";
 
@@ -13,6 +13,8 @@ export function PlannerModal({
   onTabChange,
   onOpenChange,
   onCloseAutoFocus,
+  isDetailOpen,
+  onBack,
   children,
 }: {
   open: boolean;
@@ -22,6 +24,8 @@ export function PlannerModal({
   onTabChange: (tab: PlannerTab) => void;
   onOpenChange: (open: boolean) => void;
   onCloseAutoFocus: (event: Event) => void;
+  isDetailOpen?: boolean;
+  onBack?: () => void;
   children: React.ReactNode;
 }): React.ReactElement {
   const descriptionId = useId();
@@ -87,16 +91,34 @@ export function PlannerModal({
               <X size={18} />
             </button>
           </header>
-          <header className="settings-mobile-header planner-mobile-header">
-            <button
-              type="button"
-              className="settings-mobile-header-btn"
-              aria-label={`Close ${title.toLowerCase()}`}
-              onClick={() => onOpenChange(false)}
-            >
-              <X size={18} />
-            </button>
-            {tabs}
+          <header
+            className="settings-mobile-header planner-mobile-header"
+            data-detail-open={isDetailOpen}
+          >
+            {isDetailOpen ? (
+              <button
+                type="button"
+                className="settings-mobile-header-btn planner-mobile-back-btn"
+                aria-label="Back to tasks"
+                onClick={onBack}
+              >
+                <ChevronLeft size={20} />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="settings-mobile-header-btn"
+                aria-label={`Close ${title.toLowerCase()}`}
+                onClick={() => onOpenChange(false)}
+              >
+                <X size={18} />
+              </button>
+            )}
+            {isDetailOpen ? (
+              <span className="planner-mobile-header-title">Task details</span>
+            ) : (
+              tabs
+            )}
             <span className="settings-mobile-header-spacer" />
           </header>
           <div className={`planner-modal-body ${tab === "tasks" ? "is-tasks-tab" : ""}`}>

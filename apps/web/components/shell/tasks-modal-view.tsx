@@ -11,6 +11,7 @@ import {
   FileText,
   GraduationCap,
   Plus,
+  RotateCcw,
   Tag,
   Trash2,
   X,
@@ -116,7 +117,7 @@ function parseNaturalDue(rawText: string): {
   };
 }
 
-function formatTaskDue(
+export function formatTaskDue(
   dueDate: string | null,
   dueTime: string | null,
   todayIso: string
@@ -196,7 +197,13 @@ function formatSidebarCreated(createdAtIso: string): string {
   }
 }
 
-export function TasksModalView(): React.ReactElement {
+export function TasksModalView({
+  initialTaskId,
+  onSelectedTaskChange,
+}: {
+  initialTaskId?: string | null;
+  onSelectedTaskChange?: (taskId: string | null) => void;
+} = {}): React.ReactElement {
   const { session } = useAuth();
   const token = session?.access_token;
   const { reload: reloadDashboard } = useDashboard();
@@ -204,13 +211,24 @@ export function TasksModalView(): React.ReactElement {
   const [tasks, setTasks] = useState<StudentTaskDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryAction, setRetryAction] = useState<(() => Promise<void>) | null>(null);
 
   const [completedOpen, setCompletedOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [newTaskText, setNewTaskText] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(initialTaskId ?? null);
+
+  useEffect(() => {
+    if (initialTaskId !== undefined) {
+      setSelectedTaskId(initialTaskId);
+    }
+  }, [initialTaskId]);
+
+  useEffect(() => {
+    onSelectedTaskChange?.(selectedTaskId);
+  }, [selectedTaskId, onSelectedTaskChange]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const todayIso = useMemo(() => localTodayIso(), []);
@@ -219,11 +237,13 @@ export function TasksModalView(): React.ReactElement {
     if (!token) return;
     setLoading(true);
     setError(null);
+    setRetryAction(null);
     try {
       const data = await getTasks(env.NEXT_PUBLIC_API_URL, token, true);
       setTasks(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load tasks.");
+      setRetryAction(() => loadTasks);
     } finally {
       setLoading(false);
     }
@@ -283,6 +303,8 @@ export function TasksModalView(): React.ReactElement {
           : t
       )
     );
+    setError(null);
+    setRetryAction(null);
 
     try {
       if (!token) throw new Error("Authentication unavailable");
@@ -296,6 +318,9 @@ export function TasksModalView(): React.ReactElement {
         prev.map((t) => (t.id === task.id ? { ...t, is_completed: task.is_completed } : t))
       );
       setError("Failed to update task completion.");
+      setRetryAction(() => async () => {
+        await handleToggleComplete(task);
+      });
     }
   };
 
@@ -305,6 +330,8 @@ export function TasksModalView(): React.ReactElement {
     if (selectedTaskId === taskId) {
       setSelectedTaskId(null);
     }
+    setError(null);
+    setRetryAction(null);
 
     try {
       if (!token) throw new Error("Authentication unavailable");
@@ -313,12 +340,18 @@ export function TasksModalView(): React.ReactElement {
     } catch {
       setTasks(backup);
       setError("Failed to delete task.");
+      setRetryAction(() => async () => {
+        await handleDeleteTask(taskId);
+      });
     }
   };
 
   const handleUpdateTask = async (taskId: string, updates: StudentTaskUpdateRequest) => {
+    const backup = tasks;
     // Optimistic update
     setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t)));
+    setError(null);
+    setRetryAction(null);
 
     try {
       if (!token) throw new Error("Authentication unavailable");
@@ -326,7 +359,11 @@ export function TasksModalView(): React.ReactElement {
       setTasks((prev) => prev.map((t) => (t.id === taskId ? updated : t)));
       reloadDashboard();
     } catch {
+      setTasks(backup);
       setError("Failed to save task update.");
+      setRetryAction(() => async () => {
+        await handleUpdateTask(taskId, updates);
+      });
     }
   };
 
@@ -371,8 +408,21 @@ export function TasksModalView(): React.ReactElement {
         {error && (
           <div className="planner-tasks-error-banner" role="alert">
             <span>{error}</span>
-            <button type="button" onClick={() => setError(null)} aria-label="Dismiss error">
-              <X size={14} />
+            <button
+              type="button"
+              className="planner-tasks-error-retry-btn"
+              onClick={async () => {
+                const action = retryAction;
+                setError(null);
+                setRetryAction(null);
+                if (action) {
+                  await action();
+                }
+              }}
+              aria-label="Retry"
+              title="Retry"
+            >
+              <RotateCcw size={14} aria-hidden="true" />
             </button>
           </div>
         )}

@@ -146,12 +146,14 @@ export function MobileActivityTimeline({
   today,
   sample,
   onCompleteTask,
+  onSelectTask,
 }: {
   events: DashboardTimelineEvent[];
   tab: "timetable" | "tasks";
   today: string;
   sample: boolean;
   onCompleteTask: (taskId: string) => Promise<void>;
+  onSelectTask?: (taskId: string) => void;
 }): React.ReactElement {
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
@@ -218,7 +220,27 @@ export function MobileActivityTimeline({
                   <span className="dashboard-timeline-track" aria-hidden="true">
                     <i />
                   </span>
-                  <div className="dashboard-timeline-content">
+                  <div
+                    className="dashboard-timeline-content"
+                    role={row.kind === "task" && onSelectTask && !sample ? "button" : undefined}
+                    tabIndex={row.kind === "task" && onSelectTask && !sample ? 0 : undefined}
+                    onClick={() => {
+                      if (row.kind === "task" && onSelectTask && !sample) {
+                        onSelectTask(row.eventId);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (
+                        row.kind === "task" &&
+                        onSelectTask &&
+                        !sample &&
+                        (e.key === "Enter" || e.key === " ")
+                      ) {
+                        e.preventDefault();
+                        onSelectTask(row.eventId);
+                      }
+                    }}
+                  >
                     <div>
                       <h4>{row.title}</h4>
                       <p>{row.detail}</p>

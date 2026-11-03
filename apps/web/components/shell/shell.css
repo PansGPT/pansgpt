@@ -1587,12 +1587,14 @@
   }
 }
 
+.dashboard-section-heading > .dashboard-mobile-view-all,
 .dashboard-mobile-view-all {
-  display: none;
+  display: none !important;
 }
 @media (max-width: 860px) {
+  .dashboard-section-heading > .dashboard-mobile-view-all,
   .dashboard-mobile-view-all {
-    display: inline-flex;
+    display: inline-flex !important;
   }
 }
 .dashboard-mobile-label {
@@ -2899,13 +2901,40 @@
   color: var(--text-error-primary-600);
   font-size: 12.5px;
 }
-.planner-tasks-error-banner button {
+.planner-tasks-error-banner button,
+.planner-tasks-error-retry-btn {
   border: 0;
   background: transparent;
   color: inherit;
   cursor: pointer;
   display: grid;
   place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: transform 0.16s ease, background-color 0.14s ease;
+}
+.planner-tasks-error-retry-btn:hover {
+  background: color-mix(in srgb, var(--text-error-primary-600) 18%, transparent);
+  transform: rotate(-45deg);
+}
+.planner-tasks-error-retry-btn:active {
+  transform: rotate(-180deg);
+}
+
+.dashboard-tasks-embed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+}
+.dashboard-task-card {
+  cursor: pointer;
+  width: 100%;
+}
+.dashboard-task-card:focus-visible {
+  outline: 2px solid var(--border-brand);
+  outline-offset: 1px;
 }
 .planner-tasks-scroll-content {
   flex: 1;
@@ -3470,17 +3499,32 @@
   background: color-mix(in srgb, var(--text-error-primary-600) 12%, transparent);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 860px) {
   .planner-tasks-main {
     padding: 14px 14px 20px;
   }
   .planner-task-sidebar {
     position: absolute;
     inset: 0;
-    z-index: 30;
+    z-index: 40;
     width: 100%;
+    height: 100%;
     border-left: 0;
+    background: var(--bg-primary);
     animation: taskSidebarMobileIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .planner-task-sidebar-close {
+    display: none !important;
+  }
+  .planner-mobile-header-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary-900);
+    flex: 1;
+    text-align: center;
+  }
+  .planner-mobile-back-btn {
+    color: var(--text-primary-900);
   }
   @keyframes taskSidebarMobileIn {
     from {

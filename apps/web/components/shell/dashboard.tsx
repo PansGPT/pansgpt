@@ -1,12 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   BookOpen,
   CalendarDays,
   ChevronRight,
+  Circle,
+  Clock,
   Clock3,
+  FileText,
   RefreshCw,
   ClipboardList,
   NotebookText,
@@ -28,6 +31,7 @@ import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { mobileDestinations } from "./navigation";
 import { useOpenPlannerModal } from "./planner-modal-context";
+import { formatTaskDue } from "./tasks-modal-view";
 type UpcomingEvent = DashboardTimelineEvent;
 
 function recentAge(value: string): string {
@@ -172,6 +176,19 @@ export function StudyDashboard(): React.ReactElement {
     (event) => event.kind === (activityTab === "tasks" ? "task" : "class")
   );
   const agenda = filteredEvents.slice(0, 3);
+  const activeTasksList = useMemo(() => {
+    return data.tasks
+      .filter((task) => !task.is_completed)
+      .sort((a, b) => {
+        if (a.due_date && b.due_date) {
+          const cmp = a.due_date.localeCompare(b.due_date);
+          if (cmp !== 0) return cmp;
+        } else if (a.due_date && !b.due_date) return -1;
+        else if (!a.due_date && b.due_date) return 1;
+        return (a.due_time || "").localeCompare(b.due_time || "");
+      })
+      .slice(0, 4);
+  }, [data.tasks]);
   return (
     <div className="study-dashboard">
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
@@ -379,6 +396,74 @@ export function StudyDashboard(): React.ReactElement {
                 error={data.eventsError}
                 onRetry={data.reload}
               />
+            ) : activityTab === "tasks" ? (
+              activeTasksList.length ? (
+                <div className="planner-tasks-list dashboard-tasks-embed" role="list">
+                  {activeTasksList.map((task) => {
+                    const dueInfo = formatTaskDue(task.due_date, task.due_time, today);
+                    return (
+                      <div
+                        key={task.id}
+                        className="planner-task-row dashboard-task-card"
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          openPlannerModal("tasks", e.currentTarget, task.id);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            openPlannerModal("tasks", e.currentTarget, task.id);
+                          }
+                        }}
+                      >
+                        <button
+                          type="button"
+                          className="planner-task-checkbox"
+                          aria-label={`Mark "${task.title}" as complete`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            void completeFromActivity(task.id);
+                          }}
+                        >
+                          <Circle size={18} className="planner-task-circle" />
+                          <Check size={12} className="planner-task-check-icon" />
+                        </button>
+
+                        <div className="planner-task-content">
+                          <span className="planner-task-title-text">{task.title}</span>
+                          <div className="planner-task-meta">
+                            {task.course_code && (
+                              <span className="planner-task-course-badge">{task.course_code}</span>
+                            )}
+                            {dueInfo && (
+                              <span
+                                className={`planner-task-due-badge ${
+                                  dueInfo.isOverdue
+                                    ? "is-overdue"
+                                    : dueInfo.isToday
+                                      ? "is-today"
+                                      : ""
+                                }`}
+                              >
+                                {dueInfo.isOverdue && <Clock size={11} />}
+                                {dueInfo.label}
+                              </span>
+                            )}
+                            {task.subtitle && (
+                              <span className="planner-task-notes-indicator" title="Has notes">
+                                <FileText size={11} />
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <ScheduleState loading={false} error={false} onRetry={data.reload} kind="tasks" />
+              )
             ) : agenda.length ? (
               agenda.map((event) => (
                 <div className="dashboard-event" key={event.id}>
@@ -401,16 +486,6 @@ export function StudyDashboard(): React.ReactElement {
                     <h3>{event.title}</h3>
                     <p>{event.detail || "All day"}</p>
                   </div>
-                  {event.kind === "task" && !sampleEvents && (
-                    <button
-                      type="button"
-                      className="dashboard-task-complete"
-                      aria-label={`Mark ${event.title} complete`}
-                      onClick={() => void completeFromActivity(event.id)}
-                    >
-                      <Check size={16} aria-hidden="true" />
-                    </button>
-                  )}
                 </div>
               ))
             ) : (
@@ -444,6 +519,7 @@ export function StudyDashboard(): React.ReactElement {
               today={today}
               sample={sampleEvents}
               onCompleteTask={completeFromActivity}
+              onSelectTask={(taskId) => openPlannerModal("tasks", undefined, taskId)}
             />
           )}
         </div>

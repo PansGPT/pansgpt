@@ -16,7 +16,7 @@ const taskSchema: z.ZodType<StudentTaskDto> = z.object({
   subtitle: z.string().nullable(),
   course_code: z.string().nullable(),
   task_type: z.enum(["class", "reading", "assignment", "lab", "presentation", "meeting", "custom"]),
-  due_date: z.string(),
+  due_date: z.string().nullable(),
   due_time: z.string().nullable(),
   is_completed: z.boolean(),
   is_favorite: z.boolean(),
@@ -117,7 +117,18 @@ async function request<T>(
     throw new Error(message);
   }
   if (response.status === 204) return undefined as T;
-  return schema.parse(await response.json());
+  try {
+    return schema.parse(await response.json());
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const issue = error.issues[0];
+      const field = issue?.path.filter((p) => typeof p === "string").join(".");
+      throw new Error(
+        field ? `Data format error at ${field}: ${issue?.message}` : "Unexpected response format."
+      );
+    }
+    throw error;
+  }
 }
 
 export async function getHomeDashboard(

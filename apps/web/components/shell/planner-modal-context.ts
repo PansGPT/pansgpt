@@ -3,7 +3,7 @@
 import { createContext, useContext } from "react";
 
 export type PlannerTab = "tasks" | "timetable";
-export type OpenPlannerModal = (tab: PlannerTab, opener?: HTMLElement) => void;
+export type OpenPlannerModal = (tab: PlannerTab, opener?: HTMLElement, taskId?: string) => void;
 
 const PlannerModalContext = createContext<OpenPlannerModal | null>(null);
 

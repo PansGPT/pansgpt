@@ -116,10 +116,16 @@ function Workspace({
   const plannerReturn = useRef<HTMLElement | null>(null);
   const plannerOpenedFromShell = useRef(false);
   const modalQuery = searchParams.get("modal");
+  const taskIdQuery = searchParams.get("taskId");
+  const [plannerTaskId, setPlannerTaskId] = useState<string | null>(taskIdQuery);
   const activePlannerModal =
     modalQuery === "planner" || modalQuery === "tasks" || modalQuery === "timetable";
   const plannerTab: PlannerTab =
     modalQuery === "timetable" || searchParams.get("tab") === "timetable" ? "timetable" : "tasks";
+
+  useEffect(() => {
+    setPlannerTaskId(taskIdQuery);
+  }, [taskIdQuery]);
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
     if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
@@ -168,8 +174,8 @@ function Workspace({
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
   const openWorkspaceNavigation = useCallback((_opener: HTMLElement) => {}, []);
   const openPlannerModal = useCallback(
-    (tab: PlannerTab, opener?: HTMLElement) => {
-      if (activePlannerModal && plannerTab === tab && modalQuery === "planner") return;
+    (tab: PlannerTab, opener?: HTMLElement, taskId?: string) => {
+      setPlannerTaskId(taskId ?? null);
       if (!activePlannerModal) {
         plannerReturn.current =
           opener ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
@@ -178,20 +184,28 @@ function Workspace({
       const target = new URL(window.location.href);
       target.searchParams.set("modal", "planner");
       target.searchParams.set("tab", tab);
+      if (taskId) {
+        target.searchParams.set("taskId", taskId);
+      } else {
+        target.searchParams.delete("taskId");
+      }
       const url = `${target.pathname}${target.search}${target.hash}`;
       if (activePlannerModal) router.replace(url, { scroll: false });
       else router.push(url, { scroll: false });
     },
-    [activePlannerModal, modalQuery, plannerTab, router]
+    [activePlannerModal, router]
   );
   function setPlannerTab(tab: PlannerTab): void {
     const target = new URL(window.location.href);
     target.searchParams.set("modal", "planner");
     target.searchParams.set("tab", tab);
+    target.searchParams.delete("taskId");
+    setPlannerTaskId(null);
     router.replace(`${target.pathname}${target.search}${target.hash}`, { scroll: false });
   }
   function setPlannerModalOpen(open: boolean): void {
     if (open) return;
+    setPlannerTaskId(null);
     if (plannerOpenedFromShell.current) {
       plannerOpenedFromShell.current = false;
       router.back();
@@ -200,6 +214,7 @@ function Workspace({
     const target = new URL(window.location.href);
     target.searchParams.delete("modal");
     target.searchParams.delete("tab");
+    target.searchParams.delete("taskId");
     const query = target.searchParams.toString();
     router.replace(`${target.pathname}${query ? `?${query}` : ""}${target.hash}`, {
       scroll: false,
@@ -513,6 +528,13 @@ function Workspace({
             onTabChange={setPlannerTab}
             onOpenChange={setPlannerModalOpen}
             onCloseAutoFocus={returnFromPlanner}
+            isDetailOpen={plannerTab === "tasks" && Boolean(plannerTaskId)}
+            onBack={() => {
+              setPlannerTaskId(null);
+              const target = new URL(window.location.href);
+              target.searchParams.delete("taskId");
+              router.replace(`${target.pathname}${target.search}${target.hash}`, { scroll: false });
+            }}
           >
             <div
               id="planner-panel"
@@ -521,7 +543,22 @@ function Workspace({
               aria-label={plannerTab === "tasks" ? "Tasks" : "Timetable"}
               tabIndex={0}
             >
-              {plannerTab === "tasks" ? <TasksModalView /> : <PlannerComingSoon tab={plannerTab} />}
+              {plannerTab === "tasks" ? (
+                <TasksModalView
+                  initialTaskId={plannerTaskId}
+                  onSelectedTaskChange={(id) => {
+                    setPlannerTaskId(id);
+                    const target = new URL(window.location.href);
+                    if (id) target.searchParams.set("taskId", id);
+                    else target.searchParams.delete("taskId");
+                    router.replace(`${target.pathname}${target.search}${target.hash}`, {
+                      scroll: false,
+                    });
+                  }}
+                />
+              ) : (
+                <PlannerComingSoon tab={plannerTab} />
+              )}
             </div>
           </PlannerModal>
         )}
