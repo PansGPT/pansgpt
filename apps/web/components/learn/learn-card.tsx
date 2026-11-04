@@ -20,32 +20,28 @@ export function LearnCard({
 }): React.ReactElement {
   if (variant === "list") {
     return (
-      <Link
-        href={`/app/learn/${article.slug}`}
-        className={`learn-list-row ${className}`.trim()}
-        data-theme={article.theme}
-      >
-        {/* Left: Thematic Artwork Thumbnail */}
+      <Link href={`/app/learn/${article.slug}`} className={`learn-list-item ${className}`.trim()}>
+        {/* 1. Image on the Left */}
         <div className="learn-list-thumb" data-theme={article.theme} data-art={article.artKind}>
           <StudyArt kind={article.artKind} variant="square" />
         </div>
 
-        {/* Right: Content Block */}
-        <div className="learn-list-body">
+        {/* 2. Content on the Right */}
+        <div className="learn-list-content">
           <h2 className="learn-list-title">{article.title}</h2>
-          <p className="learn-list-excerpt">{article.description}</p>
+          <p className="learn-list-summary">{article.description}</p>
 
           <div className="learn-list-meta">
-            <span className="learn-list-tag">{article.shortTag}</span>
+            <span className="learn-list-category">{article.category}</span>
             <span className="learn-list-dot" aria-hidden="true">
               ·
             </span>
             <span className="learn-list-duration">{article.duration}</span>
 
-            {onBookmarkToggle ? (
+            {onBookmarkToggle && (
               <button
                 type="button"
-                className="learn-list-bookmark-btn"
+                className="learn-list-bookmark"
                 data-bookmarked={isBookmarked ? "true" : "false"}
                 onClick={(e) => {
                   e.preventDefault();
@@ -55,23 +51,11 @@ export function LearnCard({
                 aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this guide"}
               >
                 <Bookmark
-                  size={14}
+                  size={13}
                   fill={isBookmarked ? "currentColor" : "none"}
                   aria-hidden="true"
                 />
               </button>
-            ) : (
-              <span
-                className="learn-list-bookmark-btn"
-                data-bookmarked={isBookmarked ? "true" : "false"}
-                aria-hidden="true"
-              >
-                <Bookmark
-                  size={14}
-                  fill={isBookmarked ? "currentColor" : "none"}
-                  aria-hidden="true"
-                />
-              </span>
             )}
           </div>
         </div>
@@ -79,6 +63,7 @@ export function LearnCard({
     );
   }
 
+  // Grid view (the original pastel card)
   return (
     <Link
       href={`/app/learn/${article.slug}`}
