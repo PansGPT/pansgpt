@@ -306,49 +306,65 @@
   justify-content: center;
   flex-shrink: 0;
   padding: 6px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-secondary);
-  transition: transform 120ms ease, border-color 120ms ease;
+  background: #f1f4f7;
+  border: 1px solid #dbe2e8;
+  color: #334155;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .learn-list-item:hover .learn-list-thumb {
-  border-color: var(--border-primary);
   transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-.learn-list-thumb[data-theme="teal"] {
-  background: rgba(15, 118, 110, 0.1);
+/* Identical pastel background and accent colors as grid view cards */
+.learn-list-thumb[data-theme="teal"],
+.learn-list-item[data-theme="teal"] .learn-list-thumb {
+  background: #edf8f8;
+  border: 1px solid #d4ebeb;
   color: #0f766e;
 }
 
-.learn-list-thumb[data-theme="brand"] {
-  background: rgba(4, 120, 87, 0.1);
+.learn-list-thumb[data-theme="brand"],
+.learn-list-item[data-theme="brand"] .learn-list-thumb {
+  background: #eff7f2;
+  border: 1px solid #d5ebd9;
   color: #047857;
 }
 
-.learn-list-thumb[data-theme="blue"] {
-  background: rgba(29, 78, 216, 0.1);
+.learn-list-thumb[data-theme="blue"],
+.learn-list-item[data-theme="blue"] .learn-list-thumb {
+  background: #eff5fc;
+  border: 1px solid #d7e4f8;
   color: #1d4ed8;
 }
 
-.learn-list-thumb[data-theme="amber"] {
-  background: rgba(180, 83, 9, 0.1);
+.learn-list-thumb[data-theme="amber"],
+.learn-list-item[data-theme="amber"] .learn-list-thumb {
+  background: #fbf5eb;
+  border: 1px solid #f2e3cb;
   color: #b45309;
 }
 
-.learn-list-thumb[data-theme="purple"] {
-  background: rgba(109, 40, 217, 0.1);
+.learn-list-thumb[data-theme="purple"],
+.learn-list-item[data-theme="purple"] .learn-list-thumb {
+  background: #f5f2fb;
+  border: 1px solid #e8dffc;
   color: #6d28d9;
 }
 
-.learn-list-thumb[data-theme="slate"] {
-  background: rgba(51, 65, 85, 0.1);
+.learn-list-thumb[data-theme="slate"],
+.learn-list-item[data-theme="slate"] .learn-list-thumb {
+  background: #f1f4f7;
+  border: 1px solid #dbe2e8;
   color: #334155;
 }
 
 .learn-list-thumb svg {
-  width: 80%;
-  height: 80%;
+  width: auto;
+  height: auto;
+  max-width: 80%;
+  max-height: 80%;
   display: block;
 }
 

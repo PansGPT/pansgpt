@@ -20,7 +20,11 @@ export function LearnCard({
 }): React.ReactElement {
   if (variant === "list") {
     return (
-      <Link href={`/app/learn/${article.slug}`} className={`learn-list-item ${className}`.trim()}>
+      <Link
+        href={`/app/learn/${article.slug}`}
+        className={`learn-list-item ${className}`.trim()}
+        data-theme={article.theme}
+      >
         {/* 1. Image on the Left */}
         <div className="learn-list-thumb" data-theme={article.theme} data-art={article.artKind}>
           <StudyArt kind={article.artKind} variant="square" />
