@@ -56,7 +56,9 @@
   color: var(--text-secondary-700);
   background: transparent;
   cursor: pointer;
-  transition: background 120ms, color 120ms;
+  transition:
+    background 120ms,
+    color 120ms;
 }
 
 .learn-mobile-home-button:hover,
@@ -70,7 +72,6 @@
   align-items: center;
   gap: 6px;
 }
-
 
 .learn-body-content {
   padding: 16px 16px 0;
@@ -317,7 +318,9 @@
   background: #f1f4f7;
   border: 1px solid #dbe2e8;
   color: #334155;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
 }
 
 .learn-list-item:hover .learn-list-thumb {
@@ -501,7 +504,9 @@
   padding: 12px 11px 10px;
   text-decoration: none;
   overflow: hidden;
-  transition: transform 140ms ease, box-shadow 140ms ease;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease;
   min-height: 185px;
 }
 
@@ -881,7 +886,9 @@
     border-radius: 9px;
     background: var(--bg-secondary);
     border: 1px solid var(--border-secondary);
-    transition: border-color 140ms ease, box-shadow 140ms ease;
+    transition:
+      border-color 140ms ease,
+      box-shadow 140ms ease;
   }
 
   .learn-desktop-search:focus-within {
@@ -925,7 +932,7 @@
     color: var(--text-primary-900);
   }
 
-/* Hide floating bottom dock on desktop */
+  /* Hide floating bottom dock on desktop */
   .learn-bottom-dock {
     display: none !important;
   }
@@ -1035,10 +1042,7 @@
     width: 24px;
     height: 24px;
   }
-
-
 }
-
 
 /* ─── Lesson detail page (existing styles preserved) ───────────────── */
 .learn-lesson-container {

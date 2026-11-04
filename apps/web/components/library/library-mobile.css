@@ -147,7 +147,10 @@
     margin: 0;
     border: 0;
     pointer-events: none;
-    transition: max-height 220ms ease, opacity 200ms ease, padding 200ms ease;
+    transition:
+      max-height 220ms ease,
+      opacity 200ms ease,
+      padding 200ms ease;
   }
   .library-workspace[data-search-open="true"] .library-toolbar-v2,
   .library-workspace[data-search="true"] .library-toolbar-v2 {
@@ -680,7 +683,9 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     cursor: pointer;
     backdrop-filter: blur(8px);
-    transition: transform 150ms ease, opacity 150ms ease;
+    transition:
+      transform 150ms ease,
+      opacity 150ms ease;
   }
   .library-now-reading-dock:active {
     transform: scale(0.98);

@@ -1,5 +1,7 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-11-04 consolidation:** Integrate remaining local/remote branch histories into main while preserving current contracts, verified fixes and open release gates. [Scope and validation](all-branches-consolidation-2026-11-04.md).
+
 > **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).
 
 > **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).

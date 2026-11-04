@@ -1,0 +1,13 @@
+# All-branch consolidation - 4 November 2026
+
+The user requested consolidating all local and remote branch work into main, pushing it, and making main the active checkout with identical tracked files locally and on GitHub. Historical branches are retained; their work is included in main rather than resetting their historical tips.
+
+The integration includes every existing branch tip. Remaining work came from `backup/learn-home-with-library`, `feat/library-mobile-redesign`, `feat/learn-home`, `feat/mobile-bottom-sheet-chat`, `feat/streak-timetable-tasks`, and the earlier integration branch. Other feature, fix and verification branches were already ancestors of main. The API-published dialog fix and its local equivalent have different commit IDs but identical patches; the local equivalent is recorded as merged without replacing the tested main implementation.
+
+Conflicts retain the latest Learn/card/header and planner/chat behavior, the older Library redesign's unique course/filter/reading UI, explicit sample labels, both API contract exports and main's tested Settings recovery/dialog fixes. The browser demo adapter now supplies the current dashboard DTO shape and explicitly opts into sample mode. Auth tests verify an empty new account's actual dashboard response and the intentionally removed Notes navigation entry while retaining protected-route coverage.
+
+Local verification before remote CI: 817 API tests passed, 68 service-dependent tests skipped; all 57 web unit tests passed; six TypeScript workspace checks passed; API Ruff lint/format and all 38 mirrored migrations passed. Browser and final-head CI results remain separate gates. No hosted database deployment or release certification is included.
+
+The only original uncommitted change was Next.js's generated switch between development and production route-type imports. Its patch is preserved outside tracked source before checkout synchronization; generated development output is not committed as feature work.
+
+Notion sync pending: no connector is available. Session log: 2026-11-04, repository integration / web / academic API / CI; files from the consolidated branches plus conflict resolutions, browser adapters/tests and this record. Verified only for the checks listed above until CI completes. Decision: preserve branch histories and latest feature behavior while retaining main's validated security and error handling. Roadmap: consolidated implementation in verification; hosted, native-device and live provider gates remain open. No stack change.

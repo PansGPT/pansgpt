@@ -33,7 +33,18 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("radio", { name: "200 Level", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("checkbox").check();
+  const dashboardResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/v1/home/dashboard") && response.request().method() === "GET"
+  );
   await page.getByRole("button", { name: "Complete profile" }).click();
+  const dashboard = await dashboardResponse;
+  expect(dashboard.ok()).toBe(true);
+  expect(await dashboard.json()).toMatchObject({
+    current_streak_days: 0,
+    tasks: [],
+    daily_activity: [],
+  });
   await expect(page).toHaveURL(/\/app$/);
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
@@ -49,7 +60,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByRole("button", { name: "Notifications", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Open profile", exact: true })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Study streak", exact: true })).toContainText(
-    "Sample study time"
+    "day streak"
+  );
+  await expect(page.getByRole("region", { name: "Study streak", exact: true })).not.toContainText(
+    "Sample"
   );
   await page.locator(".study-activity-grid button:not(:disabled)").first().click();
   await expect(page.locator(".study-activity-detail")).toContainText("tasks completed");
@@ -345,10 +359,12 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.screenshot({ path: "test-results/shell-navigation-375.png", fullPage: true });
   await mobile.getByRole("link", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL(/\/app$/);
-  await page
-    .getByRole("navigation", { name: "Study tools", exact: true })
-    .getByRole("link", { name: "Notes", exact: true })
-    .click();
+  await expect(
+    page
+      .getByRole("navigation", { name: "Study tools", exact: true })
+      .getByRole("link", { name: "Notes", exact: true })
+  ).toHaveCount(0);
+  await page.goto("/app/notes");
   await expect(page).toHaveURL(/\/app\/notes$/);
   await expect(mobile).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "Make room for your ideas" })).toBeVisible();
