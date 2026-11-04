@@ -256,7 +256,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await homeChat.getByLabel("Study question").fill("Keep this draft private");
   await homeChat.getByRole("button", { name: "Close chat", exact: true }).click();
   await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app\?chat=new$/);
   await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");
   expect(inferenceRequests).toBe(0);
   expect(page.url()).not.toContain("Keep");

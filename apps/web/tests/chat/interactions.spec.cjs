@@ -1353,24 +1353,30 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       await page
         .getByRole("button", { name: "Make slides Presentation decks for your topic", exact: true })
         .click();
-      await expect(page.getByLabel("Study question")).toHaveValue(
-        "Create a PowerPoint presentation about: "
+      await expect(page.getByLabel("Study question")).toHaveValue("");
+      await expect(page.getByLabel("Study question")).toHaveAttribute(
+        "placeholder",
+        "What should I include in the slides?"
       );
+      await expect(
+        page.getByRole("button", { name: "Remove Slides action", exact: true })
+      ).toBeVisible();
       expect(
         await page.evaluate(
           () => window.__calls.filter((item) => item.url.endsWith("/stream")).length
         )
       ).toBe(streamsBeforeTool);
       await page.setViewportSize({ width: 375, height: 975 });
-      await expect(page.getByRole("heading", { name: "Recent", exact: true })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "Recent", exact: true })).toHaveCount(0);
       await expect(page.getByRole("heading", { name: "Tools", exact: true })).toHaveCount(0);
       await expect(page.locator(".study-chat-composer")).toHaveAttribute(
         "data-variant",
         "adaptive"
       );
-      await expect(page.getByLabel("Study question")).toHaveValue(
-        "Create a PowerPoint presentation about: "
-      );
+      await expect(page.getByLabel("Study question")).toHaveValue("");
+      await expect(
+        page.getByRole("button", { name: "Remove Slides action", exact: true })
+      ).toBeVisible();
       await page
         .getByLabel("Study question")
         .fill(
