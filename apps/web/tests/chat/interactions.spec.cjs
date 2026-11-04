@@ -8,6 +8,12 @@ const presentationFixture = JSON.parse(
 const imageFixture = fs.readFileSync(path.join(__dirname, "fixtures/synthetic-diagram.png"));
 const owner = "00000000-0000-4000-8000-000000000001";
 const session = "00000000-0000-4000-8000-000000000003";
+async function openAttachmentPicker(page, scope = page) {
+  await scope.getByRole("button", { name: "Open uploads and study actions", exact: true }).click();
+  const chooser = page.waitForEvent("filechooser");
+  await page.getByRole("button", { name: /^(Upload a file|Files)$/ }).click();
+  return chooser;
+}
 async function setupChat(page) {
   await page.addInitScript(
     ({ owner, session, pptxBase64, imageBase64, presentationFixture }) => {
@@ -526,6 +532,18 @@ async function setupChat(page) {
   );
 }
 
+test("public mobile chat route opens the owned saved session in the Home sheet", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`/app/chat?session=${session}&route_contract=1`);
+  await expect(page).toHaveURL(new RegExp(`/app\\?session=${session}$`));
+  const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await expect(sheet).toBeVisible();
+  await expect(sheet.getByLabel("Study question")).toBeEnabled();
+});
+
 test("Library starts with a compact app sidebar and preserves other pages' sidebar choice", async ({
   page,
 }) => {
@@ -622,29 +640,7 @@ test("home and chat share aligned navigation, docked toggle and polished account
   await expect(newChat).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-  const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  const pressedHome = navigation.getByRole("link", { name: "Home", exact: true });
-  await pressedHome.dispatchEvent("pointerdown", {
-    pointerType: "touch",
-    button: 0,
-    isPrimary: true,
-  });
-  await expect(pressedHome).toHaveAttribute("data-pressed", "true");
-  const pressColor = await pressedHome.evaluate((el) => getComputedStyle(el).backgroundColor);
-  expect(pressColor).not.toBe("rgba(0, 0, 0, 0)");
-  await pressedHome.dispatchEvent("pointercancel");
-  await expect(pressedHome).toHaveAttribute("data-pressed", "false");
-  await expect(navigation.getByRole("link", { name: "New chat", exact: true })).toBeVisible();
-  expect(
-    await navigation
-      .getByRole("link", { name: "Home", exact: true })
-      .evaluate((element) => getComputedStyle(element).textDecorationLine)
-  ).toBe("none");
-  await navigation.getByRole("button", { name: "Account menu", exact: true }).click();
-  await expect(account).toBeVisible();
-  await page.screenshot({ path: test.info().outputPath("profile-menu-mobile.png") });
-  await page.keyboard.press("Escape");
+  await expect(page.getByRole("button", { name: "Open navigation", exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
@@ -884,11 +880,9 @@ test("semantic title arrival, pinned group, centred dialogs and archive/delete u
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(title).not.toBeVisible();
   await expect(page.getByRole("button", { name: "Share", exact: true })).not.toBeVisible();
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-  const mobileNavigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  await mobileNavigation
-    .getByRole("button", { name: "Options for My clearance notes", exact: true })
-    .click();
+  await page.goto(`/app?session=${session}`);
+  const mobileSheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await mobileSheet.getByRole("button", { name: "Conversation options", exact: true }).click();
   await page.getByRole("menuitem", { name: "Rename", exact: true }).click();
   await expect(rename).toBeVisible();
   await page.screenshot({ path: test.info().outputPath("rename-conversation-mobile.png") });
@@ -952,8 +946,7 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
     timeout: 60000,
   });
   const pick = async () => {
-    const chooser = page.waitForEvent("filechooser");
-    await page.getByRole("button", { name: "Attach study material", exact: true }).click();
+    const chooser = await openAttachmentPicker(page);
     await (
       await chooser
     ).setFiles({ name: "synthetic-diagram.png", mimeType: "image/png", buffer: imageFixture });
@@ -1169,7 +1162,13 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       );
       await page.getByRole("button", { name: "Edit question", exact: true }).click();
       await page.getByLabel("Edit question", { exact: true }).fill("Edited synthetic question");
-      await page.getByRole("button", { name: "Save as new branch", exact: true }).click();
+      await expect(
+        page.getByRole("img", { name: "Editing creates a new branch", exact: true })
+      ).toBeVisible();
+      await page
+        .locator(".study-chat-edit")
+        .getByRole("button", { name: "Send", exact: true })
+        .click();
       await expect(page.getByText("Edited branch answer", { exact: true })).toBeVisible();
       await expect(page.getByText("Edited synthetic question", { exact: true })).toBeVisible();
       const edited = page
@@ -1189,8 +1188,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       expect(await page.evaluate(() => window.__trackStopped)).toBe(true);
       console.log("PASS microphone lifecycle and API transcription into composer");
       await page.getByLabel("Study question").fill("Explain these attached notes");
-      const chooser = page.waitForEvent("filechooser");
-      await page.getByRole("button", { name: "Attach study material", exact: true }).click();
+      const chooser = await openAttachmentPicker(page);
       await (
         await chooser
       ).setFiles({
@@ -1355,9 +1353,14 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       await page
         .getByRole("button", { name: "Make slides Presentation decks for your topic", exact: true })
         .click();
-      await expect(page.getByLabel("Study question")).toHaveValue(
-        "Create a PowerPoint presentation about: "
+      await expect(page.getByLabel("Study question")).toHaveValue("");
+      await expect(page.getByLabel("Study question")).toHaveAttribute(
+        "placeholder",
+        "What should I include in the slides?"
       );
+      await expect(
+        page.getByRole("button", { name: "Remove Slides action", exact: true })
+      ).toBeVisible();
       expect(
         await page.evaluate(
           () => window.__calls.filter((item) => item.url.endsWith("/stream")).length
@@ -1370,9 +1373,10 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         "data-variant",
         "adaptive"
       );
-      await expect(page.getByLabel("Study question")).toHaveValue(
-        "Create a PowerPoint presentation about: "
-      );
+      await expect(page.getByLabel("Study question")).toHaveValue("");
+      await expect(
+        page.getByRole("button", { name: "Remove Slides action", exact: true })
+      ).toBeVisible();
       await page
         .getByLabel("Study question")
         .fill(
@@ -1535,17 +1539,14 @@ test("session menus persist organization and share only the selected conversatio
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const share = page.getByRole("dialog", { name: "Share conversation", exact: true });
-  await expect(share.getByLabel("Conversation preview")).toContainText("Original synthetic answer");
-  expect(await share.getByLabel("Conversation preview").inputValue()).not.toMatch(
-    /PRIVATE OTHER BRANCH|PRIVATE INTERNAL REASONING/
-  );
-  await share.getByRole("button", { name: "Copy conversation", exact: true }).click();
-  expect(await page.evaluate(() => window.__copiedTranscript)).toContain(
-    "Original synthetic question"
-  );
-  const download = page.waitForEvent("download");
-  await share.getByRole("button", { name: "Download copy", exact: true }).click();
-  await (await download).saveAs(test.info().outputPath("shared-conversation.md"));
+  await expect(share).toHaveAccessibleName("Share conversation");
+  await expect(share.getByRole("button", { name: "Invite", exact: true })).toBeDisabled();
+  await expect(
+    share.getByRole("button", { name: "Only you have access", exact: true })
+  ).toBeDisabled();
+  await expect(share).toContainText("Sharing with other accounts is not available yet");
+  await share.getByRole("button", { name: "Copy link", exact: true }).click();
+  expect(await page.evaluate(() => window.__copiedTranscript)).toContain(session);
   await page.keyboard.press("Escape");
   await title.click();
   await page.getByRole("menuitem", { name: "Pin", exact: true }).click();
@@ -1625,7 +1626,7 @@ test("session menus persist organization and share only the selected conversatio
   ).toBe(before + 1);
   expect(errors).toEqual([]);
   console.log(
-    "PASS owned session metadata, pin/rename failure-retry, sidebar menu, archive/restore, soft-delete confirmation and selected-branch copy/download without reasoning or hidden branches"
+    "PASS owned session metadata, pin/rename failure-retry, sidebar menu, archive/restore, soft-delete confirmation and owner-only deep links without enabling public access or sending invitations"
   );
 });
 
@@ -1930,15 +1931,12 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
     .toBeLessThanOrEqual(845);
   expect((await sheet.boundingBox()).y).toBeGreaterThanOrEqual(14);
   await expect(sheet.locator(".mobile-home-chat-header .auth-brand-mark")).toHaveCount(0);
-  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCSS(
-    "border-radius",
-    "50%"
-  );
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCount(0);
+  await expect(
+    sheet.getByRole("button", { name: "Conversation options", exact: true })
+  ).toHaveCount(0);
   const input = sheet.getByLabel("Study question", { exact: true });
   await expect(input).toHaveCSS("font-size", "16px");
-  expect(
-    (await sheet.getByRole("button", { name: "New chat", exact: true }).boundingBox()).height
-  ).toBe(40);
   await input.fill("A private unfinished question");
   await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
   const history = sheet.getByRole("region", { name: "Chat history", exact: true });
@@ -1966,8 +1964,7 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
     .toBeLessThanOrEqual(378);
   const composerBounds = await sheet.locator(".study-chat-composer").boundingBox();
   expect(composerBounds.x + composerBounds.width).toBeLessThanOrEqual(378);
-  const chooser = page.waitForEvent("filechooser");
-  await sheet.getByRole("button", { name: "Attach study material", exact: true }).click();
+  const chooser = await openAttachmentPicker(page, sheet);
   await (
     await chooser
   ).setFiles({
@@ -1990,8 +1987,11 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
   await expect(
     sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
   ).toBeVisible();
-  await sheet.getByRole("button", { name: "New chat", exact: true }).click();
-  await expect(input).toHaveValue("");
+  // Unsent chats retain the intentionally empty header. Remove the local draft
+  // attachment through its own action, then verify New chat after the first reply.
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCount(0);
+  await sheet.getByRole("button", { name: "Remove synthetic-sheet-note.txt", exact: true }).click();
+  await input.fill("");
   await expect(
     sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
   ).toHaveCount(0);
@@ -2000,6 +2000,13 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
   await expect(sheet.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
   await expect(sheet.getByText(/PansGPT supports your studies/)).toHaveCount(0);
   await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toBeInViewport();
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCSS(
+    "border-radius",
+    "50%"
+  );
+  expect(
+    (await sheet.getByRole("button", { name: "New chat", exact: true }).boundingBox()).height
+  ).toBe(40);
   expect((await sheet.locator(".study-chat").boundingBox()).x).toBeGreaterThanOrEqual(0);
   await page.screenshot({
     path: test.info().outputPath("mobile-home-chat-sheet-answer.png"),
@@ -2204,7 +2211,8 @@ test("mobile Home sheet supports swipes without losing drafts or swallowing norm
     sessionStorage.setItem("interaction-tree", JSON.stringify(tree));
   });
   await page.reload();
-  await trigger.click();
+  // The public chat=new URL restores the sheet after reload.
+  await expect(sheet).toBeVisible();
   await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
   await sheet
     .getByRole("region", { name: "Chat history", exact: true })
@@ -2232,11 +2240,7 @@ test("Home plus selects local attachments instead of opening search", async ({ p
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?surface=home", { waitUntil: "load", timeout: 60000 });
   await page.evaluate((id) => localStorage.removeItem(`pansgpt_disclaimer_accepted_${id}`), owner);
-  const chooser = page.waitForEvent("filechooser");
-  await page
-    .locator(".shell-mobile-composer")
-    .getByRole("button", { name: "Attach study material", exact: true })
-    .click();
+  const chooser = await openAttachmentPicker(page, page.locator(".shell-mobile-composer"));
   await (
     await chooser
   ).setFiles({
@@ -2691,17 +2695,10 @@ test("only sidebar chat history scrolls while navigation, search and account rem
   for (const [width, height] of [
     [1440, 975],
     [1440, 500],
-    [390, 844],
-    [390, 500],
   ]) {
     await page.setViewportSize({ width, height });
     await page.reload({ waitUntil: "load", timeout: 60000 });
-    if (width < 861)
-      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-    const sidebar =
-      width < 861
-        ? page.getByRole("dialog", { name: "Workspace navigation", exact: true })
-        : page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
+    const sidebar = page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
     const list = sidebar.getByRole("region", { name: "Chat history", exact: true });
     await expect(list).toContainText("Fixed sidebar study 0");
     await list.getByRole("button", { name: "More", exact: true }).click();
@@ -2723,8 +2720,6 @@ test("only sidebar chat history scrolls while navigation, search and account rem
     await expect(list).toHaveCSS("overflow-y", "auto");
     await expect(list).toHaveCSS("scrollbar-width", "thin");
     await expect(sidebar.locator(".p-app-nav-panel-top")).toHaveCSS("overflow-y", "hidden");
-    if (width < 861)
-      await expect(sidebar.locator(".p-slideout-body")).toHaveCSS("overflow-y", "hidden");
     await list.evaluate((el) => {
       el.scrollTop = 0;
     });

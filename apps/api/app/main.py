@@ -18,6 +18,7 @@ from app.core.config import settings
 from app.core.database import close_db_pool, init_db_pool
 from app.core.dependencies import prewarm_jwks_cache
 from app.core.rate_limit import limiter, rate_limit_exceeded_handler
+from app.routers.academic import router as academic_router
 from app.routers.admin import router as admin_router
 from app.routers.auth import router as auth_router
 from app.routers.chat import router as chat_router
@@ -109,6 +110,7 @@ app.add_middleware(
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(quiz_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
+app.include_router(academic_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)

@@ -72,7 +72,18 @@ export function ConversationUndo(): React.ReactElement | null {
             .then(() => {
               if (controller.signal.aborted) return;
               reload();
-              if (notice.wasCurrent) router.push(`/app/chat?session=${notice.id}`);
+              if (notice.wasCurrent) {
+                const isMobile =
+                  typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches;
+                if (isMobile) {
+                  router.push(`/app?session=${encodeURIComponent(notice.id)}`);
+                  window.dispatchEvent(
+                    new CustomEvent("pansgpt-open-chat", { detail: { id: notice.id } })
+                  );
+                } else {
+                  router.push(`/app/chat?session=${encodeURIComponent(notice.id)}`);
+                }
+              }
               setNotice(null);
             })
             .catch((failure: unknown) => {

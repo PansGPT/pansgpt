@@ -74,6 +74,12 @@ export const SETTINGS_SEARCH_FIELDS: readonly SettingsSearchField[] = [
   },
   {
     section: "appearance",
+    label: "Text size",
+    target: "Text size",
+    keywords: "text font size chat scale zoom",
+  },
+  {
+    section: "appearance",
     label: "Motion",
     target: "Motion",
     keywords: "animation reduced motion",

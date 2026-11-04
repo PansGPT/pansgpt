@@ -18,6 +18,7 @@ export interface SettingsDraft {
   academicLevel: string;
   interfaceFont: string;
   responseFont: string;
+  textSize: string;
   motion: string;
   responseStyle: string;
   replies: boolean;

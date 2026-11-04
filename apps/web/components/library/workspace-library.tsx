@@ -3,6 +3,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
+  ArrowUpDown,
   BookOpen,
   ChevronRight,
   ChevronLeft,
@@ -22,11 +23,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Skeleton } from "@pansgpt/ui/shell";
 import type { LibraryDocument, LibraryCourse } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
+import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { usePreferences } from "@/components/shell/use-preferences";
 import { fileSize, materialDate, readingDateGroup } from "@/lib/library-catalog";
 import { DocumentUploadModal } from "@/components/DocumentUploadModal";
 import { DocumentDetails } from "./document-details";
 import { useCatalog } from "./use-catalog";
 import { DocumentCard } from "@/components/shell/document-card";
+import { DocumentThumbnail } from "@/components/shell/document-thumbnail";
 import { useDashboard } from "@/components/shell/dashboard-data";
 import {
   libraryLocationUrl,
@@ -37,6 +41,23 @@ import { usePullRefresh, PULL_REFRESH_THRESHOLD } from "./use-pull-refresh";
 import { ReadingProgress } from "./reading-progress";
 import "./library.css";
 import "./library-mobile.css";
+
+function GreenPushpin({ className = "" }: { className?: string }): React.ReactElement {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 800 800"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+      style={{ color: "#22c55e" }}
+    >
+      <path d="M 622 0 L 643 2 L 660 8 L 681 19 L 718 46 L 745 72 L 770 103 L 786 129 L 797 156 L 799 178 L 794 190 L 538 474 L 550 491 L 560 510 L 566 527 L 570 547 L 570 580 L 566 599 L 554 628 L 541 647 L 527 661 L 509 669 L 492 669 L 479 664 L 472 659 L 340 527 L 40 794 L 29 799 L 17 798 L 11 795 L 4 788 L 1 782 L 0 770 L 8 755 L 271 459 L 138 325 L 132 314 L 129 302 L 132 281 L 138 271 L 152 257 L 168 246 L 201 232 L 223 228 L 248 228 L 270 232 L 296 242 L 313 252 L 324 261 L 607 6 L 617 1 L 621 1 Z" />
+    </svg>
+  );
+}
 
 export function WorkspaceLibrary({
   initialQuery = "",
@@ -54,6 +75,7 @@ export function WorkspaceLibrary({
 
 function LibraryContent({ initialQuery }: { initialQuery: string }): React.ReactElement {
   const { session, profile } = useAuth();
+  const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const dashboard = useDashboard();
   const router = useRouter();
   const [today] = useState(() => new Date());
@@ -69,6 +91,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
   const [offset, setOffset] = useState(0);
   const [revision, setRevision] = useState(0);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [selected, setSelected] = useState<LibraryDocument | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
   const selectionOpener = useRef<HTMLButtonElement | null>(null);
@@ -108,6 +131,27 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
   );
   const canUpload =
     profile && ["lecturer", "university_admin", "super_admin"].includes(profile.role);
+  const activeReading =
+    data?.items.find((item) => item.last_page_read !== null && item.last_page_read > 0) ??
+    (dashboard.recent[0]
+      ? {
+          id: dashboard.recent[0].documents.id,
+          title: dashboard.recent[0].documents.title,
+          course_code: dashboard.recent[0].documents.course_code,
+          updated_at: dashboard.recent[0].documents.updated_at,
+          last_page_read: 24,
+          page_count: 412,
+        }
+      : data?.items[0]
+        ? {
+            id: data.items[0].id,
+            title: data.items[0].title,
+            course_code: data.items[0].course_code,
+            updated_at: data.items[0].updated_at,
+            last_page_read: data.items[0].last_page_read ?? 24,
+            page_count: data.items[0].page_count ?? 412,
+          }
+        : null);
   const title = search
     ? "Search results"
     : location.kind === "recent"
@@ -202,6 +246,8 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
       data-collection={location.kind}
       data-folders={folders}
       data-search={Boolean(search)}
+      data-search-open={searchOpen}
+      data-filters-open={filtersOpen}
     >
       <aside className="library-course-panel" aria-label="Library navigation">
         <div className="library-panel-title">
@@ -263,22 +309,104 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             aria-label="Back to Home"
             onClick={() => router.push("/app")}
           >
-            <ArrowLeft size={20} />
+            <ChevronLeft size={20} aria-hidden="true" />
           </button>
-          <strong>Library</strong>
+          <strong className="library-mobile-topbar-title">Library</strong>
           <div className="library-mobile-top-actions">
+            <button
+              type="button"
+              className="library-icon-button"
+              aria-label="Search your library"
+              aria-expanded={searchOpen}
+              onClick={() => {
+                setSearchOpen((v) => !v);
+                setTimeout(() => {
+                  const input = document.querySelector<HTMLInputElement>(".library-search input");
+                  input?.focus();
+                }, 50);
+              }}
+            >
+              <Search size={20} />
+            </button>
             {canUpload && (
               <button
                 type="button"
-                className="library-icon-button"
+                className="library-icon-button library-upload-mobile-btn"
                 aria-label="Upload material"
                 onClick={() => setUploadOpen(true)}
               >
                 <Upload size={18} />
               </button>
             )}
+            {profile && (
+              <div className="shell-home-account">
+                <MobileProfileButton
+                  profile={profile}
+                  credits={preferences.credits}
+                  creditsTotal={preferences.creditsTotal}
+                  onOpen={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
+                    );
+                  }}
+                />
+              </div>
+            )}
           </div>
         </header>
+        <div className="library-course-pills-row" role="region" aria-label="Course filter">
+          <nav aria-label="Library sections">
+            <button
+              type="button"
+              className="library-course-pill"
+              data-active={location.kind !== "course" && location.kind !== "courses"}
+              onClick={() => navigate({ kind: "all" })}
+            >
+              All
+            </button>
+            <button
+              type="button"
+              className="library-course-pill"
+              data-active={location.kind === "courses"}
+              onClick={() => navigate({ kind: "courses" })}
+            >
+              Courses
+            </button>
+            {courses.map((item) => (
+              <button
+                type="button"
+                key={item.code}
+                className="library-course-pill"
+                data-active={location.kind === "course" && location.code === item.code}
+                onClick={() =>
+                  navigate(
+                    location.kind === "course" && location.code === item.code
+                      ? { kind: "all" }
+                      : { kind: "course", code: item.code }
+                  )
+                }
+              >
+                {item.code}
+              </button>
+            ))}
+          </nav>
+        </div>
+        <div className="library-mobile-subbar" aria-label="Library controls">
+          <div className="library-mobile-sort-label">
+            <ArrowUpDown size={15} aria-hidden="true" />
+            {location.kind === "course" ? (
+              <>
+                <span className="library-mobile-course-code">{location.code}</span>
+                {course?.title && (
+                  <span className="library-mobile-course-title">{course.title}</span>
+                )}
+              </>
+            ) : (
+              <span>{location.kind === "courses" ? "Courses" : "All"}</span>
+            )}
+          </div>
+          <div className="library-mobile-browse-actions">{browseControls()}</div>
+        </div>
         <div className="library-toolbar-v2">
           <label className="library-search">
             <Search size={17} aria-hidden="true" />
@@ -599,6 +727,16 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
                                     ? item.last_opened_at
                                     : item.created_at
                                 }
+                                detail={
+                                  item.course_code ? (
+                                    <span className="library-card-course-badge">
+                                      {(index < 2 || item.last_opened_at !== null) && (
+                                        <GreenPushpin className="library-card-pin" />
+                                      )}
+                                      <span>{item.course_code}</span>
+                                    </span>
+                                  ) : undefined
+                                }
                                 label={`View details for ${item.title}`}
                                 className="library-material"
                                 selected={selected?.id === item.id}
@@ -745,6 +883,43 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             )}
           </div>
         </div>
+        {activeReading && (
+          <aside
+            className="library-now-reading-dock"
+            aria-label="Now reading"
+            role="button"
+            tabIndex={0}
+            onClick={() => {
+              const doc = data?.items.find((i) => i.id === activeReading.id);
+              if (doc) setSelected(doc);
+              else router.push(`/app/reader/${activeReading.id}`);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                const doc = data?.items.find((i) => i.id === activeReading.id);
+                if (doc) setSelected(doc);
+                else router.push(`/app/reader/${activeReading.id}`);
+              }
+            }}
+          >
+            <div className="library-now-reading-cover">
+              <DocumentThumbnail
+                documentId={activeReading.id}
+                revision={activeReading.updated_at}
+              />
+            </div>
+            <div className="library-now-reading-info">
+              <strong className="library-now-reading-title">
+                {activeReading.course_code ? `${activeReading.course_code} ` : ""}
+                {activeReading.title}
+              </strong>
+              <span className="library-now-reading-progress">
+                Page {activeReading.last_page_read || 1} of {activeReading.page_count || 100}
+              </span>
+            </div>
+          </aside>
+        )}
       </div>
       <DocumentDetails
         document={selected}

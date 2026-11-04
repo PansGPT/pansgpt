@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useSyncExternalStore } from "react";
-import { useTheme } from "@pansgpt/ui/shell";
+import { useTheme, localTodayIso, addDateDays } from "@pansgpt/ui/shell";
 const params = new URLSearchParams(location.search);
 const initialState = params.get("state") || "sample";
 const DataContext = createContext(null);
-export const env = { NEXT_PUBLIC_API_URL: "http://127.0.0.1:4178" };
+export const env = { NEXT_PUBLIC_API_URL: "http://127.0.0.1:4178", NEXT_PUBLIC_DEMO_MODE: "true" };
+const fixtureToday = localTodayIso();
 const previewDocuments = globalThis.__PREVIEW_DOCUMENTS__ || [];
 const profile = {
   id: "00000000-0000-4000-8000-000000000001",
@@ -96,6 +97,8 @@ export function DashboardProvider({ children }) {
             {
               id: "fixture-class",
               course_title: "Sample pharmacology class",
+              date: fixtureToday,
+              start_time_local: "09:00",
               day: new Date().toLocaleDateString("en-US", { weekday: "long" }),
               start_time: "09:00",
               time_slot: "09:00",
@@ -103,7 +106,11 @@ export function DashboardProvider({ children }) {
             },
           ]
         : [],
-    completed: [],
+    dailyActivity: [],
+    today: fixtureToday,
+    activityFrom: addDateDays(fixtureToday, -89),
+    currentStreakDays: 0,
+    completeTask: async () => {},
     activityError: false,
     loading: state === "loading",
     recentError: false,

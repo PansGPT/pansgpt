@@ -11,6 +11,7 @@ import {
 } from "@assistant-ui/react";
 import type {
   ChatMessageView,
+  ChatActionMode,
   ChatStreamRequest,
   ChatFeedbackRequest,
   ChatBranchRequest,
@@ -102,6 +103,7 @@ export function useChatRuntime({
   canSend,
   initialSessionId,
   initialMessages,
+  initialActionMode = null,
   onSessionChanged,
   onArtifactReady,
 }: {
@@ -111,6 +113,7 @@ export function useChatRuntime({
   canSend: boolean;
   initialSessionId: string | null;
   initialMessages: ChatMessageView[];
+  initialActionMode?: ChatActionMode | null;
   onSessionChanged: () => void;
   onArtifactReady?: (artifact: ArtifactItem) => void;
 }) {
@@ -124,12 +127,22 @@ export function useChatRuntime({
   const [branchRevision, setBranchRevision] = useState(0);
   const pendingFeedback = useRef(new Set<string>());
   const [feedbackPending, setFeedbackPending] = useState<ReadonlySet<string>>(new Set());
+  const [actionMode, setActionMode] = useState<ChatActionMode | null>(initialActionMode);
   const sessionId = useRef(initialSessionId);
+  const actionModeRef = useRef<ChatActionMode | null>(initialActionMode);
+  const selectedLibraryDocumentId = useRef<string | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState(initialSessionId);
   const sessionPromise = useRef<Promise<string> | null>(null);
   const active = useRef<AbortController | null>(null);
   const lifetime = useRef<AbortController | null>(null);
   const available = useRef(enabled);
+  const setSelectedLibraryDocumentId = useCallback((documentId: string | null) => {
+    selectedLibraryDocumentId.current = documentId;
+  }, []);
+  const setSelectedActionMode = useCallback((mode: ChatActionMode | null) => {
+    actionModeRef.current = mode;
+    setActionMode(mode);
+  }, []);
   useEffect(() => {
     lifetime.current = new AbortController();
     return () => {
@@ -281,6 +294,8 @@ export function useChatRuntime({
         setError("Use a question up to 10,000 characters and at most four attachments.");
         return;
       }
+      const submittedActionMode =
+        options.editId || options.regenerateId ? null : actionModeRef.current;
       const controller = new AbortController();
       active.current = controller;
       const current = () => active.current === controller && !controller.signal.aborted;
@@ -336,7 +351,9 @@ export function useChatRuntime({
         if (!current()) return;
         const payload: ChatStreamRequest = {
           message: prompt,
+          action_mode: submittedActionMode ?? undefined,
           parent_message_id: parentId,
+          document_id: selectedLibraryDocumentId.current ?? undefined,
           edit_message_id: options.editId,
           regenerate_message_id: options.regenerateId,
           attachment_ids: files.map((item) => item.id),
@@ -352,6 +369,7 @@ export function useChatRuntime({
         if (!current()) return;
         if (!response.ok) throw new Error(await apiError(response));
         if (!response.body) throw new Error("The chat service returned no response stream.");
+        if (submittedActionMode !== null) setSelectedActionMode(null);
         reader = response.body.getReader();
         const decoder = new TextDecoder();
         const parser = new SSEEventStreamReader();
@@ -428,6 +446,7 @@ export function useChatRuntime({
       headers,
       onSessionChanged,
       onArtifactReady,
+      setSelectedActionMode,
     ]
   );
 
@@ -577,5 +596,14 @@ export function useChatRuntime({
       },
     },
   });
-  return { runtime, isRunning, error, feedbackPending, currentSessionId };
+  return {
+    runtime,
+    isRunning,
+    error,
+    feedbackPending,
+    currentSessionId,
+    setSelectedLibraryDocumentId,
+    actionMode,
+    setSelectedActionMode,
+  };
 }

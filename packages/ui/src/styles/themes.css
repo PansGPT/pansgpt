@@ -5,9 +5,20 @@
   --background: var(--bg-primary);
   --foreground: var(--text-primary-900);
   --primary: var(--bg-brand-solid);
+  --figma-colors-effects-focus-rings-focus-ring: transparent;
+  --focus-ring: transparent;
+  --effect-focus-ring: none;
+  --effect-focus-ring-shadow-xs: none;
+  --effect-focus-ring-shadow-sm: none;
+  --effect-focus-ring-shadow-xs-skeuomorphic: none;
+  --border-brand: var(--border-primary);
+  --border-brand-alt: var(--border-secondary);
+  --slider-handle-border: var(--border-primary);
+  --figma-component-colors-components-sliders-slider-handle-border: var(--border-primary);
 }
 /* Neutral charcoal layers: keep green in brand actions, not the canvas. */
 [data-theme="dark"] {
+  --slider-handle-bg: var(--bg-primary);
   --bg-primary: oklch(17.8% 0 0);
   --bg-secondary: oklch(20.9% 0 0);
   --bg-tertiary: oklch(24% 0 0);

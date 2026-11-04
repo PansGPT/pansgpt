@@ -52,7 +52,8 @@ test("close action dismisses a caller-owned badge by keyboard and honors disable
   const close = demo.getByRole("button", { name: "Remove selected badge" });
   await close.scrollIntoViewIfNeeded();
   await close.focus();
-  expect(await close.evaluate((node) => getComputedStyle(node).boxShadow)).not.toBe("none");
+  await expect(close).toBeFocused();
+  expect(await close.evaluate((node) => getComputedStyle(node).boxShadow)).toBe("none");
   await close.press("Enter");
   await expect(close).toHaveCount(0);
   await expect(demo.locator("output")).toHaveText("Badge visible: false");

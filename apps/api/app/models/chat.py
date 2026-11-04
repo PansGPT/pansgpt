@@ -39,6 +39,17 @@ class RouteType(StrEnum):
     COMPLEX_PATH = "complex_path"
 
 
+ChatActionMode = Literal[
+    "create_document",
+    "make_slides",
+    "create_flashcards",
+    "plot_graph",
+    "create_study_notes",
+    "make_revision_sheet",
+    "create_mnemonics",
+]
+
+
 class QueryClassification(BaseModel):
     """Result of intent and complexity classification."""
 
@@ -58,6 +69,7 @@ class QueryClassification(BaseModel):
     bypass_reason: str | None = None
     # Internal routing metadata; never forwarded as public reasoning.
     direct_answer: str | None = None
+    clarification_required: bool = False
     retrieval_query: str | None = None
     presentation: PresentationPlan | None = None
     routing_provider: str | None = None
@@ -263,6 +275,7 @@ class StreamChatRequest(StrictRequest):
     """Payload for POST /api/v1/ai/chat/sessions/{id}/stream."""
 
     message: str = Field(..., min_length=1, max_length=10000)
+    action_mode: ChatActionMode | None = None
     parent_message_id: str | None = None
     document_id: str | None = None
     course_code: str | None = None

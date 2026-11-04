@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -10,7 +17,7 @@ import {
   useAui,
   useAuiState,
 } from "@assistant-ui/react";
-import type { ChatMessageView } from "@pansgpt/types";
+import type { ChatActionMode, ChatMessageView, LibraryDocument } from "@pansgpt/types";
 import { ArrowDown, AlertCircle } from "lucide-react";
 import { z } from "zod";
 import { env } from "@/env";
@@ -22,7 +29,7 @@ import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal"
 import { ChatRecent } from "@/components/chat/recent";
 import { ChatTools } from "@/components/chat/tools";
 import { ChatHeader } from "@/components/chat/header";
-import { ChatComposer } from "@/components/chat/composer";
+import { ChatComposer, ChatComposerSlotProvider } from "@/components/chat/composer";
 import { ChatMessages } from "@/components/chat/virtual-messages";
 import { parseChatHistory } from "@/lib/chat-history";
 import { ChatActionsContext } from "@/components/chat/actions-context";
@@ -44,6 +51,10 @@ function ChatThread({
   initialTitle,
   embedded = false,
   onAttachmentError,
+  libraryDocument,
+  onLibraryDocumentSelect,
+  actionMode,
+  onActionModeChange,
 }: {
   embedded?: boolean;
   name: string;
@@ -51,6 +62,10 @@ function ChatThread({
   sessionId: string | null;
   initialTitle?: string;
   onAttachmentError: (message: string | null) => void;
+  libraryDocument: LibraryDocument | null;
+  onLibraryDocumentSelect: (document: LibraryDocument | null) => void;
+  actionMode: ChatActionMode | null;
+  onActionModeChange: (actionMode: ChatActionMode | null) => void;
 }): React.ReactElement {
   const aui = useAui();
   useEffect(() => {
@@ -88,8 +103,13 @@ function ChatThread({
                 Good {period}, <span>{name}</span>
               </h1>
             </div>
-            <ChatComposer />
-            {desktop && <ChatTools />}
+            <ChatComposer
+              actionMode={actionMode}
+              onActionModeChange={onActionModeChange}
+              libraryDocument={libraryDocument}
+              onLibraryDocumentSelect={onLibraryDocumentSelect}
+            />
+            {desktop && <ChatTools onActionSelect={onActionModeChange} />}
             {error && (
               <p className="study-chat-error" role="alert">
                 <AlertCircle size={17} aria-hidden="true" />
@@ -106,36 +126,43 @@ function ChatThread({
               turnAnchor="top"
               data-slot="aui_thread-viewport"
             >
-              <div className="study-chat-thread-content">
-                <div className="study-chat-messages" data-slot="aui_message-group">
-                  <ChatMessages viewport={viewport} />
-                  <span className="p-sr-only" role="status">
-                    {running ? "PansGPT is responding" : ""}
-                  </span>
+              <ChatComposerSlotProvider>
+                <div className="study-chat-thread-content">
+                  <div className="study-chat-messages" data-slot="aui_message-group">
+                    <ChatMessages viewport={viewport} />
+                    <span className="p-sr-only" role="status">
+                      {running ? "PansGPT is responding" : ""}
+                    </span>
+                  </div>
+                  <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
+                    <ThreadPrimitive.ScrollToBottom
+                      className="study-chat-scroll-bottom"
+                      aria-label="Scroll to latest message"
+                      title="Scroll to latest message"
+                    >
+                      <ArrowDown size={16} aria-hidden="true" />
+                    </ThreadPrimitive.ScrollToBottom>
+                    {error && (
+                      <p className="study-chat-error" role="alert">
+                        <AlertCircle size={17} aria-hidden="true" />
+                        {error}
+                      </p>
+                    )}
+                    <ChatComposer
+                      actionMode={actionMode}
+                      onActionModeChange={onActionModeChange}
+                      libraryDocument={libraryDocument}
+                      onLibraryDocumentSelect={onLibraryDocumentSelect}
+                    />
+                    {desktop && (
+                      <p>
+                        PansGPT supports your studies. Verify clinical facts and dosages with
+                        official monographs.
+                      </p>
+                    )}
+                  </ThreadPrimitive.ViewportFooter>
                 </div>
-                <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
-                  <ThreadPrimitive.ScrollToBottom
-                    className="study-chat-scroll-bottom"
-                    aria-label="Scroll to latest message"
-                    title="Scroll to latest message"
-                  >
-                    <ArrowDown size={16} aria-hidden="true" />
-                  </ThreadPrimitive.ScrollToBottom>
-                  {error && (
-                    <p className="study-chat-error" role="alert">
-                      <AlertCircle size={17} aria-hidden="true" />
-                      {error}
-                    </p>
-                  )}
-                  <ChatComposer />
-                  {desktop && (
-                    <p>
-                      PansGPT supports your studies. Verify clinical facts and dosages with official
-                      monographs.
-                    </p>
-                  )}
-                </ThreadPrimitive.ViewportFooter>
-              </div>
+              </ChatComposerSlotProvider>
             </ThreadPrimitive.Viewport>
           </>
         )}
@@ -151,16 +178,26 @@ export function ChatContent({
   initialTitle,
   active = true,
   renderThread,
+  onSessionCreated,
   pendingFiles,
   onFilesConsumed,
+  pendingLibraryDocument,
+  onLibraryDocumentConsumed,
+  pendingActionMode,
+  onActionModeConsumed,
 }: {
   active?: boolean;
   renderThread?: (thread: ReactNode, controls?: ReactNode) => ReactNode;
+  onSessionCreated?: (sessionId: string) => void;
   initialSessionId?: string | null;
   initialMessages?: ChatMessageView[];
   initialTitle?: string;
   pendingFiles?: { id: string; files: File[] } | null;
   onFilesConsumed?: (id: string) => void;
+  pendingLibraryDocument?: { id: string; document: LibraryDocument } | null;
+  onLibraryDocumentConsumed?: (id: string) => void;
+  pendingActionMode?: { id: string; mode: ChatActionMode } | null;
+  onActionModeConsumed?: (id: string) => void;
 }): React.ReactElement {
   const { user, session, profile, loading } = useAuth();
   const { draft, setDraft, startNewChat } = useChatDraft();
@@ -170,7 +207,11 @@ export function ChatContent({
   const { reload } = useDashboard();
   const [acknowledgedHere, setAcknowledgedHere] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const [libraryDocument, setLibraryDocument] = useState<LibraryDocument | null>(null);
+  const seenActionModes = useRef(new Set<string>());
   const seenFiles = useRef(new Set<string>());
+  const seenLibraryDocuments = useRef(new Set<string>());
+  const reportedSessionId = useRef<string | null>(initialSessionId);
   const fileLifetime = useRef(true);
   useEffect(() => {
     fileLifetime.current = true;
@@ -198,16 +239,57 @@ export function ChatContent({
     () => true
   );
   useEffect(() => () => setDraft(""), [setDraft]);
-  const { runtime, error, feedbackPending, currentSessionId } = useChatRuntime({
+  const {
+    runtime,
+    error,
+    feedbackPending,
+    currentSessionId,
+    setSelectedLibraryDocumentId,
+    actionMode,
+    setSelectedActionMode,
+  } = useChatRuntime({
     active: active,
     token: session?.access_token,
     ownerId: userId,
     canSend: accepted || acknowledgedHere,
     initialSessionId,
     initialMessages,
+    initialActionMode: pendingActionMode?.mode ?? null,
     onSessionChanged: reload,
     onArtifactReady: presentations?.received,
   });
+  const onLibraryDocumentSelect = useCallback(
+    (document: LibraryDocument | null) => {
+      setLibraryDocument(document);
+      setSelectedLibraryDocumentId(document?.id ?? null);
+    },
+    [setSelectedLibraryDocumentId]
+  );
+  useEffect(() => {
+    if (
+      !active ||
+      !(accepted || acknowledgedHere) ||
+      !pendingLibraryDocument ||
+      seenLibraryDocuments.current.has(pendingLibraryDocument.id)
+    )
+      return;
+    seenLibraryDocuments.current.add(pendingLibraryDocument.id);
+    onLibraryDocumentSelect(pendingLibraryDocument.document);
+    onLibraryDocumentConsumed?.(pendingLibraryDocument.id);
+  }, [
+    active,
+    accepted,
+    acknowledgedHere,
+    pendingLibraryDocument,
+    onLibraryDocumentConsumed,
+    onLibraryDocumentSelect,
+  ]);
+  useEffect(() => {
+    if (!active || !pendingActionMode || seenActionModes.current.has(pendingActionMode.id)) return;
+    seenActionModes.current.add(pendingActionMode.id);
+    setSelectedActionMode(pendingActionMode.mode);
+    onActionModeConsumed?.(pendingActionMode.id);
+  }, [active, pendingActionMode, onActionModeConsumed, setSelectedActionMode]);
   const draftApplied = useRef(false);
   useEffect(() => {
     if (
@@ -249,6 +331,12 @@ export function ChatContent({
     runtime.thread.composer.setText(initialDraft);
   }, [runtime, initialDraft]);
   useEffect(() => {
+    if (currentSessionId && currentSessionId !== reportedSessionId.current && onSessionCreated) {
+      reportedSessionId.current = currentSessionId;
+      onSessionCreated(currentSessionId);
+    }
+  }, [currentSessionId, initialSessionId, onSessionCreated]);
+  useEffect(() => {
     function removed(event: Event): void {
       if (
         event instanceof CustomEvent &&
@@ -272,6 +360,10 @@ export function ChatContent({
         initialTitle={initialTitle}
         embedded={!!renderThread}
         onAttachmentError={setAttachmentError}
+        libraryDocument={libraryDocument}
+        onLibraryDocumentSelect={onLibraryDocumentSelect}
+        actionMode={actionMode}
+        onActionModeChange={setSelectedActionMode}
       />
       <FirstChatDisclaimerModal
         isOpen={active && userId !== "anonymous" && !accepted && !acknowledgedHere}
@@ -305,14 +397,24 @@ export function ChatHistory({
   id,
   active = true,
   renderThread,
+  onSessionCreated,
   pendingFiles,
   onFilesConsumed,
+  pendingLibraryDocument,
+  onLibraryDocumentConsumed,
+  pendingActionMode,
+  onActionModeConsumed,
 }: {
   id: string;
   active?: boolean;
   renderThread?: (thread: ReactNode, controls?: ReactNode) => ReactNode;
+  onSessionCreated?: (sessionId: string) => void;
   pendingFiles?: { id: string; files: File[] } | null;
   onFilesConsumed?: (id: string) => void;
+  pendingLibraryDocument?: { id: string; document: LibraryDocument } | null;
+  onLibraryDocumentConsumed?: (id: string) => void;
+  pendingActionMode?: { id: string; mode: ChatActionMode } | null;
+  onActionModeConsumed?: (id: string) => void;
 }): React.ReactElement {
   const { session, profile } = useAuth();
   const [title, setTitle] = useState<string>();
@@ -340,6 +442,7 @@ export function ChatHistory({
         const metadata = z
           .object({ session: z.object({ title: z.string().optional() }) })
           .parse(data);
+        if (!controller.signal.aborted) setError(false);
         if (!controller.signal.aborted) setTitle(metadata.session.title);
         if (!controller.signal.aborted) setHistory(messages);
       } catch {
@@ -350,19 +453,32 @@ export function ChatHistory({
     return () => controller.abort();
   }, [id, owner, token, attempt]);
   const failure = (
-    <div className="shell-placeholder" role="alert">
-      <h1>We couldn&apos;t open this chat</h1>
-      <p>It may be unavailable or no longer accessible.</p>
-      <button
-        onClick={() => {
-          setError(false);
-          setAttempt((value) => value + 1);
-        }}
-      >
-        Try again
-      </button>
-      <Link href="/app/chat">Start a new chat</Link>
-    </div>
+    <section className="study-chat-load-error" role="alert">
+      <div className="study-chat-load-error-card">
+        <span className="study-chat-load-error-icon" aria-hidden="true">
+          <AlertCircle size={22} />
+        </span>
+        <p className="study-chat-load-error-label">Chat unavailable</p>
+        <h1>We couldn&apos;t open this chat</h1>
+        <p className="study-chat-load-error-description">
+          It may be unavailable or no longer accessible.
+        </p>
+        <div className="study-chat-load-error-actions">
+          <button
+            className="study-chat-load-error-retry"
+            onClick={() => {
+              setError(false);
+              setAttempt((value) => value + 1);
+            }}
+          >
+            Try again
+          </button>
+          <Link className="study-chat-load-error-new" href="/app/chat">
+            Start a new chat
+          </Link>
+        </div>
+      </div>
+    </section>
   );
   if (error) return <>{renderThread ? renderThread(failure) : failure}</>;
   if (!history)
@@ -374,8 +490,13 @@ export function ChatHistory({
       initialTitle={title}
       active={active}
       renderThread={renderThread}
+      onSessionCreated={onSessionCreated}
       pendingFiles={pendingFiles}
       onFilesConsumed={onFilesConsumed}
+      pendingLibraryDocument={pendingLibraryDocument}
+      onLibraryDocumentConsumed={onLibraryDocumentConsumed}
+      pendingActionMode={pendingActionMode}
+      onActionModeConsumed={onActionModeConsumed}
     />
   );
 }

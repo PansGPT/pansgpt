@@ -18,8 +18,8 @@
   text-underline-offset: 4px;
 }
 .auth-root :is(button, a, select):focus-visible {
-  outline: 2px solid var(--border-brand);
-  outline-offset: 4px;
+  outline: none;
+  box-shadow: none;
 }
 .auth-skip {
   position: fixed;

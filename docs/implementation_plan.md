@@ -1,5 +1,7 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-11-04 consolidation:** Integrate remaining local/remote branch histories into main while preserving current contracts, verified fixes and open release gates. [Scope and validation](all-branches-consolidation-2026-11-04.md).
+
 > **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).
 
 > **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).
@@ -17,6 +19,8 @@
 > **2026-10-28 quiz reliability:** Compact strict Groq output, matrix token/batch sizing, adaptive malformed-batch recovery and durable capacity retries are locally verified. API, real PostgreSQL and browser evidence plus remaining hosted gates: [quiz reliability hardening](quiz-reliability-2026-10-28.md).
 
 > **2026-10-26 quiz implementation:** The quiz engine and web journey are implemented on `feat/quiz-system`; [the implementation contract](quiz-system.md) supersedes Section 11's illustrative legacy transport and delivery details. Generation uses the current shared provider layer, validated JSON and fast local schema, key-shape, source-ID and duplicate checks. Quiz tables are API-only; answers autosave into server-timed sessions and immutable submissions receive retry-safe grading. Public web calls use a same-origin server proxy for client identity. Local tests do not certify hosted activation or live question quality. After explicit user approval, the staging migration was applied through Supabase CLI and the local quiz API/worker were enabled. Catalog, data-count, API, queue and proxy checks passed; production is unchanged.
+
+> **2026-11-02 streak, tasks and timetable implementation and UI direction:** Home activity uses authenticated `GET /api/v1/home/dashboard`; streak days are based on task completion dates grouped in the requested IANA timezone, and the heatmap reports completed-task counts rather than study minutes. Student task CRUD and favorites use owner/university-scoped `/api/v1/tasks` endpoints; recurring timetable occurrences use bounded ranges, with university-admin management through `/api/v1/admin/timetables`. Keep one Settings-sized URL-backed planner modal with Timetable and Tasks tabs and no standalone navigation links. At the user's request, the detailed modal screens were removed and replaced with a Coming Soon state; center the Home preview's empty state. Shared DTOs live in `packages/types/src/academic.ts`. Migration `20261102120000_student_activity_and_timetable_contracts.sql` adds typed timetable/term fields and task favorites while retaining legacy timetable text, and has been applied to the single configured Supabase database via the CLI. API journeys, typecheck, builds, staging, and native journeys remain unverified. See [the complete feature record](timetable-task-streak-by-luna.md).
 
 > **2026-10-28 Library navigation and details:** Persist collection/course in URL query parameters, tighten the course sidebar with full-width dividers, restore legacy file-icon list rows and File Information layout with filled thumbnails, retain a fixed file action, and remove the desktop course-back row. Desktop refresh reflects outstanding catalog requests; mobile uses pull-to-refresh, shared back-button/navigation touch feedback and a compact chevron/code/title course header. [Scope and verification](library-navigation-and-details-2026-10-28.md). Full phase and hosted gates remain open.
 
@@ -2918,7 +2922,7 @@ The AI dynamically adapts its system prompt, output density, and tool availabili
 | **PDF Reader Sidebar**        | Document-grounded reader assistant | `rag_search` (scoped to active doc), `read_document`                                                                                                                                             | Crisp bullet points, snip annotations, direct definitions & concept breakdowns |
 | **Chat Hub (Dedicated Page)** | Full conversational study partner  | `rag_search` (global/course), `read_document`, `web_search`, `create_doc`, `create_md`, `create_pdf`, `create_pptx`, `plot_graph`, `generate_flashcards`, `generate_mnemonics`, `vision_analyze` | Rich markdown, LaTeX math, interactive skill cards, file downloads             |
 | **Notes Editor Copilot**      | Inline writing assistant           | `format_math`, `summarize_notes`, `rag_search`                                                                                                                                                   | Contextual completions, clean markdown, structured study outlines              |
-| **Study Planner Page**        | Strategic academic coach           | `get_timetable`, `analyze_syllabus_coverage`, `recommend_study_blocks`                                                                                                                           | Timeline roadmaps, prioritized revision checklists                             |
+| **Study Planner Modal**       | Strategic academic coach           | `get_timetable`, `analyze_syllabus_coverage`, `recommend_study_blocks`                                                                                                                           | Timeline roadmaps, prioritized revision checklists                             |
 | **Quiz Review & Diagnostic**  | Explanatory instructor             | `rag_search`, `explain_mcq_distractors`                                                                                                                                                          | Breakdown of correct answers vs. common student misconceptions                 |
 
 ---
@@ -3749,7 +3753,7 @@ The Recent section is an **omni-channel activity feed** reflecting whatever the 
 
 Combines **institutional university timetables** (lectures, labs, seminars) and **personal student study tasks** into a single, unified priority stream:
 
-- **Layout**: Vertical list of actionable cards with `"View all >"` linking to the full Timetable & Study Planner (`/timetable`).
+- **Layout**: Vertical list of actionable cards with `"View all >"` opening the shared Study Planner modal on the active Timetable or Tasks tab.
 - **Interactive Checklist**:
   - Tap circular checkbox $\rightarrow$ marks completed with instant optimistic UI update (and subtle completion haptic/animation).
 - **Task Types & Indicators**:
@@ -3783,7 +3787,9 @@ Fixed floating pill bar at the bottom of the screen:
 
 To guarantee lightning-fast initial page loads (<150ms), the Home Page is powered by a **Single Aggregator Endpoint**:
 
-#### `GET /api/home/dashboard`
+#### `GET /api/v1/home/dashboard`
+
+The versioned endpoint currently implements the student activity slice: tasks, recurring timetable occurrences, timezone-aware completed-task dates and current streak. The full envelope below remains the target for Phase 10; identity and recent-resource aggregation have not been completed.
 
 #### Response Schema:
 
@@ -3842,7 +3848,7 @@ To guarantee lightning-fast initial page loads (<150ms), the Home Page is powere
       "id": "tsk_2",
       "title": "Finish outline",
       "subtitle": "Research Outline.docx",
-      "task_type": "doc",
+      "task_type": "reading",
       "due_date": "2026-09-03",
       "urgency": "tomorrow",
       "urgency_label": "Tomorrow",
@@ -3853,9 +3859,9 @@ To guarantee lightning-fast initial page loads (<150ms), the Home Page is powere
 }
 ```
 
-#### `PATCH /api/tasks/{id}/toggle`
+#### `PATCH /api/v1/tasks/{id}`
 
-- Toggles `is_completed: boolean`.
+- Sets the requested `is_completed: boolean` state, so retried requests remain safe.
 - Handled with optimistic cache updates via TanStack Query.
 
 ---

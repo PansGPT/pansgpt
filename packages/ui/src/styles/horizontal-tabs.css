@@ -128,7 +128,7 @@
     [data-tab-variant="line"]
   )[data-reference-state="focus"] {
   outline: none;
-  box-shadow: var(--effect-focus-ring);
+  box-shadow: none;
 }
 .p-tab-button.p-button[data-tab-current="false"]:not([data-tab-variant="underline"]):not(
     [data-tab-variant="line"]
@@ -136,12 +136,10 @@
   background: var(--bg-primary);
 }
 .p-tab-button.p-button[data-tab-current="true"][data-tab-variant="white"][data-reference-state="focus"] {
-  box-shadow: var(--effect-focus-ring-shadow-sm);
+  box-shadow: none;
 }
 .p-tab-button.p-button[data-tab-current="true"][data-tab-variant="minimal"][data-reference-state="focus"] {
-  box-shadow:
-    inset 0 0 0 1px var(--border-primary),
-    var(--effect-focus-ring-shadow-xs);
+  box-shadow: inset 0 0 0 1px var(--border-primary);
 }
 .p-tab-button.p-button:disabled {
   background: transparent;

@@ -16,7 +16,7 @@
   box-sizing: border-box;
 }
 .public-holding a:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
+  outline: 2px solid var(--border-primary);
   outline-offset: 5px;
 }
 .public-holding-header,

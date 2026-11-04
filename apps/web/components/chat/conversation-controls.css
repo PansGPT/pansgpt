@@ -55,8 +55,8 @@
 }
 .study-chat-dialog button:focus-visible,
 .study-chat-dialog a:focus-visible {
-  outline: 2px solid var(--fg-brand-primary-600);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: none;
 }
 .study-chat-dialog .study-chat-session-form {
   padding: 0;
@@ -266,7 +266,7 @@
 }
 .study-chat-message[data-search-match="true"] {
   border-radius: 12px;
-  outline: 1px solid var(--fg-brand-primary-600);
+  outline: 1px solid var(--border-primary);
   outline-offset: 6px;
 }
 @media (max-width: 600px) {

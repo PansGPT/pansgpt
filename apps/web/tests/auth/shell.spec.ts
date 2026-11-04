@@ -6,7 +6,6 @@ import {
   closeSettings,
   selectSettingsSection,
   accountMenu,
-  openNavigation,
   startNewChat,
 } from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
@@ -33,7 +32,18 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("radio", { name: "200 Level", exact: true }).click();
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByRole("checkbox").check();
+  const dashboardResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/v1/home/dashboard") && response.request().method() === "GET"
+  );
   await page.getByRole("button", { name: "Complete profile" }).click();
+  const dashboard = await dashboardResponse;
+  expect(dashboard.ok()).toBe(true);
+  expect(await dashboard.json()).toMatchObject({
+    current_streak_days: 0,
+    tasks: [],
+    daily_activity: [],
+  });
   await expect(page).toHaveURL(/\/app$/);
   await expect(
     page.getByRole("heading", { name: /^Good (morning|afternoon|evening), Shell$/ })
@@ -49,7 +59,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page.getByRole("button", { name: "Notifications", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Open profile", exact: true })).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Study streak", exact: true })).toContainText(
-    "Sample study time"
+    "day streak"
+  );
+  await expect(page.getByRole("region", { name: "Study streak", exact: true })).not.toContainText(
+    "Sample"
   );
   await page.locator(".study-activity-grid button:not(:disabled)").first().click();
   await expect(page.locator(".study-activity-detail")).toContainText("tasks completed");
@@ -152,12 +165,24 @@ test("verified workspace navigation, profile, account themes, failures and mobil
       if (width > 860) {
         await expect(page.getByRole("heading", { name: "Tools", exact: true })).toBeVisible();
         await expect(page.locator(".study-chat-tool-card")).toHaveCount(4);
-      } else await expect(page.locator(".study-chat-recent-card")).toHaveCount(4);
+      } else {
+        await expect(page.getByRole("dialog", { name: "PansGPT chat", exact: true })).toBeVisible();
+        await expect(page.locator(".study-chat-recent-card")).toHaveCount(0);
+      }
       await expect(page.locator(".study-chat-suggestions button")).toHaveCount(0);
       await expect(page.getByRole("button", { name: "Voice input", exact: true })).toBeEnabled();
-      await expect(
-        page.getByRole("button", { name: "Attach study material", exact: true })
-      ).toBeEnabled();
+      const uploads = page.getByRole("button", {
+        name: "Open uploads and study actions",
+        exact: true,
+      });
+      await expect(uploads).toBeEnabled();
+      await uploads.click();
+      const fileSource = page.getByRole("button", {
+        name: width > 860 ? "Upload a file" : "Files",
+        exact: true,
+      });
+      await expect(fileSource).toBeEnabled();
+      await page.keyboard.press("Escape");
       await expect(page.locator("html")).toHaveAttribute("data-theme", value);
       expect(
         await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
@@ -178,9 +203,14 @@ test("verified workspace navigation, profile, account themes, failures and mobil
             exact: true,
           })
           .click();
-        await expect(page.getByLabel("Study question")).toHaveValue(
-          "Create a downloadable Word document about: "
+        await expect(page.getByLabel("Study question")).toHaveValue("");
+        await expect(page.getByLabel("Study question")).toHaveAttribute(
+          "placeholder",
+          "What should the document cover?"
         );
+        await expect(
+          page.getByRole("button", { name: "Remove Document action", exact: true })
+        ).toBeVisible();
         await expect(page.getByLabel("Study question")).toBeFocused();
       }
       await page.goto("/app");
@@ -208,12 +238,12 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(created.ok()).toBe(true);
   const conversation: { id: string; user_id: string } = await created.json();
   await page.reload();
-  await openNavigation(page);
-  await page
-    .getByRole("dialog", { name: "Workspace navigation", exact: true })
-    .getByRole("link", { name: "My saved revision chat", exact: true })
-    .click();
-  await expect(page).toHaveURL(new RegExp(`/app/chat\\?session=${conversation.id}$`));
+  await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
+  const savedSheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+  await savedSheet.getByRole("button", { name: "Show chat history", exact: true }).click();
+  await savedSheet.getByRole("button", { name: "My saved revision chat", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/app\\?session=${conversation.id}$`));
+  await expect(page.getByRole("dialog", { name: "PansGPT chat", exact: true })).toBeVisible();
   await expect(page.getByLabel("Study question")).toBeEnabled();
   let inferenceRequests = 0;
   page.on("request", (outgoing) => {
@@ -226,7 +256,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await homeChat.getByLabel("Study question").fill("Keep this draft private");
   await homeChat.getByRole("button", { name: "Close chat", exact: true }).click();
   await page.getByRole("textbox", { name: "Message PansGPT", exact: true }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app\?chat=new$/);
   await expect(page.getByLabel("Study question")).toHaveValue("Keep this draft private");
   expect(inferenceRequests).toBe(0);
   expect(page.url()).not.toContain("Keep");
@@ -294,9 +324,9 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   fakeStreamError = true;
   await page.getByLabel("Study question").fill("Exercise a handled failure");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(page.getByRole("main").getByRole("alert")).toContainText(
-    "Synthetic provider unavailable"
-  );
+  await expect(
+    page.getByRole("dialog", { name: "PansGPT chat", exact: true }).getByRole("alert")
+  ).toContainText("Synthetic provider unavailable");
   await expect(page.getByText("No response was returned.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Generating response...", { exact: true })).toHaveCount(0);
   await expect(page.getByLabel("Study question")).toBeEnabled();
@@ -336,21 +366,21 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.unroute("**/api/v1/ai/chat/sessions/*/stream");
   await page.goto("/app");
 
-  await openNavigation(page);
-  const mobile = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  await expect(mobile.getByRole("link", { name: "Quiz", exact: true })).toHaveAttribute(
-    "aria-current",
-    "page"
-  );
-  await page.screenshot({ path: "test-results/shell-navigation-375.png", fullPage: true });
-  await mobile.getByRole("link", { name: "Home", exact: true }).click();
-  await expect(page).toHaveURL(/\/app$/);
   await page
     .getByRole("navigation", { name: "Study tools", exact: true })
-    .getByRole("link", { name: "Notes", exact: true })
+    .getByRole("link", { name: "Quiz", exact: true })
     .click();
+  await expect(page).toHaveURL(/\/app\/quiz$/);
+  await expect(page.getByRole("button", { name: "Open navigation", exact: true })).toHaveCount(0);
+  await page.screenshot({ path: "test-results/shell-quiz-375.png", fullPage: true });
+  await page.goto("/app");
+  await expect(
+    page
+      .getByRole("navigation", { name: "Study tools", exact: true })
+      .getByRole("link", { name: "Notes", exact: true })
+  ).toHaveCount(0);
+  await page.goto("/app/notes");
   await expect(page).toHaveURL(/\/app\/notes$/);
-  await expect(mobile).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "Make room for your ideas" })).toBeVisible();
   await expect(page.getByRole("main")).toBeFocused();
   await expect(
@@ -361,8 +391,11 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await search.getByLabel("Search conversations", { exact: true }).fill("zzzz");
   await expect(search.getByRole("status")).toContainText("No matching conversations");
   await page.keyboard.press("Escape");
-  await openNavigation(page);
-  await mobile.getByRole("link", { name: "Library", exact: true }).click();
+  await page.goto("/app");
+  await page
+    .getByRole("navigation", { name: "Study tools", exact: true })
+    .getByRole("link", { name: "Library", exact: true })
+    .click();
   await expect(page).toHaveURL(/\/app\/library$/);
   await expect(
     page.getByRole("navigation", { name: "Library sections", exact: true })

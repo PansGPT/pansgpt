@@ -22,6 +22,8 @@ import { useAuth } from "@/lib/auth-context";
 import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
 import { getArticleBySlug, learnArticles } from "@/components/learn/learn-content";
 import { getLearnDemoActivity } from "@/components/learn/learn-demo";
+import { usePreferences } from "@/components/shell/use-preferences";
+import { StudyArt } from "@/components/shell/study-art";
 import { LearnCard } from "@/components/learn/learn-card";
 import "@/components/learn/learn.css";
 
@@ -29,10 +31,23 @@ type FilterTab = "all" | "academics" | "clinical" | "career" | "saved" | "featur
 
 const demoActivity = getLearnDemoActivity();
 
+const filterTabs: Array<{
+  id: FilterTab;
+  label: string;
+  icon: typeof Briefcase;
+  iconSize: number;
+}> = [
+  { id: "all", label: "All", icon: Briefcase, iconSize: 13 },
+  { id: "academics", label: "Academics", icon: GraduationCap, iconSize: 14 },
+  { id: "clinical", label: "Clinical", icon: Target, iconSize: 14 },
+  { id: "career", label: "Career", icon: TrendingUp, iconSize: 14 },
+  { id: "saved", label: "Saved", icon: Bookmark, iconSize: 13 },
+  { id: "featured", label: "Featured", icon: Star, iconSize: 13 },
+];
+
 export default function LearnPage(): React.ReactElement {
   const { profile } = useAuth();
-  const userInitial =
-    Array.from(profile?.first_name || profile?.email || "P")[0]?.toUpperCase() || "P";
+  const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortMode, setSortMode] = useState<"recent" | "duration">("recent");
@@ -111,7 +126,28 @@ export default function LearnPage(): React.ReactElement {
           <ArrowLeft size={20} aria-hidden="true" />
         </Link>
 
-        <strong className="learn-mobile-topbar-title">Learn</strong>
+        <h1 className="learn-mobile-topbar-title">Learn</h1>
+
+        <div className="learn-desktop-search">
+          <Search size={15} className="learn-search-icon" aria-hidden="true" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search clinical guides, techniques, career..."
+            aria-label="Search guides"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="learn-desktop-search-clear"
+              aria-label="Clear search"
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
 
         <div className="learn-mobile-top-actions">
           <button
@@ -123,38 +159,20 @@ export default function LearnPage(): React.ReactElement {
           >
             <Search size={18} aria-hidden="true" />
           </button>
-          <div className="shell-home-account learn-profile-wrap">
-            {profile ? (
+          {profile && (
+            <div className="shell-home-account">
               <MobileProfileButton
                 profile={profile}
-                credits={null}
-                creditsTotal={null}
+                credits={preferences.credits}
+                creditsTotal={preferences.creditsTotal}
                 onOpen={() => {
                   window.dispatchEvent(
                     new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
                   );
                 }}
               />
-            ) : (
-              <button
-                type="button"
-                className="shell-account shell-account-menu shell-account-compact shell-credit-profile"
-                aria-label="Account profile"
-                onClick={() => {
-                  window.dispatchEvent(
-                    new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
-                  );
-                }}
-              >
-                <svg viewBox="0 0 36 36" className="shell-credit-ring" aria-hidden="true">
-                  <circle className="shell-credit-profile-track" cx="18" cy="18" r="16" />
-                </svg>
-                <span className="shell-account-initial" aria-hidden="true">
-                  {userInitial}
-                </span>
-              </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </header>
 
@@ -186,77 +204,23 @@ export default function LearnPage(): React.ReactElement {
 
         {/* ─── Horizontal Filter Carousel ─── */}
         <nav className="learn-filter-carousel" aria-label="Categories">
-          {/* All Tab */}
-          <button
-            type="button"
-            className="learn-filter-pill-btn"
-            data-active={activeTab === "all" ? "true" : "false"}
-            onClick={() => setActiveTab("all")}
-            aria-pressed={activeTab === "all"}
-          >
-            <Briefcase size={13} aria-hidden="true" />
-            <span>All</span>
-          </button>
-
-          {/* Academics / Study Techniques */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "academics" ? "true" : "false"}
-            onClick={() => setActiveTab("academics")}
-            aria-label="Study Techniques"
-            aria-pressed={activeTab === "academics"}
-          >
-            <GraduationCap size={14} aria-hidden="true" />
-          </button>
-
-          {/* Clinical Skills */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "clinical" ? "true" : "false"}
-            onClick={() => setActiveTab("clinical")}
-            aria-label="Clinical Skills"
-            aria-pressed={activeTab === "clinical"}
-          >
-            <Target size={14} aria-hidden="true" />
-          </button>
-
-          {/* Career & Mindset */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "career" ? "true" : "false"}
-            onClick={() => setActiveTab("career")}
-            aria-label="Career & Mindset"
-            aria-pressed={activeTab === "career"}
-          >
-            <TrendingUp size={14} aria-hidden="true" />
-          </button>
-
-          {/* Saved / Bookmarks */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "saved" ? "true" : "false"}
-            onClick={() => setActiveTab("saved")}
-            aria-label="Saved articles"
-            aria-pressed={activeTab === "saved"}
-          >
-            <Bookmark size={13} aria-hidden="true" />
-          </button>
-
-          {/* Starred / Featured */}
-          <button
-            type="button"
-            className="learn-filter-icon-btn"
-            data-active={activeTab === "featured" ? "true" : "false"}
-            onClick={() => setActiveTab("featured")}
-            aria-label="Featured guides"
-            aria-pressed={activeTab === "featured"}
-          >
-            <Star size={13} aria-hidden="true" />
-          </button>
+          {filterTabs.map(({ id, label, icon: Icon, iconSize }) => {
+            const isActive = activeTab === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                className={isActive ? "learn-filter-pill-btn" : "learn-filter-icon-btn"}
+                data-active={isActive ? "true" : "false"}
+                onClick={() => setActiveTab(id)}
+                aria-label={label}
+                aria-pressed={isActive}
+              >
+                <Icon size={iconSize} aria-hidden="true" />
+                {isActive && <span>{label}</span>}
+              </button>
+            );
+          })}
         </nav>
 
         {/* ─── Subheader / Controls Row ─── */}
@@ -302,6 +266,7 @@ export default function LearnPage(): React.ReactElement {
               <LearnCard
                 key={article.slug}
                 article={article}
+                variant={viewMode}
                 isBookmarked={bookmarkedSlugs.has(article.slug)}
                 onBookmarkToggle={toggleBookmark}
               />
@@ -313,10 +278,13 @@ export default function LearnPage(): React.ReactElement {
         {recentArticle && (
           <aside className="learn-bottom-dock" aria-label="Sample recently read guide">
             <Link href={`/app/learn/${recentArticle.slug}`} className="learn-dock-content">
-              {/* Mini Book Cover Thumbnail */}
-              <div className="learn-dock-thumb">
-                <span className="learn-dock-thumb-spine" />
-                <span className="learn-dock-thumb-title">PansGPT</span>
+              {/* Mini Card Thumbnail */}
+              <div
+                className="learn-dock-thumb"
+                data-theme={recentArticle.theme}
+                data-art={recentArticle.artKind}
+              >
+                <StudyArt kind={recentArticle.artKind} variant="square" />
               </div>
 
               {/* Title & Progress */}

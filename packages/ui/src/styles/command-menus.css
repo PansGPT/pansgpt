@@ -5,7 +5,7 @@
 .p-command-input input { padding: 0; border: 0; outline: 0; min-width: 0; flex: 1; color: var(--text-primary-900); background: transparent; font: 400 16px/24px var(--font-body); }
 .p-command-input input::placeholder { color: var(--text-placeholder); }
 .p-command-input input::-webkit-search-cancel-button { appearance: none; }
-.p-command-input[data-reference-state="focus"] { box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 4px var(--figma-colors-effects-focus-rings-focus-ring); }
+.p-command-input[data-reference-state="focus"] { box-shadow: inset 0 0 0 1px var(--border-primary); }
 .p-command-bar > .p-command-input { border-radius: 0; }
 .p-command-bar:not([data-command-only="true"]) > .p-command-input { box-shadow: inset 0 -1px var(--border-secondary); }
 .p-command-shortcut { display: inline-flex; gap: 4px; align-items: center; flex: none; font: 500 14px/20px var(--font-body); color: var(--text-quaternary-500); }

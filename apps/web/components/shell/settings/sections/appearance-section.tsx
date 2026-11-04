@@ -88,6 +88,19 @@ export function AppearanceSection({
             ]}
           />
         </SettingsRow>
+        <SettingsRow title="Text size">
+          <SettingsSelect
+            label="Text size"
+            value={draft.textSize}
+            onValueChange={(textSize) => onDraftChange({ textSize })}
+            options={[
+              { value: "small", label: "Small" },
+              { value: "default", label: "Default" },
+              { value: "large", label: "Large" },
+              { value: "xl", label: "Extra large" },
+            ]}
+          />
+        </SettingsRow>
         <SettingsRow title="Motion">
           <SettingsSelect
             label="Motion preference"
