@@ -60,13 +60,21 @@ export function ChatSessionMenu({
   const [error, setError] = useState<string | null>(null);
   const [override, setOverride] = useState<{ id: string; is_pinned: boolean } | null>(null);
   const isPinned = override && override.id === chat.id ? override.is_pinned : chat.is_pinned;
+  const userScope = useRef(`${profile?.id}:${profile?.university_id}`);
+
+  useEffect(() => {
+    const scope = `${profile?.id}:${profile?.university_id}`;
+    if (userScope.current !== scope) {
+      userScope.current = scope;
+      request.current?.abort();
+    }
+  }, [profile?.id, profile?.university_id]);
 
   useEffect(
     () => () => {
-      request.current?.abort();
       if (frame.current !== null) cancelAnimationFrame(frame.current);
     },
-    [profile?.id, profile?.university_id]
+    []
   );
   function openPanel(next: "rename" | "delete" | "share"): void {
     transferring.current = true;
@@ -86,10 +94,14 @@ export function ChatSessionMenu({
 
     const isPinning = typeof change === "object" && "is_pinned" in change;
     if (isPinning) {
+      const now = new Date().toISOString();
       setOverride({ id: chat.id, is_pinned: Boolean(change.is_pinned) });
       window.dispatchEvent(
         new CustomEvent("pansgpt-chat-updated", {
-          detail: { id: chat.id, patch: { is_pinned: Boolean(change.is_pinned) } },
+          detail: {
+            id: chat.id,
+            patch: { is_pinned: Boolean(change.is_pinned), updated_at: now },
+          },
         })
       );
       onChanged?.({
@@ -97,15 +109,17 @@ export function ChatSessionMenu({
         title: chat.title,
         is_pinned: Boolean(change.is_pinned),
         archived_at: chat.archived_at,
-        updated_at: new Date().toISOString(),
+        updated_at: now,
       });
     }
 
     try {
       const saved = await requestSession(session?.access_token, chat.id, change, controller.signal);
       if (controller.signal.aborted) return;
-      if (saved && saved.user_id !== profile?.id)
+      const currentUserId = profile?.id ?? session?.user?.id;
+      if (saved && currentUserId && saved.user_id !== currentUserId) {
         throw new Error("Conversation ownership mismatch.");
+      }
       onChanged?.(saved);
       setPanel(null);
       if (change === "delete" || change.archived === true) {
@@ -120,6 +134,7 @@ export function ChatSessionMenu({
       }
       reload();
     } catch (failure: unknown) {
+      if (controller.signal.aborted) return;
       if (isPinning) {
         setOverride(null);
         window.dispatchEvent(
@@ -134,10 +149,9 @@ export function ChatSessionMenu({
           archived_at: chat.archived_at,
         });
       }
-      if (!controller.signal.aborted)
-        setError(
-          failure instanceof Error ? failure.message : "This change was not saved. Please retry."
-        );
+      setError(
+        failure instanceof Error ? failure.message : "This change was not saved. Please retry."
+      );
     } finally {
       if (!controller.signal.aborted) setBusy(false);
     }
