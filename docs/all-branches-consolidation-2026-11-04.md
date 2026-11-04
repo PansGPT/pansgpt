@@ -12,6 +12,8 @@ The Home sheet keeps runtime identity separate from its newly created session's 
 
 Session-created notifications are emitted once per session so changing callback identities cannot reopen a dismissed streaming sheet. Mobile Library keeps the course-pill design while exposing Courses, document layout and academic filters; expanded filters reveal their toolbar. Four focused browser regressions passed for these changes, including first-attachment upload and sheet cancellation.
 
+The fixed-height chat route clips its entrance transform so it cannot create page overflow alongside the conversation scrollbar on short viewports. Auth browser helpers target an open sheet, avoiding clicks against its closing animation. The preceding remote run passed 40 of 41 chat contracts and 9 of 10 auth journeys; these remaining regressions are rechecked on the final commit.
+
 Local verification before remote CI: 817 API tests passed, 68 service-dependent tests skipped; all 57 web unit tests passed; six TypeScript workspace checks passed; API Ruff lint/format and all 38 mirrored migrations passed. Browser and final-head CI results remain separate gates. No hosted database deployment or release certification is included.
 
 The only original uncommitted change was Next.js's generated switch between development and production route-type imports. Its patch is preserved outside tracked source before checkout synchronization; generated development output is not committed as feature work.

@@ -49,7 +49,9 @@ export async function closeSettings(page: Page): Promise<void> {
 }
 export async function startNewChat(page: Page): Promise<void> {
   if ((page.viewportSize()?.width ?? 1440) <= 860) {
-    const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+    const sheet = page
+      .getByRole("dialog", { name: "PansGPT chat", exact: true })
+      .and(page.locator('[data-state="open"]'));
     const newChat = sheet.getByRole("button", { name: "New chat", exact: true });
     if (await newChat.isVisible()) await newChat.click();
     else {
