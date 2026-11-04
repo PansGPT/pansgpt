@@ -196,10 +196,9 @@ export function SettingsModal({
             }
           }}
           onEscapeKeyDown={(event) => {
-            if (
-              event.target instanceof Element &&
-              event.target.closest('[role="dialog"]') !== dialogRef.current
-            ) {
+            const targetDialog =
+              event.target instanceof Element ? event.target.closest('[role="dialog"]') : null;
+            if (targetDialog && targetDialog !== dialogRef.current) {
               event.preventDefault();
               return;
             }
