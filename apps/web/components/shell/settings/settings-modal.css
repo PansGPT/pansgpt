@@ -36,8 +36,8 @@
   cursor: default;
 }
 .settings-modal-dialog :is(button, input, select, textarea):focus-visible {
-  outline: 2px solid var(--border-brand);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: none;
 }
 .settings-modal-header {
   display: flex;
@@ -90,7 +90,14 @@
   color: var(--text-tertiary-600);
 }
 .settings-nav-search-label:focus-within {
-  border-color: var(--border-brand);
+  border-color: var(--border-primary);
+  box-shadow: none;
+}
+.settings-nav-search:focus,
+.settings-nav-search:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border: 0;
 }
 .settings-nav-search-wrap {
   position: relative;
@@ -154,8 +161,8 @@
 }
 .settings-content-pane [data-settings-label]:focus-visible,
 .settings-content-pane [data-settings-match]:not(:focus-within) {
-  outline: 2px solid var(--border-brand);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: none;
   border-radius: 6px;
 }
 .settings-nav-search {
@@ -797,8 +804,8 @@
   border-color: var(--fg-brand-primary-600);
 }
 .settings-theme-option input:focus-visible + .settings-theme-preview {
-  outline: 2px solid var(--border-brand);
-  outline-offset: 3px;
+  outline: 1px solid var(--border-primary);
+  outline-offset: 2px;
 }
 .settings-theme-name {
   font-size: 12px;
@@ -897,8 +904,8 @@
   justify-self: end;
 }
 .settings-feedback-dialog :is(button, textarea):focus-visible {
-  outline: 2px solid var(--border-brand);
-  outline-offset: 3px;
+  outline: none;
+  box-shadow: none;
 }
 .settings-mobile-header,
 .settings-modal-handle,
@@ -1043,6 +1050,7 @@
     display: none;
   }
   .settings-modal-handle {
+
     display: grid;
     place-items: center;
     position: absolute;
@@ -1056,6 +1064,11 @@
     background: transparent;
     touch-action: none;
   }
+.settings-modal-handle:focus,
+.settings-modal-handle:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
   .settings-modal-handle span {
     width: 32px;
     height: 4px;

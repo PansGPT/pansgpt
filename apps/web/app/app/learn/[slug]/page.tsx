@@ -413,26 +413,39 @@ export default async function LearnLessonPage({
 
       <div className="learn-lesson-layout">
         <article className="learn-lesson-main">
-          <div className="learn-lesson-hero" data-art={article.artKind}>
-            <StudyArt kind={article.artKind} variant="banner" />
-            <span className="learn-lesson-hero-label" aria-hidden="true">
-              {article.categoryLabel}
-            </span>
-          </div>
+          {/* ─── Hero Thumbnail Matching Learn Card Design ─── */}
+          <div className="learn-lesson-hero learn-pastel-card" data-theme={article.theme}>
+            {/* Eyebrow */}
+            <div className="learn-card-eyebrow">
+              <span>{article.shortTag}</span>
+            </div>
 
-          <div className="learn-lesson-eyebrow">
-            <span className="learn-lesson-category">{article.category}</span>
-            <span className="learn-lesson-duration">
-              {article.video ? (
-                <PlayCircle size={13} aria-hidden="true" />
-              ) : (
-                <BookOpen size={13} aria-hidden="true" />
-              )}
-              {article.duration}
-            </span>
-          </div>
+            {/* Split Row: Headline & Summary on Left, Thematic Art on Right */}
+            <div className="learn-card-body-row">
+              <div className="learn-card-copy">
+                <h1 className="learn-card-headline">{article.title}</h1>
+                <p className="learn-card-summary">{article.description}</p>
+              </div>
 
-          <h1>{article.title}</h1>
+              <div className="learn-card-art-col" data-art={article.artKind}>
+                <StudyArt kind={article.artKind} variant="square" />
+              </div>
+            </div>
+
+            {/* Card Footer */}
+            <div className="learn-card-footer">
+              <div className="learn-card-footer-left">
+                <span className="learn-card-duration-text">
+                  {article.video ? (
+                    <PlayCircle size={14} aria-hidden="true" />
+                  ) : (
+                    <BookOpen size={14} aria-hidden="true" />
+                  )}
+                  {article.duration}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {body}
         </article>
@@ -446,7 +459,11 @@ export default async function LearnLessonPage({
                 href={`/app/learn/${guide.slug}`}
                 className="learn-sidebar-item"
               >
-                <div className="learn-sidebar-thumb" data-art={guide.artKind}>
+                <div
+                  className="learn-sidebar-thumb"
+                  data-theme={guide.theme}
+                  data-art={guide.artKind}
+                >
                   <StudyArt kind={guide.artKind} variant="square" />
                 </div>
                 <div className="learn-sidebar-details">

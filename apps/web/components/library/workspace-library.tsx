@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -23,15 +23,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Skeleton } from "@pansgpt/ui/shell";
 import type { LibraryDocument, LibraryCourse } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
+import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { usePreferences } from "@/components/shell/use-preferences";
 import { fileSize, materialDate, readingDateGroup } from "@/lib/library-catalog";
 import { DocumentUploadModal } from "@/components/DocumentUploadModal";
 import { DocumentDetails } from "./document-details";
 import { useCatalog } from "./use-catalog";
 import { DocumentCard } from "@/components/shell/document-card";
 import { DocumentThumbnail } from "@/components/shell/document-thumbnail";
-import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
-import { usePreferences } from "@/components/shell/use-preferences";
-import { WorkspaceNavigationContext } from "@/components/shell/workspace-navigation";
 import { useDashboard } from "@/components/shell/dashboard-data";
 import {
   libraryLocationUrl,
@@ -76,7 +75,6 @@ export function WorkspaceLibrary({
 
 function LibraryContent({ initialQuery }: { initialQuery: string }): React.ReactElement {
   const { session, profile } = useAuth();
-  const openNav = useContext(WorkspaceNavigationContext);
   const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const dashboard = useDashboard();
   const router = useRouter();
@@ -310,12 +308,9 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
             aria-label="Back to Home"
             onClick={() => router.push("/app")}
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={20} aria-hidden="true" />
           </button>
-          <strong className="library-mobile-topbar-title">
-            <span className="library-topbar-your">Your </span>
-            <span>Library</span>
-          </strong>
+          <strong className="library-mobile-topbar-title">Library</strong>
           <div className="library-mobile-top-actions">
             <button
               type="button"
@@ -343,13 +338,15 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
               </button>
             )}
             {profile && (
-              <div className="shell-home-account library-profile-wrap">
+              <div className="shell-home-account">
                 <MobileProfileButton
                   profile={profile}
                   credits={preferences.credits}
                   creditsTotal={preferences.creditsTotal}
-                  onOpen={(opener) => {
-                    if (openNav) openNav(opener);
+                  onOpen={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
+                    );
                   }}
                 />
               </div>

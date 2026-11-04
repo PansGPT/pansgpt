@@ -2,7 +2,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
+import { MessageCircle, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
 import { destinations, mobileDestinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
@@ -10,6 +10,7 @@ import { SamplePreview } from "./sample-preview";
 import { ArchivedChats, ChatSessionMenu } from "@/components/chat/session-menu";
 import { useChatDraft } from "./chat-draft";
 import type { ChatSessionSummary } from "@/lib/chat-sessions";
+import { chatSessionUrl, newChatUrl } from "@/lib/chat-navigation";
 
 export function SidebarLinks({
   close,
@@ -37,11 +38,19 @@ export function SidebarLinks({
   const recent = chats.filter((chat) => !chat.is_pinned);
   const chatRow = (chat: ChatSessionSummary) => (
     <div className="shell-chat-row" key={chat.id}>
-      <Link href={`/app/chat?session=${encodeURIComponent(chat.id)}`} onClick={close}>
+      <Link
+        href={chatSessionUrl(chat.id, Boolean(mobile))}
+        onClick={() => {
+          close();
+          if (mobile) {
+            window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } }));
+          }
+        }}
+      >
         {chat.is_pinned ? (
           <Pin size={16} aria-label="Pinned" />
         ) : (
-          <FileText size={17} aria-hidden="true" />
+          <MessageCircle size={16} aria-hidden="true" />
         )}
         <span>{chat.title || "New chat"}</span>
       </Link>
@@ -58,46 +67,55 @@ export function SidebarLinks({
       <div className="shell-links">
         {(mobile ? mobileDestinations : destinations)
           .filter((item) => !["/app/chat", "/app/notes", "/app/focus"].includes(item.href))
-          .map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="shell-nav-link shell-touch-feedback"
-              aria-label={label}
-              aria-current={isCurrentDestination(pathname, href) ? "page" : undefined}
-              data-pressed={mobile && pressed?.pathname === pathname && pressed.href === href}
-              onPointerDown={() => press(href)}
-              onTouchStart={() => press(href)}
-              onTouchCancel={() => setPressed(null)}
-              onPointerCancel={() => setPressed(null)}
-              onPointerLeave={() => setPressed(null)}
-              onBlur={() => setPressed(null)}
-              onClick={() => {
-                press(href);
-                close();
-              }}
-            >
-              <Icon size={19} aria-hidden="true" />
-              <span>{label}</span>
-            </Link>
-          ))}
+          .map(({ href, label, icon: Icon }) => {
+            const target = href;
+            const active = isCurrentDestination(pathname, href);
+            return (
+              <Link
+                key={href}
+                href={target}
+                className="shell-nav-link shell-touch-feedback"
+                aria-label={label}
+                aria-current={active ? "page" : undefined}
+                data-pressed={mobile && pressed?.pathname === pathname && pressed.href === target}
+                onPointerDown={() => press(target)}
+                onTouchStart={() => press(target)}
+                onTouchCancel={() => setPressed(null)}
+                onPointerCancel={() => setPressed(null)}
+                onPointerLeave={() => setPressed(null)}
+                onBlur={() => setPressed(null)}
+                onClick={() => {
+                  press(target);
+                  close();
+                }}
+              >
+                <Icon size={19} aria-hidden="true" />
+                <span>{label}</span>
+              </Link>
+            );
+          })}
       </div>
       <div className="shell-new-chat-section">
         <Link
-          href="/app/chat"
+          href={newChatUrl(Boolean(mobile))}
           className="shell-nav-link shell-new-chat shell-touch-feedback"
           aria-label="New chat"
-          data-pressed={mobile && pressed?.pathname === pathname && pressed.href === "/app/chat"}
-          onPointerDown={() => press("/app/chat")}
-          onTouchStart={() => press("/app/chat")}
+          data-pressed={
+            mobile && pressed?.pathname === pathname && pressed.href === newChatUrl(true)
+          }
+          onPointerDown={() => press(newChatUrl(Boolean(mobile)))}
+          onTouchStart={() => press(newChatUrl(Boolean(mobile)))}
           onTouchCancel={() => setPressed(null)}
           onPointerCancel={() => setPressed(null)}
           onPointerLeave={() => setPressed(null)}
           onBlur={() => setPressed(null)}
           onClick={() => {
-            press("/app/chat");
+            press(newChatUrl(Boolean(mobile)));
             startNewChat();
             close();
+            if (mobile) {
+              window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: null } }));
+            }
           }}
         >
           <SquarePen size={19} aria-hidden="true" />
@@ -140,7 +158,7 @@ export function SidebarLinks({
             exampleChats.slice(0, expanded ? exampleChats.length : 6).map((title, index) => (
               <div className="shell-chat-row" key={title}>
                 <button className="shell-sample-chat" onClick={() => setSample(title)}>
-                  <FileText size={17} aria-hidden="true" />
+                  <MessageCircle size={16} aria-hidden="true" />
                   <span>{title}</span>
                 </button>
                 <ChatSessionMenu

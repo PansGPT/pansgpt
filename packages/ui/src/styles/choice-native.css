@@ -32,5 +32,5 @@
 .p-tag-textarea .p-field-control .p-field-input-area { display: contents; }
 .p-tag-textarea .p-field-control .p-input { height: 24px; flex: 1; min-width: 40px; }
 .p-textarea-field[data-error] .p-textarea { box-shadow: inset 0 0 0 1px var(--border-error-subtle), var(--effect-shadow-xs); }
-.p-textarea-field[data-reference-state="focused"] .p-textarea { box-shadow: inset 0 0 0 2px var(--border-brand), var(--effect-shadow-xs); }
+.p-textarea-field[data-reference-state="focused"] .p-textarea { box-shadow: inset 0 0 0 1px var(--border-primary); }
 .p-textarea-field[data-error][data-reference-state="focused"] .p-textarea { box-shadow: inset 0 0 0 2px var(--border-error), var(--effect-shadow-xs); }

@@ -6,7 +6,8 @@ import { useAuth, type UserProfile } from "@/lib/auth-context";
 import { usePathname } from "next/navigation";
 import { env } from "@/env";
 import { chatSessionSummarySchema } from "@/lib/chat-sessions";
-import { localTodayIso } from "@pansgpt/ui/shell";
+import type { HomeDashboardDto } from "@pansgpt/types";
+import { browserTimezone, getHomeDashboard, updateTask } from "@/lib/academic";
 
 const recentSchema = z.array(
   z.object({
@@ -28,32 +29,15 @@ const libraryPreviewSchema = z.array(
     updated_at: z.string(),
   })
 );
-const taskSchema = z.array(
-  z.object({
-    id: z.string(),
-    title: z.string(),
-    due_date: z.string(),
-    due_time: z.string().nullable(),
-    subtitle: z.string().nullable(),
-  })
-);
-const timetableSchema = z.array(
-  z.object({
-    id: z.string(),
-    course_title: z.string(),
-    day: z.string(),
-    start_time: z.string().nullable(),
-    time_slot: z.string(),
-    venue: z.string().nullable(),
-  })
-);
-const completedSchema = z.array(z.object({ id: z.string(), completed_at: z.string() }));
 type DashboardData = {
   recent: z.infer<typeof recentSchema>;
   recentSource: "history" | "library";
-  tasks: z.infer<typeof taskSchema>;
-  timetable: z.infer<typeof timetableSchema>;
-  completed: z.infer<typeof completedSchema>;
+  tasks: HomeDashboardDto["tasks"];
+  timetable: HomeDashboardDto["timetable"];
+  dailyActivity: HomeDashboardDto["daily_activity"];
+  today: string;
+  activityFrom: string;
+  currentStreakDays: number;
   activityError: boolean;
   loading: boolean;
   recentError: boolean;
@@ -64,13 +48,20 @@ const initial: DashboardData = {
   recentSource: "history",
   tasks: [],
   timetable: [],
-  completed: [],
+  dailyActivity: [],
+  today: "",
+  activityFrom: "",
+  currentStreakDays: 0,
   activityError: false,
   loading: true,
   recentError: false,
   eventsError: false,
 };
-const DashboardContext = createContext<(DashboardData & { reload: () => void }) | null>(null);
+type DashboardActions = {
+  reload: () => void;
+  completeTask: (taskId: string, completed: boolean) => Promise<void>;
+};
+const DashboardContext = createContext<(DashboardData & DashboardActions) | null>(null);
 const chatsSchema = z.object({
   sessions: z.array(chatSessionSummarySchema),
 });
@@ -94,6 +85,44 @@ export function DashboardProvider({
   const pathname = usePathname();
   const token = session?.access_token;
   const [chatData, setChatData] = useState<RecentChats>({ chats: [], loading: true, error: false });
+
+  useEffect(() => {
+    function onChatUpdated(e: Event) {
+      const custom = e as CustomEvent<{
+        id: string;
+        patch: Partial<z.infer<typeof chatSessionSummarySchema>>;
+      }>;
+      if (!custom.detail?.id || !custom.detail?.patch) return;
+      const { id, patch } = custom.detail;
+      setChatData((current) => {
+        const nextChats = current.chats.map((c) => (c.id === id ? { ...c, ...patch } : c));
+        if ("is_pinned" in patch) {
+          nextChats.sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned));
+        }
+        return {
+          ...current,
+          chats: nextChats,
+        };
+      });
+    }
+
+    function onChatRemoved(e: Event) {
+      const custom = e as CustomEvent<{ id: string }>;
+      if (!custom.detail?.id) return;
+      setChatData((current) => ({
+        ...current,
+        chats: current.chats.filter((c) => c.id !== custom.detail.id),
+      }));
+    }
+
+    window.addEventListener("pansgpt-chat-updated", onChatUpdated);
+    window.addEventListener("pansgpt-chat-removed", onChatRemoved);
+    return () => {
+      window.removeEventListener("pansgpt-chat-updated", onChatUpdated);
+      window.removeEventListener("pansgpt-chat-removed", onChatRemoved);
+    };
+  }, []);
+
   useEffect(() => {
     const controller = new AbortController();
     async function loadChats(): Promise<void> {
@@ -120,9 +149,6 @@ export function DashboardProvider({
   useEffect(() => {
     const controller = new AbortController();
     const university = profile.university_id;
-    const level = z
-      .enum(["100", "200", "300", "400", "500", "600"])
-      .safeParse(profile.current_level);
     if (!university) {
       queueMicrotask(() => {
         if (!controller.signal.aborted)
@@ -178,84 +204,68 @@ export function DashboardProvider({
         source: "library",
       };
     }
-    void Promise.all([
-      recentDocuments(),
-      supabase
-        .from("student_tasks")
-        .select("id,title,due_date,due_time,subtitle")
-        .eq("user_id", profile.id)
-        .eq("university_id", university)
-        .eq("is_completed", false)
-        .gte("due_date", localTodayIso())
-        .order("due_date")
-        .order("due_time", { nullsFirst: false })
-        .limit(30)
-        .abortSignal(controller.signal),
-      level.success
-        ? supabase
-            .from("timetables")
-            .select("id,course_title,day,start_time,time_slot,venue")
-            .eq("university_id", university)
-            .eq("level", level.data)
-            .abortSignal(controller.signal)
-        : Promise.resolve({ data: [], error: null }),
-      supabase
-        .from("student_tasks")
-        .select("id,completed_at")
-        .eq("user_id", profile.id)
-        .eq("university_id", university)
-        .eq("is_completed", true)
-        .not("completed_at", "is", null)
-        .gte("completed_at", new Date(Date.now() - 180 * 86400000).toISOString())
-        .order("completed_at", { ascending: false })
-        .limit(1000)
-        .abortSignal(controller.signal),
-    ])
-      .then(([history, tasks, timetable, completed]) => {
+    async function loadActivities(): Promise<HomeDashboardDto> {
+      if (!token) throw new Error("Session unavailable");
+      return getHomeDashboard(env.NEXT_PUBLIC_API_URL, token, browserTimezone(), controller.signal);
+    }
+    void Promise.allSettled([recentDocuments(), loadActivities()]).then(
+      ([historyResult, activityResult]) => {
         if (controller.signal.aborted) return;
+        const history =
+          historyResult.status === "fulfilled"
+            ? historyResult.value
+            : { data: [], error: true, source: "history" as const };
+        const dashboard = activityResult.status === "fulfilled" ? activityResult.value : null;
         const recent = recentSchema.safeParse(history.data);
-        const pending = taskSchema.safeParse(tasks.data);
-        const classes = timetableSchema.safeParse(timetable.data);
-        const activity = completedSchema.safeParse(completed.data);
         setData({
-          completed: activity.success && !completed.error ? activity.data : [],
-          activityError: Boolean(completed.error) || !activity.success,
+          dailyActivity: dashboard?.daily_activity ?? [],
+          today: dashboard?.today ?? "",
+          activityFrom: dashboard?.activity_from ?? "",
+          currentStreakDays: dashboard?.current_streak_days ?? 0,
+          activityError: !dashboard,
           recent: recent.success && !history.error ? recent.data : [],
           recentSource: history.source,
-          tasks: pending.success && !tasks.error ? pending.data : [],
-          timetable: classes.success && !timetable.error ? classes.data : [],
+          tasks: dashboard?.tasks ?? [],
+          timetable: dashboard?.timetable ?? [],
           loading: false,
           recentError: Boolean(history.error) || !recent.success,
-          eventsError:
-            Boolean(tasks.error) ||
-            Boolean(timetable.error) ||
-            !pending.success ||
-            !classes.success,
+          eventsError: !dashboard,
         });
-      })
-      .catch(() => {
-        if (!controller.signal.aborted)
-          setData({
-            ...initial,
-            loading: false,
-            recentError: true,
-            eventsError: true,
-            activityError: true,
-          });
-      });
+      }
+    );
     return () => controller.abort();
-  }, [attempt, profile.current_level, profile.id, profile.university_id, supabase]);
+  }, [attempt, profile.id, profile.university_id, supabase, token]);
   const reload = useCallback((): void => {
     setData((value) => ({ ...value, loading: true }));
     setAttempt((value) => value + 1);
   }, []);
+  const completeTask = useCallback(
+    async (taskId: string, completed: boolean): Promise<void> => {
+      if (!token) throw new Error("Session unavailable");
+      const previousTasks = data.tasks;
+      setData((value) => ({
+        ...value,
+        tasks: value.tasks.map((task) =>
+          task.id === taskId ? { ...task, is_completed: completed } : task
+        ),
+      }));
+      try {
+        await updateTask(env.NEXT_PUBLIC_API_URL, token, taskId, { is_completed: completed });
+        setAttempt((value) => value + 1);
+      } catch (error) {
+        setData((value) => ({ ...value, tasks: previousTasks }));
+        throw error;
+      }
+    },
+    [data.tasks, token]
+  );
   return (
-    <DashboardContext.Provider value={{ ...data, reload }}>
+    <DashboardContext.Provider value={{ ...data, reload, completeTask }}>
       <ChatsContext.Provider value={chatData}>{children}</ChatsContext.Provider>
     </DashboardContext.Provider>
   );
 }
-export function useDashboard(): DashboardData & { reload: () => void } {
+export function useDashboard(): DashboardData & DashboardActions {
   const context = useContext(DashboardContext);
   if (!context) throw new Error("Dashboard data requires a verified workspace.");
   return context;

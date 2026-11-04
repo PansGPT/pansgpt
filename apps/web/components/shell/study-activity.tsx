@@ -3,17 +3,19 @@ import { useState } from "react";
 import { ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import { Tooltip, addDateDays, formatDateOnly, parseDateOnly } from "@pansgpt/ui/shell";
 import { useDashboard } from "./dashboard-data";
+import { env } from "@/env";
 
 type DayActivity = { tasks: number; minutes: number };
-function isoLocal(date: Date): string {
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-}
 export function StudyActivity({ today }: { today: string }): React.ReactElement {
   const data = useDashboard();
   const [month, setMonth] = useState(today.slice(0, 7) + "-01");
   const [selected, setSelected] = useState<string | null>(null);
   const activity = new Map<string, DayActivity>();
-  const sample = !data.loading && !data.activityError && !data.completed.length;
+  const sample =
+    env.NEXT_PUBLIC_DEMO_MODE === "true" &&
+    !data.loading &&
+    !data.activityError &&
+    !data.dailyActivity.length;
   if (sample) {
     for (let offset = 0; offset < 90; offset += 1) {
       if (offset > 6 && offset % 4 === 0) continue;
@@ -23,19 +25,17 @@ export function StudyActivity({ today }: { today: string }): React.ReactElement 
       });
     }
   } else {
-    for (const item of data.completed) {
-      const date = new Date(item.completed_at);
-      if (Number.isNaN(date.getTime())) continue;
-      const key = isoLocal(date);
-      const current = activity.get(key) ?? { tasks: 0, minutes: 0 };
-      activity.set(key, { ...current, tasks: current.tasks + 1 });
-    }
+    for (const item of data.dailyActivity)
+      activity.set(item.date, { tasks: item.tasks_completed, minutes: 0 });
   }
-  let streak = 0;
-  let cursor = activity.has(today) ? today : addDateDays(today, -1);
-  while (activity.has(cursor)) {
-    streak += 1;
-    cursor = addDateDays(cursor, -1);
+  const activeDate = (date: string): boolean => (activity.get(date)?.tasks ?? 0) > 0;
+  let streak = sample ? 0 : data.currentStreakDays;
+  if (sample) {
+    let cursor = activeDate(today) ? today : addDateDays(today, -1);
+    while (activeDate(cursor)) {
+      streak += 1;
+      cursor = addDateDays(cursor, -1);
+    }
   }
   const first = parseDateOnly(month)!;
   const daysInMonth = new Date(
@@ -61,7 +61,11 @@ export function StudyActivity({ today }: { today: string }): React.ReactElement 
         {sample && <span className="dashboard-sample-badge">Sample</span>}
       </header>
       <div className="study-activity-month">
-        <button aria-label="Previous activity month" onClick={() => moveMonth(-1)}>
+        <button
+          aria-label="Previous activity month"
+          disabled={!!data.activityFrom && month <= `${data.activityFrom.slice(0, 7)}-01`}
+          onClick={() => moveMonth(-1)}
+        >
           <ChevronLeft size={17} />
         </button>
         <strong>{formatDateOnly(month, { month: "long", year: "numeric" })}</strong>
@@ -94,9 +98,10 @@ export function StudyActivity({ today }: { today: string }): React.ReactElement 
             {Array.from({ length: daysInMonth }, (_, index) => {
               const date = addDateDays(month, index);
               const value = activity.get(date) ?? { tasks: 0, minutes: 0 };
-              const score = value.tasks + value.minutes / 30;
-              const intensity = score === 0 ? 0 : score < 2 ? 1 : score < 4 ? 2 : score < 7 ? 3 : 4;
-              const label = `${formatDateOnly(date, { month: "short", day: "numeric" })}: ${value.tasks} tasks completed${sample ? `, ${value.minutes} minutes studied (sample)` : ""}`;
+              const score = value.tasks;
+              const intensity =
+                score === 0 ? 0 : score === 1 ? 1 : score === 2 ? 2 : score <= 4 ? 3 : 4;
+              const label = `${formatDateOnly(date, { month: "short", day: "numeric" })}: ${value.tasks} tasks completed${sample ? " (sample)" : ""}`;
               return (
                 <Tooltip key={date} content={label} side="top">
                   <button
@@ -104,7 +109,7 @@ export function StudyActivity({ today }: { today: string }): React.ReactElement 
                     aria-pressed={selected === date}
                     aria-current={date === today ? "date" : undefined}
                     data-intensity={intensity}
-                    disabled={date > today}
+                    disabled={date > today || (!!data.activityFrom && date < data.activityFrom)}
                     onClick={() => setSelected(date)}
                   >
                     {index + 1}
@@ -124,8 +129,8 @@ export function StudyActivity({ today }: { today: string }): React.ReactElement 
             {selected
               ? `${formatDateOnly(selected, { month: "short", day: "numeric" })} · ${selectedDay?.tasks ?? 0} tasks completed${sample ? ` · ${((selectedDay?.minutes ?? 0) / 60).toFixed(1)}h studied` : ""}`
               : sample
-                ? "Sample study time and completed tasks"
-                : "Completed tasks · Study time tracking coming soon"}
+                ? "Sample task completions"
+                : "Streaks and activity are based on completed tasks"}
           </p>
         </>
       )}

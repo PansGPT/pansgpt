@@ -229,6 +229,14 @@ function CopyAction(): React.ReactElement {
 }
 
 export function UserMessage(): React.ReactElement {
+  return <UserMessageContent />;
+}
+
+export function UserMessageEditing(): React.ReactElement {
+  return <UserMessageContent editing />;
+}
+
+function UserMessageContent({ editing = false }: { editing?: boolean }): React.ReactElement {
   const id = useAuiState((state) => state.message.id);
   return (
     <MessagePrimitive.Root
@@ -246,7 +254,13 @@ export function UserMessage(): React.ReactElement {
           <MessagePrimitive.Parts />
         </div>
       </div>
-      <CopyAction />
+      {editing ? (
+        <p className="study-chat-edit-branch-warning" role="note">
+          Editing this message will restart the conversation from this point.
+        </p>
+      ) : (
+        <CopyAction />
+      )}
     </MessagePrimitive.Root>
   );
 }

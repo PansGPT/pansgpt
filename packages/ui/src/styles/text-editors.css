@@ -27,7 +27,7 @@
 .p-text-editor-input { position: relative; flex: 1; min-height: 80px; width: 100%; padding: 16px; background: var(--bg-primary); border: 1px solid var(--border-primary); border-radius: var(--figma-radius-md); box-shadow: var(--shadow-xs); overflow: hidden; }
 .p-text-editor[data-size="md"] .p-text-editor-input { padding: 20px; border-radius: var(--figma-radius-xl); }
 .p-text-editor-input[data-resizable="true"] { resize: both; max-width: 100%; }
-.p-text-editor-input:focus-within { border-color: var(--border-brand); }
+.p-text-editor-input:focus-within { border-color: var(--border-primary); }
 .p-text-editor-content { height: 100%; min-height: 0; overflow: auto; outline: none; color: var(--text-primary-900); font: 400 16px/24px var(--font-body); scrollbar-width: thin; scrollbar-color: var(--border-primary) transparent; }
 .p-text-editor-content p { margin: 0 0 16px; }
 .p-text-editor-content p:last-child { margin-bottom: 0; }

@@ -1,8 +1,8 @@
 "use client";
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { Menu, PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ApplicationNavPanel, Button, Slideout, ThemeProvider } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
@@ -22,6 +22,9 @@ import { MobileHomeChat } from "./mobile-home-chat";
 import { WorkspaceNavigationContext } from "./workspace-navigation";
 import type { SettingsSectionId } from "./settings/settings-types";
 import { SettingsModal } from "./settings/settings-modal";
+import { PlannerComingSoon, PlannerModal } from "./planner-modal";
+import { TasksModalView } from "./tasks-modal-view";
+import { PlannerModalProvider, type PlannerTab } from "./planner-modal-context";
 
 function Brand(): React.ReactElement {
   return (
@@ -35,15 +38,19 @@ function Brand(): React.ReactElement {
 function WorkspaceProviders({
   profile,
   openNavigation,
+  openPlannerModal,
   children,
 }: {
   profile: UserProfile;
   openNavigation: (opener: HTMLElement) => void;
+  openPlannerModal: (tab: PlannerTab, opener?: HTMLElement) => void;
   children: ReactNode;
 }): React.ReactElement {
   return (
     <WorkspaceNavigationContext.Provider value={openNavigation}>
-      <DashboardProvider profile={profile}>{children}</DashboardProvider>
+      <PlannerModalProvider value={openPlannerModal}>
+        <DashboardProvider profile={profile}>{children}</DashboardProvider>
+      </PlannerModalProvider>
     </WorkspaceNavigationContext.Provider>
   );
 }
@@ -57,6 +64,7 @@ function Workspace({
 }): React.ReactElement {
   const pathname = usePathname();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [message, setMessage] = useState("");
   const { setDraft } = useChatDraft();
   const reduced = useReducedMotion();
@@ -100,12 +108,26 @@ function Workspace({
       settings: false,
       help: false,
     });
-  const navigationOpen = panels.pathname === pathname && panels.navigation;
   const searchOpen = panels.pathname === pathname && panels.search;
   const profileOpen = panels.pathname === pathname && panels.profile;
   const settingsOpen = panels.pathname === pathname && panels.settings;
   const [settingsSection, setSettingsSection] = useState<SettingsSectionId>("account");
   const profileReturn = useRef<HTMLButtonElement | null>(null);
+  const plannerReturn = useRef<HTMLElement | null>(null);
+  const plannerOpenedFromShell = useRef(false);
+  const modalQuery = searchParams.get("modal");
+  const taskIdQuery = searchParams.get("taskId");
+  const [plannerTaskId, setPlannerTaskId] = useState<string | null>(taskIdQuery);
+  const activePlannerModal =
+    modalQuery === "planner" || modalQuery === "tasks" || modalQuery === "timetable";
+  const plannerTab: PlannerTab =
+    modalQuery === "timetable" || searchParams.get("tab") === "timetable" ? "timetable" : "tasks";
+
+  const [prevTaskIdQuery, setPrevTaskIdQuery] = useState(taskIdQuery);
+  if (prevTaskIdQuery !== taskIdQuery) {
+    setPrevTaskIdQuery(taskIdQuery);
+    setPlannerTaskId(taskIdQuery);
+  }
   const helpOpen = panels.pathname === pathname && panels.help;
   function returnToAccount(): void {
     if (profileReturn.current?.isConnected && profileReturn.current.getClientRects().length)
@@ -117,7 +139,7 @@ function Workspace({
             ? ".shell-home-account .shell-account-menu"
             : inLibrary
               ? ".library-mobile-home-button"
-              : ".shell-mobile-menu"
+              : ".shell-home-account .shell-account-menu"
         )
         ?.focus();
   }
@@ -141,9 +163,6 @@ function Workspace({
       help: false,
     }));
   }
-  function setNavigationOpen(open: boolean): void {
-    setPanels((value) => ({ ...value, pathname, navigation: open }));
-  }
   function setSearchOpen(open: boolean): void {
     setPanels((value) => ({
       ...value,
@@ -155,16 +174,66 @@ function Workspace({
     }));
   }
   const searchReturn = useRef<{ element: HTMLElement | null; pathname: string } | null>(null);
-  const navigationOrigin = useRef(pathname);
-  const navigationReturn = useRef<HTMLElement | null>(null);
-  const openWorkspaceNavigation = useCallback(
-    (opener: HTMLElement) => {
-      navigationOrigin.current = pathname;
-      navigationReturn.current = opener;
-      setPanels((value) => ({ ...value, pathname, navigation: true }));
+  const openWorkspaceNavigation = useCallback(() => {}, []);
+  const openPlannerModal = useCallback(
+    (tab: PlannerTab, opener?: HTMLElement, taskId?: string) => {
+      setPlannerTaskId(taskId ?? null);
+      if (!activePlannerModal) {
+        plannerReturn.current =
+          opener ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+        plannerOpenedFromShell.current = true;
+      }
+      const target = new URL(window.location.href);
+      target.searchParams.set("modal", "planner");
+      target.searchParams.set("tab", tab);
+      if (taskId) {
+        target.searchParams.set("taskId", taskId);
+      } else {
+        target.searchParams.delete("taskId");
+      }
+      const url = `${target.pathname}${target.search}${target.hash}`;
+      if (activePlannerModal) router.replace(url, { scroll: false });
+      else router.push(url, { scroll: false });
     },
-    [pathname]
+    [activePlannerModal, router, setPlannerTaskId]
   );
+  function setPlannerTab(tab: PlannerTab): void {
+    const target = new URL(window.location.href);
+    target.searchParams.set("modal", "planner");
+    target.searchParams.set("tab", tab);
+    target.searchParams.delete("taskId");
+    setPlannerTaskId(null);
+    router.replace(`${target.pathname}${target.search}${target.hash}`, { scroll: false });
+  }
+  function setPlannerModalOpen(open: boolean): void {
+    if (open) return;
+    setPlannerTaskId(null);
+    if (plannerOpenedFromShell.current) {
+      plannerOpenedFromShell.current = false;
+      router.back();
+      return;
+    }
+    const target = new URL(window.location.href);
+    target.searchParams.delete("modal");
+    target.searchParams.delete("tab");
+    target.searchParams.delete("taskId");
+    const query = target.searchParams.toString();
+    router.replace(`${target.pathname}${query ? `?${query}` : ""}${target.hash}`, {
+      scroll: false,
+    });
+  }
+  function returnFromPlanner(event: Event): void {
+    event.preventDefault();
+    if (plannerReturn.current?.isConnected && plannerReturn.current.getClientRects().length) {
+      plannerReturn.current.focus({ preventScroll: true });
+      plannerReturn.current = null;
+    } else {
+      main.current?.focus({ preventScroll: true });
+    }
+  }
+  useEffect(() => {
+    if (!activePlannerModal) plannerOpenedFromShell.current = false;
+  }, [activePlannerModal]);
   const openSearch = useCallback(() => {
     searchReturn.current = {
       element: document.activeElement instanceof HTMLElement ? document.activeElement : null,
@@ -203,7 +272,13 @@ function Workspace({
       } else {
         setSettingsSection("account");
       }
-      setSettingsOpen(true);
+      setPanels((value) => ({
+        ...value,
+        settings: true,
+        profile: false,
+        navigation: false,
+        help: false,
+      }));
     }
     window.addEventListener("pansgpt:open-settings", handleOpenSettings);
     return () => window.removeEventListener("pansgpt:open-settings", handleOpenSettings);
@@ -274,19 +349,15 @@ function Workspace({
         />
       }
       label={mobile ? "Mobile navigation" : "Primary navigation"}
-      navigation={
-        <SidebarLinks
-          mobile={mobile}
-          close={() => {
-            if (mobile) setNavigationOpen(false);
-          }}
-          openSearch={openSearch}
-        />
-      }
+      navigation={<SidebarLinks mobile={mobile} close={() => {}} openSearch={openSearch} />}
     />
   );
   return (
-    <WorkspaceProviders profile={profile} openNavigation={openWorkspaceNavigation}>
+    <WorkspaceProviders
+      profile={profile}
+      openNavigation={openWorkspaceNavigation}
+      openPlannerModal={openPlannerModal}
+    >
       <div
         className="app-shell"
         data-collapsed={collapsed}
@@ -338,58 +409,6 @@ function Workspace({
                     />
                   </div>
                 )}
-                <Slideout
-                  title="Workspace navigation"
-                  className="shell-navigation-drawer"
-                  description="Find your study tools."
-                  side="left"
-                  open={navigationOpen}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      navigationOrigin.current = pathname;
-                      navigationReturn.current = null;
-                    }
-                    setNavigationOpen(open);
-                  }}
-                  onCloseAutoFocus={(event) => {
-                    if (
-                      navigationOrigin.current === pathname &&
-                      navigationReturn.current?.isConnected &&
-                      !profileOpen &&
-                      !helpOpen
-                    ) {
-                      event.preventDefault();
-                      navigationReturn.current.focus();
-                      return;
-                    }
-                    if (
-                      pathname === "/app" &&
-                      navigationOrigin.current === pathname &&
-                      !profileOpen &&
-                      !helpOpen
-                    ) {
-                      event.preventDefault();
-                      document
-                        .querySelector<HTMLButtonElement>(".shell-home-account .shell-account-menu")
-                        ?.focus();
-                      return;
-                    }
-                    if (navigationOrigin.current !== pathname || profileOpen || helpOpen) {
-                      event.preventDefault();
-                      if (!profileOpen && !helpOpen) main.current?.focus({ preventScroll: true });
-                    }
-                  }}
-                  trigger={
-                    <button
-                      className="shell-icon-button shell-mobile-menu"
-                      aria-label="Open navigation"
-                    >
-                      <Menu size={22} />
-                    </button>
-                  }
-                >
-                  {panel(true)}
-                </Slideout>
               </div>
             </header>
           )}
@@ -404,7 +423,11 @@ function Workspace({
               <div className="shell-route-content">{children}</div>
             </motion.div>
           </main>
-          {pathname === "/app" && <MobileHomeChat />}
+          {pathname === "/app" && (
+            <Suspense fallback={null}>
+              <MobileHomeChat />
+            </Suspense>
+          )}
           {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && !inLearn && (
             <form
               className="shell-mobile-composer p-study-composer"
@@ -413,7 +436,16 @@ function Workspace({
                 const prompt = message.trim();
                 if (!prompt) return;
                 setDraft(prompt.slice(0, 4000));
-                router.push("/app/chat");
+                const isMobile =
+                  typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches;
+                if (isMobile) {
+                  router.push("/app?chat=new");
+                  window.dispatchEvent(
+                    new CustomEvent("pansgpt-open-chat", { detail: { id: null } })
+                  );
+                } else {
+                  router.push("/app/chat");
+                }
                 setMessage("");
               }}
             >
@@ -445,7 +477,17 @@ function Workspace({
                   }
                   onClick={() => {
                     setDraft(message.trim().slice(0, 4000));
-                    router.push("/app/chat");
+                    const isMobile =
+                      typeof window !== "undefined" &&
+                      window.matchMedia("(max-width: 860px)").matches;
+                    if (isMobile) {
+                      router.push("/app?chat=new");
+                      window.dispatchEvent(
+                        new CustomEvent("pansgpt-open-chat", { detail: { id: null } })
+                      );
+                    } else {
+                      router.push("/app/chat");
+                    }
                     setMessage("");
                   }}
                 >
@@ -479,6 +521,49 @@ function Workspace({
           preferences={preferences}
           returnFocus={returnToAccount}
         />
+        {activePlannerModal && (
+          <PlannerModal
+            open
+            title="Study planner"
+            description="View your weekly timetable and manage your study tasks."
+            tab={plannerTab}
+            onTabChange={setPlannerTab}
+            onOpenChange={setPlannerModalOpen}
+            onCloseAutoFocus={returnFromPlanner}
+            isDetailOpen={plannerTab === "tasks" && Boolean(plannerTaskId)}
+            onBack={() => {
+              setPlannerTaskId(null);
+              const target = new URL(window.location.href);
+              target.searchParams.delete("taskId");
+              router.replace(`${target.pathname}${target.search}${target.hash}`, { scroll: false });
+            }}
+          >
+            <div
+              id="planner-panel"
+              className="planner-modal-panel"
+              role="tabpanel"
+              aria-label={plannerTab === "tasks" ? "Tasks" : "Timetable"}
+              tabIndex={0}
+            >
+              {plannerTab === "tasks" ? (
+                <TasksModalView
+                  initialTaskId={plannerTaskId}
+                  onSelectedTaskChange={(id) => {
+                    setPlannerTaskId(id);
+                    const target = new URL(window.location.href);
+                    if (id) target.searchParams.set("taskId", id);
+                    else target.searchParams.delete("taskId");
+                    router.replace(`${target.pathname}${target.search}${target.hash}`, {
+                      scroll: false,
+                    });
+                  }}
+                />
+              ) : (
+                <PlannerComingSoon tab={plannerTab} />
+              )}
+            </div>
+          </PlannerModal>
+        )}
         <Slideout
           title="Help"
           description="Find your way around PansGPT."
@@ -587,7 +672,9 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
 export function AppShell({ children }: { children: ReactNode }): React.ReactElement {
   return (
     <ThemeProvider initialTheme="dark">
-      <VerifiedWorkspace>{children}</VerifiedWorkspace>
+      <Suspense fallback={<WorkspaceLoading />}>
+        <VerifiedWorkspace>{children}</VerifiedWorkspace>
+      </Suspense>
     </ThemeProvider>
   );
 }

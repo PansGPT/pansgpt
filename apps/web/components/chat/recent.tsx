@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useDashboard, useRecentChats } from "@/components/shell/dashboard-data";
 import { SamplePreview } from "@/components/shell/sample-preview";
+import { chatSessionUrl } from "@/lib/chat-navigation";
 
 const examples = [
   {
@@ -63,13 +64,14 @@ export function ChatRecent(): React.ReactElement {
   const history = useRecentChats();
   const [preview, setPreview] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 860px)").matches;
   const real: RecentItem[] = [
     ...history.chats.map((chat) => ({
       id: chat.id,
       title: chat.title || "Untitled chat",
       kind: "Chat",
       detail: "Saved conversation",
-      href: `/app/chat?session=${encodeURIComponent(chat.id)}`,
+      href: chatSessionUrl(chat.id, isMobile),
     })),
     ...documents.recent.map((document) => ({
       id: document.documents.id,
@@ -123,8 +125,16 @@ export function ChatRecent(): React.ReactElement {
                   key={item.id}
                   className="study-chat-recent-card"
                   onClick={() => {
-                    if (item.href) router.push(item.href);
-                    else setPreview(item.title);
+                    if (item.href) {
+                      router.push(item.href);
+                      if (item.kind === "Chat" && isMobile) {
+                        window.dispatchEvent(
+                          new CustomEvent("pansgpt-open-chat", { detail: { id: item.id } })
+                        );
+                      }
+                    } else {
+                      setPreview(item.title);
+                    }
                   }}
                 >
                   <span className="study-chat-recent-icon" data-kind={item.kind}>

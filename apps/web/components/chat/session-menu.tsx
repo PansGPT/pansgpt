@@ -9,6 +9,7 @@ import {
   Pencil,
   Pin,
   PinOff,
+  Share2,
   Trash2,
 } from "lucide-react";
 import {
@@ -29,8 +30,10 @@ import {
   type ChatSessionSummary,
 } from "@/lib/chat-sessions";
 import { ConversationDialog } from "./dialog";
+import { ShareDialog } from "./share-dialog";
 import { ArchiveIcon } from "./archive-icon";
 import { offerConversationUndo } from "./undo-notice";
+import { chatSessionUrl } from "@/lib/chat-navigation";
 
 export function ChatSessionMenu({
   chat,
@@ -51,18 +54,29 @@ export function ChatSessionMenu({
   const request = useRef<AbortController | null>(null);
   const transferring = useRef(false);
   const frame = useRef<number | null>(null);
-  const [panel, setPanel] = useState<"rename" | "delete" | null>(null);
+  const [panel, setPanel] = useState<"rename" | "delete" | "share" | null>(null);
   const [name, setName] = useState(chat.title);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [override, setOverride] = useState<{ id: string; is_pinned: boolean } | null>(null);
+  const isPinned = override && override.id === chat.id ? override.is_pinned : chat.is_pinned;
+  const userScope = useRef(`${profile?.id}:${profile?.university_id}`);
+
+  useEffect(() => {
+    const scope = `${profile?.id}:${profile?.university_id}`;
+    if (userScope.current !== scope) {
+      userScope.current = scope;
+      request.current?.abort();
+    }
+  }, [profile?.id, profile?.university_id]);
+
   useEffect(
     () => () => {
-      request.current?.abort();
       if (frame.current !== null) cancelAnimationFrame(frame.current);
     },
-    [profile?.id, profile?.university_id]
+    []
   );
-  function openPanel(next: "rename" | "delete"): void {
+  function openPanel(next: "rename" | "delete" | "share"): void {
     transferring.current = true;
     setName(chat.title);
     setError(null);
@@ -77,11 +91,35 @@ export function ChatSessionMenu({
     request.current = controller;
     setBusy(true);
     setError(null);
+
+    const isPinning = typeof change === "object" && "is_pinned" in change;
+    if (isPinning) {
+      const now = new Date().toISOString();
+      setOverride({ id: chat.id, is_pinned: Boolean(change.is_pinned) });
+      window.dispatchEvent(
+        new CustomEvent("pansgpt-chat-updated", {
+          detail: {
+            id: chat.id,
+            patch: { is_pinned: Boolean(change.is_pinned), updated_at: now },
+          },
+        })
+      );
+      onChanged?.({
+        id: chat.id,
+        title: chat.title,
+        is_pinned: Boolean(change.is_pinned),
+        archived_at: chat.archived_at,
+        updated_at: now,
+      });
+    }
+
     try {
       const saved = await requestSession(session?.access_token, chat.id, change, controller.signal);
       if (controller.signal.aborted) return;
-      if (saved && saved.user_id !== profile?.id)
+      const currentUserId = profile?.id ?? session?.user?.id;
+      if (saved && currentUserId && saved.user_id !== currentUserId) {
         throw new Error("Conversation ownership mismatch.");
+      }
       onChanged?.(saved);
       setPanel(null);
       if (change === "delete" || change.archived === true) {
@@ -96,10 +134,24 @@ export function ChatSessionMenu({
       }
       reload();
     } catch (failure: unknown) {
-      if (!controller.signal.aborted)
-        setError(
-          failure instanceof Error ? failure.message : "This change was not saved. Please retry."
+      if (controller.signal.aborted) return;
+      if (isPinning) {
+        setOverride(null);
+        window.dispatchEvent(
+          new CustomEvent("pansgpt-chat-updated", {
+            detail: { id: chat.id, patch: { is_pinned: chat.is_pinned } },
+          })
         );
+        onChanged?.({
+          id: chat.id,
+          title: chat.title,
+          is_pinned: chat.is_pinned,
+          archived_at: chat.archived_at,
+        });
+      }
+      setError(
+        failure instanceof Error ? failure.message : "This change was not saved. Please retry."
+      );
     } finally {
       if (!controller.signal.aborted) setBusy(false);
     }
@@ -153,23 +205,30 @@ export function ChatSessionMenu({
         >
           <DropdownItem
             disabled={busy}
-            icon={chat.is_pinned ? <PinOff size={16} /> : <Pin size={16} />}
+            icon={isPinned ? <PinOff size={14} /> : <Pin size={14} />}
             onSelect={() => {
-              void apply({ is_pinned: !chat.is_pinned });
+              void apply({ is_pinned: !isPinned });
             }}
           >
-            {chat.is_pinned ? "Unpin" : "Pin"}
+            {isPinned ? "Unpin" : "Pin"}
           </DropdownItem>
           <DropdownItem
             disabled={busy}
-            icon={<Pencil size={16} />}
+            icon={<Pencil size={14} />}
             onSelect={() => openPanel("rename")}
           >
             Rename
           </DropdownItem>
           <DropdownItem
             disabled={busy}
-            icon={chat.archived_at ? <ArchiveRestore size={16} /> : <ArchiveIcon />}
+            icon={<Share2 size={14} />}
+            onSelect={() => openPanel("share")}
+          >
+            Share
+          </DropdownItem>
+          <DropdownItem
+            disabled={busy}
+            icon={chat.archived_at ? <ArchiveRestore size={14} /> : <ArchiveIcon size={14} />}
             onSelect={() => {
               void apply({ archived: !chat.archived_at });
             }}
@@ -179,7 +238,7 @@ export function ChatSessionMenu({
           <div role="separator" className="study-chat-menu-separator" />
           <DropdownItem
             disabled={busy}
-            icon={<Trash2 size={16} />}
+            icon={<Trash2 size={14} />}
             className="study-chat-destructive"
             onSelect={() => openPanel("delete")}
           >
@@ -192,8 +251,15 @@ export function ChatSessionMenu({
           {error}
         </span>
       )}
+      <ShareDialog
+        open={panel === "share"}
+        onOpenChange={(open) => {
+          if (!open) setPanel(null);
+        }}
+        chat={chat}
+      />
       <ConversationDialog
-        open={panel !== null}
+        open={panel === "rename" || panel === "delete"}
         onOpenChange={(open) => {
           if (!open && !busy) setPanel(null);
         }}
@@ -362,10 +428,22 @@ export function ArchivedChats({ onNavigate }: { onNavigate?: () => void }): Reac
                   <span>{chat.title}</span>
                 ) : (
                   <Link
-                    href={`/app/chat?session=${chat.id}`}
+                    href={chatSessionUrl(
+                      chat.id,
+                      typeof window !== "undefined" &&
+                        window.matchMedia("(max-width: 860px)").matches
+                    )}
                     onClick={() => {
                       setOpen(false);
                       onNavigate?.();
+                      if (
+                        typeof window !== "undefined" &&
+                        window.matchMedia("(max-width: 860px)").matches
+                      ) {
+                        window.dispatchEvent(
+                          new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } })
+                        );
+                      }
                     }}
                   >
                     {chat.title}

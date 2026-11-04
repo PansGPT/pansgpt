@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Check, Circle } from "lucide-react";
 import { formatDateOnly } from "@pansgpt/ui/shell";
 
 export type DashboardTimelineEvent = {
   id: string;
   title: string;
-  date: string;
+  date: string | null;
   detail: string;
   kind: "task" | "class";
   time?: string | null;
@@ -16,11 +17,13 @@ export type DashboardTimelineEvent = {
 type TimelineRow = {
   id: string;
   title: string;
-  date: string;
+  date: string | null;
   minutes: number | null;
   timeLabel?: string;
   detail: string;
   status: string;
+  kind: "task" | "class";
+  eventId: string;
   tone: "brand" | "blue" | "purple" | "neutral";
 };
 
@@ -46,7 +49,7 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
   const minutes =
     (/:|am|pm/i.test(explicitTime) ? timeMinutes(explicitTime) : null) ??
     (/:|am|pm/i.test(slotStart) ? timeMinutes(slotStart) : null);
-  const start = minutes === null ? null : new Date(`${event.date}T00:00:00`);
+  const start = minutes === null || !event.date ? null : new Date(`${event.date}T00:00:00`);
   start?.setMinutes(minutes ?? 0);
   const endMinutes = range.length === 2 ? timeMinutes(range[1] || "") : null;
   const end =
@@ -55,7 +58,7 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
       : null;
   const difference = start ? Math.ceil((start.getTime() - now) / 60000) : null;
   const ongoing = !!start && !!end && start.getTime() <= now && end.getTime() > now;
-  let status = event.timeSlot ? "Scheduled" : "All day";
+  let status = event.timeSlot ? "Scheduled" : !event.date ? "No due date" : "All day";
   if (ongoing) status = "Ongoing";
   else if (difference !== null) {
     if (difference > 1440) status = "Upcoming";
@@ -68,11 +71,13 @@ function eventRow(event: DashboardTimelineEvent, now: number): TimelineRow {
   }
   return {
     id: event.id,
+    eventId: event.id,
     title: event.title,
     date: event.date,
     minutes,
     timeLabel: minutes === null ? event.timeSlot : undefined,
     detail: event.kind === "class" ? "Lecture" : "Task",
+    kind: event.kind,
     status,
     tone: ongoing ? "brand" : event.kind === "task" ? "purple" : "blue",
   };
@@ -85,6 +90,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-pharmacology",
       title: "Pharmacology",
       date: today,
+      eventId: "sample-mobile-pharmacology",
+      kind: "class",
       minutes: 540,
       detail: "Lecture",
       status: "Ongoing",
@@ -94,6 +101,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-clinical",
       title: "Clinical Pharmacy",
       date: today,
+      eventId: "sample-mobile-clinical",
+      kind: "class",
       minutes: 660,
       detail: "Lecture",
       status: "1h 59m",
@@ -103,6 +112,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-study",
       title: "Self Study",
       date: today,
+      eventId: "sample-mobile-study",
+      kind: "task",
       minutes: 840,
       detail: "Library",
       status: "3h",
@@ -112,6 +123,8 @@ function sampleRows(today: string, tasks: boolean): TimelineRow[] {
       id: "sample-mobile-notes",
       title: "Review Notes",
       date: today,
+      eventId: "sample-mobile-notes",
+      kind: "task",
       minutes: 960,
       detail: "Notes",
       status: "1h",
@@ -132,11 +145,15 @@ export function MobileActivityTimeline({
   tab,
   today,
   sample,
+  onCompleteTask,
+  onSelectTask,
 }: {
   events: DashboardTimelineEvent[];
   tab: "timetable" | "tasks";
   today: string;
   sample: boolean;
+  onCompleteTask: (taskId: string) => Promise<void>;
+  onSelectTask?: (taskId: string) => void;
 }): React.ReactElement {
   const [now, setNow] = useState(Date.now);
   useEffect(() => {
@@ -148,10 +165,14 @@ export function MobileActivityTimeline({
     : events
         .filter((event) => event.kind === (tab === "tasks" ? "task" : "class"))
         .map((event) => eventRow(event, now))
-        .sort(
-          (left, right) =>
+        .sort((left, right) => {
+          if (!left.date && !right.date) return (left.minutes ?? 1440) - (right.minutes ?? 1440);
+          if (!left.date) return 1;
+          if (!right.date) return -1;
+          return (
             left.date.localeCompare(right.date) || (left.minutes ?? 1440) - (right.minutes ?? 1440)
-        )
+          );
+        })
         .slice(0, 5);
   const dates = [...new Set(rows.map((row) => row.date))];
   if (!rows.length)
@@ -167,10 +188,18 @@ export function MobileActivityTimeline({
       aria-label={`${sample ? "Sample " : ""}${tab === "tasks" ? "tasks" : "timetable"}`}
     >
       {dates.map((date) => (
-        <section key={date} className="dashboard-timeline-day">
+        <section key={date || "no-due-date"} className="dashboard-timeline-day">
           <header>
-            <h3>{date === today ? "Today" : formatDateOnly(date, { weekday: "long" })}</h3>
-            <p>{formatDateOnly(date, { weekday: "short", day: "numeric", month: "short" })}</p>
+            <h3>
+              {!date
+                ? "No due date"
+                : date === today
+                  ? "Today"
+                  : formatDateOnly(date, { weekday: "long" })}
+            </h3>
+            {date ? (
+              <p>{formatDateOnly(date, { weekday: "short", day: "numeric", month: "short" })}</p>
+            ) : null}
           </header>
           <ol>
             {rows
@@ -179,9 +208,11 @@ export function MobileActivityTimeline({
                 <li key={row.id} data-tone={row.tone}>
                   <time
                     dateTime={
-                      row.minutes === null
-                        ? date
-                        : `${date}T${String(Math.floor(row.minutes / 60)).padStart(2, "0")}:${String(row.minutes % 60).padStart(2, "0")}`
+                      !date
+                        ? undefined
+                        : row.minutes === null
+                          ? date
+                          : `${date}T${String(Math.floor(row.minutes / 60)).padStart(2, "0")}:${String(row.minutes % 60).padStart(2, "0")}`
                     }
                   >
                     {row.timeLabel || clockLabel(row.minutes)}
@@ -189,11 +220,42 @@ export function MobileActivityTimeline({
                   <span className="dashboard-timeline-track" aria-hidden="true">
                     <i />
                   </span>
-                  <div className="dashboard-timeline-content">
+                  <div
+                    className="dashboard-timeline-content"
+                    role={row.kind === "task" && onSelectTask && !sample ? "button" : undefined}
+                    tabIndex={row.kind === "task" && onSelectTask && !sample ? 0 : undefined}
+                    onClick={() => {
+                      if (row.kind === "task" && onSelectTask && !sample) {
+                        onSelectTask(row.eventId);
+                      }
+                    }}
+                    onKeyDown={(e) => {
+                      if (
+                        row.kind === "task" &&
+                        onSelectTask &&
+                        !sample &&
+                        (e.key === "Enter" || e.key === " ")
+                      ) {
+                        e.preventDefault();
+                        onSelectTask(row.eventId);
+                      }
+                    }}
+                  >
                     <div>
                       <h4>{row.title}</h4>
                       <p>{row.detail}</p>
                     </div>
+                    {row.kind === "task" && !sample && (
+                      <button
+                        type="button"
+                        className="dashboard-timeline-complete"
+                        aria-label={`Mark ${row.title} complete`}
+                        onClick={() => void onCompleteTask(row.eventId)}
+                      >
+                        <Circle size={18} aria-hidden="true" />
+                        <Check size={12} aria-hidden="true" />
+                      </button>
+                    )}
                     <span
                       className="dashboard-timeline-status"
                       data-ongoing={row.status === "Ongoing"}

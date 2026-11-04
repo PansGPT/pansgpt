@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, type RefObject } from "react";
-import { MessageCircle, Search } from "lucide-react";
+import { MessageCircle, Pin, Search } from "lucide-react";
 import type { ChatSearchResult } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
 import { searchConversations } from "@/lib/chat-sessions";
 import { searchPreviewText } from "@/lib/search-preview";
+import { ChatSessionMenu } from "@/components/chat/session-menu";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 
 export function MobileSheetHistory({
@@ -145,14 +146,21 @@ export function MobileSheetHistory({
             </div>
           ) : chats.chats.length ? (
             chats.chats.map((chat) => (
-              <button
-                className="mobile-home-history-row"
-                key={chat.id}
-                onClick={() => onChoose(chat.id)}
-              >
-                <MessageCircle size={19} aria-hidden="true" />
-                <span>{chat.title}</span>
-              </button>
+              <div className="mobile-home-history-item" key={chat.id}>
+                <button
+                  type="button"
+                  className="mobile-home-history-row"
+                  onClick={() => onChoose(chat.id)}
+                >
+                  {chat.is_pinned ? (
+                    <Pin size={18} aria-label="Pinned" />
+                  ) : (
+                    <MessageCircle size={19} aria-hidden="true" />
+                  )}
+                  <span>{chat.title}</span>
+                </button>
+                <ChatSessionMenu chat={chat} />
+              </div>
             ))
           ) : (
             !chats.loading && <p>Your conversations will appear here.</p>
