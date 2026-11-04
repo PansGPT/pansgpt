@@ -294,6 +294,7 @@ test("mobile library preserves Recent/Courses, filters, focused details and them
   await page.goto("/app/library");
   const docs = page.getByRole("list", { name: "Course documents" });
   await expect(docs.getByRole("button")).toHaveCount(8);
+  await page.getByRole("button", { name: "Search your library", exact: true }).click();
   await expect(page.getByRole("searchbox", { name: "Search your library", exact: true })).toHaveCSS(
     "font-size",
     "16px"
@@ -326,12 +327,16 @@ test("mobile library preserves Recent/Courses, filters, focused details and them
     .getByRole("button")
     .first()
     .click();
-  await expect(page.locator(".library-mobile-course-code")).toBeVisible();
-  await expect(page.locator(".library-mobile-course-title")).toHaveText("Clinical Pharmacology");
+  await expect(page.locator(".library-mobile-subbar .library-mobile-course-code")).toBeVisible();
+  await expect(page.locator(".library-mobile-subbar .library-mobile-course-title")).toHaveText(
+    "Clinical Pharmacology"
+  );
   await expect(page.locator(".library-header")).not.toBeVisible();
   await expect(
-    page.getByRole("navigation", { name: "Library sections", exact: true })
-  ).not.toBeVisible();
+    page
+      .getByRole("region", { name: "Course filter", exact: true })
+      .getByRole("button", { name: "PCL 401", exact: true })
+  ).toHaveAttribute("data-active", "true");
   await page.screenshot({ path: test.info().outputPath("library-mobile-course-header.png") });
   await page.getByRole("button", { name: "Academic filters", exact: true }).click();
   await page.getByLabel("Semester", { exact: true }).selectOption("second");
@@ -400,9 +405,13 @@ test("mobile Library keeps tab actions, a matching course grid and Home navigati
   const header = page.locator(".library-mobile-topbar");
   const search = page.getByRole("searchbox", { name: "Search your library", exact: true });
   const tabs = page.getByRole("navigation", { name: "Library sections", exact: true });
-  const actions = page.locator(".library-mobile-browse-actions");
+  const actions = page.locator(".library-mobile-subbar .library-mobile-browse-actions");
   const panel = page.locator(".library-content-panel");
   const results = page.locator(".library-results");
+  await header.getByRole("button", { name: "Search your library", exact: true }).click();
+  await expect(search).toBeVisible();
+  await expect(search).toHaveCSS("font-size", "16px");
+  await header.getByRole("button", { name: "Search your library", exact: true }).click();
   await expect(page.locator(".shell-mobile-composer")).toHaveCount(0);
   const docs = page.getByRole("list", { name: "Course documents", exact: true });
   await expect(docs.getByRole("button")).toHaveCount(6);
@@ -411,7 +420,8 @@ test("mobile Library keeps tab actions, a matching course grid and Home navigati
   await expect(page.locator(".shell-mobile-brand")).not.toBeVisible();
   await expect(panel).toHaveCSS("border-top-left-radius", "0px");
   await expect(panel).toHaveCSS("border-top-right-radius", "0px");
-  await expect(panel.locator(".library-mobile-tabs")).toBeVisible();
+  await expect(tabs).toBeVisible();
+  await expect(panel.locator(".library-mobile-tabs")).not.toBeVisible();
   await expect(panel.locator(".library-results")).toBeVisible();
   await expect(page.getByRole("button", { name: "Grid view", exact: true })).not.toBeVisible();
   await expect(page.getByRole("button", { name: "List view", exact: true })).toBeVisible();
@@ -422,14 +432,16 @@ test("mobile Library keeps tab actions, a matching course grid and Home navigati
   ]) {
     await page.setViewportSize({ width, height });
     const bounds = await Promise.all(
-      [header, search, tabs, actions, results].map((item) => item.boundingBox())
+      [header, tabs, page.locator(".library-mobile-subbar"), actions, results].map((item) =>
+        item.boundingBox()
+      )
     );
     expect(bounds[0].y + bounds[0].height).toBeLessThanOrEqual(bounds[1].y + 1);
     expect(bounds[1].y + bounds[1].height).toBeLessThanOrEqual(bounds[2].y + 1);
     expect(
       Math.abs(bounds[2].y + bounds[2].height / 2 - (bounds[3].y + bounds[3].height / 2))
     ).toBeLessThan(8);
-    expect(bounds[2].x + bounds[2].width).toBeLessThanOrEqual(bounds[3].x);
+    expect(bounds[3].x + bounds[3].width).toBeLessThanOrEqual(width);
     expect(bounds[4].y + bounds[4].height).toBeLessThanOrEqual(height);
     expect(
       await page.evaluate(

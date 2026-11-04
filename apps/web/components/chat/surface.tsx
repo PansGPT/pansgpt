@@ -211,6 +211,7 @@ export function ChatContent({
   const seenActionModes = useRef(new Set<string>());
   const seenFiles = useRef(new Set<string>());
   const seenLibraryDocuments = useRef(new Set<string>());
+  const reportedSessionId = useRef<string | null>(initialSessionId);
   const fileLifetime = useRef(true);
   useEffect(() => {
     fileLifetime.current = true;
@@ -330,8 +331,9 @@ export function ChatContent({
     runtime.thread.composer.setText(initialDraft);
   }, [runtime, initialDraft]);
   useEffect(() => {
-    if (currentSessionId && currentSessionId !== initialSessionId) {
-      onSessionCreated?.(currentSessionId);
+    if (currentSessionId && currentSessionId !== reportedSessionId.current && onSessionCreated) {
+      reportedSessionId.current = currentSessionId;
+      onSessionCreated(currentSessionId);
     }
   }, [currentSessionId, initialSessionId, onSessionCreated]);
   useEffect(() => {

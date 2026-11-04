@@ -247,6 +247,7 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
       data-folders={folders}
       data-search={Boolean(search)}
       data-search-open={searchOpen}
+      data-filters-open={filtersOpen}
     >
       <aside className="library-course-panel" aria-label="Library navigation">
         <div className="library-panel-title">
@@ -354,45 +355,57 @@ function LibraryContent({ initialQuery }: { initialQuery: string }): React.React
           </div>
         </header>
         <div className="library-course-pills-row" role="region" aria-label="Course filter">
-          <button
-            type="button"
-            className="library-course-pill"
-            data-active={location.kind !== "course"}
-            onClick={() => navigate({ kind: "all" })}
-          >
-            All
-          </button>
-          {courses.map((item) => (
+          <nav aria-label="Library sections">
             <button
               type="button"
-              key={item.code}
               className="library-course-pill"
-              data-active={location.kind === "course" && location.code === item.code}
-              onClick={() =>
-                navigate(
-                  location.kind === "course" && location.code === item.code
-                    ? { kind: "all" }
-                    : { kind: "course", code: item.code }
-                )
-              }
+              data-active={location.kind !== "course" && location.kind !== "courses"}
+              onClick={() => navigate({ kind: "all" })}
             >
-              {item.code}
+              All
             </button>
-          ))}
+            <button
+              type="button"
+              className="library-course-pill"
+              data-active={location.kind === "courses"}
+              onClick={() => navigate({ kind: "courses" })}
+            >
+              Courses
+            </button>
+            {courses.map((item) => (
+              <button
+                type="button"
+                key={item.code}
+                className="library-course-pill"
+                data-active={location.kind === "course" && location.code === item.code}
+                onClick={() =>
+                  navigate(
+                    location.kind === "course" && location.code === item.code
+                      ? { kind: "all" }
+                      : { kind: "course", code: item.code }
+                  )
+                }
+              >
+                {item.code}
+              </button>
+            ))}
+          </nav>
         </div>
         <div className="library-mobile-subbar" aria-label="Library controls">
           <div className="library-mobile-sort-label">
             <ArrowUpDown size={15} aria-hidden="true" />
-            <span>{location.kind === "course" ? location.code : "All"}</span>
+            {location.kind === "course" ? (
+              <>
+                <span className="library-mobile-course-code">{location.code}</span>
+                {course?.title && (
+                  <span className="library-mobile-course-title">{course.title}</span>
+                )}
+              </>
+            ) : (
+              <span>{location.kind === "courses" ? "Courses" : "All"}</span>
+            )}
           </div>
-          <button
-            type="button"
-            className="library-mobile-view-toggle"
-            aria-label={view === "grid" ? "Switch to list view" : "Switch to grid view"}
-            onClick={() => setView((v) => (v === "grid" ? "list" : "grid"))}
-          >
-            {view === "grid" ? <List size={20} /> : <LayoutGrid size={18} />}
-          </button>
+          <div className="library-mobile-browse-actions">{browseControls()}</div>
         </div>
         <div className="library-toolbar-v2">
           <label className="library-search">
