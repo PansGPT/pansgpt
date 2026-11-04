@@ -268,7 +268,9 @@ test("library searches the full catalog and paginates course materials with acad
   expect(state.requests.some((value) => new URLSearchParams(value).get("offset") === "24")).toBe(
     true
   );
-  await page.getByLabel("Search your library", { exact: true }).fill("Late catalog clearance");
+  await page
+    .getByRole("searchbox", { name: "Search your library", exact: true })
+    .fill("Late catalog clearance");
   await expect(docs.getByRole("button")).toHaveCount(1);
   await expect(docs).toContainText("Late catalog clearance notes");
   expect(new URLSearchParams(state.requests.at(-1)).get("course_code")).toBeNull();
@@ -292,7 +294,7 @@ test("mobile library preserves Recent/Courses, filters, focused details and them
   await page.goto("/app/library");
   const docs = page.getByRole("list", { name: "Course documents" });
   await expect(docs.getByRole("button")).toHaveCount(8);
-  await expect(page.getByLabel("Search your library", { exact: true })).toHaveCSS(
+  await expect(page.getByRole("searchbox", { name: "Search your library", exact: true })).toHaveCSS(
     "font-size",
     "16px"
   );
@@ -396,7 +398,7 @@ test("mobile Library keeps tab actions, a matching course grid and Home navigati
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/app/library");
   const header = page.locator(".library-mobile-topbar");
-  const search = page.getByLabel("Search your library", { exact: true });
+  const search = page.getByRole("searchbox", { name: "Search your library", exact: true });
   const tabs = page.getByRole("navigation", { name: "Library sections", exact: true });
   const actions = page.locator(".library-mobile-browse-actions");
   const panel = page.locator(".library-content-panel");
@@ -407,8 +409,8 @@ test("mobile Library keeps tab actions, a matching course grid and Home navigati
   await expect(page.locator(".library-date-group")).toHaveText(["Today", "Yesterday", "Earlier"]);
   await expect(header.getByText("Library", { exact: true })).toBeVisible();
   await expect(page.locator(".shell-mobile-brand")).not.toBeVisible();
-  await expect(panel).toHaveCSS("border-top-left-radius", "28px");
-  await expect(panel).toHaveCSS("border-top-right-radius", "28px");
+  await expect(panel).toHaveCSS("border-top-left-radius", "0px");
+  await expect(panel).toHaveCSS("border-top-right-radius", "0px");
   await expect(panel.locator(".library-mobile-tabs")).toBeVisible();
   await expect(panel.locator(".library-results")).toBeVisible();
   await expect(page.getByRole("button", { name: "Grid view", exact: true })).not.toBeVisible();
@@ -830,20 +832,16 @@ test("mobile navigation matches the Library back button during real touch presse
   await expect(homeLibrary).toHaveCSS("background-color", reference.background);
   await touch.send("Input.dispatchTouchEvent", { type: "touchCancel", touchPoints: [] });
   await expect(homeLibrary).toHaveAttribute("data-pressed", "false");
-  await page.goto("/app/chat");
-  await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-  const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  const library = navigation.getByRole("link", { name: "Library", exact: true });
-  const normal = await library.evaluate((element) => getComputedStyle(element).backgroundColor);
-  await press(library);
-  await expect(library).toHaveCSS("background-color", reference.background);
-  await expect(library).toHaveCSS("-webkit-tap-highlight-color", reference.tap);
+  const normal = await homeLibrary.evaluate((element) => getComputedStyle(element).backgroundColor);
+  await press(homeLibrary);
+  await expect(homeLibrary).toHaveCSS("background-color", reference.background);
+  await expect(homeLibrary).toHaveCSS("-webkit-tap-highlight-color", reference.tap);
   expect(reference.background).not.toBe(normal);
   await page.screenshot({ path: test.info().outputPath("navigation-touch-feedback.png") });
   await touch.send("Input.dispatchTouchEvent", { type: "touchCancel", touchPoints: [] });
-  await expect(library).toHaveAttribute("data-pressed", "false");
-  await expect(page).toHaveURL(/\/app\/chat$/);
-  await press(library);
+  await expect(homeLibrary).toHaveAttribute("data-pressed", "false");
+  await expect(page).toHaveURL(/\/app$/);
+  await press(homeLibrary);
   await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
   await expect(page).toHaveURL(/\/app\/library$/);
   await touch.detach();

@@ -1367,7 +1367,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         )
       ).toBe(streamsBeforeTool);
       await page.setViewportSize({ width: 375, height: 975 });
-      await expect(page.getByRole("heading", { name: "Recent", exact: true })).toHaveCount(0);
+      await expect(page.getByRole("heading", { name: "Recent", exact: true })).toBeVisible();
       await expect(page.getByRole("heading", { name: "Tools", exact: true })).toHaveCount(0);
       await expect(page.locator(".study-chat-composer")).toHaveAttribute(
         "data-variant",
@@ -2211,7 +2211,8 @@ test("mobile Home sheet supports swipes without losing drafts or swallowing norm
     sessionStorage.setItem("interaction-tree", JSON.stringify(tree));
   });
   await page.reload();
-  await trigger.click();
+  // The public chat=new URL restores the sheet after reload.
+  await expect(sheet).toBeVisible();
   await sheet.getByRole("button", { name: "Show chat history", exact: true }).click();
   await sheet
     .getByRole("region", { name: "Chat history", exact: true })

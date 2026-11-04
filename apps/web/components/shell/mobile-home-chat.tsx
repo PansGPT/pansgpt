@@ -77,6 +77,9 @@ export function MobileHomeChat(): React.ReactElement {
   }, [router]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(sessionParam || null);
+  // A new session updates the URL/menu without replacing the runtime that is
+  // uploading attachments or streaming its first response.
+  const [runtimeSessionId, setRuntimeSessionId] = useState<string | null>(sessionParam || null);
   const [chatTarget, setChatTarget] = useState<HTMLDivElement | null>(null);
   const [menuTarget, setMenuTarget] = useState<HTMLDivElement | null>(null);
   const [historySearch, setHistorySearch] = useState(false);
@@ -182,8 +185,13 @@ export function MobileHomeChat(): React.ReactElement {
     setOpen(true);
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
-      if (!selectedId && !params.has("session")) {
+      if (selectedId) {
+        params.set("session", selectedId);
+        params.delete("chat");
+      } else {
         params.set("chat", "new");
+      }
+      if (params.toString() !== window.location.search.slice(1)) {
         const nextQuery = params.toString();
         const nextUrl = nextQuery
           ? `${window.location.pathname}?${nextQuery}`
@@ -199,6 +207,7 @@ export function MobileHomeChat(): React.ReactElement {
     setPendingActionMode(null);
     setHistoryOpen(false);
     setSelectedId(null);
+    setRuntimeSessionId(null);
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       params.delete("session");
@@ -250,6 +259,7 @@ export function MobileHomeChat(): React.ReactElement {
     if (sessionParam) {
       setPendingFiles(null);
       setPendingLibraryDocument(null);
+      if (sessionParam !== selectedId) setRuntimeSessionId(sessionParam);
       setSelectedId(sessionParam);
       setHistoryOpen(false);
       setStarted(true);
@@ -258,12 +268,12 @@ export function MobileHomeChat(): React.ReactElement {
       setPendingFiles(null);
       setPendingLibraryDocument(null);
       setSelectedId(null);
+      setRuntimeSessionId(null);
       setHistoryOpen(false);
       setStarted(true);
       setOpen(true);
     } else {
       setOpen(false);
-      setSelectedId(null);
     }
   }
   useEffect(() => {
@@ -273,6 +283,7 @@ export function MobileHomeChat(): React.ReactElement {
         setPendingFiles(null);
         setPendingLibraryDocument(null);
         setSelectedId(id || null);
+        setRuntimeSessionId(id || null);
         setHistoryOpen(false);
         setStarted(true);
         setOpen(true);
@@ -301,6 +312,7 @@ export function MobileHomeChat(): React.ReactElement {
     const removed = (event: Event) => {
       if (event instanceof CustomEvent && event.detail?.id === selectedId) {
         setSelectedId(null);
+        setRuntimeSessionId(null);
         setHistoryOpen(false);
         if (typeof window !== "undefined") {
           const params = new URLSearchParams(window.location.search);
@@ -711,6 +723,7 @@ export function MobileHomeChat(): React.ReactElement {
                       setPendingFiles(null);
                       setPendingLibraryDocument(null);
                       setSelectedId(id);
+                      setRuntimeSessionId(id);
                       setHistoryOpen(false);
                       if (typeof window !== "undefined") {
                         const params = new URLSearchParams(window.location.search);
@@ -734,10 +747,10 @@ export function MobileHomeChat(): React.ReactElement {
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
       {started && (
-        <PresentationWorkspace key={`${revision}:${selectedId || "new"}`} active={open}>
-          {selectedId ? (
+        <PresentationWorkspace key={`${revision}:${runtimeSessionId || "new"}`} active={open}>
+          {runtimeSessionId ? (
             <ChatHistory
-              id={selectedId}
+              id={runtimeSessionId}
               active={open}
               renderThread={renderThread}
               onSessionCreated={handleSessionCreated}
