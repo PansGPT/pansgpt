@@ -51,15 +51,21 @@ test("all 72 tab-button states and 40 horizontal layouts match source bounds", a
         const focus = name.includes("State=Focus");
         if (name.includes("Button minimal") && !current && !focus && !transparent)
           throw new Error("Inactive minimal tab acquired a fill");
-        if (name.includes("Button white") && (current || hover) && css.boxShadow === "none")
+        if (
+          name.includes("Button white") &&
+          (current || hover) &&
+          !focus &&
+          css.boxShadow === "none"
+        )
           throw new Error("Missing white tab shadow");
         if (
           focus &&
           !name.includes("Underline") &&
           !name.includes("Line (") &&
-          css.boxShadow === "none"
+          !name.includes("Button minimal") &&
+          css.boxShadow !== "none"
         )
-          throw new Error("Missing source focus ring");
+          throw new Error("Unexpected project focus ring");
       }
       for (const [id, name, width, height, children] of layouts) {
         const root = document.querySelector(`[data-source-id="${id}"]`);

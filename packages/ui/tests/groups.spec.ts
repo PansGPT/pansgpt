@@ -64,7 +64,8 @@ test("group base states preserve current, disabled and original state-specific i
       if (kind === "leading" || kind === "icon")
         await expect(button.locator(".p-group-placeholder-current img")).toBeVisible();
       await button.focus();
-      expect(await button.evaluate((node) => getComputedStyle(node).boxShadow)).toContain("4px");
+      await expect(button).toBeFocused();
+      expect(await button.evaluate((node) => getComputedStyle(node).boxShadow)).toBe("none");
     }
   }
   await page

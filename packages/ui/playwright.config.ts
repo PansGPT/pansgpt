@@ -14,7 +14,10 @@ export default defineConfig({
     browserName: "chromium",
     // Headless Linux defaults to full hinting (integer glyph advances). Use
     // subpixel metrics when comparing the locally hosted fonts with Figma.
-    launchOptions: { args: ["--font-render-hinting=none"] },
+    launchOptions: {
+      args: ["--font-render-hinting=none"],
+      executablePath: process.env.CHROME_EXECUTABLE || undefined,
+    },
     viewport: { width: 1280, height: 1100 },
     trace: "retain-on-failure",
   },

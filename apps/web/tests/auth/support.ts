@@ -1,30 +1,6 @@
 import { expect, type APIRequestContext, type Page } from "@playwright/test";
-export async function openNavigation(page: Page): Promise<void> {
-  const trigger = page.getByRole("button", { name: "Open navigation", exact: true });
-  if (await trigger.isVisible()) await trigger.click();
-  else {
-    // Home now uses its Study tools links and a direct Settings profile button.
-    await page
-      .getByRole("navigation", { name: "Study tools", exact: true })
-      .getByRole("link", { name: "Quiz", exact: true })
-      .click();
-    await expect(page).toHaveURL(/\/app\/quiz$/);
-    await trigger.click();
-  }
-}
 export async function accountMenu(page: Page): Promise<void> {
-  if ((page.viewportSize()?.width ?? 1440) <= 860) {
-    const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-    const homeAccount = page
-      .locator(".shell-home-account")
-      .getByRole("button", { name: "Account menu", exact: true });
-    if (!(await navigation.isVisible()) && (await homeAccount.isVisible())) {
-      await homeAccount.click();
-      return;
-    }
-    if (!(await navigation.isVisible())) await openNavigation(page);
-    await navigation.getByRole("button", { name: "Account menu", exact: true }).click();
-  } else await page.getByRole("button", { name: "Account menu", exact: true }).click();
+  await page.getByRole("button", { name: "Account menu", exact: true }).click();
 }
 export async function openProfile(page: Page): Promise<void> {
   await openSettings(page);
@@ -73,11 +49,13 @@ export async function closeSettings(page: Page): Promise<void> {
 }
 export async function startNewChat(page: Page): Promise<void> {
   if ((page.viewportSize()?.width ?? 1440) <= 860) {
-    await openNavigation(page);
-    await page
-      .getByRole("dialog", { name: "Workspace navigation", exact: true })
-      .getByRole("link", { name: "New chat", exact: true })
-      .click();
+    const sheet = page.getByRole("dialog", { name: "PansGPT chat", exact: true });
+    const newChat = sheet.getByRole("button", { name: "New chat", exact: true });
+    if (await newChat.isVisible()) await newChat.click();
+    else {
+      // The public new-chat route also cancels a session still being created.
+      await page.goto("/app?chat=new");
+    }
   } else {
     await page
       .getByRole("complementary", { name: "Workspace sidebar", exact: true })
