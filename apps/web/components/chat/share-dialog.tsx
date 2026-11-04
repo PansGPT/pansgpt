@@ -29,9 +29,6 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
   const { profile, session } = useAuth();
   const emailInputId = useId();
 
-  const [accessMode, setAccessMode] = useState<"restricted" | "public">("restricted");
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteStatus, setInviteStatus] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
 
   const ownerName =
@@ -70,15 +67,6 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
     await handleCopyLink();
   }
 
-  function handleInvite(event: React.FormEvent): void {
-    event.preventDefault();
-    const target = inviteEmail.trim();
-    if (!target) return;
-    setInviteStatus(`Invite sent to ${target}`);
-    setInviteEmail("");
-    setTimeout(() => setInviteStatus(null), 3000);
-  }
-
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
@@ -86,6 +74,7 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
         <DialogPrimitive.Content
           className={isMobile ? "share-dialog-mobile" : "share-dialog-desktop"}
           data-chat-overlay
+          aria-labelledby={undefined}
           aria-label="Share conversation"
         >
           {isMobile ? (
@@ -107,7 +96,7 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
               </div>
 
               <DialogPrimitive.Description className="p-sr-only">
-                Share this study session with classmates or instructors
+                Copy a link to open this conversation in your own account
               </DialogPrimitive.Description>
 
               <div
@@ -125,39 +114,27 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
               <div className="share-dialog-section-label">Who has access</div>
 
               <div className="share-dialog-mobile-card">
-                <button
-                  type="button"
-                  className="share-dialog-mobile-card-row"
-                  onClick={() => setAccessMode("restricted")}
-                >
+                <button type="button" className="share-dialog-mobile-card-row" disabled>
                   <div className="share-dialog-mobile-card-row-left">
                     <Lock size={18} aria-hidden="true" />
                     <span>Only you have access</span>
                   </div>
-                  {accessMode === "restricted" && (
-                    <Check size={18} className="share-dialog-mobile-check" aria-hidden="true" />
-                  )}
+                  <Check size={18} className="share-dialog-mobile-check" aria-hidden="true" />
                 </button>
 
                 <div className="share-dialog-mobile-card-divider" aria-hidden="true" />
 
-                <button
-                  type="button"
-                  className="share-dialog-mobile-card-row"
-                  onClick={() => setAccessMode("public")}
-                >
+                <button type="button" className="share-dialog-mobile-card-row" disabled>
                   <div className="share-dialog-mobile-card-row-left">
                     <Globe size={18} aria-hidden="true" />
                     <span>Anyone with the link</span>
                   </div>
-                  {accessMode === "public" && (
-                    <Check size={18} className="share-dialog-mobile-check" aria-hidden="true" />
-                  )}
                 </button>
               </div>
 
               <p className="share-dialog-mobile-note">
-                Only messages up to this point will be shared
+                This link opens your conversation after you sign in. Sharing with other accounts is
+                not available yet.
               </p>
 
               <Button
@@ -179,57 +156,43 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
                   Share session
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Description className="share-dialog-subtitle">
-                  Only messages up until now will be shared
+                  This link opens your conversation in your own account.
                 </DialogPrimitive.Description>
                 <DialogPrimitive.Close className="share-dialog-close" aria-label="Close dialog">
                   <X size={18} aria-hidden="true" />
                 </DialogPrimitive.Close>
               </div>
 
-              <form className="share-dialog-invite" onSubmit={handleInvite}>
+              <div className="share-dialog-invite">
                 <input
                   id={emailInputId}
                   type="email"
                   className="share-dialog-invite-input"
                   placeholder="Add people by email"
-                  value={inviteEmail}
-                  onChange={(event) => setInviteEmail(event.target.value)}
+                  disabled
                   aria-label="Add people by email"
                 />
                 <Button
-                  type="submit"
+                  type="button"
                   variant="secondary"
                   size="sm"
-                  disabled={!inviteEmail.trim()}
+                  disabled
                   leadingIcon={null}
                   trailingIcon={null}
                 >
                   Invite
                 </Button>
-              </form>
-              {inviteStatus && (
-                <p role="status" className="share-dialog-disclaimer" style={{ marginTop: -10 }}>
-                  {inviteStatus}
-                </p>
-              )}
+              </div>
 
               <div className="share-dialog-section-label">Who has access</div>
 
               <div className="share-dialog-access-group">
-                <button
-                  type="button"
-                  className="share-dialog-access-row"
-                  onClick={() =>
-                    setAccessMode((current) => (current === "restricted" ? "public" : "restricted"))
-                  }
-                >
+                <button type="button" className="share-dialog-access-row" disabled>
                   <div className="share-dialog-access-left">
                     <div className="share-dialog-icon-badge" aria-hidden="true">
-                      {accessMode === "restricted" ? <Lock size={16} /> : <Globe size={16} />}
+                      <Lock size={16} />
                     </div>
-                    <span className="share-dialog-access-label">
-                      {accessMode === "restricted" ? "Only people invited" : "Anyone with the link"}
-                    </span>
+                    <span className="share-dialog-access-label">Only you have access</span>
                   </div>
                   <ChevronRight size={16} color="var(--text-tertiary-600)" aria-hidden="true" />
                 </button>
@@ -249,8 +212,7 @@ export function ShareDialog({ open, onOpenChange, chat }: ShareDialogProps): Rea
               </div>
 
               <p className="share-dialog-disclaimer">
-                Don&apos;t share personal information or third-party content without permission, and
-                see our{" "}
+                Sharing with other accounts is not available yet. See our{" "}
                 <a href="/legal/usage-policy" target="_blank" rel="noreferrer">
                   Usage Policy
                 </a>

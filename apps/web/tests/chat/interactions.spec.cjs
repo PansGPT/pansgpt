@@ -1162,7 +1162,13 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       );
       await page.getByRole("button", { name: "Edit question", exact: true }).click();
       await page.getByLabel("Edit question", { exact: true }).fill("Edited synthetic question");
-      await page.getByRole("button", { name: "Save as new branch", exact: true }).click();
+      await expect(
+        page.getByRole("img", { name: "Editing creates a new branch", exact: true })
+      ).toBeVisible();
+      await page
+        .locator(".study-chat-edit")
+        .getByRole("button", { name: "Send", exact: true })
+        .click();
       await expect(page.getByText("Edited branch answer", { exact: true })).toBeVisible();
       await expect(page.getByText("Edited synthetic question", { exact: true })).toBeVisible();
       const edited = page
@@ -1527,6 +1533,12 @@ test("session menus persist organization and share only the selected conversatio
   ).toHaveCount(0);
   await page.getByRole("button", { name: "Share", exact: true }).click();
   const share = page.getByRole("dialog", { name: "Share conversation", exact: true });
+  await expect(share).toHaveAccessibleName("Share conversation");
+  await expect(share.getByRole("button", { name: "Invite", exact: true })).toBeDisabled();
+  await expect(
+    share.getByRole("button", { name: "Only you have access", exact: true })
+  ).toBeDisabled();
+  await expect(share).toContainText("Sharing with other accounts is not available yet");
   await share.getByRole("button", { name: "Copy link", exact: true }).click();
   expect(await page.evaluate(() => window.__copiedTranscript)).toContain(session);
   await page.keyboard.press("Escape");
@@ -1608,7 +1620,7 @@ test("session menus persist organization and share only the selected conversatio
   ).toBe(before + 1);
   expect(errors).toEqual([]);
   console.log(
-    "PASS owned session metadata, pin/rename failure-retry, sidebar menu, archive/restore, soft-delete confirmation and selected-branch copy/download without reasoning or hidden branches"
+    "PASS owned session metadata, pin/rename failure-retry, sidebar menu, archive/restore, soft-delete confirmation and owner-only deep links without enabling public access or sending invitations"
   );
 });
 
@@ -1969,8 +1981,11 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
   await expect(
     sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
   ).toBeVisible();
-  await sheet.getByRole("button", { name: "New chat", exact: true }).click();
-  await expect(input).toHaveValue("");
+  // Unsent chats retain the intentionally empty header. Remove the local draft
+  // attachment through its own action, then verify New chat after the first reply.
+  await expect(sheet.getByRole("button", { name: "New chat", exact: true })).toHaveCount(0);
+  await sheet.getByRole("button", { name: "Remove synthetic-sheet-note.txt", exact: true }).click();
+  await input.fill("");
   await expect(
     sheet.getByRole("group", { name: "Document attachment synthetic-sheet-note.txt", exact: true })
   ).toHaveCount(0);
@@ -2585,6 +2600,8 @@ test("long chat uses one conversation scrollbar without scrolling its page", asy
   for (const [width, height] of [
     [1440, 975],
     [1440, 500],
+    [390, 844],
+    [390, 500],
   ]) {
     await page.setViewportSize({ width, height });
     await page.reload({ waitUntil: "load", timeout: 60000 });
@@ -2671,17 +2688,10 @@ test("only sidebar chat history scrolls while navigation, search and account rem
   for (const [width, height] of [
     [1440, 975],
     [1440, 500],
-    [390, 844],
-    [390, 500],
   ]) {
     await page.setViewportSize({ width, height });
     await page.reload({ waitUntil: "load", timeout: 60000 });
-    if (width < 861)
-      await page.getByRole("button", { name: "Open navigation", exact: true }).click();
-    const sidebar =
-      width < 861
-        ? page.getByRole("dialog", { name: "Workspace navigation", exact: true })
-        : page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
+    const sidebar = page.getByRole("complementary", { name: "Workspace sidebar", exact: true });
     const list = sidebar.getByRole("region", { name: "Chat history", exact: true });
     await expect(list).toContainText("Fixed sidebar study 0");
     await list.getByRole("button", { name: "More", exact: true }).click();
@@ -2703,8 +2713,6 @@ test("only sidebar chat history scrolls while navigation, search and account rem
     await expect(list).toHaveCSS("overflow-y", "auto");
     await expect(list).toHaveCSS("scrollbar-width", "thin");
     await expect(sidebar.locator(".p-app-nav-panel-top")).toHaveCSS("overflow-y", "hidden");
-    if (width < 861)
-      await expect(sidebar.locator(".p-slideout-body")).toHaveCSS("overflow-y", "hidden");
     await list.evaluate((el) => {
       el.scrollTop = 0;
     });
