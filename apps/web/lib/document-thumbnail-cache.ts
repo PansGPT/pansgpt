@@ -1,5 +1,5 @@
 const PREFIX = "pansgpt-document-thumbnails-v1:";
-const MAX_ENTRIES = 24;
+const MAX_ENTRIES = 96;
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const writes = new Map<string, Promise<void>>();
 

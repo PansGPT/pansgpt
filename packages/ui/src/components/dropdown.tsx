@@ -227,3 +227,66 @@ export function DropdownSeparator({
     </Menu.Separator>
   );
 }
+
+export const DropdownSub = Menu.Sub;
+
+export type DropdownSubTriggerProps = Omit<ComponentProps<typeof Menu.SubTrigger>, "asChild"> &
+  ItemContentProps;
+
+export function DropdownSubTrigger({
+  children,
+  icon,
+  shortcut,
+  className,
+  disabled,
+  ...props
+}: DropdownSubTriggerProps): React.ReactElement {
+  return (
+    <Menu.SubTrigger
+      {...props}
+      disabled={disabled}
+      className={cn("p-dropdown-item p-dropdown-sub-trigger", className)}
+    >
+      <ItemContent icon={icon} shortcut={shortcut}>
+        {children}
+      </ItemContent>
+      <span
+        className="p-dropdown-sub-chevron"
+        aria-hidden="true"
+        style={{ marginLeft: "auto", display: "inline-flex", opacity: 0.6 }}
+      >
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </span>
+    </Menu.SubTrigger>
+  );
+}
+
+export function DropdownSubContent({
+  className,
+  children,
+  sideOffset = 6,
+  ...props
+}: ComponentProps<typeof Menu.SubContent>): React.ReactElement {
+  return (
+    <Menu.Portal>
+      <Menu.SubContent
+        {...props}
+        sideOffset={sideOffset}
+        className={cn("p-dropdown-menu p-dropdown-sub-content", className)}
+      >
+        {children}
+      </Menu.SubContent>
+    </Menu.Portal>
+  );
+}

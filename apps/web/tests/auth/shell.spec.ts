@@ -1,5 +1,14 @@
 import { test, expect } from "@playwright/test";
-import { emailLink, openProfile, accountMenu, openNavigation, startNewChat } from "./support";
+import {
+  emailLink,
+  openProfile,
+  openAppearance,
+  closeSettings,
+  selectSettingsSection,
+  accountMenu,
+  openNavigation,
+  startNewChat,
+} from "./support";
 test.skip(process.env.AUTH_E2E_LIVE !== "1", "Requires disposable Supabase, Mailpit and FastAPI.");
 
 test("verified workspace navigation, profile, account themes, failures and mobile keyboard access", async ({
@@ -70,15 +79,18 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   ).toBe(true);
   await page.getByRole("button", { name: "Expand sidebar" }).click();
   await accountMenu(page);
-  await page.getByRole("menuitem", { name: "Help", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Get help", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Help", exact: true })).toContainText(
     "Find your conversations"
   );
   await page.keyboard.press("Escape");
   await openProfile(page);
-  const profile = page.getByRole("dialog", { name: "Your profile", exact: true });
+  const profile = page.getByRole("dialog", { name: "Settings", exact: true });
   await expect(profile.getByText("University of Jos", { exact: true })).toBeVisible();
   await expect(profile.getByText("200 Level", { exact: true })).toBeVisible();
+  await selectSettingsSection(page, "Appearance");
+  await profile.getByRole("radio", { name: "Light theme", exact: true }).check();
+  await expect(profile.getByRole("status")).toContainText("Your theme is saved");
   let failPreference = true;
   await page.route("**/rest/v1/user_preferences*", (route) => {
     if (route.request().method() === "POST" && failPreference)
@@ -89,7 +101,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
       });
     return route.continue();
   });
-  await profile.getByLabel("Workspace theme").selectOption("dark");
+  await profile.getByRole("radio", { name: "Dark theme", exact: true }).check();
   await expect(profile.getByRole("status")).toContainText("Account sync is unavailable");
   expect(await page.evaluate(() => localStorage.getItem("pansgpt-theme"))).toBe("dark");
   failPreference = false;
@@ -101,23 +113,23 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect((await saved).ok()).toBe(true);
   expect((await saved).request().postDataJSON()).toMatchObject({ theme: "oled_dark" });
   await expect(profile.getByRole("status")).toContainText("Your theme is saved");
-  await page.keyboard.press("Escape");
+  await closeSettings(page);
   await expect(page.getByRole("button", { name: "Account menu", exact: true })).toBeFocused();
   // Prove the authenticated database preference wins over a stale device value.
   await page.evaluate(() => localStorage.setItem("pansgpt-theme", "light"));
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await openProfile(page);
-  await expect(profile.getByLabel("Workspace theme")).toHaveValue("dark");
+  await openAppearance(page);
+  await expect(profile.getByRole("radio", { name: "Dark theme", exact: true })).toBeChecked();
   for (const [value, name] of [
     ["dark", "Dark"],
     ["sepia", "Sepia"],
     ["light", "Light"],
   ] as const) {
-    await profile.getByLabel("Workspace theme").selectOption(value);
+    await profile.getByRole("radio", { name: `${name} theme`, exact: true }).check();
     await expect(profile.getByRole("status")).toContainText("Your theme is saved");
     await expect(page.locator("html")).toHaveAttribute("data-theme", value);
-    await page.keyboard.press("Escape");
+    await closeSettings(page);
     for (const width of [1764, 1440, 375]) {
       await page.setViewportSize({ width, height: 900 });
       expect(
@@ -174,10 +186,11 @@ test("verified workspace navigation, profile, account themes, failures and mobil
       await page.goto("/app");
       await expect(page.locator(".dashboard-recent-card")).toHaveCount(6);
     }
-    await openProfile(page);
+    await openAppearance(page);
   }
+  await selectSettingsSection(page, "Account");
   await page.screenshot({ path: "test-results/shell-profile-375.png", fullPage: true });
-  await page.keyboard.press("Escape");
+  await closeSettings(page);
 
   // Create only a conversation record; inference remains disabled for this entire journey.
   const historyRequest = page.waitForRequest(
@@ -325,12 +338,17 @@ test("verified workspace navigation, profile, account themes, failures and mobil
 
   await openNavigation(page);
   const mobile = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
-  await expect(mobile.getByRole("link", { name: "Home", exact: true })).toHaveAttribute(
+  await expect(mobile.getByRole("link", { name: "Quiz", exact: true })).toHaveAttribute(
     "aria-current",
     "page"
   );
   await page.screenshot({ path: "test-results/shell-navigation-375.png", fullPage: true });
-  await mobile.getByRole("link", { name: "Notes", exact: true }).click();
+  await mobile.getByRole("link", { name: "Home", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
+  await page
+    .getByRole("navigation", { name: "Study tools", exact: true })
+    .getByRole("link", { name: "Notes", exact: true })
+    .click();
   await expect(page).toHaveURL(/\/app\/notes$/);
   await expect(mobile).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "Make room for your ideas" })).toBeVisible();
@@ -346,10 +364,14 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await openNavigation(page);
   await mobile.getByRole("link", { name: "Library", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/library$/);
-  await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Library sections", exact: true })
+  ).toBeVisible();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(page.getByRole("heading", { name: "Recent Documents", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Upload material" })).toHaveCount(0);
   await page.route(
-    "**/api/v1/library/documents",
+    "**/api/v1/library/catalog?*",
     (route) => route.fulfill({ status: 503, body: "Synthetic unavailable" }),
     { times: 1 }
   );
@@ -359,6 +381,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(
     page.getByRole("heading", { name: "We couldn't load your library" })
   ).not.toBeVisible();
+  await page.setViewportSize({ width: 375, height: 900 });
   await page.goto("/app/a-page-that-does-not-exist");
   await expect(
     page.getByRole("heading", { name: "This page has moved out of reach" })
@@ -367,7 +390,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
 
   let libraryRequests = 0;
   page.on("request", (outgoing) => {
-    if (outgoing.url().includes("/api/v1/library/documents")) libraryRequests += 1;
+    if (outgoing.url().includes("/api/v1/library/catalog")) libraryRequests += 1;
   });
   let profileRequests = 0;
   await page.route("**/api/v1/auth/me", (route) => {
@@ -382,9 +405,14 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   expect(profileRequests).toBe(1);
   await page.unroute("**/api/v1/auth/me");
   await page.getByRole("button", { name: "Retry profile verification" }).click();
-  await expect(page.getByRole("heading", { name: "Your library", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Library sections", exact: true })
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back to Home", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
   await openProfile(page);
-  await profile.getByRole("button", { name: "Sign Out", exact: true }).click();
+  await profile.getByRole("button", { name: "Back to settings menu", exact: true }).click();
+  await profile.getByRole("button", { name: "Log Out", exact: true }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.goto("/app/notes");
   await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fnotes/);

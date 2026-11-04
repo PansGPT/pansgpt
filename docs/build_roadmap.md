@@ -1,5 +1,7 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).
+
 > **2026-10-30 quiz recovery:** Bounded retry spending, Redis pickup recovery, quality-aware provider fallback and backend-compiled matrix drafts. Public quiz contracts are unchanged. [Verification and saved-request outcome](quiz-recovery-audit-2026-10-29.md).
 
 > **2026-10-29 development startup:** `pnpm dev` includes frontend, API and supervised quiz worker; an optional Docker worker config supports an existing host. [Lifecycle checks and hosting limits](development-startup-2026-10-29.md).
@@ -1265,7 +1267,10 @@ User-selected references and the latest sidebar/card corrections are recorded in
 
 23 October mobile Home refinement: match the top-to-bottom composition of the user-selected `Dark-Mode PansGPT Dashboard.png`, using the shared charcoal/green palette and the smaller type scale requested in follow-up. Mobile-only wordmark/account header, compact tool shortcuts (including Learn), four detailed document Recents, dated activity timeline and pill composer. Desktop document thumbnails and the approved chat welcome remain separate. [Implementation and verification](mobile-home-reference-2026-10-23.md).
 
+26 October library direction: improve the legacy library layout, keeping its course panel visible. Opening Library automatically collapses the main app sidebar to the icon rail; other pages retain the user's sidebar choice. Manual expansion stays available. [Library scope and queued chat follow-ups](library-browsing-2026-10-26.md); library/reader completion remains open.
+
 - [x] Collapsible desktop sidebar: PansGPT; Home, Library, Quiz, Notes, Focus; Recent chats. No Teamspaces or Private.
+
 - [x] Pinned sidebar account button opens Profile / Settings / Help / Log out; profile shows API-verified name, university, level and owner-only credits.
 - [x] Shared menu polish for the profile popup, aligned New chat on Home/Chat, removal of the floating assistant launcher, and collapsed toggle outside the sidebar beside the logo. [Local UI verification](search-and-sidebar-polish-2026-10-24.md); hosted rollout remains open.
 - [x] Authenticated layout (`app/app/layout.tsx`) blocks unverified profiles and redirects incomplete onboarding.
@@ -1324,6 +1329,27 @@ Windows follow-up: fix rendering under Uvicorn's reload selector loop; the user 
 - [ ] Pytest API: `GET /api/v1/home/summary` returns correct user data
 - [ ] E2E Playwright: home page loads within 2s on staging
 - [ ] All 5 widgets render with real data on staging
+
+### 10.6 Library browsing — legacy UI refinement
+
+28 October navigation/detail refinement: URL-persisted Recent/Courses/course selection, edge-to-edge course-panel dividers, legacy list and File Information layout with filled covers, fixed PDF action, request-bound desktop refresh, mobile pull-to-refresh, a chevron/code/title course header and navigation touch feedback shared with the Library back button. [Scope and local verification](library-navigation-and-details-2026-10-28.md); overall Testing and hosted gates remain open.
+
+27 October mobile follow-up: the first visual adaptation was rejected in user review. Restore the actual legacy composition: separate search/filter area and rounded-top content panel, with layout/filter actions beside Recent/Courses. Follow-up adds Back to Home, a two-column course grid with matching skeletons and a simple Recent empty state; remove the Library composer. Retain shared Home cards/covers and document-detail focus recovery. [Correction and local verification](library-mobile-2026-10-27.md); visual acceptance and hosted/full-phase gates remain open.
+
+User-approved 26 October scope: [library browsing and verification](library-browsing-2026-10-26.md). Keep the legacy course panel and document details structure, the shared color palette and dividing lines. Omit the separate All materials destination. This slice does not certify the custom PDF reader below.
+
+- [x] Implement university-scoped catalog contracts with server search, academic filters, stable pagination, course/session facets and visible infrastructure failures.
+- [x] Preserve Recent Documents and course browsing, responsive grid/list views and a desktop details panel/mobile dialog.
+- [x] Share Home's document-card renderer, dimensions and actual first-page thumbnail crop with the Library grid.
+- [x] Reuse scoped persistent thumbnail caching across Home/Library; retain expiry/revision/logout handling and increase capacity to 96 covers.
+- [x] Collapse the main app sidebar on Library entry and put its hover/focus logo-to-toggle control inside the rail, preserving keyboard/reduced-motion behavior.
+- [x] Open authorized existing/converted PDFs and record owner-only opening timestamps without overwriting saved reading positions.
+- [x] Align staff upload forms with strict typed initialization, presigned PUT and confirmation; lecturer submissions retain approval semantics.
+- [x] Verify the final local library/navigation browser journeys, library API contracts, web unit tests, lint/typecheck and production build. See the verification record for broader-suite limitations.
+- [ ] Run disposable migrated-database catalog verification in the existing database CI job; no local Docker runtime is available.
+- [ ] Verify authenticated hosted library/PDF/R2/CORS journeys and full CI; full library/reader completion remains open.
+
+After the library work, resume assistant-ui improvements in the user-approved order: **tool-specific cards**, richer code/diagram rendering, then quoted replies.
 
 ---
 
@@ -1624,6 +1650,12 @@ Following explicit user approval, Supabase CLI applied `20261026100000_quiz_life
 ## ⚙️ PHASE 17 — Settings + Profile + Feedback
 
 ### 17.1 Settings + Profile
+
+UI preview (29 October 2026): separate settings categories, standalone Security, retained storage/privacy management controls and compact actions are under review. See [settings UI refinement](settings-ui-refinement-2026-10-29.md). This preview does not complete the live acceptance items below.
+
+Settings navigation follow-up: field-level search uses a floating result list with section/setting labels and direct focus. Mobile uses the profile card as its single Account entry; Account no longer contains Log out.
+
+Settings visual follow-up: Credits uses the balance coin icon; shared custom scrollbars include settings and nested content. The Account reference informs simpler grouped rows on mobile, preserving card backgrounds/corners and internal dividers while removing outer borders and duplicate mobile headings. Desktop retains its earlier form layout and flat sections; shared custom dropdowns and the on-demand feedback row remain.
 
 - [ ] Profile editor: first_name, last_name, current_level, university_id
 - [ ] `<UserInitialsAvatar />` — first initial from `first_name`, deterministic color

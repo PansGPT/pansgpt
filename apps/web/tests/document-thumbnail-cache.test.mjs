@@ -83,9 +83,9 @@ test("expired previews are discarded and concurrent writes respect the entry cap
   const headers = { "x-pansgpt-stored-at": String(Date.now() - 25 * 3600000) };
   await cache.put(key, new Response(blob, { headers }));
   assert.equal(await readThumbnail(owner, "document-a", "v1"), null);
-  await Promise.all(Array.from({ length: 30 }, (_, index) => save(`document-${index}`)));
+  await Promise.all(Array.from({ length: 100 }, (_, index) => save(`document-${index}`)));
   const keys = await cache.keys();
-  assert.equal(keys.length, 24);
+  assert.equal(keys.length, 96);
   assert.ok(keys.every((entry) => !entry.headers.has("authorization")));
 });
 

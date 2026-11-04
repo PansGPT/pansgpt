@@ -526,6 +526,46 @@ async function setupChat(page) {
   );
 }
 
+test("Library starts with a compact app sidebar and preserves other pages' sidebar choice", async ({
+  page,
+}) => {
+  await setupChat(page);
+  // A direct link starts compact, before any manual toggle or route transition.
+  await page.goto("/app/library", { waitUntil: "load", timeout: 60000 });
+  const shell = page.locator(".app-shell");
+  const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
+  const home = sidebar.getByRole("link", { name: "Home", exact: true });
+  const library = sidebar.getByRole("link", { name: "Library", exact: true });
+  const expand = page.getByRole("button", { name: "Expand sidebar", exact: true });
+  const collapse = page.getByRole("button", { name: "Collapse sidebar", exact: true });
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await expect(expand).toHaveAttribute("aria-expanded", "false");
+  await expand.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+  await library.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "false");
+
+  await collapse.click();
+  await library.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await expand.click();
+  await home.click();
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+  await page.goBack();
+  await expect(page).toHaveURL(/\/app\/library$/);
+  await expect(shell).toHaveAttribute("data-collapsed", "true");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
+  await expect(page.locator(".shell-mobile-composer")).toHaveCount(0);
+  await page.getByRole("button", { name: "Back to Home", exact: true }).click();
+  await expect(page).toHaveURL(/\/app$/);
+});
+
 test("home and chat share aligned navigation, docked toggle and polished account menus", async ({
   page,
 }) => {
@@ -554,7 +594,7 @@ test("home and chat share aligned navigation, docked toggle and polished account
   await expect(account.getByRole("separator")).toHaveCount(1);
   expect(await account.evaluate((element) => getComputedStyle(element).borderRadius)).toBe("14px");
   await page.screenshot({ path: test.info().outputPath("profile-menu-desktop.png") });
-  await account.getByRole("menuitem", { name: "Help", exact: true }).click();
+  await account.getByRole("menuitem", { name: "Get help", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Help", exact: true })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Account menu", exact: true })).toBeFocused();
@@ -584,6 +624,17 @@ test("home and chat share aligned navigation, docked toggle and polished account
   await expect(page.locator(".shell-collapse-docked")).not.toBeVisible();
   await page.getByRole("button", { name: "Open navigation", exact: true }).click();
   const navigation = page.getByRole("dialog", { name: "Workspace navigation", exact: true });
+  const pressedHome = navigation.getByRole("link", { name: "Home", exact: true });
+  await pressedHome.dispatchEvent("pointerdown", {
+    pointerType: "touch",
+    button: 0,
+    isPrimary: true,
+  });
+  await expect(pressedHome).toHaveAttribute("data-pressed", "true");
+  const pressColor = await pressedHome.evaluate((el) => getComputedStyle(el).backgroundColor);
+  expect(pressColor).not.toBe("rgba(0, 0, 0, 0)");
+  await pressedHome.dispatchEvent("pointercancel");
+  await expect(pressedHome).toHaveAttribute("data-pressed", "false");
   await expect(navigation.getByRole("link", { name: "New chat", exact: true })).toBeVisible();
   expect(
     await navigation

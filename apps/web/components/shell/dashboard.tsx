@@ -7,7 +7,6 @@ import {
   CalendarDays,
   ChevronRight,
   Clock3,
-  FileText,
   RefreshCw,
   PlayCircle,
   ClipboardList,
@@ -18,9 +17,12 @@ import { Skeleton, addDateDays, formatDateOnly, localTodayIso } from "@pansgpt/u
 import { useAuth } from "@/lib/auth-context";
 import { useDashboard } from "./dashboard-data";
 import { StudyArt } from "./study-art";
+import { learnArticles } from "@/components/learn/learn-content";
+import { LearnCard } from "@/components/learn/learn-card";
+import "@/components/learn/learn.css";
 import { MobileActivityTimeline, type DashboardTimelineEvent } from "./mobile-activity-timeline";
 import { StudyActivity } from "./study-activity";
-import { DocumentThumbnail } from "./document-thumbnail";
+import { DocumentCard } from "./document-card";
 import { sampleDocuments, sampleActivities } from "./sample-data";
 import { SamplePreview } from "./sample-preview";
 import { mobileDestinations } from "./navigation";
@@ -35,18 +37,6 @@ function recentAge(value: string): string {
   const days = Math.floor(hours / 24);
   return `${days} ${days === 1 ? "day" : "days"} ago`;
 }
-
-const guides = [
-  { title: "Renal system overview", kind: "renal", duration: "5 min read", video: false },
-  { title: "How to approach a clinical case", kind: "case", duration: "4 min watch", video: true },
-  {
-    title: "Active recall for better retention",
-    kind: "recall",
-    duration: "3 min read",
-    video: false,
-  },
-  { title: "Creating effective study notes", kind: "notes", duration: "6 min watch", video: true },
-] as const;
 
 function ScheduleState({
   loading,
@@ -108,6 +98,7 @@ export function StudyDashboard(): React.ReactElement {
   const data = useDashboard();
   const [today] = useState(localTodayIso);
   const [preview, setPreview] = useState<string | null>(null);
+  const [pressedDestination, setPressedDestination] = useState<string | null>(null);
   const sampleRecent = !data.loading && !data.recentError && !data.recent.length;
   const recentCards = sampleRecent
     ? sampleDocuments.map((document, index) => ({
@@ -116,6 +107,19 @@ export function StudyDashboard(): React.ReactElement {
       }))
     : data.recent;
   const [activityTab, setActivityTab] = useState<"timetable" | "tasks">("timetable");
+  const [bookmarkedSlugs, setBookmarkedSlugs] = useState<Set<string>>(
+    () => new Set(["clinical-case", "pharmacy-beyond-counter"])
+  );
+  const toggleBookmark = (slug: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setBookmarkedSlugs((prev) => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug);
+      else next.add(slug);
+      return next;
+    });
+  };
   const [period] = useState(() => {
     const hour = new Date().getHours();
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
@@ -170,7 +174,18 @@ export function StudyDashboard(): React.ReactElement {
                     ? LockKeyhole
                     : icon;
             return (
-              <Link href={href} key={href}>
+              <Link
+                href={href}
+                key={href}
+                className="shell-touch-feedback"
+                data-pressed={pressedDestination === href}
+                onPointerDown={() => setPressedDestination(href)}
+                onTouchStart={() => setPressedDestination(href)}
+                onPointerCancel={() => setPressedDestination(null)}
+                onTouchCancel={() => setPressedDestination(null)}
+                onPointerLeave={() => setPressedDestination(null)}
+                onBlur={() => setPressedDestination(null)}
+              >
                 <Icon size={26} aria-hidden="true" />
                 <span>{label}</span>
               </Link>
@@ -220,43 +235,24 @@ export function StudyDashboard(): React.ReactElement {
         ) : recentCards.length ? (
           <div className="dashboard-recent-grid">
             {recentCards.map((item) => (
-              <button
+              <DocumentCard
                 key={item.documents.id}
+                documentId={sampleRecent ? undefined : item.documents.id}
+                revision={item.documents.updated_at}
+                title={item.documents.title}
+                date={item.updated_at}
+                detail={
+                  <>
+                    Library <span aria-hidden="true">·</span>{" "}
+                    {data.recentSource === "library" && !sampleRecent ? "Added " : ""}
+                    {recentAge(item.updated_at)}
+                  </>
+                }
                 onClick={() => {
                   if (sampleRecent) setPreview(item.documents.title);
                   else router.push(`/app/library?q=${encodeURIComponent(item.documents.title)}`);
                 }}
-                className="dashboard-recent-card"
-              >
-                <div className="dashboard-recent-cover">
-                  <DocumentThumbnail
-                    documentId={sampleRecent ? undefined : item.documents.id}
-                    revision={item.documents.updated_at}
-                  />
-                </div>
-                <div className="dashboard-recent-body">
-                  <span className="dashboard-file-icon">
-                    <FileText size={19} aria-hidden="true" />
-                  </span>
-                  <div className="dashboard-recent-copy">
-                    <h3>{item.documents.title}</h3>
-                    <span className="dashboard-recent-detail">
-                      Library <span aria-hidden="true">·</span>{" "}
-                      {data.recentSource === "library" && !sampleRecent ? "Added " : ""}
-                      {recentAge(item.updated_at)}
-                    </span>
-                  </div>
-                  <div className="dashboard-card-meta">
-                    <span>
-                      {new Date(item.updated_at).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
-                  </div>
-                  <ChevronRight className="dashboard-recent-chevron" size={18} aria-hidden="true" />
-                </div>
-              </button>
+              />
             ))}
           </div>
         ) : (
@@ -279,43 +275,19 @@ export function StudyDashboard(): React.ReactElement {
             <BookOpen size={20} aria-hidden="true" />
             Learn
           </h2>
-          <span className="dashboard-sample-badge">Sample</span>
           <Link href="/app/learn">
             See all
             <ChevronRight size={17} aria-hidden="true" />
           </Link>
         </div>
-        <div className="dashboard-learn-grid">
-          {guides.map((guide) => (
-            <button
-              className="dashboard-learn-card"
-              key={guide.kind}
-              onClick={() => setPreview(guide.title)}
-            >
-              <div className="dashboard-learn-cover" data-art={guide.kind}>
-                <StudyArt kind={guide.kind} />
-                <span className="dashboard-guide-label" aria-hidden="true">
-                  {guide.kind === "renal"
-                    ? "Explore the essentials"
-                    : guide.kind === "case"
-                      ? "Connect the dots"
-                      : guide.kind === "recall"
-                        ? "Put it into practice"
-                        : "Make it your own"}
-                </span>
-              </div>
-              <div className="dashboard-learn-body">
-                <h3>{guide.title}</h3>
-                <span>
-                  {guide.video ? (
-                    <PlayCircle size={16} aria-hidden="true" />
-                  ) : (
-                    <BookOpen size={16} aria-hidden="true" />
-                  )}
-                  {guide.duration}
-                </span>
-              </div>
-            </button>
+        <div className="learn-cards-container is-grid-view">
+          {learnArticles.slice(0, 4).map((article) => (
+            <LearnCard
+              key={article.slug}
+              article={article}
+              isBookmarked={bookmarkedSlugs.has(article.slug)}
+              onBookmarkToggle={toggleBookmark}
+            />
           ))}
         </div>
       </section>
@@ -392,7 +364,7 @@ export function StudyDashboard(): React.ReactElement {
       </section>
       <SamplePreview title={preview} onClose={() => setPreview(null)}>
         <div className="dashboard-preview-art">
-          <StudyArt kind="document" />
+          <StudyArt kind="document" variant="banner" />
         </div>
         <p>
           This sample shows how your study content will look. It is not part of your library and has

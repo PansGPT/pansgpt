@@ -5,12 +5,16 @@ export { Card, CardContent } from "./components/card";
 export { Slideout } from "./components/slideout";
 export { Tooltip } from "./components/tooltip";
 export { Dialog as DialogPrimitive } from "radix-ui";
+export { Select as SelectPrimitive } from "radix-ui";
 export {
   Dropdown,
   DropdownTrigger,
   DropdownContent,
   DropdownHeader,
   DropdownItem,
+  DropdownSub,
+  DropdownSubTrigger,
+  DropdownSubContent,
 } from "./components/dropdown";
 export { ApplicationNavPanel } from "./components/application-navigation-layout";
 export { ThemeProvider, useTheme, isThemeName } from "./components/theme";
