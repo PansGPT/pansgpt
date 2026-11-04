@@ -2564,18 +2564,19 @@
   flex: none;
 }
 
-/* Shared popup treatment for conversation and account controls. */
-.p-dropdown-menu:is(.study-chat-session-menu, .shell-account-popup) {
-  width: 216px;
-  min-width: 208px;
+/* Account popup controls */
+.p-dropdown-menu.shell-account-popup {
+  width: 218px;
+  min-width: 200px;
   max-width: calc(100vw - 24px);
-  padding: 6px;
+  padding: 4px;
   border: 1px solid var(--border-primary);
   border-radius: 14px;
   background: var(--bg-secondary);
   box-shadow: var(--effect-shadow-lg);
 }
-:is(.study-chat-session-menu, .shell-account-popup) .p-dropdown-item {
+
+.shell-account-popup .p-dropdown-item {
   min-height: 36px;
   margin: 0;
   padding: 8px 10px;
@@ -2584,37 +2585,85 @@
   color: var(--text-secondary-700);
   font: 400 13px/20px var(--font-body);
 }
-:is(.study-chat-session-menu, .shell-account-popup) .p-dropdown-item-label {
+
+.shell-account-popup .p-dropdown-item-label {
   font: inherit;
 }
-:is(.study-chat-session-menu, .shell-account-popup) .p-dropdown-item-icon {
+
+.shell-account-popup .p-dropdown-item-icon {
   color: var(--text-tertiary-600);
 }
-:is(.study-chat-session-menu, .shell-account-popup) .p-dropdown-item-icon svg {
+
+.shell-account-popup .p-dropdown-item-icon svg {
   width: 16px;
   height: 16px;
   stroke-width: 1.7;
 }
-:is(.study-chat-session-menu, .shell-account-popup) .p-dropdown-item[data-highlighted] {
+
+.shell-account-popup .p-dropdown-item[data-highlighted] {
   background: var(--bg-tertiary);
   color: var(--text-primary-900);
 }
+
+/* Compact conversation options menu (3-dots & title chevron dropdown) */
+.p-dropdown-menu.study-chat-session-menu {
+  width: 160px;
+  min-width: 152px;
+  max-width: calc(100vw - 24px);
+  padding: 4px;
+  border: 1px solid var(--border-primary);
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.study-chat-session-menu .p-dropdown-item {
+  min-height: 29px;
+  margin: 0;
+  padding: 5px 8px;
+  gap: 8px;
+  border-radius: 6px;
+  color: var(--text-secondary-700);
+  font: 400 12.5px/17px var(--font-body);
+  cursor: pointer;
+}
+
+.study-chat-session-menu .p-dropdown-item-label {
+  font: inherit;
+}
+
+.study-chat-session-menu .p-dropdown-item-icon {
+  color: var(--text-tertiary-600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.study-chat-session-menu .p-dropdown-item-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.8;
+}
+
+.study-chat-session-menu .p-dropdown-item[data-highlighted] {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+
 .study-chat-session-menu .study-chat-destructive,
 .study-chat-session-menu .study-chat-destructive .p-dropdown-item-icon {
   color: var(--text-error-primary-600);
 }
+
 .study-chat-session-menu .study-chat-destructive[data-highlighted] {
   background: color-mix(in srgb, var(--text-error-primary-600) 10%, var(--bg-secondary));
 }
+
 .study-chat-menu-separator {
   height: 1px;
-  margin: 5px 6px;
+  margin: 3px 4px;
   background: var(--border-secondary);
-}
-.p-dropdown-menu.shell-account-popup {
-  width: 218px;
-  min-width: 200px;
-  padding: 4px;
 }
 .shell-account-popup .p-dropdown-header {
   margin: 0 2px 2px;

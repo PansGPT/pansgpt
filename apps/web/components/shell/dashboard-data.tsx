@@ -85,6 +85,44 @@ export function DashboardProvider({
   const pathname = usePathname();
   const token = session?.access_token;
   const [chatData, setChatData] = useState<RecentChats>({ chats: [], loading: true, error: false });
+
+  useEffect(() => {
+    function onChatUpdated(e: Event) {
+      const custom = e as CustomEvent<{
+        id: string;
+        patch: Partial<z.infer<typeof chatSessionSummarySchema>>;
+      }>;
+      if (!custom.detail?.id || !custom.detail?.patch) return;
+      const { id, patch } = custom.detail;
+      setChatData((current) => {
+        const nextChats = current.chats.map((c) => (c.id === id ? { ...c, ...patch } : c));
+        if ("is_pinned" in patch) {
+          nextChats.sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned));
+        }
+        return {
+          ...current,
+          chats: nextChats,
+        };
+      });
+    }
+
+    function onChatRemoved(e: Event) {
+      const custom = e as CustomEvent<{ id: string }>;
+      if (!custom.detail?.id) return;
+      setChatData((current) => ({
+        ...current,
+        chats: current.chats.filter((c) => c.id !== custom.detail.id),
+      }));
+    }
+
+    window.addEventListener("pansgpt-chat-updated", onChatUpdated);
+    window.addEventListener("pansgpt-chat-removed", onChatRemoved);
+    return () => {
+      window.removeEventListener("pansgpt-chat-updated", onChatUpdated);
+      window.removeEventListener("pansgpt-chat-removed", onChatRemoved);
+    };
+  }, []);
+
   useEffect(() => {
     const controller = new AbortController();
     async function loadChats(): Promise<void> {

@@ -58,6 +58,9 @@ export function ChatSessionMenu({
   const [name, setName] = useState(chat.title);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [override, setOverride] = useState<{ id: string; is_pinned: boolean } | null>(null);
+  const isPinned = override && override.id === chat.id ? override.is_pinned : chat.is_pinned;
+
   useEffect(
     () => () => {
       request.current?.abort();
@@ -80,6 +83,24 @@ export function ChatSessionMenu({
     request.current = controller;
     setBusy(true);
     setError(null);
+
+    const isPinning = typeof change === "object" && "is_pinned" in change;
+    if (isPinning) {
+      setOverride({ id: chat.id, is_pinned: Boolean(change.is_pinned) });
+      window.dispatchEvent(
+        new CustomEvent("pansgpt-chat-updated", {
+          detail: { id: chat.id, patch: { is_pinned: Boolean(change.is_pinned) } },
+        })
+      );
+      onChanged?.({
+        id: chat.id,
+        title: chat.title,
+        is_pinned: Boolean(change.is_pinned),
+        archived_at: chat.archived_at,
+        updated_at: new Date().toISOString(),
+      });
+    }
+
     try {
       const saved = await requestSession(session?.access_token, chat.id, change, controller.signal);
       if (controller.signal.aborted) return;
@@ -99,6 +120,20 @@ export function ChatSessionMenu({
       }
       reload();
     } catch (failure: unknown) {
+      if (isPinning) {
+        setOverride(null);
+        window.dispatchEvent(
+          new CustomEvent("pansgpt-chat-updated", {
+            detail: { id: chat.id, patch: { is_pinned: chat.is_pinned } },
+          })
+        );
+        onChanged?.({
+          id: chat.id,
+          title: chat.title,
+          is_pinned: chat.is_pinned,
+          archived_at: chat.archived_at,
+        });
+      }
       if (!controller.signal.aborted)
         setError(
           failure instanceof Error ? failure.message : "This change was not saved. Please retry."
@@ -156,30 +191,30 @@ export function ChatSessionMenu({
         >
           <DropdownItem
             disabled={busy}
-            icon={chat.is_pinned ? <PinOff size={16} /> : <Pin size={16} />}
+            icon={isPinned ? <PinOff size={14} /> : <Pin size={14} />}
             onSelect={() => {
-              void apply({ is_pinned: !chat.is_pinned });
+              void apply({ is_pinned: !isPinned });
             }}
           >
-            {chat.is_pinned ? "Unpin" : "Pin"}
+            {isPinned ? "Unpin" : "Pin"}
           </DropdownItem>
           <DropdownItem
             disabled={busy}
-            icon={<Pencil size={16} />}
+            icon={<Pencil size={14} />}
             onSelect={() => openPanel("rename")}
           >
             Rename
           </DropdownItem>
           <DropdownItem
             disabled={busy}
-            icon={<Share2 size={16} />}
+            icon={<Share2 size={14} />}
             onSelect={() => openPanel("share")}
           >
             Share
           </DropdownItem>
           <DropdownItem
             disabled={busy}
-            icon={chat.archived_at ? <ArchiveRestore size={16} /> : <ArchiveIcon />}
+            icon={chat.archived_at ? <ArchiveRestore size={14} /> : <ArchiveIcon size={14} />}
             onSelect={() => {
               void apply({ archived: !chat.archived_at });
             }}
@@ -189,7 +224,7 @@ export function ChatSessionMenu({
           <div role="separator" className="study-chat-menu-separator" />
           <DropdownItem
             disabled={busy}
-            icon={<Trash2 size={16} />}
+            icon={<Trash2 size={14} />}
             className="study-chat-destructive"
             onSelect={() => openPanel("delete")}
           >
