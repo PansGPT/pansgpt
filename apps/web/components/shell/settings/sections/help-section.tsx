@@ -27,6 +27,11 @@ export function HelpSection(): React.ReactElement {
           <DialogPrimitive.Content
             className="settings-confirm-dialog settings-feedback-dialog"
             aria-describedby={descriptionId}
+            onEscapeKeyDown={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setOpen(false);
+            }}
             onOpenAutoFocus={(event) => {
               event.preventDefault();
               message.current?.focus();

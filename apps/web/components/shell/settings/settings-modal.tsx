@@ -196,6 +196,13 @@ export function SettingsModal({
             }
           }}
           onEscapeKeyDown={(event) => {
+            if (
+              event.target instanceof Element &&
+              event.target.closest('[role="dialog"]') !== dialogRef.current
+            ) {
+              event.preventDefault();
+              return;
+            }
             // Radix observes Escape before the input's React key handler.
             if (
               event.target instanceof Element &&
