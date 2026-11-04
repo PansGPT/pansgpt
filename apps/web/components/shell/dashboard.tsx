@@ -12,8 +12,6 @@ import {
   FileText,
   RefreshCw,
   ClipboardList,
-  NotebookText,
-  LockKeyhole,
   Check,
 } from "lucide-react";
 import { Skeleton, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
@@ -307,14 +305,7 @@ export function StudyDashboard(): React.ReactElement {
         {mobileDestinations
           .filter((item) => !["/app", "/app/chat"].includes(item.href))
           .map(({ href, label, icon }) => {
-            const Icon =
-              href === "/app/quiz"
-                ? ClipboardList
-                : href === "/app/notes"
-                  ? NotebookText
-                  : href === "/app/focus"
-                    ? LockKeyhole
-                    : icon;
+            const Icon = href === "/app/quiz" ? ClipboardList : icon;
             return (
               <Link
                 href={href}
