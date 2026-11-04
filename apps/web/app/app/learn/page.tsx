@@ -263,6 +263,7 @@ export default function LearnPage(): React.ReactElement {
               <LearnCard
                 key={article.slug}
                 article={article}
+                variant={viewMode}
                 isBookmarked={bookmarkedSlugs.has(article.slug)}
                 onBookmarkToggle={toggleBookmark}
               />

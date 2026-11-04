@@ -7,15 +7,78 @@ import type { LearnArticle } from "./learn-content";
 
 export function LearnCard({
   article,
+  variant = "grid",
   isBookmarked = false,
   onBookmarkToggle,
   className = "",
 }: {
   article: LearnArticle;
+  variant?: "grid" | "list";
   isBookmarked?: boolean;
   onBookmarkToggle?: (slug: string, e: React.MouseEvent) => void;
   className?: string;
 }): React.ReactElement {
+  if (variant === "list") {
+    return (
+      <Link
+        href={`/app/learn/${article.slug}`}
+        className={`learn-list-row ${className}`.trim()}
+        data-theme={article.theme}
+      >
+        {/* Left: Thematic Artwork Thumbnail */}
+        <div className="learn-list-thumb" data-theme={article.theme} data-art={article.artKind}>
+          <StudyArt kind={article.artKind} variant="square" />
+        </div>
+
+        {/* Right: Content Block */}
+        <div className="learn-list-body">
+          <h2 className="learn-list-title">{article.title}</h2>
+          <p className="learn-list-excerpt">{article.description}</p>
+
+          <div className="learn-list-meta">
+            <span className="learn-list-tag">{article.shortTag}</span>
+            <span className="learn-list-dot" aria-hidden="true">
+              ·
+            </span>
+            <span className="learn-list-duration">{article.duration}</span>
+
+            {onBookmarkToggle ? (
+              <button
+                type="button"
+                className="learn-list-bookmark-btn"
+                data-bookmarked={isBookmarked ? "true" : "false"}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onBookmarkToggle(article.slug, e);
+                }}
+                aria-label={isBookmarked ? "Remove bookmark" : "Bookmark this guide"}
+              >
+                <Bookmark
+                  size={14}
+                  fill={isBookmarked ? "currentColor" : "none"}
+                  aria-hidden="true"
+                />
+              </button>
+            ) : (
+              <span
+                className="learn-list-bookmark-btn"
+                data-bookmarked={isBookmarked ? "true" : "false"}
+                aria-hidden="true"
+              >
+                <Bookmark
+                  size={14}
+                  fill={isBookmarked ? "currentColor" : "none"}
+                  aria-hidden="true"
+                />
+              </span>
+            )}
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <Link
       href={`/app/learn/${article.slug}`}
