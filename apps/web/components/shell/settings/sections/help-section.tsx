@@ -27,6 +27,13 @@ export function HelpSection(): React.ReactElement {
           <DialogPrimitive.Content
             className="settings-confirm-dialog settings-feedback-dialog"
             aria-describedby={descriptionId}
+            onKeyDownCapture={(event) => {
+              if (event.key === "Escape") {
+                event.preventDefault();
+                event.stopPropagation();
+                setOpen(false);
+              }
+            }}
             onEscapeKeyDown={(event) => {
               event.preventDefault();
               event.stopPropagation();
