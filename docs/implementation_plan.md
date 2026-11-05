@@ -1,5 +1,7 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-11-05 implementation:** Local Quiz loading is restored and user-confirmed after explicit flag/client-key configuration. Restore the pre-consolidation Library layout with later header refinements; task paging, serialized saves and neutral keyboard focus are in verification. Timetable UI remains deferred and streak behavior will be discussed after implementation. [Scope, contracts and verification](tasks-2026-11-05.md).
+
 > **2026-11-04 consolidation:** Integrate remaining local/remote branch histories into main while preserving current contracts, verified fixes and open release gates. [Scope and validation](all-branches-consolidation-2026-11-04.md).
 
 > **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).

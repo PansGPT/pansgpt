@@ -1,5 +1,7 @@
 # Timetable, Tasks, and Streak — Luna’s Implementation Record
 
+> **5 November 2026 update:** This is the historical 2 November record. The Tasks modal was subsequently implemented and its save/pagination fixes are in verification. The user has kept Timetable UI deferred and requested a streak discussion after implementation. See [today's scope and verification](tasks-2026-11-05.md).
+
 **Date:** 2026-11-02
 **Branch:** `feat/streak-timetable-tasks`
 **Status:** The database migration is applied to the one configured Supabase database. Backend contracts and home previews are implemented. The full Tasks and Timetable screens were removed from the modal at the user’s request; the modal now shows “Coming soon.” Feature journeys and CI checks have not been run in this session.

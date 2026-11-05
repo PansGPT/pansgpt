@@ -126,7 +126,8 @@ test("settings keeps separate categories, student-facing content and a bounded d
   const results = nav.getByRole("listbox", { name: "Matching settings", exact: true });
   await expect(results.getByRole("option")).toHaveText(["AccountFull name"]);
   await expect(nav.getByRole("button")).toHaveText(sections);
-  await expect(search).toHaveCSS("outline-style", "none");
+  await expect(search).toHaveCSS("outline-style", "solid");
+  await expect(search).toHaveCSS("outline-width", "2px");
   await expect(results).toHaveCSS("scrollbar-width", "thin");
   await page.screenshot({ path: test.info().outputPath("settings-search-desktop.png") });
   await search.press("Enter");

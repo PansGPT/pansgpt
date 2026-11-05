@@ -1,0 +1,22 @@
+/* Neutral keyboard focus stays visible without restoring the green treatment. */
+:root
+  :is(
+    button,
+    a[href],
+    input:not([type="hidden"]),
+    textarea,
+    select,
+    summary,
+    [role="slider"],
+    [role="button"],
+    [contenteditable="true"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible:not(:disabled):not([aria-disabled="true"]) {
+  outline: 2px solid var(--text-secondary-700);
+  outline-offset: 2px;
+}
+
+:root .p-native-radio > input:focus-visible + .p-native-radio-marker {
+  outline: 2px solid var(--text-secondary-700);
+  outline-offset: 2px;
+}

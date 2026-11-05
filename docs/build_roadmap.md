@@ -1,5 +1,7 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-11-05 implementation:** Local Quiz loading is restored and user-confirmed after explicit flag/client-key configuration. Restore the pre-consolidation Library layout with later header refinements; task paging, serialized saves and neutral keyboard focus are in verification. Timetable UI remains deferred and streak behavior will be discussed after implementation. [Scope, contracts and verification](tasks-2026-11-05.md).
+
 > **2026-11-04 consolidation:** Integrate remaining local/remote branch histories into main while preserving current contracts, verified fixes and open release gates. [Scope and validation](all-branches-consolidation-2026-11-04.md).
 
 > **2026-10-30 Learn/Home integration:** Combine the current Learn/Home, Library and Settings branch with the merged quiz/chat work. Preserve both API exports and database CI suites; existing hosted/device/live-generation gates remain open. [Integration record](learn-home-integration-2026-10-30.md).
@@ -1587,20 +1589,20 @@ Following explicit user approval, Supabase CLI applied `20261026100000_quiz_life
 
 ## 🗓️ PHASE 15 — Timetable + Student Dashboard
 
-2 November 2026 implementation slice: student task CRUD, task favorites, the recurring timetable read/admin CRUD APIs, a bounded weekly timetable and task manager inside one Settings-sized Study Planner modal, and a completed-task streak heatmap are implemented. The modal uses `/app?modal=planner&tab=tasks` or `/app?modal=planner&tab=timetable`; separate Tasks/Timetable navigation entries are omitted. The API is versioned under `/api/v1`; student task changes derive user/university scope from the verified API identity. Streak activity follows the selected browser IANA timezone and reflects completed tasks only; actual study duration is not recorded. `NEXT_PUBLIC_DEMO_MODE` defaults to `false`. The new timetable columns and task favorite field are in a mirrored migration. API tests, migration application, staging/device journeys and the full Home aggregator (including recents) remain open.
+2 November 2026 implementation slice: student task CRUD, task favorites, the recurring timetable read/admin CRUD APIs, a task manager inside one Settings-sized Study Planner modal, and a completed-task streak heatmap are implemented. The modal uses `/app?modal=planner&tab=tasks` or `/app?modal=planner&tab=timetable`; separate Tasks/Timetable navigation entries are omitted. The API is versioned under `/api/v1`; student task changes derive user/university scope from the verified API identity. Streak activity follows the selected browser IANA timezone and reflects completed tasks only; actual study duration is not recorded. `NEXT_PUBLIC_DEMO_MODE` defaults to `false`. The new timetable columns and task favorite field are in a mirrored migration. API tests, migration application, staging/device journeys and the full Home aggregator (including recents) remain open.
 
 ### 15.1 Backend Timetable & Dashboard APIs (`apps/api/app/routers/academic.py`)
 
 - [x] Student timetable occurrences: `GET /api/v1/timetable` (bounded dates, verified university and level)
 - [x] University-admin timetable CRUD: `/api/v1/admin/timetables`
 - [~] `GET /api/v1/home/dashboard` returns tasks, recurring class occurrences, timezone-aware task activity and current streak; student identity, recent documents/chats, and the <150ms full-home target remain open.
-- [x] Student task CRUD: `GET|POST /api/v1/tasks`, `PATCH|DELETE /api/v1/tasks/{id}`; completion accepts the desired boolean state.
+- [x] Student task CRUD: `GET|POST /api/v1/tasks`, `GET|PATCH|DELETE /api/v1/tasks/{id}`; completion accepts the desired boolean state. Independent active/completed pages use `GET /api/v1/tasks/page`; legacy array reads remain compatible.
 - [ ] Upcoming class/exam context injected into AI system prompt (via `get_timetable` tool)
 
-### 15.2 Timetable UI & Student Dashboard (`apps/web/components/shell/timetable-modal-content.tsx`, `apps/web/components/shell/tasks-modal-content.tsx`)
+### 15.2 Timetable UI & Student Dashboard (`apps/web/components/shell/planner-modal.tsx`, `apps/web/components/shell/tasks-modal-view.tsx`)
 
 - [x] Add typed `start_time_local`, `end_time_local` and optional effective date bounds while retaining legacy `time_slot`/`start_time` values.
-- [x] Admin UI to create, edit and delete weekly classes for an authorized university.
+- [ ] Weekly timetable view and university-admin editor: deferred by the user on 5 November 2026; the Timetable tab retains its Coming Soon state.
 - [x] One Settings-sized Study Planner modal contains Timetable and Tasks tabs (`/app?modal=planner&tab=timetable|tasks`); the Home activity card opens the matching tab and closing restores the previous URL state.
 - [x] Home activity tabs use the same server-resolved class occurrences and support optimistic task completion.
 - [ ] `exam_restrictions` — time-locked windows that disable AI assistance during exams
