@@ -4,6 +4,8 @@ import type {
   StudentTaskCreateRequest,
   StudentTaskDto,
   StudentTaskUpdateRequest,
+  StudentTaskPageDto,
+  StudentTaskState,
   TimetableCreateRequest,
   TimetableEntryDto,
   TimetableOccurrenceDto,
@@ -158,6 +160,36 @@ export async function getTasks(
     timezone,
   });
   return request(`${apiUrl}/api/v1/tasks?${query.toString()}`, token, z.array(taskSchema), {
+    signal,
+  });
+}
+
+export async function getTaskPage(
+  apiUrl: string,
+  token: string,
+  state: StudentTaskState,
+  offset = 0,
+  signal?: AbortSignal
+): Promise<StudentTaskPageDto> {
+  const query = new URLSearchParams({ state, offset: String(offset), limit: "100" });
+  return request(
+    `${apiUrl}/api/v1/tasks/page?${query}`,
+    token,
+    z.object({
+      items: z.array(taskSchema),
+      next_offset: z.number().int().nonnegative().nullable(),
+    }),
+    { signal }
+  );
+}
+
+export async function getTask(
+  apiUrl: string,
+  token: string,
+  taskId: string,
+  signal?: AbortSignal
+): Promise<StudentTaskDto> {
+  return request(`${apiUrl}/api/v1/tasks/${encodeURIComponent(taskId)}`, token, taskSchema, {
     signal,
   });
 }

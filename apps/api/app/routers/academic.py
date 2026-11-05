@@ -3,7 +3,7 @@
 import logging
 import uuid
 from datetime import date, datetime, timedelta
-from typing import Any
+from typing import Any, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
@@ -21,6 +21,7 @@ from app.models.academic import (
     HomeDashboardResponse,
     StudentTask,
     StudentTaskCreate,
+    StudentTaskPage,
     StudentTaskUpdate,
     TimetableCreate,
     TimetableEntry,
@@ -259,6 +260,75 @@ async def list_tasks(
         raise HTTPException(503, "Your tasks are temporarily unavailable.") from exc
     response.headers["Cache-Control"] = "private, no-store"
     return tasks
+
+
+@router.get("/tasks/page", response_model=StudentTaskPage)
+async def list_task_page(
+    response: Response,
+    state: Literal["active", "completed"] = "active",
+    offset: int = Query(default=0, ge=0, le=1_000_000),
+    limit: int = Query(default=100, ge=1, le=200),
+    user: UserContext = Depends(require_student),
+) -> StudentTaskPage:
+    university_id = require_university(user)
+    ordering = (
+        "completed_at DESC NULLS LAST, id DESC"
+        if state == "completed"
+        else "due_date ASC NULLS LAST, due_time ASC NULLS LAST, created_at ASC, id ASC"
+    )
+    try:
+        async with get_db_connection() as conn:
+            if conn is None:
+                raise HTTPException(503, "Your tasks are temporarily unavailable.")
+            rows = await conn.fetch(
+                f"SELECT {TASK_SELECT} FROM public.student_tasks "
+                "WHERE user_id = $1 AND university_id = $2 AND is_completed = $3 "
+                f"ORDER BY {ordering} LIMIT $4 OFFSET $5;",
+                user.id,
+                university_id,
+                state == "completed",
+                limit + 1,
+                offset,
+            )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("student_task_page_unavailable: %s", _database_error_summary(exc))
+        raise HTTPException(503, "Your tasks are temporarily unavailable.") from exc
+    response.headers["Cache-Control"] = "private, no-store"
+    return StudentTaskPage(
+        items=[_task(row) for row in rows[:limit]],
+        next_offset=offset + limit if len(rows) > limit else None,
+    )
+
+
+@router.get("/tasks/{task_id}", response_model=StudentTask)
+async def get_task(
+    task_id: uuid.UUID,
+    response: Response,
+    user: UserContext = Depends(require_student),
+) -> StudentTask:
+    university_id = require_university(user)
+    try:
+        async with get_db_connection() as conn:
+            if conn is None:
+                raise HTTPException(503, "Your task is temporarily unavailable.")
+            row = await conn.fetchrow(
+                f"SELECT {TASK_SELECT} FROM public.student_tasks "
+                "WHERE id = $1 AND user_id = $2 AND university_id = $3;",
+                task_id,
+                user.id,
+                university_id,
+            )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.warning("student_task_unavailable: %s", _database_error_summary(exc))
+        raise HTTPException(503, "Your task is temporarily unavailable.") from exc
+    if row is None:
+        raise HTTPException(404, "Task not found.")
+    response.headers["Cache-Control"] = "private, no-store"
+    return _task(row)
 
 
 @router.post("/tasks", response_model=StudentTask, status_code=status.HTTP_201_CREATED)

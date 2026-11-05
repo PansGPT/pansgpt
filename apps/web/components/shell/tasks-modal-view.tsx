@@ -21,10 +21,12 @@ import type {
   StudentTaskDto,
   StudentTaskType,
   StudentTaskUpdateRequest,
+  StudentTaskState,
 } from "@pansgpt/types";
 import { env } from "@/env";
 import { useAuth } from "@/lib/auth-context";
-import { createTask, deleteTask, getTasks, updateTask } from "@/lib/academic";
+import { createTask, deleteTask, getTask, getTaskPage, updateTask } from "@/lib/academic";
+import { TaskWriteQueue } from "@/lib/task-write-queue";
 import { useDashboard } from "./dashboard-data";
 import { SettingsSelect } from "./settings/settings-select";
 
@@ -197,21 +199,50 @@ function formatSidebarCreated(createdAtIso: string): string {
   }
 }
 
-export function TasksModalView({
-  initialTaskId,
-  onSelectedTaskChange,
-}: {
+type TaskViewProps = {
   initialTaskId?: string | null;
   onSelectedTaskChange?: (taskId: string | null) => void;
-} = {}): React.ReactElement {
+};
+
+export function TasksModalView(props: TaskViewProps = {}): React.ReactElement {
+  const { session, profile } = useAuth();
+  const owner = `${session?.user.id}:${profile?.university_id}`;
+  return <TaskList key={owner} {...props} />;
+}
+
+function TaskList({ initialTaskId, onSelectedTaskChange }: TaskViewProps): React.ReactElement {
   const { session } = useAuth();
   const token = session?.access_token;
   const { reload: reloadDashboard } = useDashboard();
 
   const [tasks, setTasks] = useState<StudentTaskDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [retryAction, setRetryAction] = useState<(() => Promise<void>) | null>(null);
+  const tasksRef = useRef<StudentTaskDto[]>([]);
+  const tokenRef = useRef(token);
+  const writesRef = useRef<TaskWriteQueue | null>(null);
+  const loadController = useRef<AbortController | null>(null);
+  const nextOffsetsRef = useRef<Record<StudentTaskState, number | null>>({
+    active: null,
+    completed: null,
+  });
+  const [nextOffsets, setNextOffsets] = useState(nextOffsetsRef.current);
+  const [loadingMore, setLoadingMore] = useState<Record<StudentTaskState, boolean>>({
+    active: false,
+    completed: false,
+  });
+  const loadingMoreRef = useRef({ active: false, completed: false });
+  const selectedRef = useRef<string | null>(initialTaskId ?? null);
+  const publishTasks = useCallback((rows: StudentTaskDto[]): void => {
+    tasksRef.current = rows;
+    setTasks(rows);
+  }, []);
+  const publishOffsets = useCallback((offsets: Record<StudentTaskState, number | null>): void => {
+    nextOffsetsRef.current = offsets;
+    setNextOffsets(offsets);
+  }, []);
 
   const [completedOpen, setCompletedOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -219,6 +250,7 @@ export function TasksModalView({
   const [submitting, setSubmitting] = useState(false);
 
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(initialTaskId ?? null);
+  const reportedSelection = useRef<string | null>(initialTaskId ?? null);
   const [prevInitialTaskId, setPrevInitialTaskId] = useState(initialTaskId);
   if (initialTaskId !== prevInitialTaskId) {
     setPrevInitialTaskId(initialTaskId);
@@ -228,31 +260,131 @@ export function TasksModalView({
   }
 
   useEffect(() => {
-    onSelectedTaskChange?.(selectedTaskId);
+    selectedRef.current = selectedTaskId;
+    if (reportedSelection.current !== selectedTaskId) {
+      reportedSelection.current = selectedTaskId;
+      onSelectedTaskChange?.(selectedTaskId);
+    }
   }, [selectedTaskId, onSelectedTaskChange]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const todayIso = useMemo(() => localTodayIso(), []);
 
-  const loadTasks = useCallback(async () => {
-    if (!token) return;
-    setLoading(true);
-    setError(null);
-    setRetryAction(null);
-    try {
-      const data = await getTasks(env.NEXT_PUBLIC_API_URL, token, true);
-      setTasks(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load tasks.");
-      setRetryAction(() => loadTasks);
-    } finally {
-      setLoading(false);
-    }
-  }, [token]);
+  const loadTasks = useCallback(
+    async (clearError = true) => {
+      const writes = writesRef.current;
+      const accessToken = tokenRef.current;
+      if (!accessToken || !writes?.isActive || !writes.isIdle) return;
+      loadController.current?.abort();
+      const controller = new AbortController();
+      loadController.current = controller;
+      const version = writes.version;
+      setLoading(true);
+      setLoadFailed(false);
+      if (clearError) {
+        setError(null);
+        setRetryAction(null);
+      }
+      try {
+        const [active, completed] = await Promise.all([
+          getTaskPage(env.NEXT_PUBLIC_API_URL, accessToken, "active", 0, controller.signal),
+          getTaskPage(env.NEXT_PUBLIC_API_URL, accessToken, "completed", 0, controller.signal),
+        ]);
+        if (!writes.isActive || controller.signal.aborted || writes.version !== version) return;
+        const rows = [...active.items, ...completed.items];
+        let selected = tasksRef.current.find((task) => task.id === selectedRef.current);
+        if (!selected && selectedRef.current) {
+          try {
+            selected = await getTask(
+              env.NEXT_PUBLIC_API_URL,
+              accessToken,
+              selectedRef.current,
+              controller.signal
+            );
+          } catch (failure) {
+            if (controller.signal.aborted || !writes.isActive) return;
+            setError(
+              failure instanceof Error ? failure.message : "Selected task could not be loaded."
+            );
+            setSelectedTaskId(null);
+            setRetryAction(() => async () => {
+              await loadTasks();
+            });
+          }
+        }
+        if (!writes.isActive || controller.signal.aborted || writes.version !== version) return;
+        if (selected && !rows.some((task) => task.id === selected.id)) rows.push(selected);
+        writes.replace(rows);
+        publishOffsets({ active: active.next_offset, completed: completed.next_offset });
+      } catch (err) {
+        if (controller.signal.aborted || !writes.isActive) return;
+        setLoadFailed(true);
+        setError(
+          (previous) => previous ?? (err instanceof Error ? err.message : "Failed to load tasks.")
+        );
+        setRetryAction(
+          (previous) =>
+            previous ??
+            (async () => {
+              await loadTasks();
+            })
+        );
+      } finally {
+        if (writes.isActive && loadController.current === controller) setLoading(false);
+      }
+    },
+    [publishOffsets]
+  );
 
   useEffect(() => {
+    const writes = new TaskWriteQueue(() => tasksRef.current, publishTasks);
+    writesRef.current = writes;
+    return () => {
+      writes.dispose();
+      loadController.current?.abort();
+    };
+  }, [publishTasks]);
+
+  useEffect(() => {
+    tokenRef.current = token;
     void loadTasks();
-  }, [loadTasks]);
+  }, [token, loadTasks]);
+
+  async function loadMore(state: StudentTaskState): Promise<void> {
+    const writes = writesRef.current;
+    const accessToken = tokenRef.current;
+    const offset = nextOffsetsRef.current[state];
+    if (
+      !accessToken ||
+      !writes?.isActive ||
+      !writes.isIdle ||
+      offset === null ||
+      loadingMoreRef.current[state]
+    )
+      return;
+    const version = writes.version;
+    loadingMoreRef.current[state] = true;
+    setLoadingMore({ ...loadingMoreRef.current });
+    try {
+      const page = await getTaskPage(env.NEXT_PUBLIC_API_URL, accessToken, state, offset);
+      if (!writes.isActive || writes.version !== version) return;
+      const rows = new Map(tasksRef.current.map((task) => [task.id, task]));
+      for (const task of page.items) rows.set(task.id, task);
+      writes.replace([...rows.values()]);
+      publishOffsets({ ...nextOffsetsRef.current, [state]: page.next_offset });
+    } catch (failure) {
+      if (!writes.isActive) return;
+      setError(failure instanceof Error ? failure.message : "Failed to load more tasks.");
+      setRetryAction(() => async () => {
+        await loadMore(state);
+      });
+    } finally {
+      if (writes.isActive) {
+        loadingMoreRef.current[state] = false;
+        setLoadingMore({ ...loadingMoreRef.current });
+      }
+    }
+  }
 
   useEffect(() => {
     if (isAdding) {
@@ -273,14 +405,22 @@ export function TasksModalView({
         } else if (!a.due_date && b.due_date) {
           return 1;
         }
-        return a.created_at.localeCompare(b.created_at);
+        if (a.due_time && b.due_time) {
+          const cmp = a.due_time.localeCompare(b.due_time);
+          if (cmp !== 0) return cmp;
+        } else if (a.due_time && !b.due_time) return -1;
+        else if (!a.due_time && b.due_time) return 1;
+        return a.created_at.localeCompare(b.created_at) || a.id.localeCompare(b.id);
       });
   }, [tasks]);
 
   const completedTasks = useMemo(() => {
     return tasks
       .filter((task) => task.is_completed)
-      .sort((a, b) => (b.completed_at || "").localeCompare(a.completed_at || ""));
+      .sort(
+        (a, b) =>
+          (b.completed_at || "").localeCompare(a.completed_at || "") || b.id.localeCompare(a.id)
+      );
   }, [tasks]);
 
   const selectedTask = useMemo(() => {
@@ -288,83 +428,54 @@ export function TasksModalView({
     return tasks.find((t) => t.id === selectedTaskId) || null;
   }, [tasks, selectedTaskId]);
 
-  const handleToggleComplete = async (task: StudentTaskDto) => {
-    const nextCompleted = !task.is_completed;
-    const nextCompletedAt = nextCompleted ? new Date().toISOString() : null;
-
-    // Optimistic update
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === task.id
-          ? {
-              ...t,
-              is_completed: nextCompleted,
-              completed_at: nextCompletedAt,
-            }
-          : t
-      )
-    );
-    setError(null);
-    setRetryAction(null);
-
-    try {
-      if (!token) throw new Error("Authentication unavailable");
-      await updateTask(env.NEXT_PUBLIC_API_URL, token, task.id, {
-        is_completed: nextCompleted,
-      });
-      reloadDashboard();
-    } catch {
-      // Rollback
-      setTasks((prev) =>
-        prev.map((t) => (t.id === task.id ? { ...t, is_completed: task.is_completed } : t))
-      );
-      setError("Failed to update task completion.");
-      setRetryAction(() => async () => {
-        await handleToggleComplete(task);
-      });
-    }
-  };
-
-  const handleDeleteTask = async (taskId: string) => {
-    const backup = tasks;
-    setTasks((prev) => prev.filter((t) => t.id !== taskId));
-    if (selectedTaskId === taskId) {
-      setSelectedTaskId(null);
-    }
-    setError(null);
-    setRetryAction(null);
-
-    try {
-      if (!token) throw new Error("Authentication unavailable");
-      await deleteTask(env.NEXT_PUBLIC_API_URL, token, taskId);
-      reloadDashboard();
-    } catch {
-      setTasks(backup);
-      setError("Failed to delete task.");
-      setRetryAction(() => async () => {
-        await handleDeleteTask(taskId);
-      });
-    }
-  };
-
   const handleUpdateTask = async (taskId: string, updates: StudentTaskUpdateRequest) => {
-    const backup = tasks;
-    // Optimistic update
-    setTasks((prev) => prev.map((t) => (t.id === taskId ? { ...t, ...updates } : t)));
+    const writes = writesRef.current;
+    if (!writes?.isActive) return;
     setError(null);
     setRetryAction(null);
-
     try {
-      if (!token) throw new Error("Authentication unavailable");
-      const updated = await updateTask(env.NEXT_PUBLIC_API_URL, token, taskId, updates);
-      setTasks((prev) => prev.map((t) => (t.id === taskId ? updated : t)));
-      reloadDashboard();
+      await writes.patch(taskId, updates, async () => {
+        if (!tokenRef.current) throw new Error("Authentication unavailable");
+        return updateTask(env.NEXT_PUBLIC_API_URL, tokenRef.current, taskId, updates);
+      });
+      if (writes.isActive) reloadDashboard();
     } catch {
-      setTasks(backup);
+      if (!writes.isActive) return;
       setError("Failed to save task update.");
       setRetryAction(() => async () => {
         await handleUpdateTask(taskId, updates);
       });
+    } finally {
+      if (writes.isActive && writes.isIdle) void loadTasks(false);
+    }
+  };
+
+  const handleToggleComplete = async (task: StudentTaskDto) => {
+    await handleUpdateTask(task.id, { is_completed: !task.is_completed });
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    const writes = writesRef.current;
+    if (!writes?.isActive) return;
+    setError(null);
+    setRetryAction(null);
+    try {
+      await writes.remove(taskId, async () => {
+        if (!tokenRef.current) throw new Error("Authentication unavailable");
+        await deleteTask(env.NEXT_PUBLIC_API_URL, tokenRef.current, taskId);
+      });
+      if (writes.isActive) {
+        if (selectedRef.current === taskId) setSelectedTaskId(null);
+        reloadDashboard();
+      }
+    } catch {
+      if (!writes.isActive) return;
+      setError("Failed to delete task.");
+      setRetryAction(() => async () => {
+        await handleDeleteTask(taskId);
+      });
+    } finally {
+      if (writes.isActive && writes.isIdle) void loadTasks(false);
     }
   };
 
@@ -385,9 +496,11 @@ export function TasksModalView({
 
     try {
       const created = await createTask(env.NEXT_PUBLIC_API_URL, token, payload);
-      setTasks((prev) => [created, ...prev]);
+      if (!writesRef.current?.isActive) return;
+      writesRef.current.replace([created, ...tasksRef.current]);
       setNewTaskText("");
       reloadDashboard();
+      void loadTasks(false);
       // Keep adding bar open and focused for rapid entry
       inputRef.current?.focus();
     } catch (err) {
@@ -435,6 +548,10 @@ export function TasksModalView({
               <div className="planner-task-skeleton" />
               <div className="planner-task-skeleton" />
             </div>
+          ) : loadFailed && !tasks.length ? (
+            <p className="planner-tasks-empty" role="status">
+              Tasks could not be loaded. Use Retry above to try again.
+            </p>
           ) : !loading && !tasks.length ? (
             <div className="planner-tasks-empty">
               <span className="planner-tasks-empty-circle">
@@ -515,6 +632,18 @@ export function TasksModalView({
                 );
               })}
 
+              {nextOffsets.active !== null && (
+                <button
+                  type="button"
+                  className="planner-tasks-load-more"
+                  disabled={loading || loadingMore.active || !writesRef.current?.isIdle}
+                  aria-busy={loadingMore.active}
+                  onClick={() => void loadMore("active")}
+                >
+                  {loadingMore.active ? "Loading active tasks…" : "Load more active tasks"}
+                </button>
+              )}
+
               {/* Collapsible Completed Section */}
               {completedTasks.length > 0 && (
                 <div className="planner-tasks-completed-section">
@@ -585,6 +714,19 @@ export function TasksModalView({
                           </div>
                         </div>
                       ))}
+                      {nextOffsets.completed !== null && (
+                        <button
+                          type="button"
+                          className="planner-tasks-load-more"
+                          disabled={loading || loadingMore.completed || !writesRef.current?.isIdle}
+                          aria-busy={loadingMore.completed}
+                          onClick={() => void loadMore("completed")}
+                        >
+                          {loadingMore.completed
+                            ? "Loading completed tasks…"
+                            : "Load more completed tasks"}
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
@@ -685,12 +827,20 @@ function TaskDetailSidebar({
   const [prevTask, setPrevTask] = useState(task);
   if (prevTask !== task) {
     setPrevTask(task);
-    setTitle(task.title);
-    setDueDate(task.due_date);
-    setDueTime(task.due_time || "");
-    setCourseCode(task.course_code || "");
-    setTaskType(task.task_type || "custom");
-    setNotes(task.subtitle || "");
+    if (prevTask.title !== task.title)
+      setTitle((draft) => (draft === prevTask.title ? task.title : draft));
+    if (prevTask.due_date !== task.due_date)
+      setDueDate((draft) => (draft === prevTask.due_date ? task.due_date : draft));
+    if (prevTask.due_time !== task.due_time)
+      setDueTime((draft) => (draft === (prevTask.due_time || "") ? task.due_time || "" : draft));
+    if (prevTask.course_code !== task.course_code)
+      setCourseCode((draft) =>
+        draft === (prevTask.course_code || "") ? task.course_code || "" : draft
+      );
+    if (prevTask.task_type !== task.task_type)
+      setTaskType((draft) => (draft === prevTask.task_type ? task.task_type : draft));
+    if (prevTask.subtitle !== task.subtitle)
+      setNotes((draft) => (draft === (prevTask.subtitle || "") ? task.subtitle || "" : draft));
   }
 
   const handleTitleBlur = () => {
@@ -765,6 +915,7 @@ function TaskDetailSidebar({
             }
           }}
           placeholder="Task title"
+          aria-label="Task title"
           maxLength={200}
         />
 
@@ -791,6 +942,7 @@ function TaskDetailSidebar({
               <input
                 type="date"
                 className="planner-sidebar-input"
+                aria-label="Task due date"
                 value={dueDate || ""}
                 onChange={(e) => handleDueDateChange(e.target.value || null)}
               />
@@ -818,6 +970,7 @@ function TaskDetailSidebar({
               <input
                 type="time"
                 className="planner-sidebar-input"
+                aria-label="Task due time"
                 value={dueTime}
                 onChange={(e) => handleDueTimeChange(e.target.value)}
               />
@@ -846,6 +999,7 @@ function TaskDetailSidebar({
                 type="text"
                 className="planner-sidebar-input"
                 placeholder="e.g. PCO 301"
+                aria-label="Task course code"
                 value={courseCode}
                 onChange={(e) => setCourseCode(e.target.value)}
                 onBlur={handleCourseCodeBlur}
@@ -880,6 +1034,7 @@ function TaskDetailSidebar({
           <textarea
             className="planner-sidebar-notes-textarea"
             placeholder="Add details or notes..."
+            aria-label="Task notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             onBlur={handleNotesBlur}

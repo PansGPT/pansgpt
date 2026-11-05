@@ -104,6 +104,11 @@ class StudentTask(StrictRequest):
     created_at: datetime
 
 
+class StudentTaskPage(StrictRequest):
+    items: list[StudentTask]
+    next_offset: int | None = Field(default=None, ge=0)
+
+
 class TimetableCreate(StrictRequest):
     university_id: str | None = None
     level: UniversityLevel

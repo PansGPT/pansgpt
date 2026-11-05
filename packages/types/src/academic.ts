@@ -38,6 +38,14 @@ export type StudentTaskUpdateRequest = Partial<StudentTaskCreateRequest> & {
   is_favorite?: boolean;
 };
 
+export type StudentTaskState = "active" | "completed";
+
+/** Independent bounded pages; completed history never displaces active tasks. */
+export interface StudentTaskPageDto {
+  items: StudentTaskDto[];
+  next_offset: number | null;
+}
+
 export interface TimetableEntryDto {
   id: string;
   university_id: string;
