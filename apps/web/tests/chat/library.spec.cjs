@@ -126,6 +126,28 @@ async function setup(page, { empty = false, failure = false, staff = false } = {
   return state;
 }
 
+test("Library search keeps its rounded field without an inner focus rectangle", async ({ page }) => {
+  await setup(page);
+  await page.goto("/app/library", { waitUntil: "load" });
+  const search = page.getByRole("searchbox", { name: "Search your library", exact: true });
+  for (const theme of ["light", "dark", "sepia"]) {
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value;
+    }, theme);
+    await search.click();
+    await expect(search).toBeFocused();
+    await expect(search).toHaveCSS("outline-style", "none");
+    await expect(search).toHaveCSS("box-shadow", "none");
+    await search.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(search).toBeFocused();
+    await expect(search).toHaveCSS("outline-style", "none");
+    await expect(search).toHaveCSS("box-shadow", "none");
+    await expect(page.locator(".library-search")).toHaveCSS("border-radius", "10px");
+  }
+  await page.screenshot({ path: test.info().outputPath("library-search-focus.png") });
+});
+
 test("legacy library keeps course navigation, Home-sized document cards and real covers", async ({
   page,
 }) => {

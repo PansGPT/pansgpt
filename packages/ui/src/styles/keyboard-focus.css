@@ -1,16 +1,19 @@
-/* Neutral keyboard focus stays visible without restoring the green treatment. */
+/* Text-entry fields keep their component styling; an inner outline cuts across
+   composed fields and browsers also show :focus-visible after pointer clicks. */
 :root
   :is(
     button,
     a[href],
-    input:not([type="hidden"]),
-    textarea,
-    select,
+    input:is([type="checkbox"], [type="radio"], [type="range"]),
     summary,
     [role="slider"],
     [role="button"],
-    [contenteditable="true"],
     [tabindex]:not([tabindex="-1"])
+  ):not(
+    input:not([type="checkbox"], [type="radio"], [type="range"]),
+    textarea,
+    select,
+    [contenteditable]:not([contenteditable="false"])
   ):focus-visible:not(:disabled):not([aria-disabled="true"]) {
   outline: 2px solid var(--text-secondary-700);
   outline-offset: 2px;

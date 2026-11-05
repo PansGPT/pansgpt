@@ -2,6 +2,26 @@ import { expect, test } from "@playwright/test";
 import { openPreview } from "./open-preview";
 
 for (const theme of ["light", "dark", "sepia"]) {
+  test(`${theme} text fields retain component styling on click and keyboard focus`, async ({
+    page,
+  }) => {
+    await openPreview(page, "/");
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value;
+    }, theme);
+    const input = page.getByRole("textbox", { name: "Email", exact: true });
+    const textarea = page.getByRole("textbox", { name: "Description", exact: true });
+    for (const field of [input, textarea]) {
+      await field.click();
+      await expect(field).toBeFocused();
+      await expect(field).toHaveCSS("outline-style", "none");
+      await field.press("Shift+Tab");
+      await page.keyboard.press("Tab");
+      await expect(field).toBeFocused();
+      await expect(field).toHaveCSS("outline-style", "none");
+    }
+  });
+
   test(`${theme} keyboard focus is visible, neutral and preserves disabled controls`, async ({
     page,
   }) => {
