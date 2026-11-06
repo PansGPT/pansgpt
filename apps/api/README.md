@@ -41,6 +41,20 @@ explicitly into both processes. From `apps/api`, run these commands in separate 
 
 Both processes are required for quiz generation. HTTP readiness verifies service connections; it does not prove a worker is running. Confirm `quiz_wake_listening` in the worker output and verify a submitted request progresses. Provider-capacity waits can still defer work after questions have been saved; timed quizzes require their full question set before starting.
 
+If Quiz stays queued with zero questions while courses/history load, check that
+the worker is running with `ENABLE_QUIZ=true` and `ENABLE_AI=true`. Starting only
+Next.js and Uvicorn does not start it. With those services already running, use
+`pnpm dev:worker` from the repository root in another terminal. For a fresh full
+session, stop the existing services first, then use `pnpm dev`. Do not start
+duplicate workers to troubleshoot a saved request. A worker can recover the
+existing durable request without creating another quiz.
+
+The API's immediate queue handoff allows 15 seconds overall, with five-second
+Redis connection/read timeouts and a separate cleanup budget. A cold TLS
+connection can exceed the old three-second total. If handoff fails, the saved
+job remains available to the worker's reconciler; a successful status poll alone
+does not establish that a worker picked it up.
+
 ### Enable Quiz locally
 
 `ENABLE_QUIZ` defaults to `false`, including in `.env.example`. After the quiz

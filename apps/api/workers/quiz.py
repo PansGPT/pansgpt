@@ -5,8 +5,7 @@ from typing import Protocol, cast
 from uuid import UUID, uuid4
 
 import structlog
-from arq import create_pool
-from arq.connections import RedisSettings
+from arq.connections import ArqRedis
 
 from app.core.config import settings
 from app.core.dependencies import UserContext
@@ -76,16 +75,25 @@ async def wake_quiz_worker() -> None:
     url = settings.redis_connection_url
     if not url:
         return
+    # Own the client before the first network await. create_pool() pings before
+    # returning, so cancellation during a cold connection can lose its client.
+    redis: ArqRedis | None = None
     try:
-        async with asyncio.timeout(3):
-            redis = await create_pool(RedisSettings.from_dsn(url))
-            try:
-                await dispatch_quiz_jobs({"redis": redis})
-            finally:
-                await redis.aclose()
+        redis = ArqRedis.from_url(url, socket_connect_timeout=5, socket_timeout=5)
+        # A cold TLS connection alone can exceed three seconds. Keep the
+        # database/queue transaction bounded without cancelling normal startup.
+        async with asyncio.timeout(15):
+            await dispatch_quiz_jobs({"redis": redis})
     except Exception as exc:
         logger.warning("quiz_dispatch_deferred", error_type=type(exc).__name__)
-        return
+    finally:
+        # Cleanup has its own budget, outside the expired dispatch deadline.
+        if redis is not None:
+            try:
+                async with asyncio.timeout(5):
+                    await redis.aclose()
+            except Exception as exc:
+                logger.warning("quiz_dispatch_cleanup_failed", error_type=type(exc).__name__)
 
 
 async def retrieve_sources(config: QuizConfig, user: UserContext) -> list[dict[str, object]]:
