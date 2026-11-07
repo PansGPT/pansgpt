@@ -308,7 +308,7 @@ test("account change clears the previous practice state", async ({ page }) => {
 test("builder, generation, taking, review and deliberate sharing", async ({ page }) => {
   const state = await setup(page);
   await page.goto("/app/quiz");
-  await expect(page.getByRole("heading", { name: "Quizzes" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quiz", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "New quiz", exact: true }).click();
   await page.getByLabel("Topic", { exact: false }).fill("Pharmacokinetics");
   await page.getByRole("radio", { name: "5 questions", exact: true }).check();
@@ -612,7 +612,7 @@ for (const theme of ["light", "dark", "sepia"])
       fullPage: true,
     });
     await page.getByRole("button", { name: "Back to quizzes", exact: true }).click();
-    await expect(page.getByRole("heading", { name: "Quizzes", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Quiz", exact: true })).toBeVisible();
     expect(state.job.status).toBe("queued");
     await page.goto(`/app/quiz?job=${uid(2)}&theme=${theme}`);
     Object.assign(state.job, { status: "generating", generated_count: 3, can_start: true });
@@ -640,7 +640,7 @@ test("preparation cancellation stops the request and offers a way back", async (
   expect(state.job.status).toBe("cancelled");
   await expect(page.getByRole("button", { name: "Start quiz", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Back to quizzes", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Quizzes", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quiz", exact: true })).toBeVisible();
 });
 
 for (const timed of [false, true])
@@ -682,3 +682,39 @@ for (const [kind, label] of [
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
       .toBe(true);
   });
+
+test("mobile quiz view displays topbar with back button, title, and full-width new quiz action", async ({
+  page,
+}) => {
+  await setup(page, { history: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/app/quiz");
+
+  const topbar = page.locator(".quiz-mobile-topbar");
+  await expect(topbar).toBeVisible();
+  await expect(topbar.locator(".quiz-mobile-topbar-title")).toHaveText("Quiz");
+
+  const back = topbar.getByRole("button", { name: "Back to Home", exact: true });
+  await expect(back).toBeVisible();
+
+  // Plus icon is removed from header
+  await expect(topbar.locator(".quiz-mobile-icon-button")).toHaveCount(0);
+
+  // Bottom chat composer is hidden on quiz pages
+  await expect(page.locator(".shell-mobile-composer")).toHaveCount(0);
+
+  // Desktop heading is hidden on mobile
+  await expect(page.locator(".quiz-page-heading")).not.toBeVisible();
+
+  // Full-width New quiz button is visible at the top of content
+  const newQuiz = page.locator(".quiz-mobile-primary-action").getByRole("button", { name: "New quiz", exact: true });
+  await expect(newQuiz).toBeVisible();
+
+  const box = await newQuiz.boundingBox();
+  expect(box.width).toBeGreaterThanOrEqual(340); // Spans the full content width on mobile
+
+  await newQuiz.click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).not.toBeVisible();
+});

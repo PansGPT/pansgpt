@@ -2102,7 +2102,7 @@
   .app-shell[data-home="true"] .shell-mobile-brand .shell-brand span::after {
     content: none;
   }
-  .app-shell:is([data-home="true"], [data-learn="true"], [data-library="true"]) .shell-home-account {
+  .app-shell:is([data-home="true"], [data-learn="true"], [data-library="true"], [data-quiz="true"]) .shell-home-account {
     display: block;
   }
   .app-shell[data-home="true"] .shell-mobile-menu {
@@ -2162,6 +2162,19 @@
   }
   .app-shell[data-learn="true"] .shell-workspace {
     padding: 0 !important;
+  }
+  .app-shell[data-quiz="true"] .shell-topbar {
+    display: none !important;
+  }
+  .app-shell[data-quiz="true"] .shell-main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  .app-shell[data-quiz="true"] .shell-workspace {
+    padding: 0 !important;
+  }
+  .app-shell[data-quiz="true"] .shell-mobile-composer {
+    display: none !important;
   }
   .app-shell[data-home="true"] .dashboard-mobile-destinations {
     padding: 5px 0 10px;

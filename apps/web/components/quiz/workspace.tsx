@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, LoaderCircle, Plus } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronLeft, LoaderCircle, Plus } from "lucide-react";
+import { MobileProfileButton } from "@/components/shell/mobile-profile-button";
+import { usePreferences } from "@/components/shell/use-preferences";
+import type { UserProfile } from "@/lib/auth-context";
 import { Button } from "./button";
 import type {
   QuizAttempt,
@@ -36,13 +39,21 @@ export function QuizWorkspace(): React.ReactElement {
     <QuizWorkspaceContent
       key={`${profile?.id}:${profile?.university_id}:${params.get("attempt") ?? ""}:${params.get("job") ?? ""}:${params.get("result") ?? ""}`}
       token={session?.access_token}
+      profile={profile}
     />
   );
 }
-function QuizWorkspaceContent({ token }: { token: string | undefined }): React.ReactElement {
+function QuizWorkspaceContent({
+  token,
+  profile,
+}: {
+  token: string | undefined;
+  profile: UserProfile | null;
+}): React.ReactElement {
   const api = useMemo(() => quizApi(token), [token]);
   const router = useRouter();
   const params = useSearchParams();
+  const preferences = usePreferences(profile?.id ?? "", profile?.university_id ?? null);
   const attemptId = params.get("attempt"),
     resultId = params.get("result"),
     jobId = params.get("job");
@@ -303,212 +314,251 @@ function QuizWorkspaceContent({ token }: { token: string | undefined }): React.R
     );
   return (
     <section className="quiz-workspace">
-      <header className="quiz-page-heading">
-        <div>
-          <h1>Quizzes</h1>
-          <p>Practice with questions from your course materials.</p>
-        </div>
-        <Button
-          leadingIcon={<Plus size={17} />}
-          trailingIcon={null}
-          disabled={!courses.length}
-          onClick={() => openBuilder()}
+      <header className="quiz-mobile-topbar library-mobile-topbar">
+        <button
+          type="button"
+          className="quiz-mobile-home-button library-mobile-home-button shell-touch-feedback"
+          aria-label="Back to Home"
+          onClick={() => router.push("/app")}
         >
-          New quiz
-        </Button>
-      </header>
-      {error && (
-        <div className="quiz-error" role="alert">
-          <p>{error}</p>
-          <button
-            type="button"
-            className="quiz-text-button"
-            onClick={() => {
-              setRefresh((old) => old + 1);
-              if (attemptId || jobId || resultId) go();
-            }}
-          >
-            Try again
-          </button>
-        </div>
-      )}
-      {!history && !error && (
-        <p className="quiz-loading" role="status">
-          <LoaderCircle className="quiz-spin" size={18} /> Loading history…
-        </p>
-      )}
-      {history && (
-        <>
-          <div className="quiz-metrics">
-            {[
-              { label: "Quizzes completed", value: history.stats.completed },
-              {
-                label: "Average score",
-                value: history.stats.completed ? `${Math.round(history.stats.average)}%` : "—",
-              },
-              {
-                label: "Best score",
-                value: history.stats.completed ? `${Math.round(history.stats.best)}%` : "—",
-              },
-              {
-                label: "Time spent",
-                value: `${Math.round(history.stats.study_seconds / 60)} min`,
-              },
-            ].map((item) => (
-              <div key={item.label}>
-                <strong>{item.value}</strong>
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </div>
-          {(history.active_attempts.length > 0 || history.jobs.length > 0) && (
-            <div className="quiz-active">
-              <h2>In progress</h2>
-              {history.active_attempts.map((item) => (
-                <button
-                  type="button"
-                  className="quiz-active-row"
-                  key={item.id}
-                  onClick={() => go("attempt", item.id)}
-                >
-                  <span>
-                    <strong>{item.quiz.title}</strong>
-                    <small>
-                      {item.quiz.course_code} ·{" "}
-                      {item.status === "in_progress"
-                        ? "Answers saved"
-                        : "Submitted · finish grading"}
-                    </small>
-                  </span>
-                  <span>
-                    Resume <ArrowRight size={15} />
-                  </span>
-                </button>
-              ))}
-              {history.jobs.map((item) => (
-                <button
-                  type="button"
-                  className="quiz-active-row"
-                  key={item.id}
-                  onClick={() => go("job", item.id)}
-                >
-                  <span>
-                    <strong>
-                      {item.status === "completed" ? "Quiz ready" : item.current_step}
-                    </strong>
-                    <small>
-                      {item.generated_count}/{item.target_count} questions · {item.status}
-                    </small>
-                  </span>
-                  <span>
-                    {item.status === "completed" ? "Begin" : "View"} <ArrowRight size={15} />
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-          <header className="quiz-history-heading">
-            <div>
-              <h2>History</h2>
-            </div>
-            <label className="quiz-course-filter">
-              <span className="quiz-visually-hidden">Filter history by course</span>
-              <select
-                value={course}
-                onChange={(event) => {
-                  setCourse(event.target.value);
-                  setOffset(0);
+          <ChevronLeft size={20} aria-hidden="true" />
+        </button>
+        <h1 className="quiz-mobile-topbar-title library-mobile-topbar-title">Quiz</h1>
+        <div className="quiz-mobile-top-actions library-mobile-top-actions">
+          {profile && (
+            <div className="shell-home-account">
+              <MobileProfileButton
+                profile={profile}
+                credits={preferences.credits}
+                creditsTotal={preferences.creditsTotal}
+                onOpen={() => {
+                  window.dispatchEvent(
+                    new CustomEvent("pansgpt:open-settings", { detail: { section: "account" } })
+                  );
                 }}
-              >
-                <option value="">All courses</option>
-                {courses.map((item) => (
-                  <option key={item.code}>{item.code}</option>
-                ))}
-              </select>
-            </label>
-          </header>
-          {history.items.length === 0 ? (
-            <div className="quiz-empty">
-              <h3>{course ? "No completed quizzes for this course" : "No completed quizzes"}</h3>
-              <p>
-                {courses.length
-                  ? "Completed quizzes and scores will appear here."
-                  : "No course materials are available for your university and level."}
-              </p>
-              {!courses.length && (
-                <Link href="/app/library" className="quiz-text-button">
-                  Open library <ArrowRight size={16} />
-                </Link>
-              )}
+              />
             </div>
-          ) : (
-            <div className="quiz-history-table">
-              <div className="quiz-history-labels">
-                <span>Quiz</span>
-                <span>Type</span>
-                <span>Completed</span>
-                <span>Score</span>
-                <span />
-              </div>
-              {history.items.map((item) => (
-                <button
-                  type="button"
-                  key={item.id}
-                  className="quiz-history-row"
-                  onClick={() => go("result", item.id)}
-                >
-                  <span>
-                    <strong>{item.title}</strong>
-                    <small>
-                      {item.course_code}
-                      <span className="quiz-history-type-mobile">
-                        {" "}
-                        · {quizTypeLabels[item.question_type]}
-                      </span>
-                    </small>
-                  </span>
-                  <span
-                    className="quiz-history-type"
-                    title={quizFormats.find((format) => format.id === item.question_type)?.title}
-                  >
-                    {quizTypeLabels[item.question_type]}
-                  </span>
-                  <time dateTime={item.completed_at}>
-                    {new Date(item.completed_at).toLocaleDateString(undefined, {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </time>
-                  <span className="quiz-score-badge" data-strong={item.percentage >= 70}>
-                    {Math.round(item.percentage)}%
-                  </span>
-                  <ArrowUpRight size={17} />
-                </button>
+          )}
+        </div>
+      </header>
+      <div className="quiz-workspace-content">
+        <div className="quiz-mobile-primary-action">
+          <Button
+            leadingIcon={<Plus size={17} />}
+            trailingIcon={null}
+            disabled={!courses.length}
+            onClick={() => openBuilder()}
+          >
+            New quiz
+          </Button>
+        </div>
+        <header className="quiz-page-heading">
+          <div>
+            <h1>Quiz</h1>
+            <p>Practice with questions from your course materials.</p>
+          </div>
+          <Button
+            leadingIcon={<Plus size={17} />}
+            trailingIcon={null}
+            disabled={!courses.length}
+            onClick={() => openBuilder()}
+          >
+            New quiz
+          </Button>
+        </header>
+        {error && (
+          <div className="quiz-error" role="alert">
+            <p>{error}</p>
+            <button
+              type="button"
+              className="quiz-text-button"
+              onClick={() => {
+                setRefresh((old) => old + 1);
+                if (attemptId || jobId || resultId) go();
+              }}
+            >
+              Try again
+            </button>
+          </div>
+        )}
+        {!history && !error && (
+          <p className="quiz-loading" role="status">
+            <LoaderCircle className="quiz-spin" size={18} /> Loading history…
+          </p>
+        )}
+        {history && (
+          <>
+            <div className="quiz-metrics">
+              {[
+                { label: "Quizzes completed", value: history.stats.completed },
+                {
+                  label: "Average score",
+                  value: history.stats.completed ? `${Math.round(history.stats.average)}%` : "—",
+                },
+                {
+                  label: "Best score",
+                  value: history.stats.completed ? `${Math.round(history.stats.best)}%` : "—",
+                },
+                {
+                  label: "Time spent",
+                  value: `${Math.round(history.stats.study_seconds / 60)} min`,
+                },
+              ].map((item) => (
+                <div key={item.label}>
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
               ))}
             </div>
-          )}
-          {(offset > 0 || history.next_offset !== null) && (
-            <div className="quiz-pagination">
-              <Button
-                variant="secondary"
-                disabled={offset === 0}
-                onClick={() => setOffset(Math.max(0, offset - 20))}
-              >
-                Previous
-              </Button>
-              <span className="quiz-muted">Page {offset / 20 + 1}</span>
-              <Button
-                variant="secondary"
-                disabled={history.next_offset === null}
-                onClick={() => setOffset(history.next_offset ?? 0)}
-              >
-                Next
-              </Button>
-            </div>
-          )}
-        </>
-      )}
+            {(history.active_attempts.length > 0 || history.jobs.length > 0) && (
+              <div className="quiz-active">
+                <h2>In progress</h2>
+                {history.active_attempts.map((item) => (
+                  <button
+                    type="button"
+                    className="quiz-active-row"
+                    key={item.id}
+                    onClick={() => go("attempt", item.id)}
+                  >
+                    <span>
+                      <strong>{item.quiz.title}</strong>
+                      <small>
+                        {item.quiz.course_code} ·{" "}
+                        {item.status === "in_progress"
+                          ? "Answers saved"
+                          : "Submitted · finish grading"}
+                      </small>
+                    </span>
+                    <span>
+                      Resume <ArrowRight size={15} />
+                    </span>
+                  </button>
+                ))}
+                {history.jobs.map((item) => (
+                  <button
+                    type="button"
+                    className="quiz-active-row"
+                    key={item.id}
+                    onClick={() => go("job", item.id)}
+                  >
+                    <span>
+                      <strong>
+                        {item.status === "completed" ? "Quiz ready" : item.current_step}
+                      </strong>
+                      <small>
+                        {item.generated_count}/{item.target_count} questions · {item.status}
+                      </small>
+                    </span>
+                    <span>
+                      {item.status === "completed" ? "Begin" : "View"} <ArrowRight size={15} />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <header className="quiz-history-heading">
+              <div>
+                <h2>History</h2>
+              </div>
+              <label className="quiz-course-filter">
+                <span className="quiz-visually-hidden">Filter history by course</span>
+                <select
+                  value={course}
+                  onChange={(event) => {
+                    setCourse(event.target.value);
+                    setOffset(0);
+                  }}
+                >
+                  <option value="">All courses</option>
+                  {courses.map((item) => (
+                    <option key={item.code}>{item.code}</option>
+                  ))}
+                </select>
+              </label>
+            </header>
+            {history.items.length === 0 ? (
+              <div className="quiz-empty">
+                <h3>{course ? "No completed quizzes for this course" : "No completed quizzes"}</h3>
+                <p>
+                  {courses.length
+                    ? "Completed quizzes and scores will appear here."
+                    : "No course materials are available for your university and level."}
+                </p>
+                {!courses.length && (
+                  <Link href="/app/library" className="quiz-text-button">
+                    Open library <ArrowRight size={16} />
+                  </Link>
+                )}
+              </div>
+            ) : (
+              <div className="quiz-history-table">
+                <div className="quiz-history-labels">
+                  <span>Quiz</span>
+                  <span>Type</span>
+                  <span>Completed</span>
+                  <span>Score</span>
+                  <span />
+                </div>
+                {history.items.map((item) => (
+                  <button
+                    type="button"
+                    key={item.id}
+                    className="quiz-history-row"
+                    onClick={() => go("result", item.id)}
+                  >
+                    <span>
+                      <strong>{item.title}</strong>
+                      <small>
+                        {item.course_code}
+                        <span className="quiz-history-type-mobile">
+                          {" "}
+                          · {quizTypeLabels[item.question_type]}
+                        </span>
+                      </small>
+                    </span>
+                    <span
+                      className="quiz-history-type"
+                      title={quizFormats.find((format) => format.id === item.question_type)?.title}
+                    >
+                      {quizTypeLabels[item.question_type]}
+                    </span>
+                    <time dateTime={item.completed_at}>
+                      {new Date(item.completed_at).toLocaleDateString(undefined, {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </time>
+                    <span className="quiz-score-badge" data-strong={item.percentage >= 70}>
+                      {Math.round(item.percentage)}%
+                    </span>
+                    <ArrowUpRight size={17} />
+                  </button>
+                ))}
+              </div>
+            )}
+            {(offset > 0 || history.next_offset !== null) && (
+              <div className="quiz-pagination">
+                <Button
+                  variant="secondary"
+                  disabled={offset === 0}
+                  onClick={() => setOffset(Math.max(0, offset - 20))}
+                >
+                  Previous
+                </Button>
+                <span className="quiz-muted">Page {offset / 20 + 1}</span>
+                <Button
+                  variant="secondary"
+                  disabled={history.next_offset === null}
+                  onClick={() => setOffset(history.next_offset ?? 0)}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
       {builderView}
     </section>
   );

@@ -79,6 +79,7 @@ function Workspace({
   if (sidebar.pathname !== pathname) setSidebar({ ...sidebar, pathname, libraryExpanded: false });
   const inLibrary = pathname === "/app/library" || pathname.startsWith("/app/library/");
   const inLearn = pathname === "/app/learn" || pathname.startsWith("/app/learn/");
+  const inQuiz = pathname === "/app/quiz" || pathname.startsWith("/app/quiz/");
   // Library keeps its course navigation visible and starts with a compact app rail.
   // A temporary expansion here must not overwrite the user's choice on other pages.
   const collapsed = inLibrary
@@ -139,7 +140,9 @@ function Workspace({
             ? ".shell-home-account .shell-account-menu"
             : inLibrary
               ? ".library-mobile-home-button"
-              : ".shell-home-account .shell-account-menu"
+              : inQuiz
+                ? ".quiz-mobile-home-button"
+                : ".shell-home-account .shell-account-menu"
         )
         ?.focus();
   }
@@ -365,6 +368,7 @@ function Workspace({
         data-home={pathname === "/app"}
         data-library={inLibrary}
         data-learn={inLearn}
+        data-quiz={inQuiz}
         data-preferred-collapsed={sidebar.preferredCollapsed}
       >
         <a href="#workspace-content" className="shell-skip">
@@ -389,7 +393,7 @@ function Workspace({
           </button>
         )}
         <div className="shell-workspace">
-          {!inLearn && (
+          {!inLearn && !inQuiz && (
             <header className="shell-topbar">
               <div className="shell-mobile-brand">
                 <Brand />
@@ -428,7 +432,7 @@ function Workspace({
               <MobileHomeChat />
             </Suspense>
           )}
-          {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && !inLearn && (
+          {pathname !== "/app/chat" && pathname !== "/app" && !inLibrary && !inLearn && !inQuiz && (
             <form
               className="shell-mobile-composer p-study-composer"
               onSubmit={(event) => {

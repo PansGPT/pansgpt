@@ -14,11 +14,22 @@ export function useSearchParams() {
   const query = useSyncExternalStore(subscribe, () => location.search);
   return useMemo(() => new URLSearchParams(query), [query]);
 }
+export function usePreferences() {
+  return {
+    theme: "light",
+    setTheme: () => {},
+    ready: true,
+    credits: 100,
+    creditsTotal: 100,
+    university: "Sample University",
+    status: "saved",
+  };
+}
 export function useAuth() {
   const owner = useSyncExternalStore(subscribe, () => window.__quizOwner || "synthetic-owner");
   return {
     session: { access_token: owner },
-    profile: { id: owner, university_id: "synthetic-university" },
+    profile: { id: owner, university_id: "synthetic-university", first_name: "Synthetic" },
   };
 }
 export default function Link({ href, children, ...props }) {

@@ -10,6 +10,7 @@ export default defineConfig({
     dedupe: ["react", "react-dom"],
     alias: [
       { find: "@/env", replacement: fixture },
+      { find: "@/components/shell/use-preferences", replacement: fixture },
       { find: "@/lib/auth-context", replacement: fixture },
       { find: "next/navigation", replacement: fixture },
       { find: "next/link", replacement: fixture },
