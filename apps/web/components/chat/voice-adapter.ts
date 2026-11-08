@@ -1,4 +1,5 @@
 import type { DictationAdapter } from "@assistant-ui/react";
+import { voiceStore } from "./voice-store";
 
 /** Record locally; all transcription goes through the authenticated FastAPI endpoint. */
 export function createVoiceAdapter(
@@ -8,7 +9,10 @@ export function createVoiceAdapter(
   let cancelCurrent: (() => void) | undefined;
   return {
     disableInputDuringDictation: true,
-    dispose: () => cancelCurrent?.(),
+    dispose: () => {
+      voiceStore.reset();
+      cancelCurrent?.();
+    },
     listen() {
       cancelCurrent?.();
       const controller = new AbortController();
@@ -31,6 +35,7 @@ export function createVoiceAdapter(
         session.status = { type: "ended", reason };
         if (reason === "error") controller.abort();
         cleanup();
+        voiceStore.reset();
         if (transcript) speeches.forEach((callback) => callback({ transcript, isFinal: true }));
         ends.forEach((callback) => callback({ transcript, isFinal: true }));
         resolveStopped();
@@ -38,8 +43,12 @@ export function createVoiceAdapter(
       const session: DictationAdapter.Session = {
         status: { type: "starting" },
         stop: async () => {
-          if (recorder?.state === "recording") recorder.stop();
-          else if (!recorder) session.cancel();
+          if (recorder?.state === "recording") {
+            voiceStore.startTranscribing();
+            recorder.stop();
+          } else if (!recorder) {
+            session.cancel();
+          }
           await stopped;
         },
         cancel: () => {
@@ -61,6 +70,10 @@ export function createVoiceAdapter(
         },
       };
       cancelCurrent = session.cancel;
+      voiceStore.setHandlers(
+        () => void session.stop(),
+        () => session.cancel()
+      );
       void (async () => {
         try {
           if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined")
@@ -70,6 +83,7 @@ export function createVoiceAdapter(
           stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           if (controller.signal.aborted) {
             cleanup();
+            voiceStore.reset();
             return;
           }
           const mimeType = ["audio/webm;codecs=opus", "audio/mp4", "audio/ogg;codecs=opus"].find(
@@ -91,7 +105,11 @@ export function createVoiceAdapter(
           });
           recorder.addEventListener("stop", () => {
             cleanup();
-            if (controller.signal.aborted) return;
+            if (controller.signal.aborted) {
+              voiceStore.reset();
+              return;
+            }
+            voiceStore.startTranscribing();
             const audio = new Blob(chunks, { type: recorder?.mimeType || "audio/webm" });
             void transcribe(audio, controller.signal)
               .then((text) => {
@@ -108,12 +126,17 @@ export function createVoiceAdapter(
           });
           recorder.start(1000);
           session.status = { type: "running" };
+          voiceStore.startListening(stream);
           starts.forEach((callback) => callback());
           timer = setTimeout(() => {
-            if (recorder?.state === "recording") recorder.stop();
+            if (recorder?.state === "recording") {
+              voiceStore.startTranscribing();
+              recorder.stop();
+            }
           }, 60000);
         } catch (error: unknown) {
           if (!controller.signal.aborted) {
+            voiceStore.reset();
             reportError(error instanceof Error ? error.message : "Microphone access was denied.");
             finish("error");
           }

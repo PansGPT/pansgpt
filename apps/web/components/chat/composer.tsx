@@ -29,6 +29,7 @@ import {
   Info,
   Image as ImageIcon,
   Library as LibraryIcon,
+  Loader2,
   Mic,
   Pencil,
   Plus,
@@ -42,6 +43,8 @@ import { ChatAttachment } from "./attachment";
 import { UserMessageEditing } from "./message";
 import { chatActionTools, moreChatActions, primaryChatActions } from "./tools";
 import { ChatLibraryPicker } from "./library-picker";
+import { useVoiceState } from "./voice-store";
+import { AudioWaveform } from "./audio-waveform";
 
 type ChatComposerSlot = {
   target: HTMLDivElement | null;
@@ -108,6 +111,8 @@ export function ChatComposer({
     (state) => state.thread.isRunning || state.composer.submission !== undefined
   );
   const dictating = useAuiState((state) => state.composer.dictation != null);
+  const voice = useVoiceState();
+  const isVoiceActive = voice.phase !== "idle" || dictating;
   const empty = useAuiState((state) => !state.composer.text.trim());
   const selectedAction = actionMode
     ? chatActionTools.find((action) => action.actionMode === actionMode)
@@ -499,7 +504,8 @@ export function ChatComposer({
         </ComposerPrimitive.Attachments>
       </div>
       <ComposerPrimitive.Input
-        className="p-study-composer-input"
+        className={`p-study-composer-input ${isVoiceActive ? "is-voice-hidden" : ""}`}
+        style={isVoiceActive ? { display: "none" } : undefined}
         aria-label={editing ? "Edit question" : "Study question"}
         placeholder={selectedAction?.placeholder || "Message PansGPT…"}
         rows={1}
@@ -507,7 +513,10 @@ export function ChatComposer({
         autoFocus={editing}
         addAttachmentOnPaste={!busy}
       />
-      <div className="p-study-composer-toolbar">
+      <div
+        className={`p-study-composer-toolbar ${isVoiceActive ? "is-voice-hidden" : ""}`}
+        style={isVoiceActive ? { display: "none" } : undefined}
+      >
         {editing ? (
           <ComposerPrimitive.AddAttachment
             type="button"
@@ -571,10 +580,77 @@ export function ChatComposer({
           )}
         </div>
       </div>
-      {dictating && (
-        <span className="p-study-composer-status" role="status">
-          Recording / transcribing…
-        </span>
+      {/* 4-State Voice Dock: Active during Listening (State 2) and Transcribing (State 3) */}
+      {isVoiceActive && (
+        <div
+          className={`p-study-voice-dock ${
+            voice.phase === "transcribing" ? "is-transcribing" : ""
+          }`}
+          role="region"
+          aria-label={voice.phase === "transcribing" ? "Transcribing voice" : "Voice recording"}
+        >
+          {/* Left: Cancel Button (✕) to abort and discard */}
+          <button
+            type="button"
+            className="p-study-voice-cancel-btn"
+            onClick={voice.cancel}
+            aria-label={
+              voice.phase === "transcribing" ? "Cancel transcription" : "Cancel recording"
+            }
+            title="Cancel"
+          >
+            <X size={16} aria-hidden="true" />
+          </button>
+
+          {/* Center: Live Waveform (State 2) or "Transcribing" (State 3) */}
+          {voice.phase === "transcribing" ? (
+            <div className="p-study-voice-center is-transcribing">
+              <span className="p-study-voice-transcribing-text">Transcribing</span>
+            </div>
+          ) : (
+            <div className="p-study-voice-center">
+              <AudioWaveform stream={voice.stream} barCount={32} />
+            </div>
+          )}
+
+          {/* Right Action Group */}
+          <div className="p-study-voice-actions">
+            {voice.phase === "transcribing" ? (
+              <>
+                <div className="p-study-voice-spinner" aria-hidden="true">
+                  <Loader2 size={18} className="p-spin" />
+                </div>
+                <button
+                  type="button"
+                  className="p-study-composer-control p-study-composer-submit p-study-voice-send-btn is-disabled"
+                  disabled
+                  aria-label="Transcribing voice"
+                >
+                  <ArrowUp size={19} aria-hidden="true" />
+                </button>
+              </>
+            ) : (
+              <>
+                <ComposerPrimitive.StopDictation
+                  className="p-study-voice-stop-btn"
+                  aria-label="Finish recording"
+                  title="Finish recording and transcribe"
+                >
+                  <span className="p-study-voice-stop-inner" aria-hidden="true" />
+                </ComposerPrimitive.StopDictation>
+                <button
+                  type="button"
+                  className="p-study-composer-control p-study-composer-submit p-study-voice-send-btn"
+                  onClick={voice.stop}
+                  aria-label="Finish and transcribe"
+                  title="Finish and transcribe"
+                >
+                  <ArrowUp size={19} aria-hidden="true" />
+                </button>
+              </>
+            )}
+          </div>
+        </div>
       )}
       {!editing && actionMenu}
       {attachmentError && (
