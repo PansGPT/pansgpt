@@ -569,6 +569,12 @@
   border-top: 0;
   padding-top: 0;
 }
+.settings-security-section .settings-section-content {
+  border-top: 0;
+}
+.settings-security-card .settings-row:last-child {
+  border-bottom: 0;
+}
 .settings-account-edit-row {
   cursor: text;
 }
@@ -1860,4 +1866,178 @@
 }
 .settings-edit-check {
   color: var(--fg-brand-primary-600, var(--bg-brand-solid));
+}
+/* Manage devices desktop table */
+.settings-devices-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 4px;
+}
+.settings-devices-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.settings-devices-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary-900);
+}
+.settings-devices-logout-all-btn {
+  font-size: 13px;
+  height: 32px;
+  padding: 0 14px;
+}
+.settings-devices-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+.settings-devices-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.settings-devices-table th {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary-600);
+  border: 0;
+  letter-spacing: 0.01em;
+}
+.settings-devices-table td {
+  padding: 13px 14px;
+  font-size: 13px;
+  border: 0;
+  vertical-align: middle;
+}
+.settings-devices-row {
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+}
+.settings-devices-row:hover {
+  background: var(--bg-secondary);
+}
+.settings-devices-name-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-devices-name {
+  font-weight: 500;
+  color: var(--text-primary-900);
+  white-space: nowrap;
+}
+.settings-devices-current-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  background: color-mix(in oklch, var(--bg-brand-solid) 16%, transparent);
+  color: var(--fg-brand-primary-600, var(--bg-brand-solid));
+}
+.settings-devices-cell-muted {
+  color: var(--text-tertiary-600);
+  white-space: nowrap;
+}
+.settings-devices-last-active-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.settings-devices-row-action {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+.settings-devices-row:hover .settings-devices-row-action {
+  opacity: 1;
+}
+.settings-devices-row-action:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+
+/* Manage devices mobile subpage */
+.settings-mobile-device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.settings-mobile-device-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-secondary);
+}
+.settings-mobile-device-icon-wrap {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-secondary-700);
+  flex-shrink: 0;
+}
+.settings-mobile-device-info {
+  flex: 1;
+  min-width: 0;
+}
+.settings-mobile-device-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-mobile-device-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-mobile-device-meta {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--text-tertiary-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.settings-mobile-device-logout-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-error-primary-600);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.settings-subpage-danger-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-error-primary-600);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 6px;
 }
