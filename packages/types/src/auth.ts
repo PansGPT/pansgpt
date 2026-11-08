@@ -13,3 +13,10 @@ export interface AuthProfileResponse {
   client_type: string;
   dev_bypass: boolean;
 }
+
+/** FastAPI PATCH /api/v1/auth/profile payload */
+export interface UpdateProfileRequest {
+  first_name?: string;
+  last_name?: string | null;
+  current_level?: string;
+}

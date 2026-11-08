@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { AuthProfileResponse } from "@pansgpt/types";
+import type { AuthProfileResponse, UpdateProfileRequest } from "@pansgpt/types";
 
 export const PROFILE_REQUEST_TIMEOUT_MS = 15_000;
 export const authProfileSchema: z.ZodType<AuthProfileResponse> = z.object({
@@ -74,19 +74,20 @@ export function profileFailureMessage(error: ProfileFailure): {
         description: "We couldn't load your profile right now. Please retry shortly.",
       };
     case "session_expired":
-      return {
-        title: "We couldn't verify your sign-in session",
-        description: "Please sign out and sign in again to continue.",
-      };
     case "session_unavailable":
       return {
-        title: "We couldn't restore your sign-in session",
-        description: "Reload sign-in and try again.",
+        title: "Your session has expired",
+        description: "Sign in again to continue with your materials.",
       };
     case "forbidden":
       return {
-        title: "Your account can't access this workspace",
-        description: "Sign out to use another account, or contact support if this seems incorrect.",
+        title: "Your account does not have access",
+        description: "Check your sign-in details or request access from your school admin.",
+      };
+    case "invalid_response":
+      return {
+        title: "We couldn't verify your profile",
+        description: "Please retry shortly or sign in again if the issue persists.",
       };
     default:
       return {
@@ -140,6 +141,44 @@ export async function requestProfile(
       },
     };
   }
+}
+
+export async function updateProfile(
+  apiUrl: string,
+  identity: ProfileIdentity,
+  payload: UpdateProfileRequest,
+  signal?: AbortSignal
+): Promise<AuthProfileResponse> {
+  const deadline = AbortSignal.timeout(PROFILE_REQUEST_TIMEOUT_MS);
+  const response = await fetch(`${apiUrl}/api/v1/auth/profile`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${identity.accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    cache: "no-store",
+    signal: signal ? AbortSignal.any([signal, deadline]) : deadline,
+  });
+
+  if (!response.ok) {
+    const errorBody: unknown = await response.json().catch(() => null);
+    const detail =
+      errorBody &&
+      typeof errorBody === "object" &&
+      "detail" in errorBody &&
+      typeof errorBody.detail === "string"
+        ? errorBody.detail
+        : null;
+    throw new Error(detail || `Failed to update profile (${response.status})`);
+  }
+
+  const data: unknown = await response.json();
+  const parsed = authProfileSchema.safeParse(data);
+  if (!parsed.success || parsed.data.id !== identity.userId) {
+    throw new Error("Invalid response format when updating profile.");
+  }
+  return parsed.data;
 }
 
 /** Single-flight verification with cancellation and latest-request ownership. */

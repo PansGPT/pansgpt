@@ -67,6 +67,14 @@ class AuthConnection:
         return AUTH_PROFILES.get(str(args[0]))
 
     async def fetchval(self, sql: str, *args: Any) -> int | str:
+        if "UPDATE public.users" in sql:
+            uid = str(args[-1])
+            row = AUTH_PROFILES.get(uid)
+            if row:
+                for arg in args[:-2]:
+                    if isinstance(arg, str) and arg in {"100", "200", "300", "400", "500", "600"}:
+                        row["current_level"] = arg
+            return uid
         return "University of Jos" if "SELECT name" in sql else 1
 
     async def execute(self, sql: str, *args: Any) -> str:

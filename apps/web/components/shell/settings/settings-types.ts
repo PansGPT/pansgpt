@@ -14,6 +14,8 @@ export type SettingsSectionId =
   | "about";
 
 export interface SettingsDraft {
+  firstName: string;
+  lastName: string;
   fullName: string;
   academicLevel: string;
   interfaceFont: string;

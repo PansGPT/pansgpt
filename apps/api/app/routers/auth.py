@@ -6,6 +6,7 @@
 import time
 import uuid
 from datetime import UTC, datetime
+from typing import Any
 
 import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -55,6 +56,25 @@ class OnboardingRequest(StrictRequest):
     current_level: str = Field(description="Academic study level (100 - 600)")
     terms_accepted: bool = Field(
         description="Explicit agreement to Terms of Service & Privacy Policy"
+    )
+
+
+class UpdateProfileRequest(StrictRequest):
+    first_name: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=100,
+        description="Student first name",
+    )
+    last_name: str | None = Field(
+        default=None,
+        max_length=100,
+        description="Student last name",
+    )
+    current_level: str | None = Field(
+        default=None,
+        pattern="^(100|200|300|400|500|600)$",
+        description="Academic study level (100 - 600)",
     )
 
 
@@ -142,6 +162,111 @@ async def get_my_profile(
         current_level=current_user.current_level,
         terms_accepted_at=current_user.terms_accepted_at,
         is_onboarded=current_user.is_onboarded,
+        client_type=current_user.client_type,
+        dev_bypass=current_user.dev_bypass,
+    )
+
+
+@router.patch(
+    "/profile",
+    response_model=UserProfileResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Update user name or academic level",
+)
+@router.patch(
+    "/me",
+    response_model=UserProfileResponse,
+    status_code=status.HTTP_200_OK,
+    include_in_schema=False,
+)
+@limiter.limit("20/minute")
+async def update_profile(
+    request: Request,
+    payload: UpdateProfileRequest,
+    current_user: UserContext = Depends(get_current_user),
+) -> UserProfileResponse:
+    if payload.first_name is None and payload.last_name is None and payload.current_level is None:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail="At least one field (first_name, last_name, or current_level) must be provided.",
+        )
+
+    set_clauses: list[str] = []
+    params: list[Any] = []
+    idx = 1
+
+    new_first_name = current_user.first_name
+    new_last_name = current_user.last_name
+    new_level = current_user.current_level
+
+    if payload.first_name is not None:
+        cleaned_first = payload.first_name.strip()
+        if not cleaned_first:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+                detail="first_name cannot be empty.",
+            )
+        set_clauses.append(f"first_name = ${idx}")
+        params.append(cleaned_first)
+        new_first_name = cleaned_first
+        idx += 1
+
+    if payload.last_name is not None:
+        cleaned_last = payload.last_name.strip() if payload.last_name else None
+        set_clauses.append(f"last_name = ${idx}")
+        params.append(cleaned_last)
+        new_last_name = cleaned_last
+        idx += 1
+
+    if payload.current_level is not None:
+        set_clauses.append(f"current_level = ${idx}::university_level")
+        params.append(payload.current_level)
+        new_level = payload.current_level
+        idx += 1
+
+    set_clauses.append(f"updated_at = ${idx}")
+    params.append(datetime.now(UTC))
+    idx += 1
+
+    params.append(current_user.id)
+    query = f"UPDATE public.users SET {', '.join(set_clauses)} WHERE id = ${idx} RETURNING id;"
+
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(status_code=503, detail="Profile storage is unavailable.")
+        updated = await conn.fetchval(query, *params)
+        if not updated:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User record not found to update.",
+            )
+
+    profile_data = {
+        "roles": current_user.roles,
+        "role": current_user.role,
+        "university_id": str(current_user.university_id) if current_user.university_id else None,
+        "first_name": new_first_name,
+        "last_name": new_last_name,
+        "current_level": new_level,
+        "terms_accepted_at": current_user.terms_accepted_at,
+    }
+    await set_cached_user_profile(str(current_user.id), profile_data)
+
+    is_onboarded = bool(
+        new_first_name and current_user.university_id and current_user.terms_accepted_at
+    )
+
+    return UserProfileResponse(
+        id=str(current_user.id),
+        email=current_user.email,
+        role=current_user.role,
+        roles=current_user.roles,
+        university_id=str(current_user.university_id) if current_user.university_id else None,
+        first_name=new_first_name,
+        last_name=new_last_name,
+        current_level=new_level,
+        terms_accepted_at=current_user.terms_accepted_at,
+        is_onboarded=is_onboarded,
         client_type=current_user.client_type,
         dev_bypass=current_user.dev_bypass,
     )

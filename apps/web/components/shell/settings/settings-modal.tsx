@@ -36,8 +36,12 @@ function subscribeViewport(notify: () => void): () => void {
 }
 const mobileViewport = (): boolean => window.matchMedia("(max-width: 860px)").matches;
 function initialDraft(profile: SettingsModalProps["profile"]): SettingsDraft {
+  const firstName = profile.first_name ?? "";
+  const lastName = profile.last_name ?? "";
   return {
-    fullName: [profile.first_name, profile.last_name].filter(Boolean).join(" "),
+    firstName,
+    lastName,
+    fullName: [firstName, lastName].filter(Boolean).join(" "),
     academicLevel: profile.current_level ?? "",
     interfaceFont: "default",
     responseFont: "sans",

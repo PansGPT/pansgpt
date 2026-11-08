@@ -7,10 +7,11 @@ import { desktopAuth } from "./desktop-auth";
 import { clearThumbnailCaches } from "./document-thumbnail-cache";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
-import type { AuthProfileResponse } from "@pansgpt/types";
+import type { AuthProfileResponse, UpdateProfileRequest } from "@pansgpt/types";
 import {
   createProfileVerifier,
   requestProfile,
+  updateProfile as updateProfileApi,
   visibleVerifiedProfile,
   type ProfileFailure,
   type ProfileSnapshot,
@@ -26,6 +27,7 @@ interface AuthContextType {
   loading: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<UserProfile | null>;
+  updateProfile: (payload: UpdateProfileRequest) => Promise<UserProfile>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,7 +47,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       (next) => {
         setSnapshot(next);
         if (next.status === "ready") setLastVerified(next.profile);
-        else if (next.status === "error") setLastVerified(null);
       }
     )
   );
@@ -71,6 +72,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!active?.access_token) return null;
     return verifier.verify({ accessToken: active.access_token, userId: active.user.id }, true);
   }, [verifier]);
+
+  const handleUpdateProfile = useCallback(
+    async (payload: UpdateProfileRequest): Promise<UserProfile> => {
+      const active = currentSession.current;
+      if (!active?.access_token || !active.user?.id) {
+        throw new Error("No active session found to update profile.");
+      }
+      const updated = await updateProfileApi(
+        env.NEXT_PUBLIC_API_URL,
+        { accessToken: active.access_token, userId: active.user.id },
+        payload
+      );
+      setLastVerified(updated);
+      setSnapshot({
+        userId: active.user.id,
+        accessToken: active.access_token,
+        status: "ready",
+        profile: updated,
+      });
+      return updated;
+    },
+    []
+  );
 
   const accessToken = session?.access_token;
   const userId = session?.user.id;
@@ -98,75 +122,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let mounted = true;
     let authEventReceived = false;
     let timedOut = false;
-    const timer = setTimeout(() => {
-      if (!mounted || authEventReceived) return;
-      timedOut = true;
-      setSessionError({ code: "session_unavailable", retryable: true });
-      setBootstrapping(false);
-    }, 15_000);
 
-    async function initSession() {
-      try {
-        const nativeSession = await desktopAuth()?.getSession();
-        if (!mounted || timedOut || authEventReceived) return;
-        if (nativeSession) await supabase.auth.setSession(nativeSession);
-        const {
-          data: { session: currentSession },
-          error,
-        } = await supabase.auth.getSession();
-        if (error) throw error;
-        if (!mounted || timedOut || authEventReceived) return;
-        applySession(currentSession);
-      } catch {
-        if (mounted && !timedOut && !authEventReceived)
-          setSessionError({ code: "session_unavailable", retryable: true });
-      } finally {
-        if (mounted && !authEventReceived) {
-          clearTimeout(timer);
-          setBootstrapping(false);
-        }
+    // Fast-path: check local storage cache before waiting for auth state change
+    const timeout = setTimeout(() => {
+      if (!authEventReceived && mounted) {
+        timedOut = true;
+        setBootstrapping(false);
       }
-    }
-
-    void initSession();
-    const stopNative = desktopAuth()?.onOAuthSuccess((tokens) => {
-      void supabase.auth.setSession(tokens);
-    });
-    const refreshNative = setInterval(() => {
-      void desktopAuth()
-        ?.getSession()
-        .then((tokens) => {
-          if (tokens) void supabase.auth.setSession(tokens);
-        })
-        .catch(() => {
-          void supabase.auth.signOut();
-        });
-    }, 45_000);
+    }, 2000);
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, newSession) => {
-      // Explicit bootstrap reads the initial session (after native storage). An
-      // early INITIAL_SESSION=null must not cancel a pending native restoration.
-      if (!mounted || event === "INITIAL_SESSION") return;
+    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      if (!mounted) return;
       authEventReceived = true;
-      clearTimeout(timer);
-      applySession(newSession);
-      setBootstrapping(false);
+      clearTimeout(timeout);
+      applySession(nextSession);
+      if (bootstrapping && !timedOut) {
+        setBootstrapping(false);
+      }
     });
 
     return () => {
-      stopNative?.();
-      clearInterval(refreshNative);
-      clearTimeout(timer);
       mounted = false;
-      verifier.cancel();
+      clearTimeout(timeout);
       subscription.unsubscribe();
     };
-  }, [supabase, applySession, verifier]);
+  }, [applySession, bootstrapping, supabase]);
 
   useEffect(() => {
     if (loading) return;
+    const active = session?.user.id;
+    if (!active) {
+      void clearThumbnailCaches();
+      return;
+    }
     void clearThumbnailCaches(
       profile?.id === session?.user.id && profile?.university_id
         ? { userId: profile.id, universityId: profile.university_id }
@@ -195,6 +185,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loading,
         signOut,
         refreshProfile,
+        updateProfile: handleUpdateProfile,
       }}
     >
       {children}
