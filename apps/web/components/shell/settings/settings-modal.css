@@ -577,34 +577,25 @@
 .settings-name-inputs-desktop {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 .settings-name-inputs-desktop .settings-account-value-input {
   width: 120px;
-}
-.settings-account-row-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid var(--border-secondary);
-  background: transparent;
-  padding: 15px 0;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-  text-align: left;
-}
-.settings-account-card .settings-account-row-btn:last-child {
-  border-bottom: 0;
-}
-.settings-account-value-with-chevron {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-tertiary-600);
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   font-size: 13px;
+  text-align: left;
+  outline: none;
+}
+.settings-name-inputs-desktop .settings-account-value-input:focus {
+  border-color: var(--border-primary, #3b82f6);
+}
+.settings-mobile-row-trigger {
+  display: none !important;
 }
 .settings-save-error {
   color: var(--text-error-primary-600);
@@ -1431,6 +1422,35 @@
   .settings-account-card .settings-row {
     min-height: 58px;
     padding: 17px 0;
+  }
+  .settings-name-inputs-desktop {
+    display: none !important;
+  }
+  .settings-mobile-row-trigger {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    text-align: right;
+  }
+  .settings-mobile-row-trigger .settings-account-value {
+    color: var(--text-tertiary-600);
+    font-size: 13px;
+  }
+  .settings-account-card .settings-row:has(.settings-mobile-row-trigger) {
+    cursor: pointer;
+    position: relative;
+  }
+  .settings-mobile-row-trigger::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
   .settings-input {
     width: 180px;

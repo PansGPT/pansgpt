@@ -238,12 +238,8 @@ export function ProfileSection({
       <SettingsSection title="Your profile" hideTitleOnMobile className="settings-account-section">
         <div className="settings-account-card">
           {/* Row 1: Name */}
-          <div
-            className="settings-row settings-account-edit-row settings-copy-desktop"
-            data-settings-label="Name"
-          >
-            <span className="settings-row-title">Name</span>
-            <span className="settings-row-right settings-name-inputs-desktop">
+          <SettingsRow title="Name">
+            <div className="settings-name-inputs-desktop settings-copy-desktop">
               <input
                 className="settings-account-value-input"
                 aria-label="First name"
@@ -274,24 +270,20 @@ export function ProfileSection({
                 autoComplete="family-name"
                 maxLength={100}
               />
-            </span>
-          </div>
-          <button
-            type="button"
-            className="settings-row settings-account-row-btn settings-copy-mobile"
-            onClick={() => {
-              setSubpageFirst(draft.firstName);
-              setSubpageLast(draft.lastName);
-              setSubpage("edit-name");
-            }}
-            data-settings-label="Name"
-          >
-            <span className="settings-row-title">Name</span>
-            <span className="settings-account-value-with-chevron">
-              <span>{currentDisplayName}</span>
+            </div>
+            <button
+              type="button"
+              className="settings-mobile-row-trigger settings-copy-mobile"
+              onClick={() => {
+                setSubpageFirst(draft.firstName);
+                setSubpageLast(draft.lastName);
+                setSubpage("edit-name");
+              }}
+            >
+              <span className="settings-account-value">{currentDisplayName}</span>
               <ChevronRight size={16} aria-hidden="true" />
-            </span>
-          </button>
+            </button>
+          </SettingsRow>
 
           {/* Row 2: Email */}
           <SettingsRow title="Email">
@@ -304,35 +296,27 @@ export function ProfileSection({
           </SettingsRow>
 
           {/* Row 4: Academic level */}
-          <div
-            className="settings-row settings-account-edit-row settings-copy-desktop"
-            data-settings-label="Academic level"
-          >
-            <span className="settings-row-title">Academic level</span>
-            <span className="settings-row-right">
+          <SettingsRow title="Academic level">
+            <div className="settings-copy-desktop">
               <SettingsSelect
                 label="Academic level"
                 value={draft.academicLevel}
                 onValueChange={(academicLevel) => onDraftChange({ academicLevel })}
                 options={[{ value: "", label: "Not set" }, ...LEVEL_OPTIONS]}
               />
-            </span>
-          </div>
-          <button
-            type="button"
-            className="settings-row settings-account-row-btn settings-copy-mobile"
-            onClick={() => {
-              setSubpageLevel(draft.academicLevel || profile.current_level || "100");
-              setSubpage("edit-level");
-            }}
-            data-settings-label="Academic level"
-          >
-            <span className="settings-row-title">Academic level</span>
-            <span className="settings-account-value-with-chevron">
-              <span>{currentLevelLabel}</span>
+            </div>
+            <button
+              type="button"
+              className="settings-mobile-row-trigger settings-copy-mobile"
+              onClick={() => {
+                setSubpageLevel(draft.academicLevel || profile.current_level || "100");
+                setSubpage("edit-level");
+              }}
+            >
+              <span className="settings-account-value">{currentLevelLabel}</span>
               <ChevronRight size={16} aria-hidden="true" />
-            </span>
-          </button>
+            </button>
+          </SettingsRow>
         </div>
 
         {saveError && <p className="settings-save-error settings-copy-desktop">{saveError}</p>}
