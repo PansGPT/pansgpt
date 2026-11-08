@@ -23,7 +23,14 @@ class VoiceStore {
   private cancelCallback: (() => void) | null = null;
   private listeners = new Set<Listener>();
 
-  public getState = (): VoiceState => {
+  // Cached snapshot to satisfy React useSyncExternalStore reference stability requirement
+  private snapshot: VoiceState;
+
+  constructor() {
+    this.snapshot = this.createSnapshot();
+  }
+
+  private createSnapshot(): VoiceState {
     return {
       phase: this.phase,
       stream: this.stream,
@@ -31,6 +38,10 @@ class VoiceStore {
       stop: this.handleStop,
       cancel: this.handleCancel,
     };
+  }
+
+  public getState = (): VoiceState => {
+    return this.snapshot;
   };
 
   public subscribe = (listener: Listener): (() => void) => {
@@ -41,6 +52,7 @@ class VoiceStore {
   };
 
   private notify() {
+    this.snapshot = this.createSnapshot();
     this.listeners.forEach((l) => l());
   }
 
