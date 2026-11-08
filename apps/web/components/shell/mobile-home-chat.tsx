@@ -629,6 +629,10 @@ export function MobileHomeChat(): React.ReactElement {
           setHistoryOpen(false);
           openChat();
         }}
+        onUploadFromComputer={() => {
+          setLibraryOpen(false);
+          fileInput.current?.click();
+        }}
       />
       <DialogPrimitive.Root
         open={open}

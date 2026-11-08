@@ -92,6 +92,7 @@ export function ChatComposer({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+  const computerFileInputRef = useRef<HTMLInputElement>(null);
   const closeTimer = useRef<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuClosing, setMenuClosing] = useState(false);
@@ -222,6 +223,27 @@ export function ChatComposer({
           await aui.composer().addAttachment(file);
         } catch {
           setAttachmentError("We couldn't attach that image. Choose a PNG or JPEG up to 10 MB.");
+          return;
+        }
+      }
+    })();
+  }
+  function addComputerFiles(event: React.ChangeEvent<HTMLInputElement>): void {
+    const files = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = "";
+    if (!files.length) return;
+    setAttachmentError(null);
+    void (async () => {
+      const attachedCount = aui.composer().getState().attachments.length;
+      if (attachedCount + files.length > 4) {
+        setAttachmentError("Attach up to four files at a time.");
+        return;
+      }
+      for (const file of files) {
+        try {
+          await aui.composer().addAttachment(file);
+        } catch {
+          setAttachmentError("We couldn't attach that file. Choose a supported file up to 10 MB.");
           return;
         }
       }
@@ -601,6 +623,18 @@ export function ChatComposer({
               onLibraryDocumentSelect?.(document);
               setLibraryOpen(false);
             }}
+            onUploadFromComputer={() => {
+              setLibraryOpen(false);
+              computerFileInputRef.current?.click();
+            }}
+          />
+          <input
+            ref={computerFileInputRef}
+            type="file"
+            multiple
+            hidden
+            accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,image/png,image/jpeg"
+            onChange={addComputerFiles}
           />
         </>
       )}
