@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ChevronLeft, ChevronRight, Info } from "lucide-react";
-import { Button, UserInitialsAvatar } from "@pansgpt/ui/shell";
+import { Check, ChevronLeft, ChevronRight, Info, Pencil, X } from "lucide-react";
+import { Button, DialogPrimitive, UserInitialsAvatar } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import type { usePreferences } from "@/components/shell/use-preferences";
 import type { DraftSectionProps } from "../settings-types";
 import { SettingsRow } from "../settings-row";
-import { SettingsSelect } from "../settings-select";
 import { SettingsSection } from "../settings-section";
 
 const LEVEL_OPTIONS = [
@@ -29,12 +28,22 @@ export function ProfileSection({
   preferences: ReturnType<typeof usePreferences>;
 }): React.ReactElement {
   const { updateProfile } = useAuth();
+
+  // Mobile dedicated subpage state
   const [subpage, setSubpage] = useState<"none" | "edit-name" | "edit-level">("none");
   const [subpageFirst, setSubpageFirst] = useState(draft.firstName);
   const [subpageLast, setSubpageLast] = useState(draft.lastName);
   const [subpageLevel, setSubpageLevel] = useState(draft.academicLevel);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Desktop edit modal dialog state
+  const [desktopModal, setDesktopModal] = useState<"none" | "edit-name" | "edit-level">("none");
+  const [desktopFirstName, setDesktopFirstName] = useState(draft.firstName);
+  const [desktopLastName, setDesktopLastName] = useState(draft.lastName);
+  const [desktopLevel, setDesktopLevel] = useState(draft.academicLevel);
+  const [desktopSaving, setDesktopSaving] = useState(false);
+  const [desktopError, setDesktopError] = useState<string | null>(null);
 
   const currentDisplayName =
     [draft.firstName, draft.lastName].filter(Boolean).join(" ") ||
@@ -45,33 +54,12 @@ export function ProfileSection({
     LEVEL_OPTIONS.find((item) => item.value === (draft.academicLevel || profile.current_level))
       ?.label ?? (draft.academicLevel ? `${draft.academicLevel} Level` : "Not set");
 
-  const isDesktopDirty =
-    draft.firstName !== (profile.first_name ?? "") ||
-    draft.lastName !== (profile.last_name ?? "") ||
-    draft.academicLevel !== (profile.current_level ?? "");
-
+  // Mobile save handlers
   const isNameDirty =
     subpageFirst.trim() !== (profile.first_name ?? "") ||
     subpageLast.trim() !== (profile.last_name ?? "");
 
   const isLevelDirty = subpageLevel !== (profile.current_level ?? "");
-
-  const handleDesktopSave = async (): Promise<void> => {
-    if (!isDesktopDirty || saving) return;
-    setSaving(true);
-    setSaveError(null);
-    try {
-      await updateProfile({
-        first_name: draft.firstName.trim() || undefined,
-        last_name: draft.lastName.trim() || null,
-        current_level: draft.academicLevel || undefined,
-      });
-    } catch (err) {
-      setSaveError(err instanceof Error ? err.message : "Failed to save profile changes.");
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleSaveName = async (): Promise<void> => {
     if (!isNameDirty || !subpageFirst.trim() || saving) return;
@@ -112,6 +100,53 @@ export function ProfileSection({
     }
   };
 
+  // Desktop save handlers
+  const isDesktopNameDirty =
+    desktopFirstName.trim() !== (profile.first_name ?? "") ||
+    desktopLastName.trim() !== (profile.last_name ?? "");
+
+  const handleDesktopSaveName = async (): Promise<void> => {
+    if (!isDesktopNameDirty || !desktopFirstName.trim() || desktopSaving) return;
+    setDesktopSaving(true);
+    setDesktopError(null);
+    try {
+      await updateProfile({
+        first_name: desktopFirstName.trim(),
+        last_name: desktopLastName.trim() || null,
+      });
+      onDraftChange({
+        firstName: desktopFirstName.trim(),
+        lastName: desktopLastName.trim(),
+        fullName: [desktopFirstName.trim(), desktopLastName.trim()].filter(Boolean).join(" "),
+      });
+      setDesktopModal("none");
+    } catch (err) {
+      setDesktopError(err instanceof Error ? err.message : "Failed to save name.");
+    } finally {
+      setDesktopSaving(false);
+    }
+  };
+
+  const isDesktopLevelDirty = desktopLevel !== (profile.current_level ?? "");
+
+  const handleDesktopSaveLevel = async (): Promise<void> => {
+    if (!isDesktopLevelDirty || desktopSaving) return;
+    setDesktopSaving(true);
+    setDesktopError(null);
+    try {
+      await updateProfile({
+        current_level: desktopLevel,
+      });
+      onDraftChange({ academicLevel: desktopLevel });
+      setDesktopModal("none");
+    } catch (err) {
+      setDesktopError(err instanceof Error ? err.message : "Failed to update academic level.");
+    } finally {
+      setDesktopSaving(false);
+    }
+  };
+
+  // Mobile subpage views
   if (subpage === "edit-name") {
     return (
       <div className="settings-mobile-subpage">
@@ -212,11 +247,13 @@ export function ProfileSection({
                 <button
                   key={opt.value}
                   type="button"
-                  className={`settings-subpage-option ${isSelected ? "is-selected" : ""}`}
+                  className="settings-subpage-option"
                   onClick={() => setSubpageLevel(opt.value)}
                 >
                   <span>{opt.label}</span>
-                  {isSelected && <Check size={18} className="settings-subpage-check" />}
+                  {isSelected && (
+                    <Check size={18} className="settings-subpage-check" aria-hidden="true" />
+                  )}
                 </button>
               );
             })}
@@ -239,44 +276,27 @@ export function ProfileSection({
         <div className="settings-account-card">
           {/* Row 1: Name */}
           <SettingsRow title="Name">
-            <div className="settings-name-inputs-desktop settings-copy-desktop">
-              <input
-                className="settings-account-value-input"
-                aria-label="First name"
-                placeholder="First name"
-                value={draft.firstName}
-                onChange={(event) => {
-                  const firstName = event.target.value;
-                  onDraftChange({
-                    firstName,
-                    fullName: [firstName, draft.lastName].filter(Boolean).join(" "),
-                  });
-                }}
-                autoComplete="given-name"
-                maxLength={100}
-              />
-              <input
-                className="settings-account-value-input"
-                aria-label="Last name"
-                placeholder="Surname"
-                value={draft.lastName}
-                onChange={(event) => {
-                  const lastName = event.target.value;
-                  onDraftChange({
-                    lastName,
-                    fullName: [draft.firstName, lastName].filter(Boolean).join(" "),
-                  });
-                }}
-                autoComplete="family-name"
-                maxLength={100}
-              />
-            </div>
+            <button
+              type="button"
+              className="settings-account-edit-trigger settings-copy-desktop"
+              onClick={() => {
+                setDesktopFirstName(draft.firstName);
+                setDesktopLastName(draft.lastName);
+                setDesktopError(null);
+                setDesktopModal("edit-name");
+              }}
+              aria-label="Edit name"
+            >
+              <span className="settings-account-value">{currentDisplayName}</span>
+              <Pencil size={14} className="settings-edit-icon" aria-hidden="true" />
+            </button>
             <button
               type="button"
               className="settings-mobile-row-trigger settings-copy-mobile"
               onClick={() => {
                 setSubpageFirst(draft.firstName);
                 setSubpageLast(draft.lastName);
+                setSaveError(null);
                 setSubpage("edit-name");
               }}
             >
@@ -297,19 +317,25 @@ export function ProfileSection({
 
           {/* Row 4: Academic level */}
           <SettingsRow title="Academic level">
-            <div className="settings-copy-desktop">
-              <SettingsSelect
-                label="Academic level"
-                value={draft.academicLevel}
-                onValueChange={(academicLevel) => onDraftChange({ academicLevel })}
-                options={[{ value: "", label: "Not set" }, ...LEVEL_OPTIONS]}
-              />
-            </div>
+            <button
+              type="button"
+              className="settings-account-edit-trigger settings-copy-desktop"
+              onClick={() => {
+                setDesktopLevel(draft.academicLevel || profile.current_level || "100");
+                setDesktopError(null);
+                setDesktopModal("edit-level");
+              }}
+              aria-label="Edit academic level"
+            >
+              <span className="settings-account-value">{currentLevelLabel}</span>
+              <Pencil size={14} className="settings-edit-icon" aria-hidden="true" />
+            </button>
             <button
               type="button"
               className="settings-mobile-row-trigger settings-copy-mobile"
               onClick={() => {
                 setSubpageLevel(draft.academicLevel || profile.current_level || "100");
+                setSaveError(null);
                 setSubpage("edit-level");
               }}
             >
@@ -318,20 +344,8 @@ export function ProfileSection({
             </button>
           </SettingsRow>
         </div>
-
-        {saveError && <p className="settings-save-error settings-copy-desktop">{saveError}</p>}
-
-        <div className="settings-section-action-row settings-copy-desktop">
-          <Button
-            leadingIcon={null}
-            trailingIcon={null}
-            disabled={!isDesktopDirty || saving}
-            onClick={handleDesktopSave}
-          >
-            {saving ? "Saving..." : "Save changes"}
-          </Button>
-        </div>
       </SettingsSection>
+
       <div className="settings-copy-desktop">
         <SettingsSection title="Account deletion" className="settings-danger-section">
           <SettingsRow
@@ -353,6 +367,193 @@ export function ProfileSection({
       >
         Delete account
       </button>
+
+      {/* Desktop Edit Name Dialog */}
+      <DialogPrimitive.Root
+        open={desktopModal === "edit-name"}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDesktopModal("none");
+            setDesktopError(null);
+          }
+        }}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="settings-confirm-overlay" />
+          <DialogPrimitive.Content
+            className="settings-edit-dialog"
+            aria-describedby="edit-name-desc"
+          >
+            <div className="settings-edit-dialog-header">
+              <DialogPrimitive.Title className="settings-edit-dialog-title">
+                Edit name
+              </DialogPrimitive.Title>
+              <DialogPrimitive.Close
+                className="settings-edit-dialog-close"
+                aria-label="Close"
+                onClick={() => {
+                  setDesktopModal("none");
+                  setDesktopError(null);
+                }}
+              >
+                <X size={18} />
+              </DialogPrimitive.Close>
+            </div>
+
+            <p id="edit-name-desc" className="sr-only">
+              Update your first name and surname.
+            </p>
+
+            {desktopError && (
+              <p className="settings-edit-dialog-error" role="alert">
+                {desktopError}
+              </p>
+            )}
+
+            <div className="settings-edit-dialog-body">
+              <label className="settings-edit-field">
+                <span className="settings-edit-field-label">First name</span>
+                <input
+                  className="settings-edit-input"
+                  value={desktopFirstName}
+                  onChange={(e) => setDesktopFirstName(e.target.value)}
+                  placeholder="First name"
+                  maxLength={100}
+                  autoFocus
+                />
+              </label>
+              <label className="settings-edit-field">
+                <span className="settings-edit-field-label">Surname</span>
+                <input
+                  className="settings-edit-input"
+                  value={desktopLastName}
+                  onChange={(e) => setDesktopLastName(e.target.value)}
+                  placeholder="Surname"
+                  maxLength={100}
+                />
+              </label>
+            </div>
+
+            <div className="settings-edit-dialog-actions">
+              <Button
+                variant="secondary"
+                leadingIcon={null}
+                trailingIcon={null}
+                disabled={desktopSaving}
+                onClick={() => {
+                  setDesktopModal("none");
+                  setDesktopError(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                leadingIcon={null}
+                trailingIcon={null}
+                disabled={!isDesktopNameDirty || !desktopFirstName.trim() || desktopSaving}
+                onClick={handleDesktopSaveName}
+              >
+                {desktopSaving ? "Saving..." : "Save"}
+              </Button>
+            </div>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+
+      {/* Desktop Edit Academic Level Dialog */}
+      <DialogPrimitive.Root
+        open={desktopModal === "edit-level"}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDesktopModal("none");
+            setDesktopError(null);
+          }
+        }}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="settings-confirm-overlay" />
+          <DialogPrimitive.Content
+            className="settings-edit-dialog"
+            aria-describedby="edit-level-desc"
+          >
+            <div className="settings-edit-dialog-header">
+              <DialogPrimitive.Title className="settings-edit-dialog-title">
+                Academic level
+              </DialogPrimitive.Title>
+              <DialogPrimitive.Close
+                className="settings-edit-dialog-close"
+                aria-label="Close"
+                onClick={() => {
+                  setDesktopModal("none");
+                  setDesktopError(null);
+                }}
+              >
+                <X size={18} />
+              </DialogPrimitive.Close>
+            </div>
+
+            <div id="edit-level-desc" className="settings-edit-info-card">
+              <Info size={16} className="settings-edit-info-icon" aria-hidden="true" />
+              <p className="settings-edit-info-text">
+                Changing your academic level will adjust the documents you have access to for your
+                year.
+              </p>
+            </div>
+
+            {desktopError && (
+              <p className="settings-edit-dialog-error" role="alert">
+                {desktopError}
+              </p>
+            )}
+
+            <div className="settings-edit-dialog-body">
+              <div className="settings-edit-options-list">
+                {LEVEL_OPTIONS.map((opt) => {
+                  const isSelected = desktopLevel === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      className={`settings-edit-option${isSelected ? " is-selected" : ""}`}
+                      onClick={() => setDesktopLevel(opt.value)}
+                    >
+                      <span>{opt.label}</span>
+                      {isSelected && (
+                        <Check size={18} className="settings-edit-check" aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="settings-edit-dialog-actions">
+              <Button
+                variant="secondary"
+                leadingIcon={null}
+                trailingIcon={null}
+                disabled={desktopSaving}
+                onClick={() => {
+                  setDesktopModal("none");
+                  setDesktopError(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                leadingIcon={null}
+                trailingIcon={null}
+                disabled={!isDesktopLevelDirty || desktopSaving}
+                onClick={handleDesktopSaveLevel}
+              >
+                {desktopSaving ? "Saving..." : "Save"}
+              </Button>
+            </div>
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </div>
   );
 }
