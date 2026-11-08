@@ -2195,28 +2195,16 @@ button.study-chat-attachment-tile:hover {
   align-items: center;
   justify-content: center;
   height: 36px;
-  padding: 0 10px;
+  padding: 0 4px;
   overflow: hidden;
+  position: relative;
 }
 
-.p-study-voice-waveform {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  height: 32px;
+.p-study-voice-canvas {
   width: 100%;
-  max-width: 340px;
-  overflow: hidden;
-}
-
-.p-study-voice-bar {
-  width: 2.5px;
-  min-width: 2.5px;
-  border-radius: 99px;
-  background: var(--text-secondary-700, #a1a1aa);
-  transition: height 60ms ease-out;
-  flex-shrink: 0;
+  height: 36px;
+  display: block;
+  color: var(--text-secondary-700, #a1a1aa);
 }
 
 .p-study-voice-transcribing-text {

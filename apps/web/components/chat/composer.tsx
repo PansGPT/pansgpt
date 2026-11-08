@@ -609,7 +609,7 @@ export function ChatComposer({
             </div>
           ) : (
             <div className="p-study-voice-center">
-              <AudioWaveform stream={voice.stream} barCount={32} />
+              <AudioWaveform stream={voice.stream} />
             </div>
           )}
 
