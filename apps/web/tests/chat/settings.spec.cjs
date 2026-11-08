@@ -47,7 +47,7 @@ test("settings keeps separate categories, student-facing content and a bounded d
   const profileForm = modal.locator(".settings-account-section .settings-section-content");
   await expect(profileForm).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(profileForm).toHaveCSS("border-radius", "0px");
-  await expect(profileForm).toHaveCSS("border-top-width", "1px");
+  await expect(profileForm).toHaveCSS("border-top-width", "0px");
   await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toHaveCSS(
     "border-left-width",
     "1px"

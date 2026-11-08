@@ -347,7 +347,10 @@ export function ProfileSection({
       </SettingsSection>
 
       <div className="settings-copy-desktop">
-        <SettingsSection title="Account deletion" className="settings-danger-section">
+        <SettingsSection
+          title="Account deletion"
+          className="settings-danger-section settings-account-danger-section"
+        >
           <SettingsRow
             title="Delete account"
             description="Review account deletion and its 30-day recovery period."

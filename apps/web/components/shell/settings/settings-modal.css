@@ -553,11 +553,21 @@
   border-radius: 16px;
   background: var(--bg-secondary);
 }
+.settings-account-section .settings-section-content {
+  border-top: 0;
+}
 .settings-account-card {
   min-width: 0;
 }
 .settings-account-card .settings-row {
   padding: 16px 0;
+}
+.settings-account-card .settings-row:last-child {
+  border-bottom: 0;
+}
+.settings-account-danger-section {
+  border-top: 0;
+  padding-top: 0;
 }
 .settings-account-edit-row {
   cursor: text;
