@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   LockKeyhole,
   ChevronLeft,
+  ChevronRight,
   X,
   Laptop,
   Smartphone,
@@ -13,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@pansgpt/ui/shell";
 import { SettingsSection } from "../settings-section";
-import { SettingsRow, SettingsActionButton } from "../settings-row";
+import { SettingsRow } from "../settings-row";
 
 interface SessionDevice {
   id: string;
@@ -277,23 +278,35 @@ export function SecuritySection(): React.ReactElement {
             mobileTitle="Change password"
             mobileDescription={null}
           >
-            <SettingsActionButton
-              icon={<LockKeyhole size={15} />}
-              onClick={() => {
-                if (typeof window !== "undefined" && window.innerWidth < 768) {
-                  setPasswordError(null);
-                  setSubpage("change-password");
-                } else {
+            {/* Desktop action button */}
+            <div className="settings-copy-desktop">
+              <Button
+                variant="secondary"
+                leadingIcon={<LockKeyhole size={15} />}
+                trailingIcon={null}
+                onClick={() => {
                   setPasswordError(null);
                   setDesktopModal("change-password");
-                }
+                }}
+              >
+                Change password
+              </Button>
+            </div>
+            {/* Mobile row trigger button */}
+            <button
+              type="button"
+              className="settings-mobile-row-trigger settings-copy-mobile"
+              onClick={() => {
+                setPasswordError(null);
+                setSubpage("change-password");
               }}
+              aria-label="Change password"
             >
-              Change password
-            </SettingsActionButton>
+              <ChevronRight size={16} aria-hidden="true" />
+            </button>
           </SettingsRow>
 
-          {/* Row 2 (Mobile only): Manage devices -> clean chevron trigger, no count number */}
+          {/* Row 2 (Mobile only): Manage devices */}
           <div className="settings-copy-mobile">
             <SettingsRow
               title="Manage devices"
@@ -301,9 +314,14 @@ export function SecuritySection(): React.ReactElement {
               mobileTitle="Manage devices"
               mobileDescription={null}
             >
-              <SettingsActionButton onClick={() => setSubpage("manage-devices")}>
-                Manage devices
-              </SettingsActionButton>
+              <button
+                type="button"
+                className="settings-mobile-row-trigger settings-copy-mobile"
+                onClick={() => setSubpage("manage-devices")}
+                aria-label="Manage devices"
+              >
+                <ChevronRight size={16} aria-hidden="true" />
+              </button>
             </SettingsRow>
           </div>
         </div>

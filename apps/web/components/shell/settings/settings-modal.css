@@ -572,6 +572,12 @@
 .settings-security-section .settings-section-content {
   border-top: 0;
 }
+.settings-security-card {
+  min-width: 0;
+}
+.settings-security-card .settings-row {
+  padding: 16px 0;
+}
 .settings-security-card .settings-row:last-child {
   border-bottom: 0;
 }
@@ -1462,7 +1468,12 @@
     color: var(--text-tertiary-600);
     font-size: 13px;
   }
-  .settings-account-card .settings-row:has(.settings-mobile-row-trigger) {
+  .settings-security-card .settings-row {
+    min-height: 58px;
+    padding: 17px 0;
+  }
+  .settings-account-card .settings-row:has(.settings-mobile-row-trigger),
+  .settings-security-card .settings-row:has(.settings-mobile-row-trigger) {
     cursor: pointer;
     position: relative;
   }
@@ -1873,6 +1884,11 @@
   flex-direction: column;
   gap: 16px;
   margin-top: 4px;
+}
+@media (max-width: 767px) {
+  .settings-devices-section {
+    display: none !important;
+  }
 }
 .settings-devices-header {
   display: flex;
