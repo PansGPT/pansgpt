@@ -10,7 +10,6 @@ import {
   Shield,
   Moon,
   HardDrive,
-  Info,
   Search,
 } from "lucide-react";
 import type { SettingsNavGroup, SettingsSectionId } from "./settings-types";
@@ -77,12 +76,6 @@ export const SETTINGS_GROUPS: SettingsNavGroup[] = [
         label: "Data & Storage",
         icon: <HardDrive size={18} />,
         keywords: "cache offline clear delete history",
-      },
-      {
-        id: "about",
-        label: "About PansGPT",
-        icon: <Info size={18} />,
-        keywords: "help support feedback bug shortcuts guide terms version",
       },
     ],
   },

@@ -216,17 +216,4 @@ export const SETTINGS_SEARCH_FIELDS: readonly SettingsSearchField[] = [
     target: "Delete conversation history",
     keywords: "clear chats history",
   },
-  {
-    section: "about",
-    label: "Feedback",
-    target: "Send feedback",
-    keywords: "help support report bug idea feedback",
-  },
-  { section: "about", label: "Version", target: "PansGPT", keywords: "app version release" },
-  {
-    section: "about",
-    label: "Terms of service",
-    target: "Terms of service",
-    keywords: "legal terms conditions",
-  },
 ];

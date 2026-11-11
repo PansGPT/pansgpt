@@ -7,14 +7,14 @@ import {
   LogOut,
   Menu,
   Settings,
-  BookOpen,
   Download,
-  Smartphone,
-  Monitor,
-  Share2,
   Command,
   FileText,
   Info,
+  Shield,
+  FileCheck,
+  Bug,
+  ExternalLink,
 } from "lucide-react";
 import {
   Dropdown,
@@ -30,7 +30,8 @@ import {
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import type { SettingsSectionId } from "./settings/settings-types";
 import { ShortcutsDialog } from "./shortcuts-dialog";
-import { IosInstructionsDialog } from "./ios-instructions-dialog";
+import { DownloadAppsDialog } from "./download-apps-dialog";
+import { ReportBugDialog } from "./report-bug-dialog";
 
 export function AccountMenu({
   profile,
@@ -53,8 +54,11 @@ export function AccountMenu({
   const transferring = useRef(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(false);
-  const [iosModalOpen, setIosModalOpen] = useState(false);
+
+  // Dialog States
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
+  const [downloadAppsOpen, setDownloadAppsOpen] = useState(false);
+  const [bugReportOpen, setBugReportOpen] = useState(false);
 
   const name = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || "Your account";
 
@@ -120,66 +124,90 @@ export function AccountMenu({
             Settings
           </DropdownItem>
 
-          {/* Get help */}
+          {/* Direct Support Chat Bot / Assistant */}
           <DropdownItem icon={<HelpCircle size={16} />} onSelect={() => transfer(openHelp)}>
             Get help
           </DropdownItem>
 
-          {/* Learn more (Hover Submenu) */}
+          {/* Download apps (Root) */}
+          <DropdownItem
+            icon={<Download size={16} />}
+            onSelect={() => transfer(() => setDownloadAppsOpen(true))}
+          >
+            Download apps
+          </DropdownItem>
+
+          {/* Learn more (Flyout Submenu) */}
           <DropdownSub>
-            <DropdownSubTrigger icon={<BookOpen size={16} />}>Learn more</DropdownSubTrigger>
-            <DropdownSubContent className="shell-account-popup" style={{ width: "196px" }}>
+            <DropdownSubTrigger icon={<Info size={16} />}>Learn more</DropdownSubTrigger>
+            <DropdownSubContent
+              className="shell-account-popup"
+              align="end"
+              alignOffset={-4}
+              sideOffset={8}
+              style={{ width: "232px", padding: "6px 6px 8px" }}
+            >
+              {/* About PansGPT */}
               <DropdownItem
                 icon={<Info size={15} />}
-                onSelect={() => transfer((opener) => openSettings?.(opener, "about"))}
+                shortcut={<ExternalLink size={12} className="p-dropdown-external-icon" />}
+                onSelect={() => {
+                  window.open("/about", "_blank");
+                }}
               >
                 About PansGPT
               </DropdownItem>
+
+              {/* Usage Policy */}
+              <DropdownItem
+                icon={<FileCheck size={15} />}
+                shortcut={<ExternalLink size={12} className="p-dropdown-external-icon" />}
+                onSelect={() => {
+                  window.open("/usage", "_blank");
+                }}
+              >
+                Usage policy
+              </DropdownItem>
+
+              {/* Terms of Service */}
+              <DropdownItem
+                icon={<FileText size={15} />}
+                shortcut={<ExternalLink size={12} className="p-dropdown-external-icon" />}
+                onSelect={() => {
+                  window.open("/terms", "_blank");
+                }}
+              >
+                Terms of Service
+              </DropdownItem>
+
+              {/* Privacy Policy */}
+              <DropdownItem
+                icon={<Shield size={15} />}
+                shortcut={<ExternalLink size={12} className="p-dropdown-external-icon" />}
+                onSelect={() => {
+                  window.open("/privacy", "_blank");
+                }}
+              >
+                Privacy Policy
+              </DropdownItem>
+
+              <div className="study-chat-menu-separator" role="separator" />
+
+              {/* Report a Bug */}
+              <DropdownItem
+                icon={<Bug size={15} />}
+                onSelect={() => transfer(() => setBugReportOpen(true))}
+              >
+                Report a bug
+              </DropdownItem>
+
+              {/* Keyboard Shortcuts */}
               <DropdownItem
                 icon={<Command size={15} />}
+                shortcut={<kbd className="shell-shortcut-badge">Ctrl+/</kbd>}
                 onSelect={() => transfer(() => setShortcutsOpen(true))}
               >
                 Keyboard shortcuts
-              </DropdownItem>
-              <DropdownItem
-                icon={<FileText size={15} />}
-                onSelect={() => transfer((opener) => openSettings?.(opener, "privacy"))}
-              >
-                Privacy & Data
-              </DropdownItem>
-            </DropdownSubContent>
-          </DropdownSub>
-
-          {/* Download (Hover Submenu) */}
-          <DropdownSub>
-            <DropdownSubTrigger icon={<Download size={16} />}>Download app</DropdownSubTrigger>
-            <DropdownSubContent className="shell-account-popup" style={{ width: "206px" }}>
-              <DropdownItem
-                icon={<Smartphone size={15} />}
-                onSelect={() => {
-                  // Direct download link or prompt
-                  window.open("/downloads/pansgpt-android.apk", "_blank");
-                }}
-              >
-                Download for Android
-              </DropdownItem>
-              <DropdownItem
-                icon={<Monitor size={15} />}
-                onSelect={() => {
-                  // Direct desktop app link
-                  window.open("/downloads/pansgpt-desktop.exe", "_blank");
-                }}
-              >
-                Download Desktop App
-              </DropdownItem>
-              <DropdownItem
-                icon={<Share2 size={15} />}
-                onSelect={() => {
-                  // Open iOS home screen instructions dialog
-                  setIosModalOpen(true);
-                }}
-              >
-                Add to iOS Home Screen
               </DropdownItem>
             </DropdownSubContent>
           </DropdownSub>
@@ -217,13 +245,26 @@ export function AccountMenu({
         </DropdownContent>
       </Dropdown>
 
+      {/* Keyboard Shortcuts Dialog */}
       <ShortcutsDialog
         open={shortcutsOpen}
         onOpenChange={setShortcutsOpen}
         returnFocus={() => trigger.current?.focus()}
       />
-      {/* iOS Installation Instructions Dialog */}
-      <IosInstructionsDialog open={iosModalOpen} onOpenChange={setIosModalOpen} />
+
+      {/* Unified Download Apps Dialog (Android, Desktop & iOS) */}
+      <DownloadAppsDialog
+        open={downloadAppsOpen}
+        onOpenChange={setDownloadAppsOpen}
+        returnFocus={() => trigger.current?.focus()}
+      />
+
+      {/* Report a Bug Dialog */}
+      <ReportBugDialog
+        open={bugReportOpen}
+        onOpenChange={setBugReportOpen}
+        returnFocus={() => trigger.current?.focus()}
+      />
     </>
   );
 }

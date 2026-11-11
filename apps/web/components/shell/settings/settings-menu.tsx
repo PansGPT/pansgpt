@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, LogOut } from "lucide-react";
+import { ChevronRight, LogOut, Bug } from "lucide-react";
 import { UserInitialsAvatar } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import type { usePreferences } from "@/components/shell/use-preferences";
 import { SETTINGS_GROUPS } from "./settings-nav";
 import type { SettingsSectionId } from "./settings-types";
+import { ReportBugDialog } from "../report-bug-dialog";
 
 export function SettingsMenu({
   profile,
@@ -23,6 +24,7 @@ export function SettingsMenu({
   const router = useRouter();
   const { signOut } = useAuth();
   const [signingOut, setSigningOut] = useState(false);
+  const [bugReportOpen, setBugReportOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const name = [profile.first_name, profile.last_name].filter(Boolean).join(" ") || "Your Account";
@@ -90,6 +92,24 @@ export function SettingsMenu({
             </div>
           </div>
         ))}
+
+        {/* Mobile-only Report a bug section */}
+        <div className="settings-menu-group">
+          <span className="settings-menu-group-title">Get Help</span>
+          <div className="settings-menu-group-card">
+            <button
+              type="button"
+              className="settings-menu-row"
+              onClick={() => setBugReportOpen(true)}
+            >
+              <span className="settings-menu-row-icon" aria-hidden="true">
+                <Bug size={18} />
+              </span>
+              <span className="settings-menu-row-label">Report a bug</span>
+              <ChevronRight size={16} className="settings-menu-chevron" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Danger / Sign Out */}
@@ -109,6 +129,8 @@ export function SettingsMenu({
           <span>{signingOut ? "Signing out…" : "Log Out"}</span>
         </button>
       </div>
+
+      <ReportBugDialog open={bugReportOpen} onOpenChange={setBugReportOpen} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect, useId, useSyncExternalStore, type ReactNode } from "react";
-import { X, ChevronLeft, Info } from "lucide-react";
+import { X, ChevronLeft, Info, ExternalLink, HelpCircle } from "lucide-react";
 import { DialogPrimitive } from "@pansgpt/ui/shell";
 import type { SettingsModalProps, SettingsSectionId, SettingsDraft } from "./settings-types";
 import { SettingsNav } from "./settings-nav";
@@ -15,7 +15,6 @@ import { WellbeingSection } from "./sections/wellbeing-section";
 import { PrivacySection } from "./sections/privacy-section";
 import { CreditsSection } from "./sections/account-section";
 import { DataStorageSection } from "./sections/data-storage-section";
-import { AboutSection } from "./sections/about-section";
 import "./settings-modal.css";
 
 const TITLES: Record<SettingsSectionId, string> = {
@@ -27,7 +26,6 @@ const TITLES: Record<SettingsSectionId, string> = {
   privacy: "Privacy & Data",
   wellbeing: "Study & Wellbeing",
   "data-storage": "Data & Storage",
-  about: "About PansGPT",
 };
 function subscribeViewport(notify: () => void): () => void {
   const query = window.matchMedia("(max-width: 860px)");
@@ -69,6 +67,7 @@ export function SettingsModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchSelection, setSearchSelection] = useState<SettingsSearchField | null>(null);
   const [inMobileSection, setInMobileSection] = useState(initialSection !== "account");
+  const [infoPopupOpen, setInfoPopupOpen] = useState(false);
   const [prevOpen, setPrevOpen] = useState(open);
   const [draft, setDraft] = useState(() => initialDraft(profile));
   const mobile = useSyncExternalStore(subscribeViewport, mobileViewport, () => false);
@@ -76,6 +75,8 @@ export function SettingsModal({
   const contentRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const menuOpener = useRef<HTMLElement | null>(null);
+  const infoPopupRef = useRef<HTMLDivElement>(null);
+  const infoButtonRef = useRef<HTMLButtonElement>(null);
   const descriptionId = useId();
   const touchOrigin = useRef<{ x: number; y: number } | null>(null);
   if (open !== prevOpen) {
@@ -86,8 +87,26 @@ export function SettingsModal({
       setSearchSelection(null);
       setInMobileSection(initialSection !== "account");
       setDraft(initialDraft(profile));
+      setInfoPopupOpen(false);
     }
   }
+  useEffect(() => {
+    if (!infoPopupOpen) return;
+    function handlePointerDown(event: PointerEvent) {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (
+        infoPopupRef.current &&
+        !infoPopupRef.current.contains(target) &&
+        infoButtonRef.current &&
+        !infoButtonRef.current.contains(target)
+      ) {
+        setInfoPopupOpen(false);
+      }
+    }
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => window.removeEventListener("pointerdown", handlePointerDown);
+  }, [infoPopupOpen]);
   useEffect(() => {
     if (!open) return;
     const viewport = window.visualViewport;
@@ -127,6 +146,7 @@ export function SettingsModal({
     };
   }, [open, activeSection, searchSelection]);
   function selectSection(id: SettingsSectionId): void {
+    setInfoPopupOpen(false);
     setSearchSelection(null);
     menuOpener.current =
       document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -135,6 +155,7 @@ export function SettingsModal({
     requestAnimationFrame(() => titleRef.current?.focus({ preventScroll: true }));
   }
   function backToMenu(): void {
+    setInfoPopupOpen(false);
     setInMobileSection(false);
     requestAnimationFrame(() => menuOpener.current?.focus({ preventScroll: true }));
   }
@@ -182,9 +203,6 @@ export function SettingsModal({
     case "privacy":
       content = <PrivacySection />;
       break;
-    case "about":
-      content = <AboutSection />;
-      break;
   }
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
@@ -205,6 +223,12 @@ export function SettingsModal({
               event.target instanceof Element ? event.target.closest('[role="dialog"]') : null;
             if (targetDialog && targetDialog !== dialogRef.current) {
               event.preventDefault();
+              return;
+            }
+            if (infoPopupOpen) {
+              event.preventDefault();
+              setInfoPopupOpen(false);
+              infoButtonRef.current?.focus();
               return;
             }
             // Radix observes Escape before the input's React key handler.
@@ -287,14 +311,94 @@ export function SettingsModal({
             {inMobileSection ? (
               <span className="settings-mobile-header-spacer" />
             ) : (
-              <button
-                type="button"
-                className="settings-mobile-header-btn"
-                aria-label="About PansGPT"
-                onClick={() => selectSection("about")}
-              >
-                <Info size={18} />
-              </button>
+              <div className="settings-mobile-info-anchor">
+                <button
+                  ref={infoButtonRef}
+                  type="button"
+                  className="settings-mobile-header-btn"
+                  aria-label="App info and legal"
+                  aria-expanded={infoPopupOpen}
+                  aria-haspopup="menu"
+                  data-active={infoPopupOpen}
+                  onClick={() => setInfoPopupOpen((open) => !open)}
+                >
+                  <Info size={18} />
+                </button>
+                {infoPopupOpen && (
+                  <div
+                    ref={infoPopupRef}
+                    className="settings-mobile-info-popup"
+                    role="menu"
+                    aria-label="PansGPT information"
+                  >
+                    <div className="settings-mobile-info-links">
+                      <a
+                        href="/usage"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="settings-mobile-info-item"
+                        role="menuitem"
+                        onClick={() => setInfoPopupOpen(false)}
+                      >
+                        <ExternalLink
+                          size={16}
+                          className="settings-mobile-info-icon"
+                          aria-hidden="true"
+                        />
+                        <span>Usage Policy</span>
+                      </a>
+                      <a
+                        href="/terms"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="settings-mobile-info-item"
+                        role="menuitem"
+                        onClick={() => setInfoPopupOpen(false)}
+                      >
+                        <ExternalLink
+                          size={16}
+                          className="settings-mobile-info-icon"
+                          aria-hidden="true"
+                        />
+                        <span>Terms of Service</span>
+                      </a>
+                      <a
+                        href="/privacy"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="settings-mobile-info-item"
+                        role="menuitem"
+                        onClick={() => setInfoPopupOpen(false)}
+                      >
+                        <ExternalLink
+                          size={16}
+                          className="settings-mobile-info-icon"
+                          aria-hidden="true"
+                        />
+                        <span>Privacy Policy</span>
+                      </a>
+                      <div className="settings-mobile-info-divider" />
+                      <button
+                        type="button"
+                        className="settings-mobile-info-item"
+                        role="menuitem"
+                        onClick={() => {
+                          setInfoPopupOpen(false);
+                          onOpenChange(false);
+                          window.dispatchEvent(new CustomEvent("pansgpt:open-help"));
+                        }}
+                      >
+                        <HelpCircle
+                          size={16}
+                          className="settings-mobile-info-icon"
+                          aria-hidden="true"
+                        />
+                        <span>Help & Support</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
           </header>
           <div className="settings-modal-body">

@@ -58,3 +58,15 @@ button:focus-visible,
   outline: none;
   box-shadow: none;
 }
+
+
+[role="menuitem"]:focus,
+[role="menuitem"]:focus-visible,
+[role="menuitem"]:hover,
+.p-dropdown-item:focus,
+.p-dropdown-item:focus-visible,
+.p-dropdown-item:hover {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}

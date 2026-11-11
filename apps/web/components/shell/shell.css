@@ -3623,3 +3623,75 @@
     }
   }
 }
+
+
+/* Industry-Standard Dropdown Shortcuts & External Indicators */
+.shell-account-popup .p-dropdown-shortcut {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.shell-account-popup .shell-shortcut-badge {
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--text-tertiary-600);
+  background: transparent;
+  border: none;
+  padding: 0;
+  opacity: 0.8;
+}
+
+.shell-account-popup .p-dropdown-external-icon {
+  margin-left: auto;
+  color: var(--text-tertiary-600);
+  opacity: 0.6;
+}
+
+
+/* Eliminate any white border, outline, or focus ring on menu items */
+.shell-account-popup .p-dropdown-item,
+.shell-account-popup .p-dropdown-sub-trigger,
+.shell-account-popup [role="menuitem"],
+.shell-account-popup [role="menuitemcheckbox"],
+.shell-account-popup [role="menuitemradio"],
+.p-dropdown-menu .p-dropdown-item,
+.p-dropdown-menu .p-dropdown-sub-trigger,
+.p-dropdown-menu [role="menuitem"] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shell-account-popup .p-dropdown-item:hover,
+.shell-account-popup .p-dropdown-item:focus,
+.shell-account-popup .p-dropdown-item:focus-visible,
+.shell-account-popup .p-dropdown-item[data-highlighted],
+.shell-account-popup .p-dropdown-sub-trigger:hover,
+.shell-account-popup .p-dropdown-sub-trigger:focus,
+.shell-account-popup .p-dropdown-sub-trigger:focus-visible,
+.shell-account-popup .p-dropdown-sub-trigger[data-highlighted],
+.p-dropdown-menu .p-dropdown-item:hover,
+.p-dropdown-menu .p-dropdown-item:focus,
+.p-dropdown-menu .p-dropdown-item:focus-visible,
+.p-dropdown-menu .p-dropdown-item[data-highlighted] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary-900) !important;
+}
+
+
+/* Submenu container padding & bottom breathing space */
+.p-dropdown-sub-content.shell-account-popup,
+.shell-account-popup.p-dropdown-sub-content {
+  padding: 6px 6px 10px !important;
+}
+
+.shell-account-popup.p-dropdown-sub-content .p-dropdown-item:last-child,
+.p-dropdown-sub-content.shell-account-popup .p-dropdown-item:last-child {
+  margin-bottom: 3px;
+}

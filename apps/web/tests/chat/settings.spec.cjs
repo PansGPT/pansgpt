@@ -8,7 +8,6 @@ const sections = [
   "Privacy & Data",
   "Study & Wellbeing",
   "Data & Storage",
-  "About PansGPT",
 ];
 async function openSettings(page) {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -106,21 +105,7 @@ test("settings keeps separate categories, student-facing content and a bounded d
     await expect(modal.getByText(label, { exact: true })).toBeVisible();
   await expect(modal.getByText("Help improve our AI models", { exact: true })).toHaveCount(0);
   await page.screenshot({ path: test.info().outputPath("settings-privacy-desktop.png") });
-  await nav.getByRole("button", { name: "About PansGPT", exact: true }).click();
-  await expect(modal.getByRole("textbox", { name: "Your message", exact: true })).toHaveCount(0);
-  const feedbackRow = modal.getByRole("button", { name: /Send feedback/ });
-  await feedbackRow.click();
-  const feedbackDialog = page.getByRole("dialog", { name: "Send feedback", exact: true });
-  await expect(
-    feedbackDialog.getByRole("textbox", { name: "Your message", exact: true })
-  ).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(feedbackDialog).not.toBeVisible();
-  await expect(modal).toBeVisible();
-  await expect(feedbackRow).toBeFocused();
-  await expect(modal.getByText("Getting started", { exact: true })).toHaveCount(0);
-  await expect(modal.getByText("Keyboard shortcuts", { exact: true })).toHaveCount(0);
-  await page.screenshot({ path: test.info().outputPath("settings-about-desktop.png") });
+  await expect(nav.getByRole("button", { name: "About PansGPT", exact: true })).toHaveCount(0);
   const search = nav.getByRole("combobox", { name: "Search settings", exact: true });
   await search.fill("name");
   const results = nav.getByRole("listbox", { name: "Matching settings", exact: true });
@@ -432,18 +417,20 @@ test("mobile settings retains grouped menus, separate Security and usable storag
     });
   }
   await page.keyboard.press("Escape");
-  await menu.getByRole("button", { name: "About PansGPT", exact: true }).click();
-  await expect(modal.getByRole("textbox", { name: "Your message", exact: true })).toHaveCount(0);
-  await modal.getByRole("button", { name: /Send feedback/ }).click();
-  const mobileFeedback = page.getByRole("dialog", { name: "Send feedback", exact: true });
-  await expect(
-    mobileFeedback.getByRole("textbox", { name: "Your message", exact: true })
-  ).toBeFocused();
-  await page.screenshot({ path: test.info().outputPath("settings-feedback-mobile.png") });
+  await expect(menu.getByRole("button", { name: "About PansGPT", exact: true })).toHaveCount(0);
+  await expect(menu.getByRole("button", { name: "Report a bug", exact: true })).toBeVisible();
+  const infoBtn = modal.getByRole("button", { name: "App info and legal", exact: true });
+  await expect(infoBtn).toBeVisible();
+  await infoBtn.click();
+  const infoPopup = modal.getByRole("menu", { name: "PansGPT information", exact: true });
+  await expect(infoPopup).toBeVisible();
+  await expect(infoPopup.getByRole("menuitem", { name: "Usage Policy" })).toBeVisible();
+  await expect(infoPopup.getByRole("menuitem", { name: "Terms of Service" })).toBeVisible();
+  await expect(infoPopup.getByRole("menuitem", { name: "Privacy Policy" })).toBeVisible();
+  await expect(infoPopup.getByRole("menuitem", { name: "Help & Support" })).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("settings-mobile-info-popup.png") });
   await page.keyboard.press("Escape");
-  await expect(mobileFeedback).not.toBeVisible();
-  await expect(modal.getByRole("heading", { name: "About PansGPT", exact: true })).toBeVisible();
-  await page.keyboard.press("Escape");
+  await expect(infoPopup).not.toBeVisible();
   await page.keyboard.press("Escape");
   await expect(modal).not.toBeVisible();
   await expect(page.getByRole("button", { name: "Open settings", exact: true })).toBeFocused();

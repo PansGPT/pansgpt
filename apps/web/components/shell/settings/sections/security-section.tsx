@@ -8,11 +8,12 @@ import {
   X,
   Laptop,
   Smartphone,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ShieldCheck,
   MoreHorizontal,
   Info,
 } from "lucide-react";
-import { Button } from "@pansgpt/ui/shell";
+import { Button, DialogPrimitive } from "@pansgpt/ui/shell";
 import { SettingsSection } from "../settings-section";
 import { SettingsRow } from "../settings-row";
 
@@ -93,6 +94,7 @@ const INITIAL_DEVICES: SessionDevice[] = [
 
 export function SecuritySection(): React.ReactElement {
   const [devices, setDevices] = useState<SessionDevice[]>(INITIAL_DEVICES);
+  const [selectedDevice, setSelectedDevice] = useState<SessionDevice | null>(null);
   const [subpage, setSubpage] = useState<"none" | "change-password" | "manage-devices">("none");
   const [desktopModal, setDesktopModal] = useState<"none" | "change-password">("none");
   const [newPassword, setNewPassword] = useState("");
@@ -193,75 +195,154 @@ export function SecuritySection(): React.ReactElement {
 
   /* --- Mobile Subpage: Manage Devices --- */
   if (subpage === "manage-devices") {
-    const hasOtherDevices = devices.some((d) => !d.isCurrent);
     return (
       <div className="settings-mobile-subpage">
         <div className="settings-subpage-header">
           <button
             type="button"
             className="settings-subpage-back-btn"
-            onClick={() => setSubpage("none")}
+            onClick={() => {
+              setSelectedDevice(null);
+              setSubpage("none");
+            }}
             aria-label="Back"
           >
             <ChevronLeft size={20} />
           </button>
           <h2 className="settings-subpage-title">Manage devices</h2>
-          {hasOtherDevices ? (
-            <button type="button" className="settings-subpage-danger-btn" onClick={handleLogoutAll}>
-              Log out all
-            </button>
-          ) : (
-            <div style={{ width: 44 }} />
-          )}
+          <div style={{ width: 38 }} aria-hidden="true" />
         </div>
         <div className="settings-subpage-body">
-          <div className="settings-subpage-info-card">
-            <ShieldCheck size={16} className="settings-subpage-info-icon" aria-hidden="true" />
-            <p className="settings-subpage-info-text">
-              Review the devices currently signed in to your account. You can log out of any session
-              you do not recognize.
-            </p>
-          </div>
+          <p className="settings-mobile-devices-description">
+            Review the devices currently signed in to your account. You can log out of any session
+            you do not recognize.
+          </p>
 
-          <div className="settings-mobile-device-list">
+          <h3 className="settings-mobile-linked-devices-title">Linked devices</h3>
+
+          <div className="settings-mobile-linked-device-list">
             {devices.map((dev) => (
-              <div key={dev.id} className="settings-mobile-device-card">
-                <div className="settings-mobile-device-icon-wrap">
+              <button
+                key={dev.id}
+                type="button"
+                className="settings-mobile-linked-device-card"
+                onClick={() => setSelectedDevice(dev)}
+                aria-label={`View details for ${dev.name}`}
+              >
+                <div className="settings-mobile-linked-device-icon-wrap">
                   {dev.type === "mobile" ? (
                     <Smartphone
-                      size={20}
-                      className="settings-mobile-device-icon"
+                      size={22}
+                      className="settings-mobile-linked-device-icon"
                       aria-hidden="true"
                     />
                   ) : (
-                    <Laptop size={20} className="settings-mobile-device-icon" aria-hidden="true" />
+                    <Laptop
+                      size={22}
+                      className="settings-mobile-linked-device-icon"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
-                <div className="settings-mobile-device-info">
-                  <div className="settings-mobile-device-name-row">
-                    <span className="settings-mobile-device-name">{dev.name}</span>
-                    {dev.isCurrent && (
-                      <span className="settings-devices-current-badge">Current</span>
-                    )}
-                  </div>
-                  <p className="settings-mobile-device-meta">
-                    {dev.location} • {dev.isCurrent ? "Active now" : dev.lastActiveAt}
-                  </p>
+                <div className="settings-mobile-linked-device-info">
+                  <span className="settings-mobile-linked-device-name">{dev.name}</span>
+                  <span className="settings-mobile-linked-device-meta">
+                    {dev.isCurrent
+                      ? "Active now"
+                      : dev.lastActiveAt.toLowerCase().startsWith("last active")
+                        ? dev.lastActiveAt
+                        : `Last active ${dev.lastActiveAt}`}
+                  </span>
                 </div>
-                {!dev.isCurrent && (
-                  <button
-                    type="button"
-                    className="settings-mobile-device-logout-btn"
-                    onClick={() => handleLogoutDevice(dev.id)}
-                    aria-label={`Log out ${dev.name}`}
-                  >
-                    Log out
-                  </button>
-                )}
-              </div>
+                <ChevronRight
+                  size={18}
+                  className="settings-mobile-linked-device-chevron"
+                  aria-hidden="true"
+                />
+              </button>
             ))}
           </div>
         </div>
+
+        <DialogPrimitive.Root
+          open={!!selectedDevice}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) setSelectedDevice(null);
+          }}
+        >
+          <DialogPrimitive.Portal>
+            <DialogPrimitive.Overlay className="settings-device-sheet-overlay" />
+            <DialogPrimitive.Content className="settings-device-sheet" aria-describedby={undefined}>
+              <div className="settings-device-sheet-top-bar">
+                <DialogPrimitive.Close
+                  className="settings-device-sheet-close-btn"
+                  aria-label="Close"
+                >
+                  <X size={16} />
+                </DialogPrimitive.Close>
+              </div>
+
+              {selectedDevice && (
+                <>
+                  <div className="settings-device-sheet-hero">
+                    <div className="settings-device-sheet-icon-box">
+                      {selectedDevice.type === "mobile" ? (
+                        <Smartphone size={32} color="#ffffff" aria-hidden="true" />
+                      ) : (
+                        <Laptop size={32} color="#ffffff" aria-hidden="true" />
+                      )}
+                    </div>
+                    <DialogPrimitive.Title className="settings-device-sheet-title">
+                      {selectedDevice.name}
+                    </DialogPrimitive.Title>
+                    <p className="settings-device-sheet-subtitle">
+                      {selectedDevice.isCurrent
+                        ? "Current session"
+                        : selectedDevice.signedInAt.split(",")[0] || selectedDevice.signedInAt}
+                    </p>
+                  </div>
+
+                  <div className="settings-device-sheet-card">
+                    <div className="settings-device-sheet-row">
+                      <span className="settings-device-sheet-label">Location</span>
+                      <span className="settings-device-sheet-val">{selectedDevice.location}</span>
+                    </div>
+                    <div className="settings-device-sheet-divider" />
+                    <div className="settings-device-sheet-row">
+                      <span className="settings-device-sheet-label">Signed in</span>
+                      <span className="settings-device-sheet-val">{selectedDevice.signedInAt}</span>
+                    </div>
+                    <div className="settings-device-sheet-divider" />
+                    <div className="settings-device-sheet-row">
+                      <span className="settings-device-sheet-label">Last active</span>
+                      <span className="settings-device-sheet-val">
+                        {selectedDevice.isCurrent ? "Active now" : selectedDevice.lastActiveAt}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="settings-device-sheet-disclaimer">
+                    This location estimate is based on the IP address and may not always be
+                    accurate.
+                  </p>
+
+                  <div className="settings-device-sheet-actions">
+                    <button
+                      type="button"
+                      className="settings-device-sheet-terminate-btn"
+                      onClick={() => {
+                        handleLogoutDevice(selectedDevice.id);
+                        setSelectedDevice(null);
+                      }}
+                    >
+                      Terminate Session
+                    </button>
+                  </div>
+                </>
+              )}
+            </DialogPrimitive.Content>
+          </DialogPrimitive.Portal>
+        </DialogPrimitive.Root>
       </div>
     );
   }

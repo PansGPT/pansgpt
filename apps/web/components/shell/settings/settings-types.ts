@@ -10,8 +10,7 @@ export type SettingsSectionId =
   | "notifications"
   | "privacy"
   | "wellbeing"
-  | "data-storage"
-  | "about";
+  | "data-storage";
 
 export interface SettingsDraft {
   firstName: string;

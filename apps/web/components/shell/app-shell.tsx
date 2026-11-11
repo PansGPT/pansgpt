@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ApplicationNavPanel, Button, Slideout, ThemeProvider } from "@pansgpt/ui/shell";
+import { ApplicationNavPanel, Button, ThemeProvider } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
 import { profileFailureMessage } from "@/lib/profile-verification";
 import { BrandMark } from "@/components/auth/brand-art";
@@ -25,6 +25,7 @@ import { SettingsModal } from "./settings/settings-modal";
 import { PlannerComingSoon, PlannerModal } from "./planner-modal";
 import { TasksModalView } from "./tasks-modal-view";
 import { PlannerModalProvider, type PlannerTab } from "./planner-modal-context";
+import { SupportWidget } from "./support-widget";
 
 function Brand(): React.ReactElement {
   return (
@@ -283,8 +284,21 @@ function Workspace({
         help: false,
       }));
     }
+    function handleOpenHelp() {
+      setPanels((value) => ({
+        ...value,
+        help: true,
+        settings: false,
+        profile: false,
+        navigation: false,
+      }));
+    }
     window.addEventListener("pansgpt:open-settings", handleOpenSettings);
-    return () => window.removeEventListener("pansgpt:open-settings", handleOpenSettings);
+    window.addEventListener("pansgpt:open-help", handleOpenHelp);
+    return () => {
+      window.removeEventListener("pansgpt:open-settings", handleOpenSettings);
+      window.removeEventListener("pansgpt:open-help", handleOpenHelp);
+    };
   }, []);
   const panel = (mobile = false): React.ReactElement => (
     <ApplicationNavPanel
@@ -465,7 +479,7 @@ function Workspace({
                 <input
                   className="p-study-composer-input"
                   aria-label="Message PansGPT"
-                  placeholder="Message PansGPT…"
+                  placeholder="Message PansGPTâ€¦"
                   value={message}
                   maxLength={4000}
                   onChange={(event) => setMessage(event.target.value)}
@@ -568,32 +582,10 @@ function Workspace({
             </div>
           </PlannerModal>
         )}
-        <Slideout
-          title="Help"
-          description="Find your way around PansGPT."
+        <SupportWidget
           open={helpOpen}
           onOpenChange={(open) => setPanels((value) => ({ ...value, help: open }))}
-          onCloseAutoFocus={(event) => {
-            event.preventDefault();
-            returnToAccount();
-          }}
-        >
-          <div className="dashboard-sample-preview">
-            <h3>Your study space</h3>
-            <p>
-              Open Library for your course documents, or choose New chat in the navigation to start
-              a study chat.
-            </p>
-            <h3>Find your conversations</h3>
-            <p>
-              Search titles and messages beside Recent chats, or press Ctrl + K (Command + K on
-              Mac).
-            </p>
-            <h3>Your preferences</h3>
-            <p>Open your account at the bottom of the sidebar to change your theme or sign out.</p>
-            <p>Cards marked Sample show the intended experience while your account is new.</p>
-          </div>
-        </Slideout>
+        />
         {searchOpen && (
           <ConversationSearch
             open={searchOpen}
@@ -625,7 +617,7 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
     else if (profile && !profile.is_onboarded) router.replace("/onboarding");
   }, [loading, pathname, profile, profileError, router, session]);
   if (loading || (!session && !profileError) || (profile && !profile.is_onboarded))
-    return <WorkspaceLoading message="Connecting to your study space…" />;
+    return <WorkspaceLoading message="Connecting to your study spaceâ€¦" />;
   if (!profile || profile.id !== session?.user.id) {
     const failure = profileFailureMessage(
       profileError ?? { code: "invalid_response", retryable: true }
@@ -649,7 +641,7 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
             }}
           >
             {retrying
-              ? "Checking…"
+              ? "Checkingâ€¦"
               : profileError?.code === "session_unavailable"
                 ? "Reload sign-in"
                 : "Retry profile verification"}
