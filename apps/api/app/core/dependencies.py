@@ -13,7 +13,7 @@ from collections.abc import Callable
 
 import jwt
 import structlog
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Depends, Header, HTTPException, Request, status
 from jwt import PyJWKClient
 from jwt.exceptions import ExpiredSignatureError, InvalidTokenError, PyJWKClientError
 
@@ -221,7 +221,7 @@ set_cached_user_profile = _set_cached_role
 
 
 async def _lookup_user_profile(
-    user_id: str, claims: dict
+    user_id: str, claims: dict, *, write: bool = False
 ) -> tuple[list[str], str, uuid.UUID | None, str | None, str | None, str | None, str | None]:
     """
     Resolves roles and university_id for a verified JWT subject.
@@ -240,14 +240,45 @@ async def _lookup_user_profile(
         async with get_db_connection(timeout=3.0) as conn:
             if conn is None:
                 raise HTTPException(status_code=503, detail="Authorization store is unavailable.")
+            governance_columns = (
+                ", account_status, (SELECT status FROM public.universities WHERE id=users.university_id) AS institution_status"
+                if settings.ENABLE_GOVERNANCE
+                else ""
+            )
             row = await conn.fetchrow(
                 "SELECT roles, university_id, first_name, last_name, current_level, "
-                "terms_accepted_at::text, deleted_at FROM public.users WHERE id = $1;",
+                "terms_accepted_at::text, deleted_at" + governance_columns + " "
+                "FROM public.users WHERE id = $1;",
                 uuid.UUID(user_id),
             )
         if row:
             if row["deleted_at"] is not None:
                 raise HTTPException(status_code=401, detail="User account has been deactivated.")
+            if row.get("account_status", "active") in {"suspended", "banned", "rejected"}:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Your account access is restricted. Contact your university administrator.",
+                )
+            if row.get("account_status") == "pending" and "lecturer" in row["roles"]:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Your faculty application is awaiting review by your university administrator.",
+                )
+            if (
+                write
+                and row.get("institution_status") == "read_only"
+                and "super_admin" not in row["roles"]
+            ):
+                raise HTTPException(
+                    status_code=423, detail="Your university is currently in read-only mode."
+                )
+            if (
+                row.get("institution_status", "active") in {"suspended", "archived", "provisioning"}
+                and "super_admin" not in row["roles"]
+            ):
+                raise HTTPException(
+                    status_code=403, detail="Your university workspace is currently unavailable."
+                )
             roles = [str(role) for role in row["roles"]] or ["student"]
             primary_role = next(
                 (
@@ -355,6 +386,7 @@ async def get_current_user(
     x_user_role: str | None = Header(None),
     x_user_id: str | None = Header(None, alias="x-user-id"),
     x_api_key: str | None = Header(None, alias="x-api-key"),
+    request: Request = None,
 ) -> UserContext:
     """
     Resolves verified user identity:
@@ -380,7 +412,9 @@ async def get_current_user(
                 detail="Token missing subject (sub) claim.",
             )
         roles, role, uni_id, fname, lname, clevel, terms_at = await _lookup_user_profile(
-            sub, claims
+            sub,
+            claims,
+            write=request is not None and request.method not in {"GET", "HEAD", "OPTIONS"},
         )
         return UserContext(
             id=sub,

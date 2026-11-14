@@ -1,5 +1,12 @@
 # Provider privacy register
 
+## Shared course knowledge authorization — 14 November 2026
+
+- **Authority:** The user answered “Yes, let the AI use it” when asked whether AI answers should use course outlines and syllabus information admins add under Course knowledge. This followed disclosure that relevant excerpts use the existing chat providers and Google's accepted retention terms.
+- **Scope:** FastAPI may add shared, admin-entered curriculum text matching the authenticated student's university and level, and either the selected course or a university-level entry. At most eight excerpts of 1,500 characters each, bounded to 12,000 characters total, enter course-oriented generation. Deleted entries and other universities, levels and courses are excluded. General web answers do not receive this supplement.
+- **Provider controls:** Existing Google retention exception applies; Google is not verified ZDR. Groq and OpenRouter retain their existing eligibility and ZDR requirements. This approval adds no destination and does not authorize sending curriculum to Tavily, private student notes, full conversations or patient records through this supplement.
+- **Verification:** Local PostgreSQL tests verify scope and bounds with synthetic curriculum only. No live inference or hosted configuration change is part of this verification. Governance remains disabled by default until migration and release checks are completed.
+
 Decision: **Google/Gemini has a retention exception; Tavily has a separate public-search-only exception approved on 25 October; other integrations require verified ZDR.** Neither exception is verified ZDR. The user explicitly requested removal of the Google block on 2026-10-22 after reviewing its retention trade-off. The local Groq attestation below remains limited to the user's local credential; it does not attest staging or production.
 
 | Integration                                              | Attestation                                                                   | Current evidence                                                         | Eligibility                                                                         |

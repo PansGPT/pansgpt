@@ -10,6 +10,8 @@
     "test:auth": "playwright test",
     "test:chat": "playwright test --config playwright.chat.config.ts",
     "test:quiz": "playwright test --config playwright.quiz.config.ts",
+    "test:admin": "playwright test --config playwright.governance.config.ts",
+    "test:admin:integration": "playwright test --config playwright.governance-integration.config.ts",
     "test": "node --experimental-strip-types --test tests/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },

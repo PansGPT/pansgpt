@@ -11,6 +11,7 @@ import structlog
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel, Field
 
+from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import (
     UserContext,
@@ -52,7 +53,9 @@ class OnboardingRequest(StrictRequest):
     first_name: str = Field(min_length=1, max_length=100, description="Student first name")
     last_name: str | None = Field(default=None, max_length=100, description="Student last name")
     university_id: str = Field(description="Selected institution UUID")
-    current_level: str = Field(description="Academic study level (100 - 600)")
+    current_level: str | None = Field(
+        default=None, description="Academic study level (100 - 600); optional for verified staff"
+    )
     terms_accepted: bool = Field(
         description="Explicit agreement to Terms of Service & Privacy Policy"
     )
@@ -175,7 +178,9 @@ async def complete_onboarding(
         )
 
     # 2. Academic Level validation
-    if payload.current_level not in VALID_ACADEMIC_LEVELS:
+    if payload.current_level not in VALID_ACADEMIC_LEVELS and not (
+        current_user.role != "student" and payload.current_level is None
+    ):
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,  # [LEFTOVER FIX]
             detail=f"Invalid academic level '{payload.current_level}'. Must be one of: {', '.join(sorted(VALID_ACADEMIC_LEVELS))}.",
@@ -195,6 +200,7 @@ async def complete_onboarding(
             status_code=403, detail="Institution changes require administrator approval."
         )
     terms_accepted_at_str = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    resolved_level: str | None = payload.current_level
 
     # 4. Upsert into database
     async with get_db_connection() as conn:
@@ -224,11 +230,11 @@ async def complete_onboarding(
                         first_name = EXCLUDED.first_name,
                         last_name = EXCLUDED.last_name,
                         university_id = EXCLUDED.university_id,
-                        current_level = EXCLUDED.current_level,
+                        current_level = COALESCE(EXCLUDED.current_level,public.users.current_level),
                         terms_accepted_at = COALESCE(public.users.terms_accepted_at, EXCLUDED.terms_accepted_at),
                         updated_at = now()
                     WHERE public.users.university_id IS NULL OR public.users.university_id=EXCLUDED.university_id
-                    RETURNING terms_accepted_at::text;
+                    RETURNING terms_accepted_at::text,current_level::text;
                 """
                 row = await conn.fetchrow(
                     sql,
@@ -243,6 +249,7 @@ async def complete_onboarding(
                     raise HTTPException(status_code=503, detail="Profile could not be saved.")
                 if row and row["terms_accepted_at"]:
                     terms_accepted_at_str = row["terms_accepted_at"]
+                    resolved_level = row.get("current_level", payload.current_level)
             except HTTPException:
                 raise
             except Exception as exc:
@@ -256,7 +263,7 @@ async def complete_onboarding(
         "university_id": str(uni_uuid),
         "first_name": payload.first_name.strip(),
         "last_name": payload.last_name.strip() if payload.last_name else None,
-        "current_level": payload.current_level,
+        "current_level": resolved_level,
         "terms_accepted_at": terms_accepted_at_str,
     }
     await set_cached_user_profile(str(current_user.id), profile_data)
@@ -269,7 +276,7 @@ async def complete_onboarding(
         university_id=str(uni_uuid),
         first_name=payload.first_name.strip(),
         last_name=payload.last_name.strip() if payload.last_name else None,
-        current_level=payload.current_level,
+        current_level=resolved_level,
         terms_accepted_at=terms_accepted_at_str,
         is_onboarded=True,
         client_type=current_user.client_type,
@@ -310,7 +317,7 @@ async def get_invite_details(request: Request, token: str) -> InviteValidationRe
                         u.name AS uni_name, u.short_name AS uni_short_name, u.slug AS uni_slug
                     FROM public.invitations i
                     JOIN public.universities u ON u.id = i.university_id
-                    WHERE i.token = $1;
+                    WHERE i.token = $1 AND u.status='active';
                     """,
                     clean_token,
                 )
@@ -388,6 +395,18 @@ async def redeem_invite(
             )
             if not invite:
                 raise HTTPException(status_code=404, detail="Invitation was not found.")
+            governance_invite = bool(invite.get("target_email"))
+            if governance_invite and not settings.ENABLE_GOVERNANCE:
+                raise HTTPException(503, "Institutional invitations are temporarily paused.")
+            if governance_invite and invite["issued_by"] == current_user.id:
+                raise HTTPException(403, "Invitations cannot change your own access.")
+            if (
+                governance_invite
+                and invite["target_email"].casefold() != current_user.email.casefold()
+            ):
+                raise HTTPException(
+                    403, "Sign in with the email address this invitation was issued to."
+                )
             redeemed = await conn.fetchval(
                 "SELECT 1 FROM public.invitation_redemptions WHERE invitation_id=$1 AND user_id=$2;",
                 invite["id"],
@@ -402,17 +421,62 @@ async def redeem_invite(
                     raise HTTPException(
                         status_code=410, detail="Invitation is no longer available."
                     )
-                if set(invite["grant_roles"]) != {"lecturer"}:
+                grant_roles = set(invite["grant_roles"])
+                if grant_roles != {"lecturer"} and not (
+                    governance_invite and grant_roles in ({"student"}, {"university_admin"})
+                ):
                     raise HTTPException(
                         status_code=403, detail="This invitation cannot grant the requested role."
                     )
+                if governance_invite:
+                    issuer = await conn.fetchrow(
+                        """SELECT u.roles,u.university_id,u.account_status,u.deleted_at,m.admin_level FROM public.users u
+                    LEFT JOIN public.admin_memberships m ON m.user_id=u.id AND m.university_id=u.university_id WHERE u.id=$1 FOR SHARE OF u""",
+                        invite["issued_by"],
+                    )
+                    if (
+                        issuer is None
+                        or issuer["deleted_at"] is not None
+                        or issuer["account_status"] != "active"
+                        or not (
+                            "super_admin" in issuer["roles"]
+                            or (
+                                "university_admin" in issuer["roles"]
+                                and issuer["admin_level"] == "senior"
+                                and issuer["university_id"] == invite["university_id"]
+                                and invite.get("grant_admin_level") != "senior"
+                            )
+                        )
+                    ):
+                        raise HTTPException(
+                            403,
+                            "The invitation issuer no longer has permission to grant this access.",
+                        )
                 # Lock the actor too: concurrent invitations cannot move one user across tenants.
                 actor = await conn.fetchrow(
-                    "SELECT university_id FROM public.users WHERE id=$1 AND deleted_at IS NULL FOR UPDATE;",
+                    (
+                        "SELECT university_id,roles FROM public.users WHERE id=$1 AND deleted_at IS NULL FOR UPDATE;"
+                        if governance_invite
+                        else "SELECT university_id FROM public.users WHERE id=$1 AND deleted_at IS NULL FOR UPDATE;"
+                    ),
                     current_user.id,
                 )
                 if actor is None:
-                    raise HTTPException(status_code=403, detail="An active profile is required.")
+                    if not governance_invite:
+                        raise HTTPException(
+                            status_code=403, detail="An active profile is required."
+                        )
+                    await conn.execute(
+                        "INSERT INTO public.users(id,email,first_name) VALUES($1,$2,'') ON CONFLICT(id) DO NOTHING",
+                        current_user.id,
+                        current_user.email,
+                    )
+                    actor = await conn.fetchrow(
+                        "SELECT university_id,roles FROM public.users WHERE id=$1 AND deleted_at IS NULL FOR UPDATE",
+                        current_user.id,
+                    )
+                    if actor is None:
+                        raise HTTPException(403, "An active profile is required.")
                 if (
                     actor["university_id"] is not None
                     and actor["university_id"] != invite["university_id"]
@@ -420,12 +484,42 @@ async def redeem_invite(
                     raise HTTPException(
                         status_code=403, detail="Invitation belongs to another university."
                     )
+                if (
+                    governance_invite
+                    and grant_roles == {"university_admin"}
+                    and "university_admin" in actor.get("roles", [])
+                ):
+                    raise HTTPException(
+                        409, "An invitation cannot change an existing administrator membership."
+                    )
+                if governance_invite and grant_roles == {"university_admin"}:
+                    membership = await conn.fetchval(
+                        "SELECT admin_level FROM public.admin_memberships WHERE user_id=$1",
+                        current_user.id,
+                    )
+                    if membership is not None:
+                        raise HTTPException(
+                            409,
+                            "An invitation cannot replace an existing administrator assignment.",
+                        )
                 await conn.execute(
-                    "UPDATE public.users SET university_id=$2, roles=ARRAY(SELECT DISTINCT unnest(roles || ARRAY['lecturer']::public.user_role[])), current_level=COALESCE(current_level,$3), updated_at=now() WHERE id=$1;",
+                    "UPDATE public.users SET university_id=$2, roles=ARRAY(SELECT DISTINCT unnest(roles || $4::public.user_role[])), current_level=COALESCE(current_level,$3), updated_at=now() WHERE id=$1;",
                     current_user.id,
                     invite["university_id"],
                     invite["target_level"],
+                    list(grant_roles),
                 )
+                if governance_invite and grant_roles == {"university_admin"}:
+                    if invite.get("grant_admin_level") not in {"senior", "standard"}:
+                        raise HTTPException(403, "Invalid administrator invitation.")
+                    await conn.execute(
+                        """INSERT INTO public.admin_memberships(user_id,university_id,admin_level,assigned_by) VALUES($1,$2,$3,$4)
+                    """,
+                        current_user.id,
+                        invite["university_id"],
+                        invite["grant_admin_level"],
+                        invite["issued_by"],
+                    )
                 await conn.execute(
                     "INSERT INTO public.invitation_redemptions(invitation_id,user_id) VALUES($1,$2);",
                     invite["id"],
@@ -435,5 +529,23 @@ async def redeem_invite(
                     "UPDATE public.invitations SET current_uses=current_uses+1 WHERE id=$1;",
                     invite["id"],
                 )
+                if governance_invite:
+                    import json
+
+                    await conn.execute(
+                        """INSERT INTO public.audit_logs(actor_user_id,actor_email,actor_role,university_id,action,target_type,target_id,metadata)
+                    VALUES($1,$2,$3,$4,'invitations.accept','users',$1,$5::jsonb)""",
+                        current_user.id,
+                        current_user.email,
+                        next(iter(grant_roles)),
+                        invite["university_id"],
+                        json.dumps(
+                            {
+                                "invitation_id": str(invite["id"]),
+                                "grant_roles": sorted(grant_roles),
+                                "reason": "Email-bound institutional invitation accepted",
+                            }
+                        ),
+                    )
     await invalidate_user_role_cache(current_user.id)
     return {"redeemed": True, "university_id": str(invite["university_id"])}

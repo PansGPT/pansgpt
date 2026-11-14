@@ -99,12 +99,19 @@ async def get_document_thumbnail(
 async def initialize_document_upload(
     payload: DocumentUploadRequest,
     auth_user: UserContext = Depends(require_lecturer),  # [PRELAUNCH FIX]
+    target_university_id: uuid.UUID | None = Query(default=None, alias="university_id"),
 ) -> DocumentUploadResponse:  # [PRELAUNCH FIX]
     """
     Stage 1: Generates an immutable Cloudflare R2 path and a time-limited presigned PUT URL.
     The client streams the PDF directly to R2 edge storage ($0 egress).
     """
-    university_id = str(require_university(auth_user))  # [TENANT FIX]
+    if not isinstance(target_university_id, uuid.UUID):
+        target_university_id = None
+    if target_university_id is not None and (
+        "super_admin" not in auth_user.roles or not settings.ENABLE_GOVERNANCE
+    ):
+        target_university_id = None  # Ordinary staff cannot override their authenticated tenant.
+    university_id = str(target_university_id or require_university(auth_user))
     doc_id = str(uuid7())  # [LEFTOVER FIX]
     try:  # [PRELAUNCH FIX]
         ext = payload.upload_extension()  # [PRELAUNCH FIX]
@@ -142,6 +149,21 @@ async def initialize_document_upload(
             statement_cache_size=0,  # [PRELAUNCH FIX]
         )  # [PRELAUNCH FIX]
         async with conn.transaction():  # [PRELAUNCH FIX]
+            if settings.ENABLE_GOVERNANCE:
+                allocation = await conn.fetchrow(
+                    "SELECT max_storage_bytes,status FROM public.universities WHERE id=$1 FOR UPDATE",
+                    uuid.UUID(university_id),
+                )
+                if allocation is None or allocation["status"] != "active":
+                    raise HTTPException(423, "This university is not accepting uploads.")
+                used = await conn.fetchval(
+                    "SELECT coalesce(sum(file_size_bytes),0) FROM public.documents WHERE university_id=$1 AND deleted_at IS NULL",
+                    uuid.UUID(university_id),
+                )
+                if used + payload.file_size_bytes > allocation["max_storage_bytes"]:
+                    raise HTTPException(
+                        413, "This upload exceeds the university storage allocation."
+                    )
             # A link failure rolls the inserted document back before returning an error. [PRELAUNCH FIX]
             inserted = await conn.execute(  # [PRELAUNCH FIX]
                 "INSERT INTO public.documents ("  # [PRELAUNCH FIX]

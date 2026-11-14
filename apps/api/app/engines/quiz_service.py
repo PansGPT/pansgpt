@@ -60,6 +60,9 @@ def scope(user: UserContext) -> UUID:
 
 
 async def check_exam(conn: asyncpg.Connection, user: UserContext, course: str) -> None:
+    from app.core.governance_access import check_ai_access
+
+    await check_ai_access(conn, user, course)
     blocked = await conn.fetchval(
         """SELECT EXISTS(SELECT 1 FROM public.exam_restrictions
     WHERE university_id=$1 AND level=$2::public.university_level AND (course_code IS NULL OR course_code=$3)

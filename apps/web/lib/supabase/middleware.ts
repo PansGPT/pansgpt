@@ -9,7 +9,8 @@ export async function updateSession(request: NextRequest) {
   // cookie auth here would call Supabase on every autosave/progress request.
   if (
     request.nextUrl.pathname === "/api/quiz" ||
-    request.nextUrl.pathname.startsWith("/api/quiz/")
+    request.nextUrl.pathname.startsWith("/api/quiz/") ||
+    request.nextUrl.pathname.startsWith("/api/governance/")
   ) {
     return NextResponse.next({ request });
   }
@@ -60,7 +61,12 @@ export async function updateSession(request: NextRequest) {
     return redirect("/forgot-password?error=recovery_required");
   if (
     !user &&
-    (pathname === "/app" || pathname.startsWith("/app/") || pathname === "/onboarding")
+    (pathname === "/app" ||
+      pathname.startsWith("/app/") ||
+      pathname === "/onboarding" ||
+      ["/admin", "/super-admin", "/lecturer"].some(
+        (base) => pathname === base || pathname.startsWith(base + "/")
+      ))
   ) {
     return redirect(`/login?next=${encodeURIComponent(pathname + request.nextUrl.search)}`);
   }

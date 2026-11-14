@@ -1575,6 +1575,8 @@ Following explicit user approval, Supabase CLI applied `20261026100000_quiz_life
 
 ## 🏫 PHASE 16 — Portals + Governance
 
+Implementation update (13 November 2026): administrative frontend/API work is on `feat/admin-workspaces`; see [implementation and verification handoff](admin-implementation-2026-11-13.md). Local review/account journeys run through the browser, FastAPI and an isolated PostgreSQL database. Invitation handoff approval and hosted integration/release gates remain open; the phase is not certified complete.
+
 ### 16.1 Backend Governance & Exam Restriction APIs (`apps/api/app/routers/exam.py` & `admin.py`)
 
 - [ ] Exam restriction enforcement middleware: time-locked windows that disable AI assistance during exams

@@ -41,6 +41,7 @@ from app.engines.chat_interactions import (
     select_path,
 )
 from app.engines.chat_progress import ChatProgress, public_progress_text
+from app.engines.governance_policy import configured_generation, load_policy
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
@@ -359,6 +360,18 @@ async def stream_chat_session(
     """
     user_id = str(current_user.id)  # [TENANT FIX]
     university_id = str(require_university(current_user))  # [TENANT FIX]
+    from app.core.governance_access import check_ai_access
+
+    async with get_db_connection() as governance_conn:
+        if governance_conn is None:
+            raise HTTPException(503, "Unable to verify assessment restrictions. Please retry.")
+        await check_ai_access(governance_conn, current_user)
+        governance_policy = await load_policy(
+            governance_conn,
+            current_user.university_id,
+            current_user.current_level,
+            payload.course_code,
+        )
     await require_owned_session(session_id, current_user, payload.parent_message_id)  # [TENANT FIX]
     if payload.document_id:  # [TENANT FIX]
         await check_document_scope(  # [TENANT FIX]
@@ -588,7 +601,7 @@ async def stream_chat_session(
         if classification.requires_web:
             if update := progress.emit("searching_sources"):
                 yield update
-            if not payload.enable_tools:
+            if not payload.enable_tools or not governance_policy.web_search_enabled:
                 web_result = WebSearchResponse(
                     status="tools_disabled",
                     message="Web search is disabled for this message. Enable tools to verify current information.",
@@ -622,14 +635,19 @@ async def stream_chat_session(
             if update := progress.emit("checking_materials"):
                 yield update
             try:
-                async with asyncio.timeout(settings.CHAT_RETRIEVAL_TIMEOUT_S):
+                retrieval_deadline = min(
+                    time.monotonic() + settings.CHAT_RETRIEVAL_TIMEOUT_S, stream_deadline
+                )
+                if time.monotonic() >= retrieval_deadline:
+                    raise RequestDeadlineExceeded("Chat request deadline exceeded")
+                async with asyncio.timeout_at(retrieval_deadline):
                     rag_context, citations = await rag_engine.retrieve_context(
                         query=classification.retrieval_query or turn.prompt,
                         document_id=payload.document_id,
                         university_id=university_id,
                         course_code=payload.course_code,
                         match_count=4,
-                        match_threshold=0.25,
+                        match_threshold=governance_policy.rag_threshold,
                         expand_siblings=True,
                         expand_full_segment=payload.expand_full_segment,
                         conversation_history=history_turns,
@@ -647,6 +665,8 @@ async def stream_chat_session(
                 yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
                 return
             except Exception as exc:
+                if time.monotonic() >= stream_deadline:
+                    raise RequestDeadlineExceeded("Chat request deadline exceeded") from exc
                 timed_out = isinstance(exc, (TimeoutError, QueryCanceledError))
                 logger.warning(
                     "rag_pipeline_execution_error",
@@ -696,6 +716,16 @@ async def stream_chat_session(
             general=classification.search_scope == "general",
             has_web_sources=any(item.source_type == "web" for item in citations),
         ) + attachment_context(turn.attachments)
+        if governance_policy.system_prompt:
+            system_prompt += (
+                "\nPLATFORM STUDY GUIDANCE (clinical safety and verified-source rules still apply):\n"
+                + governance_policy.system_prompt
+            )
+        if governance_policy.curriculum_context and classification.search_scope != "general":
+            system_prompt += (
+                "\nUNIVERSITY CURRICULUM CONTEXT (source data; clinical claims still require verified evidence):\n"
+                + governance_policy.curriculum_context
+            )
 
         if image_attachments:
             system_prompt += (
@@ -731,37 +761,41 @@ async def stream_chat_session(
                     return
                 yield "text_chunk", {"token": answer}, classification.routing_provider or "router"
                 return
-            async for event in llm_engine.stream_agentic_chat(
-                system_prompt=system_prompt,
-                user_message=turn.prompt,
-                history=history_turns,
-                user_id=user_id,
-                university_id=university_id,
-                enable_tools=classification.requires_tools,
-                role=current_user.role,
-                levels=[current_user.current_level] if current_user.current_level else None,
-                fast_path=is_fast_path
-                or (
-                    classification.requires_web
-                    and classification.search_scope == "general"
-                    and not classification.requires_tools
+            async for event in configured_generation(
+                llm_engine.stream_agentic_chat(
+                    system_prompt=system_prompt,
+                    user_message=turn.prompt,
+                    history=history_turns,
+                    user_id=user_id,
+                    university_id=university_id,
+                    enable_tools=classification.requires_tools,
+                    role=current_user.role,
+                    levels=[current_user.current_level] if current_user.current_level else None,
+                    fast_path=is_fast_path
+                    or (
+                        classification.requires_web
+                        and classification.search_scope == "general"
+                        and not classification.requires_tools
+                    ),
+                    web_search_scope=classification.search_scope,
+                    public_web_search=classification.public_search_query
+                    and not bool(turn.attachments or payload.document_id or payload.course_code),
+                    current_information=classification.current_information,
+                    presentation_request=classification.presentation is not None,
+                    validate_presentation_request=True,
+                    presentation_slide_count=classification.presentation.slide_count
+                    if classification.presentation
+                    else None,
+                    presentation_sources=[
+                        PresentationSource(
+                            title=item.title[:200],
+                            url=item.url if item.source_type == "web" else None,
+                        )
+                        for item in citations
+                    ],
+                    session_id=session_id,
                 ),
-                web_search_scope=classification.search_scope,
-                public_web_search=classification.public_search_query
-                and not bool(turn.attachments or payload.document_id or payload.course_code),
-                current_information=classification.current_information,
-                presentation_request=classification.presentation is not None,
-                validate_presentation_request=True,
-                presentation_slide_count=classification.presentation.slide_count
-                if classification.presentation
-                else None,
-                presentation_sources=[
-                    PresentationSource(
-                        title=item.title[:200], url=item.url if item.source_type == "web" else None
-                    )
-                    for item in citations
-                ],
-                session_id=session_id,
+                governance_policy.temperature,
             ):
                 yield event
 

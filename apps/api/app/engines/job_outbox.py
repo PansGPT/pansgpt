@@ -3,6 +3,7 @@
 import uuid
 from typing import Any
 
+import asyncpg
 import structlog
 
 from app.core.config import settings
@@ -12,19 +13,33 @@ logger = structlog.get_logger(__name__)
 PICTURE_QUEUE_NAME = "arq:picture_queue"
 
 
-async def record_job(document_id: str, storage_key: str, job_name: str) -> str:
+async def record_job(
+    document_id: str,
+    storage_key: str,
+    job_name: str,
+    *,
+    connection: asyncpg.Connection | None = None,
+) -> str:
+    if connection is not None:
+        return await _record_job(connection, document_id, storage_key, job_name)
     async with get_db_connection() as conn:
         if conn is None:
             raise RuntimeError("Job storage is unavailable")
-        job_id = await conn.fetchval(
-            "INSERT INTO public.background_jobs(document_id, storage_key, job_name) VALUES($1,$2,$3) "
-            "ON CONFLICT(document_id, job_name) DO UPDATE SET "
-            "id = CASE WHEN background_jobs.status IN ('completed','failed') THEN public.uuid_generate_v7() ELSE background_jobs.id END, "
-            "storage_key=EXCLUDED.storage_key, status='pending', updated_at=now() RETURNING id;",
-            uuid.UUID(document_id),
-            storage_key,
-            job_name,
-        )
+        return await _record_job(conn, document_id, storage_key, job_name)
+
+
+async def _record_job(
+    conn: asyncpg.Connection, document_id: str, storage_key: str, job_name: str
+) -> str:
+    job_id = await conn.fetchval(
+        "INSERT INTO public.background_jobs(document_id, storage_key, job_name) VALUES($1,$2,$3) "
+        "ON CONFLICT(document_id, job_name) DO UPDATE SET "
+        "id = CASE WHEN background_jobs.status IN ('completed','failed') THEN public.uuid_generate_v7() ELSE background_jobs.id END, "
+        "storage_key=EXCLUDED.storage_key, status='pending', updated_at=now() RETURNING id;",
+        uuid.UUID(document_id),
+        storage_key,
+        job_name,
+    )
     return str(job_id)
 
 

@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
     ENABLE_AI: bool = True
     ENABLE_QUIZ: bool = False
+    ENABLE_GOVERNANCE: bool = False  # Enable after governance migration and integration gates.
+    FRONTEND_URL: str = "https://pansgpt.com"
     # Speculative generation spends the same daily allowance as student requests.
     ENABLE_QUIZ_INVENTORY: bool = False
     AI_CAPACITY_ENABLED: bool = True
