@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   listAccountSessions,
   revokeAccountSessions,
@@ -9,13 +9,13 @@ import {
   updateAccountPassword,
 } from "@/lib/settings";
 import type { AccountSession } from "@pansgpt/types";
+import { toast } from "@pansgpt/ui/shell";
 
 export function useAccountSecurity(token: string | undefined) {
   const [sessions, setSessions] = useState<AccountSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(false);
   const [sessionError, setSessionError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
   const [revoking, setRevoking] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,12 +32,26 @@ export function useAccountSecurity(token: string | undefined) {
   const passwordMutation = useRef(false);
   const confirmationMutation = useRef(false);
   const reads = useRef<AbortController | null>(null);
+  const notifications = useRef(new Set<string | number>());
+  const notificationId = useId();
+  const notify = useCallback(
+    (message: string, error = false): void => {
+      notifications.current.add(
+        error
+          ? toast.error(message, { id: notificationId })
+          : toast.success(message, { id: notificationId })
+      );
+    },
+    [notificationId]
+  );
   const [revision, setRevision] = useState(0);
   useEffect(() => {
     alive.current = true;
+    const ownedNotifications = notifications.current;
     return () => {
       alive.current = false;
       reads.current?.abort();
+      for (const id of ownedNotifications) toast.dismiss(id);
     };
   }, []);
   useEffect(() => {
@@ -70,23 +84,21 @@ export function useAccountSecurity(token: string | undefined) {
       reads.current?.abort();
       setRevoking(true);
       setSessionError(null);
-      setNotice(null);
       try {
         await revokeAccountSessions(token, id);
         if (!alive.current) return false;
         reads.current?.abort();
         setSessions((rows) => rows.filter((row) => (id ? row.id !== id : row.is_current)));
         if (!id) setHasMore(false);
-        setNotice(
-          id ? "Device logged out." : "Other devices logged out. This session stays signed in."
-        );
+        notify(id ? "Device logged out." : "Other devices logged out.");
         return true;
       } catch (error: unknown) {
         if (alive.current)
-          setSessionError(
+          notify(
             error instanceof SettingsError
               ? error.message
-              : "Couldn't log out that device. Please try again."
+              : "Couldn't log out that device. Please try again.",
+            true
           );
         return false;
       } finally {
@@ -97,7 +109,7 @@ export function useAccountSecurity(token: string | undefined) {
         }
       }
     },
-    [token]
+    [token, notify]
   );
 
   function clearPassword(): void {
@@ -132,7 +144,6 @@ export function useAccountSecurity(token: string | undefined) {
     setSaving(true);
     setPasswordError(null);
     setPasswordNotice(null);
-    setNotice(null);
     try {
       await updateAccountPassword(token, {
         password,
@@ -141,7 +152,7 @@ export function useAccountSecurity(token: string | undefined) {
       });
       if (!alive.current) return false;
       clearPassword();
-      setNotice("Password updated.");
+      notify("Password updated.");
       // Auth policy may end other sessions when the password changes.
       setLoading(true);
       setRevision((value) => value + 1);
@@ -188,7 +199,6 @@ export function useAccountSecurity(token: string | undefined) {
     loading,
     hasMore,
     sessionError,
-    notice,
     revoking,
     revoke,
     reload: () => {

@@ -133,22 +133,34 @@ async def test_invalid_password_validation_never_echoes_secrets(
     assert all("input" not in error for error in result.json()["detail"])
 
 
+@pytest.mark.parametrize(
+    "agent,stored_ip,display_ip",
+    [
+        (None, "192.0.2.1/32", "192.0.2.1"),
+        ("node", "192.0.2.1/32", "192.0.2.1"),
+        ("python-httpx/0.28.1", "2001:db8::1/128", "2001:db8::1"),
+        (" ", None, None),
+    ],
+)
 async def test_owned_session_list_contains_no_fake_metadata_or_secret_material(
     client: httpx.AsyncClient,
     controls: TenantTestState,
+    agent: str | None,
+    stored_ip: str | None,
+    display_ip: str | None,
 ) -> None:
     now = datetime.now(UTC)
     controls.connection.fetch.return_value = [
         {
             "id": CURRENT,
             "user_agent": "Mozilla Chrome/100 Windows",
-            "ip_address": "192.0.2.1",
+            "ip_address": stored_ip,
             "created_at": now,
             "last_active_at": now,
         },
         {
             "id": OTHER,
-            "user_agent": None,
+            "user_agent": agent,
             "ip_address": None,
             "created_at": None,
             "last_active_at": None,
@@ -159,6 +171,7 @@ async def test_owned_session_list_contains_no_fake_metadata_or_secret_material(
     assert result.headers["cache-control"] == "private, no-store"
     current, other = result.json()["sessions"]
     assert current["is_current"] and current["device"] == "Chrome (Windows)"
+    assert current["ip_address"] == display_ip
     assert (
         not other["is_current"]
         and other["device"] == "Unknown device"
@@ -166,6 +179,25 @@ async def test_owned_session_list_contains_no_fake_metadata_or_secret_material(
     )
     assert "refresh_token" not in result.text and "user_agent" not in result.text
     assert controls.connection.fetch.call_args.args[1:] == (controls.user.id, CURRENT)
+
+
+@pytest.mark.parametrize("marker,browser", [("CriOS/100", "Chrome"), ("FxiOS/100", "Firefox")])
+async def test_ios_browser_identity_takes_precedence_over_safari_compatibility_token(
+    client: httpx.AsyncClient, controls: TenantTestState, marker: str, browser: str
+) -> None:
+    controls.connection.fetch.return_value = [
+        {
+            "id": CURRENT,
+            "user_agent": f"Mozilla/5.0 (iPhone) {marker} Mobile/123 Safari/604.1",
+            "ip_address": None,
+            "created_at": None,
+            "last_active_at": None,
+        }
+    ]
+    response = await client.get("/api/v1/settings/sessions", headers=HEADERS)
+    assert response.status_code == 200
+    assert response.json()["sessions"][0]["device"] == f"{browser} (iPhone)"
+    assert response.json()["sessions"][0]["device_type"] == "mobile"
 
 
 @pytest.mark.parametrize("target", [None, OTHER, CURRENT])

@@ -81,9 +81,7 @@ test("desktop password waits for confirmation, preserves failed drafts and retri
   await expect.poll(() => !!held).toBe(true);
   await held.fulfill({ json: { status: "updated" } });
   await expect(editor).not.toBeVisible();
-  await expect(modal.getByRole("status").filter({ hasText: "Password updated." })).toHaveText(
-    "Password updated."
-  );
+  await expect(page.locator("[data-sonner-toast]")).toContainText("Password updated.");
   await expect(modal.locator("tbody tr")).toHaveCount(1);
   expect(attempts).toBe(2);
 });
@@ -126,16 +124,50 @@ test("desktop owned devices remain after failed logout and all-others keeps the 
 }) => {
   const modal = await security(page);
   await expect(modal.locator("tbody tr")).toHaveCount(2);
-  await expect(modal.getByText("Not available", { exact: true })).toHaveCount(3);
+  await expect(modal.locator("thead th")).toHaveText([
+    "Device",
+    "Location",
+    "Signed in",
+    "Last active",
+  ]);
+  expect(
+    await modal.locator("thead th").evaluateAll((cells) => cells.map((cell) => cell.style.width))
+  ).toEqual(["32%", "22%", "23%", "23%"]);
+  await expect(modal.locator("tbody tr").first().locator("td").nth(1)).toHaveText("Not available");
+  await expect(modal.locator("tbody tr").first().locator("td").nth(1)).toHaveAttribute(
+    "title",
+    "IP address: 192.0.2.10"
+  );
+  await expect(modal.locator("tbody tr").first().locator("td").nth(2)).toHaveText(
+    /^Nov 15, 2026, \d{1,2}:\d{2} [AP]M$/
+  );
+  await expect(
+    modal
+      .getByRole("button", { name: "Session options for Unknown device", exact: true })
+      .locator("svg")
+  ).toHaveAttribute("class", /lucide-(ellipsis|more-horizontal)/);
+  await page.screenshot({ path: test.info().outputPath("settings-sessions-desktop-restored.png") });
   let held;
   await page.route(`**/api/settings/sessions/${other}`, (route) => {
     held = route;
   });
-  await modal.getByRole("button", { name: "Log out Unknown device", exact: true }).click();
+  await modal
+    .getByRole("button", { name: "Session options for Unknown device", exact: true })
+    .click();
+  const actions = page.getByRole("menu", {
+    name: "Session actions for Unknown device",
+    exact: true,
+  });
+  await expect(actions).toHaveCSS("width", "128px");
+  await page.screenshot({ path: test.info().outputPath("settings-device-terminate-menu.png") });
+  expect(held).toBeUndefined();
+  await actions.getByRole("menuitem", { name: "Terminate", exact: true }).click();
   await expect.poll(() => !!held).toBe(true);
   await expect(modal.locator("tbody tr")).toHaveCount(2);
   await held.fulfill({ status: 503, json: unavailable });
-  await expect(modal.getByRole("alert")).toHaveText("Something went wrong. Please try again.");
+  await expect(page.locator("[data-sonner-toast]")).toContainText(
+    "Something went wrong. Please try again."
+  );
   await expect(modal.locator("tbody tr")).toHaveCount(2);
   await page.route("**/api/settings/sessions", (route) =>
     route.request().method() === "DELETE"
@@ -145,7 +177,17 @@ test("desktop owned devices remain after failed logout and all-others keeps the 
   await modal.getByRole("button", { name: "Log out other devices", exact: true }).click();
   await expect(modal.locator("tbody tr")).toHaveCount(1);
   await expect(modal.locator("tbody tr")).toContainText("Chrome (Windows)");
-  await expect(modal.getByRole("status")).toContainText("This session stays signed in");
+  await expect(page.locator('[data-sonner-toast][data-type="success"]')).toContainText(
+    "Other devices logged out."
+  );
+  const notice = page.locator('[data-sonner-toast][data-type="success"]');
+  await expect(notice.locator("[data-icon]")).toHaveCount(0);
+  await expect(notice.getByRole("button")).toHaveCount(0);
+  await expect(notice).toHaveCSS("font-size", "13px");
+  expect((await notice.boundingBox()).height).toBeLessThanOrEqual(40);
+  expect((await notice.boundingBox()).width).toBeLessThan(280);
+  await page.screenshot({ path: test.info().outputPath("settings-minimal-toast-desktop.png") });
+  await expect(modal.locator(".settings-content-pane > p[role='status']")).toHaveCount(0);
 });
 
 test("mobile password and device controls use the same confirmed operations", async ({ page }) => {
@@ -159,14 +201,19 @@ test("mobile password and device controls use the same confirmed operations", as
   await modal.getByRole("button", { name: "Change password", exact: true }).click();
   await passwords(modal);
   await modal.getByRole("button", { name: "Save", exact: true }).click();
-  await expect(modal.getByRole("status")).toHaveText("Password updated.");
+  await expect(page.locator("[data-sonner-toast]")).toContainText("Password updated.");
   await modal.getByRole("button", { name: "Manage devices", exact: true }).click();
   await modal.getByRole("button", { name: "View details for Unknown device", exact: true }).click();
   const sheet = page.getByRole("dialog", { name: "Unknown device", exact: true });
   await expect(
     sheet.locator(".settings-device-sheet-card").getByText("Not available", { exact: true })
   ).toHaveCount(3);
-  await sheet.getByRole("button", { name: "Log out device", exact: true }).click();
+  await expect(sheet.getByText("Location", { exact: true })).toBeVisible();
+  await expect(sheet.locator(".settings-device-sheet-divider")).toHaveCount(2);
+  await page.screenshot({
+    path: test.info().outputPath("settings-device-details-mobile-restored.png"),
+  });
+  await sheet.getByRole("button", { name: "Terminate Session", exact: true }).click();
   await expect(sheet).not.toBeVisible();
   await expect(
     modal.getByRole("button", { name: "View details for Unknown device", exact: true })
@@ -174,6 +221,11 @@ test("mobile password and device controls use the same confirmed operations", as
   await expect(
     modal.getByRole("button", { name: "View details for Chrome (Windows)", exact: true })
   ).toBeVisible();
+  const notice = page.locator('[data-sonner-toast][data-type="success"]');
+  await expect(notice).toContainText("Device logged out.");
+  await expect(notice.locator("[data-icon]")).toHaveCount(0);
+  await expect(notice.getByRole("button")).toHaveCount(0);
+  expect((await notice.boundingBox()).height).toBeLessThanOrEqual(40);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: test.info().outputPath("settings-devices-mobile.png") });
 });
@@ -302,4 +354,53 @@ test("device list failure has an explicit recovery without displaying sample dev
   await modal.getByRole("button", { name: "Retry devices", exact: true }).click();
   await expect(modal.locator("tbody tr")).toHaveCount(2);
   await expect(modal.getByRole("alert")).toHaveCount(0);
+});
+
+test("device loading uses a spinner without visible loading prose", async ({ page }) => {
+  const modal = await open(page);
+  let held;
+  await page.route("**/api/settings/sessions", (route) => {
+    held = route;
+  });
+  await modal.getByRole("button", { name: "Security", exact: true }).click();
+  const spinner = modal.getByRole("status", { name: "Loading devices", exact: true });
+  await expect(spinner).toBeVisible();
+  await expect(spinner.locator("svg")).toHaveCount(1);
+  await expect(spinner).toHaveText("");
+  await expect(modal.locator("table")).toHaveAttribute("aria-busy", "true");
+  await expect.poll(() => !!held).toBe(true);
+  await held.fulfill({ json: { sessions, has_more: false } });
+  await expect(spinner).not.toBeVisible();
+  await expect(modal.locator("tbody tr")).toHaveCount(2);
+});
+
+test("current-session menu logs out locally and failed logout shows a toast", async ({ page }) => {
+  await page.addInitScript(() => {
+    window.__previewSignOutFails = true;
+  });
+  const modal = await security(page);
+  const trigger = modal.getByRole("button", {
+    name: "Session options for Chrome (Windows)",
+    exact: true,
+  });
+  await trigger.click();
+  const menu = page.getByRole("menu", {
+    name: "Session actions for Chrome (Windows)",
+    exact: true,
+  });
+  await expect(menu.getByRole("menuitem")).toHaveText("Log out");
+  await page.screenshot({ path: test.info().outputPath("settings-current-session-menu.png") });
+  await menu.getByRole("menuitem", { name: "Log out", exact: true }).click();
+  await expect(page.locator("[data-sonner-toast]")).toContainText(
+    "Couldn't log out. Please try again."
+  );
+  await expect(modal).toBeVisible();
+  expect(await page.evaluate(() => window.__previewSignOutCalls)).toEqual(["local"]);
+  await page.evaluate(() => {
+    window.__previewSignOutFails = false;
+  });
+  await trigger.click();
+  await menu.getByRole("menuitem", { name: "Log out", exact: true }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  expect(await page.evaluate(() => window.__previewSignOutCalls)).toEqual(["local", "local"]);
 });

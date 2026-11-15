@@ -1,17 +1,30 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
   X,
   Laptop,
   Smartphone,
-  LogOut,
+  MoreHorizontal,
   Info,
   LockKeyhole,
+  LoaderCircle,
+  AlertCircle,
+  RotateCw,
 } from "lucide-react";
-import { Button, DialogPrimitive } from "@pansgpt/ui/shell";
+import {
+  Button,
+  DialogPrimitive,
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+  Toaster,
+  toast,
+} from "@pansgpt/ui/shell";
 import { useAuth } from "@/lib/auth-context";
 import type { AccountSession } from "@pansgpt/types";
 import { useAccountSecurity } from "../use-account-security";
@@ -19,9 +32,22 @@ import { SettingsSection } from "../settings-section";
 import { SettingsRow } from "../settings-row";
 
 type SecurityControls = ReturnType<typeof useAccountSecurity>;
+function DeviceLoading(): React.ReactElement {
+  return (
+    <div className="settings-device-loading" role="status" aria-label="Loading devices">
+      <LoaderCircle size={18} className="animate-spin" aria-hidden="true" />
+    </div>
+  );
+}
 function date(value: string | null): string {
   return value && Number.isFinite(Date.parse(value))
-    ? new Date(value).toLocaleString()
+    ? new Date(value).toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
     : "Not available";
 }
 
@@ -54,7 +80,11 @@ function PasswordFields({
           {controls.passwordError}
         </p>
       )}
-      {controls.passwordNotice && <p role="status">{controls.passwordNotice}</p>}
+      {controls.passwordNotice && (
+        <p className="settings-field-feedback" role="status">
+          {controls.passwordNotice}
+        </p>
+      )}
       <div className={fieldClass}>
         <label className={labelClass} htmlFor={`${prefix}-current-password`}>
           Current password{controls.currentRequired ? "" : " (if set)"}
@@ -137,11 +167,56 @@ function PasswordFields({
 
 export function SecuritySection(): React.ReactElement {
   const { session } = useAuth();
-  return <SecurityAccount key={session?.user.id ?? "signed-out"} token={session?.access_token} />;
+  return (
+    <>
+      <Toaster
+        className="settings-toaster"
+        position="bottom-right"
+        duration={3000}
+        closeButton={false}
+        visibleToasts={1}
+        icons={{ success: null, error: null }}
+        style={{ zIndex: 110 }}
+      />
+      <SecurityAccount key={session?.user.id ?? "signed-out"} token={session?.access_token} />
+    </>
+  );
 }
 
 function SecurityAccount({ token }: { token: string | undefined }): React.ReactElement {
   const controls = useAccountSecurity(token);
+  const { signOut } = useAuth();
+  const router = useRouter();
+  const [loggingOut, setLoggingOut] = useState(false);
+  const loggingOutRef = useRef(false);
+  const alive = useRef(true);
+  const logoutToasts = useRef(new Set<string | number>());
+  useEffect(() => {
+    alive.current = true;
+    const owned = logoutToasts.current;
+    return () => {
+      alive.current = false;
+      for (const id of owned) toast.dismiss(id);
+    };
+  }, []);
+  async function logoutCurrent(): Promise<void> {
+    if (loggingOutRef.current) return;
+    loggingOutRef.current = true;
+    setLoggingOut(true);
+    try {
+      await signOut("local");
+      if (alive.current) {
+        router.replace("/login");
+        router.refresh();
+      }
+    } catch {
+      if (alive.current)
+        logoutToasts.current.add(toast.error("Couldn't log out. Please try again."));
+    } finally {
+      loggingOutRef.current = false;
+      if (alive.current) setLoggingOut(false);
+    }
+  }
   const [subpage, setSubpage] = useState<"none" | "change-password" | "manage-devices">("none");
   const [desktopPassword, setDesktopPassword] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState<AccountSession | null>(null);
@@ -158,25 +233,26 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
   };
   const status = (
     <>
-      {controls.loading && <p role="status">Loading devices…</p>}
       {controls.sessionError && (
-        <div>
-          <p role="alert">{controls.sessionError}</p>
-          <Button
-            variant="secondary"
-            leadingIcon={null}
-            trailingIcon={null}
+        <div className="settings-inline-error" role="alert">
+          <AlertCircle size={16} aria-hidden="true" />
+          <span>{controls.sessionError}</span>
+          <button
+            type="button"
+            className="settings-notice-retry"
             onClick={controls.reload}
             disabled={controls.revoking}
             aria-label="Retry devices"
           >
-            Retry
-          </Button>
+            <RotateCw size={15} aria-hidden="true" />
+          </button>
         </div>
       )}
-      {controls.hasMore && <p>Only your first 100 sessions are shown.</p>}
+      {controls.hasMore && (
+        <p className="settings-device-note">Only your first 100 sessions are shown.</p>
+      )}
       {!controls.loading && !controls.sessionError && !controls.sessions.length && (
-        <p>No active sessions found.</p>
+        <p className="settings-device-note">No active sessions found.</p>
       )}
     </>
   );
@@ -187,13 +263,18 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
       disabled={
         controls.loading ||
         controls.revoking ||
+        loggingOut ||
         (!controls.hasMore && !controls.sessions.some((row) => !row.is_current))
       }
       className="settings-devices-logout-all-btn"
-      leadingIcon={null}
+      leadingIcon={
+        controls.revoking ? (
+          <LoaderCircle size={14} className="animate-spin" aria-hidden="true" />
+        ) : null
+      }
       trailingIcon={null}
     >
-      {controls.revoking ? "Logging out…" : "Log out other devices"}
+      Log out other devices
     </Button>
   );
   if (subpage === "change-password")
@@ -249,13 +330,12 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
           <div style={{ width: 38 }} aria-hidden="true" />
         </div>
         <div className="settings-subpage-body">
-          {controls.notice && <p role="status">{controls.notice}</p>}
           <p className="settings-mobile-devices-description">
-            Review the devices signed in to your account. Logging out other devices keeps this
-            session signed in.
+            Review the devices currently signed in to your account. You can log out of any session
+            you do not recognize.
           </p>
           {status}
-          {logoutOthers}
+          {controls.loading && <DeviceLoading />}
           <h3 className="settings-mobile-linked-devices-title">Linked devices</h3>
           <div className="settings-mobile-linked-device-list">
             {controls.sessions.map((device) => (
@@ -268,20 +348,32 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
               >
                 <div className="settings-mobile-linked-device-icon-wrap">
                   {device.device_type === "mobile" ? (
-                    <Smartphone size={22} aria-hidden="true" />
+                    <Smartphone
+                      size={22}
+                      className="settings-mobile-linked-device-icon"
+                      aria-hidden="true"
+                    />
                   ) : (
-                    <Laptop size={22} aria-hidden="true" />
+                    <Laptop
+                      size={22}
+                      className="settings-mobile-linked-device-icon"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
                 <div className="settings-mobile-linked-device-info">
                   <span className="settings-mobile-linked-device-name">{device.device}</span>
                   <span className="settings-mobile-linked-device-meta">
                     {device.is_current
-                      ? "Current session"
+                      ? "Active now"
                       : `Last active ${date(device.last_active_at)}`}
                   </span>
                 </div>
-                <ChevronRight size={18} aria-hidden="true" />
+                <ChevronRight
+                  size={18}
+                  className="settings-mobile-linked-device-chevron"
+                  aria-hidden="true"
+                />
               </button>
             ))}
           </div>
@@ -326,18 +418,35 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
                     <p className="settings-device-sheet-subtitle">
                       {selectedDevice.is_current
                         ? "Current session"
-                        : date(selectedDevice.created_at)}
+                        : date(selectedDevice.created_at).split(",")[0]}
                     </p>
                   </div>
                   <div className="settings-device-sheet-card">
                     {[
-                      ["IP address", selectedDevice.ip_address ?? "Not available"],
+                      ["Location", "Not available"],
                       ["Signed in", date(selectedDevice.created_at)],
-                      ["Last active", date(selectedDevice.last_active_at)],
-                    ].map(([label, value]) => (
-                      <div key={label} className="settings-device-sheet-row">
-                        <span className="settings-device-sheet-label">{label}</span>
-                        <span className="settings-device-sheet-val">{value}</span>
+                      [
+                        "Last active",
+                        selectedDevice.is_current
+                          ? "Active now"
+                          : date(selectedDevice.last_active_at),
+                      ],
+                    ].map(([label, value], index) => (
+                      <div key={label}>
+                        {index > 0 && <div className="settings-device-sheet-divider" />}
+                        <div className="settings-device-sheet-row">
+                          <span className="settings-device-sheet-label">{label}</span>
+                          <span
+                            className="settings-device-sheet-val"
+                            title={
+                              label === "Location" && selectedDevice.ip_address
+                                ? `IP address: ${selectedDevice.ip_address}`
+                                : undefined
+                            }
+                          >
+                            {value}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -346,7 +455,6 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
                       ? "Use Log out from your account menu to end this session."
                       : "This device will need to sign in again. It may take a short time to show the sign-in screen."}
                   </p>
-                  {controls.sessionError && <p role="alert">{controls.sessionError}</p>}
                   <div className="settings-device-sheet-actions">
                     <button
                       type="button"
@@ -358,7 +466,7 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
                         });
                       }}
                     >
-                      {controls.revoking ? "Logging out…" : "Log out device"}
+                      {controls.revoking ? "Logging out…" : "Terminate Session"}
                     </button>
                   </div>
                 </>
@@ -370,7 +478,6 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
     );
   return (
     <div className="settings-section-container">
-      {controls.notice && <p role="status">{controls.notice}</p>}
       <SettingsSection title="Security" hideTitleOnMobile className="settings-security-section">
         <div className="settings-security-card">
           <SettingsRow
@@ -426,26 +533,36 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
       </SettingsSection>
       <div className="settings-copy-desktop settings-devices-section">
         <div className="settings-devices-header">
-          <div>
-            <h3 className="settings-devices-title">Manage devices</h3>
-            <p className="settings-devices-description">
-              Review where you use PansGPT. This session stays signed in.
-            </p>
-          </div>
+          <h3 className="settings-devices-title">Manage devices</h3>
           {logoutOthers}
         </div>
         {status}
         <div className="settings-devices-table-wrap">
-          <table className="settings-devices-table">
+          <table className="settings-devices-table" aria-busy={controls.loading}>
             <thead>
               <tr>
-                <th scope="col">Device</th>
-                <th scope="col">IP address</th>
-                <th scope="col">Signed in</th>
-                <th scope="col">Last active</th>
+                <th scope="col" style={{ width: "32%" }}>
+                  Device
+                </th>
+                <th scope="col" style={{ width: "22%" }}>
+                  Location
+                </th>
+                <th scope="col" style={{ width: "23%" }}>
+                  Signed in
+                </th>
+                <th scope="col" style={{ width: "23%" }}>
+                  Last active
+                </th>
               </tr>
             </thead>
             <tbody>
+              {controls.loading && (
+                <tr>
+                  <td colSpan={4}>
+                    <DeviceLoading />
+                  </td>
+                </tr>
+              )}
               {controls.sessions.map((device) => (
                 <tr key={device.id} className="settings-devices-row">
                   <td className="settings-devices-cell-device">
@@ -456,25 +573,45 @@ function SecurityAccount({ token }: { token: string | undefined }): React.ReactE
                       )}
                     </div>
                   </td>
-                  <td className="settings-devices-cell-muted">
-                    {device.ip_address ?? "Not available"}
+                  <td
+                    className="settings-devices-cell-muted"
+                    title={device.ip_address ? `IP address: ${device.ip_address}` : undefined}
+                  >
+                    Not available
                   </td>
                   <td className="settings-devices-cell-muted">{date(device.created_at)}</td>
                   <td className="settings-devices-cell-muted">
                     <div className="settings-devices-last-active-wrap">
-                      <span>{date(device.last_active_at)}</span>
-                      {!device.is_current && (
-                        <button
-                          type="button"
-                          className="settings-devices-row-action"
-                          disabled={controls.revoking}
-                          onClick={() => void controls.revoke(device.id)}
-                          aria-label={`Log out ${device.device}`}
-                          title="Log out of this device"
+                      <span>{device.is_current ? "Active now" : date(device.last_active_at)}</span>
+                      <Dropdown>
+                        <DropdownTrigger asChild>
+                          <button
+                            type="button"
+                            className="settings-devices-row-action"
+                            disabled={controls.revoking || loggingOut}
+                            aria-label={`Session options for ${device.device}`}
+                          >
+                            <MoreHorizontal size={15} />
+                          </button>
+                        </DropdownTrigger>
+                        <DropdownContent
+                          className="settings-session-menu"
+                          aria-label={`Session actions for ${device.device}`}
+                          align="end"
+                          sideOffset={5}
                         >
-                          <LogOut size={15} />
-                        </button>
-                      )}
+                          <DropdownItem
+                            className="settings-session-menu-item"
+                            disabled={controls.revoking || loggingOut}
+                            onSelect={() => {
+                              if (device.is_current) void logoutCurrent();
+                              else void controls.revoke(device.id);
+                            }}
+                          >
+                            {device.is_current ? "Log out" : "Terminate"}
+                          </DropdownItem>
+                        </DropdownContent>
+                      </Dropdown>
                     </div>
                   </td>
                 </tr>

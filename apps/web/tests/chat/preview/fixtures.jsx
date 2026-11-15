@@ -43,7 +43,11 @@ export function useAuth() {
     profile,
     session: { user: { id: profile.id }, access_token: "invalid-fixture-not-an-access-token" },
     loading: false,
-    signOut: async () => {},
+    signOut: async (scope) => {
+      window.__previewSignOutCalls ??= [];
+      window.__previewSignOutCalls.push(scope);
+      if (window.__previewSignOutFails) throw new Error("Synthetic sign-out failure");
+    },
     refreshProfile: async () => profile,
   };
 }

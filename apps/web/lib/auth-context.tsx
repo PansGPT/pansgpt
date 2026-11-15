@@ -26,7 +26,7 @@ interface AuthContextType {
   profile: UserProfile | null;
   profileError: ProfileFailure | null;
   loading: boolean;
-  signOut: () => Promise<void>;
+  signOut: (scope?: "global" | "local") => Promise<void>;
   refreshProfile: () => Promise<UserProfile | null>;
   updateProfile: (payload: UpdateProfileRequest) => Promise<UserProfile>;
 }
@@ -171,13 +171,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }, [loading, profile?.id, profile?.university_id, session?.user.id]);
 
-  const signOut = async () => {
+  const signOut = async (scope: "global" | "local" = "global") => {
     await clearThumbnailCaches();
     await clearPdfCopies();
     try {
       await desktopAuth()?.signOut();
     } finally {
-      const { error } = await supabase.auth.signOut();
+      const { error } = await supabase.auth.signOut({ scope });
       if (error) throw error;
     }
     applySession(null);

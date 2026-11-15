@@ -1,6 +1,7 @@
 """Owned account controls; no simulated success or credential logging."""
 
 import asyncio
+from ipaddress import ip_interface
 from typing import Literal
 from uuid import UUID
 
@@ -145,7 +146,7 @@ async def confirm_password(
 
 
 def device(agent: str | None) -> tuple[str, Literal["mobile", "desktop", "unknown"]]:
-    if not agent:
+    if not agent or not agent.strip():
         return "Unknown device", "unknown"
     platform = next(
         (
@@ -168,13 +169,15 @@ def device(agent: str | None) -> tuple[str, Literal["mobile", "desktop", "unknow
             for needle, name in [
                 ("Electron/", "PansGPT Desktop"),
                 ("Edg/", "Edge"),
+                ("CriOS/", "Chrome"),
+                ("FxiOS/", "Firefox"),
                 ("Chrome/", "Chrome"),
                 ("Firefox/", "Firefox"),
                 ("Safari/", "Safari"),
             ]
             if needle in agent
         ),
-        "Browser",
+        "Unknown device",
     )
     return (
         f"{browser} ({platform})" if platform else browser,
@@ -184,6 +187,15 @@ def device(agent: str | None) -> tuple[str, Literal["mobile", "desktop", "unknow
         if platform
         else "unknown",
     )
+
+
+def session_ip(value: str | None) -> str | None:
+    if not value:
+        return None
+    try:
+        return str(ip_interface(value).ip)
+    except ValueError:
+        return None
 
 
 @router.get("/sessions", response_model=AccountSessionsResponse)
@@ -214,7 +226,7 @@ async def list_sessions(
                 id=str(row["id"]),
                 device=name,
                 device_type=kind,
-                ip_address=row["ip_address"],
+                ip_address=session_ip(row["ip_address"]),
                 created_at=row["created_at"],
                 last_active_at=row["last_active_at"],
                 is_current=row["id"] == current,

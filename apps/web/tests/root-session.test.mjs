@@ -5,6 +5,7 @@ import test from "node:test";
 import { runInNewContext } from "node:vm";
 import ts from "typescript";
 import { safeAuthNext, signupDestination } from "../lib/auth-navigation.ts";
+import { browserAuthHeaders } from "../lib/supabase/request-headers.ts";
 
 const require = createRequire(import.meta.url);
 const { NextRequest } = require("next/server");
@@ -21,13 +22,17 @@ test("quiz API transport delegates bearer verification without refreshing cookie
 
 // Run the real middleware with only its auth service and environment replaced.
 // No hosted credentials, account creation or network requests are needed.
-async function requestSession(path, { authenticated = false, unavailable = false } = {}) {
+async function requestSession(
+  path,
+  { authenticated = false, unavailable = false, userAgent, inspect } = {}
+) {
   const exports = {};
   runInNewContext(outputText, {
     exports,
     URL,
     require(id) {
       if (id === "@/lib/auth-navigation") return { safeAuthNext, signupDestination };
+      if (id === "./request-headers") return { browserAuthHeaders };
       if (id === "@/env")
         return {
           env: {
@@ -37,7 +42,8 @@ async function requestSession(path, { authenticated = false, unavailable = false
         };
       if (id === "@supabase/ssr")
         return {
-          createServerClient(_url, _key, { cookies }) {
+          createServerClient(_url, _key, { cookies, global }) {
+            inspect?.(global.headers);
             return {
               auth: {
                 async getUser() {
@@ -58,8 +64,24 @@ async function requestSession(path, { authenticated = false, unavailable = false
       return require(id);
     },
   });
-  return exports.updateSession(new NextRequest(`http://localhost:3000${path}`));
+  return exports.updateSession(
+    new NextRequest(`http://localhost:3000${path}`, {
+      headers: userAgent ? { "User-Agent": userAgent, "X-Forwarded-For": "192.0.2.100" } : {},
+    })
+  );
 }
+
+test("server session refresh forwards browser metadata through the allowlisted header boundary", async () => {
+  let forwarded;
+  await requestSession("/app", {
+    authenticated: true,
+    userAgent: "Mozilla/5.0 Chrome/100 Windows",
+    inspect: (headers) => {
+      forwarded = headers;
+    },
+  });
+  assert.deepEqual(forwarded, { "User-Agent": "Mozilla/5.0 Chrome/100 Windows" });
+});
 
 test("verified root sessions redirect internally and preserve refreshed cookies", async () => {
   const response = await requestSession("/?next=https://untrusted.invalid", {

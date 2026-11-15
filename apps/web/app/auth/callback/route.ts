@@ -1,5 +1,6 @@
 import { env } from "@/env";
 import { safeAuthNext } from "@/lib/auth-navigation";
+import { browserAuthHeaders } from "@/lib/supabase/request-headers";
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import type { Database } from "@pansgpt/types";
@@ -24,6 +25,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
+      global: { headers: browserAuthHeaders(request.headers) },
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookies: Array<{ name: string; value: string; options?: CookieOptions }>) => {

@@ -2080,6 +2080,91 @@
   background: var(--bg-tertiary);
   color: var(--text-primary-900);
 }
+.settings-devices-row:focus-within .settings-devices-row-action,
+.settings-devices-row-action[data-state="open"] {
+  opacity: 1;
+}
+.settings-devices-row-action[data-state="open"] {
+  background: var(--bg-tertiary);
+  color: var(--text-primary-900);
+}
+.settings-session-menu {
+  width: 128px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  z-index: 80;
+}
+.settings-session-menu .settings-session-menu-item {
+  margin: 0;
+  padding: 7px 11px;
+  color: var(--text-error-primary-600);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+.settings-device-loading {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  color: var(--text-tertiary-600);
+}
+.p-toaster.settings-toaster .p-toast {
+  right: 0;
+  width: max-content;
+  max-width: 100%;
+  padding: 9px 12px;
+  gap: 0;
+  border: 0;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+  font-size: 13px;
+  line-height: 18px;
+}
+.p-toaster.settings-toaster .p-toast-title {
+  font-weight: 400;
+}
+.p-toaster.settings-toaster [data-icon] {
+  display: none;
+}
+.settings-device-note,
+.settings-field-feedback {
+  margin: 8px 0;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.settings-inline-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-error-subtle);
+  border-radius: 10px;
+  color: var(--text-error-primary-600);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.settings-inline-error > svg {
+  flex: none;
+}
+.settings-inline-error > span {
+  flex: 1;
+}
+.settings-notice-retry {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-error-secondary);
+  color: inherit;
+  cursor: pointer;
+}
 
 /* Manage devices mobile subpage */
 .settings-mobile-devices-description {

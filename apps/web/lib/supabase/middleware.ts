@@ -3,6 +3,7 @@ import { env } from "@/env";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@pansgpt/types";
+import { browserAuthHeaders } from "./request-headers";
 
 export async function updateSession(request: NextRequest) {
   // Quiz transport forwards the explicit bearer token to FastAPI. Rechecking
@@ -22,6 +23,7 @@ export async function updateSession(request: NextRequest) {
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
+      global: { headers: browserAuthHeaders(request.headers) },
       cookies: {
         getAll() {
           return request.cookies.getAll();

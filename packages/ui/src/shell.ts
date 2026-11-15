@@ -4,6 +4,7 @@ export { Skeleton } from "./components/skeleton";
 export { Card, CardContent } from "./components/card";
 export { Slideout } from "./components/slideout";
 export { Tooltip } from "./components/tooltip";
+export { Toaster, toast } from "./components/toast";
 export { Dialog as DialogPrimitive } from "radix-ui";
 export { Select as SelectPrimitive } from "radix-ui";
 export {
