@@ -6,12 +6,16 @@ const DataContext = createContext(null);
 export const env = { NEXT_PUBLIC_API_URL: "http://127.0.0.1:4178", NEXT_PUBLIC_DEMO_MODE: "true" };
 const fixtureToday = localTodayIso();
 const previewDocuments = globalThis.__PREVIEW_DOCUMENTS__ || [];
+const initialRole = globalThis.__PREVIEW_ACCOUNT__?.role || "student";
 const profile = {
   id: "00000000-0000-4000-8000-000000000001",
   email: "study@example.test",
   first_name: "Ojonugwa",
   last_name: "Student",
-  role: "student",
+  role: initialRole,
+  roles: [initialRole],
+  client_type: "web",
+  dev_bypass: false,
   university_id: "00000000-0000-4000-8000-000000000002",
   university_name: "Sample University",
   current_level: "200",
@@ -31,6 +35,7 @@ export function useAuth() {
   );
   globalThis.__changePreviewAccount = (next) => {
     Object.assign(profile, next);
+    if (next.role && !next.roles) profile.roles = [next.role];
     window.__accountFixtureRevision = (window.__accountFixtureRevision || 0) + 1;
     window.dispatchEvent(new Event("fixture-account-changed"));
   };

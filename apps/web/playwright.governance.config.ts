@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests/governance",
+  outputDir: "./test-results/governance",
   testMatch: "**/*.spec.cjs",
   workers: 1,
   retries: 0,
