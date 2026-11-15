@@ -1,5 +1,7 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-11-15 conversation voice:** Normal and study chat share a senior-colleague voice across direct and generated answers. Selected history is preserved; four final live synthetic exchanges were reviewed alongside API regressions. [Scope, output examples and limits](chat-voice-2026-11-15.md).
+
 > **2026-11-15 chat reliability:** Run cleanup, recoverable failed questions and naming, separated study history, immediate question actions, scoped conversation loading and bounded provider recovery are implemented and locally verified. [Contracts, verification and remaining hosted gates](chat-lifecycle-recovery-2026-11-15.md).
 
 > **2026-11-06 Quiz queue:** Recovered the saved five-question local quiz by starting its missing worker; hardened the API handoff against cold Redis connection timeouts. [Diagnosis and verification](quiz-queue-recovery-2026-11-06.md).

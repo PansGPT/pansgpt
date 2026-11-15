@@ -1,0 +1,87 @@
+{
+  "scope": "Synthetic dialogue only; no real student messages, uploads, patient data or chat writes. Human voice review, not an automated personality benchmark.",
+  "baseline_commit": "5c897f0",
+  "before": [
+    {
+      "case": "identity_repair",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "latency_ms": 5046,
+      "answer": "Yes, I'm PansGPT, your study assistant. How can I help you today?",
+      "human_review_criteria": [
+        "Identify as PansGPT and acknowledge the earlier mix-up.",
+        "Continue the exchange without restarting an introduction or generic offer of help."
+      ]
+    },
+    {
+      "case": "continue_agreed_plan",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "latency_ms": 2454,
+      "answer": "Sure! A micelle forms when amphiphilic molecules (like soap) are in water. Their hydrophobic tails hide inside, away from water, while the hydrophilic heads face outward, creating a spherical structure. This happens once the concentration exceeds the critical micelle concentration (CMC). In contrast, an emulsion is a mixture of two immiscible liquids (e.g., oil droplets dispersed in water) stabilized by surfactants, but the droplets stay larger and don’t form the tight spherical arrangement of a micelle.",
+      "human_review_criteria": [
+        "Start the agreed micelle explanation using the existing topic and plan.",
+        "Use an approachable collaborative tone; do not ask what topic to study again."
+      ]
+    }
+  ],
+  "after": [
+    {
+      "case": "identity_repair",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "qwen/qwen3.8-27b",
+      "latency_ms": 8968,
+      "answer": "You're right—I mixed up the name. I'm PansGPT.",
+      "human_review_criteria": [
+        "Identify as PansGPT and acknowledge the earlier mix-up.",
+        "Continue the exchange without restarting an introduction or generic offer of help."
+      ]
+    },
+    {
+      "case": "continue_agreed_plan",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "openai/gpt-oss-120b",
+      "latency_ms": 7796,
+      "answer": "Sure thing! A micelle forms when amphiphilic molecules (like soap) are in water. Their hydrophobic tails hide from water by clustering together, while the hydrophilic heads stay outward, touching the water. This creates a tiny spherical structure with the tails inside and heads on the surface. Think of it as a tiny bubble where the “inside” is the water‑shy part and the “outside” is water‑friendly. Let’s sketch it together and then we’ll move on to the emulsion comparison.",
+      "human_review_criteria": [
+        "Start the agreed micelle explanation using the existing topic and plan.",
+        "Use an approachable collaborative tone; do not ask what topic to study again."
+      ]
+    },
+    {
+      "case": "support_without_lecture",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "qwen/qwen3.8-27b",
+      "latency_ms": 3719,
+      "answer": "Totally fair—that explanation is a bit abstract. Think of soap as a tiny bridge. One end loves water, the other loves oil. When you wash a greasy pan, the oil-loving ends stick to the grease while the water-loving ends stay in the water. That pulls the oil off the surface and traps it in little droplets that can rinse away. So soap doesn’t just “clean”; it helps water grab onto oil so it can be washed off.",
+      "human_review_criteria": [
+        "Acknowledge the student's frustration briefly without judgment or empty reassurance.",
+        "Use the soap/oil context to offer one concrete simpler step rather than repeating the same definition."
+      ]
+    },
+    {
+      "case": "own_a_factual_mistake",
+      "route_contract_passed": true,
+      "provider": "groq",
+      "model": "qwen/qwen3.8-27b",
+      "latency_ms": 2735,
+      "answer": "You're right, I made a mistake. 2 is the only even prime number. Every other prime number is odd, because any even number greater than 2 is divisible by 2 and therefore not prime.",
+      "human_review_criteria": [
+        "Acknowledge the student's correction and take responsibility for the earlier error.",
+        "Explain the exception briefly and naturally without defensiveness or exaggerated praise."
+      ]
+    }
+  ],
+  "review": {
+    "identity_repair": "Acknowledges the mix-up and stops without a generic offer of help.",
+    "continue_agreed_plan": "Uses the existing micelle topic and explicitly carries the agreed plan into the emulsion comparison.",
+    "support_without_lecture": "Acknowledges confusion and changes the explanation to a concrete washing-up picture.",
+    "own_a_factual_mistake": "Owns the error and gives the corrected point without defensiveness."
+  },
+  "limits": "Small sample across configured Groq models. Provider admission/fallback remained enabled. Earlier development samples retained boilerplate and one provider attempt was unavailable; these results do not guarantee every model or turn."
+}
