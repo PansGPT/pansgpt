@@ -1202,8 +1202,51 @@ button.study-chat-attachment-tile:hover {
 }
 .study-chat-notice-dismiss:hover { background: var(--bg-tertiary); }
 .study-chat-notice-dismiss:focus-visible { outline: 2px solid var(--fg-brand-primary-600); outline-offset: 2px; }
+.study-chat-error-row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-block: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-error-subtle);
+  border-radius: 12px;
+  color: var(--text-error-primary-600);
+  background: color-mix(in srgb, var(--bg-error-solid) 6%, var(--bg-secondary));
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
+.study-chat-error-row > p { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.study-chat-error-row .study-chat-error-actions { display: flex; align-items: center; gap: 8px; }
+.study-chat-error-row .study-chat-recovery-actions { align-items: center; gap: 8px; margin: 0; }
+.study-chat-error-actions:empty { display: none; }
+.study-chat-error-row .study-chat-error-actions :is(button, a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: none;
+  min-height: 32px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--bg-error-solid);
+  color: var(--text-white);
+  font: 500 12px/1.4 var(--font-body);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.study-chat-error-row .study-chat-error-actions :is(button, a):hover { background: var(--bg-error-solid-hover); }
+.study-chat-error-row .study-chat-error-actions button:disabled { opacity: .5; cursor: default; }
+.study-chat-error-row .study-chat-error-actions :is(button, a):focus-visible { outline: 2px solid var(--text-error-primary-600); outline-offset: 3px; }
+.study-chat-composer-notices .study-chat-error-row { margin: 0; }
 .study-chat-recovery-actions:empty { display: none; }
 @media (max-width: 860px) {
+  .study-chat-error-row { gap: 8px; padding: 10px; font-size: 12px; border-radius: 10px; }
   .study-chat-composer-notices { padding-inline: 0; }
   .study-chat-notice-banner { padding: 10px; gap: 8px; grid-template-columns: 16px minmax(0, 1fr) 24px; font-size: 12px; border-radius: 10px; }
   .study-chat-notice-icon { width: 15px; height: 15px; }

@@ -6,11 +6,11 @@ import { fetchWithRecovery, publicFailure } from "@/lib/chat-recovery";
 import { createContext, useContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AttachmentPrimitive, useAui, useAuiState } from "@assistant-ui/react";
-import { FileText, ImageIcon, Loader2, X } from "lucide-react";
+import { FileText, ImageIcon, Loader2, RotateCcw, X } from "lucide-react";
 import { DialogPrimitive, Tooltip } from "@pansgpt/ui/shell";
 import { useAuth } from "@/lib/auth-context";
 import { env } from "@/env";
-import { ChatNotice } from "./connection-notice";
+import { ChatError, ChatNotice } from "./connection-notice";
 import { useChatActions } from "./actions-context";
 
 export const AttachmentNoticeTargetContext = createContext<HTMLElement | null>(null);
@@ -152,8 +152,9 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
       )}
     </>
   );
+  const UploadNotice = !uploadFailure && removable && file ? ChatError : ChatNotice;
   const uploadNotice = uploadFailed ? (
-    <ChatNotice
+    <UploadNotice
       message={
         retryError
           ? "We couldn't attach this file. Choose it again to retry."
@@ -164,6 +165,7 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
         {!uploadFailure && removable && file && (
           <button
             type="button"
+            aria-label="Retry upload"
             onClick={() => {
               setRetryError(false);
               void (async () => {
@@ -176,12 +178,12 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
               })();
             }}
           >
-            Retry upload
+            <RotateCcw size={14} aria-hidden="true" /> Retry
           </button>
         )}
         {uploadFailure?.action === "sign_in" && <a href="/login">Sign in again</a>}
       </div>
-    </ChatNotice>
+    </UploadNotice>
   ) : null;
   return (
     <>

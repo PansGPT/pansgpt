@@ -37,7 +37,7 @@ import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
 import { ThinkingStatus } from "./motion";
 import { ChatAttachment } from "./attachment";
-import { ChatNotice } from "./connection-notice";
+import { ChatError, ChatNotice } from "./connection-notice";
 
 function useOriginalMessage(): ChatMessageView | undefined {
   return useAuiState((state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]);
@@ -328,7 +328,7 @@ export function AssistantMessage(): React.ReactElement {
             />
           )}
           {message?.status === "error" && (
-            <ChatNotice
+            <ChatError
               message={message.error || "The response could not be completed. Please try again."}
             >
               <div className="study-chat-recovery-actions">
@@ -344,7 +344,7 @@ export function AssistantMessage(): React.ReactElement {
                 {message.failure?.action === "sign_in" && <a href="/login">Sign in again</a>}
                 {message.failure?.action === "usage" && <a href="/usage">View usage</a>}
               </div>
-            </ChatNotice>
+            </ChatError>
           )}
           <MessageExtras />
           {message?.status === "cancelled" && !empty && (

@@ -1,0 +1,31 @@
+# Chat errors and notices — 15 November 2026
+
+User decision: distinguish a failed chat action from an informational notice. Follow the supplied legacy screenshot: an inline error row with a simple message, error icon and a right-aligned rounded Retry button. Keep dismissible banners for offline status, attachment limits, validation guidance and automatic-recovery progress.
+
+Scope: shared main/study chat response failures, retryable attachment uploads and recoverable transcription failures. Keep existing backend retry limits, owned-message recovery, tool replay restrictions, retained files/recordings, unfinished drafts, and safe public error wording. Do not display provider/network exception details such as `Failed to fetch`.
+
+Use semantic error/background/border tokens in Light, Dark and Sepia. Center the copy and action vertically, shorten mobile copy using the existing mapping, and keep upload/transcription actions accessible as `Retry upload` and `Retry transcription` while their visible label is `Retry`. Errors remain visible until recovery; they have no dismiss button. Informational notices retain their dismiss control.
+
+Implementation lives on `feature/chat-retry-errors` in `.tmp/chat-retry-errors`, isolated from the user's active `fix/reader-loading-ux` checkout. The user's branch and loading files are not part of this change.
+
+Acceptance and verification:
+
+- Response failures show the inline row beside its Retry action, without a dismiss button, on desktop and mobile in all three themes.
+- Retry reuses the owned failed question without duplicating messages or losing an unfinished draft. Saved-answer recovery and tool replay restrictions remain enforced.
+- Failed uploads retain their file, show the row above the composer, and upload only after explicit Retry. Keep the existing atomic geometry assertion.
+- Transcription retries reuse the recording. Offline, attachment-count and validation notices stay dismissible banners.
+- Lint, typecheck and applicable browser journeys must pass; retain screenshots for design review. Synthetic browser fixtures do not certify hosted/provider/native release gates.
+
+Verified locally: **15 targeted browser journeys passed** (14 recovery/notice checks plus the main-chat timeout journey), including desktop/mobile error rows in all three themes, vertical alignment, no overflow, owned-message retries, saved-answer recovery, blocked tool replay, retained uploads and recordings, offline notices and attachment limits. Web typecheck, focused component lint, JavaScript syntax, formatting and diff checks passed. The initial browser run hit a Chrome launch failure and was interrupted; the final completed checks above passed. No dependencies were installed for this work; the isolated checkout reuses existing installed tools.
+
+Design previews: [desktop](design-system/chat-error-rows-2026-11-15/chat-error-desktop.png), [mobile](design-system/chat-error-rows-2026-11-15/chat-error-mobile.png). These show synthetic test data. This UI branch remains separate from main and the user's loading branch; no CI or hosted verification is claimed for the new design.
+
+Notion tools are unavailable. Pending Engineering entries:
+
+| Gallery                    | Entry                                                                                                                                                                                                                                                                                                                                                                        |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session / Change Log       | **Summary:** Separate inline chat failure rows from dismissible notices. **Date:** 2026-11-15. **Area:** Chat / reader / web. **Files Touched:** shared chat error/notice, message, attachment and CSS components; recovery browser checks; this record and previews. **Verified:** 15 targeted browser journeys, web typecheck, lint, syntax and formatting passed locally. |
+| Decision Log               | **Rationale:** Give failed actions a visible recovery button while reserving dismissible banners for guidance and status. **Alternatives Considered:** Reuse the warning toast for every error; expose raw network/provider messages.                                                                                                                                        |
+| Product Roadmap & Features | **Chat error presentation:** Implemented and locally verified in an isolated branch; ready for design review.                                                                                                                                                                                                                                                                |
+
+Knowledge Base unchanged; this is presentation within the existing recovery architecture.
