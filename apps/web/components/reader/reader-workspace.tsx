@@ -85,6 +85,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
   const [pdfAttempt, setPdfAttempt] = useState(0);
   const [page, setPage] = useState(material.last_page_read || 1);
   const [pageInput, setPageInput] = useState(String(page));
+  const pageInputRef = useRef<HTMLInputElement>(null);
   const [zoom, setZoom] = useState(1);
   const [theme, setTheme] = useState("paper");
   const [chatOpen, setChatOpen] = useState(false);
@@ -186,7 +187,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
   const onPage = useCallback(
     (value: number) => {
       setPage(value);
-      setPageInput(String(value));
+      if (document.activeElement !== pageInputRef.current) setPageInput(String(value));
       updatePage(value);
     },
     [updatePage]
@@ -322,6 +323,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
   function navigate(value: number, rects?: ReaderRect[]): void {
     setControlsHidden(false);
     const next = Math.max(1, Math.min(source?.pdf.numPages || material.page_count || 1, value));
+    setPageInput(String(next));
     setJump({ id: Date.now(), page: next, rects });
     if (window.matchMedia("(max-width: 860px)").matches) setChatOpen(false);
   }
@@ -597,10 +599,12 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
                 }}
               >
                 <input
+                  ref={pageInputRef}
                   aria-label="Page number"
                   inputMode="numeric"
                   value={pageInput}
                   onChange={(event) => setPageInput(event.target.value)}
+                  onBlur={() => setPageInput(String(page))}
                   disabled={!source}
                 />
                 <span>/ {source?.pdf.numPages || material.page_count || "—"}</span>

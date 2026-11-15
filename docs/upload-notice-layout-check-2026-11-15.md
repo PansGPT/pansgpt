@@ -1,4 +1,4 @@
-# Upload notice layout check — 15 November 2026
+# Upload notice checks and reader navigation — 15 November 2026
 
 The main CI run `43688745641` failed the desktop failed-upload journey: a separately measured banner bottom was 751px and composer top was 745px. The same commit had passed all nine jobs in verification run `43687458418`.
 
@@ -13,6 +13,14 @@ Verification:
 
 The user-authorized removal of `.temp/verify-20261105` also completed. Its reviewed files matched the recorded hashes before deletion; only the main working directory remains registered. No application source was changed by that cleanup.
 
+## Reader page-number edits
+
+Verification run `43691257753` passed both corrected upload journeys and eight CI jobs, then exposed a separate intermittent reader journey failure: page 8 never appeared after typing its number while chat resizing settled. Three focused repeats of that original journey passed locally.
+
+A new regression reproduced a concrete input bug: type `8`, scroll the real PDF viewport by 16px, then wait for the scroll handler. The field reverted to `3`, causing Enter to navigate to the old page. Preserve the focused page-number input during viewport updates, explicitly set the bounded destination on navigation, and synchronize the field with the displayed page on blur. Reading progress continues to follow the actual displayed page.
+
+Files: `apps/web/components/reader/reader-workspace.tsx`, `apps/web/tests/chat/reader.spec.cjs`. All five focused journeys passed: the new regression, original navigation, fit/night mode, mobile controls and progress recovery. Formatting, JavaScript syntax, web typecheck and focused lint passed. Final GitHub CI remains required.
+
 Notion tools are unavailable; pending Engineering entries:
 
 | Gallery                    | Entry                                                                                                                                                                                                                                                                                                                            |
@@ -22,3 +30,5 @@ Notion tools are unavailable; pending Engineering entries:
 | Product Roadmap & Features | **Chat upload recovery verification:** Local correction verified; final GitHub CI pending.                                                                                                                                                                                                                                       |
 
 Knowledge Base unchanged; no stack or core architecture changes.
+
+Additional pending Engineering entry: **Summary:** Preserve page-number edits during PDF scroll updates. **Area:** Reader / web. **Decision:** Keep the edited field separate from viewport notifications until submit or blur; continue saving actual reading progress. **Alternatives Considered:** Increase reader test timeout or retry page navigation without fixing the reproduced input overwrite. **Verified:** Regression failed before the fix with expected `8`, received `3`; all five focused reader journeys passed afterward. Final GitHub CI pending.

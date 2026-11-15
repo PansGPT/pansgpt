@@ -1040,6 +1040,29 @@ test("reader actions send once, omit page references and reopen with a fresh cha
   await page.screenshot({ path: test.info().outputPath("reader-fresh-chat.png") });
 });
 
+test("page number edits survive a PDF scroll update and still navigate on Enter", async ({
+  page,
+}) => {
+  await setup(page);
+  await ready(page);
+  const counter = page.getByRole("textbox", { name: "Page number", exact: true });
+  await counter.fill("8");
+  await page.locator(".reader-scroll").evaluate(
+    (element) =>
+      new Promise((resolve) => {
+        element.addEventListener(
+          "scroll",
+          () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          { once: true }
+        );
+        element.scrollBy(0, 16);
+      })
+  );
+  await expect(counter).toHaveValue("8");
+  await counter.press("Enter");
+  await painted(page, 8);
+});
+
 test("mobile text actions send directly while preserving an unfinished draft", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const state = await setup(page);
