@@ -160,7 +160,19 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
                     )
             elif parent is None:
                 selected = [row for row in rows if row["is_active_branch"]]
-                parent = str(selected[-1]["id"]) if selected else None
+                if selected:
+                    last = selected[-1]
+                    # An unanswered question remains recoverable, but a new question
+                    # follows its last assistant ancestor rather than a missing reply.
+                    parent = (
+                        str(last["id"])
+                        if str(last["role"]) == "assistant"
+                        else (
+                            str(last["parent_message_id"])
+                            if last.get("parent_message_id")
+                            else None
+                        )
+                    )
             if parent is not None:
                 parent_row = by_id.get(parent)
                 if parent_row is None:
@@ -216,13 +228,14 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
 
 async def release_turn(session_id: str, run_id: str) -> None:
     async with get_db_connection() as conn:
-        if conn is not None:
-            await conn.execute(
-                """UPDATE public.chat_sessions SET active_run_id=NULL, active_run_started_at=NULL
-                WHERE id=$1 AND active_run_id=$2""",
-                identifier(session_id),
-                identifier(run_id),
-            )
+        if conn is None:
+            raise ConnectionError("Conversation storage is unavailable during run cleanup")
+        await conn.execute(
+            """UPDATE public.chat_sessions SET active_run_id=NULL, active_run_started_at=NULL
+            WHERE id=$1 AND active_run_id=$2""",
+            identifier(session_id),
+            identifier(run_id),
+        )
 
 
 def attachment_context(attachments: list[dict[str, Any]]) -> str:

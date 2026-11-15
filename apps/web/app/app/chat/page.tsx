@@ -4,7 +4,7 @@ import { Suspense, useEffect, useSyncExternalStore } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useChatDraft } from "@/components/shell/chat-draft";
-import { WorkspaceLoading } from "@/components/shell/loading";
+import { ChatLoading } from "@/components/chat/chat-loading";
 import { ChatContent, ChatHistory } from "@/components/chat/surface";
 import { PresentationWorkspace } from "@/components/artifacts/PresentationWorkspace";
 
@@ -48,7 +48,7 @@ function ChatRoute(): React.ReactElement {
     typeof window !== "undefined" &&
     window.location.pathname.startsWith("/app/chat")
   ) {
-    return <WorkspaceLoading />;
+    return <ChatLoading />;
   }
 
   return (
@@ -62,7 +62,7 @@ function ChatRoute(): React.ReactElement {
 
 export default function ChatPage(): React.ReactElement {
   return (
-    <Suspense fallback={<WorkspaceLoading />}>
+    <Suspense fallback={<ChatLoading />}>
       <ChatRoute />
     </Suspense>
   );

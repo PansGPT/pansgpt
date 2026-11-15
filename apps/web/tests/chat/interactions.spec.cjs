@@ -471,6 +471,13 @@ async function setupChat(page) {
             { headers: { "Content-Type": "text/event-stream" } }
           );
         }
+        if (window.__holdHistory)
+          await new Promise((resolve) => {
+            window.__releaseHistory = () => {
+              window.__holdHistory = false;
+              resolve();
+            };
+          });
         return json({
           session: target || { id: session, user_id: owner },
           messages: window.__shareSafetyFixture
@@ -531,6 +538,157 @@ async function setupChat(page) {
     }
   );
 }
+
+for (const width of [1440, 390]) {
+  test(`sent question actions are visible before an answer arrives at ${width}px`, async ({
+    page,
+  }) => {
+    await setupChat(page);
+    await page.setViewportSize({ width, height: 975 });
+    await page.goto(`/?session=${session}`);
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      window.__holdReasoning = true;
+      Object.defineProperty(navigator, "clipboard", {
+        configurable: true,
+        value: {
+          writeText: async (text) => {
+            window.__copiedQuestion = text;
+          },
+        },
+      });
+    });
+    const question = `Synthetic question awaiting a response ${width}`;
+    await page.getByLabel("Study question").fill(question);
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.locator(".study-chat-live-status")).toBeVisible();
+    const sent = page.locator('.study-chat-message[data-role="user"]').last();
+    await expect(sent.getByRole("button", { name: "Copy message", exact: true })).toBeVisible();
+    await expect(sent.getByRole("button", { name: "Edit question", exact: true })).toBeDisabled();
+    await sent.getByRole("button", { name: "Copy message", exact: true }).click();
+    await expect.poll(() => page.evaluate(() => window.__copiedQuestion)).toBe(question);
+    await page.screenshot({ path: test.info().outputPath(`question-actions-${width}.png`) });
+    await page.evaluate(() => window.__finishReasoning());
+    await expect(sent.getByRole("button", { name: "Edit question", exact: true })).toBeEnabled();
+  });
+}
+
+test("delayed conversation history keeps the sidebar interactive and uses a local chat placeholder", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.addInitScript(() => {
+    window.__holdHistory = true;
+  });
+  await page.goto(`/app/chat?session=${session}&route_contract=1`);
+  const placeholder = page.getByRole("status", { name: "Loading conversation", exact: true });
+  const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
+  await expect(placeholder).toBeVisible();
+  await expect(sidebar.getByRole("link", { name: "Library", exact: true })).toBeVisible();
+  const loadingBox = await placeholder.boundingBox();
+  const sidebarBox = await sidebar.boundingBox();
+  expect(loadingBox.x).toBeGreaterThanOrEqual(sidebarBox.x + sidebarBox.width - 1);
+  expect(await placeholder.evaluate((element) => getComputedStyle(element).position)).not.toBe(
+    "fixed"
+  );
+  await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
+  await expect(page.locator(".app-shell")).toHaveAttribute("data-collapsed", "true");
+  await page.getByRole("button", { name: "Expand sidebar", exact: true }).click();
+  await page.screenshot({ path: test.info().outputPath("conversation-loading-desktop.png") });
+  await expect.poll(() => page.evaluate(() => typeof window.__releaseHistory)).toBe("function");
+  await page.evaluate(() => window.__releaseHistory());
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await expect(placeholder).toHaveCount(0);
+});
+
+test("conversation query suspension is contained below the workspace shell", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`/app/chat?session=${session}&route_contract=1`);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  const nextSession = "00000000-0000-4000-8000-000000000004";
+  await page.evaluate((id) => {
+    window.__chatSessions.push({
+      ...window.__chatSessions[0],
+      id,
+      title: "Second synthetic conversation",
+    });
+    window.__chatFixtureRevision = (window.__chatFixtureRevision || 0) + 1;
+    window.dispatchEvent(new Event("fixture-chats-changed"));
+  }, nextSession);
+  const sidebar = page.getByRole("complementary", { name: "Workspace sidebar" });
+  const historyLink = sidebar.getByRole("link", {
+    name: "Second synthetic conversation",
+    exact: true,
+  });
+  await expect(historyLink).toBeVisible();
+  await page.evaluate(() => {
+    window.__pendingSearchParams = new Promise((resolve) => {
+      window.__releaseSearchParams = () => {
+        delete window.__pendingSearchParams;
+        resolve();
+      };
+    });
+  });
+  await historyLink.click();
+  await expect(
+    page.getByRole("status", { name: "Loading conversation", exact: true })
+  ).toBeVisible();
+  await expect(sidebar).toBeVisible();
+  await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
+  await expect(page.locator(".app-shell")).toHaveAttribute("data-collapsed", "true");
+  await page.evaluate(() => window.__releaseSearchParams());
+  await expect(
+    page.getByRole("heading", { name: "Second synthetic conversation", exact: true })
+  ).toHaveCount(1);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+});
+
+test("pending names continue to refresh when a saved conversation only has a failed question", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    sessionStorage.setItem(
+      "interaction-tree",
+      JSON.stringify([
+        {
+          id: "00000000-0000-4000-8000-000000000011",
+          role: "user",
+          content: "Synthetic failed document request",
+          parent_message_id: null,
+          is_active_branch: true,
+        },
+      ])
+    );
+    const chat = window.__chatSessions[0];
+    chat.title = "New Chat";
+    chat.title_source = "pending";
+    sessionStorage.setItem("session-metadata-fixture", JSON.stringify(window.__chatSessions));
+  });
+  await page.reload();
+  await expect(page.getByText("Synthetic failed document request", { exact: true })).toBeVisible();
+  await expect(page.locator('.study-chat-message[data-role="assistant"]')).toHaveCount(0);
+  const initialRequests = await page.evaluate(
+    () => window.__calls.filter((call) => call.url.endsWith("/metadata")).length
+  );
+  await page.evaluate(() => {
+    Object.assign(window.__chatSessions[0], {
+      title: "Synthetic Surfactants Document",
+      title_source: "generated",
+      updated_at: "2026-11-15T12:00:00Z",
+    });
+  });
+  await expect(
+    page.getByRole("heading", { name: "Synthetic Surfactants Document", exact: true })
+  ).toHaveCount(1);
+  expect(
+    await page.evaluate(
+      () => window.__calls.filter((call) => call.url.endsWith("/metadata")).length
+    )
+  ).toBeGreaterThan(initialRequests);
+});
 
 test("public mobile chat route opens the owned saved session in the Home sheet", async ({
   page,

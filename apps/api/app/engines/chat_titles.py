@@ -41,7 +41,7 @@ Do not include personal identifiers, credentials, quotes, markdown or private re
 """
 
 
-async def generate_title(session_id: str, user_id: str) -> None:
+async def generate_title(session_id: str, user_id: str, *, question: str | None = None) -> None:
     try:
         async with asyncio.timeout(14):
             async with get_db_connection(timeout=3) as conn:
@@ -58,8 +58,17 @@ async def generate_title(session_id: str, user_id: str) -> None:
                     "SELECT role::text,content FROM public.chat_messages WHERE session_id=$1 AND is_active_branch AND role IN ('user','assistant') ORDER BY created_at DESC,id DESC LIMIT 8",
                     uuid.UUID(session_id),
                 )
+            messages = [
+                {"role": row["role"], "content": row["content"][:1800]} for row in reversed(rows)
+            ]
+            if question and not any(
+                item["role"] == "user" and item["content"] == question[:1800] for item in messages
+            ):
+                messages.append({"role": "user", "content": question[:1800]})
+            if not messages:
+                return
             context = json.dumps(
-                [{"role": row["role"], "content": row["content"][:1800]} for row in reversed(rows)],
+                messages[-8:],
                 ensure_ascii=False,
             )
             deadline = asyncio.get_running_loop().time() + 10

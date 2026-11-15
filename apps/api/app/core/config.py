@@ -215,7 +215,7 @@ class Settings(BaseSettings):
     CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
     CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
     CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
-    INTENT_ROUTER_TOTAL_TIMEOUT_S: float = Field(default=12, gt=0, le=30)
+    INTENT_ROUTER_TOTAL_TIMEOUT_S: float = Field(default=24, gt=0, le=30)
     INTENT_ROUTER_ATTEMPT_TIMEOUT_S: float = Field(default=8, gt=0, le=15)
     INTENT_ROUTER_MAX_TOKENS: int = Field(default=768, ge=128, le=2048)
     CHAT_RETRIEVAL_TIMEOUT_S: float = Field(default=25, gt=0, le=60)

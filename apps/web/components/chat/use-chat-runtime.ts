@@ -573,7 +573,7 @@ export function useChatRuntime({
           setIsRunning(false);
           active.current = null;
           window.dispatchEvent(new Event("pansgpt-credits-changed"));
-          if (answer.status === "complete") onSessionChanged();
+          onSessionChanged();
         }
       }
     },

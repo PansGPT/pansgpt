@@ -16,12 +16,13 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from app.core import authorization
+from app.core.config import settings
 from app.core.dependencies import UserContext, get_current_user
 from app.core.ids import uuid7
 from app.engines import chat_interactions as engine
 from app.main import app
 from app.models.chat import ComplexityLevel, IntentType, QueryClassification, RouteType
-from app.routers import chat, chat_sessions
+from app.routers import chat, chat_discovery, chat_sessions, reader
 from app.routers import chat_interactions as routes
 
 pytestmark = [pytest.mark.live, pytest.mark.asyncio]
@@ -29,6 +30,8 @@ pytestmark = [pytest.mark.live, pytest.mark.asyncio]
 
 @pytest.fixture
 async def live_chat(monkeypatch):
+    # This fixture verifies chat persistence; governance has its own real-DB gates.
+    monkeypatch.setattr(settings, "ENABLE_GOVERNANCE", False)
     url = os.getenv("CHAT_INTERACTIONS_TEST_DATABASE_URL")
     if not url:
         pytest.skip("Explicit transactional chat test database not configured")
@@ -44,6 +47,11 @@ async def live_chat(monkeypatch):
     await transaction.start()
     overrides = dict(app.dependency_overrides)
     try:
+        # The enclosing rollback transaction freezes now(); preserve the normal
+        # per-request insert order without relying on UUIDs generated in one ms.
+        await conn.execute(
+            "ALTER TABLE public.chat_messages ALTER COLUMN created_at SET DEFAULT clock_timestamp()"
+        )
         university = await conn.fetchval(
             "INSERT INTO public.universities(name,slug,status) VALUES('Synthetic chat verification',$1,'active') RETURNING id",
             f"chat-verification-{uuid7()}",
@@ -71,7 +79,7 @@ async def live_chat(monkeypatch):
         async def connection(*args, **kwargs):
             yield conn
 
-        for module in (chat, routes, engine, authorization, chat_sessions):
+        for module in (chat, routes, engine, authorization, chat_sessions, chat_discovery, reader):
             monkeypatch.setattr(module, "get_db_connection", connection)
         app.dependency_overrides[get_current_user] = lambda: user
         monkeypatch.setattr(chat, "_deduct_user_credit", AsyncMock(return_value=100))
@@ -443,8 +451,8 @@ async def test_routing_outage_leaves_no_false_answer_and_releases_owned_run(
     assert calls == []
     retrieval.assert_not_awaited()
     assert finish.call_args.kwargs["refund"] is True
-    # Failed attempts do not advance the selected successful branch.
-    assert (await client.get(path)).json()["messages"] == []
+    # The unanswered question stays selected so reopening the chat can recover it.
+    assert [row["role"] for row in (await client.get(path)).json()["messages"]] == ["user"]
     messages = (await client.get(path + "?include_branches=true")).json()["messages"]
     assert [message["role"] for message in messages] == ["user"]
     assert (
@@ -453,3 +461,102 @@ async def test_routing_outage_leaves_no_false_answer_and_releases_owned_run(
         )
         is None
     )
+
+
+async def test_general_history_and_search_exclude_study_and_unused_sessions(
+    live_chat: tuple[AsyncClient, asyncpg.Connection, UserContext, list[dict[str, object]]],
+) -> None:
+    client, conn, user, _ = live_chat
+    base = "/api/v1/ai/chat"
+    unused = (await client.post(base + "/sessions", json={})).json()["id"]
+    manual = (await client.post(base + "/sessions", json={"title": "Synthetic manual"})).json()[
+        "id"
+    ]
+    failed = (await client.post(base + "/sessions", json={})).json()["id"]
+    await conn.execute(
+        "INSERT INTO public.chat_messages(session_id,role,content) VALUES($1,'user','Synthetic failed question')",
+        uuid.UUID(failed),
+    )
+    document = await conn.fetchval(
+        """INSERT INTO public.documents(university_id,uploaded_by,title,course_code,course_title,storage_key,status)
+        VALUES($1,$2,'Synthetic document','TEST','Synthetic course',$3,'active') RETURNING id""",
+        user.university_id,
+        user.id,
+        f"synthetic/{uuid7()}.pdf",
+    )
+    study = (
+        await client.post(
+            base + "/sessions", json={"document_id": str(document), "title": "Synthetic study"}
+        )
+    ).json()["id"]
+    foreign = uuid7()
+    await conn.execute(
+        "INSERT INTO auth.users(id,email,raw_user_meta_data) VALUES($1,$2,'{}')",
+        foreign,
+        f"{foreign}@example.invalid",
+    )
+    await conn.execute(
+        "UPDATE public.users SET university_id=$2 WHERE id=$1", foreign, user.university_id
+    )
+    foreign_session = await conn.fetchval(
+        "INSERT INTO public.chat_sessions(user_id,title) VALUES($1,'Synthetic foreign') RETURNING id",
+        foreign,
+    )
+    history = await client.get(base + "/sessions")
+    assert history.status_code == 200, history.text
+    assert {row["id"] for row in history.json()["sessions"]} == {manual, failed}
+    assert (
+        unused not in history.text
+        and study not in history.text
+        and str(foreign_session) not in history.text
+    )
+    search = await client.get(base + "/search", params={"q": "Synthetic"})
+    assert search.status_code == 200, search.text
+    assert {row["session_id"] for row in search.json()["results"]} == {manual, failed}
+    study_history = await client.get(f"/api/v1/library/catalog/{document}/conversations")
+    assert study_history.status_code == 200, study_history.text
+    assert [row["id"] for row in study_history.json()["sessions"]] == [study]
+    assert (
+        await client.patch(base + f"/sessions/{study}", json={"archived": True})
+    ).status_code == 200
+    archived = await client.get(base + "/sessions", params={"archived": True})
+    assert [row["id"] for row in archived.json()["sessions"]] == [study]
+
+
+async def test_failed_question_can_be_reopened_retried_or_followed_by_a_new_question(
+    live_chat: tuple[AsyncClient, asyncpg.Connection, UserContext, list[dict[str, object]]],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    client, conn, user, calls = live_chat
+    classification = chat.intent_classifier.classify
+    for retry in (False, True):
+        session = (await client.post("/api/v1/ai/chat/sessions", json={})).json()["id"]
+        path = f"/api/v1/ai/chat/sessions/{session}"
+        monkeypatch.setattr(
+            chat.intent_classifier,
+            "classify",
+            AsyncMock(side_effect=RuntimeError("Synthetic outage")),
+        )
+        failed = await client.post(path + "/stream", json={"message": "Synthetic failed question"})
+        assert "event: error" in failed.text
+        history = (await client.get(path)).json()["messages"]
+        assert len(history) == 1 and history[0]["role"] == "user"
+        assert await conn.fetchval(
+            "SELECT active_run_id IS NULL FROM public.chat_sessions WHERE id=$1", uuid.UUID(session)
+        )
+        monkeypatch.setattr(chat.intent_classifier, "classify", classification)
+        payload = {"message": "Synthetic next question"}
+        if retry:
+            payload["retry_message_id"] = history[0]["id"]
+        completed = init_event(await client.post(path + "/stream", json=payload))
+        assert (completed["user_message_id"] == history[0]["id"]) is retry
+        visible = (await client.get(path)).json()["messages"]
+        assert [row["role"] for row in visible] == ["user", "assistant"]
+        assert visible[0]["content"] == (
+            "Synthetic failed question" if retry else "Synthetic next question"
+        )
+        # The next successful request must acquire the released lease immediately.
+        init_event(
+            await client.post(path + "/stream", json={"message": "Synthetic immediate follow-up"})
+        )
+    assert len(calls) == 4

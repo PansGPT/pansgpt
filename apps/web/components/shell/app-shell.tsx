@@ -57,6 +57,19 @@ function WorkspaceProviders({
   );
 }
 
+type WorkspaceQuery = { modal: string | null; taskId: string | null; tab: string | null };
+
+function WorkspaceQueryObserver({ onChange }: { onChange: (query: WorkspaceQuery) => void }): null {
+  const params = useSearchParams();
+  const modal = params.get("modal");
+  const taskId = params.get("taskId");
+  const tab = params.get("tab");
+  useEffect(() => {
+    onChange({ modal, taskId, tab });
+  }, [onChange, modal, taskId, tab]);
+  return null;
+}
+
 function Workspace({
   children,
   profile,
@@ -66,7 +79,11 @@ function Workspace({
 }): React.ReactElement {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const [workspaceQuery, setWorkspaceQuery] = useState<WorkspaceQuery>({
+    modal: null,
+    taskId: null,
+    tab: null,
+  });
   const [message, setMessage] = useState("");
   const { setDraft } = useChatDraft();
   const reduced = useReducedMotion();
@@ -119,13 +136,13 @@ function Workspace({
   const profileReturn = useRef<HTMLButtonElement | null>(null);
   const plannerReturn = useRef<HTMLElement | null>(null);
   const plannerOpenedFromShell = useRef(false);
-  const modalQuery = searchParams.get("modal");
-  const taskIdQuery = searchParams.get("taskId");
+  const modalQuery = workspaceQuery.modal;
+  const taskIdQuery = workspaceQuery.taskId;
   const [plannerTaskId, setPlannerTaskId] = useState<string | null>(taskIdQuery);
   const activePlannerModal =
     modalQuery === "planner" || modalQuery === "tasks" || modalQuery === "timetable";
   const plannerTab: PlannerTab =
-    modalQuery === "timetable" || searchParams.get("tab") === "timetable" ? "timetable" : "tasks";
+    modalQuery === "timetable" || workspaceQuery.tab === "timetable" ? "timetable" : "tasks";
 
   const [prevTaskIdQuery, setPrevTaskIdQuery] = useState(taskIdQuery);
   if (prevTaskIdQuery !== taskIdQuery) {
@@ -388,6 +405,9 @@ function Workspace({
         data-quiz={inQuiz}
         data-preferred-collapsed={sidebar.preferredCollapsed}
       >
+        <Suspense fallback={null}>
+          <WorkspaceQueryObserver onChange={setWorkspaceQuery} />
+        </Suspense>
         <a href="#workspace-content" className="shell-skip">
           Skip to content
         </a>

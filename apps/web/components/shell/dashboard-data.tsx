@@ -140,7 +140,11 @@ export function DashboardProvider({
         if (!response.ok) throw new Error("Chat history unavailable");
         const result = chatsSchema.parse(await response.json());
         if (!controller.signal.aborted)
-          setChatData({ chats: result.sessions, loading: false, error: false });
+          setChatData({
+            chats: result.sessions.filter((chat) => !chat.document_id),
+            loading: false,
+            error: false,
+          });
       } catch {
         if (!controller.signal.aborted) setChatData({ chats: [], loading: false, error: true });
       }

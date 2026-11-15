@@ -203,5 +203,7 @@ export function useSearchParams() {
     },
     () => location.search
   );
+  // Explicit synthetic route suspension exercises the real component boundaries.
+  if (window.__pendingSearchParams) throw window.__pendingSearchParams;
   return new URLSearchParams(search);
 }

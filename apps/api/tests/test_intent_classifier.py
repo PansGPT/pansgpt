@@ -2,7 +2,7 @@
 
 import asyncio
 import json
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -296,7 +296,7 @@ async def test_routing_deadline_is_bounded_and_cancellation_propagates(
     monkeypatch.setitem(settings.__dict__, "INTENT_ROUTER_TOTAL_TIMEOUT_S", 0.035)
     monkeypatch.setitem(settings.__dict__, "INTENT_ROUTER_ATTEMPT_TIMEOUT_S", 0.015)
 
-    async def hang(*args: object) -> None:
+    async def hang(*args: object, **kwargs: object) -> None:
         await asyncio.Event().wait()
 
     completion.side_effect = hang
@@ -335,3 +335,64 @@ async def test_connection_failure_skips_other_models_and_cools_down_provider(
     assert (await engine.classify("Hello")).routing_provider == "google"
     assert (await engine.classify("Hello again")).routing_provider == "google"
     assert [call.args[0] for call in completion.call_args_list] == ["groq", "google", "google"]
+
+
+@pytest.mark.parametrize("openrouter_allowed", [False, True])
+async def test_slow_provider_families_cannot_starve_the_next_eligible_fallback(
+    router: tuple[IntentClassifier, AsyncMock],
+    monkeypatch: pytest.MonkeyPatch,
+    openrouter_allowed: bool,
+) -> None:
+    engine, completion = router
+    monkeypatch.setattr(settings, "INTENT_ROUTER_TOTAL_TIMEOUT_S", 0.3)
+    monkeypatch.setattr(settings, "INTENT_ROUTER_ATTEMPT_TIMEOUT_S", 0.2)
+    monkeypatch.setattr(settings, "OPENROUTER_ZDR_CONFIRMED", openrouter_allowed)
+    recovery = MagicMock()
+
+    async def fallback(provider: str, *args: object, **kwargs: object) -> str:
+        if provider == ("openrouter" if openrouter_allowed else "google"):
+            return decision(answer="Synthetic recovered response")
+        await asyncio.Event().wait()
+        return "unreachable"
+
+    completion.side_effect = fallback
+    result = await asyncio.wait_for(engine.classify("Hello", on_retry=recovery), timeout=0.6)
+    assert result.direct_answer == "Synthetic recovered response"
+    assert [call.args[0] for call in completion.call_args_list] == (
+        ["groq", "google", "openrouter"] if openrouter_allowed else ["groq", "google"]
+    )
+    recovery.assert_called()
+    assert completion.call_args.kwargs["google_thinking_level"] == "minimal"
+
+
+async def test_exhausted_models_keep_recovery_events_inside_the_existing_contract(
+    router: tuple[IntentClassifier, AsyncMock],
+) -> None:
+    from app.models.chat import ChatRecoveryEvent
+
+    engine, completion = router
+    completion.side_effect = ValueError("Synthetic invalid decision")
+    events: list[ChatRecoveryEvent] = []
+    result = await engine.classify(
+        "A synthetic request",
+        on_retry=lambda attempt, delay: events.append(
+            ChatRecoveryEvent(attempt=attempt, retry_after_ms=round(delay * 1000))
+        ),
+    )
+    assert result.routing_source == "fallback" and not result.requires_rag
+    assert len(events) == 5
+
+
+@pytest.mark.parametrize("kwargs", [{}, {"general": True}, {"rag_context": "Synthetic source"}])
+async def test_router_and_answer_prompts_keep_the_same_public_identity(
+    router: tuple[IntentClassifier, AsyncMock],
+    kwargs: dict[str, object],
+) -> None:
+    from app.engines.guard import ASSISTANT_IDENTITY, policy_guard
+
+    engine, completion = router
+    await engine.classify(
+        "What is your name?", history=[{"role": "assistant", "content": "I'm ChatGPT"}]
+    )
+    assert ASSISTANT_IDENTITY in completion.call_args.args[3]
+    assert ASSISTANT_IDENTITY in policy_guard.build_system_prompt(**kwargs)

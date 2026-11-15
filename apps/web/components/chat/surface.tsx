@@ -29,6 +29,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useChatDraft } from "@/components/shell/chat-draft";
 import { useDashboard } from "@/components/shell/dashboard-data";
 import { WorkspaceLoading } from "@/components/shell/loading";
+import { ChatLoading } from "./chat-loading";
 import { FirstChatDisclaimerModal } from "@/components/FirstChatDisclaimerModal";
 import { ChatRecent } from "@/components/chat/recent";
 import { ChatTools } from "@/components/chat/tools";
@@ -490,8 +491,7 @@ export function ChatHistory({
     </section>
   );
   if (error) return <>{renderThread ? renderThread(failure) : failure}</>;
-  if (!history)
-    return <>{renderThread ? renderThread(<WorkspaceLoading />) : <WorkspaceLoading />}</>;
+  if (!history) return <>{renderThread ? renderThread(<ChatLoading />) : <ChatLoading />}</>;
   return (
     <ChatContent
       initialSessionId={id}

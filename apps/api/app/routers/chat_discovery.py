@@ -30,6 +30,7 @@ LEFT JOIN LATERAL (
  ORDER BY rank DESC,m.created_at DESC,m.id DESC LIMIT 1
 ) hit ON true
 WHERE s.user_id=$1 AND u.university_id=$2 AND u.deleted_at IS NULL AND s.deleted_at IS NULL
+  AND s.document_id IS NULL
  AND ($5::boolean OR s.archived_at IS NULL)
  AND (s.search_vector @@ n.query OR s.title ILIKE $4 OR hit.id IS NOT NULL)
 ORDER BY (s.search_vector @@ n.query OR s.title ILIKE $4) DESC,coalesce(hit.rank,0) DESC,

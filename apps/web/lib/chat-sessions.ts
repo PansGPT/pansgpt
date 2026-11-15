@@ -23,6 +23,7 @@ export const chatSessionSummarySchema = chatSessionSchema
     title: true,
     is_pinned: true,
     archived_at: true,
+    document_id: true,
   })
   .extend({
     updated_at: z.string().optional(),

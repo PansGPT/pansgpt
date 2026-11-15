@@ -10,6 +10,7 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 import structlog
+from anyio import CancelScope
 from asyncpg import QueryCanceledError
 from fastapi import (
     APIRouter,
@@ -128,10 +129,10 @@ async def _auto_generate_session_title(  # [TENANT FIX]
     message: str,  # [TENANT FIX]
     user_id: str,  # [TENANT FIX]
 ) -> None:  # [TENANT FIX]
-    """Use successful server-owned exchanges; never a first-words title."""
+    """Name saved questions as well as successful exchanges; never a first-words title."""
     from app.engines.chat_titles import generate_title
 
-    await generate_title(session_id, user_id)
+    await generate_title(session_id, user_id, question=message)
 
 
 @router.post(
@@ -226,6 +227,9 @@ async def list_chat_sessions(
                            created_at::text, updated_at::text, is_pinned, archived_at::text,title_source,last_message_at::text
                     FROM public.chat_sessions
                     WHERE user_id = $1 AND deleted_at IS NULL AND (archived_at IS NOT NULL) = $3
+                      AND ($3 OR (document_id IS NULL AND (title_source='manual' OR EXISTS (
+                        SELECT 1 FROM public.chat_messages m WHERE m.session_id=chat_sessions.id AND m.role='user'
+                      ))))
                     ORDER BY is_pinned DESC, coalesce(last_message_at,created_at) DESC, id DESC
                     LIMIT $2;
                 """
@@ -426,12 +430,42 @@ async def stream_chat_session(
     assistant_message_id = turn.assistant_id
     credit_reserved = False
     credit_settled = False
+    cleanup_task: asyncio.Task[None] | None = None
+
+    async def finish_run() -> None:
+        nonlocal cleanup_task
+
+        async def cleanup() -> None:
+            try:
+                if credit_reserved and not credit_settled:
+                    async with asyncio.timeout(5):
+                        await _finish_chat_credit(user_id, assistant_message_id, refund=True)
+            except Exception as exc:
+                logger.warning("chat_credit_cleanup_failed", error_type=type(exc).__name__)
+            finally:
+                try:
+                    async with asyncio.timeout(15):
+                        await retry_transient(lambda: release_turn(session_id, turn.run_id))
+                except Exception as exc:
+                    logger.error("chat_run_release_failed", error_type=type(exc).__name__)
+
+        # The browser can close its reader immediately after a terminal frame.
+        # Keep cleanup independent of both ASGI cancellation and producer.cancel().
+        with CancelScope(shield=True):
+            if cleanup_task is None:
+                cleanup_task = asyncio.create_task(cleanup())
+            try:
+                await asyncio.shield(cleanup_task)
+            except asyncio.CancelledError:
+                await asyncio.shield(cleanup_task)
+                raise
+
     try:
         if not current_user.dev_bypass and policy_guard.check_prompt_safety(turn.prompt)[0]:
             await _deduct_user_credit(user_id, assistant_message_id)
             credit_reserved = True
     except BaseException:
-        await release_turn(session_id, turn.run_id)
+        await finish_run()
         raise
 
     model_started = False  # [CHAT FIX 2]
@@ -600,6 +634,11 @@ async def stream_chat_session(
                             [row["id"] for row in turn.attachments],
                         )
 
+                    if not payload.edit_message_id:
+                        await select_path(conn, session_id, user_message_id)
+
+        background_tasks.add_task(_auto_generate_session_title, session_id, turn.prompt, user_id)
+
         # 3b. Intent & Complexity Classification (Fast Path vs. Complex Path)
         model_started = True
         classification = await intent_classifier.classify(
@@ -611,6 +650,7 @@ async def stream_chat_session(
             user_enable_tools=payload.enable_tools,
             has_attachments=bool(turn.attachments),
             action_mode=payload.action_mode,
+            on_retry=recovering,
         )
         if await client_disconnected():
             return
@@ -1030,10 +1070,6 @@ async def stream_chat_session(
 
         credit_settled = True
         await _finish_chat_credit(user_id, assistant_message_id, refund=False)
-        if full_response_text.strip():
-            background_tasks.add_task(
-                _auto_generate_session_title, session_id, turn.prompt, user_id
-            )
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
@@ -1064,17 +1100,25 @@ async def stream_chat_session(
         queue = event_queue
 
         async def produce() -> None:
+            terminal: str | None = None
             try:
                 async for event in bounded_sse_events():
-                    await queue.put(event)
+                    if event.startswith("event: done\n"):
+                        terminal = event
+                    else:
+                        await queue.put(event)
             except Exception:
                 logger.exception("chat_stream_producer_failed")
+                terminal = None
                 await queue.put(
                     'event: error\ndata: {"error":"The answer could not be saved. Please retry."}\n\n'
                 )
-            else:
-                await queue.put(None)
-                return
+            finally:
+                await finish_run()
+            # Finish persistence, billing and the owned lease before the client
+            # sees done and becomes able to submit the next question.
+            if terminal is not None:
+                await queue.put(terminal)
             await queue.put(None)
 
         producer = asyncio.create_task(produce())
@@ -1095,13 +1139,12 @@ async def stream_chat_session(
                 yield event
                 last_ping = time.monotonic()
         finally:
-            producer.cancel()
-            await asyncio.gather(producer, return_exceptions=True)
-            try:
-                if credit_reserved and not credit_settled:
-                    await _finish_chat_credit(user_id, assistant_message_id, refund=True)
-            finally:
-                await release_turn(session_id, turn.run_id)
+            with CancelScope(shield=True):
+                producer.cancel()
+                try:
+                    await asyncio.shield(asyncio.gather(producer, return_exceptions=True))
+                finally:
+                    await finish_run()
 
     return StreamingResponse(
         transport_events(),  # [CHAT FIX]

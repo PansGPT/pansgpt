@@ -181,16 +181,20 @@ function CopyAction(): React.ReactElement {
   const { feedbackPending } = useChatActions();
   const savingFeedback = !!message && feedbackPending.has(message.id);
   return (
-    <ActionBarPrimitive.Root className="study-chat-actions" hideWhenRunning autohide="never">
+    <ActionBarPrimitive.Root
+      className="study-chat-actions"
+      hideWhenRunning={message?.role !== "user"}
+      autohide="never"
+    >
       <Tooltip content={copied ? "Copied" : "Copy message"}>
         <ActionBarPrimitive.Copy aria-label="Copy message">
           {copied ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
           <span className="p-sr-only">{copied ? "Copied" : "Copy"}</span>
         </ActionBarPrimitive.Copy>
       </Tooltip>
-      {message?.isSaved && message.role === "user" && (
+      {message?.role === "user" && (
         <Tooltip content="Edit question">
-          <ActionBarPrimitive.Edit aria-label="Edit question" disabled={busy}>
+          <ActionBarPrimitive.Edit aria-label="Edit question" disabled={busy || !message.isSaved}>
             <Pencil size={15} />
           </ActionBarPrimitive.Edit>
         </Tooltip>

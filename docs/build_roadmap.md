@@ -1,5 +1,7 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-11-15 chat reliability:** Run cleanup, recoverable failed questions and naming, separated study history, immediate question actions, scoped conversation loading and bounded provider recovery are implemented and locally verified. [Contracts, verification and remaining hosted gates](chat-lifecycle-recovery-2026-11-15.md).
+
 > **2026-11-06 Quiz queue:** Recovered the saved five-question local quiz by starting its missing worker; hardened the API handoff against cold Redis connection timeouts. [Diagnosis and verification](quiz-queue-recovery-2026-11-06.md).
 
 > **2026-11-05 implementation:** Local Quiz loading is restored and user-confirmed after explicit flag/client-key configuration. Restore the pre-consolidation Library layout with later header refinements; task paging, serialized saves and neutral keyboard focus are in verification. Timetable UI remains deferred and streak behavior will be discussed after implementation. [Scope, contracts and verification](tasks-2026-11-05.md).

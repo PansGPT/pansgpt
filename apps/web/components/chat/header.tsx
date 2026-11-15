@@ -31,7 +31,7 @@ export function ChatHeader({
   const shareTrigger = useRef<HTMLButtonElement>(null);
   const listed = chats.find((chat) => chat.id === sessionId);
   const publishedTitle = useRef("");
-  const hasAnswer = messages.some((message) => message.role === "assistant");
+  const hasQuestion = messages.some((message) => message.role === "user");
   useEffect(() => {
     if (!sessionId) return;
     const controller = new AbortController();
@@ -45,7 +45,7 @@ export function ChatHeader({
             throw new Error("Conversation ownership mismatch.");
           setSaved(result);
           setMetadataError(false);
-          if (result.title_source === "pending" && hasAnswer && !running && polls++ < 6)
+          if (result.title_source === "pending" && hasQuestion && !running && polls++ < 6)
             timer = setTimeout(load, 2500);
           if (
             (result.title_source === "generated" ||
@@ -71,7 +71,7 @@ export function ChatHeader({
     profile?.id,
     profile?.university_id,
     attempt,
-    hasAnswer,
+    hasQuestion,
     running,
     reload,
   ]);

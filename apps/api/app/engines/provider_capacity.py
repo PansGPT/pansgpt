@@ -134,6 +134,13 @@ class Reservation:
 active: ContextVar[Reservation | None] = ContextVar("provider_reservation", default=None)
 
 
+def mark_request_unsent() -> None:
+    """Transport-proven no-send: settle tokens, retaining conservative attempt limits."""
+    ticket = active.get()
+    if ticket is not None and ticket.actual is None:
+        ticket.actual = 0
+
+
 def scope_prefix(provider: str, model: str) -> str:
     scope = hashlib.sha256(f"{settings.AI_CAPACITY_SCOPE}:{provider}:{model}".encode()).hexdigest()[
         :24

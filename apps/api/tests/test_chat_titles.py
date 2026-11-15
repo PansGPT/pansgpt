@@ -95,3 +95,15 @@ async def test_incomplete_or_unnamable_results_leave_the_title_pending(title_sto
     await chat_titles.generate_title(SESSION, USER)
     assert state == {"title": "New Chat", "title_source": "pending"}
     conn.execute.assert_not_awaited()
+
+
+async def test_saved_question_can_be_named_without_a_successful_assistant_reply(
+    title_store: tuple[dict[str, str], list[dict[str, str]], MagicMock, AsyncMock],
+) -> None:
+    state, rows, _, completion = title_store
+    rows.clear()
+    completion.return_value = '{"title":"Surfactants Study Document","provisional":false}'
+    question = "Create a document about synthetic surfactants"
+    await chat_titles.generate_title(SESSION, USER, question=question)
+    assert state == {"title": "Surfactants Study Document", "title_source": "generated"}
+    assert json.loads(completion.call_args.args[4]) == [{"role": "user", "content": question}]

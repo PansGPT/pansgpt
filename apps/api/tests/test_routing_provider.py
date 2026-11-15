@@ -1,7 +1,7 @@
 """Routing transports preserve privacy, token bounds and private structured output."""
 
 import json
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import httpx
 import pytest
@@ -218,6 +218,75 @@ async def test_transport_failure_reports_only_stage_without_request_content(
     assert error.value.phase == "connection.connect_tcp.started"
     assert error.value.error_type == "ConnectTimeout"
     assert "PRIVATE" not in str(error.value)
+
+
+@pytest.mark.parametrize(
+    "error_type",
+    [
+        httpx.ConnectTimeout,
+        httpx.ConnectError,
+        httpx.PoolTimeout,
+        httpx.ReadTimeout,
+        httpx.WriteError,
+    ],
+)
+async def test_only_proven_unsent_transport_failures_settle_token_estimates_to_zero(
+    monkeypatch: pytest.MonkeyPatch,
+    error_type: type[httpx.RequestError],
+) -> None:
+    from app.engines import provider_capacity as capacity
+    from app.engines.routing_provider import RoutingTransportError
+
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    monkeypatch.setattr(settings, "GROQ_ZDR_CONFIRMED", True)
+    store = MagicMock(eval=AsyncMock(return_value=[1, 0, 1]))
+    monkeypatch.setattr(capacity, "redis_client", lambda: store)
+
+    async def fail(request: httpx.Request) -> httpx.Response:
+        raise error_type("Synthetic transport error", request=request)
+
+    real = httpx.AsyncClient
+    monkeypatch.setattr(
+        httpx, "AsyncClient", lambda **kwargs: real(transport=httpx.MockTransport(fail), **kwargs)
+    )
+    with pytest.raises(RoutingTransportError):
+        await routing_completion("groq", "fixture", "synthetic", "JSON", "Synthetic question")
+    unsent = error_type in {httpx.ConnectTimeout, httpx.ConnectError, httpx.PoolTimeout}
+    assert store.eval.await_count == (2 if unsent else 1)
+    if unsent:
+        assert store.eval.call_args.args[0] == capacity.SETTLE
+        assert store.eval.call_args.args[-2:] == (0, 1)
+    assert capacity.active.get() is None
+
+
+@pytest.mark.parametrize(
+    "phase", ["connection.start_tls.started", "http11.receive_response_headers.started"]
+)
+async def test_cancellation_settles_zero_only_before_the_request_was_sent(
+    monkeypatch: pytest.MonkeyPatch,
+    phase: str,
+) -> None:
+    import asyncio
+
+    from app.engines import provider_capacity as capacity
+
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    monkeypatch.setattr(settings, "GROQ_ZDR_CONFIRMED", True)
+    store = MagicMock(eval=AsyncMock(return_value=[1, 0, 1]))
+    monkeypatch.setattr(capacity, "redis_client", lambda: store)
+
+    async def cancel(request: httpx.Request) -> httpx.Response:
+        await request.extensions["trace"](phase, {})
+        raise asyncio.CancelledError()
+
+    real = httpx.AsyncClient
+    monkeypatch.setattr(
+        httpx, "AsyncClient", lambda **kwargs: real(transport=httpx.MockTransport(cancel), **kwargs)
+    )
+    with pytest.raises(asyncio.CancelledError):
+        await routing_completion("groq", "fixture", "synthetic", "JSON", "Synthetic question")
+    assert store.eval.await_count == (2 if phase.startswith("connection.") else 1)
+    assert capacity.active.get() is None
 
 
 async def test_quiz_maps_can_use_json_mode_without_unsupported_constrained_schema(monkeypatch):

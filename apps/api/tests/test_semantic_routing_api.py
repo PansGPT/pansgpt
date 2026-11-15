@@ -25,6 +25,32 @@ def semantic_router(monkeypatch: pytest.MonkeyPatch, output: str) -> AsyncMock:
     return completion
 
 
+async def test_routing_failover_uses_thinking_recovery_and_saves_one_exchange(
+    client: AsyncClient,
+    tenant_state: TenantTestState,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.engines.routing_provider import RoutingTransportError
+
+    completion = semantic_router(monkeypatch, "unused")
+    completion.side_effect = [
+        RoutingTransportError("connection.start_tls.started", "ConnectTimeout"),
+        decision(answer="I'm PansGPT, your study assistant."),
+    ]
+    response = await client.post(
+        "/api/v1/ai/chat/sessions/018f3a30-0001-7000-8000-000000000001/stream",
+        json={"message": "But aren't you PansGPT?"},
+    )
+    assert "event: recovery" in response.text and "event: error" not in response.text
+    assert response.text.index("event: recovery") < response.text.index("event: text_chunk")
+    assert "I'm PansGPT" in response.text
+    assert [call.args[0] for call in completion.call_args_list] == ["groq", "google"]
+    writes = tenant_state.connection.execute.await_args_list
+    assert sum("INSERT INTO public.chat_messages" in call.args[0] for call in writes) == 2
+    tenant_state.ai.assert_not_called()
+    tenant_state.retrieval.assert_not_awaited()
+
+
 @pytest.mark.parametrize("bound", [False, True])
 async def test_intent_decider_can_answer_without_material_search_even_in_a_pdf_chat(
     client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch, bound: bool

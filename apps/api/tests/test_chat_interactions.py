@@ -9,6 +9,7 @@ import pymupdf
 import pytest
 from fastapi import HTTPException
 
+from app.core.dependencies import UserContext
 from app.engines import chat_interactions as engine
 from app.models.chat import StreamChatRequest
 from app.routers import chat_interactions as routes
@@ -108,6 +109,18 @@ async def test_retry_reuses_an_unanswered_owned_question_and_stored_parent(tree_
     assert result.user_id == uid(3) and result.prompt == rows[2]["content"]
     assert result.parent_id == uid(2) and len(result.history) == 2
     assert not result.regenerate
+
+
+@pytest.mark.parametrize("with_previous_answer", [False, True])
+async def test_new_question_can_follow_an_unanswered_question(
+    tree_store: tuple[MagicMock, list[dict[str, object]], UserContext],
+    with_previous_answer: bool,
+) -> None:
+    _, rows, user = tree_store
+    rows[:] = rows[:3] if with_previous_answer else rows[:1]
+    result = await engine.prepare_turn(uid(80), StreamChatRequest(message="A new question"), user)
+    assert result.parent_id == (uid(2) if with_previous_answer else None)
+    assert len(result.history) == (2 if with_previous_answer else 0)
 
 
 @pytest.mark.parametrize("reason", ["answered", "tool", "foreign", "wrong_role", "mixed"])

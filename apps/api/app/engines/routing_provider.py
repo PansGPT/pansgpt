@@ -8,7 +8,7 @@ import structlog
 from pydantic import BaseModel, Field
 
 from app.core.config import settings
-from app.engines.provider_capacity import observe, provider_budget
+from app.engines.provider_capacity import mark_request_unsent, observe, provider_budget
 from app.models.chat import SemanticDecision
 from app.models.presentation import PresentationPlan
 
@@ -205,7 +205,7 @@ async def _routing_completion(
         if event.endswith(".started"):
             phase = event
 
-    timeout = httpx.Timeout(attempt_timeout, connect=4.0)
+    timeout = httpx.Timeout(attempt_timeout, connect=min(4.0, attempt_timeout))
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.post(
@@ -219,10 +219,14 @@ async def _routing_completion(
             phase = "response_validation"
             result = CompletionEnvelope.model_validate_json(response.text)
     except asyncio.CancelledError as exc:
+        if phase in {"connection.connect_tcp.started", "connection.start_tls.started"}:
+            mark_request_unsent()
         # asyncio.timeout preserves this cause; external cancellation still propagates.
         exc.routing_phase = phase
         raise
     except httpx.RequestError as exc:
+        if isinstance(exc, (httpx.ConnectTimeout, httpx.ConnectError, httpx.PoolTimeout)):
+            mark_request_unsent()
         raise RoutingTransportError(phase, type(exc).__name__) from exc
     if result.usage:
         input_tokens = result.usage.get("prompt_tokens")
