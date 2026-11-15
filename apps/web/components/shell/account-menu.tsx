@@ -106,6 +106,24 @@ export function AccountMenu({
           }}
         >
           <DropdownHeader title={name} description={profile.email} />
+          {profile.roles.some((role) =>
+            ["super_admin", "university_admin", "lecturer"].includes(role)
+          ) && (
+            <DropdownItem
+              icon={<Shield size={16} />}
+              onSelect={() =>
+                router.push(
+                  profile.roles.includes("super_admin")
+                    ? "/super-admin"
+                    : profile.roles.includes("university_admin")
+                      ? "/admin"
+                      : "/lecturer"
+                )
+              }
+            >
+              Administration
+            </DropdownItem>
+          )}
 
           {openNavigation && (
             <DropdownItem

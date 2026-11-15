@@ -25,6 +25,7 @@ from app.routers.chat import router as chat_router
 from app.routers.chat_discovery import router as chat_discovery_router
 from app.routers.chat_interactions import router as chat_interactions_router
 from app.routers.chat_sessions import router as chat_sessions_router
+from app.routers.governance import router as governance_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
 from app.routers.quiz import router as quiz_router
@@ -111,6 +112,7 @@ app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
 app.include_router(quiz_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(academic_router, prefix=settings.API_V1_PREFIX)
+app.include_router(governance_router, prefix=settings.API_V1_PREFIX)
 app.include_router(library_router, prefix=settings.API_V1_PREFIX)
 app.include_router(documents_router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat_router, prefix=settings.API_V1_PREFIX)

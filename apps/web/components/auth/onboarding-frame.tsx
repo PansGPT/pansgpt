@@ -11,6 +11,7 @@ export function OnboardingFrame({
   back,
   children,
   footer,
+  steps = ONBOARDING_STEPS,
 }: {
   step: number;
   title: string;
@@ -19,6 +20,7 @@ export function OnboardingFrame({
   back: () => void;
   children: ReactNode;
   footer?: ReactNode;
+  steps?: readonly string[];
 }): React.ReactElement {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
@@ -46,7 +48,7 @@ export function OnboardingFrame({
         <div className="onboarding-content">
           <nav className="onboarding-progress" aria-label="Setup progress">
             <ol>
-              {ONBOARDING_STEPS.map((name, index) => (
+              {steps.map((name, index) => (
                 <li
                   key={name}
                   aria-current={index === step ? "step" : undefined}
@@ -58,7 +60,7 @@ export function OnboardingFrame({
               ))}
             </ol>
             <p>
-              Step {step + 1} of {ONBOARDING_STEPS.length}
+              Step {step + 1} of {steps.length}
             </p>
           </nav>
           <header className="onboarding-heading">

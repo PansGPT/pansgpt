@@ -8,6 +8,7 @@ from typing import Any
 import httpx
 
 from app.core.config import settings
+from app.engines.governance_policy import temperature
 from app.engines.provider_capacity import observe, provider_budget
 
 
@@ -83,6 +84,7 @@ async def google_turn(
             )
     declarations = [tool["function"] for tool in tools or []]
     config = types.GenerateContentConfig(
+        temperature=temperature.get(),
         system_instruction="\n".join(system),
         tools=[types.Tool(function_declarations=declarations)] if declarations else None,
         max_output_tokens=settings.TEXT_CHAT_MAX_TOKENS,
@@ -152,7 +154,7 @@ async def groq_turn(
                     "messages": messages,
                     "stream": True,
                     "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
-                    "temperature": 0.2,
+                    "temperature": temperature.get(),
                 }
                 if tools:
                     kwargs.update(tools=tools, tool_choice="auto")
@@ -193,7 +195,7 @@ async def openrouter_turn(
         "messages": messages,
         "stream": True,
         "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
-        "temperature": 0.2,
+        "temperature": temperature.get(),
         "provider": {"zdr": True, "data_collection": "deny"},
     }
     if tools:

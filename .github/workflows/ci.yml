@@ -211,7 +211,7 @@ jobs:
   chat-ui:
     name: Assistant UI Interaction Contracts
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -230,6 +230,8 @@ jobs:
         run: pnpm --filter @pansgpt/web test:chat
       - name: Verify quiz practice journeys without hosted credentials
         run: pnpm --filter @pansgpt/web test:quiz
+      - name: Verify administrative workspace journeys without hosted credentials
+        run: pnpm --filter @pansgpt/web test:admin
 
   build-web:
     name: Web Smoke Build Check

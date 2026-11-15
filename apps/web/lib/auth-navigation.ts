@@ -18,6 +18,9 @@ export function safeAuthNext(value: string | null | undefined, fallback = "/app"
     if (!(
       path === "/app" ||
       path.startsWith("/app/") ||
+      ["/admin", "/super-admin", "/lecturer"].some(
+        (base) => path === base || path.startsWith(base + "/")
+      ) ||
       path === "/onboarding" ||
       path === "/update-password"
     ))
