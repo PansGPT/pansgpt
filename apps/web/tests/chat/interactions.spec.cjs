@@ -2868,9 +2868,19 @@ for (const mobile of [false, true]) {
     await expect(warning).toHaveText(
       mobile ? "Couldn't upload. Try again." : "We couldn't upload this file. Please try again."
     );
-    const box = await banner.boundingBox();
-    const after = await form.boundingBox();
-    expect(box.y + box.height).toBeLessThan(after.y);
+    // Read both edges together: viewport scrolling between browser calls can
+    // otherwise compare positions from different frames and report an overlap.
+    const layout = await banner.evaluate((element) => {
+      const composer = element
+        .closest(".study-chat-composer-host")
+        ?.querySelector(".study-chat-composer");
+      if (!composer) throw new Error("Upload notice has no composer");
+      return {
+        noticeBottom: element.getBoundingClientRect().bottom,
+        composerTop: composer.getBoundingClientRect().top,
+      };
+    });
+    expect(layout.noticeBottom).toBeLessThan(layout.composerTop);
     expect((await warning.boundingBox()).width).toBeGreaterThan(200);
     await expect(form.getByRole("alert")).toHaveCount(0);
     await page.screenshot({
