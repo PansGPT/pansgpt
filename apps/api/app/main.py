@@ -9,10 +9,14 @@ from typing import TypedDict
 
 import structlog
 from fastapi import FastAPI
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 
 from app.core.config import settings
 from app.core.database import close_db_pool, init_db_pool
@@ -29,6 +33,7 @@ from app.routers.governance import router as governance_router
 from app.routers.library import documents_router
 from app.routers.library import router as library_router
 from app.routers.quiz import router as quiz_router
+from app.routers.settings import router as settings_router
 
 # Suppress SDK-level AFC deprecation warnings from google.genai.models
 logging.getLogger("google.genai.models").setLevel(logging.ERROR)
@@ -93,6 +98,23 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+
+@app.exception_handler(RequestValidationError)
+async def safe_settings_validation(request: Request, exc: RequestValidationError) -> Response:
+    if request.url.path.startswith(f"{settings.API_V1_PREFIX}/settings/"):
+        return JSONResponse(
+            status_code=422,
+            content={
+                "detail": [
+                    {key: error[key] for key in ("loc", "msg", "type") if key in error}
+                    for error in exc.errors()
+                ]
+            },
+            headers={"Cache-Control": "private, no-store"},
+        )
+    return await request_validation_exception_handler(request, exc)
+
+
 # Configure Rate Limiting (SlowAPI)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
@@ -109,6 +131,7 @@ app.add_middleware(
 
 # Register API v1 Routers
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
+app.include_router(settings_router, prefix=settings.API_V1_PREFIX)
 app.include_router(quiz_router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_router, prefix=settings.API_V1_PREFIX)
 app.include_router(academic_router, prefix=settings.API_V1_PREFIX)

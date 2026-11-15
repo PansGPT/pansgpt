@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Bug, Check, AlertCircle, X, Loader2 } from "lucide-react";
 import { DialogPrimitive } from "@pansgpt/ui/shell";
+import { useAuth } from "@/lib/auth-context";
+import { feedbackRequestId, SettingsError, submitFeedback } from "@/lib/settings";
+import type { FeedbackCategory, FeedbackRequest } from "@pansgpt/types";
 
 export type BugCategory =
   "ui_glitch" | "clinical_accuracy" | "document_pdf" | "payment_credits" | "other";
@@ -15,26 +18,49 @@ const CATEGORIES: { id: BugCategory; label: string }[] = [
   { id: "other", label: "Other Feedback / Feature Request" },
 ];
 
-export function ReportBugDialog({
-  open,
-  onOpenChange,
-  returnFocus,
-}: {
+type ReportProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   returnFocus?: () => void;
-}): React.ReactElement {
+};
+export function ReportBugDialog(props: ReportProps): React.ReactElement {
+  const { session } = useAuth();
+  return (
+    <AccountReport
+      key={session?.user.id ?? "signed-out"}
+      {...props}
+      token={session?.access_token}
+    />
+  );
+}
+function AccountReport({
+  open,
+  onOpenChange,
+  returnFocus,
+  token,
+}: ReportProps & { token: string | undefined }): React.ReactElement {
   const [category, setCategory] = useState<BugCategory>("ui_glitch");
   const [description, setDescription] = useState("");
-  const [includeDiagnostics, setIncludeDiagnostics] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const active = useRef(true);
+  const pending = useRef(false);
+  const attempted = useRef<FeedbackRequest | null>(null);
+  const categoryId = useId();
+  const messageId = useId();
+  const descriptionId = useId();
+  useEffect(() => {
+    active.current = true;
+    return () => {
+      active.current = false;
+    };
+  }, []);
 
   function resetForm(): void {
     setDescription("");
     setCategory("ui_glitch");
-    setIncludeDiagnostics(true);
+    attempted.current = null;
     setSubmitting(false);
     setSubmitted(false);
     setError(null);
@@ -42,47 +68,51 @@ export function ReportBugDialog({
 
   async function handleSubmit(event: React.FormEvent): Promise<void> {
     event.preventDefault();
+    if (pending.current) return;
     if (!description.trim()) {
       setError("Please describe the issue before submitting.");
       return;
     }
 
     setSubmitting(true);
+    pending.current = true;
     setError(null);
 
-    const diagnostics = includeDiagnostics
-      ? {
-          userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
-          screen:
-            typeof window !== "undefined"
-              ? `${window.innerWidth}x${window.innerHeight}`
-              : "unknown",
-          pathname: typeof window !== "undefined" ? window.location.pathname : "unknown",
-          timestamp: new Date().toISOString(),
-        }
-      : null;
-
     try {
-      // Send report to API or fallback to logging if local/offline
-      const response = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          description: description.trim(),
-          diagnostics,
-        }),
-      }).catch(() => null);
-
-      if (response && !response.ok && response.status !== 404) {
-        throw new Error("Unable to submit feedback at this time.");
-      }
-
+      const categories: Record<BugCategory, FeedbackCategory> = {
+        ui_glitch: "bug",
+        clinical_accuracy: "content",
+        document_pdf: "bug",
+        payment_credits: "billing",
+        other: "other",
+      };
+      const text = description.trim();
+      const mappedCategory = categories[category];
+      if (
+        !attempted.current ||
+        attempted.current.description !== text ||
+        attempted.current.category !== mappedCategory
+      )
+        attempted.current = {
+          request_id: feedbackRequestId(),
+          category: mappedCategory,
+          description: text,
+        };
+      await submitFeedback(token, attempted.current);
+      if (!active.current) return;
       setSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to send report. Please try again.");
+      setDescription("");
+      attempted.current = null;
+    } catch (err: unknown) {
+      if (active.current)
+        setError(
+          err instanceof SettingsError
+            ? err.message
+            : "Couldn't send your feedback. Please try again."
+        );
     } finally {
-      setSubmitting(false);
+      pending.current = false;
+      if (active.current) setSubmitting(false);
     }
   }
 
@@ -90,9 +120,8 @@ export function ReportBugDialog({
     <DialogPrimitive.Root
       open={open}
       onOpenChange={(next) => {
-        if (!next) {
-          setTimeout(resetForm, 200);
-        }
+        if (pending.current) return;
+        if (!next && submitted) resetForm();
         onOpenChange(next);
       }}
     >
@@ -101,7 +130,11 @@ export function ReportBugDialog({
         <DialogPrimitive.Content
           className="settings-confirm-dialog"
           style={{ width: "min(480px, 94vw)" }}
-          aria-describedby="report-bug-desc"
+          aria-describedby={descriptionId}
+          onEscapeKeyDown={(event) => {
+            event.stopPropagation();
+            if (pending.current) event.preventDefault();
+          }}
           onCloseAutoFocus={(event) => {
             if (returnFocus) {
               event.preventDefault();
@@ -143,7 +176,7 @@ export function ReportBugDialog({
                   Report a bug
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Description
-                  id="report-bug-desc"
+                  id={descriptionId}
                   style={{
                     margin: "2px 0 0",
                     fontSize: "12px",
@@ -157,6 +190,7 @@ export function ReportBugDialog({
             <DialogPrimitive.Close
               className="settings-close-button"
               aria-label="Close bug report dialog"
+              disabled={submitting}
               style={{ flex: "none" }}
             >
               <X size={18} />
@@ -188,7 +222,7 @@ export function ReportBugDialog({
               >
                 <Check size={24} />
               </div>
-              <strong style={{ fontSize: "15px", color: "var(--text-primary-900)" }}>
+              <strong role="status" style={{ fontSize: "15px", color: "var(--text-primary-900)" }}>
                 Report received!
               </strong>
               <p
@@ -200,12 +234,15 @@ export function ReportBugDialog({
                   lineHeight: "1.5",
                 }}
               >
-                Thank you for helping us maintain clinical accuracy and system stability. Our
-                engineering team has logged this issue.
+                Thank you for helping us maintain clinical accuracy and system stability. Our team
+                has received your report.
               </p>
               <button
                 type="button"
-                onClick={() => onOpenChange(false)}
+                onClick={() => {
+                  resetForm();
+                  onOpenChange(false);
+                }}
                 style={{
                   marginTop: "8px",
                   padding: "8px 24px",
@@ -229,6 +266,7 @@ export function ReportBugDialog({
               {/* Category Picker */}
               <div>
                 <label
+                  htmlFor={categoryId}
                   style={{
                     display: "block",
                     fontSize: "12px",
@@ -240,6 +278,8 @@ export function ReportBugDialog({
                   Issue category
                 </label>
                 <select
+                  id={categoryId}
+                  disabled={submitting}
                   value={category}
                   onChange={(e) => setCategory(e.target.value as BugCategory)}
                   style={{
@@ -264,6 +304,7 @@ export function ReportBugDialog({
               {/* Description Field */}
               <div>
                 <label
+                  htmlFor={messageId}
                   style={{
                     display: "block",
                     fontSize: "12px",
@@ -275,6 +316,10 @@ export function ReportBugDialog({
                   What happened?
                 </label>
                 <textarea
+                  id={messageId}
+                  maxLength={4000}
+                  required
+                  disabled={submitting}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe the bug, what you expected, or any inaccurate clinical calculation..."
@@ -295,36 +340,9 @@ export function ReportBugDialog({
                 />
               </div>
 
-              {/* Diagnostics Toggle */}
-              <label
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "10px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                  color: "var(--text-secondary-700)",
-                  userSelect: "none",
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={includeDiagnostics}
-                  onChange={(e) => setIncludeDiagnostics(e.target.checked)}
-                  style={{ marginTop: "2px" }}
-                />
-                <span>
-                  <strong>Include device and browser diagnostics</strong>
-                  <br />
-                  <span style={{ fontSize: "11px", color: "var(--text-tertiary-600)" }}>
-                    Includes browser version, screen size, and page route. No private chat messages
-                    or clinical patient notes are shared.
-                  </span>
-                </span>
-              </label>
-
               {error && (
                 <div
+                  role="alert"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -352,6 +370,7 @@ export function ReportBugDialog({
               >
                 <button
                   type="button"
+                  disabled={submitting}
                   onClick={() => onOpenChange(false)}
                   style={{
                     padding: "8px 14px",
@@ -367,7 +386,7 @@ export function ReportBugDialog({
                 </button>
                 <button
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || !description.trim()}
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
@@ -384,7 +403,7 @@ export function ReportBugDialog({
                   }}
                 >
                   {submitting ? <Loader2 size={14} className="animate-spin" /> : null}
-                  <span>{submitting ? "Sending..." : "Submit report"}</span>
+                  <span>{submitting ? "Sending..." : error ? "Retry" : "Submit report"}</span>
                 </button>
               </div>
             </form>

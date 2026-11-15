@@ -1,211 +1,247 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
-  LockKeyhole,
   ChevronLeft,
   ChevronRight,
   X,
   Laptop,
   Smartphone,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  ShieldCheck,
-  MoreHorizontal,
+  LogOut,
   Info,
+  LockKeyhole,
 } from "lucide-react";
 import { Button, DialogPrimitive } from "@pansgpt/ui/shell";
+import { useAuth } from "@/lib/auth-context";
+import type { AccountSession } from "@pansgpt/types";
+import { useAccountSecurity } from "../use-account-security";
 import { SettingsSection } from "../settings-section";
 import { SettingsRow } from "../settings-row";
 
-interface SessionDevice {
-  id: string;
-  name: string;
-  location: string;
-  signedInAt: string;
-  lastActiveAt: string;
-  isCurrent: boolean;
-  type: "mobile" | "desktop";
+type SecurityControls = ReturnType<typeof useAccountSecurity>;
+function date(value: string | null): string {
+  return value && Number.isFinite(Date.parse(value))
+    ? new Date(value).toLocaleString()
+    : "Not available";
 }
 
-function sessionDevice(): string {
-  if (typeof navigator === "undefined") return "This browser";
-  const ua = navigator.userAgent;
-  const browser = ua.includes("Edg/")
-    ? "Edge"
-    : ua.includes("Chrome/")
-      ? "Chrome"
-      : ua.includes("Firefox/")
-        ? "Firefox"
-        : ua.includes("Safari/")
-          ? "Safari"
-          : "Browser";
-  const device = /iPhone|iPad/.test(ua)
-    ? "iOS"
-    : ua.includes("Android")
-      ? "Android"
-      : ua.includes("Windows")
-        ? "Windows"
-        : ua.includes("Mac")
-          ? "macOS"
-          : ua.includes("Linux")
-            ? "Linux"
-            : "this device";
-  return `${browser} (${device})`;
+function PasswordFields({
+  controls,
+  mobile,
+  onSaved,
+}: {
+  controls: SecurityControls;
+  mobile: boolean;
+  onSaved: () => void;
+}): React.ReactElement {
+  const prefix = mobile ? "mobile" : "desktop";
+  const fieldClass = mobile ? "settings-subpage-input-card" : "settings-edit-field";
+  const labelClass = mobile ? "settings-subpage-input-label" : "settings-edit-field-label";
+  const inputClass = mobile ? "settings-subpage-input" : "settings-edit-input";
+  return (
+    <form
+      className="settings-password-form"
+      id={`settings-password-${prefix}`}
+      onSubmit={(event) => {
+        event.preventDefault();
+        void controls.savePassword().then((saved) => {
+          if (saved) onSaved();
+        });
+      }}
+    >
+      {controls.passwordError && (
+        <p role="alert" className="settings-edit-dialog-error">
+          {controls.passwordError}
+        </p>
+      )}
+      {controls.passwordNotice && <p role="status">{controls.passwordNotice}</p>}
+      <div className={fieldClass}>
+        <label className={labelClass} htmlFor={`${prefix}-current-password`}>
+          Current password{controls.currentRequired ? "" : " (if set)"}
+        </label>
+        <input
+          id={`${prefix}-current-password`}
+          className={inputClass}
+          type="password"
+          autoComplete="current-password"
+          value={controls.currentPassword}
+          onChange={(event) => controls.setCurrentPassword(event.target.value)}
+          maxLength={128}
+          disabled={controls.saving}
+        />
+      </div>
+      <div className={fieldClass}>
+        <label className={labelClass} htmlFor={`${prefix}-new-password`}>
+          New password
+        </label>
+        <input
+          id={`${prefix}-new-password`}
+          className={inputClass}
+          type="password"
+          autoComplete="new-password"
+          value={controls.password}
+          onChange={(event) => controls.setPassword(event.target.value)}
+          minLength={8}
+          maxLength={128}
+          required
+          disabled={controls.saving}
+        />
+      </div>
+      <div className={fieldClass}>
+        <label className={labelClass} htmlFor={`${prefix}-confirm-password`}>
+          Confirm password
+        </label>
+        <input
+          id={`${prefix}-confirm-password`}
+          className={inputClass}
+          type="password"
+          autoComplete="new-password"
+          value={controls.confirmPassword}
+          onChange={(event) => controls.setConfirmPassword(event.target.value)}
+          maxLength={128}
+          required
+          disabled={controls.saving}
+        />
+      </div>
+      {controls.confirmationRequired && (
+        <div className={fieldClass}>
+          <label className={labelClass} htmlFor={`${prefix}-password-code`}>
+            Confirmation code
+          </label>
+          <input
+            id={`${prefix}-password-code`}
+            className={inputClass}
+            autoComplete="one-time-code"
+            inputMode="numeric"
+            pattern="[0-9]{6,10}"
+            maxLength={10}
+            value={controls.nonce}
+            onChange={(event) => controls.setNonce(event.target.value)}
+            disabled={controls.saving}
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            leadingIcon={null}
+            trailingIcon={null}
+            disabled={controls.sending || controls.saving}
+            onClick={() => void controls.sendConfirmation()}
+          >
+            {controls.sending ? "Sending…" : "Send confirmation code"}
+          </Button>
+        </div>
+      )}
+    </form>
+  );
 }
-
-const INITIAL_DEVICES: SessionDevice[] = [
-  {
-    id: "device-1",
-    name: "Mobile Safari (iOS)",
-    location: "Abuja, FCT, NG",
-    signedInAt: "Oct 25, 2026, 3:16 PM",
-    lastActiveAt: "Oct 25, 2026, 3:16 PM",
-    isCurrent: false,
-    type: "mobile",
-  },
-  {
-    id: "device-2",
-    name: "PansGPT (iOS)",
-    location: "Abuja, FCT, NG",
-    signedInAt: "Oct 21, 2026, 4:42 PM",
-    lastActiveAt: "Nov 8, 2026, 4:20 PM",
-    isCurrent: false,
-    type: "mobile",
-  },
-  {
-    id: "device-3",
-    name: "PansGPT Desktop (Windows)",
-    location: "Abuja, FCT, NG",
-    signedInAt: "Oct 15, 2026, 9:13 PM",
-    lastActiveAt: "Oct 16, 2026, 12:51 PM",
-    isCurrent: false,
-    type: "desktop",
-  },
-  {
-    id: "device-current",
-    name: sessionDevice(),
-    location: "Abuja, FCT, NG",
-    signedInAt: "Aug 11, 2026, 5:01 AM",
-    lastActiveAt: "Active now",
-    isCurrent: true,
-    type: "desktop",
-  },
-];
 
 export function SecuritySection(): React.ReactElement {
-  const [devices, setDevices] = useState<SessionDevice[]>(INITIAL_DEVICES);
-  const [selectedDevice, setSelectedDevice] = useState<SessionDevice | null>(null);
+  const { session } = useAuth();
+  return <SecurityAccount key={session?.user.id ?? "signed-out"} token={session?.access_token} />;
+}
+
+function SecurityAccount({ token }: { token: string | undefined }): React.ReactElement {
+  const controls = useAccountSecurity(token);
   const [subpage, setSubpage] = useState<"none" | "change-password" | "manage-devices">("none");
-  const [desktopModal, setDesktopModal] = useState<"none" | "change-password">("none");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-
-  function handleLogoutAll() {
-    setDevices((prev) => prev.filter((d) => d.isCurrent));
-  }
-
-  function handleLogoutDevice(id: string) {
-    setDevices((prev) => prev.filter((d) => d.id !== id));
-  }
-
-  function handleUpdatePassword() {
-    if (!newPassword || newPassword.length < 8) {
-      setPasswordError("Password must be at least 8 characters");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError("Passwords do not match");
-      return;
-    }
-    setDesktopModal("none");
+  const [desktopPassword, setDesktopPassword] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<AccountSession | null>(null);
+  const passwordOpener = useRef<HTMLButtonElement | null>(null);
+  const passwordDisabled =
+    controls.saving ||
+    controls.sending ||
+    !controls.password ||
+    controls.password !== controls.confirmPassword;
+  const closePassword = (): void => {
+    controls.clearPassword();
+    setDesktopPassword(false);
     setSubpage("none");
-    setNewPassword("");
-    setConfirmPassword("");
-    setPasswordError(null);
-  }
-
-  /* --- Mobile Subpage: Change Password --- */
-  if (subpage === "change-password") {
+  };
+  const status = (
+    <>
+      {controls.loading && <p role="status">Loading devices…</p>}
+      {controls.sessionError && (
+        <div>
+          <p role="alert">{controls.sessionError}</p>
+          <Button
+            variant="secondary"
+            leadingIcon={null}
+            trailingIcon={null}
+            onClick={controls.reload}
+            disabled={controls.revoking}
+            aria-label="Retry devices"
+          >
+            Retry
+          </Button>
+        </div>
+      )}
+      {controls.hasMore && <p>Only your first 100 sessions are shown.</p>}
+      {!controls.loading && !controls.sessionError && !controls.sessions.length && (
+        <p>No active sessions found.</p>
+      )}
+    </>
+  );
+  const logoutOthers = (
+    <Button
+      variant="secondary"
+      onClick={() => void controls.revoke()}
+      disabled={
+        controls.loading ||
+        controls.revoking ||
+        (!controls.hasMore && !controls.sessions.some((row) => !row.is_current))
+      }
+      className="settings-devices-logout-all-btn"
+      leadingIcon={null}
+      trailingIcon={null}
+    >
+      {controls.revoking ? "Logging out…" : "Log out other devices"}
+    </Button>
+  );
+  if (subpage === "change-password")
     return (
       <div className="settings-mobile-subpage">
         <div className="settings-subpage-header">
           <button
             type="button"
             className="settings-subpage-back-btn"
-            onClick={() => {
-              setPasswordError(null);
-              setSubpage("none");
-            }}
             aria-label="Back"
+            disabled={controls.saving || controls.sending}
+            onClick={closePassword}
           >
             <ChevronLeft size={20} />
           </button>
           <h2 className="settings-subpage-title">Change password</h2>
           <button
-            type="button"
+            type="submit"
+            form="settings-password-mobile"
             className="settings-subpage-save-btn"
-            disabled={!newPassword || newPassword !== confirmPassword}
-            onClick={handleUpdatePassword}
+            disabled={passwordDisabled}
           >
-            Save
+            {controls.saving ? "Saving…" : "Save"}
           </button>
         </div>
         <div className="settings-subpage-body">
-          {passwordError && <p className="settings-subpage-error">{passwordError}</p>}
           <div className="settings-subpage-info-card">
             <Info size={16} className="settings-subpage-info-icon" aria-hidden="true" />
             <p className="settings-subpage-info-text">
-              Use at least 8 characters with a mix of letters and numbers to protect your account.
+              Use at least 8 characters. You may need to confirm your account before saving.
             </p>
           </div>
-          <div className="settings-subpage-input-card">
-            <label className="settings-subpage-input-label" htmlFor="mobile-new-password">
-              New password
-            </label>
-            <input
-              id="mobile-new-password"
-              type="password"
-              className="settings-subpage-input"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              autoFocus
-              autoComplete="new-password"
-              placeholder="Enter new password"
-            />
-          </div>
-          <div className="settings-subpage-input-card">
-            <label className="settings-subpage-input-label" htmlFor="mobile-confirm-password">
-              Confirm password
-            </label>
-            <input
-              id="mobile-confirm-password"
-              type="password"
-              className="settings-subpage-input"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              autoComplete="new-password"
-              placeholder="Confirm new password"
-            />
-          </div>
+          <PasswordFields controls={controls} mobile onSaved={closePassword} />
         </div>
       </div>
     );
-  }
-
-  /* --- Mobile Subpage: Manage Devices --- */
-  if (subpage === "manage-devices") {
+  if (subpage === "manage-devices")
     return (
       <div className="settings-mobile-subpage">
         <div className="settings-subpage-header">
           <button
             type="button"
             className="settings-subpage-back-btn"
+            aria-label="Back"
             onClick={() => {
               setSelectedDevice(null);
               setSubpage("none");
             }}
-            aria-label="Back"
           >
             <ChevronLeft size={20} />
           </button>
@@ -213,129 +249,116 @@ export function SecuritySection(): React.ReactElement {
           <div style={{ width: 38 }} aria-hidden="true" />
         </div>
         <div className="settings-subpage-body">
+          {controls.notice && <p role="status">{controls.notice}</p>}
           <p className="settings-mobile-devices-description">
-            Review the devices currently signed in to your account. You can log out of any session
-            you do not recognize.
+            Review the devices signed in to your account. Logging out other devices keeps this
+            session signed in.
           </p>
-
+          {status}
+          {logoutOthers}
           <h3 className="settings-mobile-linked-devices-title">Linked devices</h3>
-
           <div className="settings-mobile-linked-device-list">
-            {devices.map((dev) => (
+            {controls.sessions.map((device) => (
               <button
-                key={dev.id}
+                key={device.id}
                 type="button"
                 className="settings-mobile-linked-device-card"
-                onClick={() => setSelectedDevice(dev)}
-                aria-label={`View details for ${dev.name}`}
+                onClick={() => setSelectedDevice(device)}
+                aria-label={`View details for ${device.device}`}
               >
                 <div className="settings-mobile-linked-device-icon-wrap">
-                  {dev.type === "mobile" ? (
-                    <Smartphone
-                      size={22}
-                      className="settings-mobile-linked-device-icon"
-                      aria-hidden="true"
-                    />
+                  {device.device_type === "mobile" ? (
+                    <Smartphone size={22} aria-hidden="true" />
                   ) : (
-                    <Laptop
-                      size={22}
-                      className="settings-mobile-linked-device-icon"
-                      aria-hidden="true"
-                    />
+                    <Laptop size={22} aria-hidden="true" />
                   )}
                 </div>
                 <div className="settings-mobile-linked-device-info">
-                  <span className="settings-mobile-linked-device-name">{dev.name}</span>
+                  <span className="settings-mobile-linked-device-name">{device.device}</span>
                   <span className="settings-mobile-linked-device-meta">
-                    {dev.isCurrent
-                      ? "Active now"
-                      : dev.lastActiveAt.toLowerCase().startsWith("last active")
-                        ? dev.lastActiveAt
-                        : `Last active ${dev.lastActiveAt}`}
+                    {device.is_current
+                      ? "Current session"
+                      : `Last active ${date(device.last_active_at)}`}
                   </span>
                 </div>
-                <ChevronRight
-                  size={18}
-                  className="settings-mobile-linked-device-chevron"
-                  aria-hidden="true"
-                />
+                <ChevronRight size={18} aria-hidden="true" />
               </button>
             ))}
           </div>
         </div>
-
         <DialogPrimitive.Root
           open={!!selectedDevice}
-          onOpenChange={(isOpen) => {
-            if (!isOpen) setSelectedDevice(null);
+          onOpenChange={(open) => {
+            if (!open && !controls.revoking) setSelectedDevice(null);
           }}
         >
           <DialogPrimitive.Portal>
             <DialogPrimitive.Overlay className="settings-device-sheet-overlay" />
-            <DialogPrimitive.Content className="settings-device-sheet" aria-describedby={undefined}>
+            <DialogPrimitive.Content
+              className="settings-device-sheet"
+              aria-describedby={undefined}
+              onEscapeKeyDown={(event) => {
+                if (controls.revoking) event.preventDefault();
+              }}
+            >
               <div className="settings-device-sheet-top-bar">
                 <DialogPrimitive.Close
                   className="settings-device-sheet-close-btn"
                   aria-label="Close"
+                  disabled={controls.revoking}
                 >
                   <X size={16} />
                 </DialogPrimitive.Close>
               </div>
-
               {selectedDevice && (
                 <>
                   <div className="settings-device-sheet-hero">
                     <div className="settings-device-sheet-icon-box">
-                      {selectedDevice.type === "mobile" ? (
-                        <Smartphone size={32} color="#ffffff" aria-hidden="true" />
+                      {selectedDevice.device_type === "mobile" ? (
+                        <Smartphone size={32} aria-hidden="true" />
                       ) : (
-                        <Laptop size={32} color="#ffffff" aria-hidden="true" />
+                        <Laptop size={32} aria-hidden="true" />
                       )}
                     </div>
                     <DialogPrimitive.Title className="settings-device-sheet-title">
-                      {selectedDevice.name}
+                      {selectedDevice.device}
                     </DialogPrimitive.Title>
                     <p className="settings-device-sheet-subtitle">
-                      {selectedDevice.isCurrent
+                      {selectedDevice.is_current
                         ? "Current session"
-                        : selectedDevice.signedInAt.split(",")[0] || selectedDevice.signedInAt}
+                        : date(selectedDevice.created_at)}
                     </p>
                   </div>
-
                   <div className="settings-device-sheet-card">
-                    <div className="settings-device-sheet-row">
-                      <span className="settings-device-sheet-label">Location</span>
-                      <span className="settings-device-sheet-val">{selectedDevice.location}</span>
-                    </div>
-                    <div className="settings-device-sheet-divider" />
-                    <div className="settings-device-sheet-row">
-                      <span className="settings-device-sheet-label">Signed in</span>
-                      <span className="settings-device-sheet-val">{selectedDevice.signedInAt}</span>
-                    </div>
-                    <div className="settings-device-sheet-divider" />
-                    <div className="settings-device-sheet-row">
-                      <span className="settings-device-sheet-label">Last active</span>
-                      <span className="settings-device-sheet-val">
-                        {selectedDevice.isCurrent ? "Active now" : selectedDevice.lastActiveAt}
-                      </span>
-                    </div>
+                    {[
+                      ["IP address", selectedDevice.ip_address ?? "Not available"],
+                      ["Signed in", date(selectedDevice.created_at)],
+                      ["Last active", date(selectedDevice.last_active_at)],
+                    ].map(([label, value]) => (
+                      <div key={label} className="settings-device-sheet-row">
+                        <span className="settings-device-sheet-label">{label}</span>
+                        <span className="settings-device-sheet-val">{value}</span>
+                      </div>
+                    ))}
                   </div>
-
                   <p className="settings-device-sheet-disclaimer">
-                    This location estimate is based on the IP address and may not always be
-                    accurate.
+                    {selectedDevice.is_current
+                      ? "Use Log out from your account menu to end this session."
+                      : "This device will need to sign in again. It may take a short time to show the sign-in screen."}
                   </p>
-
+                  {controls.sessionError && <p role="alert">{controls.sessionError}</p>}
                   <div className="settings-device-sheet-actions">
                     <button
                       type="button"
                       className="settings-device-sheet-terminate-btn"
+                      disabled={selectedDevice.is_current || controls.revoking}
                       onClick={() => {
-                        handleLogoutDevice(selectedDevice.id);
-                        setSelectedDevice(null);
+                        void controls.revoke(selectedDevice.id).then((success) => {
+                          if (success) setSelectedDevice(null);
+                        });
                       }}
                     >
-                      Terminate Session
+                      {controls.revoking ? "Logging out…" : "Log out device"}
                     </button>
                   </div>
                 </>
@@ -345,61 +368,55 @@ export function SecuritySection(): React.ReactElement {
         </DialogPrimitive.Root>
       </div>
     );
-  }
-
-  /* --- Main Security View --- */
   return (
     <div className="settings-section-container">
+      {controls.notice && <p role="status">{controls.notice}</p>}
       <SettingsSection title="Security" hideTitleOnMobile className="settings-security-section">
         <div className="settings-security-card">
-          {/* Row 1: Password */}
           <SettingsRow
             title="Password"
-            description="Manage your account password."
             mobileTitle="Change password"
+            description="Manage your account password."
             mobileDescription={null}
           >
-            {/* Desktop action button */}
             <div className="settings-copy-desktop">
               <Button
                 variant="secondary"
                 leadingIcon={<LockKeyhole size={15} />}
                 trailingIcon={null}
-                onClick={() => {
-                  setPasswordError(null);
-                  setDesktopModal("change-password");
+                onClick={(event) => {
+                  passwordOpener.current = event.currentTarget;
+                  controls.clearPassword();
+                  setDesktopPassword(true);
                 }}
               >
                 Change password
               </Button>
             </div>
-            {/* Mobile row trigger button */}
             <button
               type="button"
               className="settings-mobile-row-trigger settings-copy-mobile"
-              onClick={() => {
-                setPasswordError(null);
+              aria-label="Change password"
+              onClick={(event) => {
+                passwordOpener.current = event.currentTarget;
+                controls.clearPassword();
                 setSubpage("change-password");
               }}
-              aria-label="Change password"
             >
               <ChevronRight size={16} aria-hidden="true" />
             </button>
           </SettingsRow>
-
-          {/* Row 2 (Mobile only): Manage devices */}
           <div className="settings-copy-mobile">
             <SettingsRow
               title="Manage devices"
               description="Review where you use PansGPT."
-              mobileTitle="Manage devices"
               mobileDescription={null}
             >
               <button
                 type="button"
                 className="settings-mobile-row-trigger settings-copy-mobile"
-                onClick={() => setSubpage("manage-devices")}
                 aria-label="Manage devices"
+                onClick={() => setSubpage("manage-devices")}
               >
                 <ChevronRight size={16} aria-hidden="true" />
               </button>
@@ -407,65 +424,55 @@ export function SecuritySection(): React.ReactElement {
           </div>
         </div>
       </SettingsSection>
-
-      {/* Desktop only: Inline "Manage devices" table matching reference image */}
       <div className="settings-copy-desktop settings-devices-section">
         <div className="settings-devices-header">
-          <h3 className="settings-devices-title">Manage devices</h3>
-          <Button
-            variant="secondary"
-            onClick={handleLogoutAll}
-            disabled={devices.filter((d) => !d.isCurrent).length === 0}
-            className="settings-devices-logout-all-btn"
-            leadingIcon={null}
-            trailingIcon={null}
-          >
-            Log out of all devices
-          </Button>
+          <div>
+            <h3 className="settings-devices-title">Manage devices</h3>
+            <p className="settings-devices-description">
+              Review where you use PansGPT. This session stays signed in.
+            </p>
+          </div>
+          {logoutOthers}
         </div>
+        {status}
         <div className="settings-devices-table-wrap">
           <table className="settings-devices-table">
             <thead>
               <tr>
-                <th scope="col" style={{ width: "32%" }}>
-                  Device
-                </th>
-                <th scope="col" style={{ width: "22%" }}>
-                  Location
-                </th>
-                <th scope="col" style={{ width: "23%" }}>
-                  Signed in
-                </th>
-                <th scope="col" style={{ width: "23%" }}>
-                  Last active
-                </th>
+                <th scope="col">Device</th>
+                <th scope="col">IP address</th>
+                <th scope="col">Signed in</th>
+                <th scope="col">Last active</th>
               </tr>
             </thead>
             <tbody>
-              {devices.map((dev) => (
-                <tr key={dev.id} className="settings-devices-row">
+              {controls.sessions.map((device) => (
+                <tr key={device.id} className="settings-devices-row">
                   <td className="settings-devices-cell-device">
                     <div className="settings-devices-name-wrap">
-                      <span className="settings-devices-name">{dev.name}</span>
-                      {dev.isCurrent && (
+                      <span className="settings-devices-name">{device.device}</span>
+                      {device.is_current && (
                         <span className="settings-devices-current-badge">Current</span>
                       )}
                     </div>
                   </td>
-                  <td className="settings-devices-cell-muted">{dev.location}</td>
-                  <td className="settings-devices-cell-muted">{dev.signedInAt}</td>
+                  <td className="settings-devices-cell-muted">
+                    {device.ip_address ?? "Not available"}
+                  </td>
+                  <td className="settings-devices-cell-muted">{date(device.created_at)}</td>
                   <td className="settings-devices-cell-muted">
                     <div className="settings-devices-last-active-wrap">
-                      <span>{dev.lastActiveAt}</span>
-                      {!dev.isCurrent && (
+                      <span>{date(device.last_active_at)}</span>
+                      {!device.is_current && (
                         <button
                           type="button"
                           className="settings-devices-row-action"
-                          onClick={() => handleLogoutDevice(dev.id)}
-                          aria-label={`Log out ${dev.name}`}
+                          disabled={controls.revoking}
+                          onClick={() => void controls.revoke(device.id)}
+                          aria-label={`Log out ${device.device}`}
                           title="Log out of this device"
                         >
-                          <MoreHorizontal size={15} />
+                          <LogOut size={15} />
                         </button>
                       )}
                     </div>
@@ -476,86 +483,65 @@ export function SecuritySection(): React.ReactElement {
           </table>
         </div>
       </div>
-
-      {/* Desktop Modal: Change password */}
-      {desktopModal === "change-password" && (
-        <>
-          <div className="settings-overlay" onClick={() => setDesktopModal("none")} />
-          <div
+      <DialogPrimitive.Root
+        open={desktopPassword}
+        onOpenChange={(open) => {
+          if (!open && !controls.saving && !controls.sending) closePassword();
+        }}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Overlay className="settings-overlay" />
+          <DialogPrimitive.Content
             className="settings-edit-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="security-password-dialog-title"
+            aria-describedby={undefined}
+            onEscapeKeyDown={(event) => {
+              if (controls.saving || controls.sending) event.preventDefault();
+            }}
+            onCloseAutoFocus={(event) => {
+              if (passwordOpener.current?.isConnected) {
+                event.preventDefault();
+                passwordOpener.current.focus();
+              }
+            }}
           >
             <div className="settings-edit-dialog-header">
-              <h3 id="security-password-dialog-title" className="settings-edit-dialog-title">
+              <DialogPrimitive.Title className="settings-edit-dialog-title">
                 Change password
-              </h3>
-              <button
-                type="button"
+              </DialogPrimitive.Title>
+              <DialogPrimitive.Close
                 className="settings-edit-dialog-close"
-                onClick={() => setDesktopModal("none")}
                 aria-label="Close dialog"
+                disabled={controls.saving || controls.sending}
               >
                 <X size={16} />
-              </button>
+              </DialogPrimitive.Close>
             </div>
             <div className="settings-edit-dialog-body">
-              {passwordError && <p className="settings-edit-dialog-error">{passwordError}</p>}
-              <div className="settings-edit-field">
-                <label className="settings-edit-field-label" htmlFor="desktop-new-password">
-                  New password
-                </label>
-                <input
-                  id="desktop-new-password"
-                  type="password"
-                  className="settings-edit-input"
-                  aria-label="New password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  autoComplete="new-password"
-                  placeholder="Enter new password"
-                  autoFocus
-                />
-              </div>
-              <div className="settings-edit-field">
-                <label className="settings-edit-field-label" htmlFor="desktop-confirm-password">
-                  Confirm password
-                </label>
-                <input
-                  id="desktop-confirm-password"
-                  type="password"
-                  className="settings-edit-input"
-                  aria-label="Confirm password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  autoComplete="new-password"
-                  placeholder="Confirm new password"
-                />
-              </div>
+              <PasswordFields controls={controls} mobile={false} onSaved={closePassword} />
             </div>
             <div className="settings-edit-dialog-actions">
               <Button
                 variant="secondary"
-                onClick={() => setDesktopModal("none")}
                 leadingIcon={null}
                 trailingIcon={null}
+                disabled={controls.saving || controls.sending}
+                onClick={closePassword}
               >
                 Cancel
               </Button>
               <Button
-                variant="primary"
-                disabled={!newPassword || !confirmPassword || newPassword !== confirmPassword}
-                onClick={handleUpdatePassword}
+                form="settings-password-desktop"
+                type="submit"
+                disabled={passwordDisabled}
                 leadingIcon={null}
                 trailingIcon={null}
               >
-                Update password
+                {controls.saving ? "Updating…" : "Update password"}
               </Button>
             </div>
-          </div>
-        </>
-      )}
+          </DialogPrimitive.Content>
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </div>
   );
 }

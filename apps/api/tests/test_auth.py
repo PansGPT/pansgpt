@@ -10,6 +10,7 @@ import jwt
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi import APIRouter, Depends
+from httpx import AsyncClient
 
 from app.core.config import settings
 from app.core.dependencies import (
@@ -103,6 +104,7 @@ def make_token(
     roles: list[str] | None = None,
     university_id: str = "01a07664-7a69-7ce0-ad6a-b219462cbde3",
     expires_in_seconds: int = 3600,
+    session_id: str | None = None,
 ) -> str:
     """Signs a genuine RS256 JWT using the test private key."""
     private_key, _ = rsa_key_pair
@@ -127,6 +129,8 @@ def make_token(
             "last_name": "Student",
         },
     }
+    if session_id is not None:
+        payload["session_id"] = session_id
     return jwt.encode(payload, private_key, algorithm="RS256", headers={"kid": "test-kid-1"})
 
 
@@ -392,3 +396,47 @@ async def test_role_cache_stores_and_retrieves_profile(rsa_key_pair, mock_jwks):
     cached_data, expire_time = _IN_MEMORY_ROLE_CACHE[user_id]
     assert cached_data["role"] == "lecturer"
     assert expire_time > time.time()
+
+
+async def test_signed_session_is_rechecked_after_revocation(
+    client: AsyncClient,
+    rsa_key_pair: tuple[rsa.RSAPrivateKey, rsa.RSAPublicKey],
+    mock_jwks: object,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from collections.abc import AsyncIterator
+    from contextlib import asynccontextmanager
+    from unittest.mock import AsyncMock
+
+    from app.core import dependencies
+    from tests.auth_support import AUTH_PROFILES
+
+    identity = str(uuid.uuid4())
+    session = str(uuid.uuid4())
+    token = make_token(rsa_key_pair, sub=identity, session_id=session)
+    conn = AsyncMock()
+    conn.fetchval.return_value = True
+    conn.fetchrow.return_value = AUTH_PROFILES[identity]
+
+    @asynccontextmanager
+    async def connection(**kwargs: object) -> AsyncIterator[AsyncMock]:
+        yield conn
+
+    monkeypatch.setattr(dependencies, "get_db_connection", connection)
+    headers = {"Authorization": f"Bearer {token}"}
+    assert (await client.get("/api/v1/auth/me", headers=headers)).status_code == 200
+    assert conn.fetchval.call_args.args[1:] == (uuid.UUID(session), uuid.UUID(identity))
+    conn.fetchval.return_value = False
+    conn.fetchrow.reset_mock()
+    assert (await client.get("/api/v1/auth/me", headers=headers)).status_code == 401
+    conn.fetchrow.assert_not_awaited()
+
+
+async def test_signed_invalid_session_identity_is_rejected(
+    client: AsyncClient,
+    rsa_key_pair: tuple[rsa.RSAPrivateKey, rsa.RSAPublicKey],
+    mock_jwks: object,
+) -> None:
+    token = make_token(rsa_key_pair, session_id="not-a-session-uuid")
+    response = await client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert response.status_code == 401

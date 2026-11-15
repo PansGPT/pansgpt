@@ -5641,6 +5641,8 @@ POST   /api/admin/material-submissions/batch-approve  ← Bulk approval of verif
 
 ### 16.1 System Architecture & Route Topology
 
+15 November 2026 implementation amendment: the existing web Settings and account-menu report form use the typed `/api/v1/settings` contracts for password updates/reauthentication, owned Supabase sessions/revocation and persisted feedback. The fixed Next proxy holds the client API key; password changes use the captured user's bearer, and revoked session IDs are checked on subsequent backend authorization. Feedback retries retain a UUIDv7 request ID and commit the support ticket plus first message atomically. No diagnostics are attached by default. Historical endpoint names below are planned topology, not the live contract. See [implementation, security boundaries and verification](settings-functionality-2026-11-15.md); hosted Auth/device verification and the remaining Settings/Support scope stay open.
+
 29 October 2026 UI amendment: the web settings preview uses a shared modal with the original three navigation groups and nine separate sections, including standalone Security. Storage/download and privacy management controls remain part of the design. About excludes onboarding and shortcut lists; the account menu provides optional help and shortcuts. Settings action buttons use compact sizing and softly rounded corners. This is UI scope only; the route topology below remains historical planned topology, and persistence/security/export acceptance remains open. See [settings UI refinement](settings-ui-refinement-2026-10-29.md).
 
 ```

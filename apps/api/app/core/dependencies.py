@@ -240,6 +240,17 @@ async def _lookup_user_profile(
         async with get_db_connection(timeout=3.0) as conn:
             if conn is None:
                 raise HTTPException(status_code=503, detail="Authorization store is unavailable.")
+            if claims.get("session_id"):
+                active_session = await conn.fetchval(
+                    "SELECT EXISTS(SELECT 1 FROM auth.sessions WHERE id=$1 AND user_id=$2 "
+                    "AND (not_after IS NULL OR not_after>now()))",
+                    uuid.UUID(str(claims["session_id"])),
+                    uuid.UUID(user_id),
+                )
+                if active_session is not True:
+                    raise HTTPException(
+                        status_code=401, detail="Your session has ended. Sign in again."
+                    )
             governance_columns = (
                 ", account_status, (SELECT status FROM public.universities WHERE id=users.university_id) AS institution_status"
                 if settings.ENABLE_GOVERNANCE
@@ -340,6 +351,11 @@ def _verify_token(token: str) -> dict:
             options=options,
         )
         uuid.UUID(claims["sub"])
+        session_claim = claims.get("session_id")
+        if session_claim is not None:
+            if not isinstance(session_claim, str):
+                raise ValueError("Invalid session claim")
+            uuid.UUID(session_claim)
         return claims
     except ExpiredSignatureError as exc:
         raise HTTPException(status_code=401, detail="Token has expired.") from exc
@@ -426,6 +442,7 @@ async def get_current_user(
             last_name=lname,
             current_level=clevel,
             terms_accepted_at=terms_at,
+            session_id=uuid.UUID(claims["session_id"]) if claims.get("session_id") else None,
             client_type=client_type or "web",
             dev_bypass=False,
         )

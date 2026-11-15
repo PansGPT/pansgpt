@@ -1676,6 +1676,8 @@ Implementation update (13 November 2026): administrative frontend/API work is on
 
 ### 17.1 Settings + Profile
 
+15 November 2026 functionality: password updates/confirmation and owned active-session listing, individual logout and logout of other devices now have backend contracts and web integration. Local API, PostgreSQL and synthetic browser verification are recorded in [Settings functionality](settings-functionality-2026-11-15.md). Hosted Supabase Auth and actual device acceptance remain open; this does not complete Phase 17.
+
 UI preview (29 October 2026): separate settings categories, standalone Security, retained storage/privacy management controls and compact actions are under review. See [settings UI refinement](settings-ui-refinement-2026-10-29.md). This preview does not complete the live acceptance items below.
 
 Settings navigation follow-up: field-level search uses a floating result list with section/setting labels and direct focus. Mobile uses the profile card as its single Account entry; Account no longer contains Log out.
@@ -1686,13 +1688,15 @@ Settings visual follow-up: Credits uses the balance coin icon; shared custom scr
 - [ ] `<UserInitialsAvatar />` — first initial from `first_name`, deterministic color
 - [ ] AI response style preference: `concise | balanced | detailed` → stored in user preferences
 - [ ] Theme selector: Light / Dark / Sepia Warm
-- [ ] Active session list + individual session revocation
-- [ ] Password change (via Supabase `updateUser`)
+- [x] Active session list + owned session revocation: API and web implementation, locally verified
+- [x] Password change + provider confirmation: API and web implementation, locally verified
+- [ ] Hosted password/confirmation and real device revocation acceptance
 - [ ] Account deletion: 30-day soft delete → GDPR purge cron
 
 ### 17.2 Feedback + Support
 
-- [ ] In-app bug report with auto-attached device diagnostics + Sentry event ID
+- [x] Authenticated in-app feedback/bug reports saved as support tickets with idempotent retry
+- [ ] Optional device diagnostics + Sentry event ID (not collected by the implemented form)
 - [ ] CSAT rating prompt after quiz completion + learn mode section mastery
 - [ ] Admin feedback triage dashboard (view, tag, resolve reports)
 

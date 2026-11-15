@@ -608,7 +608,9 @@
   color: inherit;
   font: inherit;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 .settings-account-edit-trigger:hover {
   background: var(--bg-tertiary);
@@ -1105,7 +1107,6 @@
     display: none;
   }
   .settings-modal-handle {
-
     display: grid;
     place-items: center;
     position: absolute;
@@ -1119,11 +1120,11 @@
     background: transparent;
     touch-action: none;
   }
-.settings-modal-handle:focus,
-.settings-modal-handle:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-}
+  .settings-modal-handle:focus,
+  .settings-modal-handle:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
   .settings-modal-handle span {
     width: 32px;
     height: 4px;
@@ -1223,7 +1224,9 @@
     text-decoration: none;
     box-sizing: border-box;
     font-family: inherit;
-    transition: background 120ms ease, color 120ms ease;
+    transition:
+      background 120ms ease,
+      color 120ms ease;
   }
   .settings-mobile-info-item:hover,
   .settings-mobile-info-item:active {
@@ -1716,7 +1719,9 @@
   cursor: pointer;
   background: var(--bg-brand-solid);
   color: var(--text-white, #fff);
-  transition: background-color 0.15s ease, opacity 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
 }
 .settings-subpage-save-btn:hover:not(:disabled) {
   background: var(--bg-brand-solid-hover);
@@ -1855,13 +1860,20 @@
   background: transparent;
   color: var(--text-tertiary-600);
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 .settings-edit-dialog-close:hover {
   background: var(--bg-tertiary);
   color: var(--text-primary-900);
 }
 .settings-edit-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.settings-password-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -2056,7 +2068,10 @@
   color: var(--text-tertiary-600);
   cursor: pointer;
   opacity: 0;
-  transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 .settings-devices-row:hover .settings-devices-row-action {
   opacity: 1;
@@ -2097,7 +2112,9 @@
   text-align: left;
   cursor: pointer;
   outline: none;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
 }
 .settings-mobile-linked-device-card:hover {
   background: var(--bg-tertiary);
@@ -2299,7 +2316,9 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 16px rgba(224, 82, 76, 0.28);
-  transition: filter 0.15s ease, transform 0.1s ease;
+  transition:
+    filter 0.15s ease,
+    transform 0.1s ease;
 }
 .settings-device-sheet-terminate-btn:hover {
   filter: brightness(1.06);

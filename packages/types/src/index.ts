@@ -25,6 +25,7 @@ export * from "./library";
 export * from "./reader";
 export * from "./academic";
 export * from "./governance";
+export * from "./settings";
 
 export type { ChatSessionMetadata, ChatSessionUpdateRequest } from "./chat";
 
