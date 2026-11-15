@@ -119,6 +119,7 @@ jobs:
       - run: uv sync --frozen --all-extras
         working-directory: apps/api
       - name: Start disposable Supabase and replay all migrations plus seed
+        id: database_setup
         run: |
           pnpm exec supabase start
           pnpm exec supabase db reset --local
@@ -131,6 +132,7 @@ jobs:
         run: uv run --project apps/api python tooling/check-db-contracts.py
       - name: Generate actual database types
         id: database-types
+        if: always() && steps.database_setup.outcome == 'success'
         run: bash tooling/gen-types.sh local
       - name: Verify generated-type consumers
         run: pnpm typecheck

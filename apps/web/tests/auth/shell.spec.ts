@@ -93,10 +93,10 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("button", { name: "Expand sidebar" }).click();
   await accountMenu(page);
   await page.getByRole("menuitem", { name: "Get help", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Help", exact: true })).toContainText(
-    "Find your conversations"
-  );
-  await page.keyboard.press("Escape");
+  const support = page.getByRole("complementary", { name: "PansGPT Support", exact: true });
+  await expect(support).toBeVisible();
+  await support.getByRole("button", { name: "Close support", exact: true }).click();
+  await expect(support).not.toBeVisible();
   await openProfile(page);
   const profile = page.getByRole("dialog", { name: "Settings", exact: true });
   await expect(profile.getByText("University of Jos", { exact: true })).toBeVisible();
@@ -445,7 +445,7 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await expect(page).toHaveURL(/\/app$/);
   await openProfile(page);
   await profile.getByRole("button", { name: "Back to settings menu", exact: true }).click();
-  await profile.getByRole("button", { name: "Log Out", exact: true }).click();
+  await profile.getByRole("button", { name: /^Log out$/i }).click();
   await expect(page).toHaveURL(/\/login/);
   await page.goto("/app/notes");
   await expect(page).toHaveURL(/\/login\?next=%2Fapp%2Fnotes/);

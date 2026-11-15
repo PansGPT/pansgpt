@@ -41,28 +41,36 @@ test("settings keeps separate categories, student-facing content and a bounded d
   await expect(nav.getByRole("button")).toHaveText(sections);
   await expect(modal.getByText("User ID", { exact: true })).toHaveCount(0);
   await expect(modal.getByRole("button", { name: "Log out", exact: true })).toHaveCount(0);
-  await expect(modal.getByRole("button", { name: "Save changes", exact: true })).toBeVisible();
-  await expect(modal.getByRole("button", { name: "Save changes", exact: true })).toBeDisabled();
+  await expect(modal.getByRole("button", { name: "Save changes", exact: true })).toHaveCount(0);
   const profileForm = modal.locator(".settings-account-section .settings-section-content");
   await expect(profileForm).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(profileForm).toHaveCSS("border-radius", "0px");
   await expect(profileForm).toHaveCSS("border-top-width", "0px");
-  await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toHaveCSS(
-    "border-left-width",
-    "1px"
-  );
+  await expect(modal.getByRole("button", { name: "Edit name", exact: true })).toBeVisible();
   await expect(modal.getByRole("button", { name: "Delete account", exact: true })).toBeVisible();
-  await expect(modal.getByRole("combobox", { name: "Academic level", exact: true })).toBeVisible();
+  await expect(
+    modal.getByRole("button", { name: "Edit academic level", exact: true })
+  ).toBeVisible();
   await expect(modal.locator(".settings-content-pane")).toHaveCSS("scrollbar-width", "thin");
   await expect(modal.getByRole("button", { name: "Change password", exact: true })).toHaveCount(0);
   await page.screenshot({ path: test.info().outputPath("settings-account-desktop.png") });
-  await modal.getByRole("textbox", { name: "Name", exact: true }).fill("Draft student name");
+  await modal.getByRole("button", { name: "Edit name", exact: true }).click();
+  const nameEditor = page.getByRole("dialog", { name: "Edit name", exact: true });
+  await expect(nameEditor.getByRole("button", { name: "Save", exact: true })).toBeDisabled();
+  await nameEditor
+    .getByRole("textbox", { name: "First name", exact: true })
+    .fill("Draft student name");
+  await expect(nameEditor.getByRole("button", { name: "Save", exact: true })).toBeEnabled();
+  await nameEditor.getByRole("button", { name: "Cancel", exact: true }).click();
+  await expect(nameEditor).not.toBeVisible();
   await nav.getByRole("button", { name: "Security", exact: true }).click();
   await expect(modal.getByText("Password", { exact: true })).toBeVisible();
   await expect(modal.getByText("Manage your account password.", { exact: true })).toBeVisible();
   await modal.getByRole("button", { name: "Change password", exact: true }).click();
   await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toHaveCount(0);
-  await expect(modal.getByLabel("New password", { exact: true })).toBeVisible();
+  const passwordEditor = page.getByRole("dialog", { name: "Change password", exact: true });
+  await expect(passwordEditor.getByLabel("New password", { exact: true })).toBeVisible();
+  await passwordEditor.getByRole("button", { name: "Close dialog", exact: true }).click();
   await page.screenshot({ path: test.info().outputPath("settings-security-desktop.png") });
   await nav.getByRole("button", { name: "Notifications", exact: true }).click();
   await modal.getByRole("switch", { name: "Finished replies", exact: true }).click();
@@ -75,8 +83,8 @@ test("settings keeps separate categories, student-facing content and a bounded d
   await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
   await modal.getByText("Dark", { exact: true }).click();
   await nav.getByRole("button", { name: "Account", exact: true }).click();
-  await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toHaveValue(
-    "Draft student name"
+  await expect(modal.getByRole("button", { name: "Edit name", exact: true })).toHaveText(
+    "Ojonugwa Student"
   );
   await nav.getByRole("button", { name: "Notifications", exact: true }).click();
   await expect(
@@ -115,7 +123,7 @@ test("settings keeps separate categories, student-facing content and a bounded d
   await expect(results).toHaveCSS("scrollbar-width", "thin");
   await page.screenshot({ path: test.info().outputPath("settings-search-desktop.png") });
   await search.press("Enter");
-  await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toBeFocused();
+  await expect(modal.getByRole("button", { name: "Edit name", exact: true })).toBeFocused();
   await expect(results).not.toBeVisible();
   await search.fill("response font");
   await results.getByRole("option", { name: "Appearance Response font", exact: true }).click();
@@ -196,11 +204,12 @@ test("mobile settings retains grouped menus, separate Security and usable storag
   );
   await expect(creditRing).toHaveCount(0);
   await page.evaluate(() => window.__changePreviewCredits(20, 50));
-  await expect(menu.locator(".settings-menu-row")).toHaveText(
-    sections
+  await expect(menu.locator(".settings-menu-row")).toHaveText([
+    ...sections
       .filter((label) => label !== "Account")
-      .map((label) => (label === "Credits" ? "Credits20 credits" : label))
-  );
+      .map((label) => (label === "Credits" ? "Credits20 credits" : label)),
+    "Report a bug",
+  ]);
   await expect(menu.getByRole("button", { name: "Account", exact: true })).toHaveCount(0);
   await expect(menu.getByRole("button", { name: "Edit profile", exact: true })).toBeVisible();
   const menuCards = await menu
@@ -253,7 +262,7 @@ test("mobile settings retains grouped menus, separate Security and usable storag
   await expect(modal.getByText("Manage your account password.", { exact: true })).not.toBeVisible();
   await expect(passwordRow.locator(".settings-row-title")).toHaveCSS("font-size", "13px");
   const rowInset = await passwordRow.evaluate((row) => {
-    const card = row.parentElement.getBoundingClientRect();
+    const card = row.closest(".settings-section-content").getBoundingClientRect();
     const box = row.getBoundingClientRect();
     return { left: box.left - card.left, right: card.right - box.right };
   });
@@ -272,14 +281,15 @@ test("mobile settings retains grouped menus, separate Security and usable storag
     await expect(modal.getByRole("button", { name: "Log out", exact: true })).toHaveCount(0);
     await expect(modal.getByRole("button", { name: "Save changes", exact: true })).toHaveCount(0);
     await expect(modal.getByRole("heading", { name: "Your profile", exact: true })).toHaveCount(0);
-    await expect(modal.getByRole("textbox", { name: "Name", exact: true })).toHaveCSS(
-      "font-size",
-      "12px"
-    );
-    await expect(modal.getByRole("combobox", { name: "Academic level", exact: true })).toHaveCSS(
-      "font-size",
-      "12px"
-    );
+    const nameRow = content.locator('[data-settings-label="Name"]');
+    await expect(
+      nameRow.getByRole("button", { name: "Ojonugwa Student", exact: true })
+    ).toBeVisible();
+    await expect(
+      content
+        .locator('[data-settings-label="Academic level"]')
+        .getByRole("button", { name: "200 Level", exact: true })
+    ).toBeVisible();
     for (const label of ["Email", "University"]) {
       await expect(
         content.locator(`[data-settings-label="${label}"] .settings-account-value`)
@@ -294,30 +304,30 @@ test("mobile settings retains grouped menus, separate Security and usable storag
     if (width === 390)
       await page.screenshot({ path: test.info().outputPath("settings-account-mobile.png") });
     if (width === 390) {
-      const level = modal.getByRole("combobox", { name: "Academic level", exact: true });
-      await level.click();
-      const list = page.getByRole("listbox");
-      await expect(list.getByRole("option", { name: "200 Level", exact: true })).toHaveAttribute(
-        "aria-selected",
-        "true"
+      await nameRow.getByRole("button", { name: "Ojonugwa Student", exact: true }).click();
+      await expect(content.getByRole("heading", { name: "Edit name", exact: true })).toBeVisible();
+      await expect(content.getByRole("textbox", { name: "First name", exact: true })).toHaveValue(
+        "Ojonugwa"
       );
-      const bounds = await list.boundingBox();
-      expect(bounds.x).toBeGreaterThanOrEqual(0);
-      expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
-      await expect(list.locator(".settings-select-viewport")).toHaveCSS("scrollbar-width", "thin");
-      await page.screenshot({ path: test.info().outputPath("settings-dropdown-mobile.png") });
-      await page.keyboard.press("Escape");
-      await expect(list).not.toBeVisible();
-      await expect(level).toBeFocused();
-      await expect(modal.getByRole("heading", { name: "Account", exact: true })).toBeVisible();
-      await level.click();
-      await expect(page.getByRole("option", { name: "200 Level", exact: true })).toBeFocused();
-      await page.keyboard.press("ArrowDown");
-      await expect(page.getByRole("option", { name: "300 Level", exact: true })).toBeFocused();
-      await page.keyboard.press("Enter");
-      await expect(level).toHaveText("300 Level");
-      await chooseSetting(page, "Academic level", "Not set");
-      await chooseSetting(page, "Academic level", "200 Level");
+      await expect(content.getByRole("button", { name: "Save", exact: true })).toBeDisabled();
+      await content.getByRole("button", { name: "Back", exact: true }).click();
+      await content
+        .locator('[data-settings-label="Academic level"]')
+        .getByRole("button", { name: "200 Level", exact: true })
+        .click();
+      await expect(
+        content.getByRole("heading", { name: "Academic level", exact: true })
+      ).toBeVisible();
+      const saveLevel = content.getByRole("button", { name: "Save", exact: true });
+      await expect(saveLevel).toBeDisabled();
+      await content.getByRole("button", { name: "300 Level", exact: true }).click();
+      await expect(saveLevel).toBeEnabled();
+      await content.getByRole("button", { name: "Back", exact: true }).click();
+      await expect(
+        content
+          .locator('[data-settings-label="Academic level"]')
+          .getByRole("button", { name: "200 Level", exact: true })
+      ).toBeVisible();
     }
     await page.keyboard.press("Escape");
     await expect(menu).not.toHaveAttribute("inert", "");
