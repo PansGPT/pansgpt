@@ -527,6 +527,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
         <button
           type="button"
           className="reader-icon reader-desktop-chat-toggle"
+          disabled={!source}
           aria-label="Open study chat"
           aria-expanded={chatOpen}
           aria-controls="reader-chat-panel"
@@ -620,6 +621,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
             </div>
             <button
               className="reader-mobile-chat-toggle"
+              disabled={!source}
               type="button"
               aria-label="Open study chat"
               aria-expanded={chatOpen}
@@ -665,7 +667,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
               />
             ) : (
               <div className="reader-empty" role="status">
-                <Loader2 size={22} />
+                <Loader2 size={22} className="animate-spin text-primary-500" />
                 <p>Opening your document…</p>
               </div>
             )}
@@ -840,6 +842,53 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
     </div>
   );
 }
+function ReaderShell({ children }: { children: React.ReactNode }): React.ReactElement {
+  return (
+    <div className="reader-workspace" data-ready="false">
+      <header className="reader-header t-panel-slide" data-open="true">
+        <Link href="/app/library" className="reader-back" aria-label="Back to library">
+          <ArrowLeft size={18} />
+        </Link>
+        <div className="reader-heading">
+          <div className="reader-heading-skeleton" aria-hidden="true" />
+          <div
+            className="reader-heading-skeleton reader-heading-skeleton--sub"
+            aria-hidden="true"
+          />
+        </div>
+      </header>
+      <div className="reader-body">
+        <section className="reader-document-panel" aria-label="Document reader">
+          <div className="reader-toolbar t-panel-slide" data-open="true">
+            <div className="reader-tool-start">
+              <button type="button" disabled aria-label="Snip" title="Snip">
+                <Scissors size={19} />
+                <span>Snip</span>
+              </button>
+            </div>
+            <div className="reader-page-controls">
+              <button type="button" disabled aria-label="Previous page">
+                <ChevronLeft size={17} />
+              </button>
+              <span className="reader-mobile-page-counter" aria-hidden="true">
+                <span>— / —</span>
+              </span>
+              <button type="button" disabled aria-label="Next page">
+                <ChevronRight size={17} />
+              </button>
+            </div>
+            <div className="reader-tool-end">
+              <button type="button" disabled aria-label="Full screen" title="Full screen">
+                <Maximize2 size={18} />
+              </button>
+            </div>
+          </div>
+          <div className="reader-canvas-area">{children}</div>
+        </section>
+      </div>
+    </div>
+  );
+}
 
 function ReaderLoad({ documentId }: { documentId: string }): React.ReactElement {
   const { session, profile } = useAuth();
@@ -869,7 +918,7 @@ function ReaderLoad({ documentId }: { documentId: string }): React.ReactElement 
               { userId: profile.id, universityId: profile.university_id },
               documentId
             );
-          throw await libraryError(response, "Your document couldn’t be loaded. Please try again.");
+          throw await libraryError(response, "Your document couldn't be loaded. Please try again.");
         }
         const result = readerSchema.parse(await response.json());
         if (result.document.id !== documentId) throw new Error("Document identity mismatch");
@@ -879,19 +928,26 @@ function ReaderLoad({ documentId }: { documentId: string }): React.ReactElement 
           setError(
             cause instanceof Error && cause.name === "Error"
               ? cause.message
-              : "Your document couldn’t be loaded. Please retry."
+              : "Your document couldn't be loaded. Please retry."
           );
       }
     })();
     return () => controller.abort();
   }, [documentId, token, attempt, profile?.id, profile?.university_id]);
-  if (error) return <ReaderError message={error} retry={() => setAttempt((value) => value + 1)} />;
+  if (error)
+    return (
+      <ReaderShell>
+        <ReaderError message={error} retry={() => setAttempt((value) => value + 1)} />
+      </ReaderShell>
+    );
   if (!data)
     return (
-      <div className="reader-empty" role="status">
-        <Loader2 size={24} />
-        <p>Opening your study workspace…</p>
-      </div>
+      <ReaderShell>
+        <div className="reader-empty" role="status">
+          <Loader2 size={24} className="animate-spin text-primary-500" />
+          <p>Opening your document…</p>
+        </div>
+      </ReaderShell>
     );
   return <ReaderDocument data={data} />;
 }
@@ -901,10 +957,12 @@ export function ReaderWorkspace({ documentId }: { documentId: string }): React.R
   return (
     <div className="reader-route">
       {loading || !profile ? (
-        <div className="reader-empty" role="status">
-          <Loader2 size={24} />
-          <p>Opening your document...</p>
-        </div>
+        <ReaderShell>
+          <div className="reader-empty" role="status">
+            <Loader2 size={24} className="animate-spin text-primary-500" />
+            <p>Opening your document…</p>
+          </div>
+        </ReaderShell>
       ) : (
         <ReaderLoad
           key={`${profile.id}:${profile.university_id}:${documentId}`}

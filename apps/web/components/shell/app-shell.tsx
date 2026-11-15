@@ -11,6 +11,7 @@ import { BrandMark } from "@/components/auth/brand-art";
 import { ConversationSearch } from "@/components/chat/search-dialog";
 import { ConversationUndo } from "@/components/chat/undo-notice";
 import { WorkspaceLoading } from "./loading";
+import { ReaderSuspenseFallback } from "@/components/reader/reader-suspense-fallback";
 import { ProfileDrawer } from "./profile";
 import { usePreferences } from "./use-preferences";
 import { DashboardProvider } from "./dashboard-data";
@@ -646,7 +647,7 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
 export function AppShell({ children }: { children: ReactNode }): React.ReactElement {
   return (
     <ThemeProvider initialTheme="dark">
-      <Suspense fallback={<WorkspaceLoading />}>
+      <Suspense fallback={<ReaderSuspenseFallback />}>
         <VerifiedWorkspace>{children}</VerifiedWorkspace>
       </Suspense>
     </ThemeProvider>
