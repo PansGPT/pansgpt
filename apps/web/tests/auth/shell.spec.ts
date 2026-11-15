@@ -328,12 +328,12 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   await expect(
     page.getByRole("dialog", { name: "PansGPT chat", exact: true }).getByRole("alert")
-  ).toContainText("Synthetic provider unavailable");
+  ).toHaveText("Something went wrong. Try again.");
   await expect(page.getByText("No response was returned.", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Generating response...", { exact: true })).toHaveCount(0);
   await expect(page.getByLabel("Study question")).toBeEnabled();
   await startNewChat(page);
-  await expect(page.getByText("Synthetic provider unavailable", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Something went wrong. Try again.", { exact: true })).toHaveCount(0);
   expect(inferenceRequests).toBe(2);
   // Hold creation until New chat aborts the old runtime. It must never dispatch inference afterwards.
   let releaseCreation: () => void = () => {};

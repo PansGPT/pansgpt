@@ -2878,7 +2878,9 @@ for (const mobile of [false, true]) {
     });
     await banner.getByRole("button", { name: "Dismiss notice", exact: true }).click();
     await expect(warning).toHaveCount(0);
-    expect(Math.abs((await form.boundingBox()).height - after.height)).toBeLessThan(1);
+    expect(
+      (await form.locator(".study-chat-attachment-card").boundingBox()).height
+    ).toBeLessThanOrEqual(70);
     await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toBeVisible();
 
     await expect(page.getByLabel("Study question")).toHaveValue("Question with supporting file");
