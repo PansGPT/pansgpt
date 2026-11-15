@@ -71,3 +71,5 @@ Thumbs.db
 
 # Local verification logs, scripts and isolated test databases
 .tmp/
+# Copied from the pinned PDF.js package before web dev/build.
+apps/web/public/pdfjs/

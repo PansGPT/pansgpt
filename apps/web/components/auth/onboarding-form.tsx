@@ -196,7 +196,8 @@ export function OnboardingForm(): React.ReactElement {
         <div className="auth-form">
           <AuthAlert>
             {profileError
-              ? profileFailureMessage(profileError).description
+              ? profileFailureMessage(profileError).description ||
+                profileFailureMessage(profileError).title
               : "Your profile could not be loaded. Please retry before continuing."}
           </AuthAlert>
           <Button

@@ -1,0 +1,36 @@
+# Profile verification recovery — 14 November 2026
+
+User request: explain recurring `GET /api/v1/auth/me` 503s, add automatic recovery and show a simple failure message with a round retry icon.
+
+## Diagnosis
+
+- The route serializes the context produced by `get_current_user`; its dependencies can return 503 when authoritative profile storage or signing keys are unavailable.
+- At diagnosis time, local `/health/live` returned 200. `/health/ready` returned 503 with database/Redis errors, operational API and working storage. A read-only probe using the API configuration timed out resolving the database hostname; asyncpg then failed with `gaierror`, Windows error 11001. No database credentials/hostnames were printed or changed. This identifies a current connection fault, rather than proving the cause of every historical 503.
+- Browser profile verification used a single `fetch` with a 15-second deadline. Chat's safe-read recovery was not connected to this separate auth path. The existing screen used explanatory service copy and two full text buttons.
+- Automatic approval review rejected an optional comparison against external DNS because configured database/Redis hostnames would be disclosed to that server. It was not executed or bypassed. Local diagnostics already established the database lookup failure. No OS DNS/network settings were changed; the underlying connectivity issue is not certified resolved.
+
+## Contract and behavior
+
+- Keep the API payload, authorization checks and owned-profile schema unchanged. Verify every returned profile against the current account; never open a workspace using an invented profile or failed verification.
+- Reuse `fetchWithRecovery` for `GET /auth/me`: at most three attempts for transient network/timeouts, 408/429/500/502/503/504, exponential delay with jitter (500 ms then 1 s base), bounded Retry-After hints. Each request keeps a 15-second deadline; the complete operation has a 47-second deadline. Offline state stops automatic repeats. Do not automatically retry rejected sessions/access (401/403), malformed successful payloads or mismatched owners.
+- Existing single-flight verification remains in `checking` through recovery; publish an error only after attempts are exhausted. Account/token changes and unmount abort requests and backoff. No unbounded polling or profile mutation retries are added.
+- Transient/invalid-response/session-bootstrap failures show **Something went wrong** and a 44px circular icon-only **Retry** button. Disable it while the manual retry is pending. A manual retry starts one new bounded verification, not a page reload, except the existing failed-session-bootstrap recovery that reloads sign-in.
+- Expired sessions and forbidden accounts retain actionable guidance and sign-in/sign-out access; they are not silently retried. Onboarding falls back to the short error title when its description is intentionally empty.
+
+## Verification
+
+**88 web unit checks passed**, including recovery caps, cancellation, owned responses and simple copy. **Four focused Chrome journeys passed** with the app theme on desktop/mobile: circular icon-only button geometry, disabled state during retry, automatic recovery after two 503s, a three-attempt cap with deliberate manual recovery, and expired-session guidance. Final web lint and the Next.js production build including strict TypeScript passed. Existing full auth-journey assertions were updated to the new copy, button and three attempts; that hosted sign-in suite was not executed. Browser previews use visibly identified synthetic data and the production request helper/error component; they do not certify restored real database connectivity.
+
+Visual captures: [mobile retry screen](design-system/profile-recovery-2026-11-14/profile-retry-mobile.png), [desktop retry screen](design-system/profile-recovery-2026-11-14/profile-retry-desktop.png). The final local readiness recheck still returned database/Redis errors. No migrations or backend code were changed; no real authenticated profile was used as a committed fixture.
+
+## Engineering gallery
+
+No Notion tools are available. Pending structured rows:
+
+| Gallery                    | Ready-to-sync entry                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Session / Change Log       | **Summary:** Wire profile checks into bounded safe-read retries; simplify transient auth failures to a short message and circular retry icon; retain owned verification and access guidance. **Date:** 2026-11-14. **Area:** Web / Authentication. **Files Touched:** profile-verification, profile-error, app-shell/CSS, onboarding fallback, profile unit/browser checks, preview adapter, auth assertions and docs. **Verified:** Yes, 88 web unit checks, four focused Chrome journeys, lint and production build including strict TypeScript passed. Live infrastructure remains degraded. |
+| Decision Log               | **Decision:** Reuse safe GET recovery while preserving authorization failures and bounded deadlines. **Rationale:** profile checks had bypassed chat recovery; recover temporary outages without hiding a persistent database fault. **Alternatives Considered:** infinite retries, cached-role authorization, exposing infrastructure diagnostics in the UI, retrying profile PATCH requests.                                                                                                                                                                                                  |
+| Product Roadmap & Features | **Profile recovery:** Locally verified. Overall authentication remains subject to existing hosted/security release gates; real DNS/database recovery remains unresolved.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+
+No Knowledge Base change: this applies an existing retry pattern to an omitted request path.

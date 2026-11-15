@@ -10,6 +10,8 @@
 .app-shell[data-collapsed="true"] {
   --shell-sidebar-width: 88px;
 }
+.app-shell[data-reader="true"] { grid-template-columns: minmax(0, 1fr); --shell-sidebar-width: 0px; }
+.app-shell[data-reader="true"] .shell-main { width: 100%; max-width: none; padding: 0; }
 .app-shell *,
 .app-shell *::before,
 .app-shell *::after {
@@ -601,6 +603,23 @@
   margin: 0;
   font-size: 26px;
 }
+.shell-verification p { margin: 0; max-width: 340px; color: var(--text-tertiary-600); }
+.shell-verification-retry {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-secondary);
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: var(--text-primary-900);
+  cursor: pointer;
+}
+.shell-verification-retry:hover { background: var(--bg-tertiary); }
+.shell-verification-retry:disabled { opacity: .5; cursor: default; }
+.shell-verification-retry:focus-visible { outline: 2px solid var(--fg-brand-primary-600); outline-offset: 3px; }
+.shell-verification-sign-in { padding: 8px 14px; border: 1px solid var(--border-secondary); border-radius: 8px; background: var(--bg-secondary); color: inherit; font: inherit; cursor: pointer; }
 .shell-sr-only {
   position: absolute;
   width: 1px;
@@ -2428,7 +2447,7 @@
   align-items: center;
   min-width: 0;
 }
-.shell-sidebar-group .shell-chat-row > a {
+.shell-sidebar-group .shell-chat-row > :is(a, .shell-conversation-select) {
   display: flex;
   align-items: center;
   flex: 1;
@@ -2437,13 +2456,21 @@
   padding: 7px 8px;
   color: var(--text-secondary-700);
   font-size: 11px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
 }
-.shell-chat-row > a > span {
+.shell-sidebar-group .shell-conversation-select:is(:hover, [aria-current="true"]) {
+  background: var(--bg-secondary);
+}
+.shell-chat-row > :is(a, .shell-conversation-select) > span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.shell-chat-row > a > svg {
+.shell-chat-row > :is(a, .shell-conversation-select) > svg {
   flex: none;
 }
 .shell-sidebar-group .shell-chat-menu,
@@ -2549,7 +2576,7 @@
   color: var(--text-primary-900);
   overflow-wrap: anywhere;
 }
-.app-shell[data-collapsed="true"] .shell-chat-row {
+.app-shell[data-collapsed="true"] .shell-sidebar .shell-chat-row {
   display: none;
 }
 

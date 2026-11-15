@@ -1,4 +1,6 @@
 "use client";
+
+import { failureFrom } from "@/lib/chat-recovery";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
@@ -87,8 +89,7 @@ export function ConversationUndo(): React.ReactElement | null {
               setNotice(null);
             })
             .catch((failure: unknown) => {
-              if (!controller.signal.aborted)
-                setError(failure instanceof Error ? failure.message : "Undo failed. Please retry.");
+              if (!controller.signal.aborted) setError(failureFrom(failure, "mutation").message);
             })
             .finally(() => {
               if (!controller.signal.aborted) setBusy(false);

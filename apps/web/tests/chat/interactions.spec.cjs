@@ -613,9 +613,11 @@ test("home and chat share aligned navigation, docked toggle and polished account
   expect(await account.evaluate((element) => getComputedStyle(element).borderRadius)).toBe("14px");
   await page.screenshot({ path: test.info().outputPath("profile-menu-desktop.png") });
   await account.getByRole("menuitem", { name: "Get help", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Help", exact: true })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Account menu", exact: true })).toBeFocused();
+  // Get help now opens the existing support widget rather than the retired Help dialog.
+  const support = page.getByRole("complementary", { name: "PansGPT Support", exact: true });
+  await expect(support).toBeVisible();
+  await support.getByRole("button", { name: "Close support", exact: true }).click();
+  await expect(support).not.toBeVisible();
   await page.getByRole("button", { name: "Collapse sidebar", exact: true }).click();
   const toggle = page.getByRole("button", { name: "Expand sidebar", exact: true });
   await expect(toggle).toBeFocused();
@@ -726,7 +728,7 @@ test("conversation search covers history, archives, pagination and matched-messa
     window.__failSearch = true;
   });
   await input.fill("clearance");
-  await expect(search.getByRole("alert")).toContainText("unavailable");
+  await expect(search.getByRole("alert")).toContainText("We couldn't load your conversations.");
   await page.evaluate(() => {
     window.__failSearch = false;
   });
@@ -1134,7 +1136,9 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         window.__failFeedback = true;
       });
       await page.getByRole("button", { name: "Unhelpful response", exact: true }).click();
-      await expect(page.getByRole("alert")).toContainText("Synthetic feedback save failure");
+      await expect(page.getByRole("alert")).toContainText(
+        "Your change wasn't saved. Please try again."
+      );
       await expect(
         page.getByRole("button", { name: "Unhelpful response", exact: true })
       ).toBeEnabled();
@@ -1152,7 +1156,9 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         window.__failBranch = true;
       });
       await page.getByRole("button", { name: "Next branch", exact: true }).click();
-      await expect(page.getByRole("alert")).toContainText("Synthetic branch save failure");
+      await expect(page.getByRole("alert")).toContainText(
+        "Your change wasn't saved. Please try again."
+      );
       await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
       await page.evaluate(() => {
         window.__failBranch = false;
@@ -1258,7 +1264,9 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       });
       await page.getByLabel("Study question").fill("Question during an outage");
       await page.getByRole("button", { name: "Send message", exact: true }).click();
-      await expect(page.getByRole("alert")).toContainText("Synthetic service unavailable");
+      await expect(page.getByRole("alert")).toContainText(
+        "Something went wrong. Please try again."
+      );
       await page.evaluate(() => {
         window.__failStream = false;
       });
@@ -1455,11 +1463,11 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       ).toBe(transcriptions);
       await page.evaluate(() => {
         navigator.mediaDevices.getUserMedia = async () => {
-          throw new Error("Synthetic microphone permission denied");
+          throw new DOMException("Synthetic microphone permission denied", "NotAllowedError");
         };
       });
       await page.getByRole("button", { name: "Voice input", exact: true }).click();
-      await expect(page.getByRole("alert")).toContainText("Synthetic microphone permission denied");
+      await expect(page.getByRole("alert")).toContainText("Microphone access is blocked.");
       console.log(
         "PASS navigation cancels microphone without late upload; permission failures are visible"
       );
@@ -1561,7 +1569,9 @@ test("session menus persist organization and share only the selected conversatio
     window.__failSessionMutation = true;
   });
   await rename.getByRole("button", { name: "Save name", exact: true }).click();
-  await expect(rename.getByRole("alert")).toContainText("Synthetic session update failure");
+  await expect(rename.getByRole("alert")).toContainText(
+    "Your change wasn't saved. Please try again."
+  );
   await expect(page.locator(".study-chat-title-menu")).toContainText(
     "Synthetic study conversation"
   );
@@ -1685,7 +1695,7 @@ test("presentation workspace previews actual slides, navigates, retries and clea
     window.__failPresentationPreview = true;
   });
   await card.click();
-  await expect(preview.getByRole("alert")).toContainText("preview is unavailable");
+  await expect(preview.getByRole("alert")).toContainText("preview isn't available");
   await expect(
     preview.getByRole("button", { name: "Download presentation", exact: true })
   ).toBeEnabled();
@@ -1770,7 +1780,7 @@ test("presentation download retries and completed tool results need no Steps pan
   await expect(page.locator(".study-chat-tool")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Download", exact: true }).click();
-  await expect(page.getByRole("alert")).toContainText("This file is unavailable.");
+  await expect(page.getByRole("alert")).toContainText("This item is no longer available");
   await page.screenshot({ path: test.info().outputPath("artifact-download-retry-desktop.png") });
   await page.evaluate(() => {
     window.__failArtifactDownload = false;
@@ -1817,7 +1827,9 @@ test("timeout feedback stays with its response on desktop and mobile", async ({ 
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     const response = page.locator('.study-chat-message[data-role="assistant"]').last();
     const error = response.getByRole("alert");
-    await expect(error).toHaveText("The answer timed out. Please try again.");
+    await expect(error).toHaveText(
+      width < 861 ? "Something went wrong. Try again." : "Something went wrong. Please try again."
+    );
     await expect(page.locator(".study-chat-footer").getByRole("alert")).toHaveCount(0);
     await expect(response.getByText("No response was returned.", { exact: true })).toHaveCount(0);
     const spacing = await response.evaluate((element) => {
@@ -1834,7 +1846,7 @@ test("timeout feedback stays with its response on desktop and mobile", async ({ 
     });
     expect(spacing.gap).toBeGreaterThanOrEqual(0);
     expect(spacing.gap).toBeLessThanOrEqual(20);
-    expect(spacing.fontSize).toBe("13px");
+    expect(spacing.fontSize).toBe(width < 861 ? "12px" : "13px");
     if (mode === "partial") await expect(response).toContainText("Synthetic partial response.");
     await error.scrollIntoViewIfNeeded();
     await page.screenshot({ path: test.info().outputPath(`inline-timeout-${width}.png`) });
@@ -1878,7 +1890,7 @@ test("general web answers show web references and actionable lookup failures", a
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   const failed = page.locator('.study-chat-message[data-role="assistant"]').last();
   await expect(failed.getByRole("alert")).toHaveText(
-    "Web search is not configured, so I cannot verify current information."
+    "Search isn't available for this request. Try again later."
   );
   await expect(failed).not.toContainText("not found in your course materials");
   await expect(page.locator(".study-chat-footer").getByRole("alert")).toHaveCount(0);
@@ -2490,7 +2502,7 @@ test("native paste and drop attach privately, reject unsupported files and uploa
       );
   });
   await expect(page.getByRole("alert")).toContainText(
-    "Choose a PDF, text, PNG or JPEG file up to 10 MB."
+    "Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB."
   );
   await expect(page.locator(".study-chat-composer .study-chat-attachment-card")).toHaveCount(2);
   await page.getByLabel("Study question", { exact: true }).fill("Explain these synthetic diagrams");
@@ -2738,4 +2750,192 @@ test("only sidebar chat history scrolls while navigation, search and account rem
     ).toBeInViewport();
     await page.screenshot({ path: test.info().outputPath(`fixed-sidebar-${width}-${height}.png`) });
   }
+});
+
+test("offline chat keeps the draft and lays notices above a compact input at both widths", async ({
+  page,
+  context,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  const input = page.getByLabel("Study question");
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await input.fill("Keep this offline question");
+    const composer = page.locator(".study-chat-composer");
+    const before = await composer.boundingBox();
+    await context.setOffline(true);
+    const notice = page.getByText(
+      width < 861
+        ? "You're offline. Reconnect to send."
+        : "You're offline. Your draft is kept. Reconnect to send a message.",
+      { exact: true }
+    );
+    await expect(notice).toBeVisible();
+    const messageBox = await notice.boundingBox();
+    const after = await composer.boundingBox();
+    expect(messageBox.y + messageBox.height).toBeLessThan(after.y);
+    expect(messageBox.width).toBeGreaterThan(200);
+    expect(Math.abs(after.height - before.height)).toBeLessThan(1);
+    await expect(composer.locator(".study-chat-notice-banner")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
+    await input.press("Enter");
+    await expect(input).toHaveValue("Keep this offline question");
+    await page.screenshot({ path: test.info().outputPath(`chat-notice-above-${width}.png`) });
+    await context.setOffline(false);
+    await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
+    expect(
+      await page.evaluate(
+        () => window.__calls.filter((call) => call.url.endsWith("/stream")).length
+      )
+    ).toBe(0);
+  }
+});
+
+test("failed transcription can retry the same recording while keeping a typed draft", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.getByLabel("Study question").fill("My typed draft");
+  await page.evaluate(() => {
+    const original = window.fetch;
+    window.__transcriptionCalls = 0;
+    window.__recordingStarts = 0;
+    window.__rejectTranscription = true;
+    const start = MediaRecorder.prototype.start;
+    MediaRecorder.prototype.start = function (...args) {
+      window.__recordingStarts++;
+      return start.apply(this, args);
+    };
+    window.fetch = async (...args) => {
+      if (String(args[0]).endsWith("/transcribe")) {
+        window.__transcriptionCalls++;
+        if (window.__rejectTranscription)
+          return new Response(
+            JSON.stringify({ detail: "Synthetic internal speech provider failure" }),
+            { status: 503, headers: { "Content-Type": "application/json", "Retry-After": "0" } }
+          );
+      }
+      return original(...args);
+    };
+  });
+  await page.getByRole("button", { name: "Voice input", exact: true }).click();
+  await page.getByRole("button", { name: "Finish recording", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Retry transcription", exact: true })
+  ).toBeVisible();
+  expect(await page.evaluate(() => window.__transcriptionCalls)).toBe(3);
+  await expect(page.getByRole("alert")).not.toContainText("internal speech");
+  await page.evaluate(() => {
+    window.__rejectTranscription = false;
+  });
+  await page.getByRole("button", { name: "Retry transcription", exact: true }).click();
+  await expect(page.getByLabel("Study question")).toHaveValue(
+    "My typed draft\nSynthetic spoken question"
+  );
+  expect(await page.evaluate(() => window.__recordingStarts)).toBe(1);
+  expect(await page.evaluate(() => window.__transcriptionCalls)).toBe(4);
+});
+
+for (const mobile of [false, true]) {
+  test(`failed uploads keep the local file and offer an explicit upload retry on ${mobile ? "mobile" : "desktop"}`, async ({
+    page,
+  }) => {
+    if (mobile) await page.setViewportSize({ width: 390, height: 844 });
+    await setupChat(page);
+    await page.goto(`/?session=${session}`);
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      window.__failUpload = true;
+    });
+    const chooser = await openAttachmentPicker(page);
+    await chooser.setFiles({
+      name: "synthetic-diagram.png",
+      mimeType: "image/png",
+      buffer: imageFixture,
+    });
+    await page.getByLabel("Study question").fill("Question with supporting file");
+    const form = page.locator(".study-chat-composer");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toBeVisible();
+    const banner = page.locator(".study-chat-composer-notices .study-chat-notice-banner");
+    const warning = banner.getByRole("alert");
+    await expect(warning).toHaveText(
+      mobile ? "Couldn't upload. Try again." : "We couldn't upload this file. Please try again."
+    );
+    const box = await banner.boundingBox();
+    const after = await form.boundingBox();
+    expect(box.y + box.height).toBeLessThan(after.y);
+    expect((await warning.boundingBox()).width).toBeGreaterThan(200);
+    await expect(form.getByRole("alert")).toHaveCount(0);
+    await page.screenshot({
+      path: test.info().outputPath(`upload-error-above-${mobile ? "mobile" : "desktop"}.png`),
+    });
+    await banner.getByRole("button", { name: "Dismiss notice", exact: true }).click();
+    await expect(warning).toHaveCount(0);
+    expect(Math.abs((await form.boundingBox()).height - after.height)).toBeLessThan(1);
+    await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toBeVisible();
+
+    await expect(page.getByLabel("Study question")).toHaveValue("Question with supporting file");
+    expect(
+      await page.evaluate(
+        () =>
+          window.__calls.filter(
+            (call) => call.url.endsWith("/attachments") && call.method === "POST"
+          ).length
+      )
+    ).toBe(1);
+    await page.evaluate(() => {
+      window.__failUpload = false;
+    });
+    await page.getByRole("button", { name: "Retry upload", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toHaveCount(0);
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+    await expect(page.getByText("Question with supporting file", { exact: true })).toHaveCount(1);
+  });
+}
+
+test("transient backend recovery shows Trying again without replaying the message POST", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`);
+  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+  await page.evaluate(() => {
+    const original = window.fetch;
+    window.fetch = async (...args) => {
+      const response = await original(...args);
+      if (!String(args[0]).endsWith("/stream")) return response;
+      const body = await response.text();
+      const encoder = new TextEncoder();
+      return new Response(
+        new ReadableStream({
+          start(controller) {
+            controller.enqueue(
+              encoder.encode(
+                'event: recovery\ndata: {"state":"retrying","attempt":1,"retry_after_ms":1500}\n\n'
+              )
+            );
+            setTimeout(() => {
+              controller.enqueue(encoder.encode(body));
+              controller.close();
+            }, 1500);
+          },
+        }),
+        { headers: { "Content-Type": "text/event-stream" } }
+      );
+    };
+  });
+  await page.getByLabel("Study question").fill("Synthetic temporary failure");
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Trying again" }).first()).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("chat-automatic-recovery.png") });
+  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
+  ).toBe(1);
 });

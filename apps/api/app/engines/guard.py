@@ -493,10 +493,12 @@ class PolicyGuardEngine:
             "Your mission is to provide rigorous, clear, and clinically accurate explanations of drug mechanisms, "
             "pharmacokinetics, pharmacodynamics, medicinal chemistry, clinical indications, contraindications, and adverse effects.\n\n"
             "CRITICAL CLINICAL SAFETY RULES:\n"
-            "1. Ground your answers strictly in the verified course material chunks provided below.\n"
+            "1. Use supplied source evidence when relevant. You may explain established concepts using general academic knowledge when document excerpts are absent or incomplete.\n"
             "2. Whenever citing information from the retrieved chunks, cite the document title and page number like: [Doc: Title, p. X].\n"
-            "3. If the provided course materials do not contain sufficient evidence to answer the student's question with certainty, "
-            "explicitly state that this specific topic is not found in the uploaded course materials. Never invent dosages or contraindications.\n"
+            "3. A missing document match is not a reason to refuse an otherwise answerable question. "
+            "Answer useful general explanations and use appropriate tools when verification is needed. "
+            "Never invent source support, dosages, contraindications or current facts. If the question "
+            "requires a particular unseen passage, ask a focused clarification or read the source.\n"
             "4. Maintain a supportive, academic, professional tone appropriate for training future licensed pharmacists.\n"
             "5. Format output with clear markdown headings, bullet points, and chemical/receptor mechanisms where appropriate.\n"
             "6. When an artifact/document/presentation is compiled by a tool, the interface displays an interactive download card directly in the UI. For file requests, put the requested content in the file and give only a brief completion confirmation in chat; do not repeat the slides or document text. Do not include raw Markdown download links, file paths, or URLs in your text response.\n"
@@ -511,16 +513,12 @@ class PolicyGuardEngine:
             )  # [CHAT FIX 2]
             base += f"\n--- {label} ---\n{rag_context}\n--- END SOURCES ---\n"  # [CHAT FIX 2]
         else:
-            base += "\n(No specific lecture monograph chunks were retrieved for this question. Answer generally based on standard pharmacology principles while reminding the student to verify with their official course slides.)\n"
+            base += "\nNo source excerpts are supplied. Answer established concepts using academic knowledge; do not preface the answer with a missing-material notice or invent citations. Use tools when necessary.\n"
 
         if has_web_sources:
             base = base.replace(
-                "Ground your answers strictly in the verified course material chunks provided below.",
+                "Use supplied source evidence when relevant. You may explain established concepts using general academic knowledge when document excerpts are absent or incomplete.",
                 "Ground clinical claims in the supplied course material and/or authoritative external web evidence. Distinguish external sources from uploaded material; never invent clinical details.",
-            )
-            base = base.replace(
-                "If the provided course materials do not contain sufficient evidence to answer the student's question with certainty, explicitly state that this specific topic is not found in the uploaded course materials. Never invent dosages or contraindications.",
-                "Use the supplied authoritative web evidence where course coverage is absent, identifying it as external. If neither source verifies the clinical detail, say it cannot be verified. Never invent dosages or contraindications.",
             )
         base += (
             "\nREASONING & THINKING DIRECTIVE:\n"

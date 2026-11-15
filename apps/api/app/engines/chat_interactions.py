@@ -11,7 +11,9 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext
 from app.core.ids import uuid7
-from app.models.chat import StreamChatRequest
+from app.engines.reader_snips import validate_study_attachments
+from app.models.chat import CitationItem, StreamChatRequest
+from app.models.reader import ReaderSnipOrigin
 
 
 def identifier(value: str) -> uuid.UUID:
@@ -66,15 +68,25 @@ class ChatTurn:
 
 
 async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserContext) -> ChatTurn:
-    if payload.edit_message_id and payload.regenerate_message_id:
-        raise HTTPException(422, "Choose either edit or regenerate.")
+    if (
+        sum(
+            bool(value)
+            for value in (
+                payload.edit_message_id,
+                payload.regenerate_message_id,
+                payload.retry_message_id,
+            )
+        )
+        > 1
+    ):
+        raise HTTPException(422, "Choose either edit, regenerate or retry.")
     run_id = str(uuid7())
     async with get_db_connection() as conn:
         if conn is None:
             raise HTTPException(503, "Conversation storage is unavailable.")
         async with conn.transaction():
             session = await conn.fetchrow(
-                """SELECT id, active_run_id,
+                """SELECT id, active_run_id, document_id,
                 active_run_started_at > now()-($3 * interval '1 second') AS busy
                 FROM public.chat_sessions WHERE id=$1 AND user_id=$2 AND deleted_at IS NULL FOR UPDATE""",
                 identifier(session_id),
@@ -95,7 +107,9 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
             if len(rows) > 5000:
                 raise HTTPException(413, "This conversation is full. Start a new chat to continue.")
             by_id = {str(row["id"]): row for row in rows}
-            target_id = payload.edit_message_id or payload.regenerate_message_id
+            target_id = (
+                payload.edit_message_id or payload.regenerate_message_id or payload.retry_message_id
+            )
             target = by_id.get(target_id or "")
             if target_id and target is None:
                 raise HTTPException(404, "Message not found in this conversation.")
@@ -103,6 +117,24 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
                 "assistant" if payload.regenerate_message_id else "user"
             ):
                 raise HTTPException(422, "That message does not support this action.")
+            if payload.retry_message_id and target:
+                metadata = target.get("image_metadata") or {}
+                if isinstance(metadata, str):
+                    metadata = json.loads(metadata)
+                if metadata.get("retry_blocked"):
+                    raise HTTPException(
+                        409,
+                        "This request already started a study tool. Check its results before starting a new request.",
+                    )
+                if any(
+                    str(row.get("parent_message_id")) == str(target["id"])
+                    and row["role"] == "assistant"
+                    for row in rows
+                ):
+                    raise HTTPException(
+                        409,
+                        "This question already has a saved answer. Reopen the conversation to view it.",
+                    )
             parent = payload.parent_message_id
             prompt = payload.message
             user_message_id = str(uuid7())
@@ -111,8 +143,8 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
                 parent = (
                     str(target["parent_message_id"]) if target.get("parent_message_id") else None
                 )
-                if payload.regenerate_message_id:
-                    original = by_id.get(parent or "")
+                if payload.regenerate_message_id or payload.retry_message_id:
+                    original = target if payload.retry_message_id else by_id.get(parent or "")
                     if not original or str(original["role"]) != "user":
                         raise HTTPException(409, "The original question is unavailable.")
                     user_message_id = str(original["id"])
@@ -152,6 +184,8 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
                 ]
                 if len(attachments) != len(attachment_ids):
                     raise HTTPException(404, "An attachment is unavailable in this conversation.")
+                if session.get("document_id"):
+                    validate_study_attachments(attachments, str(session["document_id"]))
                 if sum(len(row["extracted_text"]) for row in attachments) > 50000:
                     raise HTTPException(
                         413,
@@ -198,3 +232,40 @@ def attachment_context(attachments: list[dict[str, Any]]) -> str:
         f"Attachment ID: {row['id']} | {row['filename']}\n{row['extracted_text']}"
         for row in attachments
     )
+
+
+def attachment_citations(
+    attachments: list[dict[str, Any]], document_id: str | None
+) -> list[CitationItem]:
+    sources: list[CitationItem] = []
+    for row in attachments:
+        origin: ReaderSnipOrigin | None = None
+        if document_id and row.get("content_type") == "image/png":
+            try:
+                origin = ReaderSnipOrigin.model_validate_json(row.get("extracted_text") or "")
+            except ValueError:
+                pass
+        if origin and origin.document_id == document_id:
+            sources.append(
+                CitationItem(
+                    source_type="document",
+                    document_id=document_id,
+                    chunk_id=str(row["id"]),
+                    title="Open PDF snip",
+                    page_start=origin.page_number,
+                    page_end=origin.page_number,
+                    snippet=f"Selected area on page {origin.page_number} of the open PDF.",
+                )
+            )
+        else:
+            sources.append(
+                CitationItem(
+                    source_type="attachment",
+                    attachment_id=str(row["id"]),
+                    title=str(row["filename"]),
+                    page_start=None,
+                    page_end=None,
+                    snippet="Supporting material uploaded to this conversation.",
+                )
+            )
+    return sources

@@ -5,6 +5,8 @@ import {
   requestProfile,
   profileFailureMessage,
   visibleVerifiedProfile,
+  PROFILE_REQUEST_TIMEOUT_MS,
+  PROFILE_RECOVERY_TIMEOUT_MS,
 } from "../lib/profile-verification.ts";
 
 const identity = { userId: "00000000-0000-4000-8000-000000000001", accessToken: "synthetic-token" };
@@ -81,7 +83,8 @@ test("profile responses remain owned and errors retain their actual category", a
         [429, "unavailable", true],
         [503, "unavailable", true],
       ]) {
-        globalThis.fetch = async () => new Response("Untrusted internal response", { status });
+        globalThis.fetch = async () =>
+          new Response("Untrusted internal response", { status, headers: { "Retry-After": "0" } });
         const result = await requestProfile("https://example.invalid", identity, signal);
         assert.deepEqual(result, { status: "error", error: { code, retryable } });
         assert.doesNotMatch(JSON.stringify(result), /Untrusted/);
@@ -116,7 +119,7 @@ test("profile responses remain owned and errors retain their actual category", a
   await t.test("an actual abort deadline ends a stalled fetch", async () => {
     const timeout = AbortSignal.timeout;
     AbortSignal.timeout = (milliseconds) => {
-      assert.equal(milliseconds, 15000);
+      assert.ok([PROFILE_REQUEST_TIMEOUT_MS, PROFILE_RECOVERY_TIMEOUT_MS].includes(milliseconds));
       return timeout(5);
     };
     const keepAlive = setTimeout(() => {}, 1000);
@@ -232,8 +235,86 @@ test("an explicit post-onboarding refresh supersedes an older same-token request
 });
 
 test("service error copy does not claim an invalid account or expired session", () => {
-  for (const code of ["timeout", "unavailable", "network"]) {
+  for (const code of [
+    "timeout",
+    "unavailable",
+    "network",
+    "invalid_response",
+    "session_unavailable",
+  ]) {
     const copy = profileFailureMessage({ code, retryable: true });
+    assert.deepEqual(copy, { title: "Something went wrong", description: "" });
     assert.doesNotMatch(copy.title + copy.description, /invalid account|expired|sign out/i);
   }
+});
+
+test("profile verification retries transient reads before publishing a failure", async (t) => {
+  const original = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+  for (const failures of [1, 2, 3]) {
+    let calls = 0;
+    const snapshots = [];
+    globalThis.fetch = async (_url, options) => {
+      assert.equal(options.headers.Authorization, "Bearer synthetic-token");
+      assert.equal(options.cache, "no-store");
+      return ++calls <= failures
+        ? new Response(null, { status: 503, headers: { "Retry-After": "0" } })
+        : Response.json(profile);
+    };
+    const verifier = createProfileVerifier(
+      (identity, signal) => requestProfile("https://example.invalid", identity, signal),
+      (state) => snapshots.push(state)
+    );
+    const result = await verifier.verify(identity);
+    assert.equal(calls, Math.min(failures + 1, 3));
+    assert.deepEqual(
+      snapshots.map((item) => item.status),
+      ["checking", failures === 3 ? "error" : "ready"]
+    );
+    assert.equal(result?.id ?? null, failures === 3 ? null : identity.userId);
+  }
+});
+
+test("profile recovery never retries rejected identity or invalid owned data", async (t) => {
+  const original = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+  for (const response of [
+    new Response(null, { status: 401 }),
+    new Response(null, { status: 403 }),
+    Response.json({ ...profile, id: "00000000-0000-4000-8000-000000000002" }),
+  ]) {
+    let calls = 0;
+    globalThis.fetch = async () => {
+      calls++;
+      return response;
+    };
+    assert.equal(
+      (await requestProfile("https://example.invalid", identity, new AbortController().signal))
+        .status,
+      "error"
+    );
+    assert.equal(calls, 1);
+  }
+});
+
+test("account cancellation during profile backoff prevents another request", async (t) => {
+  const original = globalThis.fetch;
+  t.after(() => {
+    globalThis.fetch = original;
+  });
+  const controller = new AbortController();
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls++;
+    setTimeout(() => controller.abort(), 10);
+    return new Response(null, { status: 503, headers: { "Retry-After": "1" } });
+  };
+  await assert.rejects(requestProfile("https://example.invalid", identity, controller.signal), {
+    name: "AbortError",
+  });
+  assert.equal(calls, 1);
 });

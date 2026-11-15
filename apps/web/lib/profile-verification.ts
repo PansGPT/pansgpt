@@ -1,7 +1,9 @@
 import { z } from "zod";
 import type { AuthProfileResponse, UpdateProfileRequest } from "@pansgpt/types";
+import { fetchWithRecovery } from "./chat-recovery.ts";
 
 export const PROFILE_REQUEST_TIMEOUT_MS = 15_000;
+export const PROFILE_RECOVERY_TIMEOUT_MS = 47_000;
 export const authProfileSchema: z.ZodType<AuthProfileResponse> = z.object({
   id: z.string().uuid(),
   email: z.string(),
@@ -59,22 +61,12 @@ export function profileFailureMessage(error: ProfileFailure): {
 } {
   switch (error.code) {
     case "network":
-      return {
-        title: "We couldn't connect to your study service",
-        description: "Check your connection and retry.",
-      };
     case "timeout":
-      return {
-        title: "Your study service is taking too long",
-        description: "It may be starting up or temporarily unavailable. Please retry shortly.",
-      };
     case "unavailable":
-      return {
-        title: "Your study service is temporarily unavailable",
-        description: "We couldn't load your profile right now. Please retry shortly.",
-      };
-    case "session_expired":
     case "session_unavailable":
+    case "invalid_response":
+      return { title: "Something went wrong", description: "" };
+    case "session_expired":
       return {
         title: "Your session has expired",
         description: "Sign in again to continue with your materials.",
@@ -84,16 +76,8 @@ export function profileFailureMessage(error: ProfileFailure): {
         title: "Your account does not have access",
         description: "Check your sign-in details or request access from your school admin.",
       };
-    case "invalid_response":
-      return {
-        title: "We couldn't verify your profile",
-        description: "Please retry shortly or sign in again if the issue persists.",
-      };
     default:
-      return {
-        title: "We couldn't verify your profile",
-        description: "Please retry before opening your workspace.",
-      };
+      return { title: "Something went wrong", description: "" };
   }
 }
 
@@ -102,13 +86,17 @@ export async function requestProfile(
   identity: ProfileIdentity,
   signal: AbortSignal
 ): Promise<ProfileResult> {
-  const deadline = AbortSignal.timeout(PROFILE_REQUEST_TIMEOUT_MS);
+  const deadline = AbortSignal.timeout(PROFILE_RECOVERY_TIMEOUT_MS);
   try {
-    const response = await fetch(`${apiUrl}/api/v1/auth/me`, {
-      headers: { Authorization: `Bearer ${identity.accessToken}` },
-      cache: "no-store",
-      signal: AbortSignal.any([signal, deadline]),
-    });
+    const response = await fetchWithRecovery(
+      `${apiUrl}/api/v1/auth/me`,
+      {
+        headers: { Authorization: `Bearer ${identity.accessToken}` },
+        cache: "no-store",
+        signal: AbortSignal.any([signal, deadline]),
+      },
+      { timeoutMs: PROFILE_REQUEST_TIMEOUT_MS }
+    );
     if (!response.ok) {
       const code: ProfileFailureCode =
         response.status === 401
@@ -132,11 +120,12 @@ export async function requestProfile(
     return {
       status: "error",
       error: {
-        code: deadline.aborted
-          ? "timeout"
-          : error instanceof SyntaxError
-            ? "invalid_response"
-            : "network",
+        code:
+          deadline.aborted || (error instanceof DOMException && error.name === "TimeoutError")
+            ? "timeout"
+            : error instanceof SyntaxError
+              ? "invalid_response"
+              : "network",
         retryable: true,
       },
     };

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { publicProgressLines } from "./chat-message";
 import type { ChatMessageView } from "@pansgpt/types";
 import { parsePublicProgressUpdates } from "./public-progress";
+import { parseCitationGeometry } from "./citation-geometry";
 
 export const chatAttachmentSchema = z.object({
   id: z.string().uuid(),
@@ -13,13 +14,15 @@ const citationSchema = z.object({
   title: z.string(),
   chunk_id: z.string().nullable().optional(),
   document_id: z.string().nullable().optional(),
-  source_type: z.enum(["document", "web"]).optional(),
+  source_type: z.enum(["document", "web", "attachment"]).optional(),
+  attachment_id: z.string().uuid().nullable().optional(),
   url: z.string().nullable().optional(),
   course_code: z.string().nullable().optional(),
   page_start: z.number().int().positive().nullable().optional(),
   page_end: z.number().int().positive().nullable().optional(),
   snippet: z.string().optional(),
   confidence: z.string().optional(),
+  bounding_box: z.unknown().transform(parseCitationGeometry).optional(),
 });
 const historySchema = z.object({
   session: z.object({ id: z.string().uuid(), user_id: z.string().uuid() }),

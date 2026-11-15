@@ -97,6 +97,39 @@ async def test_regeneration_reuses_saved_question_instead_of_supplied_prompt(tre
     assert len(result.history) == 2
 
 
+async def test_retry_reuses_an_unanswered_owned_question_and_stored_parent(tree_store):
+    _, rows, user = tree_store
+    rows[:] = rows[:3]
+    result = await engine.prepare_turn(
+        uid(80),
+        StreamChatRequest(message="Ignored client replacement", retry_message_id=uid(3)),
+        user,
+    )
+    assert result.user_id == uid(3) and result.prompt == rows[2]["content"]
+    assert result.parent_id == uid(2) and len(result.history) == 2
+    assert not result.regenerate
+
+
+@pytest.mark.parametrize("reason", ["answered", "tool", "foreign", "wrong_role", "mixed"])
+async def test_retry_cannot_repeat_tools_answers_or_cross_session_questions(tree_store, reason):
+    conn, rows, user = tree_store
+    payload = {"retry_message_id": uid(3)}
+    if reason == "tool":
+        rows[:] = rows[:3]
+        rows[2]["image_metadata"] = {"retry_blocked": True}
+    elif reason == "foreign":
+        payload["retry_message_id"] = uid(99)
+    elif reason == "wrong_role":
+        payload["retry_message_id"] = uid(2)
+    elif reason == "mixed":
+        payload["edit_message_id"] = uid(3)
+    with pytest.raises(HTTPException):
+        await engine.prepare_turn(
+            uid(80), StreamChatRequest(message="Synthetic retry", **payload), user
+        )
+    conn.execute.assert_not_awaited()
+
+
 @pytest.mark.parametrize(
     "payload,status",
     [
@@ -139,6 +172,34 @@ async def test_attachment_ids_must_belong_to_the_owned_conversation(tree_store):
         )
     assert error.value.status_code == 404
     conn.execute.assert_not_awaited()
+
+
+@pytest.mark.parametrize("regenerate", [False, True])
+async def test_bound_chat_supporting_uploads_remain_owner_scoped_on_send_and_regeneration(
+    tree_store, regenerate
+):
+    conn, rows, user = tree_store
+    conn.fetchrow.return_value["document_id"] = uid(70)
+    rows[2]["image_metadata"] = {"attachment_ids": [uid(99)]}
+    attachment = {
+        "id": uid(99),
+        "filename": "notes.txt",
+        "content_type": "text/plain",
+        "extracted_text": "Synthetic support",
+    }
+    conn.fetch.side_effect = [rows, [attachment]]
+    payload = StreamChatRequest(
+        message="Compare my note",
+        attachment_ids=[] if regenerate else [uid(99)],
+        regenerate_message_id=uid(4) if regenerate else None,
+    )
+    result = await engine.prepare_turn(uid(80), payload, user)
+    assert result.attachments == [attachment]
+    sql, session, owner, identifiers = conn.fetch.call_args.args
+    assert "session_id=$1 AND user_id=$2" in sql
+    assert (
+        session == uuid.UUID(uid(80)) and owner == user.id and identifiers == [uuid.UUID(uid(99))]
+    )
 
 
 async def test_run_release_is_fenced_by_run_id(tree_store):

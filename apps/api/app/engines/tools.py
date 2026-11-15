@@ -156,11 +156,12 @@ class ToolExecutionEngine:
             role=role,
             expand_siblings=True,
             levels=levels,
+            allow_web_search=False,
         )
         return {
             "found_chunks": len(citations),
             "context": context
-            or "No relevant monograph chunks found matching this query in syllabus.",
+            or "No source excerpts returned by this lookup. Continue answering from established knowledge or use an appropriate evidence tool; do not claim unsupported document content.",
             "citations": [c.model_dump() for c in citations],
         }
 
@@ -288,10 +289,20 @@ class ToolExecutionEngine:
         web_search_scope: SearchScope = "biomedical",
         public_web_search: bool = False,
         current_information: bool = False,
+        document_id: str | None = None,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
         logger.info("tool_dispatch_requested", tool_name=tool_name)
         try:
+            if document_id:
+                # The server-owned reader scope wins over model-supplied tool arguments.
+                if tool_name == "web_search":
+                    return {
+                        "status": "error",
+                        "error": "This study chat uses only the open document.",
+                    }
+                if tool_name in {"rag_search", "read_document"}:
+                    arguments = {**arguments, "document_id": document_id, "course_code": None}
             if tool_name == "rag_search":
                 return await self.execute_rag_search(
                     query=arguments.get("query", ""),

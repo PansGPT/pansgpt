@@ -1,4 +1,6 @@
 "use client";
+
+import { failureFrom } from "@/lib/chat-recovery";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
@@ -85,7 +87,7 @@ export function ConversationSearch({
               key,
               results: [],
               next: null,
-              error: error instanceof Error ? error.message : "Search failed. Please retry.",
+              error: failureFrom(error, "history").message,
             });
         })
         .finally(() => {

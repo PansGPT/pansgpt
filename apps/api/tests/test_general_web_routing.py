@@ -1,6 +1,7 @@
 """General current facts use real web contracts, never unrelated course evidence."""
 
 import json
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import httpx
@@ -321,16 +322,24 @@ async def test_provider_failures_are_not_cached_as_success(
     assert not engine._result_cache
 
 
+@pytest.mark.parametrize("early_timer", [False, True])
 async def test_total_deadline_survives_a_receive_checkpoint_swallowing_cancellation(
     client: httpx.AsyncClient,
     tenant_state: TenantTestState,
     monkeypatch: pytest.MonkeyPatch,
+    early_timer: bool,
 ) -> None:
     import asyncio
 
     from starlette.requests import Request
 
     monkeypatch.setattr(settings, "CHAT_TOTAL_TIMEOUT_S", 0.02)
+    if early_timer:
+        # Keep the route's clock before its deadline while the real loop timer expires.
+        # Do not patch the global time module used by asyncio itself.
+        monkeypatch.setattr(
+            chat, "time", SimpleNamespace(monotonic=lambda: 100.0, time=chat.time.time)
+        )
 
     async def receive_checkpoint(self: Request) -> bool:
         try:

@@ -1,3 +1,4 @@
+import { fetchWithRecovery, responseFailure } from "./chat-recovery";
 import { z } from "zod";
 import type { ChatSessionMetadata, ChatSessionUpdateRequest } from "@pansgpt/types";
 import type { ChatSearchResponse, ChatTrashResponse } from "@pansgpt/types";
@@ -38,21 +39,17 @@ export async function requestSession(
   signal?: AbortSignal
 ): Promise<ChatSessionMetadata | null> {
   if (!token) throw new Error("Sign in again before changing this conversation.");
-  const response = await fetch(`${base}/${id}${change === undefined ? "/metadata" : ""}`, {
-    method: change === undefined ? "GET" : change === "delete" ? "DELETE" : "PATCH",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-    ...(typeof change === "object" ? { body: JSON.stringify(change) } : {}),
-    signal,
-  });
+  const response = await fetchWithRecovery(
+    `${base}/${id}${change === undefined ? "/metadata" : ""}`,
+    {
+      method: change === undefined ? "GET" : change === "delete" ? "DELETE" : "PATCH",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      ...(typeof change === "object" ? { body: JSON.stringify(change) } : {}),
+      signal,
+    }
+  );
   if (!response.ok) {
-    const failure = z
-      .object({ detail: z.string() })
-      .safeParse(await response.json().catch(() => null));
-    throw new Error(
-      failure.success
-        ? failure.data.detail
-        : "This conversation could not be updated. Please retry."
-    );
+    throw await responseFailure(response, "mutation");
   }
   if (change === "delete") return null;
   const saved = chatSessionSchema.parse(await response.json());
@@ -65,7 +62,7 @@ export async function listArchivedSessions(
   signal: AbortSignal
 ): Promise<ChatSessionSummary[]> {
   if (!token) throw new Error("Sign in again to view archived chats.");
-  const response = await fetch(`${base}?archived=true&limit=100`, {
+  const response = await fetchWithRecovery(`${base}?archived=true&limit=100`, {
     headers: { Authorization: `Bearer ${token}` },
     signal,
   });
@@ -100,10 +97,13 @@ export async function searchConversations(
     include_archived: String(includeArchived),
     offset: String(offset),
   });
-  const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/search?${params}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal,
-  });
+  const response = await fetchWithRecovery(
+    `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/search?${params}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      signal,
+    }
+  );
   if (!response.ok) throw new Error("Conversation search is unavailable. Please retry.");
   return searchResponseSchema.parse(await response.json());
 }
@@ -113,10 +113,13 @@ export async function listDeletedSessions(
   signal: AbortSignal
 ): Promise<ChatTrashResponse> {
   if (!token) throw new Error("Sign in again to view deleted conversations.");
-  const response = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/trash?offset=${offset}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal,
-  });
+  const response = await fetchWithRecovery(
+    `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/trash?offset=${offset}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      signal,
+    }
+  );
   if (!response.ok) throw new Error("Deleted conversations could not be loaded. Please retry.");
   return z
     .object({
@@ -131,7 +134,7 @@ export async function restoreSession(
   signal: AbortSignal
 ): Promise<ChatSessionMetadata> {
   if (!token) throw new Error("Sign in again to restore this conversation.");
-  const response = await fetch(`${base}/${encodeURIComponent(id)}/restore`, {
+  const response = await fetchWithRecovery(`${base}/${encodeURIComponent(id)}/restore`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
     signal,

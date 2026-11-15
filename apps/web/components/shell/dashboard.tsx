@@ -11,7 +11,6 @@ import {
   Clock3,
   FileText,
   RefreshCw,
-  ClipboardList,
   Check,
 } from "lucide-react";
 import { Skeleton, formatDateOnly, localTodayIso } from "@pansgpt/ui/shell";
@@ -304,8 +303,7 @@ export function StudyDashboard(): React.ReactElement {
       <nav className="dashboard-mobile-destinations" aria-label="Study tools">
         {mobileDestinations
           .filter((item) => !["/app", "/app/chat"].includes(item.href))
-          .map(({ href, label, icon }) => {
-            const Icon = href === "/app/quiz" ? ClipboardList : icon;
+          .map(({ href, label, icon: Icon }) => {
             return (
               <Link
                 href={href}
@@ -383,7 +381,7 @@ export function StudyDashboard(): React.ReactElement {
                 }
                 onClick={() => {
                   if (sampleRecent) setPreview(item.documents.title);
-                  else router.push(`/app/library?q=${encodeURIComponent(item.documents.title)}`);
+                  else router.push(`/app/library/${item.documents.id}/read`);
                 }}
               />
             ))}

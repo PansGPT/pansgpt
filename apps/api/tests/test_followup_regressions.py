@@ -6,7 +6,6 @@ from unittest.mock import AsyncMock
 import pytest
 from fastapi.testclient import TestClient
 
-from app.engines.rag import ABSENCE_NOTICE
 from app.main import app
 from app.models.library import DocumentPatchRequest
 from app.routers import library
@@ -15,11 +14,13 @@ from tests.conftest import TenantTestState
 DOC_ID = "018f3a30-0001-7000-8000-000000000001"
 
 
-def test_absence_answer_is_saved_before_done(tenant_state: TenantTestState) -> None:
-    tenant_state.retrieval.return_value = (
-        "This topic was not found in your course materials.",
-        [],
-    )
+@pytest.mark.parametrize("bound", [False, True])
+def test_missing_material_still_generates_and_saves_an_answer(
+    tenant_state: TenantTestState, bound: bool
+) -> None:
+    if bound:
+        tenant_state.sessions[uuid.UUID(DOC_ID)]["document_id"] = uuid.UUID(DOC_ID)
+    tenant_state.retrieval.return_value = (None, [])
     response = TestClient(app).post(
         f"/api/v1/ai/chat/sessions/{DOC_ID}/stream",
         json={"message": "unrelated topic"},
@@ -32,9 +33,13 @@ def test_absence_answer_is_saved_before_done(tenant_state: TenantTestState) -> N
         if "'assistant'" in call.args[0]
     ]
     assert len(inserts) == 1
-    assert inserts[0].args[4] == ABSENCE_NOTICE
+    assert inserts[0].args[4] == "Scoped test answer."
     assert inserts[0].args[5] is None
-    tenant_state.ai.assert_not_called()
+    tenant_state.ai.assert_called_once()
+    assert "This topic was not found" not in response.text
+    assert tenant_state.retrieval.call_args.kwargs["allow_web_search"] is False
+    prompt = tenant_state.ai.call_args.kwargs["system_prompt"]
+    assert "general academic knowledge" in prompt
 
 
 @pytest.mark.parametrize("alias", ["confirm-upload", "complete"])

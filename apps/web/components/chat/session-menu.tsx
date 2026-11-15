@@ -1,5 +1,7 @@
 "use client";
 
+import { failureFrom } from "@/lib/chat-recovery";
+
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
@@ -149,9 +151,7 @@ export function ChatSessionMenu({
           archived_at: chat.archived_at,
         });
       }
-      setError(
-        failure instanceof Error ? failure.message : "This change was not saved. Please retry."
-      );
+      setError(failureFrom(failure, "mutation").message);
     } finally {
       if (!controller.signal.aborted) setBusy(false);
     }
@@ -355,10 +355,7 @@ export function ArchivedChats({ onNavigate }: { onNavigate?: () => void }): Reac
         }
       })
       .catch((failure: unknown) => {
-        if (!controller.signal.aborted)
-          setError(
-            failure instanceof Error ? failure.message : "Archived chats could not be loaded."
-          );
+        if (!controller.signal.aborted) setError(failureFrom(failure, "mutation").message);
       });
     return () => controller.abort();
   }, [open, attempt, session?.access_token, owner, mode, offset]);
@@ -467,9 +464,7 @@ export function ArchivedChats({ onNavigate }: { onNavigate?: () => void }): Reac
                         })
                         .catch((failure: unknown) => {
                           if (!controller.signal.aborted)
-                            setError(
-                              failure instanceof Error ? failure.message : "Restore failed."
-                            );
+                            setError(failureFrom(failure, "mutation").message);
                         })
                         .finally(() => {
                           if (!controller.signal.aborted) setRestoring(null);

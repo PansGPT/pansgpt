@@ -3,6 +3,7 @@ export type SSEEventType =
   | "citations"
   | "thinking_chunk"
   | "public_progress"
+  | "recovery"
   | "tool_start"
   | "tool_end"
   | "artifact_ready"
@@ -40,7 +41,8 @@ export interface BoundingBoxCoordinates {
 export interface CitationItem {
   chunk_id?: string | null; // [CHAT FIX 2]
   document_id?: string | null;
-  source_type?: "document" | "web";
+  source_type?: "document" | "web" | "attachment";
+  attachment_id?: string | null;
   url?: string | null;
   title: string;
   course_code?: string | null;
@@ -71,6 +73,7 @@ export interface ArtifactItem {
 
 // [CHAT FIX 2] Keep payload types paired with their event; no identity or `any` casts.
 export interface SSEEventData {
+  recovery: { state: "retrying"; attempt: number; retry_after_ms: number };
   init: { session_id?: string; user_message_id?: string; assistant_message_id?: string };
   citations: CitationItem[];
   text_chunk: { token?: string; delta?: string };
@@ -108,6 +111,7 @@ export interface ChatStreamRequest {
   enable_tools?: boolean;
   edit_message_id?: string;
   regenerate_message_id?: string;
+  retry_message_id?: string;
   attachment_ids?: string[];
 }
 
@@ -146,6 +150,17 @@ export interface ChatMessageView {
   artifacts?: ArtifactItem[];
   status: "running" | "complete" | "cancelled" | "error";
   error?: string;
+  errorCode?: string;
+  retryable?: boolean;
+  recovery?: "retrying" | "slow";
+  failure?: ChatFailureView;
+}
+
+export interface ChatFailureView {
+  code: string;
+  message: string;
+  retryable: boolean;
+  action: "retry" | "sign_in" | "usage" | "edit" | "wait" | "review";
 }
 
 /** Owner-authorized conversation organization; mutation responses are authoritative. */

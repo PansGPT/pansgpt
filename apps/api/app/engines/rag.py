@@ -23,9 +23,6 @@ from app.models.chat import CitationItem
 from app.models.web_search import WebSearchResponse
 
 logger = structlog.get_logger(__name__)
-ABSENCE_NOTICE = (  # [CHAT FIX 2]
-    "This topic was not found in your course materials. I could not verify it from available external references."
-)  # [CHAT FIX 2]
 
 
 class RagRetrievalEngine:
@@ -147,8 +144,8 @@ class RagRetrievalEngine:
         filter_uni_uuid = uuid.UUID(university_id)  # [TENANT FIX]
         if document_id:  # [TENANT FIX]
             async with get_db_connection() as scope_conn:  # [TENANT FIX]
-                if scope_conn is None:  # [TENANT FIX]
-                    return None, []  # [TENANT FIX]
+                if scope_conn is None:
+                    raise ConnectionError("Document access storage is unavailable")
                 allowed = await scope_conn.fetchval(  # [TENANT FIX]
                     "SELECT id FROM public.documents WHERE id = $1 AND university_id = $2 "  # [TENANT FIX]
                     "AND status = 'active' AND deleted_at IS NULL;",  # [TENANT FIX]
@@ -248,7 +245,7 @@ class RagRetrievalEngine:
         async with get_db_connection() as conn:
             try:
                 if not conn:  # [CHAT FIX 2]
-                    raise ValueError("Database connection unavailable for RAG")  # [CHAT FIX 2]
+                    raise ConnectionError("Database connection unavailable for RAG")  # [CHAT FIX 2]
 
                 # 4. Try Primary: 3-Pool Hybrid Search RPC (Vector + FTS + Trigram with RRF k=60)
                 filter_doc_uuids = [uuid.UUID(document_id)] if document_id else None
@@ -261,7 +258,7 @@ class RagRetrievalEngine:
                         filter_uni_uuid,  # [TENANT FIX]
                     )
                     if not course_doc_rows:
-                        return ABSENCE_NOTICE, []
+                        return None, []
                     filter_doc_uuids = [r["id"] for r in course_doc_rows]
 
                 hybrid_sql = """
@@ -440,8 +437,8 @@ class RagRetrievalEngine:
             except (TimeoutError, asyncpg.QueryCanceledError):
                 raise
             except Exception as exc:
-                logger.warning("rag_retrieval_query_error", error=str(exc))
-                raw_matches = []
+                logger.warning("rag_retrieval_query_error", error_type=type(exc).__name__)
+                raise
 
         # 5. Neural Candidate Re-Ranking & Precision Relevance Filtering
         reranked_matches = await candidate_reranker.rerank(
@@ -495,11 +492,7 @@ class RagRetrievalEngine:
             ]  # [CHAT FIX 2]
             if web_results:
                 web_citations: list[CitationItem] = []
-                web_blocks: list[str] = [
-                    "> [!NOTE]\n"
-                    "> **Absence Policy Notice**: This topic was not found in your course materials. "  # [CHAT FIX 2]
-                    "**Outside the lecture materials**: the following real web search results are external references."  # [CHAT FIX 2]
-                ]
+                web_blocks: list[str] = ["External reference results for this question:"]
                 for w_idx, item in enumerate(web_results):
                     w_title = item.get("title", "Biomedical Literature Reference")
                     w_snippet = item.get("content", "")

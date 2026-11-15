@@ -138,7 +138,8 @@ class CitationItem(BaseModel):
 
     chunk_id: str | None = None  # [CHAT FIX 2]
     document_id: str | None = None  # [CHAT FIX 2]
-    source_type: Literal["document", "web"] = "document"  # [CHAT FIX 2]
+    source_type: Literal["document", "web", "attachment"] = "document"
+    attachment_id: str | None = None
     url: str | None = None  # [CHAT FIX 2]
     title: str = "Course Material"
     course_code: str | None = None
@@ -285,6 +286,7 @@ class StreamChatRequest(StrictRequest):
     history: list[dict[str, Any]] | None = None
     edit_message_id: str | None = None
     regenerate_message_id: str | None = None
+    retry_message_id: str | None = None
     attachment_ids: list[str] = Field(default_factory=list, max_length=4)
 
 
@@ -302,6 +304,13 @@ class ChatAttachmentResponse(BaseModel):
     name: str
     content_type: str
     size: int
+
+
+class ChatRecoveryEvent(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    state: Literal["retrying"] = "retrying"
+    attempt: int = Field(ge=1, le=3)
+    retry_after_ms: int = Field(ge=0, le=30000)
 
 
 class ToolCallPayload(BaseModel):

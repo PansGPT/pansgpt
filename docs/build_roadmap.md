@@ -180,7 +180,7 @@ PR reviewed + CI green → merged to main
 | **7**  | Auth Backend                  |    Source fixes; live gates pending     | JWKS, JWT validation, RBAC role guards, per-client API keys                                              | `GET /auth/me` returns correct user on staging; role guards reject wrong roles |
 | **8**  | Walking Skeleton Web UI       |     Testing: staging slice pending      | Thin auth + upload + chat — proves all 3 engines together                                                | Student signs up, uploads a doc, gets an AI response — on staging              |
 | **9**  | Design System + App Shell     | Library verified; app integration gated | OKLCH tokens, atomic components, 3 themes, navigation                                                    | Core screens navigable with real design                                        |
-| **10** | PDF Reader (Web)              |               ⏳ Pending                | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
+| **10** | PDF Reader (Web)              |     In progress — first study slice     | 4-layer virtualized reader, highlights, AI sidebar, snip-to-chat                                         | Student opens, reads, highlights, and Snips to Chat                            |
 | **11** | AI Chat Interface (Web)       |               ⏳ Pending                | `assistant-ui`, streaming, `<BranchPicker />`, voice, generative UI skills                               | Student chats with the AI; branch navigation works                             |
 | **12** | Learn Mode (Web)              |               ⏳ Pending                | Section outline, explanations, check questions, mastery ring                                             | Student studies a section and answers recall checks                            |
 | **13** | Quiz System (Web)             |               In Progress               | Async ARQ job, 5 formats, timed interface, results, share card                                           | Student generates and completes a quiz                                         |
@@ -1361,11 +1361,17 @@ After the library work, resume assistant-ui improvements in the user-approved or
 
 ## 📖 PHASE 10 — PDF Reader (Web)
 
+11-14 November implementation: [original reader contracts](pdf-study-workspace-2026-11-11.md), [design refinement](pdf-reader-refinements-2026-11-14.md) and [current reading flow](pdf-reader-flow-2026-11-14.md). `/app/library/{id}/read` opens the actual authorized PDF with local PDF.js assets, selectable text, viewport windowing, desktop zoom/theme controls and saved page position. Desktop has bottom controls and resizable document study chat; mobile uses a docked action bar and Home's shared chat sheet. Text actions send directly; snips stage editable drafts. Owned supporting uploads supplement the PDF; retrieval and tool execution remain bound to the open document, with source metadata retained internally. Existing tables/RLS are reused without schema changes. Full Phase 10 remains open: hosted PDF/provider verification, native devices, performance budgets, within-page offsets, notes and Learn integration are not certified by local synthetic tests.
+
+**14 November reading-flow follow-up (latest):** open an empty study chat and use History to resume saved conversations; remove visible page tags/source chips. Simplify Go to page and remove its reading controls. Lighten the mobile dock and hide header/dock during downward reading scroll using transforms, without resizing the PDF. Reader loading and failures occupy the full page. Add bounded private on-device PDF copies (50 MiB/file, 12 files/256 MiB, 30 days), revision invalidation, access checks before every reopen and logout/account cleanup; large documents retain range loading. These changes supersede the earlier Page controls, automatic chat resume and staged text-action behavior. PWA offline authorization/navigation and native storage remain separate gates. [Scope and verification](pdf-reader-flow-2026-11-14.md).
+
+**14 November user-approved refinement:** [current scope and verification](pdf-reader-refinements-2026-11-14.md). Remove highlights navigation and successful-save banners; fit 100% to the reading pane, widen/round mobile paper, and dock a shorter Snip / Page / Chat bar to the bottom/sides with top corners only, hide the mobile progress line and keep reading controls inside Page. The bar uses only Snip/Chat icons and a page counter; mobile header Help uses the legacy GIF guide. Preserve original PDF pixels in night mode. Desktop study chat has History/New icons only. Mobile reuses Home's actual bottom sheet, header and history rows, with document-scoped search. The normal composer accepts supporting PDF/PPTX/DOCX/text/images; uploaded sources are identified separately from PDF page citations. This supersedes the earlier rejection of general supporting attachments; catalog/tool scope and server-rendered snip provenance remain protected. Full Phase 10 stays open.
+
 ### 10.1 4-Layer Virtualized Page Stack
 
 ```
-Layer 4: Floating interaction popover (Explain / Define / Example / Snip to Chat / Highlight)
-Layer 3: Annotation + highlight SVG overlay (yellow / green / blue / pink)
+Layer 4: Completed-selection text actions + Snip to Chat (legacy actions restored 13 November)
+Layer 3: Citation overlays and temporary snip selection (saved-highlight UI removed 14 November)
 Layer 2: Selectable HTML textLayer (<span> bounding boxes)
 Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
 ```
@@ -1389,7 +1395,7 @@ Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
   9. **Add to Input** (Appends text to active chat input)
   10. **Add to Notes** (Saves directly to general notes)
 - [ ] Persistent highlights saved to `document_highlights` (per-user, per-page, with bounding box coordinates as percentages so they scale correctly across zoom levels)
-- [ ] Highlight colors: yellow, green, blue, pink
+- Color creation controls removed on 13 November; saved-highlight display/sidebar/footer navigation removed by user request on 14 November. Existing records are retained. Legacy Explain / Copy / More and Snip actions take priority. The text menu appears after selection completes; same-document snippets are rendered by the backend. See [reader action revision](pdf-study-workspace-2026-11-11.md#legacy-textsnip-actions-and-completed-selection-menu--13-november-2026).
 
 ### 10.3 In-Reader AI Sidebar (Resizable Draggable Divider)
 
@@ -1406,6 +1412,10 @@ Layer 1: High-DPI canvas (pdfjs-dist @ devicePixelRatio × 1.5)
 ---
 
 ## 💬 PHASE 11 — AI Chat Interface (Web)
+
+Latest 14 November user correction: remove the canned no-material terminal answer and prompts enforcing it. Empty retrieval continues to the answering model using available context/general knowledge/tools. An open PDF/course/attachment no longer bypasses semantic intent routing. Actual storage/search outages remain failures with recovery; never treat them as proof of missing material. Source ownership, private attachments and tool/web permissions remain enforced. [Decision and verification](chat-recovery-2026-11-14.md).
+
+14 November recovery follow-up: [contracts and verification](chat-recovery-2026-11-14.md). Shared normal/Home/study chat now uses simple public failure copy, bounded safe retries/backoff, offline draft protection, slow/retrying notices and manual response/file/voice recovery. Restore already saved answers without regeneration; prevent retries from replaying answered or tool-started questions. Access, credits, quotas and validation keep actionable messages. Full Phase 11 and hosted/native integration gates remain open.
 
 The user authorized a [reference-based visual refinement of the existing chat](chat-design-2026-10-21.md): centered greeting, pill composer, suggestion actions, Recent cards and New chat reset. All eight jobs and ten disposable auth/shell browser checks passed at `d6310f3` in [run 39686957184](https://github.com/PansGPT/pansgpt/actions/runs/39686957184). Reviewed desktop/mobile screenshots are linked in the record. This does not complete the full Phase 11 feature set below.
 

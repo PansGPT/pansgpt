@@ -10,15 +10,11 @@ import {
   ChevronRight,
   Ellipsis,
   Folder,
-  History,
   Image as ImageIcon,
   Library as LibraryIcon,
-  Search,
   Mic,
   Plus,
-  SquarePen,
 } from "lucide-react";
-import { DialogPrimitive } from "@pansgpt/ui/shell";
 import type { ChatActionMode, LibraryDocument } from "@pansgpt/types";
 import { ChatContent, ChatHistory } from "@/components/chat/surface";
 import { ChatLibraryPicker } from "@/components/chat/library-picker";
@@ -26,7 +22,8 @@ import { moreChatActions, primaryChatActions } from "@/components/chat/tools";
 import { PresentationWorkspace } from "@/components/artifacts/PresentationWorkspace";
 import { MobileSheetHistory } from "./mobile-sheet-history";
 import { useChatDraft } from "./chat-draft";
-import { useSheetSwipe } from "./use-sheet-swipe";
+import { MobileChatSheet } from "./mobile-chat-sheet";
+import { MobileChatHeader } from "./mobile-chat-header";
 import "./mobile-home-chat.css";
 
 /** The modal stays mounted across conversation changes; only its runtime changes. */
@@ -54,10 +51,8 @@ export function MobileHomeChat(): React.ReactElement {
   const actionMenuRef = useRef<HTMLDivElement>(null);
   const actionMenuCloseTimer = useRef<number | null>(null);
   const sheet = useRef<HTMLDivElement>(null);
-  const [touchSurface, setTouchSurface] = useState<HTMLDivElement | null>(null);
   const bindSheet = useCallback((node: HTMLDivElement | null) => {
     sheet.current = node;
-    setTouchSurface(node);
   }, []);
   const dismiss = useCallback(() => {
     setOpen(false);
@@ -178,7 +173,6 @@ export function MobileHomeChat(): React.ReactElement {
     },
     []
   );
-  useSheetSwipe(touchSurface, historyOpen, setHistoryOpen, dismiss);
   function openChat(): void {
     setHistoryOpen(false);
     setStarted(true);
@@ -333,17 +327,6 @@ export function MobileHomeChat(): React.ReactElement {
   }, [selectedId, router]);
   useEffect(() => {
     if (!open) return;
-    const viewport = window.visualViewport;
-    const update = () => {
-      sheet.current?.style.setProperty(
-        "--chat-viewport-height",
-        `${viewport?.height ?? window.innerHeight}px`
-      );
-      sheet.current?.style.setProperty("--chat-viewport-top", `${viewport?.offsetTop ?? 0}px`);
-    };
-    update();
-    viewport?.addEventListener("resize", update);
-    viewport?.addEventListener("scroll", update);
     const desktop = window.matchMedia("(min-width: 861px)");
     const closeOnDesktop = () => {
       if (desktop.matches) {
@@ -362,8 +345,6 @@ export function MobileHomeChat(): React.ReactElement {
     }
     desktop.addEventListener("change", closeOnDesktop);
     return () => {
-      viewport?.removeEventListener("resize", update);
-      viewport?.removeEventListener("scroll", update);
       desktop.removeEventListener("change", closeOnDesktop);
     };
   }, [open, router]);
@@ -600,7 +581,7 @@ export function MobileHomeChat(): React.ReactElement {
         type="file"
         hidden
         multiple
-        accept="application/pdf,text/plain,text/markdown,text/csv,image/png,image/jpeg"
+        accept=".pdf,.pptx,.docx,.txt,.md,.csv,image/png,image/jpeg"
         onChange={(event) => queueSelectedFiles(event.currentTarget)}
       />
       <input
@@ -634,122 +615,68 @@ export function MobileHomeChat(): React.ReactElement {
           fileInput.current?.click();
         }}
       />
-      <DialogPrimitive.Root
+      <MobileChatSheet
         open={open}
         onOpenChange={(next) => {
           if (!next) dismiss();
           else setOpen(true);
         }}
+        historyOpen={historyOpen}
+        onHistoryChange={setHistoryOpen}
+        contentRef={bindSheet}
+        returnFocus={trigger}
+        title="PansGPT chat"
+        description="Ask a question or attach study material. Closing stops your response and keeps your draft while you stay on Home."
       >
-        <DialogPrimitive.Portal>
-          <DialogPrimitive.Overlay className="mobile-home-chat-overlay" />
-          <DialogPrimitive.Content
-            ref={bindSheet}
-            className="mobile-home-chat-sheet"
-            onInteractOutside={(event) => {
-              const original = event.detail.originalEvent;
-              if (original && "type" in original && original.type === "focusin") {
-                event.preventDefault();
-                return;
-              }
-              const target = original?.target;
-              if (target instanceof Element && target.closest("[data-chat-overlay]"))
-                event.preventDefault();
-            }}
-            onEscapeKeyDown={(event) => {
-              if (document.querySelector('[data-chat-overlay][data-state="open"]'))
-                event.preventDefault();
-            }}
-            onOpenAutoFocus={(event) => {
-              event.preventDefault();
-              sheet.current?.focus({ preventScroll: true });
-            }}
-            onCloseAutoFocus={(event) => {
-              event.preventDefault();
-              trigger.current?.focus({ preventScroll: true });
-            }}
-          >
-            <DialogPrimitive.Title className="p-sr-only">PansGPT chat</DialogPrimitive.Title>
-            <DialogPrimitive.Description className="p-sr-only">
-              Ask a question or attach study material. Closing stops your response and keeps your
-              draft while you stay on Home.
-            </DialogPrimitive.Description>
-            <DialogPrimitive.Close className="mobile-home-chat-handle" aria-label="Close chat">
-              <span />
-            </DialogPrimitive.Close>
-            <header className="mobile-home-chat-header">
-              <button
-                className="shell-icon-button mobile-home-chat-history-toggle"
-                aria-label={historyOpen ? "Back to conversation" : "Show chat history"}
-                aria-expanded={historyOpen}
-                aria-controls="home-sheet-history"
-                onClick={() => setHistoryOpen((value) => !value)}
-              >
-                {historyOpen ? (
-                  <ChevronRight size={25} aria-hidden="true" />
-                ) : (
-                  <History size={25} aria-hidden="true" />
-                )}
-              </button>
-              {historyOpen ? (
-                <button
-                  className="shell-icon-button mobile-home-chat-history-toggle"
-                  aria-label="Search conversations"
-                  onClick={() => {
-                    flushSync(() => setHistorySearch(true));
-                    historyInput.current?.focus();
-                  }}
-                >
-                  <Search size={24} aria-hidden="true" />
-                </button>
-              ) : selectedId || pendingFiles ? (
-                <div className="mobile-home-chat-actions">
-                  <button className="shell-icon-button" aria-label="New chat" onClick={newChat}>
-                    <SquarePen size={25} aria-hidden="true" />
-                  </button>
-                  <div ref={setMenuTarget} />
-                </div>
-              ) : null}
-            </header>
-            <div className="mobile-home-chat-views" data-history={historyOpen}>
-              <div className="mobile-home-chat-track">
-                <section
-                  id="home-sheet-history"
-                  className="mobile-home-chat-history"
-                  aria-label="Chat history"
-                  inert={!historyOpen}
-                >
-                  <MobileSheetHistory
-                    active={open && historyOpen}
-                    searchVisible={historySearch}
-                    inputRef={historyInput}
-                    onChoose={(id) => {
-                      setPendingFiles(null);
-                      setPendingLibraryDocument(null);
-                      setSelectedId(id);
-                      setRuntimeSessionId(id);
-                      setHistoryOpen(false);
-                      if (typeof window !== "undefined") {
-                        const params = new URLSearchParams(window.location.search);
-                        params.set("session", id);
-                        params.delete("chat");
-                        const nextQuery = params.toString();
-                        const nextUrl = nextQuery
-                          ? `${window.location.pathname}?${nextQuery}`
-                          : window.location.pathname;
-                        window.history.replaceState(null, "", nextUrl);
-                        router.replace(nextUrl, { scroll: false });
-                      }
-                      sheet.current?.focus({ preventScroll: true });
-                    }}
-                  />
-                </section>
-                <div ref={setChatTarget} className="mobile-home-chat-pane" inert={historyOpen} />
-              </div>
-            </div>
-          </DialogPrimitive.Content>
-        </DialogPrimitive.Portal>
-      </DialogPrimitive.Root>
+        <MobileChatHeader
+          historyOpen={historyOpen}
+          onToggleHistory={() => setHistoryOpen((value) => !value)}
+          onSearch={() => {
+            flushSync(() => setHistorySearch(true));
+            historyInput.current?.focus();
+          }}
+          onNew={newChat}
+          historyId="home-sheet-history"
+          showNew={!!(selectedId || pendingFiles)}
+          controls={<div ref={setMenuTarget} />}
+        />
+        <div className="mobile-home-chat-views" data-history={historyOpen}>
+          <div className="mobile-home-chat-track">
+            <section
+              id="home-sheet-history"
+              className="mobile-home-chat-history"
+              aria-label="Chat history"
+              inert={!historyOpen}
+            >
+              <MobileSheetHistory
+                active={open && historyOpen}
+                searchVisible={historySearch}
+                inputRef={historyInput}
+                onChoose={(id) => {
+                  setPendingFiles(null);
+                  setPendingLibraryDocument(null);
+                  setSelectedId(id);
+                  setRuntimeSessionId(id);
+                  setHistoryOpen(false);
+                  if (typeof window !== "undefined") {
+                    const params = new URLSearchParams(window.location.search);
+                    params.set("session", id);
+                    params.delete("chat");
+                    const nextQuery = params.toString();
+                    const nextUrl = nextQuery
+                      ? `${window.location.pathname}?${nextQuery}`
+                      : window.location.pathname;
+                    window.history.replaceState(null, "", nextUrl);
+                    router.replace(nextUrl, { scroll: false });
+                  }
+                  sheet.current?.focus({ preventScroll: true });
+                }}
+              />
+            </section>
+            <div ref={setChatTarget} className="mobile-home-chat-pane" inert={historyOpen} />
+          </div>
+        </div>
+      </MobileChatSheet>
       {started && (
         <PresentationWorkspace key={`${revision}:${runtimeSessionId || "new"}`} active={open}>
           {runtimeSessionId ? (

@@ -4,6 +4,7 @@
 
 import type { CitationItem, SSEParsedEvent } from "@pansgpt/types";
 import { parsePublicProgress } from "./public-progress.ts";
+import { parseCitationGeometry } from "./citation-geometry.ts";
 export type {
   SSEEventType,
   BoundingBoxCoordinates,
@@ -48,6 +49,14 @@ function isCitation(value: unknown): value is CitationItem {
       externalSourceUrl({ title: value.title, source_type: "web", url: value.url }) !== undefined
     );
   }
+  if (value.source_type === "attachment") {
+    return (
+      typeof value.attachment_id === "string" &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value.attachment_id) &&
+      value.document_id == null &&
+      value.url == null
+    );
+  }
   return (
     (value.source_type === undefined || value.source_type === "document") &&
     typeof value.document_id === "string" &&
@@ -57,10 +66,39 @@ function isCitation(value: unknown): value is CitationItem {
 
 function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
   if (event === "citations") {
-    return Array.isArray(value) ? { event, data: value.filter(isCitation) } : undefined;
+    return Array.isArray(value)
+      ? {
+          event,
+          data: value.filter(isCitation).map((citation) => ({
+            ...citation,
+            ...(citation.bounding_box === undefined
+              ? {}
+              : { bounding_box: parseCitationGeometry(citation.bounding_box) }),
+          })),
+        }
+      : undefined;
   }
   if (!isRecord(value)) return undefined;
   switch (event) {
+    case "recovery":
+      return value.state === "retrying" &&
+        typeof value.attempt === "number" &&
+        Number.isInteger(value.attempt) &&
+        value.attempt >= 1 &&
+        value.attempt <= 3 &&
+        typeof value.retry_after_ms === "number" &&
+        Number.isFinite(value.retry_after_ms) &&
+        value.retry_after_ms >= 0 &&
+        value.retry_after_ms <= 30000
+        ? {
+            event,
+            data: {
+              state: "retrying",
+              attempt: value.attempt,
+              retry_after_ms: value.retry_after_ms,
+            },
+          }
+        : undefined;
     case "public_progress": {
       const update = parsePublicProgress(value);
       return update ? { event, data: update } : undefined;

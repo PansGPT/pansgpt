@@ -1,3 +1,9 @@
+import {
+  fetchWithRecovery,
+  responseFailure,
+  ChatFailure,
+  publicFailure,
+} from "@/lib/chat-recovery";
 import { z } from "zod";
 import type { ArtifactItem, PresentationPreviewResponse } from "@pansgpt/types";
 import { artifactDownload } from "./artifact-download";
@@ -59,27 +65,18 @@ export async function loadPresentationPreview(
   token: string | undefined,
   signal: AbortSignal
 ): Promise<PresentationPreviewResponse> {
-  if (!token) throw new Error("Please sign in again to preview this presentation.");
+  if (!token) throw new ChatFailure(publicFailure("401"));
   const { url: download, filename } = artifactDownload(artifact, apiBase);
   if (!filename.endsWith(".pptx")) throw new Error("Choose a PowerPoint presentation.");
   const url = new URL(download);
   url.pathname = "/api/v1/library/artifacts/presentation";
   url.searchParams.delete("filename");
-  const response = await fetch(url, {
+  const response = await fetchWithRecovery(url, {
     headers: { Authorization: `Bearer ${token}` },
     signal,
     cache: "no-store",
   });
-  if (!response.ok)
-    throw new Error(
-      response.status === 401 || response.status === 403
-        ? "Please sign in again to preview this presentation."
-        : response.status === 404
-          ? "This presentation is no longer available."
-          : response.status === 422
-            ? "This file cannot be previewed. Download it to view the presentation."
-            : "The preview is unavailable. Please retry, or download the file."
-    );
+  if (!response.ok) throw await responseFailure(response, "preview");
   const parsed = presentationPreviewSchema.safeParse(await response.json());
   if (!parsed.success)
     throw new Error("The presentation preview could not be read. You can still download the file.");

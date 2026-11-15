@@ -5,6 +5,7 @@ import { env } from "@/env";
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { desktopAuth } from "./desktop-auth";
 import { clearThumbnailCaches } from "./document-thumbnail-cache";
+import { clearPdfCopies } from "./reader-pdf-cache";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
 import type { AuthProfileResponse, UpdateProfileRequest } from "@pansgpt/types";
@@ -155,9 +156,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const active = session?.user.id;
     if (!active) {
       void clearThumbnailCaches();
+      void clearPdfCopies();
       return;
     }
     void clearThumbnailCaches(
+      profile?.id === session?.user.id && profile?.university_id
+        ? { userId: profile.id, universityId: profile.university_id }
+        : undefined
+    );
+    void clearPdfCopies(
       profile?.id === session?.user.id && profile?.university_id
         ? { userId: profile.id, universityId: profile.university_id }
         : undefined
@@ -166,6 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     await clearThumbnailCaches();
+    await clearPdfCopies();
     try {
       await desktopAuth()?.signOut();
     } finally {

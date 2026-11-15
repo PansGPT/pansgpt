@@ -1,10 +1,13 @@
 import { defineConfig } from "../../../../../packages/ui/node_modules/vite/dist/node/index.js";
 import react from "../../../../../packages/ui/node_modules/@vitejs/plugin-react/dist/index.js";
 import { fileURLToPath } from "node:url";
+import { syncPdfAssets } from "../../../../../tooling/sync-pdf-assets.mjs";
+await syncPdfAssets();
 const repo = fileURLToPath(new URL("../../../../../", import.meta.url)).replaceAll("\\", "/");
 const fixture = fileURLToPath(new URL("./fixtures.jsx", import.meta.url));
 export default defineConfig({
   root: fileURLToPath(new URL("./", import.meta.url)),
+  publicDir: fileURLToPath(new URL("../../../public", import.meta.url)),
   plugins: [react()],
   resolve: {
     dedupe: ["react", "react-dom"],

@@ -15,9 +15,10 @@ from PIL import Image, PngImagePlugin
 
 from app.core.config import settings
 from app.engines import chat_images as images
-from app.engines import vision
+from app.engines import reader_snips, vision
 from app.engines.chat_interactions import ChatTurn
 from app.engines.tools import tool_engine
+from app.models.reader import ReaderSnipOrigin
 from app.routers import chat
 from app.routers import chat_interactions as routes
 from tests.conftest import TenantTestState
@@ -198,6 +199,49 @@ async def test_question_aware_image_context_is_used_at_send_without_forced_rag(
     tenant_state.retrieval.assert_not_awaited()
     assert "Sample B" in tenant_state.ai.call_args.kwargs["system_prompt"]
     assert tenant_state.ai.call_args.kwargs["session_id"] == session
+
+
+async def test_bound_study_chat_analyses_owned_snip_without_losing_document_scope(
+    client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    session, row = image_record(tenant_state)
+    document = str(next(iter(tenant_state.documents)))
+    tenant_state.sessions[uuid.UUID(session)]["document_id"] = uuid.UUID(document)
+    row["extracted_text"] = ReaderSnipOrigin(
+        document_id=document,
+        page_number=1,
+        rect={"x": 0.1, "y": 0.1, "width": 0.5, "height": 0.3},
+        source="reader_snip_v1",
+    ).model_dump_json()
+    conn = MagicMock(fetch=AsyncMock(return_value=[row]))
+
+    @asynccontextmanager
+    async def database() -> AsyncIterator[MagicMock]:
+        yield conn
+
+    monkeypatch.setattr(reader_snips, "get_db_connection", database)
+    turn = ChatTurn(
+        str(uuid.uuid4()),
+        str(uuid.uuid4()),
+        str(uuid.uuid4()),
+        None,
+        "Explain the snipped diagram",
+        [],
+        [row],
+        False,
+    )
+    monkeypatch.setattr(chat, "prepare_turn", AsyncMock(return_value=turn))
+    monkeypatch.setattr(chat, "release_turn", AsyncMock())
+    inference = AsyncMock(return_value="The source image shows the synthetic Sample B label.")
+    monkeypatch.setattr(chat, "analyze_image", inference)
+    response = await client.post(
+        f"/api/v1/ai/chat/sessions/{session}/stream",
+        json={"message": turn.prompt, "attachment_ids": [row["id"]]},
+    )
+    assert response.status_code == 200 and "analysing_image" in response.text
+    inference.assert_awaited_once()
+    assert tenant_state.ai.call_args.kwargs["document_id"] == document
+    assert "Sample B" in tenant_state.ai.call_args.kwargs["system_prompt"]
 
 
 async def test_failed_vision_does_not_continue_without_image(

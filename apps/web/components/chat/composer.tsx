@@ -1,4 +1,6 @@
 "use client";
+
+import { ChatComposerNotices } from "./connection-notice";
 import {
   createContext,
   useCallback,
@@ -39,7 +41,7 @@ import {
 } from "lucide-react";
 import type { ChatActionMode, ChatMessageView, LibraryDocument } from "@pansgpt/types";
 import { Tooltip } from "@pansgpt/ui/shell";
-import { ChatAttachment } from "./attachment";
+import { AttachmentNoticeTargetContext, ChatAttachment } from "./attachment";
 import { UserMessageEditing } from "./message";
 import { chatActionTools, moreChatActions, primaryChatActions } from "./tools";
 import { ChatLibraryPicker } from "./library-picker";
@@ -80,6 +82,10 @@ export function ChatComposer({
   onActionModeChange = ignoreActionModeChange,
   libraryDocument = null,
   onLibraryDocumentSelect,
+  documentBound = false,
+  inputLabel,
+  notice,
+  noticeActions,
 }: {
   initialDraft?: string;
   editing?: boolean;
@@ -87,6 +93,10 @@ export function ChatComposer({
   onActionModeChange?: (actionMode: ChatActionMode | null) => void;
   libraryDocument?: LibraryDocument | null;
   onLibraryDocumentSelect?: (document: LibraryDocument | null) => void;
+  documentBound?: boolean;
+  inputLabel?: string;
+  notice?: string | null;
+  noticeActions?: ReactNode;
 }): React.ReactElement {
   const composerSlot = useContext(ChatComposerSlotContext);
   const aui = useAui();
@@ -104,6 +114,8 @@ export function ChatComposer({
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [libraryRevision, setLibraryRevision] = useState(0);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const [attachmentNoticeTarget, setAttachmentNoticeTarget] = useState<HTMLDivElement | null>(null);
+  const pendingFiles = useRef(0);
   useEffect(() => {
     if (!editing && initialDraft !== undefined) aui.composer().setText(initialDraft);
   }, [aui, editing, initialDraft]);
@@ -208,51 +220,48 @@ export function ChatComposer({
         ?.focus()
     );
   }
-  function addImageFiles(event: React.ChangeEvent<HTMLInputElement>): void {
-    const files = Array.from(event.currentTarget.files ?? []);
-    event.currentTarget.value = "";
+  function addFiles(files: File[], imagesOnly = false): void {
     if (!files.length) return;
     setAttachmentError(null);
     void (async () => {
-      const attachedCount = aui.composer().getState().attachments.length;
+      const attachedCount = aui.composer().getState().attachments.length + pendingFiles.current;
       if (attachedCount + files.length > 4) {
         setAttachmentError("Attach up to four files at a time.");
         return;
       }
-      for (const file of files) {
-        if (!["image/png", "image/jpeg"].includes(file.type) || file.size > 10 * 1024 * 1024) {
-          setAttachmentError("Choose a PNG or JPEG image up to 10 MB.");
-          return;
-        }
-        try {
+      if (
+        imagesOnly &&
+        files.some(
+          (file) => !["image/png", "image/jpeg"].includes(file.type) || file.size > 10 * 1024 * 1024
+        )
+      ) {
+        setAttachmentError("Choose a PNG or JPEG image up to 10 MB.");
+        return;
+      }
+      pendingFiles.current += files.length;
+      let remaining = files.length;
+      try {
+        for (const file of files) {
           await aui.composer().addAttachment(file);
-        } catch {
-          setAttachmentError("We couldn't attach that image. Choose a PNG or JPEG up to 10 MB.");
-          return;
+          pendingFiles.current--;
+          remaining--;
         }
+      } catch {
+        setAttachmentError("We couldn't attach that file. Choose a supported file up to 10 MB.");
+      } finally {
+        pendingFiles.current -= remaining;
       }
     })();
+  }
+  function addImageFiles(event: React.ChangeEvent<HTMLInputElement>): void {
+    const files = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = "";
+    addFiles(files, true);
   }
   function addComputerFiles(event: React.ChangeEvent<HTMLInputElement>): void {
     const files = Array.from(event.currentTarget.files ?? []);
     event.currentTarget.value = "";
-    if (!files.length) return;
-    setAttachmentError(null);
-    void (async () => {
-      const attachedCount = aui.composer().getState().attachments.length;
-      if (attachedCount + files.length > 4) {
-        setAttachmentError("Attach up to four files at a time.");
-        return;
-      }
-      for (const file of files) {
-        try {
-          await aui.composer().addAttachment(file);
-        } catch {
-          setAttachmentError("We couldn't attach that file. Choose a supported file up to 10 MB.");
-          return;
-        }
-      }
-    })();
+    addFiles(files);
   }
   const actionMenu = (
     <>
@@ -281,87 +290,99 @@ export function ChatComposer({
         <div className="study-chat-action-handle" aria-hidden="true">
           <span />
         </div>
-        <div
-          className="study-chat-action-sources study-chat-action-sources-standard"
-          aria-label="Add study material"
-        >
-          <ComposerPrimitive.AddAttachment
-            type="button"
-            className="study-chat-action-item"
-            aria-label="Upload a file"
-            disabled={busy}
-            onClick={() => closeMenu()}
-          >
-            <Upload size={18} aria-hidden="true" />
-            <strong>Upload a file</strong>
-          </ComposerPrimitive.AddAttachment>
-          <button
-            type="button"
-            className="study-chat-action-item"
-            disabled={busy}
-            onClick={() => {
-              closeMenu();
-              setLibraryRevision((value) => value + 1);
-              setLibraryOpen(true);
-            }}
-          >
-            <LibraryIcon size={18} aria-hidden="true" />
-            <strong>Upload from library</strong>
-          </button>
-        </div>
-        <div
-          className="study-chat-action-sources study-chat-action-source-tiles"
-          aria-label="Choose a file source"
-        >
-          <button
-            type="button"
-            className="study-chat-action-source-tile"
-            disabled={busy}
-            onClick={() => {
-              closeMenu();
-              photoInputRef.current?.click();
-            }}
-          >
-            <ImageIcon size={25} aria-hidden="true" />
-            <strong>Photos</strong>
-          </button>
-          <button
-            type="button"
-            className="study-chat-action-source-tile"
-            disabled={busy}
-            onClick={() => {
-              closeMenu();
-              cameraInputRef.current?.click();
-            }}
-          >
-            <Camera size={25} aria-hidden="true" />
-            <strong>Camera</strong>
-          </button>
-          <ComposerPrimitive.AddAttachment
-            type="button"
-            className="study-chat-action-source-tile"
-            disabled={busy}
-            onClick={() => closeMenu()}
-          >
-            <Folder size={25} aria-hidden="true" />
-            <strong>Files</strong>
-          </ComposerPrimitive.AddAttachment>
-        </div>
-        {!moreActionsOpen && (
-          <button
-            type="button"
-            className="study-chat-action-item study-chat-action-mobile-library"
-            disabled={busy}
-            onClick={() => {
-              closeMenu();
-              setLibraryRevision((value) => value + 1);
-              setLibraryOpen(true);
-            }}
-          >
-            <LibraryIcon size={18} aria-hidden="true" />
-            <strong>Upload from library</strong>
-          </button>
-        )}
+        {
+          <>
+            <div
+              className="study-chat-action-sources study-chat-action-sources-standard"
+              aria-label="Add study material"
+            >
+              <button
+                type="button"
+                className="study-chat-action-item"
+                aria-label="Upload a file"
+                disabled={busy}
+                onClick={() => {
+                  closeMenu();
+                  computerFileInputRef.current?.click();
+                }}
+              >
+                <Upload size={18} aria-hidden="true" />
+                <strong>Upload a file</strong>
+              </button>
+              {!documentBound && (
+                <button
+                  type="button"
+                  className="study-chat-action-item"
+                  disabled={busy}
+                  onClick={() => {
+                    closeMenu();
+                    setLibraryRevision((value) => value + 1);
+                    setLibraryOpen(true);
+                  }}
+                >
+                  <LibraryIcon size={18} aria-hidden="true" />
+                  <strong>Upload from library</strong>
+                </button>
+              )}
+            </div>
+            <div
+              className="study-chat-action-sources study-chat-action-source-tiles"
+              aria-label="Choose a file source"
+            >
+              <button
+                type="button"
+                className="study-chat-action-source-tile"
+                disabled={busy}
+                onClick={() => {
+                  closeMenu();
+                  photoInputRef.current?.click();
+                }}
+              >
+                <ImageIcon size={25} aria-hidden="true" />
+                <strong>Photos</strong>
+              </button>
+              <button
+                type="button"
+                className="study-chat-action-source-tile"
+                disabled={busy}
+                onClick={() => {
+                  closeMenu();
+                  cameraInputRef.current?.click();
+                }}
+              >
+                <Camera size={25} aria-hidden="true" />
+                <strong>Camera</strong>
+              </button>
+              <button
+                type="button"
+                className="study-chat-action-source-tile"
+                disabled={busy}
+                onClick={() => {
+                  closeMenu();
+                  computerFileInputRef.current?.click();
+                }}
+              >
+                <Folder size={25} aria-hidden="true" />
+                <strong>Files</strong>
+              </button>
+            </div>
+            {!documentBound && !moreActionsOpen && (
+              <button
+                type="button"
+                className="study-chat-action-item study-chat-action-mobile-library"
+                disabled={busy}
+                onClick={() => {
+                  closeMenu();
+                  setLibraryRevision((value) => value + 1);
+                  setLibraryOpen(true);
+                }}
+              >
+                <LibraryIcon size={18} aria-hidden="true" />
+                <strong>Upload from library</strong>
+              </button>
+            )}
+          </>
+        }
         <div className="study-chat-action-divider" role="separator" />
         <div
           id="study-chat-more-actions"
@@ -449,6 +470,14 @@ export function ChatComposer({
       data-variant="adaptive"
       data-editing={editing ? "true" : undefined}
       compact={!editing && !selectedAction && !libraryDocument}
+      onDragOver={(event) => {
+        if (event.dataTransfer.types.includes("Files")) event.preventDefault();
+      }}
+      onDrop={(event) => {
+        if (!event.dataTransfer.files.length) return;
+        event.preventDefault();
+        if (!busy) addFiles(Array.from(event.dataTransfer.files));
+      }}
       onSubmit={(event) => {
         if (empty || busy || dictating) event.preventDefault();
       }}
@@ -506,27 +535,33 @@ export function ChatComposer({
       <ComposerPrimitive.Input
         className={`p-study-composer-input ${isVoiceActive ? "is-voice-hidden" : ""}`}
         style={isVoiceActive ? { display: "none" } : undefined}
-        aria-label={editing ? "Edit question" : "Study question"}
+        aria-label={editing ? "Edit question" : inputLabel || "Study question"}
         placeholder={selectedAction?.placeholder || "Message PansGPT…"}
         rows={1}
         maxLength={10000}
         autoFocus={editing}
-        addAttachmentOnPaste={!busy}
+        addAttachmentOnPaste={false}
+        onPaste={(event) => {
+          if (!event.clipboardData.files.length) return;
+          event.preventDefault();
+          if (!busy) addFiles(Array.from(event.clipboardData.files));
+        }}
       />
       <div
         className={`p-study-composer-toolbar ${isVoiceActive ? "is-voice-hidden" : ""}`}
         style={isVoiceActive ? { display: "none" } : undefined}
       >
         {editing ? (
-          <ComposerPrimitive.AddAttachment
+          <button
             type="button"
             className="p-study-composer-control"
             aria-label="Attach study material"
             disabled={busy}
             title="Attach PDF, text, PNG or JPEG (up to 4 files, 10 MB each)"
+            onClick={() => computerFileInputRef.current?.click()}
           >
             <Plus size={25} aria-hidden="true" />
-          </ComposerPrimitive.AddAttachment>
+          </button>
         ) : (
           <button
             ref={triggerRef}
@@ -653,11 +688,6 @@ export function ChatComposer({
         </div>
       )}
       {!editing && actionMenu}
-      {attachmentError && (
-        <p className="study-chat-attachment-error" role="alert">
-          {attachmentError}
-        </p>
-      )}
       {!editing && (
         <>
           <input
@@ -682,40 +712,65 @@ export function ChatComposer({
           />
         </>
       )}
+      <input
+        ref={computerFileInputRef}
+        type="file"
+        multiple
+        hidden
+        accept=".pdf,.docx,.txt,.md,.csv,.pptx,image/png,image/jpeg"
+        onChange={addComputerFiles}
+      />
     </ComposerPrimitive.Root>
   );
-  if (editing) return composer;
+  const notices = (
+    <>
+      <ChatComposerNotices
+        error={notice}
+        attachmentError={attachmentError}
+        actions={noticeActions}
+      />
+      <div className="study-chat-composer-notices" ref={setAttachmentNoticeTarget} />
+    </>
+  );
+  if (editing)
+    return (
+      <AttachmentNoticeTargetContext.Provider value={attachmentNoticeTarget}>
+        <div className="study-chat-composer-host">
+          {notices}
+          {composer}
+        </div>
+      </AttachmentNoticeTargetContext.Provider>
+    );
 
   return (
-    <div ref={hostRef} className="study-chat-composer-host">
-      {!composerSlot?.mobileEditing && composer}
-      {!composerSlot?.mobileEditing && (
-        <>
-          <ChatLibraryPicker
-            open={libraryOpen}
-            revision={libraryRevision}
-            onOpenChange={setLibraryOpen}
-            onSelect={(document) => {
-              onLibraryDocumentSelect?.(document);
-              setLibraryOpen(false);
-            }}
-            onUploadFromComputer={() => {
-              setLibraryOpen(false);
-              computerFileInputRef.current?.click();
-            }}
-          />
-          <input
-            ref={computerFileInputRef}
-            type="file"
-            multiple
-            hidden
-            accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,image/png,image/jpeg"
-            onChange={addComputerFiles}
-          />
-        </>
-      )}
-      <div ref={composerSlot?.setTarget} className="study-chat-edit-portal-target" />
-    </div>
+    <AttachmentNoticeTargetContext.Provider value={attachmentNoticeTarget}>
+      <div ref={hostRef} className="study-chat-composer-host">
+        {!composerSlot?.mobileEditing && (
+          <>
+            {notices}
+            {composer}
+          </>
+        )}
+        {!composerSlot?.mobileEditing && (
+          <>
+            <ChatLibraryPicker
+              open={libraryOpen}
+              revision={libraryRevision}
+              onOpenChange={setLibraryOpen}
+              onSelect={(document) => {
+                onLibraryDocumentSelect?.(document);
+                setLibraryOpen(false);
+              }}
+              onUploadFromComputer={() => {
+                setLibraryOpen(false);
+                computerFileInputRef.current?.click();
+              }}
+            />
+          </>
+        )}
+        <div ref={composerSlot?.setTarget} className="study-chat-edit-portal-target" />
+      </div>
+    </AttachmentNoticeTargetContext.Provider>
   );
 }
 

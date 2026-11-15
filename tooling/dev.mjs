@@ -180,6 +180,10 @@ export function supervise(
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   try {
     const services = servicesFor(process.argv[2] || "all");
+    if (services.some((service) => service.name === "web")) {
+      const { syncPdfAssets } = await import("./sync-pdf-assets.mjs");
+      await syncPdfAssets();
+    }
     await preflight(services);
     console.log(
       "[dev] Frontend http://localhost:3000 | API http://127.0.0.1:8000 | quiz worker included in full startup. Ctrl+C stops this session."

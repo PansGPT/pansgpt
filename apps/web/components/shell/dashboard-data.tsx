@@ -1,4 +1,6 @@
 "use client";
+
+import { fetchWithRecovery } from "@/lib/chat-recovery";
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/client";
@@ -128,7 +130,7 @@ export function DashboardProvider({
     async function loadChats(): Promise<void> {
       try {
         if (!token) throw new Error("Session unavailable");
-        const response = await fetch(
+        const response = await fetchWithRecovery(
           `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions?limit=30`,
           {
             headers: { Authorization: `Bearer ${token}` },

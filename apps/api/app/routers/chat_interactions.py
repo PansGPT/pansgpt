@@ -4,44 +4,28 @@ import asyncio
 import io
 from typing import Literal
 
-import pymupdf
 from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, UploadFile
 from PIL import Image
 
-from app.core.authorization import require_owned_session, require_university
+from app.core.authorization import check_document_scope, require_owned_session, require_university
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
 from app.core.ids import uuid7
 from app.core.rate_limit import limiter
+from app.engines.chat_document_worker import DOCX, PPTX
+from app.engines.chat_document_worker import extract_document as extract_document
+from app.engines.chat_documents import document_text
 from app.engines.chat_images import image_bytes, image_pixels, owned_image
 from app.engines.chat_interactions import active_path, identifier, select_path
+from app.engines.reader_snips import document_snip
 from app.engines.storage import storage_engine
 from app.models.chat import ChatAttachmentResponse, ChatBranchRequest, ChatFeedbackRequest
+from app.models.reader import ReaderSnipOrigin, ReaderSnipRequest
+from app.routers.library_catalog import SCOPE, can_review
 
 router = APIRouter(prefix="/ai/chat", tags=["Chat interactions"])
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
-
-
-def extract_document(data: bytes, content_type: str) -> str:
-    if content_type == "application/pdf":
-        if not data.startswith(b"%PDF-"):
-            raise ValueError("The file is not a PDF.")
-        with pymupdf.open(stream=data, filetype="pdf") as document:
-            if document.is_encrypted or len(document) > 50:
-                raise ValueError("Use an unlocked PDF with at most 50 pages.")
-            text = "\n".join(page.get_text() for page in document)
-        if not text.strip():
-            raise ValueError("This PDF has no readable text. Attach its pages as images instead.")
-    elif content_type in ("text/plain", "text/markdown", "text/csv"):
-        text = data.decode("utf-8-sig")
-        if "\x00" in text:
-            raise ValueError("The file is not a text document.")
-    else:
-        raise ValueError("Unsupported document type.")
-    if not text.strip() or len(text) > 40000:
-        raise ValueError("Use a non-empty document with at most 40,000 characters.")
-    return text
 
 
 @router.post("/sessions/{session_id}/branch")
@@ -131,6 +115,8 @@ async def upload_attachment(
     content_type = (file.content_type or "").split(";")[0].lower()
     allowed = {
         "application/pdf",
+        PPTX,
+        DOCX,
         "text/plain",
         "text/markdown",
         "text/csv",
@@ -138,7 +124,7 @@ async def upload_attachment(
         "image/jpeg",
     }
     if content_type not in allowed:
-        raise HTTPException(415, "Attach a PDF, UTF-8 text/Markdown/CSV, PNG or JPEG.")
+        raise HTTPException(415, "Attach a PDF, PPTX, DOCX, UTF-8 text/Markdown/CSV, PNG or JPEG.")
     data = await file.read(MAX_UPLOAD_BYTES + 1)
     await file.close()
     if not data or len(data) > MAX_UPLOAD_BYTES:
@@ -168,20 +154,27 @@ async def upload_attachment(
             # Store validated pixels now; vision uses the actual question at Send.
             text = ""
         else:
-            text = await asyncio.to_thread(extract_document, data, content_type)
+            text = await document_text(data, content_type)
     except (ValueError, RuntimeError, OSError, Image.DecompressionBombError) as exc:
         raise HTTPException(
             422,
-            "The file could not be read. Use an unlocked PDF (50 pages/40,000 characters), UTF-8 text, PNG or JPEG.",
+            "The file could not be read. Use a readable PDF/PPTX (up to 50 pages/slides), DOCX or UTF-8 text (40,000 characters), PNG or JPEG.",
         ) from exc
     except TimeoutError as exc:
-        raise HTTPException(504, "Image analysis timed out. Please retry.") from exc
-    attachment_id = str(uuid7())
+        raise HTTPException(504, "The file took too long to read. Please retry.") from exc
     filename = (file.filename or "Attachment").replace("\\", "/").split("/")[-1]
     filename = (
         "".join(character for character in filename if character.isprintable())[:160]
         or "Attachment"
     )
+    return await save_attachment(session_id, user, data, filename, content_type, text)
+
+
+async def save_attachment(
+    session_id: str, user: UserContext, data: bytes, filename: str, content_type: str, text: str
+) -> ChatAttachmentResponse:
+    await require_owned_session(session_id, user)
+    attachment_id = str(uuid7())
     key = f"chat/{user.university_id}/{user.id}/{session_id}/{attachment_id}"
     uploaded = False
     try:
@@ -219,6 +212,64 @@ async def upload_attachment(
         raise
     return ChatAttachmentResponse(
         id=attachment_id, name=filename, content_type=content_type, size=len(data)
+    )
+
+
+@router.post(
+    "/sessions/{session_id}/document-snip", response_model=ChatAttachmentResponse, status_code=201
+)
+@limiter.limit("10/minute")
+async def create_document_snip(
+    request: Request,
+    session_id: str,
+    payload: ReaderSnipRequest,
+    user: UserContext = Depends(get_current_user),
+) -> ChatAttachmentResponse:
+    university = require_university(user)
+    if await require_owned_session(session_id, user) != payload.document_id:
+        raise HTTPException(422, "Snip the document bound to this study chat.")
+    await check_document_scope(payload.document_id, user, active_only=True)
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(503, "Document access is temporarily unavailable.")
+        row = await conn.fetchrow(
+            "SELECT storage_key,converted_key,mime_type,page_count FROM public.documents "
+            f"WHERE {SCOPE} AND id=$3",
+            university,
+            can_review(user),
+            identifier(payload.document_id),
+        )
+        used = await conn.fetchval(
+            "SELECT count(*) FROM public.chat_attachments WHERE user_id=$1 AND created_at>now()-interval '1 hour'",
+            user.id,
+        )
+    if row is None:
+        raise HTTPException(404, "Document not found.")
+    if used >= 30:
+        raise HTTPException(429, "Attachment limit reached. Try again in an hour.")
+    if payload.page_number > row["page_count"]:
+        raise HTTPException(422, "Choose a page in this document.")
+    key = row["converted_key"] or (
+        row["storage_key"] if row["mime_type"] == "application/pdf" else None
+    )
+    if not key:
+        raise HTTPException(409, "The PDF is still being prepared.")
+    try:
+        pixels = await document_snip(key, payload)
+    except (ValueError, TimeoutError) as exc:
+        raise HTTPException(
+            422, "This area could not be snipped. Select it again and retry."
+        ) from exc
+    except Exception as exc:
+        raise HTTPException(503, "Snip storage is temporarily unavailable. Please retry.") from exc
+    await check_document_scope(payload.document_id, user, active_only=True)
+    return await save_attachment(
+        session_id,
+        user,
+        pixels,
+        "Snippet.png",
+        "image/png",
+        ReaderSnipOrigin(**payload.model_dump(), source="reader_snip_v1").model_dump_json(),
     )
 
 

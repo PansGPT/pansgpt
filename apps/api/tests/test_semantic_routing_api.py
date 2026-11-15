@@ -25,6 +25,28 @@ def semantic_router(monkeypatch: pytest.MonkeyPatch, output: str) -> AsyncMock:
     return completion
 
 
+@pytest.mark.parametrize("bound", [False, True])
+async def test_intent_decider_can_answer_without_material_search_even_in_a_pdf_chat(
+    client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch, bound: bool
+) -> None:
+    session_id = next(iter(tenant_state.sessions))
+    if bound:
+        tenant_state.sessions[session_id]["document_id"] = next(iter(tenant_state.documents))
+    completion = semantic_router(
+        monkeypatch, decision(answer="Here is a general explanation of the concept.")
+    )
+    response = await client.post(
+        f"/api/v1/ai/chat/sessions/{session_id}/stream",
+        json={"message": "Explain this concept generally"},
+    )
+    assert "Here is a general explanation" in response.text and "event: done" in response.text
+    assert "not found in your course materials" not in response.text
+    completion.assert_awaited_once()
+    assert json.loads(completion.call_args.args[4])["available_context"]["document"] is bound
+    tenant_state.retrieval.assert_not_awaited()
+    tenant_state.ai.assert_not_called()
+
+
 async def test_simple_reply_is_one_completion_no_retrieval_or_second_generation(
     client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:

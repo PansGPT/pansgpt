@@ -21,7 +21,6 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import {
   Copy,
-  AlertCircle,
   Check,
   BookOpen,
   ChevronLeft,
@@ -38,6 +37,7 @@ import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
 import { ThinkingStatus } from "./motion";
 import { ChatAttachment } from "./attachment";
+import { ChatNotice } from "./connection-notice";
 
 function useOriginalMessage(): ChatMessageView | undefined {
   return useAuiState((state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]);
@@ -122,6 +122,7 @@ const ChatTool: ToolCallMessagePartComponent = () => null;
 
 function MessageExtras(): React.ReactElement | null {
   const message = useOriginalMessage();
+  const { onCitation, hideSources } = useChatActions();
   if (!message) return null;
   return (
     <>
@@ -130,14 +131,14 @@ function MessageExtras(): React.ReactElement | null {
           <ArtifactRenderer artifact={artifact} />
         </div>
       ))}
-      {!!message.citations?.length && (
+      {!hideSources && !!message.citations?.length && (
         <div className="study-chat-sources">
           <span>
             <BookOpen size={13} aria-hidden="true" />
             Sources
           </span>
           <div>
-            {documentSources(message.citations).map((citation, index) => {
+            {documentSources(message.citations, !!onCitation).map((citation, index) => {
               const url = externalSourceUrl(citation);
               return url ? (
                 <a
@@ -149,9 +150,20 @@ function MessageExtras(): React.ReactElement | null {
                 >
                   {citation.title} — Web source
                 </a>
+              ) : onCitation && citation.document_id && citation.page_start ? (
+                <button
+                  key={index}
+                  type="button"
+                  title={citation.snippet}
+                  onClick={() => onCitation(citation)}
+                >
+                  {citation.title} · p. {citation.page_start}
+                </button>
               ) : (
                 <span key={index} title={citation.snippet}>
-                  {citation.title}
+                  {citation.source_type === "attachment"
+                    ? `Upload: ${citation.title}`
+                    : citation.title}
                 </span>
               );
             })}
@@ -267,6 +279,8 @@ function UserMessageContent({ editing = false }: { editing?: boolean }): React.R
 
 export function AssistantMessage(): React.ReactElement {
   const message = useOriginalMessage();
+  const { retryMessage, online } = useChatActions();
+  const running = useAuiState((state) => state.thread.isRunning);
   const waiting =
     message?.status === "running" &&
     (!message.content || message.tools?.some((tool) => tool.status === "running"));
@@ -285,7 +299,7 @@ export function AssistantMessage(): React.ReactElement {
     >
       <div className="study-chat-turn">
         <div className="study-chat-bubble" data-role="assistant">
-          {waiting && (
+          {waiting && !message?.recovery && (
             <div className="study-chat-live-status">
               <ThinkingStatus label={currentProgress?.label} />
             </div>
@@ -301,13 +315,36 @@ export function AssistantMessage(): React.ReactElement {
               {message?.status === "cancelled" ? "Response stopped." : "No response was returned."}
             </p>
           )}
+          {message?.status === "running" && message.recovery && (
+            <ChatNotice
+              key={message.recovery}
+              kind="info"
+              role="status"
+              message={
+                message.recovery === "retrying"
+                  ? "Trying again…"
+                  : "This is taking longer than usual."
+              }
+            />
+          )}
           {message?.status === "error" && (
-            <p className="study-chat-message-error" role="alert">
-              <AlertCircle size={16} aria-hidden="true" />
-              <span>
-                {message.error || "The response could not be completed. Please try again."}
-              </span>
-            </p>
+            <ChatNotice
+              message={message.error || "The response could not be completed. Please try again."}
+            >
+              <div className="study-chat-recovery-actions">
+                {message.retryable !== false && retryMessage && (
+                  <button
+                    type="button"
+                    disabled={running || online === false}
+                    onClick={() => void retryMessage(message.id)}
+                  >
+                    <RotateCcw size={14} /> Retry
+                  </button>
+                )}
+                {message.failure?.action === "sign_in" && <a href="/login">Sign in again</a>}
+                {message.failure?.action === "usage" && <a href="/usage">View usage</a>}
+              </div>
+            </ChatNotice>
           )}
           <MessageExtras />
           {message?.status === "cancelled" && !empty && (

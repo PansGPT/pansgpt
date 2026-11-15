@@ -44,17 +44,14 @@ def test_confidence_classification_logic():
 
 
 @pytest.mark.asyncio
-async def test_hybrid_rag_acronym_and_fallback_retrieval():
-    """Verify hybrid RAG retrieval normalizes acronyms and returns structured citations."""
-    from app.engines.web_grounding import WebSearchUnavailable
-
-    with pytest.raises(WebSearchUnavailable) as error:
+async def test_unavailable_retrieval_storage_does_not_fall_through_to_web_search():
+    """An infrastructure outage is not a successful empty search."""
+    with pytest.raises(ConnectionError):
         await rag_engine.retrieve_context(
             query="What is the MOA of HCTZ in HTN?",
             university_id=DEFAULT_UNIVERSITY_ID,
             match_count=2,
         )
-    assert error.value.result.status == "not_configured"
 
 
 # ------------------------------------------------------------------------------
@@ -373,10 +370,19 @@ def test_candidate_reranking_scoring_and_ordering():
 # 9. Absence Policy & Autonomous Web Search Fallback Tests
 # ------------------------------------------------------------------------------
 @pytest.mark.asyncio
-async def test_absence_policy_triggers_web_search_fallback(  # [CHAT FIX 2]
+async def test_empty_lookup_can_return_external_evidence_without_a_canned_reply(  # [CHAT FIX 2]
     monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
 ) -> None:  # [CHAT FIX 2]
-    """Verify that low/empty syllabus confidence autonomously triggers web search fallback."""
+    """The legacy explicit fallback preserves real evidence without an absence banner."""
+    from app.core.config import settings
+    from app.engines import rag as rag_module
+
+    @asynccontextmanager
+    async def empty_store():
+        yield unittest.mock.MagicMock(fetch=unittest.mock.AsyncMock(return_value=[]))
+
+    monkeypatch.setattr(rag_module, "get_db_connection", empty_store)
+    monkeypatch.setattr(settings, "WEB_SEARCH_ENABLED", True)
     monkeypatch.setattr(web_search_engine, "tavily_key", "offline-provider-fixture")  # [CHAT FIX 2]
     monkeypatch.setattr(web_search_engine, "_result_cache", {})  # [CHAT FIX 2]
     monkeypatch.setattr(  # [CHAT FIX 2]
@@ -403,7 +409,8 @@ async def test_absence_policy_triggers_web_search_fallback(  # [CHAT FIX 2]
         match_count=2,
     )
     assert context is not None
-    assert "Absence Policy Notice" in context
+    assert "External reference results" in context
+    assert "not found in your course materials" not in context
     assert len(citations) > 0
     assert citations[0].confidence == "WEB_FALLBACK"
     assert citations[0].course_code == "WEB-REF"

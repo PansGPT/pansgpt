@@ -57,7 +57,7 @@ async def require_owned_session(  # [TENANT FIX]
     session_id: str,  # [TENANT FIX]
     user: UserContext,  # [TENANT FIX]
     parent_message_id: str | None = None,  # [TENANT FIX]
-) -> None:  # [TENANT FIX]
+) -> str | None:
     require_university(user)  # [TENANT FIX]
     try:  # [TENANT FIX]
         session_uuid = uuid.UUID(session_id)  # [TENANT FIX]
@@ -96,3 +96,5 @@ async def require_owned_session(  # [TENANT FIX]
             user,  # [TENANT FIX]
             active_only=True,  # [TENANT FIX]
         )  # [TENANT FIX]
+        return str(session["document_id"])
+    return None

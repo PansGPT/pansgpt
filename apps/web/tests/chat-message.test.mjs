@@ -72,7 +72,7 @@ test("a provider error followed by done keeps partial content and the failure st
   const message = events.reduce(applyChatEvent, pending());
   assert.equal(message.content, "Partial answer");
   assert.equal(message.status, "error");
-  assert.equal(message.error, "Synthetic timeout");
+  assert.equal(message.error, "Something went wrong. Please try again.");
   assert.equal(finishChatMessage(message, false).status, "error");
 });
 
@@ -168,4 +168,19 @@ test("source display groups document pages without changing citation coordinates
   assert.equal(documentSources(citations).length, 2);
   assert.equal(citations.length, 3);
   assert.equal(citations[1].page_start, 9);
+});
+
+test("uploaded sources retain their own identities and cannot become PDF or web links", () => {
+  const first = {
+    source_type: "attachment",
+    attachment_id: "01900000-0000-7000-8000-000000000021",
+    title: "notes.txt",
+  };
+  const second = { ...first, attachment_id: "01900000-0000-7000-8000-000000000022" };
+  const unsafe = { ...first, url: "https://example.test/" };
+  const forged = { ...first, document_id: "other-pdf" };
+  const frame = `event: citations\ndata: ${JSON.stringify([first, second, unsafe, forged])}\n\n`;
+  const parsed = new SSEEventStreamReader().push(frame);
+  assert.deepEqual(parsed[0].data, [first, second]);
+  assert.equal(documentSources([first, second, first]).length, 2);
 });

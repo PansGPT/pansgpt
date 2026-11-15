@@ -2,7 +2,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MessageCircle, MoreHorizontal, Search, SquarePen, Pin } from "lucide-react";
+import { MessageCircle, MoreHorizontal, Search, SquarePen } from "lucide-react";
 import { destinations, mobileDestinations, isCurrentDestination } from "./navigation";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 import { sampleDocuments } from "./sample-data";
@@ -11,6 +11,7 @@ import { ArchivedChats, ChatSessionMenu } from "@/components/chat/session-menu";
 import { useChatDraft } from "./chat-draft";
 import type { ChatSessionSummary } from "@/lib/chat-sessions";
 import { chatSessionUrl, newChatUrl } from "@/lib/chat-navigation";
+import { ConversationHistoryRow } from "./conversation-history-row";
 
 export function SidebarLinks({
   close,
@@ -37,25 +38,16 @@ export function SidebarLinks({
   const pinned = chats.filter((chat) => chat.is_pinned);
   const recent = chats.filter((chat) => !chat.is_pinned);
   const chatRow = (chat: ChatSessionSummary) => (
-    <div className="shell-chat-row" key={chat.id}>
-      <Link
-        href={chatSessionUrl(chat.id, Boolean(mobile))}
-        onClick={() => {
-          close();
-          if (mobile) {
-            window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } }));
-          }
-        }}
-      >
-        {chat.is_pinned ? (
-          <Pin size={16} aria-label="Pinned" />
-        ) : (
-          <MessageCircle size={16} aria-hidden="true" />
-        )}
-        <span>{chat.title || "New chat"}</span>
-      </Link>
-      <ChatSessionMenu chat={chat} />
-    </div>
+    <ConversationHistoryRow
+      key={chat.id}
+      chat={chat}
+      href={chatSessionUrl(chat.id, Boolean(mobile))}
+      onChoose={() => {
+        close();
+        if (mobile)
+          window.dispatchEvent(new CustomEvent("pansgpt-open-chat", { detail: { id: chat.id } }));
+      }}
+    />
   );
   const exampleChats = [
     ...sampleDocuments.map((item) => item.title),

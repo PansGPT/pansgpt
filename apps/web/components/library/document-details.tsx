@@ -1,17 +1,10 @@
 "use client";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
 import { Eye, FileText, X } from "lucide-react";
 import { Button, Slideout } from "@pansgpt/ui/shell";
 import type { LibraryDocument } from "@pansgpt/types";
-import { useAuth } from "@/lib/auth-context";
-import { env } from "@/env";
-import {
-  fileSize,
-  materialDate,
-  libraryError,
-  pdfLinkSchema,
-  openedSchema,
-} from "@/lib/library-catalog";
+import { fileSize, materialDate } from "@/lib/library-catalog";
 import { ReadingProgress } from "./reading-progress";
 import { DocumentThumbnail } from "@/components/shell/document-thumbnail";
 
@@ -27,123 +20,8 @@ const detailsViewport = (): "mobile" | "wide" | "compact" =>
       ? "wide"
       : "compact";
 
-function DetailsBody({
-  document,
-  onOpened,
-}: {
-  document: LibraryDocument;
-  onOpened: () => void;
-}): React.ReactElement {
-  const { session } = useAuth();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [fallback, setFallback] = useState<string | null>(null);
-  const [recentError, setRecentError] = useState(false);
-  const pending = useRef<AbortController | null>(null);
-  const popup = useRef<Window | null>(null);
-  const expiry = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(
-    () => () => {
-      pending.current?.abort();
-      popup.current?.close();
-      if (expiry.current) clearTimeout(expiry.current);
-    },
-    []
-  );
-  async function recordOpening(): Promise<void> {
-    if (!session?.access_token) return;
-    const controller = new AbortController();
-    pending.current = controller;
-    const timer = setTimeout(
-      () => controller.abort(new DOMException("History timed out", "TimeoutError")),
-      15000
-    );
-    try {
-      const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/api/v1/library/catalog/${document.id}/opened`,
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${session.access_token}` },
-          signal: controller.signal,
-          cache: "no-store",
-        }
-      );
-      if (!response.ok) throw new Error("Recent update failed");
-      const result = openedSchema.parse(await response.json());
-      if (result.document_id !== document.id) throw new Error("Document mismatch");
-      if (!controller.signal.aborted) {
-        setRecentError(false);
-        onOpened();
-      }
-    } catch {
-      if (!controller.signal.aborted || controller.signal.reason?.name === "TimeoutError")
-        setRecentError(true);
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-  async function openPdf(): Promise<void> {
-    if (!session?.access_token || busy) return;
-    setBusy(true);
-    setError(null);
-    setFallback(null);
-    if (expiry.current) clearTimeout(expiry.current);
-    // Open during the user's click so asynchronous signing does not trigger popup blocking.
-    const tab = window.open("", "_blank");
-    if (tab) {
-      tab.opener = null;
-      tab.document.title = "Opening document";
-      tab.document.body.textContent = "Opening your document…";
-      const meta = tab.document.createElement("meta");
-      meta.name = "referrer";
-      meta.content = "no-referrer";
-      tab.document.head.append(meta);
-    }
-    popup.current = tab;
-    const controller = new AbortController();
-    pending.current = controller;
-    const timeout = setTimeout(
-      () => controller.abort(new DOMException("Timed out", "TimeoutError")),
-      15000
-    );
-    try {
-      const response = await fetch(
-        `${env.NEXT_PUBLIC_API_URL}/api/v1/library/catalog/${encodeURIComponent(document.id)}/pdf-url`,
-        {
-          headers: { Authorization: `Bearer ${session.access_token}` },
-          signal: controller.signal,
-          cache: "no-store",
-        }
-      );
-      if (!response.ok)
-        throw await libraryError(response, "We couldn't open this PDF. Please try again.");
-      const data = pdfLinkSchema.parse(await response.json());
-      if (data.document_id !== document.id)
-        throw new Error("The document link could not be verified.");
-      if (controller.signal.aborted) return;
-      if (tab && !tab.closed) {
-        tab.location.replace(data.presigned_url);
-        popup.current = null;
-        await recordOpening();
-      } else {
-        setFallback(data.presigned_url);
-        expiry.current = setTimeout(() => setFallback(null), data.expires_in_seconds * 1000);
-      }
-      popup.current = null;
-    } catch (cause: unknown) {
-      tab?.close();
-      if (!controller.signal.aborted || controller.signal.reason?.name === "TimeoutError")
-        setError(
-          cause instanceof Error && cause.name !== "ZodError" && cause.name !== "TimeoutError"
-            ? cause.message
-            : "We couldn't open this PDF. Please try again."
-        );
-    } finally {
-      clearTimeout(timeout);
-      if (!controller.signal.aborted || controller.signal.reason?.name === "TimeoutError")
-        setBusy(false);
-    }
-  }
+function DetailsBody({ document }: { document: LibraryDocument }): React.ReactElement {
+  const router = useRouter();
   return (
     <div className="library-details-body">
       <div className="library-file-scroll">
@@ -214,37 +92,10 @@ function DetailsBody({
         <Button
           leadingIcon={<Eye size={17} />}
           trailingIcon={null}
-          disabled={busy}
-          onClick={() => void openPdf()}
+          onClick={() => router.push(`/app/library/${document.id}/read`)}
         >
-          {busy ? "Opening PDF…" : "Open PDF"}
+          Open PDF
         </Button>
-        {error && (
-          <p className="library-inline-error" role="alert">
-            {error}
-          </p>
-        )}
-        {fallback && (
-          <p role="status">
-            Your browser blocked the new tab.{" "}
-            <a
-              href={fallback}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => void recordOpening()}
-            >
-              Open your PDF
-            </a>
-          </p>
-        )}
-        {recentError && (
-          <p className="library-inline-error" role="status">
-            Your PDF opened, but Recent Documents couldn’t be updated.{" "}
-            <button type="button" onClick={() => void recordOpening()}>
-              Retry history update
-            </button>
-          </p>
-        )}
       </div>
     </div>
   );
@@ -254,12 +105,11 @@ export function DocumentDetails({
   document,
   onClose,
   returnFocus,
-  onOpened,
 }: {
   document: LibraryDocument | null;
   onClose: () => void;
   returnFocus: () => void;
-  onOpened: () => void;
+  onOpened?: () => void;
 }): React.ReactElement | null {
   const viewport = useSyncExternalStore(subscribeViewport, detailsViewport, () => "compact");
   if (!document)
@@ -290,7 +140,7 @@ export function DocumentDetails({
           returnFocus();
         }}
       >
-        <DetailsBody key={document.id} document={document} onOpened={onOpened} />
+        <DetailsBody key={document.id} document={document} />
       </Slideout>
     );
   return (
@@ -309,7 +159,7 @@ export function DocumentDetails({
           <X size={18} />
         </button>
       </header>
-      <DetailsBody key={document.id} document={document} onOpened={onOpened} />
+      <DetailsBody key={document.id} document={document} />
     </aside>
   );
 }

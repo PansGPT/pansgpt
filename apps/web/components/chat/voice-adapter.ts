@@ -1,3 +1,4 @@
+import { failureFrom } from "@/lib/chat-recovery";
 import type { DictationAdapter } from "@assistant-ui/react";
 import { voiceStore } from "./voice-store";
 
@@ -117,9 +118,7 @@ export function createVoiceAdapter(
               })
               .catch((error: unknown) => {
                 if (!controller.signal.aborted) {
-                  reportError(
-                    error instanceof Error ? error.message : "Transcription failed. Please retry."
-                  );
+                  reportError(failureFrom(error, "voice").message);
                   finish("error");
                 }
               });
@@ -137,7 +136,13 @@ export function createVoiceAdapter(
         } catch (error: unknown) {
           if (!controller.signal.aborted) {
             voiceStore.reset();
-            reportError(error instanceof Error ? error.message : "Microphone access was denied.");
+            reportError(
+              error instanceof DOMException && error.name === "NotAllowedError"
+                ? "Microphone access is blocked. Allow it in your browser settings, or type your question."
+                : error instanceof DOMException && error.name === "NotFoundError"
+                  ? "No microphone was found. Connect one, or type your question."
+                  : "Voice recording isn't available. You can type your question."
+            );
             finish("error");
           }
         }

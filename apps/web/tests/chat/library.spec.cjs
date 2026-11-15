@@ -126,7 +126,9 @@ async function setup(page, { empty = false, failure = false, staff = false } = {
   return state;
 }
 
-test("Library search keeps its rounded field without an inner focus rectangle", async ({ page }) => {
+test("Library search keeps its rounded field without an inner focus rectangle", async ({
+  page,
+}) => {
   await setup(page);
   await page.goto("/app/library", { waitUntil: "load" });
   const search = page.getByRole("searchbox", { name: "Search your library", exact: true });
@@ -167,24 +169,13 @@ test("legacy library keeps course navigation, Home-sized document cards and real
   const details = page.getByRole("complementary", { name: "File information" });
   await expect(details).toContainText("PCL 401");
   await expect(details).toContainText("3 / 16 pages");
-  await details.getByRole("button", { name: "Open PDF", exact: true }).click();
-  await expect(details.getByRole("alert")).toContainText("couldn't open this PDF");
-  state.pdfFails = false;
-  await details.getByRole("button", { name: "Open PDF", exact: true }).click();
-  await expect(details.getByRole("link", { name: "Open your PDF", exact: true })).toHaveAttribute(
-    "href",
-    /^https:\/\/files.example.test/
-  );
   await page.screenshot({ path: test.info().outputPath("library-desktop-details.png") });
-  expect(state.opened).toEqual([]);
-  const fallback = details.getByRole("link", { name: "Open your PDF", exact: true });
-  await fallback.evaluate((element) =>
-    element.addEventListener("click", (event) => event.preventDefault(), { once: true })
-  );
-  await fallback.click();
-  await expect.poll(() => state.opened.length).toBe(1);
   await details.getByRole("button", { name: "Close document details" }).click();
   await expect(cards.first()).toBeFocused();
+  await cards.first().click();
+  await details.getByRole("button", { name: "Open PDF", exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/app/library/${documents[0].id}/read$`));
+  expect(state.opened).toEqual([]);
 });
 
 test("Library reuses Home card dimensions, cover styling and persistent cached thumbnails", async ({
@@ -290,7 +281,9 @@ test("library searches the full catalog and paginates course materials with acad
   expect(state.requests.some((value) => new URLSearchParams(value).get("offset") === "24")).toBe(
     true
   );
-  await page.getByRole("searchbox", { name: "Search your library", exact: true }).fill("Late catalog clearance");
+  await page
+    .getByRole("searchbox", { name: "Search your library", exact: true })
+    .fill("Late catalog clearance");
   await expect(docs.getByRole("button")).toHaveCount(1);
   await expect(docs).toContainText("Late catalog clearance notes");
   expect(new URLSearchParams(state.requests.at(-1)).get("course_code")).toBeNull();

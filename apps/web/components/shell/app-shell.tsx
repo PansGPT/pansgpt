@@ -4,9 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PanelLeftClose, PanelLeftOpen, Plus, Mic, ArrowUp } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { ApplicationNavPanel, Button, ThemeProvider } from "@pansgpt/ui/shell";
+import { ApplicationNavPanel, ThemeProvider } from "@pansgpt/ui/shell";
 import { useAuth, type UserProfile } from "@/lib/auth-context";
-import { profileFailureMessage } from "@/lib/profile-verification";
+import { ProfileError } from "./profile-error";
 import { BrandMark } from "@/components/auth/brand-art";
 import { ConversationSearch } from "@/components/chat/search-dialog";
 import { ConversationUndo } from "@/components/chat/undo-notice";
@@ -79,6 +79,7 @@ function Workspace({
   const [railToggleFocused, setRailToggleFocused] = useState(false);
   if (sidebar.pathname !== pathname) setSidebar({ ...sidebar, pathname, libraryExpanded: false });
   const inLibrary = pathname === "/app/library" || pathname.startsWith("/app/library/");
+  const inReader = /^\/app\/library\/[^/]+\/read\/?$/.test(pathname);
   const inLearn = pathname === "/app/learn" || pathname.startsWith("/app/learn/");
   const inQuiz = pathname === "/app/quiz" || pathname.startsWith("/app/quiz/");
   // Library keeps its course navigation visible and starts with a compact app rail.
@@ -381,6 +382,7 @@ function Workspace({
         data-chat={pathname === "/app/chat"}
         data-home={pathname === "/app"}
         data-library={inLibrary}
+        data-reader={inReader}
         data-learn={inLearn}
         data-quiz={inQuiz}
         data-preferred-collapsed={sidebar.preferredCollapsed}
@@ -388,14 +390,16 @@ function Workspace({
         <a href="#workspace-content" className="shell-skip">
           Skip to content
         </a>
-        <aside
-          className="shell-sidebar"
-          aria-label="Workspace sidebar"
-          onPointerEnter={() => setRailHovered(true)}
-          onPointerLeave={() => setRailHovered(false)}
-        >
-          {panel()}
-        </aside>
+        {!inReader && (
+          <aside
+            className="shell-sidebar"
+            aria-label="Workspace sidebar"
+            onPointerEnter={() => setRailHovered(true)}
+            onPointerLeave={() => setRailHovered(false)}
+          >
+            {panel()}
+          </aside>
+        )}
         {!inLibrary && (
           <button
             className="shell-collapse shell-collapse-docked"
@@ -407,7 +411,7 @@ function Workspace({
           </button>
         )}
         <div className="shell-workspace">
-          {!inLearn && !inQuiz && (
+          {!inLearn && !inQuiz && !inReader && (
             <header className="shell-topbar">
               <div className="shell-mobile-brand">
                 <Brand />
@@ -609,7 +613,6 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
   const { session, profile, profileError, loading, refreshProfile, signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [retrying, setRetrying] = useState(false);
   useEffect(() => {
     if (loading) return;
     if (!session && !profileError)
@@ -617,45 +620,20 @@ function VerifiedWorkspace({ children }: { children: ReactNode }): React.ReactEl
     else if (profile && !profile.is_onboarded) router.replace("/onboarding");
   }, [loading, pathname, profile, profileError, router, session]);
   if (loading || (!session && !profileError) || (profile && !profile.is_onboarded))
-    return <WorkspaceLoading message="Connecting to your study spaceâ€¦" />;
+    return <WorkspaceLoading message="Connecting to your study space..." />;
   if (!profile || profile.id !== session?.user.id) {
-    const failure = profileFailureMessage(
-      profileError ?? { code: "invalid_response", retryable: true }
-    );
     return (
-      <div className="shell-verification" role="alert">
-        <h1>{failure.title}</h1>
-        <p>{failure.description}</p>
-        {profileError?.retryable !== false && (
-          <Button
-            disabled={retrying}
-            leadingIcon={null}
-            trailingIcon={null}
-            onClick={() => {
-              if (profileError?.code === "session_unavailable") {
-                window.location.reload();
-                return;
-              }
-              setRetrying(true);
-              void refreshProfile().finally(() => setRetrying(false));
-            }}
-          >
-            {retrying
-              ? "Checkingâ€¦"
-              : profileError?.code === "session_unavailable"
-                ? "Reload sign-in"
-                : "Retry profile verification"}
-          </Button>
-        )}
-        <Button
-          variant="secondary"
-          leadingIcon={null}
-          trailingIcon={null}
-          onClick={() => void signOut()}
-        >
-          Sign Out
-        </Button>
-      </div>
+      <ProfileError
+        error={profileError ?? { code: "invalid_response", retryable: true }}
+        onRetry={async () => {
+          if (profileError?.code === "session_unavailable") {
+            window.location.reload();
+            return;
+          }
+          await refreshProfile();
+        }}
+        onSignOut={signOut}
+      />
     );
   }
   return (

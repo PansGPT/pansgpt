@@ -1151,6 +1151,63 @@ button.study-chat-attachment-tile:hover {
   max-width: 45rem;
   margin-inline: auto;
 }
+.study-chat-composer-notices {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding-inline: 8px;
+}
+.study-chat-composer-notices:empty { display: none; }
+.study-chat-notice-banner {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  margin-block: 8px;
+  padding: 14px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 12px;
+  color: var(--text-primary-900);
+  background: var(--bg-quaternary);
+  box-shadow: 0 8px 22px #0002;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+}
+.study-chat-composer-notices .study-chat-notice-banner { justify-self: end; margin: 0; }
+.study-chat-notice-icon { color: var(--fg-warning-primary); }
+.study-chat-notice-banner[data-kind="info"] .study-chat-notice-icon { color: var(--text-tertiary-600); }
+.study-chat-notice-copy { min-width: 0; }
+.study-chat-notice-copy > p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.study-chat-notice-dismiss {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  color: var(--text-secondary-700);
+  background: transparent;
+  cursor: pointer;
+}
+.study-chat-notice-dismiss:hover { background: var(--bg-tertiary); }
+.study-chat-notice-dismiss:focus-visible { outline: 2px solid var(--fg-brand-primary-600); outline-offset: 2px; }
+.study-chat-recovery-actions:empty { display: none; }
+@media (max-width: 860px) {
+  .study-chat-composer-notices { padding-inline: 0; }
+  .study-chat-notice-banner { padding: 10px; gap: 8px; grid-template-columns: 16px minmax(0, 1fr) 24px; font-size: 12px; border-radius: 10px; }
+  .study-chat-notice-icon { width: 15px; height: 15px; }
+}
 .study-chat-action-menu {
   position: absolute;
   z-index: 30;
@@ -2293,3 +2350,7 @@ button.study-chat-attachment-tile:hover {
   opacity: 0.45 !important;
   cursor: default !important;
 }
+
+.study-chat-recovery-actions { display: flex; gap: 12px; margin-top: 8px; }
+.study-chat-recovery-actions :is(button, a) { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border-secondary); border-radius: 8px; padding: 6px 10px; background: var(--bg-secondary); color: var(--text-primary-900); font: inherit; font-size: 12px; cursor: pointer; }
+.study-chat-recovery-actions button:disabled { opacity: 0.5; cursor: default; }

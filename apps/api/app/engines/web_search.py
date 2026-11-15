@@ -17,6 +17,7 @@ import structlog
 
 from app.core.config import settings
 from app.engines.guard import policy_guard
+from app.engines.recovery import retry_transient
 from app.models.web_search import SearchScope, WebReference
 
 logger = structlog.get_logger(__name__)
@@ -335,7 +336,14 @@ class WebSearchEngine:
             payload["include_domains"] = BIOMEDICAL_AUTHORITY_DOMAINS
         try:
             async with httpx.AsyncClient(timeout=settings.WEB_SEARCH_TIMEOUT_SECONDS) as client:
-                resp = await client.post("https://api.tavily.com/search", json=payload)
+
+                async def lookup() -> httpx.Response:
+                    result = await client.post("https://api.tavily.com/search", json=payload)
+                    if result.status_code in {408, 429, 500, 502, 503, 504}:
+                        result.raise_for_status()
+                    return result
+
+                resp = await retry_transient(lookup)
             if resp.status_code != 200:
                 logger.warning("web_search_upstream_status", http_status=resp.status_code)
                 return unavailable(

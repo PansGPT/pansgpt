@@ -432,12 +432,12 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   });
   await page.goto("/app/library");
   await expect(
-    page.getByRole("heading", { name: "Your study service is temporarily unavailable" })
+    page.getByRole("heading", { name: "Something went wrong", exact: true })
   ).toBeVisible();
   expect(libraryRequests).toBe(0);
-  expect(profileRequests).toBe(1);
+  expect(profileRequests).toBe(3);
   await page.unroute("**/api/v1/auth/me");
-  await page.getByRole("button", { name: "Retry profile verification" }).click();
+  await page.getByRole("button", { name: "Retry", exact: true }).click();
   await expect(
     page.getByRole("navigation", { name: "Library sections", exact: true })
   ).toBeVisible();

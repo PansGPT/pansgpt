@@ -1,5 +1,7 @@
 "use client";
 
+import { failureFrom } from "@/lib/chat-recovery";
+
 import {
   createContext,
   useCallback,
@@ -184,7 +186,7 @@ export function PresentationWorkspace({
         if (!controller.signal.aborted)
           setResult({
             key,
-            error: failure instanceof Error ? failure.message : "The preview could not be loaded.",
+            error: failureFrom(failure, "preview").message,
           });
       });
     return () => controller.abort();

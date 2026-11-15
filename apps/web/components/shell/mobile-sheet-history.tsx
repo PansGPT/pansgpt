@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, type RefObject } from "react";
-import { MessageCircle, Pin, Search } from "lucide-react";
+import { MessageCircle, Search } from "lucide-react";
 import type { ChatSearchResult } from "@pansgpt/types";
 import { useAuth } from "@/lib/auth-context";
 import { searchConversations } from "@/lib/chat-sessions";
 import { searchPreviewText } from "@/lib/search-preview";
-import { ChatSessionMenu } from "@/components/chat/session-menu";
+import { MobileChatHistoryList } from "./mobile-chat-history-list";
 import { useDashboard, useRecentChats } from "./dashboard-data";
 
 export function MobileSheetHistory({
@@ -145,23 +145,7 @@ export function MobileSheetHistory({
               <button onClick={reload}>Try again</button>
             </div>
           ) : chats.chats.length ? (
-            chats.chats.map((chat) => (
-              <div className="mobile-home-history-item" key={chat.id}>
-                <button
-                  type="button"
-                  className="mobile-home-history-row"
-                  onClick={() => onChoose(chat.id)}
-                >
-                  {chat.is_pinned ? (
-                    <Pin size={18} aria-label="Pinned" />
-                  ) : (
-                    <MessageCircle size={19} aria-hidden="true" />
-                  )}
-                  <span>{chat.title}</span>
-                </button>
-                <ChatSessionMenu chat={chat} />
-              </div>
-            ))
+            <MobileChatHistoryList chats={chats.chats} onChoose={onChoose} />
           ) : (
             !chats.loading && <p>Your conversations will appear here.</p>
           )}

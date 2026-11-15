@@ -5,6 +5,7 @@ import type {
   CitationItem,
 } from "@pansgpt/types";
 import { parsePublicProgressUpdates } from "./public-progress.ts";
+import { publicFailure } from "./chat-recovery.ts";
 
 export const CHAT_PROGRESS_LABELS: Record<ChatProgressCode, string> = {
   reviewing_request: "Reviewing your request.",
@@ -32,13 +33,15 @@ export function publicProgressLines(text: string | undefined): string[] {
   ];
 }
 
-export function documentSources(citations: CitationItem[]): CitationItem[] {
+export function documentSources(citations: CitationItem[], byPage = false): CitationItem[] {
   const seen = new Set<string>();
   return citations.filter((citation) => {
     const key =
       citation.source_type === "web"
         ? `web:${citation.url || citation.title}`
-        : `doc:${citation.document_id || citation.title}`;
+        : citation.source_type === "attachment"
+          ? `attachment:${citation.attachment_id || citation.title}`
+          : `doc:${citation.document_id || citation.title}${byPage ? `:${citation.page_start || ""}` : ""}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
@@ -48,9 +51,12 @@ export function documentSources(citations: CitationItem[]): CitationItem[] {
 /** Apply only parser-validated events. A terminal error survives a later done frame. */
 export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent): ChatMessageView {
   switch (event.event) {
+    case "recovery":
+      return message.status === "running" ? { ...message, recovery: "retrying" } : message;
     case "public_progress":
       return {
         ...message,
+        recovery: undefined,
         progress: parsePublicProgressUpdates([...(message.progress ?? []), event.data]),
         activity: event.data.code,
       };
@@ -58,6 +64,7 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
       return {
         ...message,
         content: message.content + (event.data.token ?? event.data.delta ?? ""),
+        recovery: undefined,
       };
     case "thinking_chunk": {
       const stage = Object.entries(CHAT_PROGRESS_LABELS).find(([code]) => code === event.data.code);
@@ -67,6 +74,7 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
       return incoming.length
         ? {
             ...message,
+            recovery: undefined,
             thinking: progress.join("\n"),
             ...(stage ? { activity: stage[0] as ChatProgressCode } : {}),
           }
@@ -95,15 +103,28 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
     case "artifact_ready":
       return { ...message, artifacts: [...(message.artifacts ?? []), event.data] };
     case "error":
+      const failure = publicFailure(
+        event.data.code,
+        event.data.error,
+        event.data.retryable ?? true
+      );
       return {
         ...message,
         status: "error",
-        error: event.data.error || "The response could not be completed.",
+        error: failure.message,
+        failure,
+        errorCode: event.data.code,
+        retryable: failure.retryable,
+        recovery: undefined,
       };
     case "done":
       return {
         ...message,
-        content: event.data.full_text ?? message.content,
+        content:
+          message.status === "error" && !event.data.full_text
+            ? message.content
+            : (event.data.full_text ?? message.content),
+        recovery: undefined,
         status: message.status === "error" ? "error" : "complete",
       };
     default:
@@ -118,8 +139,10 @@ export function finishChatMessage(message: ChatMessageView, aborted: boolean): C
     : {
         ...message,
         status: "error",
-        error:
-          "The connection ended before the response finished. Your partial answer is still here.",
+        error: publicFailure("CONNECTION_ENDED").message,
+        failure: publicFailure("CONNECTION_ENDED"),
+        retryable: true,
+        recovery: undefined,
       };
 }
 

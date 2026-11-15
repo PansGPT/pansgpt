@@ -41,9 +41,11 @@ from app.models.library import (
 )
 from app.models.presentation import PresentationPreviewResponse
 from app.routers.library_catalog import router as catalog_router
+from app.routers.reader import router as reader_router
 
 router = APIRouter(prefix="/library", tags=["Library & Ingestion"])
 router.include_router(catalog_router)
+router.include_router(reader_router)
 logger = logging.getLogger(__name__)
 
 

@@ -175,14 +175,20 @@ async def test_model_resolves_follow_up_from_selected_history(
     "context",
     [{"document_id": "synthetic-document"}, {"course_code": "PCL301"}, {"has_attachments": True}],
 )
-async def test_explicit_server_context_preserves_scope_and_skips_speculative_routing(
+async def test_open_material_does_not_force_greetings_or_general_questions_into_retrieval(
     router: tuple[IntentClassifier, AsyncMock], context: dict[str, object]
 ) -> None:
     engine, completion = router
-    result = await engine.classify("Explain this", **context)
-    assert result.routing_source == "server_context"
-    assert result.requires_rag and result.requires_tools and result.direct_answer is None
-    completion.assert_not_awaited()
+    result = await engine.classify("Hello", **context)
+    assert result.routing_source == "model"
+    assert not result.requires_rag and not result.requires_tools and result.direct_answer
+    completion.assert_awaited_once()
+    sent = json.loads(completion.call_args.args[4])
+    assert sent["available_context"] == {
+        "document": bool(context.get("document_id")),
+        "course": bool(context.get("course_code")),
+        "attachments": bool(context.get("has_attachments")),
+    }
 
 
 async def test_user_tool_and_retrieval_disables_remain_authoritative(

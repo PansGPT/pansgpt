@@ -1,13 +1,19 @@
 "use client";
 
+import { fetchWithRecovery, publicFailure } from "@/lib/chat-recovery";
+
 // Adapted from assistant-ui's attachment element; see assistant-ui.LICENSE.
-import { useEffect, useState } from "react";
-import { AttachmentPrimitive, useAuiState } from "@assistant-ui/react";
-import { AlertCircle, FileText, ImageIcon, Loader2, X } from "lucide-react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { AttachmentPrimitive, useAui, useAuiState } from "@assistant-ui/react";
+import { FileText, ImageIcon, Loader2, X } from "lucide-react";
 import { DialogPrimitive, Tooltip } from "@pansgpt/ui/shell";
 import { useAuth } from "@/lib/auth-context";
 import { env } from "@/env";
+import { ChatNotice } from "./connection-notice";
 import { useChatActions } from "./actions-context";
+
+export const AttachmentNoticeTargetContext = createContext<HTMLElement | null>(null);
 
 /** Local files and authenticated previews only; never load a model-supplied image URL. */
 function useAttachmentPreview(expanded = false): {
@@ -41,7 +47,7 @@ function useAttachmentPreview(expanded = false): {
         if (file) blob = file;
         else {
           if (!complete || !sessionId || !token || !profile?.id) return;
-          const response = await fetch(
+          const response = await fetchWithRecovery(
             `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions/${encodeURIComponent(sessionId)}/attachments/${encodeURIComponent(id)}/preview${expanded ? "?size=large" : ""}`,
             {
               headers: { Authorization: `Bearer ${token}` },
@@ -96,12 +102,24 @@ function ExpandedImage({
 }
 
 export function ChatAttachment({ removable = false }: { removable?: boolean }): React.ReactElement {
+  const aui = useAui();
+  const noticeTarget = useContext(AttachmentNoticeTargetContext);
+  const file = useAuiState((s) => s.attachment.file);
+  const [retryError, setRetryError] = useState(false);
   const name = useAuiState((s) => s.attachment.name);
   const image = useAuiState((s) => s.attachment.type === "image");
   const status = useAuiState((s) => s.attachment.status);
   const submitting = useAuiState((s) => s.optional.message?.submission !== undefined);
   const uploading = status.type === "running" || (submitting && status.type !== "complete");
   const uploadFailed = status.type === "incomplete";
+  const uploadFailure = uploadFailed
+    ? [
+        ...["401", "402", "403", "404", "413", "415", "422", "429"].map((code) =>
+          publicFailure(code, "", false, "upload")
+        ),
+        publicFailure("429", "limit reached", false, "upload"),
+      ].find((failure) => failure.message === status.message)
+    : undefined;
   const { src, failed, retry } = useAttachmentPreview();
   const [broken, setBroken] = useState<string>();
   const available = src && broken !== src;
@@ -134,72 +152,102 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
       )}
     </>
   );
-  return (
-    <AttachmentPrimitive.Root
-      className="study-chat-attachment-card"
-      data-image={image}
-      data-removable={removable}
-      data-error={uploadFailed}
+  const uploadNotice = uploadFailed ? (
+    <ChatNotice
+      message={
+        retryError
+          ? "We couldn't attach this file. Choose it again to retry."
+          : (uploadFailure?.message ?? "We couldn't upload this file. Please try again.")
+      }
     >
-      {image && available ? (
-        <DialogPrimitive.Root>
-          <DialogPrimitive.Trigger asChild>
-            <button
-              type="button"
-              className="study-chat-attachment-tile"
-              aria-label={`Preview ${name}`}
-            >
-              {tile}
-            </button>
-          </DialogPrimitive.Trigger>
-          <DialogPrimitive.Portal>
-            <DialogPrimitive.Overlay className="study-chat-lightbox-overlay" />
-            <DialogPrimitive.Content className="study-chat-lightbox" aria-describedby={undefined}>
-              <DialogPrimitive.Title className="p-sr-only">Image preview</DialogPrimitive.Title>
-              <ExpandedImage thumbnail={src} name={name} />
-              <DialogPrimitive.Close
-                className="study-chat-lightbox-close"
-                aria-label="Close image preview"
-              >
-                <X size={22} aria-hidden="true" />
-              </DialogPrimitive.Close>
-            </DialogPrimitive.Content>
-          </DialogPrimitive.Portal>
-        </DialogPrimitive.Root>
-      ) : (
-        <div
-          className="study-chat-attachment-tile"
-          role="group"
-          aria-label={`${label} attachment ${name}`}
-          title={image ? undefined : name}
-        >
-          {tile}
-          {image && !previewFailed && !uploading && (
-            <span className="p-sr-only">Loading preview</span>
-          )}
-        </div>
-      )}
-      {removable && (
-        <Tooltip content={image ? "Remove image" : `Remove ${name}`}>
-          <AttachmentPrimitive.Remove
-            className="study-chat-attachment-remove"
-            aria-label={`Remove ${name}`}
+      <div className="study-chat-recovery-actions">
+        {!uploadFailure && removable && file && (
+          <button
+            type="button"
+            onClick={() => {
+              setRetryError(false);
+              void (async () => {
+                try {
+                  await aui.composer().addAttachment(file);
+                  await aui.attachment().remove();
+                } catch {
+                  setRetryError(true);
+                }
+              })();
+            }}
           >
-            <X size={13} />
-          </AttachmentPrimitive.Remove>
-        </Tooltip>
-      )}
-      {uploadFailed && (
-        <span className="study-chat-attachment-failure" role="status">
-          <AlertCircle size={13} />
-          Upload failed. Remove and retry.
-        </span>
-      )}
-      {image && previewFailed && (
-        <button type="button" className="study-chat-preview-retry" onClick={retry}>
-          Retry preview
-        </button>
-      )}
-    </AttachmentPrimitive.Root>
+            Retry upload
+          </button>
+        )}
+        {uploadFailure?.action === "sign_in" && <a href="/login">Sign in again</a>}
+      </div>
+    </ChatNotice>
+  ) : null;
+  return (
+    <>
+      <AttachmentPrimitive.Root
+        className="study-chat-attachment-card"
+        data-image={image}
+        data-removable={removable}
+        data-error={uploadFailed}
+      >
+        {image && available ? (
+          <DialogPrimitive.Root>
+            <DialogPrimitive.Trigger asChild>
+              <button
+                type="button"
+                className="study-chat-attachment-tile"
+                aria-label={`Preview ${name}`}
+              >
+                {tile}
+              </button>
+            </DialogPrimitive.Trigger>
+            <DialogPrimitive.Portal>
+              <DialogPrimitive.Overlay className="study-chat-lightbox-overlay" />
+              <DialogPrimitive.Content className="study-chat-lightbox" aria-describedby={undefined}>
+                <DialogPrimitive.Title className="p-sr-only">Image preview</DialogPrimitive.Title>
+                <ExpandedImage thumbnail={src} name={name} />
+                <DialogPrimitive.Close
+                  className="study-chat-lightbox-close"
+                  aria-label="Close image preview"
+                >
+                  <X size={22} aria-hidden="true" />
+                </DialogPrimitive.Close>
+              </DialogPrimitive.Content>
+            </DialogPrimitive.Portal>
+          </DialogPrimitive.Root>
+        ) : (
+          <div
+            className="study-chat-attachment-tile"
+            role="group"
+            aria-label={`${label} attachment ${name}`}
+            title={image ? undefined : name}
+          >
+            {tile}
+            {image && !previewFailed && !uploading && (
+              <span className="p-sr-only">Loading preview</span>
+            )}
+          </div>
+        )}
+        {removable && (
+          <Tooltip content={image ? "Remove image" : `Remove ${name}`}>
+            <AttachmentPrimitive.Remove
+              className="study-chat-attachment-remove"
+              aria-label={`Remove ${name}`}
+            >
+              <X size={13} />
+            </AttachmentPrimitive.Remove>
+          </Tooltip>
+        )}
+        {image && previewFailed && (
+          <button type="button" className="study-chat-preview-retry" onClick={retry}>
+            Retry preview
+          </button>
+        )}
+      </AttachmentPrimitive.Root>
+      {removable
+        ? noticeTarget && uploadNotice && createPortal(uploadNotice, noticeTarget)
+        : uploadNotice}
+    </>
   );
 }

@@ -1,5 +1,9 @@
 "use client";
 
+import { VoiceRecoveryAction } from "./connection-notice";
+
+import { fetchWithRecovery } from "@/lib/chat-recovery";
+
 import {
   useCallback,
   useEffect,
@@ -70,7 +74,7 @@ function ChatThread({
   const aui = useAui();
   useEffect(() => {
     const rejected = aui.on("composer.attachmentAddError", () =>
-      onAttachmentError("Choose a PDF, text, PNG or JPEG file up to 10 MB.")
+      onAttachmentError("Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB.")
     );
     const added = aui.on("composer.attachmentAdd", () => onAttachmentError(null));
     const started = aui.on("thread.runStart", () => onAttachmentError(null));
@@ -104,18 +108,14 @@ function ChatThread({
               </h1>
             </div>
             <ChatComposer
+              notice={error}
+              noticeActions={<VoiceRecoveryAction />}
               actionMode={actionMode}
               onActionModeChange={onActionModeChange}
               libraryDocument={libraryDocument}
               onLibraryDocumentSelect={onLibraryDocumentSelect}
             />
             {desktop && <ChatTools onActionSelect={onActionModeChange} />}
-            {error && (
-              <p className="study-chat-error" role="alert">
-                <AlertCircle size={17} aria-hidden="true" />
-                {error}
-              </p>
-            )}
           </section>
         ) : (
           <>
@@ -142,13 +142,9 @@ function ChatThread({
                     >
                       <ArrowDown size={16} aria-hidden="true" />
                     </ThreadPrimitive.ScrollToBottom>
-                    {error && (
-                      <p className="study-chat-error" role="alert">
-                        <AlertCircle size={17} aria-hidden="true" />
-                        {error}
-                      </p>
-                    )}
                     <ChatComposer
+                      notice={error}
+                      noticeActions={<VoiceRecoveryAction />}
                       actionMode={actionMode}
                       onActionModeChange={onActionModeChange}
                       libraryDocument={libraryDocument}
@@ -243,6 +239,10 @@ export function ChatContent({
     runtime,
     error,
     feedbackPending,
+    online,
+    retryMessage,
+    retryVoice,
+    canRetryVoice,
     currentSessionId,
     setSelectedLibraryDocumentId,
     actionMode,
@@ -377,7 +377,16 @@ export function ChatContent({
   );
   return (
     <AssistantRuntimeProvider runtime={runtime}>
-      <ChatActionsContext.Provider value={{ feedbackPending, sessionId: currentSessionId }}>
+      <ChatActionsContext.Provider
+        value={{
+          feedbackPending,
+          sessionId: currentSessionId,
+          online,
+          retryMessage,
+          retryVoice,
+          canRetryVoice,
+        }}
+      >
         {renderThread
           ? renderThread(
               thread,
@@ -429,7 +438,7 @@ export function ChatHistory({
       try {
         if (!token || !owner || !z.string().uuid().safeParse(id).success)
           throw new Error("Invalid conversation");
-        const response = await fetch(
+        const response = await fetchWithRecovery(
           `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat/sessions/${id}?include_branches=true`,
           {
             headers: { Authorization: `Bearer ${token}` },

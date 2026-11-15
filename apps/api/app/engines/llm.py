@@ -22,6 +22,7 @@ from app.engines.presentation_completion import (
     merge_presentation_sources,
     presentation_confirmation,
 )
+from app.engines.recovery import retry_transient, transient
 from app.engines.skills import SKILL_TOOL_DEFINITIONS, skill_engine
 from app.engines.thinking import ThinkingStreamParser  # [CHAT FIX]  # [CHAT FIX 2]
 from app.engines.tools import CORE_TOOL_DEFINITIONS, tool_engine
@@ -361,6 +362,7 @@ class MultiTierLlmEngine:
         web_search_scope: SearchScope = "biomedical",
         public_web_search: bool = False,
         current_information: bool = False,
+        document_id: str | None = None,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:  # [CHAT FIX]
         attempt_state = {"model": "unknown"}  # [CHAT FIX]
         try:  # [CHAT FIX]
@@ -384,6 +386,7 @@ class MultiTierLlmEngine:
                     web_search_scope=web_search_scope,
                     public_web_search=public_web_search,
                     current_information=current_information,
+                    document_id=document_id,
                 ):  # [CHAT FIX]
                     yield event  # [CHAT FIX]
         except TimeoutError as exc:  # [CHAT FIX]
@@ -485,7 +488,7 @@ class MultiTierLlmEngine:
         first = None  # [CHAT FIX 2]
         try:  # [CHAT FIX 2]
             async with asyncio.timeout_at(first_deadline):  # [CHAT FIX 2]
-                calls, stream = await create()  # [CHAT FIX 2]
+                calls, stream = await retry_transient(create)  # [CHAT FIX 2]
                 if stream is not None:  # [CHAT FIX 2]
                     iterator = aiter(stream)  # [CHAT FIX 2]
                     async for chunk in iterator:  # [CHAT FIX 2]
@@ -561,6 +564,7 @@ class MultiTierLlmEngine:
         web_search_scope: SearchScope = "biomedical",
         public_web_search: bool = False,
         current_information: bool = False,
+        document_id: str | None = None,
     ) -> AsyncGenerator[tuple[str, Any, str], None]:
         """
         Multi-turn Agentic Chat Streamer (max 5 turns):
@@ -656,6 +660,7 @@ class MultiTierLlmEngine:
                         MAX_HISTORY_TOKENS_OPENROUTER,
                     ),
                 ]
+            failed_attempts = 0
             for provider, model, key, budget in candidates:
                 if not self._is_live_key(key) or not self.circuits.available(model):
                     continue
@@ -691,6 +696,13 @@ class MultiTierLlmEngine:
                         model=model,
                         error_type=type(exc).__name__,
                     )
+                    failed_attempts += 1
+                    if transient(exc) and failed_attempts <= 2:
+                        yield (
+                            "recovery",
+                            {"state": "retrying", "attempt": failed_attempts, "retry_after_ms": 0},
+                            provider,
+                        )
 
             # ------------------------------------------------------------------
             # OFFLINE DETERMINISTIC AGENT FALLBACK
@@ -948,6 +960,7 @@ class MultiTierLlmEngine:
                             web_search_scope=web_search_scope,
                             public_web_search=public_web_search,
                             current_information=current_information,
+                            document_id=document_id,
                         )
                         deck_sources = merge_presentation_sources(deck_sources, t_name, tool_res)
 

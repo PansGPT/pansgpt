@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import "@pansgpt/ui/styles.css";
 import "@/components/shell/shell.css";
@@ -9,6 +9,11 @@ import { PresentationWorkspace } from "@/components/artifacts/PresentationWorksp
 import { useChatDraft } from "@/components/shell/chat-draft";
 import { StudyDashboard } from "@/components/shell/dashboard";
 import { WorkspaceLibrary } from "@/components/shell/library";
+import { ReaderWorkspace } from "@/components/reader/reader-workspace";
+import { ProfileError } from "@/components/shell/profile-error";
+import { requestProfile } from "@/lib/profile-verification";
+import { ThemeProvider } from "@pansgpt/ui/shell";
+import { env } from "./fixtures";
 import { usePathname, useSearchParams, useAuth } from "./fixtures";
 const exercisePublicRoute = new URLSearchParams(location.search).get("route_contract") === "1";
 // Component contracts cover both viewport sizes independently of the public route redirect.
@@ -31,6 +36,8 @@ function Preview() {
     <AppShell>
       {pathname === "/app" ? (
         <StudyDashboard />
+      ) : /^\/app\/library\/[^/]+\/read$/.test(pathname) ? (
+        <ReaderWorkspace documentId={pathname.split("/")[3]} />
       ) : pathname === "/app/library" ? (
         <WorkspaceLibrary />
       ) : exercisePublicRoute ? (
@@ -41,8 +48,46 @@ function Preview() {
     </AppShell>
   );
 }
+function ProfileRecoveryPreview() {
+  const code = new URLSearchParams(location.search).get("profile_failure");
+  const [result, setResult] = useState({
+    status: "error",
+    error: { code, retryable: !["session_expired", "forbidden"].includes(code) },
+  });
+  return (
+    <>
+      <small>Synthetic profile recovery preview</small>
+      {result.status === "ready" ? (
+        <p role="status">Synthetic profile verified</p>
+      ) : (
+        <ProfileError
+          error={result.error}
+          onRetry={async () => {
+            setResult(
+              await requestProfile(
+                env.NEXT_PUBLIC_API_URL,
+                {
+                  userId: "00000000-0000-4000-8000-000000000001",
+                  accessToken: "synthetic-profile-token",
+                },
+                new AbortController().signal
+              )
+            );
+          }}
+          onSignOut={async () => {}}
+        />
+      )}
+    </>
+  );
+}
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Preview />
+    {new URLSearchParams(location.search).has("profile_failure") ? (
+      <ThemeProvider initialTheme="dark">
+        <ProfileRecoveryPreview />
+      </ThemeProvider>
+    ) : (
+      <Preview />
+    )}
   </React.StrictMode>
 );

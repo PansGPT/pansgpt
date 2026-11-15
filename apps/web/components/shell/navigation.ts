@@ -4,7 +4,7 @@ import {
   BookOpen,
   Home,
   MessageSquare,
-  Sparkles,
+  ClipboardList,
 } from "lucide-react";
 
 export const destinations = [
@@ -21,7 +21,7 @@ export const destinations = [
     icon: MessageSquare,
     description: "Ask PansGPT a study question",
   },
-  { href: "/app/quiz", label: "Quiz", icon: Sparkles, description: "Practice and revision" },
+  { href: "/app/quiz", label: "Quiz", icon: ClipboardList, description: "Practice and revision" },
 ] as const;
 
 type Destination = {

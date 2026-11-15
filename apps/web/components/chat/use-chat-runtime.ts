@@ -22,12 +22,23 @@ import { z } from "zod";
 import { env } from "@/env";
 import { applyChatEvent, finishChatMessage } from "@/lib/chat-message";
 import { chatAttachmentSchema } from "@/lib/chat-history";
+import { readerSnipOrigin } from "@/lib/reader-snips";
 import { SSEEventStreamReader } from "@/lib/sse-parser";
 import { createVoiceAdapter } from "./voice-adapter";
+import {
+  ChatFailure,
+  publicFailure,
+  failureFrom,
+  responseFailure,
+  fetchWithRecovery,
+} from "@/lib/chat-recovery";
+import { parseChatHistory } from "@/lib/chat-history";
 
 const toolArgsSchema = z.record(z.string(), z.json());
 const acceptedFiles = new Set([
   "application/pdf",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   "text/plain",
   "text/markdown",
   "text/csv",
@@ -86,15 +97,25 @@ const sessionSchema = z.object({ id: z.string().uuid(), user_id: z.string().uuid
 const uuidSchema = z.string().uuid();
 const base = `${env.NEXT_PUBLIC_API_URL}/api/v1/ai/chat`;
 
-async function apiError(response: Response): Promise<string> {
-  const parsed: unknown = await response.json().catch(() => null);
-  const detail = z.object({ detail: z.string() }).safeParse(parsed);
-  return detail.success
-    ? detail.data.detail
-    : `The chat service returned HTTP ${response.status}. Please retry.`;
-}
-
-type RunOptions = { editId?: string; regenerateId?: string; parentId?: string | null };
+type RunOptions = {
+  editId?: string;
+  regenerateId?: string;
+  parentId?: string | null;
+  retryMessageId?: string;
+  actionMode?: ChatActionMode | null;
+  documentId?: string | null;
+  replace?: { questionId: string; answerId: string };
+};
+type RetryContext = {
+  prompt: string;
+  files: NonNullable<ChatMessageView["attachments"]>;
+  options: RunOptions;
+  questionId: string;
+  answerId: string;
+  canonical: boolean;
+  ambiguous: boolean;
+  blocked: boolean;
+};
 
 export function useChatRuntime({
   active: enabled = true,
@@ -106,6 +127,7 @@ export function useChatRuntime({
   initialActionMode = null,
   onSessionChanged,
   onArtifactReady,
+  fixedDocumentId = null,
 }: {
   active?: boolean;
   token: string | undefined;
@@ -116,6 +138,7 @@ export function useChatRuntime({
   initialActionMode?: ChatActionMode | null;
   onSessionChanged: () => void;
   onArtifactReady?: (artifact: ArtifactItem) => void;
+  fixedDocumentId?: string | null;
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const [headId, setHeadId] = useState<string | null>(
@@ -123,6 +146,20 @@ export function useChatRuntime({
   );
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [online, setOnline] = useState(true);
+  const [recording, setRecording] = useState<Blob | null>(null);
+  const [canRetryVoice, setCanRetryVoice] = useState(false);
+  const retryContexts = useRef(new Map<string, RetryContext>());
+  useEffect(() => {
+    const update = () => setOnline(navigator.onLine);
+    update();
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
   const [isSwitching, setIsSwitching] = useState(false);
   const [branchRevision, setBranchRevision] = useState(0);
   const pendingFeedback = useRef(new Set<string>());
@@ -134,6 +171,7 @@ export function useChatRuntime({
   const [currentSessionId, setCurrentSessionId] = useState(initialSessionId);
   const sessionPromise = useRef<Promise<string> | null>(null);
   const active = useRef<AbortController | null>(null);
+  const readerFileUpload = useRef<AbortController | null>(null);
   const lifetime = useRef<AbortController | null>(null);
   const available = useRef(enabled);
   const setSelectedLibraryDocumentId = useCallback((documentId: string | null) => {
@@ -148,6 +186,7 @@ export function useChatRuntime({
     return () => {
       lifetime.current?.abort();
       active.current?.abort();
+      readerFileUpload.current?.abort();
       active.current = null;
     };
   }, []);
@@ -164,11 +203,13 @@ export function useChatRuntime({
           );
           const response = await fetch(`${base}/sessions`, {
             method: "POST",
-            signal: signals.length ? AbortSignal.any(signals) : undefined,
+            signal: AbortSignal.any([...signals, AbortSignal.timeout(60000)]),
             headers: { ...headers, "Content-Type": "application/json" },
-            body: JSON.stringify({} satisfies ChatSessionCreateRequest),
+            body: JSON.stringify({
+              ...(fixedDocumentId ? { document_id: fixedDocumentId } : {}),
+            } satisfies ChatSessionCreateRequest),
           });
-          if (!response.ok) throw new Error(await apiError(response));
+          if (!response.ok) throw await responseFailure(response);
           const created = sessionSchema.parse(await response.json());
           if (created.user_id !== ownerId)
             throw new Error("The conversation does not belong to this account.");
@@ -184,15 +225,43 @@ export function useChatRuntime({
       }
       return sessionPromise.current;
     },
-    [token, canSend, headers, ownerId, onSessionChanged]
+    [token, canSend, headers, ownerId, onSessionChanged, fixedDocumentId]
+  );
+
+  const uploadFile = useCallback(
+    async (file: File, signal?: AbortSignal) => {
+      const id = await ensureSession(signal);
+      const body = new FormData();
+      body.append("file", file);
+      const signals = [signal, lifetime.current?.signal].filter(
+        (item): item is AbortSignal => !!item
+      );
+      const snip = fixedDocumentId ? readerSnipOrigin(file) : undefined;
+      const response = await fetch(
+        `${base}/sessions/${id}/${snip ? "document-snip" : "attachments"}`,
+        {
+          method: "POST",
+          headers: snip ? { ...headers, "Content-Type": "application/json" } : headers,
+          body: snip ? JSON.stringify(snip) : body,
+          signal: AbortSignal.any([...signals, AbortSignal.timeout(60000)]),
+        }
+      );
+      if (!response.ok) throw await responseFailure(response, "upload");
+      const saved = chatAttachmentSchema.parse(await response.json());
+      return saved;
+    },
+    [ensureSession, headers, fixedDocumentId]
   );
 
   const attachments = useMemo<AttachmentAdapter>(
     () => ({
-      accept: "application/pdf,text/plain,text/markdown,text/csv,image/png,image/jpeg",
+      accept: ".pdf,.pptx,.docx,.txt,.md,.csv,image/png,image/jpeg",
       async add({ file }) {
+        const origin = readerSnipOrigin(file);
+        if (fixedDocumentId && origin && origin.document_id !== fixedDocumentId)
+          throw new Error("Snip from the PDF open in this study chat.");
         if (!file.size || file.size > 10 * 1024 * 1024 || !acceptedFiles.has(file.type)) {
-          const message = "Choose a PDF, text, PNG or JPEG file up to 10 MB.";
+          const message = "Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB.";
           throw new Error(message);
         }
         return {
@@ -205,20 +274,7 @@ export function useChatRuntime({
         };
       },
       async send(attachment, options) {
-        const id = await ensureSession(options?.signal);
-        const body = new FormData();
-        body.append("file", attachment.file);
-        const signals = [options?.signal, lifetime.current?.signal].filter(
-          (item): item is AbortSignal => !!item
-        );
-        const response = await fetch(`${base}/sessions/${id}/attachments`, {
-          method: "POST",
-          headers,
-          body,
-          signal: signals.length ? AbortSignal.any(signals) : undefined,
-        });
-        if (!response.ok) throw new Error(await apiError(response));
-        const saved = chatAttachmentSchema.parse(await response.json());
+        const saved = await uploadFile(attachment.file, options?.signal);
         return {
           id: saved.id,
           name: saved.name,
@@ -239,40 +295,56 @@ export function useChatRuntime({
             signal: lifetime.current?.signal,
           }
         );
-        if (!response.ok && response.status !== 404) throw new Error(await apiError(response));
+        if (!response.ok && response.status !== 404)
+          throw await responseFailure(response, "upload");
       },
     }),
-    [ensureSession, headers]
+    [uploadFile, headers, fixedDocumentId]
   );
 
-  const dictation = useMemo(
-    () =>
-      createVoiceAdapter(async (audio, signal) => {
-        if (!token || !canSend)
-          throw new Error("Please acknowledge the study notice before recording.");
-        const body = new FormData();
-        const extension = audio.type.includes("mp4")
-          ? "m4a"
-          : audio.type.includes("ogg")
-            ? "ogg"
-            : "webm";
-        body.append("file", audio, `question.${extension}`);
-        const response = await fetch(`${base}/transcribe`, {
-          method: "POST",
-          headers,
-          body,
-          signal,
-        });
-        if (!response.ok) throw new Error(await apiError(response));
-        return z.object({ text: z.string() }).parse(await response.json()).text;
-      }, setError),
+  const transcribeAudio = useCallback(
+    async (audio: Blob, signal: AbortSignal): Promise<string> => {
+      if (!token || !canSend)
+        throw new Error("Please acknowledge the study notice before recording.");
+      setRecording(audio);
+      setCanRetryVoice(false);
+      const body = new FormData();
+      const extension = audio.type.includes("mp4")
+        ? "m4a"
+        : audio.type.includes("ogg")
+          ? "ogg"
+          : "webm";
+      body.append("file", audio, `question.${extension}`);
+      try {
+        const response = await fetchWithRecovery(
+          `${base}/transcribe`,
+          {
+            method: "POST",
+            headers,
+            body,
+            signal,
+          },
+          { safeTranscription: true, timeoutMs: 30000 }
+        );
+        if (!response.ok) throw await responseFailure(response, "voice");
+        const text = z.object({ text: z.string() }).parse(await response.json()).text;
+        setRecording(null);
+        return text;
+      } catch (failure) {
+        if (!signal.aborted) setCanRetryVoice(failureFrom(failure, "voice").retryable);
+        else setRecording(null);
+        throw failure;
+      }
+    },
     [token, canSend, headers]
   );
+  const dictation = useMemo(() => createVoiceAdapter(transcribeAudio, setError), [transcribeAudio]);
   useEffect(() => () => dictation.dispose(), [dictation]);
   useEffect(() => {
     available.current = enabled;
     if (!enabled) {
       active.current?.abort();
+      readerFileUpload.current?.abort();
       dictation.dispose();
     }
   }, [enabled, dictation]);
@@ -285,6 +357,10 @@ export function useChatRuntime({
     ) => {
       // An attachment submission can finish after the Home sheet was closed.
       if (!available.current || lifetime.current?.signal.aborted) return;
+      if (navigator.onLine === false) {
+        setError(publicFailure("OFFLINE").message);
+        return;
+      }
       if (active.current || isSwitching) return;
       if (!token || !canSend) {
         setError("Please acknowledge the study notice before sending.");
@@ -295,15 +371,23 @@ export function useChatRuntime({
         return;
       }
       const submittedActionMode =
-        options.editId || options.regenerateId ? null : actionModeRef.current;
+        options.actionMode !== undefined
+          ? options.actionMode
+          : options.editId || options.regenerateId
+            ? null
+            : actionModeRef.current;
+      const submittedDocument =
+        options.documentId !== undefined
+          ? options.documentId
+          : (fixedDocumentId ?? selectedLibraryDocumentId.current);
       const controller = new AbortController();
       active.current = controller;
       const current = () => active.current === controller && !controller.signal.aborted;
       const original = options.regenerateId
         ? messages.find((item) => item.id === options.regenerateId)
         : undefined;
-      let questionId = original?.parentId ?? crypto.randomUUID();
-      const placeholderId = crypto.randomUUID();
+      let questionId = options.replace?.questionId ?? original?.parentId ?? crypto.randomUUID();
+      const placeholderId = options.replace?.answerId ?? crypto.randomUUID();
       let answer: ChatMessageView = {
         id: placeholderId,
         parentId: questionId,
@@ -312,6 +396,10 @@ export function useChatRuntime({
         status: "running",
       };
       let canonical = false;
+      let requestStarted = false;
+      let rejected = false;
+      let terminal = false;
+      let blocked = false;
       const publish = () =>
         setMessages((previous) =>
           previous.map((item) =>
@@ -327,8 +415,8 @@ export function useChatRuntime({
         parentId = parent.parentId ?? null;
       }
       setMessages((previous) => [
-        ...previous,
-        ...(options.regenerateId
+        ...previous.filter((item) => item.id !== options.replace?.answerId),
+        ...(options.regenerateId || options.replace
           ? []
           : [
               {
@@ -344,8 +432,21 @@ export function useChatRuntime({
       ]);
       setHeadId(answer.id);
       setError(null);
+      setRecording(null);
+      setCanRetryVoice(false);
       setIsRunning(true);
       let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
+      let slowTimer: ReturnType<typeof setTimeout> | undefined;
+      const scheduleSlow = () => {
+        if (slowTimer) clearTimeout(slowTimer);
+        slowTimer = setTimeout(() => {
+          if (current() && answer.status === "running") {
+            answer = { ...answer, recovery: "slow" };
+            publish();
+          }
+        }, 12000);
+      };
+      scheduleSlow();
       try {
         const id = await ensureSession(controller.signal);
         if (!current()) return;
@@ -353,21 +454,26 @@ export function useChatRuntime({
           message: prompt,
           action_mode: submittedActionMode ?? undefined,
           parent_message_id: parentId,
-          document_id: selectedLibraryDocumentId.current ?? undefined,
+          document_id: submittedDocument ?? undefined,
           edit_message_id: options.editId,
           regenerate_message_id: options.regenerateId,
+          retry_message_id: options.retryMessageId,
           attachment_ids: files.map((item) => item.id),
           enable_rag: true,
           enable_tools: true,
         };
+        requestStarted = true;
         const response = await fetch(`${base}/sessions/${id}/stream`, {
           method: "POST",
-          signal: controller.signal,
+          signal: AbortSignal.any([controller.signal, AbortSignal.timeout(150000)]),
           headers: { ...headers, "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
         if (!current()) return;
-        if (!response.ok) throw new Error(await apiError(response));
+        if (!response.ok) {
+          rejected = true;
+          throw await responseFailure(response);
+        }
         if (!response.body) throw new Error("The chat service returned no response stream.");
         if (submittedActionMode !== null) setSelectedActionMode(null);
         reader = response.body.getReader();
@@ -380,6 +486,14 @@ export function useChatRuntime({
             ? [...parser.push(decoder.decode()), ...parser.flush()]
             : parser.push(decoder.decode(chunk.value, { stream: true }));
           for (const event of events) {
+            if (
+              ["text_chunk", "public_progress", "tool_start", "tool_end", "recovery"].includes(
+                event.event
+              )
+            )
+              scheduleSlow();
+            if (event.event === "error" || event.event === "done") terminal = true;
+            if (event.event === "tool_start" || event.event === "artifact_ready") blocked = true;
             if (event.event === "init" && event.data.session_id && event.data.session_id !== id)
               throw new Error("The response belongs to a different conversation.");
             if (
@@ -403,17 +517,20 @@ export function useChatRuntime({
             if (event.event === "artifact_ready") onArtifactReady?.(event.data);
           }
           publish();
-          if (chunk.done) break;
+          if (chunk.done || events.some((event) => event.event === "done")) break;
         }
       } catch (failure: unknown) {
         if (current())
           answer = {
             ...answer,
             status: "error",
-            error:
-              failure instanceof Error ? failure.message : "The response failed. Please retry.",
+            error: failureFrom(failure).message,
+            failure: failureFrom(failure),
+            retryable: failureFrom(failure).retryable,
+            recovery: undefined,
           };
       } finally {
+        if (slowTimer) clearTimeout(slowTimer);
         if (reader) {
           await reader.cancel().catch(() => undefined);
           reader.releaseLock();
@@ -422,7 +539,31 @@ export function useChatRuntime({
           answer = {
             ...finishChatMessage(answer, controller.signal.aborted),
             isSaved: canonical && answer.status === "complete",
+            ...(blocked && answer.status === "error"
+              ? {
+                  retryable: false,
+                  error:
+                    "Something went wrong. Check any generated results before starting a new request.",
+                }
+              : {}),
           };
+          if (answer.status === "error")
+            retryContexts.current.set(answer.id, {
+              prompt,
+              files,
+              questionId,
+              answerId: answer.id,
+              canonical,
+              ambiguous: requestStarted && !terminal && !rejected,
+              blocked,
+              options: {
+                ...options,
+                documentId: submittedDocument,
+                actionMode: submittedActionMode,
+                parentId,
+              },
+            });
+          else retryContexts.current.delete(answer.id);
           publish();
           if (answer.isSaved)
             setMessages((previous) =>
@@ -447,7 +588,83 @@ export function useChatRuntime({
       onSessionChanged,
       onArtifactReady,
       setSelectedActionMode,
+      fixedDocumentId,
     ]
+  );
+
+  const retryMessage = useCallback(
+    async (messageId: string) => {
+      const context = retryContexts.current.get(messageId);
+      if (!context || active.current || !available.current) return;
+      if (!online) {
+        setError(publicFailure("OFFLINE").message);
+        return;
+      }
+      if (context.blocked) {
+        setError("Check the study-tool results before making a new request.");
+        return;
+      }
+      try {
+        const id = sessionId.current;
+        if (!id) {
+          if (context.ambiguous) throw new ChatFailure(publicFailure("409"));
+          await run(context.prompt, context.files, {
+            ...context.options,
+            replace: { questionId: context.questionId, answerId: context.answerId },
+          });
+          return;
+        }
+        const response = await fetchWithRecovery(`${base}/sessions/${id}?include_branches=true`, {
+          headers,
+          signal: lifetime.current?.signal,
+          cache: "no-store",
+        });
+        if (!response.ok) throw await responseFailure(response);
+        const saved = parseChatHistory(await response.json(), id, ownerId);
+        const completed = saved.find(
+          (item) => item.id === context.answerId && item.role === "assistant"
+        );
+        if (completed) {
+          setMessages((previous) =>
+            previous.map((item) =>
+              item.id === messageId
+                ? completed
+                : item.id === context.questionId
+                  ? { ...item, isSaved: true }
+                  : item
+            )
+          );
+          setHeadId(completed.id);
+          setError(null);
+          retryContexts.current.delete(messageId);
+          onSessionChanged();
+          return;
+        }
+        if (context.ambiguous && !context.canonical) throw new ChatFailure(publicFailure("409"));
+        const existingQuestion = saved.find(
+          (item) => item.id === context.questionId && item.role === "user"
+        );
+        await run(context.prompt, context.files, {
+          ...context.options,
+          ...(existingQuestion
+            ? { retryMessageId: existingQuestion.id, editId: undefined, regenerateId: undefined }
+            : {}),
+          replace: { questionId: context.questionId, answerId: context.answerId },
+        });
+      } catch (failure) {
+        if (!lifetime.current?.signal.aborted) {
+          const view = failureFrom(failure);
+          setMessages((previous) =>
+            previous.map((item) =>
+              item.id === messageId
+                ? { ...item, error: view.message, failure: view, retryable: view.retryable }
+                : item
+            )
+          );
+        }
+      }
+    },
+    [run, online, headers, ownerId, onSessionChanged]
   );
 
   const onNew = useCallback(
@@ -503,7 +720,7 @@ export function useChatRuntime({
         signal: lifetime.current?.signal,
       })
         .then(async (response) => {
-          if (!response.ok) throw new Error(await apiError(response));
+          if (!response.ok) throw await responseFailure(response, "mutation");
           if (!lifetime.current?.signal.aborted) {
             setHeadId(selectedHead);
             setError(null);
@@ -511,7 +728,7 @@ export function useChatRuntime({
         })
         .catch((failure: unknown) => {
           if (!lifetime.current?.signal.aborted) {
-            setError(failure instanceof Error ? failure.message : "Branch selection failed.");
+            setError(failureFrom(failure, "mutation").message);
             setBranchRevision((value) => value + 1);
           }
         })
@@ -552,7 +769,7 @@ export function useChatRuntime({
             signal: lifetime.current?.signal,
           }
         );
-        if (!response.ok) throw new Error(await apiError(response));
+        if (!response.ok) throw await responseFailure(response, "mutation");
         if (!lifetime.current?.signal.aborted) {
           setMessages((previous) =>
             previous.map((item) => (item.id === messageId ? { ...item, feedback: rating } : item))
@@ -560,10 +777,7 @@ export function useChatRuntime({
           setError(null);
         }
       } catch (failure: unknown) {
-        if (!lifetime.current?.signal.aborted)
-          setError(
-            failure instanceof Error ? failure.message : "Feedback was not saved. Please retry."
-          );
+        if (!lifetime.current?.signal.aborted) setError(failureFrom(failure, "mutation").message);
         throw failure;
       } finally {
         pendingFeedback.current.delete(messageId);
@@ -578,12 +792,13 @@ export function useChatRuntime({
     convertMessage: convertChatMessage,
     isRunning,
     isLoading: isSwitching,
-    isSendDisabled: !enabled || !token || !canSend || isSwitching,
+    isSendDisabled: !enabled || !token || !canSend || isSwitching || !online,
     onNew,
     onEdit: onNew,
     onReload,
     onCancel: async () => {
       active.current?.abort();
+      readerFileUpload.current?.abort();
     },
     setMessages: persistBranch,
     adapters: {
@@ -596,9 +811,56 @@ export function useChatRuntime({
       },
     },
   });
+  const sendReaderFile = useCallback(
+    async (text: string, file: File): Promise<void> => {
+      if (readerFileUpload.current || active.current || !available.current) return;
+      if (!navigator.onLine) {
+        setError(publicFailure("OFFLINE").message);
+        return;
+      }
+      const controller = new AbortController();
+      readerFileUpload.current = controller;
+      setIsRunning(true);
+      try {
+        const saved = await uploadFile(file, controller.signal);
+        if (controller.signal.aborted) return;
+        await run(text, [saved]);
+      } catch (failure) {
+        if (!lifetime.current?.signal.aborted && !controller.signal.aborted) {
+          setError(failureFrom(failure, "upload").message);
+          // Keep the image available for a deliberate Send after an upload failure.
+          if (runtime.thread.composer.getState().attachments.length < 4)
+            await runtime.thread.composer.addAttachment(file).catch(() => undefined);
+        }
+      } finally {
+        readerFileUpload.current = null;
+        if (!lifetime.current?.signal.aborted) setIsRunning(false);
+      }
+    },
+    [uploadFile, run, runtime]
+  );
+  const retryVoice = useCallback(async () => {
+    const audio = recording;
+    if (!audio || !available.current || !lifetime.current || active.current) return;
+    setCanRetryVoice(false);
+    try {
+      const text = await transcribeAudio(audio, lifetime.current.signal);
+      if (lifetime.current.signal.aborted || !available.current) return;
+      const previous = runtime.thread.composer.getState().text;
+      runtime.thread.composer.setText(previous.trim() ? `${previous}\n${text}` : text);
+      setError(null);
+    } catch (failure) {
+      if (!lifetime.current?.signal.aborted) setError(failureFrom(failure, "voice").message);
+    }
+  }, [transcribeAudio, runtime, recording]);
   return {
     runtime,
     isRunning,
+    online,
+    retryMessage,
+    sendReaderFile,
+    retryVoice,
+    canRetryVoice,
     error,
     feedbackPending,
     currentSessionId,
