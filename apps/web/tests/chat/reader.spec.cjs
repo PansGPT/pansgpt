@@ -1277,11 +1277,35 @@ for (const mobile of [false, true]) {
     );
     await expect(failed).toContainText("Synthetic partial answer.");
     await expect(failed).not.toContainText("internal provider");
-    await page.screenshot({
-      path: test.info().outputPath(`chat-failure-${mobile ? "mobile" : "desktop"}.png`),
-    });
-    await failed.getByRole("button", { name: "Dismiss notice", exact: true }).click();
-    await expect(failed.getByRole("alert")).toHaveCount(0);
+    await expect(failed.getByRole("button", { name: "Dismiss notice", exact: true })).toHaveCount(
+      0
+    );
+    for (const theme of ["light", "dark", "sepia"]) {
+      await page.evaluate((value) => {
+        document.documentElement.dataset.theme = value;
+      }, theme);
+      const geometry = await failed.locator(".study-chat-error-row").evaluate((row) => {
+        const text = row.querySelector('[role="alert"]').getBoundingClientRect();
+        const button = row.querySelector("button").getBoundingClientRect();
+        const bounds = row.getBoundingClientRect();
+        return {
+          centerDifference: Math.abs(text.top + text.height / 2 - button.top - button.height / 2),
+          buttonRight: button.right,
+          rowRight: bounds.right,
+          textRight: text.right,
+          buttonLeft: button.left,
+          rowWidth: bounds.width,
+          viewportWidth: window.innerWidth,
+        };
+      });
+      expect(geometry.centerDifference).toBeLessThanOrEqual(1);
+      expect(geometry.buttonRight).toBeLessThan(geometry.rowRight);
+      expect(geometry.textRight).toBeLessThan(geometry.buttonLeft);
+      expect(geometry.rowWidth).toBeLessThanOrEqual(geometry.viewportWidth);
+      await page.screenshot({
+        path: test.info().outputPath(`chat-failure-${mobile ? "mobile" : "desktop"}-${theme}.png`),
+      });
+    }
     await expect(failed.getByRole("button", { name: "Retry", exact: true })).toBeVisible();
     await input.fill("Keep my unfinished draft");
     state.streamMode = null;

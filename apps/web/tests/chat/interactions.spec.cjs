@@ -1832,17 +1832,22 @@ test("timeout feedback stays with its response on desktop and mobile", async ({ 
     await expect(error).toHaveText(
       width < 861 ? "Something went wrong. Try again." : "Something went wrong. Please try again."
     );
+    await expect(response.locator(".study-chat-error-row")).toBeVisible();
+    await expect(response.getByRole("button", { name: "Dismiss notice", exact: true })).toHaveCount(
+      0
+    );
     await expect(page.locator(".study-chat-footer").getByRole("alert")).toHaveCount(0);
     await expect(response.getByText("No response was returned.", { exact: true })).toHaveCount(0);
     const spacing = await response.evaluate((element) => {
       const alert = element.querySelector('[role="alert"]');
-      const previous = alert.previousElementSibling;
+      const row = alert.closest(".study-chat-error-row");
+      const previous = row.previousElementSibling;
       return {
         gap:
-          alert.getBoundingClientRect().top -
+          row.getBoundingClientRect().top -
           (previous
             ? previous.getBoundingClientRect().bottom
-            : alert.parentElement.getBoundingClientRect().top),
+            : row.parentElement.getBoundingClientRect().top),
         fontSize: getComputedStyle(alert).fontSize,
       };
     });
@@ -2863,7 +2868,7 @@ for (const mobile of [false, true]) {
     const form = page.locator(".study-chat-composer");
     await page.getByRole("button", { name: "Send message", exact: true }).click();
     await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toBeVisible();
-    const banner = page.locator(".study-chat-composer-notices .study-chat-notice-banner");
+    const banner = page.locator(".study-chat-composer-notices .study-chat-error-row");
     const warning = banner.getByRole("alert");
     await expect(warning).toHaveText(
       mobile ? "Couldn't upload. Try again." : "We couldn't upload this file. Please try again."
@@ -2886,8 +2891,12 @@ for (const mobile of [false, true]) {
     await page.screenshot({
       path: test.info().outputPath(`upload-error-above-${mobile ? "mobile" : "desktop"}.png`),
     });
-    await banner.getByRole("button", { name: "Dismiss notice", exact: true }).click();
-    await expect(warning).toHaveCount(0);
+    await expect(banner.getByRole("button", { name: "Dismiss notice", exact: true })).toHaveCount(
+      0
+    );
+    await expect(banner.getByRole("button", { name: "Retry upload", exact: true })).toHaveText(
+      "Retry"
+    );
     expect(
       (await form.locator(".study-chat-attachment-card").boundingBox()).height
     ).toBeLessThanOrEqual(70);

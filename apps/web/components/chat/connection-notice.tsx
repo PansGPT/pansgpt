@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore, type ReactNode } from "react";
-import { AlertTriangle, Info, X } from "lucide-react";
+import { AlertCircle, AlertTriangle, Info, RotateCcw, X } from "lucide-react";
 import { useChatActions } from "./actions-context";
 
 function subscribe(notify: () => void): () => void {
@@ -49,6 +49,32 @@ const mobileCopy: Record<string, string> = {
   "This is taking longer than usual.": "Taking a little longer…",
 };
 
+function useChatNoticeMessage(message: string): string {
+  const mobile = useSyncExternalStore(
+    subscribeMobile,
+    () => window.matchMedia("(max-width: 860px)").matches,
+    () => false
+  );
+  return mobile ? (mobileCopy[message] ?? message) : message;
+}
+
+export function ChatError({
+  message,
+  children,
+}: {
+  message: string;
+  children?: ReactNode;
+}): React.ReactElement {
+  const copy = useChatNoticeMessage(message);
+  return (
+    <div className="study-chat-error-row">
+      <AlertCircle size={18} aria-hidden="true" />
+      <p role="alert">{copy}</p>
+      <div className="study-chat-error-actions">{children}</div>
+    </div>
+  );
+}
+
 export function ChatNotice({
   message,
   kind = "warning",
@@ -61,18 +87,14 @@ export function ChatNotice({
   children?: ReactNode;
 }): React.ReactElement | null {
   const [dismissed, setDismissed] = useState<string | null>(null);
-  const mobile = useSyncExternalStore(
-    subscribeMobile,
-    () => window.matchMedia("(max-width: 860px)").matches,
-    () => false
-  );
+  const copy = useChatNoticeMessage(message);
   if (dismissed === message) return children ? <>{children}</> : null;
   const Icon = kind === "info" ? Info : AlertTriangle;
   return (
     <div className="study-chat-notice-banner" data-kind={kind}>
       <Icon className="study-chat-notice-icon" size={17} aria-hidden="true" />
       <div className="study-chat-notice-copy">
-        <p role={role}>{mobile ? (mobileCopy[message] ?? message) : message}</p>
+        <p role={role}>{copy}</p>
         {children}
       </div>
       <button
@@ -96,6 +118,7 @@ export function ChatComposerNotices({
   attachmentError?: string | null;
   actions?: ReactNode;
 }): React.ReactElement | null {
+  const { canRetryVoice, retryVoice } = useChatActions();
   const online = useSyncExternalStore(
     subscribe,
     () => navigator.onLine,
@@ -118,11 +141,17 @@ export function ChatComposerNotices({
           role="status"
         />
       )}
-      {errors.map((message) => (
-        <ChatNotice key={message} message={message}>
-          {message === error ? actions : undefined}
-        </ChatNotice>
-      ))}
+      {errors.map((message) =>
+        message === error && canRetryVoice && retryVoice ? (
+          <ChatError key={message} message={message}>
+            {actions}
+          </ChatError>
+        ) : (
+          <ChatNotice key={message} message={message}>
+            {message === error ? actions : undefined}
+          </ChatNotice>
+        )
+      )}
     </div>
   );
 }
@@ -131,8 +160,13 @@ export function VoiceRecoveryAction(): React.ReactElement | null {
   const { retryVoice, canRetryVoice, online } = useChatActions();
   return canRetryVoice && retryVoice ? (
     <span className="study-chat-recovery-actions">
-      <button type="button" disabled={online === false} onClick={() => void retryVoice()}>
-        Retry transcription
+      <button
+        type="button"
+        aria-label="Retry transcription"
+        disabled={online === false}
+        onClick={() => void retryVoice()}
+      >
+        <RotateCcw size={14} aria-hidden="true" /> Retry
       </button>
     </span>
   ) : null;
