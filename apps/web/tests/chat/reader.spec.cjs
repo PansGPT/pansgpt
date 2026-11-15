@@ -271,7 +271,10 @@ async function setup(page, options = {}) {
       ];
       state.trees[currentChat] = state.tree;
       const frame = (event, data) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
-      if (state.streamMode === "slow") await new Promise((resolve) => setTimeout(resolve, 14000));
+      if (state.streamMode === "slow")
+        await new Promise((resolve) => {
+          state.finishSlowResponse = resolve;
+        });
       if (["failure", "tool_failure", "saved_disconnect"].includes(state.streamMode)) {
         const mode = state.streamMode;
         const prefix = frame("init", {
@@ -1351,22 +1354,40 @@ test("a failed tool request cannot be replayed through response Retry", async ({
   await expect(page.getByRole("button", { name: "Retry", exact: true })).toHaveCount(0);
 });
 
-test("slow responses show gentle waiting feedback before completing", async ({ page }) => {
-  await setup(page, { streamMode: "slow" });
-  await ready(page);
-  await page.getByRole("button", { name: "Open study chat", exact: true }).click();
-  await page
-    .getByRole("textbox", { name: "Ask about this document" })
-    .fill("Synthetic slow request");
-  await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(
-    page.getByRole("status").filter({ hasText: "This is taking longer than usual." }).first()
-  ).toBeVisible();
-  await expect(
-    page.getByText("This synthetic passage describes a signal and a response.", { exact: true })
-  ).toBeVisible();
-  await expect(page.getByRole("alert")).toHaveCount(0);
-});
+for (const mobile of [false, true]) {
+  test(`slow responses use the thinking status before completing on ${mobile ? "mobile" : "desktop"}`, async ({
+    page,
+  }) => {
+    if (mobile) {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.emulateMedia({ reducedMotion: "reduce" });
+    }
+    const state = await setup(page, { streamMode: "slow" });
+    await ready(page);
+    await page.getByRole("button", { name: "Open study chat", exact: true }).click();
+    await page
+      .getByRole("textbox", { name: "Ask about this document" })
+      .fill("Synthetic slow request");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const status = page.locator(".study-chat-live-status .t-think");
+    await expect(status).toContainText("Thinking");
+    await expect(status).toContainText("This is taking longer than usual.");
+    await expect(page.locator(".study-chat-live-status")).toHaveCount(1);
+    await expect(page.locator(".study-chat-live-status .t-matrix")).toBeVisible();
+    await expect(page.locator(".study-chat-notice-banner, .study-chat-error-row")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Retry", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Dismiss notice", exact: true })).toHaveCount(0);
+    await page.screenshot({
+      path: test.info().outputPath(`reader-slow-thinking-${mobile ? "mobile" : "desktop"}.png`),
+    });
+    state.finishSlowResponse();
+    await expect(
+      page.getByText("This synthetic passage describes a signal and a response.", { exact: true })
+    ).toBeVisible();
+    await expect(page.getByRole("alert")).toHaveCount(0);
+    await expect(page.locator(".study-chat-live-status")).toHaveCount(0);
+  });
+}
 
 test("mobile study validation uses a short dismissible banner above a compact composer", async ({
   page,

@@ -37,7 +37,7 @@ import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
 import { ThinkingStatus } from "./motion";
 import { ChatAttachment } from "./attachment";
-import { ChatError, ChatNotice } from "./connection-notice";
+import { ChatError } from "./connection-notice";
 
 function useOriginalMessage(): ChatMessageView | undefined {
   return useAuiState((state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]);
@@ -283,11 +283,18 @@ export function AssistantMessage(): React.ReactElement {
   const running = useAuiState((state) => state.thread.isRunning);
   const waiting =
     message?.status === "running" &&
-    (!message.content || message.tools?.some((tool) => tool.status === "running"));
+    (!!message.recovery ||
+      !message.content ||
+      message.tools?.some((tool) => tool.status === "running"));
   const currentProgress = message?.progress
     ?.slice()
     .reverse()
     .find((update) => !message.activity || update.code === message.activity);
+  const statusLabel = message?.recovery
+    ? message.recovery === "retrying"
+      ? "Trying again…"
+      : "This is taking longer than usual."
+    : currentProgress?.label;
   const empty = !message?.content && !message?.artifacts?.length;
   return (
     <MessagePrimitive.Root
@@ -299,9 +306,9 @@ export function AssistantMessage(): React.ReactElement {
     >
       <div className="study-chat-turn">
         <div className="study-chat-bubble" data-role="assistant">
-          {waiting && !message?.recovery && (
+          {waiting && (
             <div className="study-chat-live-status">
-              <ThinkingStatus label={currentProgress?.label} />
+              <ThinkingStatus label={statusLabel} />
             </div>
           )}
           <MessagePrimitive.Parts
@@ -314,18 +321,6 @@ export function AssistantMessage(): React.ReactElement {
             <p className="study-chat-response-state">
               {message?.status === "cancelled" ? "Response stopped." : "No response was returned."}
             </p>
-          )}
-          {message?.status === "running" && message.recovery && (
-            <ChatNotice
-              key={message.recovery}
-              kind="info"
-              role="status"
-              message={
-                message.recovery === "retrying"
-                  ? "Trying again…"
-                  : "This is taking longer than usual."
-              }
-            />
           )}
           {message?.status === "error" && (
             <ChatError

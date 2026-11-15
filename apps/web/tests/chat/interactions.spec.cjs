@@ -2922,43 +2922,57 @@ for (const mobile of [false, true]) {
   });
 }
 
-test("transient backend recovery shows Trying again without replaying the message POST", async ({
-  page,
-}) => {
-  await setupChat(page);
-  await page.goto(`/?session=${session}`);
-  await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
-  await page.evaluate(() => {
-    const original = window.fetch;
-    window.fetch = async (...args) => {
-      const response = await original(...args);
-      if (!String(args[0]).endsWith("/stream")) return response;
-      const body = await response.text();
-      const encoder = new TextEncoder();
-      return new Response(
-        new ReadableStream({
-          start(controller) {
-            controller.enqueue(
-              encoder.encode(
-                'event: recovery\ndata: {"state":"retrying","attempt":1,"retry_after_ms":1500}\n\n'
-              )
-            );
-            setTimeout(() => {
-              controller.enqueue(encoder.encode(body));
-              controller.close();
-            }, 1500);
-          },
-        }),
-        { headers: { "Content-Type": "text/event-stream" } }
-      );
-    };
+for (const mobile of [false, true]) {
+  test(`transient backend recovery uses thinking without replaying the message POST on ${mobile ? "mobile" : "desktop"}`, async ({
+    page,
+  }) => {
+    if (mobile) await page.setViewportSize({ width: 390, height: 844 });
+    await setupChat(page);
+    await page.goto(`/?session=${session}`);
+    await expect(page.getByText("Original synthetic answer", { exact: true })).toBeVisible();
+    await page.evaluate(() => {
+      const original = window.fetch;
+      window.fetch = async (...args) => {
+        const response = await original(...args);
+        if (!String(args[0]).endsWith("/stream")) return response;
+        const body = await response.text();
+        const encoder = new TextEncoder();
+        return new Response(
+          new ReadableStream({
+            start(controller) {
+              controller.enqueue(
+                encoder.encode(
+                  'event: text_chunk\ndata: {"token":"Synthetic partial recovery."}\n\nevent: recovery\ndata: {"state":"retrying","attempt":1,"retry_after_ms":1500}\n\n'
+                )
+              );
+              window.__finishRecovery = () => {
+                controller.enqueue(encoder.encode(body));
+                controller.close();
+              };
+            },
+          }),
+          { headers: { "Content-Type": "text/event-stream" } }
+        );
+      };
+    });
+    await page.getByLabel("Study question").fill("Synthetic temporary failure");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.locator(".study-chat-live-status .t-think")).toContainText("Trying again");
+    await expect(page.locator(".study-chat-live-status")).toHaveCount(1);
+    await expect(page.locator(".study-chat-live-status .t-matrix")).toBeVisible();
+    await expect(page.getByText("Synthetic partial recovery.", { exact: true })).toBeVisible();
+    await expect(page.locator(".study-chat-notice-banner, .study-chat-error-row")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Retry", exact: true })).toHaveCount(0);
+    await page.screenshot({
+      path: test.info().outputPath(`chat-automatic-thinking-${mobile ? "mobile" : "desktop"}.png`),
+    });
+    await page.evaluate(() => window.__finishRecovery());
+    await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+    await expect(page.locator(".study-chat-live-status")).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () => window.__calls.filter((call) => call.url.endsWith("/stream")).length
+      )
+    ).toBe(1);
   });
-  await page.getByLabel("Study question").fill("Synthetic temporary failure");
-  await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(page.getByRole("status").filter({ hasText: "Trying again" }).first()).toBeVisible();
-  await page.screenshot({ path: test.info().outputPath("chat-automatic-recovery.png") });
-  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
-  expect(
-    await page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
-  ).toBe(1);
-});
+}
