@@ -987,7 +987,9 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
   });
   await page.getByLabel("Study question").fill("Which sample does the arrow point to?");
   await page.getByRole("button", { name: "Send message", exact: true }).click();
-  await expect(page.getByText("Upload failed. Remove and retry.", { exact: true })).toBeVisible();
+  await expect(page.getByRole("alert")).toHaveText(
+    "We couldn't upload this file. Please try again."
+  );
   expect(
     await page.evaluate(() => window.__calls.filter((c) => c.url.endsWith("/stream")).length)
   ).toBe(0);

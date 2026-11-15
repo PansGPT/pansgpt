@@ -100,7 +100,9 @@ test("verified workspace navigation, profile, account themes, failures and mobil
   await openProfile(page);
   const profile = page.getByRole("dialog", { name: "Settings", exact: true });
   await expect(profile.getByText("University of Jos", { exact: true })).toBeVisible();
-  await expect(profile.getByText("200 Level", { exact: true })).toBeVisible();
+  await expect(
+    profile.getByRole("button", { name: "Edit academic level", exact: true })
+  ).toHaveText("200 Level");
   await selectSettingsSection(page, "Appearance");
   await profile.getByRole("radio", { name: "Light theme", exact: true }).check();
   await expect(profile.getByRole("status")).toContainText("Your theme is saved");

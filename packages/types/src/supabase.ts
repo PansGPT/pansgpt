@@ -28,227 +28,6 @@ export type Database = {
   };
   public: {
     Tables: {
-      quiz_result_shares: {
-        Row: {
-          created_at: string;
-          id: string;
-          result_id: string;
-          revoked_at: string | null;
-          token_hash: string;
-          user_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          result_id: string;
-          revoked_at?: string | null;
-          token_hash: string;
-          user_id: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          result_id?: string;
-          revoked_at?: string | null;
-          token_hash?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "quiz_result_shares_result_id_fkey";
-            columns: ["result_id"];
-            isOneToOne: false;
-            referencedRelation: "quiz_attempts";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quiz_result_shares_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      quiz_sessions: {
-        Row: {
-          answers: Json;
-          deadline_at: string | null;
-          flagged_ids: string[];
-          grading_lease: string | null;
-          grading_until: string | null;
-          id: string;
-          quiz_id: string;
-          result_id: string | null;
-          revision: number;
-          started_at: string;
-          status: string;
-          submitted_at: string | null;
-          university_id: string;
-          user_id: string;
-        };
-        Insert: {
-          answers?: Json;
-          deadline_at?: string | null;
-          flagged_ids?: string[];
-          grading_lease?: string | null;
-          grading_until?: string | null;
-          id?: string;
-          quiz_id: string;
-          result_id?: string | null;
-          revision?: number;
-          started_at?: string;
-          status?: string;
-          submitted_at?: string | null;
-          university_id: string;
-          user_id: string;
-        };
-        Update: {
-          answers?: Json;
-          deadline_at?: string | null;
-          flagged_ids?: string[];
-          grading_lease?: string | null;
-          grading_until?: string | null;
-          id?: string;
-          quiz_id?: string;
-          result_id?: string | null;
-          revision?: number;
-          started_at?: string;
-          status?: string;
-          submitted_at?: string | null;
-          university_id?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "quiz_sessions_quiz_id_fkey";
-            columns: ["quiz_id"];
-            isOneToOne: false;
-            referencedRelation: "quizzes";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quiz_sessions_result_id_fkey";
-            columns: ["result_id"];
-            isOneToOne: false;
-            referencedRelation: "quiz_attempts";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quiz_sessions_university_id_fkey";
-            columns: ["university_id"];
-            isOneToOne: false;
-            referencedRelation: "universities";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "quiz_sessions_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      chat_message_feedback: {
-        Row: {
-          comment: string | null;
-          id: string;
-          message_id: string;
-          rating: string;
-          session_id: string;
-          updated_at: string;
-          user_id: string;
-        };
-        Insert: {
-          comment?: string | null;
-          id?: string;
-          message_id: string;
-          rating: string;
-          session_id: string;
-          updated_at?: string;
-          user_id: string;
-        };
-        Update: {
-          comment?: string | null;
-          id?: string;
-          message_id?: string;
-          rating?: string;
-          session_id?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "chat_message_feedback_message_id_session_id_fkey";
-            columns: ["message_id", "session_id"];
-            isOneToOne: false;
-            referencedRelation: "chat_messages";
-            referencedColumns: ["id", "session_id"];
-          },
-          {
-            foreignKeyName: "chat_message_feedback_session_id_user_id_fkey";
-            columns: ["session_id", "user_id"];
-            isOneToOne: false;
-            referencedRelation: "chat_sessions";
-            referencedColumns: ["id", "user_id"];
-          },
-        ];
-      };
-      chat_attachments: {
-        Row: {
-          byte_size: number;
-          content_type: string;
-          created_at: string;
-          extracted_text: string;
-          filename: string;
-          id: string;
-          message_id: string | null;
-          object_key: string;
-          session_id: string;
-          user_id: string;
-        };
-        Insert: {
-          byte_size: number;
-          content_type: string;
-          created_at?: string;
-          extracted_text: string;
-          filename: string;
-          id?: string;
-          message_id?: string | null;
-          object_key: string;
-          session_id: string;
-          user_id: string;
-        };
-        Update: {
-          byte_size?: number;
-          content_type?: string;
-          created_at?: string;
-          extracted_text?: string;
-          filename?: string;
-          id?: string;
-          message_id?: string | null;
-          object_key?: string;
-          session_id?: string;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "chat_attachments_message_id_session_id_fkey";
-            columns: ["message_id", "session_id"];
-            isOneToOne: false;
-            referencedRelation: "chat_messages";
-            referencedColumns: ["id", "session_id"];
-          },
-          {
-            foreignKeyName: "chat_attachments_session_id_user_id_fkey";
-            columns: ["session_id", "user_id"];
-            isOneToOne: false;
-            referencedRelation: "chat_sessions";
-            referencedColumns: ["id", "user_id"];
-          },
-        ];
-      };
       academic_level_history: {
         Row: {
           academic_session: string;
@@ -312,6 +91,58 @@ export type Database = {
             columns: ["university_id"];
             isOneToOne: true;
             referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      admin_memberships: {
+        Row: {
+          admin_level: string;
+          assigned_by: string | null;
+          created_at: string;
+          id: string;
+          university_id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          admin_level: string;
+          assigned_by?: string | null;
+          created_at?: string;
+          id?: string;
+          university_id: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          admin_level?: string;
+          assigned_by?: string | null;
+          created_at?: string;
+          id?: string;
+          university_id?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "admin_memberships_assigned_by_fkey";
+            columns: ["assigned_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "admin_memberships_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "admin_memberships_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];
@@ -519,6 +350,105 @@ export type Database = {
           },
         ];
       };
+      chat_attachments: {
+        Row: {
+          byte_size: number;
+          content_type: string;
+          created_at: string;
+          extracted_text: string;
+          filename: string;
+          id: string;
+          message_id: string | null;
+          object_key: string;
+          session_id: string;
+          user_id: string;
+        };
+        Insert: {
+          byte_size: number;
+          content_type: string;
+          created_at?: string;
+          extracted_text: string;
+          filename: string;
+          id?: string;
+          message_id?: string | null;
+          object_key: string;
+          session_id: string;
+          user_id: string;
+        };
+        Update: {
+          byte_size?: number;
+          content_type?: string;
+          created_at?: string;
+          extracted_text?: string;
+          filename?: string;
+          id?: string;
+          message_id?: string | null;
+          object_key?: string;
+          session_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_attachments_message_id_session_id_fkey";
+            columns: ["message_id", "session_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_messages";
+            referencedColumns: ["id", "session_id"];
+          },
+          {
+            foreignKeyName: "chat_attachments_session_id_user_id_fkey";
+            columns: ["session_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_sessions";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
+      chat_message_feedback: {
+        Row: {
+          comment: string | null;
+          id: string;
+          message_id: string;
+          rating: string;
+          session_id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          comment?: string | null;
+          id?: string;
+          message_id: string;
+          rating: string;
+          session_id: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          comment?: string | null;
+          id?: string;
+          message_id?: string;
+          rating?: string;
+          session_id?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "chat_message_feedback_message_id_session_id_fkey";
+            columns: ["message_id", "session_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_messages";
+            referencedColumns: ["id", "session_id"];
+          },
+          {
+            foreignKeyName: "chat_message_feedback_session_id_user_id_fkey";
+            columns: ["session_id", "user_id"];
+            isOneToOne: false;
+            referencedRelation: "chat_sessions";
+            referencedColumns: ["id", "user_id"];
+          },
+        ];
+      };
       chat_messages: {
         Row: {
           branch_index: number;
@@ -534,7 +464,7 @@ export type Database = {
           is_active_branch: boolean;
           parent_message_id: string | null;
           role: Database["public"]["Enums"]["interaction_role"];
-          search_vector: unknown | null;
+          search_vector: unknown;
           session_id: string;
           thinking_text: string | null;
           tool_calls: Json | null;
@@ -553,7 +483,7 @@ export type Database = {
           is_active_branch?: boolean;
           parent_message_id?: string | null;
           role: Database["public"]["Enums"]["interaction_role"];
-          search_vector?: never;
+          search_vector?: unknown;
           session_id: string;
           thinking_text?: string | null;
           tool_calls?: Json | null;
@@ -572,7 +502,7 @@ export type Database = {
           is_active_branch?: boolean;
           parent_message_id?: string | null;
           role?: Database["public"]["Enums"]["interaction_role"];
-          search_vector?: never;
+          search_vector?: unknown;
           session_id?: string;
           thinking_text?: string | null;
           tool_calls?: Json | null;
@@ -612,7 +542,7 @@ export type Database = {
           id: string;
           is_pinned: boolean;
           last_message_at: string | null;
-          search_vector: unknown | null;
+          search_vector: unknown;
           summary: string | null;
           title: string;
           title_source: string;
@@ -629,7 +559,7 @@ export type Database = {
           id?: string;
           is_pinned?: boolean;
           last_message_at?: string | null;
-          search_vector?: never;
+          search_vector?: unknown;
           summary?: string | null;
           title?: string;
           title_source?: string;
@@ -646,7 +576,7 @@ export type Database = {
           id?: string;
           is_pinned?: boolean;
           last_message_at?: string | null;
-          search_vector?: never;
+          search_vector?: unknown;
           summary?: string | null;
           title?: string;
           title_source?: string;
@@ -674,6 +604,7 @@ export type Database = {
         Row: {
           course_code: string | null;
           created_at: string;
+          deleted_at: string | null;
           id: string;
           knowledge_text: string;
           level: Database["public"]["Enums"]["university_level"];
@@ -683,6 +614,7 @@ export type Database = {
         Insert: {
           course_code?: string | null;
           created_at?: string;
+          deleted_at?: string | null;
           id?: string;
           knowledge_text: string;
           level: Database["public"]["Enums"]["university_level"];
@@ -692,6 +624,7 @@ export type Database = {
         Update: {
           course_code?: string | null;
           created_at?: string;
+          deleted_at?: string | null;
           id?: string;
           knowledge_text?: string;
           level?: Database["public"]["Enums"]["university_level"];
@@ -1391,12 +1324,14 @@ export type Database = {
           lecturer_name: string | null;
           mime_type: string;
           page_count: number;
+          parent_submission_id: string | null;
           review_note: string | null;
           reviewed_at: string | null;
           reviewed_by: string | null;
           semester: string | null;
           status: Database["public"]["Enums"]["document_status"];
           storage_key: string;
+          submission_cancelled_at: string | null;
           target_levels: Database["public"]["Enums"]["university_level"][];
           title: string;
           topic: string | null;
@@ -1421,12 +1356,14 @@ export type Database = {
           lecturer_name?: string | null;
           mime_type?: string;
           page_count?: number;
+          parent_submission_id?: string | null;
           review_note?: string | null;
           reviewed_at?: string | null;
           reviewed_by?: string | null;
           semester?: string | null;
           status?: Database["public"]["Enums"]["document_status"];
           storage_key: string;
+          submission_cancelled_at?: string | null;
           target_levels?: Database["public"]["Enums"]["university_level"][];
           title: string;
           topic?: string | null;
@@ -1451,12 +1388,14 @@ export type Database = {
           lecturer_name?: string | null;
           mime_type?: string;
           page_count?: number;
+          parent_submission_id?: string | null;
           review_note?: string | null;
           reviewed_at?: string | null;
           reviewed_by?: string | null;
           semester?: string | null;
           status?: Database["public"]["Enums"]["document_status"];
           storage_key?: string;
+          submission_cancelled_at?: string | null;
           target_levels?: Database["public"]["Enums"]["university_level"][];
           title?: string;
           topic?: string | null;
@@ -1466,6 +1405,13 @@ export type Database = {
           uploaded_by?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "documents_parent_submission_id_fkey";
+            columns: ["parent_submission_id"];
+            isOneToOne: false;
+            referencedRelation: "documents";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "documents_reviewed_by_fkey";
             columns: ["reviewed_by"];
@@ -1610,12 +1556,15 @@ export type Database = {
       };
       exam_timetables: {
         Row: {
+          academic_session: string | null;
           course_code: string;
           course_title: string;
           created_at: string;
+          deleted_at: string | null;
           end_time: string;
           exam_date: string;
           id: string;
+          semester: string | null;
           start_time: string;
           target_level: Database["public"]["Enums"]["university_level"];
           university_id: string;
@@ -1623,12 +1572,15 @@ export type Database = {
           venue: string;
         };
         Insert: {
+          academic_session?: string | null;
           course_code: string;
           course_title: string;
           created_at?: string;
+          deleted_at?: string | null;
           end_time: string;
           exam_date: string;
           id?: string;
+          semester?: string | null;
           start_time: string;
           target_level: Database["public"]["Enums"]["university_level"];
           university_id: string;
@@ -1636,12 +1588,15 @@ export type Database = {
           venue: string;
         };
         Update: {
+          academic_session?: string | null;
           course_code?: string;
           course_title?: string;
           created_at?: string;
+          deleted_at?: string | null;
           end_time?: string;
           exam_date?: string;
           id?: string;
+          semester?: string | null;
           start_time?: string;
           target_level?: Database["public"]["Enums"]["university_level"];
           university_id?: string;
@@ -1775,6 +1730,57 @@ export type Database = {
           },
         ];
       };
+      governance_proposals: {
+        Row: {
+          before_values: Json;
+          created_at: string;
+          id: string;
+          proposed_by: string | null;
+          proposed_values: Json;
+          reason: string;
+          reviewed_by: string | null;
+          status: string;
+          updated_at: string;
+        };
+        Insert: {
+          before_values: Json;
+          created_at?: string;
+          id?: string;
+          proposed_by?: string | null;
+          proposed_values: Json;
+          reason: string;
+          reviewed_by?: string | null;
+          status?: string;
+          updated_at?: string;
+        };
+        Update: {
+          before_values?: Json;
+          created_at?: string;
+          id?: string;
+          proposed_by?: string | null;
+          proposed_values?: Json;
+          reason?: string;
+          reviewed_by?: string | null;
+          status?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "governance_proposals_proposed_by_fkey";
+            columns: ["proposed_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "governance_proposals_reviewed_by_fkey";
+            columns: ["reviewed_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       invitation_redemptions: {
         Row: {
           created_at: string;
@@ -1816,40 +1822,49 @@ export type Database = {
           created_at: string;
           current_uses: number;
           expires_at: string | null;
+          grant_admin_level: string | null;
           grant_roles: Database["public"]["Enums"]["user_role"][];
           id: string;
           is_active: boolean;
           issued_by: string | null;
           max_uses: number;
+          target_email: string | null;
           target_level: Database["public"]["Enums"]["university_level"] | null;
           token: string;
           university_id: string;
+          updated_at: string;
         };
         Insert: {
           created_at?: string;
           current_uses?: number;
           expires_at?: string | null;
+          grant_admin_level?: string | null;
           grant_roles?: Database["public"]["Enums"]["user_role"][];
           id?: string;
           is_active?: boolean;
           issued_by?: string | null;
           max_uses?: number;
+          target_email?: string | null;
           target_level?: Database["public"]["Enums"]["university_level"] | null;
           token?: string;
           university_id: string;
+          updated_at?: string;
         };
         Update: {
           created_at?: string;
           current_uses?: number;
           expires_at?: string | null;
+          grant_admin_level?: string | null;
           grant_roles?: Database["public"]["Enums"]["user_role"][];
           id?: string;
           is_active?: boolean;
           issued_by?: string | null;
           max_uses?: number;
+          target_email?: string | null;
           target_level?: Database["public"]["Enums"]["university_level"] | null;
           token?: string;
           university_id?: string;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -1864,6 +1879,52 @@ export type Database = {
             columns: ["university_id"];
             isOneToOne: false;
             referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      lecturer_course_assignments: {
+        Row: {
+          assigned_by: string | null;
+          course_code: string;
+          id: string;
+          university_id: string;
+          user_id: string;
+        };
+        Insert: {
+          assigned_by?: string | null;
+          course_code: string;
+          id?: string;
+          university_id: string;
+          user_id: string;
+        };
+        Update: {
+          assigned_by?: string | null;
+          course_code?: string;
+          id?: string;
+          university_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "lecturer_course_assignments_assigned_by_fkey";
+            columns: ["assigned_by"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "lecturer_course_assignments_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "lecturer_course_assignments_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];
@@ -1919,7 +1980,7 @@ export type Database = {
           {
             foreignKeyName: "quiz_attempts_session_id_fkey";
             columns: ["session_id"];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: "quiz_sessions";
             referencedColumns: ["id"];
           },
@@ -2074,6 +2135,128 @@ export type Database = {
           },
         ];
       };
+      quiz_result_shares: {
+        Row: {
+          created_at: string;
+          id: string;
+          result_id: string;
+          revoked_at: string | null;
+          token_hash: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          result_id: string;
+          revoked_at?: string | null;
+          token_hash: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          result_id?: string;
+          revoked_at?: string | null;
+          token_hash?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quiz_result_shares_result_id_fkey";
+            columns: ["result_id"];
+            isOneToOne: false;
+            referencedRelation: "quiz_attempts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_result_shares_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      quiz_sessions: {
+        Row: {
+          answers: Json;
+          deadline_at: string | null;
+          flagged_ids: string[];
+          grading_lease: string | null;
+          grading_until: string | null;
+          id: string;
+          quiz_id: string;
+          result_id: string | null;
+          revision: number;
+          started_at: string;
+          status: string;
+          submitted_at: string | null;
+          university_id: string;
+          user_id: string;
+        };
+        Insert: {
+          answers?: Json;
+          deadline_at?: string | null;
+          flagged_ids?: string[];
+          grading_lease?: string | null;
+          grading_until?: string | null;
+          id?: string;
+          quiz_id: string;
+          result_id?: string | null;
+          revision?: number;
+          started_at?: string;
+          status?: string;
+          submitted_at?: string | null;
+          university_id: string;
+          user_id: string;
+        };
+        Update: {
+          answers?: Json;
+          deadline_at?: string | null;
+          flagged_ids?: string[];
+          grading_lease?: string | null;
+          grading_until?: string | null;
+          id?: string;
+          quiz_id?: string;
+          result_id?: string | null;
+          revision?: number;
+          started_at?: string;
+          status?: string;
+          submitted_at?: string | null;
+          university_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "quiz_sessions_quiz_id_fkey";
+            columns: ["quiz_id"];
+            isOneToOne: false;
+            referencedRelation: "quizzes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_result_id_fkey";
+            columns: ["result_id"];
+            isOneToOne: false;
+            referencedRelation: "quiz_attempts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "quiz_sessions_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       quizzes: {
         Row: {
           course_code: string;
@@ -2182,7 +2365,7 @@ export type Database = {
           completed_at: string | null;
           course_code: string | null;
           created_at: string;
-          due_date: string;
+          due_date: string | null;
           due_time: string | null;
           id: string;
           is_completed: boolean;
@@ -2201,7 +2384,7 @@ export type Database = {
           completed_at?: string | null;
           course_code?: string | null;
           created_at?: string;
-          due_date: string;
+          due_date?: string | null;
           due_time?: string | null;
           id?: string;
           is_completed?: boolean;
@@ -2220,7 +2403,7 @@ export type Database = {
           completed_at?: string | null;
           course_code?: string | null;
           created_at?: string;
-          due_date?: string;
+          due_date?: string | null;
           due_time?: string | null;
           id?: string;
           is_completed?: boolean;
@@ -2344,6 +2527,7 @@ export type Database = {
           priority: string;
           status: string;
           subject: string;
+          university_id: string | null;
           updated_at: string;
           user_id: string;
         };
@@ -2354,6 +2538,7 @@ export type Database = {
           priority?: string;
           status?: string;
           subject: string;
+          university_id?: string | null;
           updated_at?: string;
           user_id: string;
         };
@@ -2364,10 +2549,18 @@ export type Database = {
           priority?: string;
           status?: string;
           subject?: string;
+          university_id?: string | null;
           updated_at?: string;
           user_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "support_tickets_university_id_fkey";
+            columns: ["university_id"];
+            isOneToOne: false;
+            referencedRelation: "universities";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "support_tickets_user_id_fkey";
             columns: ["user_id"];
@@ -2464,15 +2657,19 @@ export type Database = {
       };
       timetables: {
         Row: {
+          academic_session: string | null;
           course_code: string;
           course_title: string;
           created_at: string;
           day: string;
+          deleted_at: string | null;
           effective_from: string | null;
           effective_until: string | null;
+          end_time: string | null;
           end_time_local: string | null;
           id: string;
           level: Database["public"]["Enums"]["university_level"];
+          semester: string | null;
           start_time: string | null;
           start_time_local: string | null;
           time_slot: string;
@@ -2481,15 +2678,19 @@ export type Database = {
           venue: string | null;
         };
         Insert: {
+          academic_session?: string | null;
           course_code: string;
           course_title: string;
           created_at?: string;
           day: string;
+          deleted_at?: string | null;
           effective_from?: string | null;
           effective_until?: string | null;
+          end_time?: string | null;
           end_time_local?: string | null;
           id?: string;
           level: Database["public"]["Enums"]["university_level"];
+          semester?: string | null;
           start_time?: string | null;
           start_time_local?: string | null;
           time_slot: string;
@@ -2498,15 +2699,19 @@ export type Database = {
           venue?: string | null;
         };
         Update: {
+          academic_session?: string | null;
           course_code?: string;
           course_title?: string;
           created_at?: string;
           day?: string;
+          deleted_at?: string | null;
           effective_from?: string | null;
           effective_until?: string | null;
+          end_time?: string | null;
           end_time_local?: string | null;
           id?: string;
           level?: Database["public"]["Enums"]["university_level"];
+          semester?: string | null;
           start_time?: string | null;
           start_time_local?: string | null;
           time_slot?: string;
@@ -2529,6 +2734,8 @@ export type Database = {
           country: string;
           created_at: string;
           id: string;
+          max_storage_bytes: number;
+          monthly_token_quota: number;
           name: string;
           short_name: string | null;
           slug: string;
@@ -2540,6 +2747,8 @@ export type Database = {
           country?: string;
           created_at?: string;
           id?: string;
+          max_storage_bytes?: number;
+          monthly_token_quota?: number;
           name: string;
           short_name?: string | null;
           slug: string;
@@ -2551,6 +2760,8 @@ export type Database = {
           country?: string;
           created_at?: string;
           id?: string;
+          max_storage_bytes?: number;
+          monthly_token_quota?: number;
           name?: string;
           short_name?: string | null;
           slug?: string;
@@ -2679,6 +2890,8 @@ export type Database = {
       };
       users: {
         Row: {
+          academic_title: string | null;
+          account_status: string;
           avatar_key: string | null;
           created_at: string;
           current_level: Database["public"]["Enums"]["university_level"] | null;
@@ -2687,13 +2900,17 @@ export type Database = {
           first_name: string;
           id: string;
           last_name: string | null;
+          phone: string | null;
           roles: Database["public"]["Enums"]["user_role"][];
+          status_reason: string | null;
           subscription_tier: string;
           terms_accepted_at: string | null;
           university_id: string | null;
           updated_at: string;
         };
         Insert: {
+          academic_title?: string | null;
+          account_status?: string;
           avatar_key?: string | null;
           created_at?: string;
           current_level?: Database["public"]["Enums"]["university_level"] | null;
@@ -2702,13 +2919,17 @@ export type Database = {
           first_name: string;
           id: string;
           last_name?: string | null;
+          phone?: string | null;
           roles?: Database["public"]["Enums"]["user_role"][];
+          status_reason?: string | null;
           subscription_tier?: string;
           terms_accepted_at?: string | null;
           university_id?: string | null;
           updated_at?: string;
         };
         Update: {
+          academic_title?: string | null;
+          account_status?: string;
           avatar_key?: string | null;
           created_at?: string;
           current_level?: Database["public"]["Enums"]["university_level"] | null;
@@ -2717,7 +2938,9 @@ export type Database = {
           first_name?: string;
           id?: string;
           last_name?: string | null;
+          phone?: string | null;
           roles?: Database["public"]["Enums"]["user_role"][];
+          status_reason?: string | null;
           subscription_tier?: string;
           terms_accepted_at?: string | null;
           university_id?: string | null;
