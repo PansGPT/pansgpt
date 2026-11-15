@@ -15,8 +15,12 @@ from app.core.rate_limit import limiter
 from app.models.settings import (
     AccountSession,
     AccountSessionsResponse,
+    FeedbackHistoryResponse,
     FeedbackRequest,
     FeedbackResponse,
+    FeedbackTicket,
+    OwnedAttachment,
+    OwnedAttachmentsResponse,
     PasswordConfirmationResponse,
     PasswordUpdateRequest,
     PasswordUpdateResponse,
@@ -346,3 +350,127 @@ async def submit_feedback(
     except Exception as exc:
         raise failure(503, "UNAVAILABLE", "Couldn't send your feedback. Please try again.") from exc
     return FeedbackResponse(id=str(payload.request_id))
+
+
+# ─── Feedback history ─────────────────────────────────────────────────────────
+
+
+@router.get("/feedback", response_model=FeedbackHistoryResponse)
+@limiter.limit("30/minute")
+async def list_feedback(
+    request: Request,
+    response: Response,
+    limit: int = 20,
+    offset: int = 0,
+    user: UserContext = Depends(get_current_user),
+) -> FeedbackHistoryResponse:
+    """Return the signed-in user's own support tickets, most recent first.
+    Internal staff notes are excluded; only the user's own first reply is returned."""
+    private(response)
+    if limit < 1 or limit > 100:
+        raise failure(422, "CONFLICT", "Invalid page size.")
+    if offset < 0:
+        raise failure(422, "CONFLICT", "Invalid offset.")
+    try:
+        async with asyncio.timeout(12), get_db_connection(timeout=3) as conn:
+            if conn is None:
+                raise ConnectionError()
+            rows = await conn.fetch(
+                """SELECT t.id::text,t.category,t.subject,t.status,
+                   t.created_at,t.updated_at,
+                   (SELECT r.message FROM public.support_ticket_replies r
+                    WHERE r.ticket_id=t.id AND r.sender_id=$1 AND NOT r.is_internal_note
+                    ORDER BY r.created_at,r.id LIMIT 1) AS first_message
+                   FROM public.support_tickets t
+                   WHERE t.user_id=$1
+                   ORDER BY t.created_at DESC,t.id DESC
+                   LIMIT $2 OFFSET $3""",
+                user.id,
+                limit + 1,
+                offset,
+            )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise failure(503, "UNAVAILABLE", "Couldn't load your feedback. Please try again.") from exc
+    tickets = [
+        FeedbackTicket(
+            id=row["id"],
+            category=row["category"],
+            subject=row["subject"],
+            status=row["status"],
+            created_at=row["created_at"],
+            updated_at=row["updated_at"],
+            first_message=row["first_message"],
+        )
+        for row in rows[:limit]
+    ]
+    return FeedbackHistoryResponse(
+        tickets=tickets,
+        next_offset=offset + limit if len(rows) > limit else None,
+    )
+
+
+# ─── Owned chat attachments ───────────────────────────────────────────────────
+
+
+@router.get("/uploads", response_model=OwnedAttachmentsResponse)
+@limiter.limit("30/minute")
+async def list_owned_uploads(
+    request: Request,
+    response: Response,
+    limit: int = 50,
+    offset: int = 0,
+    user: UserContext = Depends(get_current_user),
+) -> OwnedAttachmentsResponse:
+    """Return the signed-in user's own uploaded chat attachments.
+    Distinguishes personal files from institution-managed library content.
+    Only attachments owned by this user under this university are returned."""
+    private(response)
+    if limit < 1 or limit > 200:
+        raise failure(422, "CONFLICT", "Invalid page size.")
+    if offset < 0:
+        raise failure(422, "CONFLICT", "Invalid offset.")
+    # university_id check: joins through users table so we cannot be fed a spoofed id
+    if not user.university_id:
+        raise failure(401, "SESSION_EXPIRED", "Sign in again to continue.")
+    try:
+        async with asyncio.timeout(12), get_db_connection(timeout=3) as conn:
+            if conn is None:
+                raise ConnectionError()
+            rows = await conn.fetch(
+                """SELECT a.id::text,a.filename AS name,a.content_type,a.byte_size AS size,
+                   a.created_at,a.session_id::text,
+                   (a.message_id IS NOT NULL) AS in_use
+                   FROM public.chat_attachments a
+                   JOIN public.users u ON u.id=a.user_id
+                   WHERE a.user_id=$1 AND u.university_id=$2 AND u.deleted_at IS NULL
+                   ORDER BY a.created_at DESC,a.id DESC
+                   LIMIT $3 OFFSET $4""",
+                user.id,
+                user.university_id,
+                limit + 1,
+                offset,
+            )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise failure(
+            503, "UNAVAILABLE", "Couldn't load your uploaded files. Please try again."
+        ) from exc
+    attachments = [
+        OwnedAttachment(
+            id=row["id"],
+            name=row["name"],
+            content_type=row["content_type"],
+            size=row["size"],
+            created_at=row["created_at"],
+            session_id=row["session_id"],
+            in_use=row["in_use"],
+        )
+        for row in rows[:limit]
+    ]
+    return OwnedAttachmentsResponse(
+        attachments=attachments,
+        next_offset=offset + limit if len(rows) > limit else None,
+    )

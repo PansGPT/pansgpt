@@ -72,6 +72,20 @@ export async function listArchivedSessions(
     .sessions;
 }
 
+export async function listActiveSessions(
+  token: string | undefined,
+  signal?: AbortSignal
+): Promise<ChatSessionSummary[]> {
+  if (!token) throw new Error("Sign in again to view conversations.");
+  const response = await fetchWithRecovery(`${base}?archived=false&limit=100`, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal,
+  });
+  if (!response.ok) throw new Error("Conversations could not be loaded. Please retry.");
+  return z.object({ sessions: z.array(chatSessionSummarySchema) }).parse(await response.json())
+    .sessions;
+}
+
 const searchResponseSchema = z.object({
   results: z.array(
     z.object({
@@ -149,4 +163,25 @@ export async function restoreSession(
   const saved = chatSessionSchema.parse(await response.json());
   if (saved.id !== id) throw new Error("Conversation identity mismatch.");
   return saved;
+}
+
+export async function removeChatAttachment(
+  token: string | undefined,
+  sessionId: string,
+  attachmentId: string
+): Promise<void> {
+  if (!token) throw new Error("Sign in again to remove this file.");
+  const response = await fetchWithRecovery(
+    `${base}/${encodeURIComponent(sessionId)}/attachments/${encodeURIComponent(attachmentId)}`,
+    {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  if (!response.ok)
+    throw new Error(
+      response.status === 404
+        ? "This file is in use or no longer exists."
+        : "Couldn't remove this file. Please retry."
+    );
 }

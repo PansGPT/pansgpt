@@ -1,8 +1,10 @@
 import { z } from "zod";
 import type {
   AccountSessionsResponse,
+  FeedbackHistoryResponse,
   FeedbackRequest,
   FeedbackResponse,
+  OwnedAttachmentsResponse,
   PasswordUpdateRequest,
   SettingsErrorCode,
 } from "@pansgpt/types";
@@ -132,4 +134,50 @@ export function feedbackRequestId(): string {
   bytes[8] = (bytes[8]! & 63) | 128;
   const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
+const feedbackTicketSchema = z.object({
+  id: z.string().uuid(),
+  category: z.enum(["bug", "account", "content", "billing", "other"]),
+  subject: z.string(),
+  status: z.enum(["open", "in_progress", "resolved", "closed"]),
+  created_at: z.string(),
+  updated_at: z.string(),
+  first_message: z.string().nullable(),
+});
+export async function listFeedbackHistory(
+  token: string | undefined,
+  offset: number,
+  signal: AbortSignal
+): Promise<FeedbackHistoryResponse> {
+  const params = new URLSearchParams({ limit: "20", offset: String(offset) });
+  return z
+    .object({
+      tickets: z.array(feedbackTicketSchema).max(100),
+      next_offset: z.number().int().nonnegative().nullable(),
+    })
+    .parse(await request(`feedback?${params}`, token, "GET", undefined, signal));
+}
+
+const ownedAttachmentSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  content_type: z.string(),
+  size: z.number().int().positive(),
+  created_at: z.string(),
+  session_id: z.string().uuid().nullable(),
+  in_use: z.boolean(),
+});
+export async function listOwnedUploads(
+  token: string | undefined,
+  offset: number,
+  signal: AbortSignal
+): Promise<OwnedAttachmentsResponse> {
+  const params = new URLSearchParams({ limit: "50", offset: String(offset) });
+  return z
+    .object({
+      attachments: z.array(ownedAttachmentSchema).max(200),
+      next_offset: z.number().int().nonnegative().nullable(),
+    })
+    .parse(await request(`uploads?${params}`, token, "GET", undefined, signal));
 }

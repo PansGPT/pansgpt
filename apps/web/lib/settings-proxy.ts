@@ -11,7 +11,7 @@ export async function proxySettings(
   const route = path.join("/");
   const allowed =
     request.method === "GET"
-      ? route === "sessions"
+      ? /^(sessions|feedback|uploads)$/.test(route)
       : request.method === "DELETE"
         ? /^sessions(?:\/[0-9a-f-]{36})?$/i.test(route)
         : request.method === "PUT"
@@ -51,7 +51,20 @@ export async function proxySettings(
     }
   }
   try {
-    const upstream = await transport(new URL(`/api/v1/settings/${route}`, config.apiUrl), {
+    // For GET endpoints that accept query parameters, forward only the
+    // safelisted numeric pagination params (limit, offset). No arbitrary
+    // passthrough.
+    const upstreamUrl = new URL(`/api/v1/settings/${route}`, config.apiUrl);
+    if (request.method === "GET") {
+      const incoming = new URL(request.url).searchParams;
+      for (const key of ["limit", "offset"]) {
+        const value = incoming.get(key);
+        if (value !== null && /^\d{1,10}$/.test(value)) {
+          upstreamUrl.searchParams.set(key, value);
+        }
+      }
+    }
+    const upstream = await transport(upstreamUrl, {
       method: request.method,
       headers: {
         Authorization: authorization,

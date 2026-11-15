@@ -1676,6 +1676,8 @@ Implementation update (13 November 2026): administrative frontend/API work is on
 
 ### 17.1 Settings + Profile
 
+16 November 2026 functionality: Data & Storage (device-measured private Cache Storage, individual document copy removal, downloads removal, preview cache clearing) and scoped Privacy & Data (data protection disclosures, owned chat attachments management with in-use status enforcement, feedback ticket history with internal staff notes excluded, archived chats unarchive, 30-day deleted chats restore, review-before-delete soft-delete flow) now have typed contracts, backend endpoints, and web integration. Local API tests, web unit tests, and Playwright desktop/mobile browser tests are verified. Account-level export/DSAR and public chat sharing remain separate future increments; hosted provider/device checks remain open. This advances but does not complete Phase 17.
+
 15 November 2026 functionality: password updates/confirmation and owned active-session listing, individual logout and logout of other devices now have backend contracts and web integration. Local API, PostgreSQL and synthetic browser verification are recorded in [Settings functionality](settings-functionality-2026-11-15.md). Hosted Supabase Auth and actual device acceptance remain open; this does not complete Phase 17.
 
 Next implementation handoff: [Data & Storage, then Privacy & Data](settings-storage-privacy-agent-handoff-2026-11-15.md). Preserve the approved UI, replace sample storage with scoped measurements, reuse owned privacy/conversation APIs, and return the work for independent review before the core study journeys. New general exports/DSAR and public-sharing infrastructure remain separate increments.

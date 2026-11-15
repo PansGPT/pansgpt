@@ -7,6 +7,8 @@ import {
   submitFeedback,
   updateAccountPassword,
   listAccountSessions,
+  listFeedbackHistory,
+  listOwnedUploads,
 } from "../lib/settings.ts";
 
 const config = { apiUrl: "https://api.example.invalid", apiKey: "synthetic-server-key" };
@@ -146,4 +148,86 @@ test("feedback requires a matching saved identity and malformed session response
     Response.json({ sessions: [{ id: "not-a-session", is_current: true }], has_more: false })
   );
   await assert.rejects(listAccountSessions("token", new AbortController().signal));
+});
+
+test("account proxy allows GET feedback and uploads and forwards safelisted pagination params", async () => {
+  let feedbackReceived;
+  await proxySettings(
+    new Request("https://app.example.invalid?limit=25&offset=50&evil=true", { headers }),
+    ["feedback"],
+    config,
+    async (url, options) => {
+      feedbackReceived = { url, options };
+      return Response.json({ tickets: [], next_offset: null });
+    }
+  );
+  assert.equal(
+    feedbackReceived.url.href,
+    "https://api.example.invalid/api/v1/settings/feedback?limit=25&offset=50"
+  );
+  assert.equal(feedbackReceived.url.searchParams.has("evil"), false);
+
+  let uploadsReceived;
+  await proxySettings(
+    new Request("https://app.example.invalid?limit=10&offset=0", { headers }),
+    ["uploads"],
+    config,
+    async (url, options) => {
+      uploadsReceived = { url, options };
+      return Response.json({ attachments: [], next_offset: null });
+    }
+  );
+  assert.equal(
+    uploadsReceived.url.href,
+    "https://api.example.invalid/api/v1/settings/uploads?limit=10&offset=0"
+  );
+});
+
+test("listFeedbackHistory and listOwnedUploads parse typed API responses", async (t) => {
+  const ticketId = "01900000-0000-7000-8000-000000000001";
+  t.mock.method(globalThis, "fetch", async (url) => {
+    if (url.includes("feedback")) {
+      return Response.json({
+        tickets: [
+          {
+            id: ticketId,
+            category: "bug",
+            subject: "Feedback: bug",
+            status: "open",
+            created_at: "2026-11-15T12:00:00Z",
+            updated_at: "2026-11-15T12:00:00Z",
+            first_message: "Sample bug report",
+          },
+        ],
+        next_offset: null,
+      });
+    }
+    if (url.includes("uploads")) {
+      return Response.json({
+        attachments: [
+          {
+            id: "01900000-0000-7000-8000-000000000002",
+            name: "prescription.pdf",
+            content_type: "application/pdf",
+            size: 10240,
+            created_at: "2026-11-15T12:00:00Z",
+            session_id: "01900000-0000-7000-8000-000000000003",
+            in_use: false,
+          },
+        ],
+        next_offset: null,
+      });
+    }
+    return Response.json({}, { status: 404 });
+  });
+
+  const feedbackRes = await listFeedbackHistory("token", 0, new AbortController().signal);
+  assert.equal(feedbackRes.tickets.length, 1);
+  assert.equal(feedbackRes.tickets[0].id, ticketId);
+  assert.equal(feedbackRes.tickets[0].first_message, "Sample bug report");
+
+  const uploadsRes = await listOwnedUploads("token", 0, new AbortController().signal);
+  assert.equal(uploadsRes.attachments.length, 1);
+  assert.equal(uploadsRes.attachments[0].name, "prescription.pdf");
+  assert.equal(uploadsRes.attachments[0].in_use, false);
 });

@@ -99,7 +99,7 @@ test("settings keeps separate categories, student-facing content and a bounded d
     modal.getByText(/Institutional Pilot|Managed by Faculty|Paystack|\u20a6/)
   ).toHaveCount(0);
   await nav.getByRole("button", { name: "Data & Storage", exact: true }).click();
-  await expect(modal.getByRole("img", { name: /Sample storage breakdown/ })).toBeVisible();
+  await expect(modal.getByRole("img", { name: /storage breakdown/i })).toBeVisible();
   await expect(modal.locator(".settings-section-content").first()).toHaveCSS(
     "background-color",
     "rgba(0, 0, 0, 0)"
@@ -334,7 +334,7 @@ test("mobile settings retains grouped menus, separate Security and usable storag
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await menu.getByRole("button", { name: "Data & Storage", exact: true }).click();
-  await expect(modal.getByRole("img", { name: /Sample storage breakdown/ })).toBeVisible();
+  await expect(modal.getByRole("img", { name: /storage breakdown/i })).toBeVisible();
   await expect(content.locator(".settings-row").first()).toHaveCSS("border-bottom-width", "1px");
   const storageInset = await content
     .locator(".settings-row")

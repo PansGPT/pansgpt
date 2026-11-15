@@ -57,3 +57,43 @@ class FeedbackRequest(StrictRequest):
 class FeedbackResponse(BaseModel):
     id: str
     status: Literal["received"] = "received"
+
+
+# ─── Feedback history ──────────────────────────────────────────────────────────
+
+FeedbackCategory = Literal["bug", "account", "content", "billing", "other"]
+FeedbackStatus = Literal["open", "in_progress", "resolved", "closed"]
+
+
+class FeedbackTicket(BaseModel):
+    id: str
+    category: FeedbackCategory
+    subject: str
+    status: FeedbackStatus
+    created_at: datetime
+    updated_at: datetime
+    # The user's own first message; never an internal staff note.
+    first_message: str | None
+
+
+class FeedbackHistoryResponse(BaseModel):
+    tickets: list[FeedbackTicket]
+    next_offset: int | None
+
+
+# ─── Owned chat attachments ────────────────────────────────────────────────────
+
+
+class OwnedAttachment(BaseModel):
+    id: str
+    name: str
+    content_type: str
+    size: int
+    created_at: datetime
+    session_id: str | None
+    in_use: bool
+
+
+class OwnedAttachmentsResponse(BaseModel):
+    attachments: list[OwnedAttachment]
+    next_offset: int | None

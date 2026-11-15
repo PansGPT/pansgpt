@@ -366,6 +366,72 @@ async def test_store_failure_never_reports_settings_success(
     assert "PRIVATE DATABASE DETAIL" not in response.text
 
 
+async def test_list_feedback_history_scopes_to_owner_and_excludes_internal_notes(
+    client: httpx.AsyncClient, controls: TenantTestState
+) -> None:
+    now = datetime.now(UTC)
+    controls.connection.fetch.return_value = [
+        {
+            "id": "01900000-0000-7000-8000-000000000001",
+            "category": "bug",
+            "subject": "Feedback: bug",
+            "status": "open",
+            "created_at": now,
+            "updated_at": now,
+            "first_message": "User visible bug report",
+        }
+    ]
+    response = await client.get("/api/v1/settings/feedback?limit=10&offset=0", headers=HEADERS)
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "private, no-store"
+    data = response.json()
+    assert len(data["tickets"]) == 1
+    assert data["tickets"][0]["id"] == "01900000-0000-7000-8000-000000000001"
+    assert data["tickets"][0]["category"] == "bug"
+    assert data["tickets"][0]["first_message"] == "User visible bug report"
+    assert data["next_offset"] is None
+
+    call_args = controls.connection.fetch.call_args[0]
+    assert call_args[1] == controls.user.id
+
+
+async def test_list_owned_uploads_scopes_to_user_and_university(
+    client: httpx.AsyncClient, controls: TenantTestState
+) -> None:
+    now = datetime.now(UTC)
+    controls.connection.fetch.return_value = [
+        {
+            "id": "01900000-0000-7000-8000-000000000002",
+            "name": "slide.pdf",
+            "content_type": "application/pdf",
+            "size": 2048,
+            "created_at": now,
+            "session_id": "01900000-0000-7000-8000-000000000003",
+            "in_use": True,
+        }
+    ]
+    response = await client.get("/api/v1/settings/uploads?limit=10&offset=0", headers=HEADERS)
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "private, no-store"
+    data = response.json()
+    assert len(data["attachments"]) == 1
+    assert data["attachments"][0]["name"] == "slide.pdf"
+    assert data["attachments"][0]["in_use"] is True
+
+    call_args = controls.connection.fetch.call_args[0]
+    assert call_args[1] == controls.user.id
+    assert call_args[2] == controls.user.university_id
+
+
+async def test_settings_get_routes_reject_invalid_pagination(
+    client: httpx.AsyncClient, controls: TenantTestState
+) -> None:
+    res = await client.get("/api/v1/settings/feedback?limit=0", headers=HEADERS)
+    assert res.status_code == 422
+    res = await client.get("/api/v1/settings/uploads?limit=500", headers=HEADERS)
+    assert res.status_code == 422
+
+
 async def test_password_timeout_preserves_privacy_and_never_retries_ambiguous_write(
     client: httpx.AsyncClient, controls: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:

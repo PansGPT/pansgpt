@@ -50,3 +50,40 @@ export interface FeedbackResponse {
   id: string;
   status: "received";
 }
+
+// ─── Feedback history (read own submissions) ──────────────────────────────────
+
+export interface FeedbackTicket {
+  id: string;
+  category: FeedbackCategory;
+  subject: string;
+  status: "open" | "in_progress" | "resolved" | "closed";
+  created_at: string;
+  updated_at: string;
+  /** The user's own first message in this ticket. Never an internal staff note. */
+  first_message: string | null;
+}
+
+export interface FeedbackHistoryResponse {
+  tickets: FeedbackTicket[];
+  next_offset: number | null;
+}
+
+// ─── Uploaded chat attachments (personal files in settings) ──────────────────
+
+export interface OwnedAttachment {
+  id: string;
+  name: string;
+  content_type: string;
+  size: number;
+  created_at: string;
+  /** The session this attachment was sent in, null if it was never sent. */
+  session_id: string | null;
+  /** True when this attachment is referenced by a chat message (cannot be deleted). */
+  in_use: boolean;
+}
+
+export interface OwnedAttachmentsResponse {
+  attachments: OwnedAttachment[];
+  next_offset: number | null;
+}
