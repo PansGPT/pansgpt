@@ -1678,6 +1678,8 @@ Implementation update (13 November 2026): administrative frontend/API work is on
 
 15 November 2026 functionality: password updates/confirmation and owned active-session listing, individual logout and logout of other devices now have backend contracts and web integration. Local API, PostgreSQL and synthetic browser verification are recorded in [Settings functionality](settings-functionality-2026-11-15.md). Hosted Supabase Auth and actual device acceptance remain open; this does not complete Phase 17.
 
+Next implementation handoff: [Data & Storage, then Privacy & Data](settings-storage-privacy-agent-handoff-2026-11-15.md). Preserve the approved UI, replace sample storage with scoped measurements, reuse owned privacy/conversation APIs, and return the work for independent review before the core study journeys. New general exports/DSAR and public-sharing infrastructure remain separate increments.
+
 UI preview (29 October 2026): separate settings categories, standalone Security, retained storage/privacy management controls and compact actions are under review. See [settings UI refinement](settings-ui-refinement-2026-10-29.md). This preview does not complete the live acceptance items below.
 
 Settings navigation follow-up: field-level search uses a floating result list with section/setting labels and direct focus. Mobile uses the profile card as its single Account entry; Account no longer contains Log out.
