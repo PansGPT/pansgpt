@@ -444,7 +444,13 @@ async def list_owned_uploads(
                    (a.message_id IS NOT NULL) AS in_use
                    FROM public.chat_attachments a
                    JOIN public.users u ON u.id=a.user_id
+                   JOIN public.chat_sessions s ON s.id=a.session_id AND s.user_id=a.user_id
                    WHERE a.user_id=$1 AND u.university_id=$2 AND u.deleted_at IS NULL
+                     AND s.deleted_at IS NULL
+                     AND a.object_key='chat/' || $2::text || '/' || $1::text || '/' || a.session_id::text || '/' || a.id::text
+                     AND (s.document_id IS NULL OR EXISTS (
+                       SELECT 1 FROM public.documents d WHERE d.id=s.document_id
+                         AND d.university_id=$2 AND d.deleted_at IS NULL))
                    ORDER BY a.created_at DESC,a.id DESC
                    LIMIT $3 OFFSET $4""",
                 user.id,

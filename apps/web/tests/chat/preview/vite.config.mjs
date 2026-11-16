@@ -12,6 +12,10 @@ export default defineConfig({
   resolve: {
     dedupe: ["react", "react-dom"],
     alias: [
+      {
+        find: "./supabase/client",
+        replacement: fileURLToPath(new URL("./auth-cache-client.jsx", import.meta.url)),
+      },
       { find: "@/env", replacement: fixture },
       { find: "@/components/shell/dashboard-data", replacement: fixture },
       { find: "@/components/shell/use-preferences", replacement: fixture },

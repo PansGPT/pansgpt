@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { z } from "zod";
+import { localCacheEpoch } from "@/lib/local-cache-coordination";
 import {
   ArrowLeft,
   BookOpen,
@@ -88,7 +89,15 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
   const pageInputRef = useRef<HTMLInputElement>(null);
   const [zoom, setZoom] = useState(1);
   const [theme, setTheme] = useState("paper");
-  const [chatOpen, setChatOpen] = useState(false);
+  const [requestedSession] = useState(() => {
+    const value =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("session")
+        : null;
+    const parsed = z.uuid().safeParse(value);
+    return parsed.success ? parsed.data : null;
+  });
+  const [chatOpen, setChatOpen] = useState(Boolean(requestedSession));
   const [controlsHidden, setControlsHidden] = useState(false);
   const readingScroll = useRef({ top: 0, travel: 0 });
   const [firstGuide] = useState(() => !hasSeenReaderGuide(profile!.id));
@@ -206,6 +215,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
         const owner = profile?.university_id
           ? { userId: profile.id, universityId: profile.university_id }
           : null;
+        const cacheEpoch = owner ? localCacheEpoch("pdf", owner) : null;
         const cached = owner ? await readPdfCopy(owner, material.id, material.updated_at) : null;
         let pdf: PdfSource["pdf"] | undefined;
         let downloaded: Blob | null = null;
@@ -283,7 +293,8 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
             material.id,
             material.updated_at,
             downloaded,
-            controller.signal
+            controller.signal,
+            cacheEpoch
           );
         if (disposed) return;
         onPage(Math.min(pdf.numPages, initialPage));
@@ -819,7 +830,7 @@ function ReaderDocument({ data }: { data: ReaderResponse }): React.ReactElement 
           <StudyChat
             active={chatOpen && !!source && !pdfError}
             document={material}
-            sessionId={null}
+            sessionId={requestedSession}
             draft={draft}
             onCitation={citation}
             onChanged={reload}

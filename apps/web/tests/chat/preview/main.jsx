@@ -15,6 +15,7 @@ import { requestProfile } from "@/lib/profile-verification";
 import { ThemeProvider } from "@pansgpt/ui/shell";
 import { env } from "./fixtures";
 import { usePathname, useSearchParams, useAuth } from "./fixtures";
+import { AuthCachePreview } from "./auth-cache-preview";
 const exercisePublicRoute = new URLSearchParams(location.search).get("route_contract") === "1";
 // Component contracts cover both viewport sizes independently of the public route redirect.
 // The actual ChatPage route is exercised explicitly by the route-contract browser journey.
@@ -82,7 +83,9 @@ function ProfileRecoveryPreview() {
 }
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {new URLSearchParams(location.search).has("profile_failure") ? (
+    {new URLSearchParams(location.search).has("auth_cache_recovery") ? (
+      <AuthCachePreview />
+    ) : new URLSearchParams(location.search).has("profile_failure") ? (
       <ThemeProvider initialTheme="dark">
         <ProfileRecoveryPreview />
       </ThemeProvider>

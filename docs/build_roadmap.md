@@ -1,5 +1,9 @@
 # PansGPT — Complete Build Roadmap (Engine-First)
 
+> **2026-11-16 mobile Settings and saved copies:** Privacy/Data management uses the existing mobile subpage pattern; verified auth-state handling preserves saved PDFs through startup/profile outages. Archive Open and private upload preview/download actions are locally implemented. [Contracts, evidence and hosted/device gates](settings-mobile-and-downloads-2026-11-16.md).
+
+> **2026-11-16 Settings review and study recovery:** Correct local storage accounting/removal, scoped management recovery and pagination; retain unsaved quiz answers across client navigation, restore failed snip questions, and clear successful quiz retry errors. Local verification and remaining Settings/hosted gates: [review record](settings-review-and-study-recovery-2026-11-16.md).
+
 > **2026-11-15 conversation voice:** Normal and study chat share a senior-colleague voice across direct and generated answers. Selected history is preserved; four final live synthetic exchanges were reviewed alongside API regressions. [Scope, output examples and limits](chat-voice-2026-11-15.md).
 
 > **2026-11-15 chat reliability:** Run cleanup, recoverable failed questions and naming, separated study history, immediate question actions, scoped conversation loading and bounded provider recovery are implemented and locally verified. [Contracts, verification and remaining hosted gates](chat-lifecycle-recovery-2026-11-15.md).

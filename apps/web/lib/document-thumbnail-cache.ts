@@ -1,3 +1,8 @@
+import {
+  localCacheEpoch,
+  notifyLocalCacheChange,
+  withLocalCacheLock,
+} from "./local-cache-coordination.ts";
 const PREFIX = "pansgpt-document-thumbnails-v1:";
 const MAX_ENTRIES = 96;
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
@@ -45,10 +50,17 @@ async function storeThumbnail(
   documentId: string,
   revision: string,
   blob: Blob,
-  signal: AbortSignal
+  signal: AbortSignal,
+  epoch: string | null
 ): Promise<void> {
   try {
-    if (typeof caches === "undefined" || signal.aborted) return;
+    if (
+      typeof caches === "undefined" ||
+      signal.aborted ||
+      epoch === null ||
+      epoch !== localCacheEpoch("thumbnail", owner)
+    )
+      return;
     const cache = await caches.open(cacheName(owner));
     if (signal.aborted) return;
     const key = cacheKey(documentId, revision);
@@ -60,13 +72,16 @@ async function storeThumbnail(
     const remaining = await cache.keys();
     for (const entry of remaining.slice(0, Math.max(0, remaining.length - MAX_ENTRIES + 1)))
       await cache.delete(entry);
-    if (!signal.aborted)
+    if (!signal.aborted && epoch === localCacheEpoch("thumbnail", owner)) {
       await cache.put(
         key,
         new Response(blob, {
           headers: { "content-type": "image/png", "x-pansgpt-stored-at": String(Date.now()) },
         })
       );
+      if (signal.aborted || epoch !== localCacheEpoch("thumbnail", owner)) await cache.delete(key);
+      notifyLocalCacheChange();
+    }
   } catch {
     // Cache quota/private-browsing failures must not prevent the actual preview.
   }
@@ -77,11 +92,14 @@ export async function writeThumbnail(
   documentId: string,
   revision: string,
   blob: Blob,
-  signal: AbortSignal
+  signal: AbortSignal,
+  epoch = localCacheEpoch("thumbnail", owner)
 ): Promise<void> {
   const name = cacheName(owner);
   const pending = (writes.get(name) ?? Promise.resolve()).then(() =>
-    storeThumbnail(owner, documentId, revision, blob, signal)
+    withLocalCacheLock("thumbnail", owner, () =>
+      storeThumbnail(owner, documentId, revision, blob, signal, epoch)
+    )
   );
   writes.set(name, pending);
   try {

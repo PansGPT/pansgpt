@@ -13,6 +13,7 @@ import { AiChatSection } from "./sections/ai-chat-section";
 import { NotificationsSection } from "./sections/notifications-section";
 import { WellbeingSection } from "./sections/wellbeing-section";
 import { PrivacySection } from "./sections/privacy-section";
+import { SettingsDetailBackContext } from "./settings-detail-view";
 import { CreditsSection } from "./sections/account-section";
 import { DataStorageSection } from "./sections/data-storage-section";
 import "./settings-modal.css";
@@ -79,6 +80,7 @@ export function SettingsModal({
   const infoButtonRef = useRef<HTMLButtonElement>(null);
   const descriptionId = useId();
   const touchOrigin = useRef<{ x: number; y: number } | null>(null);
+  const detailBack = useRef<(() => void) | null>(null);
   if (open !== prevOpen) {
     setPrevOpen(open);
     if (open) {
@@ -201,7 +203,7 @@ export function SettingsModal({
       content = <DataStorageSection />;
       break;
     case "privacy":
-      content = <PrivacySection />;
+      content = <PrivacySection onNavigate={() => onOpenChange(false)} />;
       break;
   }
   return (
@@ -241,6 +243,10 @@ export function SettingsModal({
             }
             if (mobile && inMobileSection) {
               event.preventDefault();
+              if (detailBack.current) {
+                detailBack.current();
+                return;
+              }
               backToMenu();
             }
           }}
@@ -301,7 +307,13 @@ export function SettingsModal({
               type="button"
               className="settings-mobile-header-btn"
               aria-label={inMobileSection ? "Back to settings menu" : "Close settings"}
-              onClick={() => (inMobileSection ? backToMenu() : onOpenChange(false))}
+              onClick={() =>
+                detailBack.current
+                  ? detailBack.current()
+                  : inMobileSection
+                    ? backToMenu()
+                    : onOpenChange(false)
+              }
             >
               {inMobileSection ? <ChevronLeft size={21} /> : <X size={18} />}
             </button>
@@ -440,7 +452,9 @@ export function SettingsModal({
                 <div className="settings-content-heading">
                   <h2>{TITLES[activeSection]}</h2>
                 </div>
-                {content}
+                <SettingsDetailBackContext.Provider value={detailBack}>
+                  {content}
+                </SettingsDetailBackContext.Provider>
               </div>
             </div>
           </div>

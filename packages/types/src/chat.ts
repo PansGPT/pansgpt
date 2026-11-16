@@ -115,6 +115,11 @@ export interface ChatStreamRequest {
   attachment_ids?: string[];
 }
 
+/** UUID path identity for authenticated preview/download; no storage key is accepted. */
+export interface ChatAttachmentReadRequest {
+  session_id: string;
+  attachment_id: string;
+}
 export interface ChatAttachment {
   id: string;
   name: string;
@@ -167,6 +172,13 @@ export interface ChatFailureView {
 export interface ChatSessionCreateRequest {
   title?: string | null;
   document_id?: string | null;
+}
+/** Owner-scoped session management; default chat history excludes document studies. */
+export interface ChatSessionListQuery {
+  limit?: number;
+  offset?: number;
+  archived?: boolean;
+  scope?: "chat" | "all";
 }
 export interface ChatSessionMetadata {
   id: string;

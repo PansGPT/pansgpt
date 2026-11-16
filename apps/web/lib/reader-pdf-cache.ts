@@ -1,4 +1,9 @@
 /** Private, bounded browser-disk copies; callers must verify current document access first. */
+import {
+  localCacheEpoch,
+  notifyLocalCacheChange,
+  withLocalCacheLock,
+} from "./local-cache-coordination.ts";
 export type PdfOwner = { userId: string; universityId: string };
 export const MAX_CACHED_PDF_BYTES = 50 * 1024 * 1024;
 const PREFIX = "pansgpt-reader-pdfs-v1:";
@@ -68,64 +73,72 @@ export async function storePdfCopy(
   documentId: string,
   revision: string,
   blob: Blob,
-  signal: AbortSignal
+  signal: AbortSignal,
+  cacheEpoch = localCacheEpoch("pdf", owner)
 ): Promise<void> {
   const epoch = generation;
   const cacheName = name(owner);
-  const pending = (writes.get(cacheName) ?? Promise.resolve()).then(async () => {
-    try {
-      if (
-        typeof caches === "undefined" ||
-        signal.aborted ||
-        epoch !== generation ||
-        blob.size < 5 ||
-        blob.size > MAX_CACHED_PDF_BYTES
-      )
-        return;
-      if ((await blob.slice(0, 5).text()) !== "%PDF-") return;
-      const cache = await caches.open(cacheName);
-      const address = key(documentId, revision);
-      const pathname = new URL(address).pathname;
-      const keep: { request: Request; bytes: number; stored: number }[] = [];
-      for (const request of await cache.keys()) {
-        const response = await cache.match(request);
-        const stored = Number(response?.headers.get("x-pansgpt-stored-at"));
-        const bytes = Number(response?.headers.get("content-length"));
+  const pending = (writes.get(cacheName) ?? Promise.resolve()).then(() =>
+    withLocalCacheLock("pdf", owner, async () => {
+      try {
         if (
-          new URL(request.url).pathname === pathname ||
-          !stored ||
-          Date.now() - stored >= MAX_AGE_MS ||
-          !bytes ||
-          bytes > MAX_CACHED_PDF_BYTES
+          typeof caches === "undefined" ||
+          signal.aborted ||
+          epoch !== generation ||
+          cacheEpoch === null ||
+          cacheEpoch !== localCacheEpoch("pdf", owner) ||
+          blob.size < 5 ||
+          blob.size > MAX_CACHED_PDF_BYTES
         )
-          await cache.delete(request);
-        else keep.push({ request, bytes, stored });
+          return;
+        if ((await blob.slice(0, 5).text()) !== "%PDF-") return;
+        const cache = await caches.open(cacheName);
+        const address = key(documentId, revision);
+        const pathname = new URL(address).pathname;
+        const keep: { request: Request; bytes: number; stored: number }[] = [];
+        for (const request of await cache.keys()) {
+          const response = await cache.match(request);
+          const stored = Number(response?.headers.get("x-pansgpt-stored-at"));
+          const bytes = Number(response?.headers.get("content-length"));
+          if (
+            new URL(request.url).pathname === pathname ||
+            !stored ||
+            Date.now() - stored >= MAX_AGE_MS ||
+            !bytes ||
+            bytes > MAX_CACHED_PDF_BYTES
+          )
+            await cache.delete(request);
+          else keep.push({ request, bytes, stored });
+        }
+        keep.sort((a, b) => a.stored - b.stored);
+        let bytes = keep.reduce((sum, entry) => sum + entry.bytes, blob.size);
+        while (keep.length >= MAX_ENTRIES || bytes > MAX_BYTES) {
+          const oldest = keep.shift();
+          if (!oldest) break;
+          bytes -= oldest.bytes;
+          await cache.delete(oldest.request);
+        }
+        if (signal.aborted || epoch !== generation || cacheEpoch !== localCacheEpoch("pdf", owner))
+          return;
+        await cache.put(
+          address,
+          new Response(blob, {
+            headers: {
+              "content-type": "application/pdf",
+              "content-length": String(blob.size),
+              "cache-control": "private",
+              "x-pansgpt-stored-at": String(Date.now()),
+            },
+          })
+        );
+        if (signal.aborted || epoch !== generation || cacheEpoch !== localCacheEpoch("pdf", owner))
+          await cache.delete(address);
+        notifyLocalCacheChange();
+      } catch {
+        /* Quota/private-browsing errors leave normal network reading available. */
       }
-      keep.sort((a, b) => a.stored - b.stored);
-      let bytes = keep.reduce((sum, entry) => sum + entry.bytes, blob.size);
-      while (keep.length >= MAX_ENTRIES || bytes > MAX_BYTES) {
-        const oldest = keep.shift();
-        if (!oldest) break;
-        bytes -= oldest.bytes;
-        await cache.delete(oldest.request);
-      }
-      if (signal.aborted || epoch !== generation) return;
-      await cache.put(
-        address,
-        new Response(blob, {
-          headers: {
-            "content-type": "application/pdf",
-            "content-length": String(blob.size),
-            "cache-control": "private",
-            "x-pansgpt-stored-at": String(Date.now()),
-          },
-        })
-      );
-      if (signal.aborted || epoch !== generation) await cache.delete(address);
-    } catch {
-      /* Quota/private-browsing errors leave normal network reading available. */
-    }
-  });
+    })
+  );
   writes.set(cacheName, pending);
   try {
     await pending;

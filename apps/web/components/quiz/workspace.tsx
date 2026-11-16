@@ -120,6 +120,7 @@ function QuizWorkspaceContent({
           setCourses(available);
         }
       }
+      if (!controller.signal.aborted) setError(null);
     }
     void load().catch((failure: unknown) => {
       if (!controller.signal.aborted)
@@ -233,6 +234,7 @@ function QuizWorkspaceContent({
       <QuizTaking
         key={attempt.id}
         initial={attempt}
+        draftScope={`${profile?.id}:${profile?.university_id}`}
         api={api}
         onResult={showResult}
         onLeave={() => {
@@ -374,7 +376,6 @@ function QuizWorkspaceContent({
               className="quiz-text-button"
               onClick={() => {
                 setRefresh((old) => old + 1);
-                if (attemptId || jobId || resultId) go();
               }}
             >
               Try again

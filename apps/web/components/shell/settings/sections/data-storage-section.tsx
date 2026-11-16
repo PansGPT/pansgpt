@@ -1,6 +1,7 @@
 "use client";
+import { SettingsDetailView, useMobileSettings } from "../settings-detail-view";
 
-import { FileDown, ImageIcon, RefreshCw, Trash2 } from "lucide-react";
+import { FileDown, ImageIcon, LoaderCircle, RefreshCw, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   clearOwnerThumbnailCache,
@@ -17,6 +18,9 @@ import { SettingsRow, SettingsActionButton } from "../settings-row";
 import { useAuth } from "@/lib/auth-context";
 import { toast, DialogPrimitive, Button } from "@pansgpt/ui/shell";
 import { DeleteHistoryDialog } from "../delete-history-dialog";
+import { observeLocalCacheChanges } from "@/lib/local-cache-coordination";
+import { env } from "@/env";
+import { libraryDocumentSchema } from "@/lib/library-catalog";
 
 // ─── Storage Overview ─────────────────────────────────────────────────────────
 
@@ -28,7 +32,7 @@ type MeasureState =
 function useMeasuredStorage() {
   const { session, profile } = useAuth();
   const owner =
-    session?.user && profile?.university_id
+    session?.user && profile?.id === session.user.id && profile?.university_id
       ? {
           userId: session.user.id,
           universityId: profile.university_id,
@@ -37,8 +41,10 @@ function useMeasuredStorage() {
 
   const [state, setState] = useState<MeasureState>({ status: "loading" });
   const alive = useRef(true);
+  const measurementId = useRef(0);
 
   const measure = useCallback(async () => {
+    const id = ++measurementId.current;
     if (!owner) {
       setState({
         status: "done",
@@ -57,10 +63,10 @@ function useMeasuredStorage() {
     setState({ status: "loading" });
     try {
       const data = await measureOwnerStorage(owner);
-      if (!alive.current) return;
+      if (!alive.current || id !== measurementId.current) return;
       setState({ status: "done", data });
     } catch {
-      if (!alive.current) return;
+      if (!alive.current || id !== measurementId.current) return;
       setState({ status: "error", message: "Couldn't measure local storage. Please retry." });
     }
   }, [owner?.userId, owner?.universityId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -72,19 +78,21 @@ function useMeasuredStorage() {
         alive.current = false;
       };
     }
+    const id = ++measurementId.current;
     void measureOwnerStorage(owner)
       .then((data) => {
-        if (!alive.current) return;
+        if (!alive.current || id !== measurementId.current) return;
         setState({ status: "done", data });
       })
       .catch(() => {
-        if (!alive.current) return;
+        if (!alive.current || id !== measurementId.current) return;
         setState({ status: "error", message: "Couldn't measure local storage. Please retry." });
       });
     return () => {
       alive.current = false;
     };
   }, [owner?.userId, owner?.universityId]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => observeLocalCacheChanges(() => void measure()), [measure]);
 
   return { state, refresh: measure, owner };
 }
@@ -98,11 +106,13 @@ type ListState =
 
 function PdfManageDialog({
   owner,
+  token,
   open,
   onOpenChange,
   onDone,
 }: {
   owner: { userId: string; universityId: string };
+  token: string | undefined;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onDone: () => void;
@@ -110,15 +120,40 @@ function PdfManageDialog({
   const [listState, setListState] = useState<ListState>({ status: "loading" });
   const [removing, setRemoving] = useState<Set<string>>(new Set());
   const alive = useRef(true);
+  const listVersion = useRef(0);
+  const [titles, setTitles] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (!token || listState.status !== "done") return;
+    const controller = new AbortController();
+    void Promise.allSettled(
+      listState.entries.map(async (entry) => {
+        const response = await fetch(
+          `${env.NEXT_PUBLIC_API_URL}/api/v1/library/catalog/${encodeURIComponent(entry.documentId)}/reader`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            signal: controller.signal,
+            cache: "no-store",
+          }
+        );
+        if (!response.ok) return;
+        const payload = (await response.json()) as { document?: unknown };
+        const document = libraryDocumentSchema.safeParse(payload.document);
+        if (!controller.signal.aborted && document.success && document.data.id === entry.documentId)
+          setTitles((old) => ({ ...old, [entry.documentId]: document.data.title }));
+      })
+    );
+    return () => controller.abort();
+  }, [listState, token]);
 
   const load = useCallback(async () => {
+    const version = ++listVersion.current;
     setListState({ status: "loading" });
     try {
       const entries = await listOwnerPdfEntries(owner);
-      if (!alive.current) return;
+      if (!alive.current || version !== listVersion.current) return;
       setListState({ status: "done", entries });
     } catch (err) {
-      if (!alive.current) return;
+      if (!alive.current || version !== listVersion.current) return;
       setListState({
         status: "error",
         message: err instanceof Error ? err.message : "Couldn't load saved files. Please retry.",
@@ -128,14 +163,15 @@ function PdfManageDialog({
 
   useEffect(() => {
     alive.current = true;
+    const version = ++listVersion.current;
     if (open) {
       void listOwnerPdfEntries(owner)
         .then((entries) => {
-          if (!alive.current) return;
+          if (!alive.current || version !== listVersion.current) return;
           setListState({ status: "done", entries });
         })
         .catch((err: unknown) => {
-          if (!alive.current) return;
+          if (!alive.current || version !== listVersion.current) return;
           setListState({
             status: "error",
             message:
@@ -147,6 +183,7 @@ function PdfManageDialog({
       alive.current = false;
     };
   }, [open, owner.userId, owner.universityId]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => observeLocalCacheChanges(() => void load()), [load]);
 
   async function handleRemoveOne(documentId: string) {
     if (removing.has(documentId)) return;
@@ -174,86 +211,72 @@ function PdfManageDialog({
   }
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="settings-confirm-overlay" />
-        <DialogPrimitive.Content
-          className="settings-confirm-dialog"
-          aria-describedby="pdf-manage-desc"
-          style={{ maxWidth: 480, width: "90vw" }}
-        >
-          <DialogPrimitive.Title className="settings-confirm-title">
-            Saved documents
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description
-            id="pdf-manage-desc"
-            className="settings-confirm-description"
+    <SettingsDetailView
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Saved documents"
+      description={
+        <>These are PDF copies saved in this browser. Removing them keeps your library intact.</>
+      }
+      maxWidth={480}
+    >
+      {listState.status === "loading" && (
+        <div className="settings-spinner-row" aria-label="Loading saved files…">
+          <LoaderCircle size={20} className="animate-spin" aria-hidden="true" />
+        </div>
+      )}
+
+      {listState.status === "error" && (
+        <div className="settings-error-notice" role="alert">
+          {listState.message}
+          <button
+            type="button"
+            className="settings-retry-icon"
+            aria-label="Retry"
+            onClick={() => void load()}
           >
-            These are offline copies saved on this device. Removing them keeps your library intact.
-          </DialogPrimitive.Description>
-          {listState.status === "loading" && (
-            <div className="settings-spinner-row" aria-label="Loading saved files…">
-              <span className="settings-spinner" aria-hidden="true" />
-            </div>
-          )}
-          {listState.status === "error" && (
-            <div className="settings-error-notice" role="alert">
-              {listState.message}
+            <RefreshCw size={14} />
+          </button>
+        </div>
+      )}
+
+      {listState.status === "done" && listState.entries.length === 0 && (
+        <p className="settings-muted-note">No saved documents on this device.</p>
+      )}
+
+      {listState.status === "done" && listState.entries.length > 0 && (
+        <ul className="settings-pdf-list" role="list">
+          {listState.entries.map((entry) => (
+            <li key={entry.documentId} className="settings-pdf-row">
+              <span className="settings-pdf-info">
+                <span className="settings-pdf-name">
+                  {titles[entry.documentId] ?? `Saved document (${entry.documentId.slice(0, 8)})`}
+                </span>
+                <span className="settings-pdf-meta">
+                  {formatBytes(entry.bytes)} ·{" "}
+                  {entry.storedAt
+                    ? new Date(entry.storedAt).toLocaleDateString()
+                    : "Date unavailable"}
+                </span>
+              </span>
               <button
                 type="button"
-                className="settings-retry-icon"
-                aria-label="Retry"
-                onClick={() => void load()}
+                className="settings-pdf-remove"
+                disabled={removing.has(entry.documentId)}
+                onClick={() => void handleRemoveOne(entry.documentId)}
+                aria-label={`Remove saved copy`}
               >
-                <RefreshCw size={14} />
+                {removing.has(entry.documentId) ? (
+                  <LoaderCircle size={16} className="animate-spin" aria-hidden="true" />
+                ) : (
+                  <Trash2 size={14} />
+                )}
               </button>
-            </div>
-          )}
-          {listState.status === "done" && listState.entries.length === 0 && (
-            <p className="settings-muted-note">No saved documents on this device.</p>
-          )}
-          {listState.status === "done" && listState.entries.length > 0 && (
-            <ul className="settings-pdf-list" role="list">
-              {listState.entries.map((entry) => (
-                <li key={entry.documentId} className="settings-pdf-row">
-                  <span className="settings-pdf-info">
-                    <span className="settings-pdf-name">
-                      {entry.documentId.length > 36
-                        ? `${entry.documentId.slice(0, 8)}…`
-                        : entry.documentId}
-                    </span>
-                    <span className="settings-pdf-meta">{formatBytes(entry.bytes)}</span>
-                  </span>
-                  <button
-                    type="button"
-                    className="settings-pdf-remove"
-                    disabled={removing.has(entry.documentId)}
-                    onClick={() => void handleRemoveOne(entry.documentId)}
-                    aria-label={`Remove saved copy`}
-                  >
-                    {removing.has(entry.documentId) ? (
-                      <span className="settings-spinner settings-spinner-xs" aria-hidden="true" />
-                    ) : (
-                      <Trash2 size={14} />
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div className="settings-confirm-actions">
-            <Button
-              variant="secondary"
-              leadingIcon={null}
-              trailingIcon={null}
-              onClick={() => onOpenChange(false)}
-            >
-              Close
-            </Button>
-          </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+            </li>
+          ))}
+        </ul>
+      )}
+    </SettingsDetailView>
   );
 }
 
@@ -274,6 +297,13 @@ function RemoveDownloadsDialog({
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+    };
+  }, []);
 
   async function handleConfirm() {
     if (busy) return;
@@ -281,13 +311,15 @@ function RemoveDownloadsDialog({
     setError(null);
     try {
       const removed = await removeAllOwnerPdfs(owner);
+      if (!alive.current) return;
       onOpenChange(false);
       onDone();
       toast.success(`${removed} saved ${removed === 1 ? "file" : "files"} removed.`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Removal failed. Please retry.");
+      if (alive.current)
+        setError(err instanceof Error ? err.message : "Removal failed. Please retry.");
     } finally {
-      setBusy(false);
+      if (alive.current) setBusy(false);
     }
   }
 
@@ -339,6 +371,13 @@ function RemoveDownloadsDialog({
 // ─── Main storage section ─────────────────────────────────────────────────────
 
 export function DataStorageSection(): React.ReactElement {
+  const { session, profile } = useAuth();
+  return (
+    <DataStorageContent key={`${session?.user.id}:${profile?.id}:${profile?.university_id}`} />
+  );
+}
+function DataStorageContent(): React.ReactElement {
+  const mobile = useMobileSettings();
   const { session } = useAuth();
   const { state, refresh, owner } = useMeasuredStorage();
   const [manageOpen, setManageOpen] = useState(false);
@@ -346,6 +385,14 @@ export function DataStorageSection(): React.ReactElement {
   const [deleteHistoryOpen, setDeleteHistoryOpen] = useState(false);
   const [clearingCache, setClearingCache] = useState(false);
   const toastId = useRef<string | number | undefined>(undefined);
+  const alive = useRef(true);
+  useEffect(() => {
+    alive.current = true;
+    return () => {
+      alive.current = false;
+      if (toastId.current !== undefined) toast.dismiss(toastId.current);
+    };
+  }, []);
 
   const pdfCount = state.status === "done" ? state.data.pdfDocumentCount : 0;
   const pdfBytes = state.status === "done" ? state.data.pdfBytes : 0;
@@ -360,6 +407,7 @@ export function DataStorageSection(): React.ReactElement {
     setClearingCache(true);
     try {
       const removed = await clearOwnerThumbnailCache(owner);
+      if (!alive.current) return;
       void refresh();
       if (toastId.current !== undefined) toast.dismiss(toastId.current);
       toastId.current = toast.success(
@@ -368,12 +416,13 @@ export function DataStorageSection(): React.ReactElement {
           : "Cache is already empty."
       );
     } catch (err) {
+      if (!alive.current) return;
       if (toastId.current !== undefined) toast.dismiss(toastId.current);
       toastId.current = toast.error(
         err instanceof Error ? err.message : "Cache could not be cleared. Please retry."
       );
     } finally {
-      setClearingCache(false);
+      if (alive.current) setClearingCache(false);
     }
   }
 
@@ -397,6 +446,18 @@ export function DataStorageSection(): React.ReactElement {
     isAvailable && state.status === "done"
       ? `Storage breakdown: ${formatBytes(pdfBytes)} downloaded documents, ${formatBytes(thumbBytes)} cached previews`
       : "Storage breakdown for downloaded documents and cached previews";
+  const detail = deleteHistoryOpen ? (
+    <DeleteHistoryDialog open onOpenChange={setDeleteHistoryOpen} token={session?.access_token} />
+  ) : owner && manageOpen ? (
+    <PdfManageDialog
+      owner={owner}
+      token={session?.access_token}
+      open
+      onOpenChange={setManageOpen}
+      onDone={refresh}
+    />
+  ) : null;
+  if (mobile && detail) return detail;
 
   return (
     <div className="settings-section-container">
@@ -416,7 +477,7 @@ export function DataStorageSection(): React.ReactElement {
               <strong>{storageLabel}</strong>
             </div>
             {state.status === "loading" && (
-              <span className="settings-spinner settings-spinner-xs" aria-label="Measuring…" />
+              <LoaderCircle size={16} className="animate-spin" aria-label="Measuring…" />
             )}
             {state.status === "error" && (
               <button
@@ -432,11 +493,11 @@ export function DataStorageSection(): React.ReactElement {
           <div className="settings-storage-meter" role="img" aria-label={metricsAriaLabel}>
             <span
               className="settings-storage-documents"
-              style={isAvailable && totalBytes > 0 ? { width: `${pdfFraction}%` } : undefined}
+              style={{ width: isAvailable && totalBytes > 0 ? `${pdfFraction}%` : "0%" }}
             />
             <span
               className="settings-storage-previews"
-              style={isAvailable && totalBytes > 0 ? { width: `${100 - pdfFraction}%` } : undefined}
+              style={{ width: isAvailable && totalBytes > 0 ? `${100 - pdfFraction}%` : "0%" }}
             />
           </div>
           <div className="settings-storage-legend">
@@ -459,9 +520,9 @@ export function DataStorageSection(): React.ReactElement {
         </div>
         <SettingsRow
           title="Downloaded documents"
-          description="Files saved to read offline."
+          description="PDF copies saved in this browser."
           mobileTitle="Downloads"
-          mobileDescription="Files saved for offline reading."
+          mobileDescription="PDF copies saved in this browser."
         >
           <span className="settings-inline-action-group">
             <span className="settings-storage-count">{countLabel}</span>
@@ -526,27 +587,19 @@ export function DataStorageSection(): React.ReactElement {
         </SettingsRow>
       </SettingsSection>
 
-      <DeleteHistoryDialog
-        open={deleteHistoryOpen}
-        onOpenChange={setDeleteHistoryOpen}
-        token={session?.access_token}
-      />
+      {detail}
 
       {owner && (
         <>
-          <PdfManageDialog
-            owner={owner}
-            open={manageOpen}
-            onOpenChange={setManageOpen}
-            onDone={refresh}
-          />
-          <RemoveDownloadsDialog
-            owner={owner}
-            open={removeOpen}
-            count={pdfCount}
-            onOpenChange={setRemoveOpen}
-            onDone={refresh}
-          />
+          {removeOpen && (
+            <RemoveDownloadsDialog
+              owner={owner}
+              open={removeOpen}
+              count={pdfCount}
+              onOpenChange={setRemoveOpen}
+              onDone={refresh}
+            />
+          )}
         </>
       )}
     </div>

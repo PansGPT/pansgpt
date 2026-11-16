@@ -237,6 +237,60 @@ async function setup(page, options = {}) {
   return state;
 }
 
+test("a recovered quiz load clears its old error", async ({ page }) => {
+  const options = { outage: true, history: true };
+  await setup(page, options);
+  await page.goto("/app/quiz");
+  await expect(page.getByRole("alert")).toContainText("Quiz storage is unavailable");
+  options.outage = false;
+  await page.getByRole("button", { name: "Try again", exact: true }).click();
+  await expect(page.locator(".quiz-history-row")).toHaveCount(1);
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
+test("retry keeps the requested saved attempt instead of returning to the dashboard", async ({
+  page,
+}) => {
+  const options = { outage: true };
+  await setup(page, options);
+  await page.goto(`/app/quiz?attempt=${uid(3)}`);
+  await expect(page.getByRole("alert")).toBeVisible();
+  options.outage = false;
+  await page.getByRole("button", { name: "Try again", exact: true }).click();
+  await expect(
+    page.getByRole("radio", { name: "B Pharmacology option B", exact: true })
+  ).toBeVisible();
+  expect(new URL(page.url()).searchParams.get("attempt")).toBe(uid(3));
+});
+
+test("client navigation preserves a quiz answer before the autosave timer runs", async ({
+  page,
+}) => {
+  const state = await setup(page);
+  await page.clock.install();
+  await page.goto(`/app/quiz?attempt=${uid(3)}`);
+  const answer = page.getByRole("radio", { name: "B Pharmacology option B", exact: true });
+  await expect(answer).toBeVisible();
+  await page.clock.pauseAt(new Date(Date.now() + 1000));
+  await answer.check();
+  await expect(page.getByText("Unsaved changes", { exact: true })).toBeVisible();
+  expect(state.saves).toBe(0);
+  await page.evaluate(() => {
+    history.pushState(null, "", "/app/quiz");
+    dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page.getByRole("button", { name: "New quiz", exact: true })).toBeVisible();
+  await page.clock.runFor(1000);
+  await page.evaluate((id) => {
+    history.pushState(null, "", `/app/quiz?attempt=${id}`);
+    dispatchEvent(new PopStateEvent("popstate"));
+  }, uid(3));
+  await expect(answer).toBeChecked();
+  await page.clock.runFor(600);
+  await expect.poll(() => state.saves).toBe(1);
+  expect(state.attempt.answers[0].selected_option_ids).toEqual(["B"]);
+});
+
 test("stopped generation can retry the same request without promising automatic retries", async ({
   page,
 }) => {
@@ -707,7 +761,9 @@ test("mobile quiz view displays topbar with back button, title, and full-width n
   await expect(page.locator(".quiz-page-heading")).not.toBeVisible();
 
   // Full-width New quiz button is visible at the top of content
-  const newQuiz = page.locator(".quiz-mobile-primary-action").getByRole("button", { name: "New quiz", exact: true });
+  const newQuiz = page
+    .locator(".quiz-mobile-primary-action")
+    .getByRole("button", { name: "New quiz", exact: true });
   await expect(newQuiz).toBeVisible();
 
   const box = await newQuiz.boundingBox();

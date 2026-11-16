@@ -4,6 +4,7 @@ import { FileText } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { env } from "@/env";
 import { readThumbnail, writeThumbnail } from "@/lib/document-thumbnail-cache";
+import { localCacheEpoch } from "@/lib/local-cache-coordination";
 
 export function DocumentThumbnail({
   documentId,
@@ -44,6 +45,7 @@ export function DocumentThumbnail({
       return;
     const requestedId = documentId;
     const owner = { userId: ownerId, universityId };
+    const cacheEpoch = localCacheEpoch("thumbnail", owner);
     const controller = new AbortController();
     let objectUrl: string | null = null;
     let retryTimer: number | undefined;
@@ -75,7 +77,7 @@ export function DocumentThumbnail({
           const blob = await response.blob();
           if (!controller.signal.aborted) {
             display(blob);
-            void writeThumbnail(owner, requestedId, revision, blob, controller.signal);
+            void writeThumbnail(owner, requestedId, revision, blob, controller.signal, cacheEpoch);
           }
         })
         .catch((error: unknown) => {

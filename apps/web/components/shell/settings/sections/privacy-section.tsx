@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useMobileSettings } from "../settings-detail-view";
 import { useAuth } from "@/lib/auth-context";
 import { SettingsSection } from "../settings-section";
 import { SettingsRow, SettingsActionButton } from "../settings-row";
@@ -13,7 +14,17 @@ import {
   type PrivacyInfoType,
 } from "../privacy-dialogs";
 
-export function PrivacySection(): React.ReactElement {
+export function PrivacySection({ onNavigate }: { onNavigate?: () => void }): React.ReactElement {
+  const { session, profile } = useAuth();
+  return (
+    <PrivacyContent
+      key={`${session?.user.id}:${profile?.id}:${profile?.university_id}`}
+      onNavigate={onNavigate}
+    />
+  );
+}
+function PrivacyContent({ onNavigate }: { onNavigate?: () => void }): React.ReactElement {
+  const mobile = useMobileSettings();
   const { session } = useAuth();
   const token = session?.access_token;
 
@@ -22,6 +33,29 @@ export function PrivacySection(): React.ReactElement {
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [archivedOpen, setArchivedOpen] = useState(false);
   const [deletedOpen, setDeletedOpen] = useState(false);
+  const detail = infoType ? (
+    <PrivacyInfoDialog
+      type={infoType}
+      open
+      onOpenChange={(open) => {
+        if (!open) setInfoType(null);
+      }}
+    />
+  ) : uploadsOpen ? (
+    <UploadedFilesDialog open onOpenChange={setUploadsOpen} token={token} />
+  ) : feedbackOpen ? (
+    <FeedbackHistoryDialog open onOpenChange={setFeedbackOpen} token={token} />
+  ) : archivedOpen ? (
+    <ArchivedChatsDialog
+      open
+      onOpenChange={setArchivedOpen}
+      token={token}
+      onNavigate={onNavigate}
+    />
+  ) : deletedOpen ? (
+    <DeletedChatsDialog open onOpenChange={setDeletedOpen} token={token} />
+  ) : null;
+  if (mobile && detail) return detail;
 
   return (
     <div className="settings-section-container">
@@ -56,9 +90,9 @@ export function PrivacySection(): React.ReactElement {
       <SettingsSection title="Your data">
         <SettingsRow
           title="Export account data"
-          description="Get a copy of the information associated with your account."
+          description="Account data export is coming soon."
           mobileTitle="Export my data"
-          mobileDescription="Download your account information."
+          mobileDescription="Account export is coming soon."
         >
           {/* General account-export/DSAR engine is a separate security-sensitive
               increment. Kept honestly disabled until contract is implemented. */}
@@ -66,8 +100,8 @@ export function PrivacySection(): React.ReactElement {
         </SettingsRow>
         <SettingsRow
           title="Shared chats"
-          description="Review the conversations you have shared."
-          mobileDescription="Review chats you've shared with others."
+          description="Public conversation sharing is coming soon."
+          mobileDescription="Public sharing is coming soon."
         >
           {/* Public chat sharing infrastructure is not built. Kept honestly disabled. */}
           <SettingsActionButton disabled>Manage</SettingsActionButton>
@@ -110,18 +144,7 @@ export function PrivacySection(): React.ReactElement {
         </SettingsRow>
       </SettingsSection>
 
-      {/* Dialogs */}
-      <PrivacyInfoDialog
-        type={infoType}
-        open={infoType !== null}
-        onOpenChange={(open) => {
-          if (!open) setInfoType(null);
-        }}
-      />
-      <UploadedFilesDialog open={uploadsOpen} onOpenChange={setUploadsOpen} token={token} />
-      <FeedbackHistoryDialog open={feedbackOpen} onOpenChange={setFeedbackOpen} token={token} />
-      <ArchivedChatsDialog open={archivedOpen} onOpenChange={setArchivedOpen} token={token} />
-      <DeletedChatsDialog open={deletedOpen} onOpenChange={setDeletedOpen} token={token} />
+      {detail}
     </div>
   );
 }

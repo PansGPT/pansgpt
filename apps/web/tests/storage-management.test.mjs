@@ -1,5 +1,8 @@
 import { after, beforeEach, test } from "node:test";
 import assert from "node:assert/strict";
+import { storePdfCopy, readPdfCopy } from "../lib/reader-pdf-cache.ts";
+import { writeThumbnail, readThumbnail } from "../lib/document-thumbnail-cache.ts";
+import { localCacheEpoch } from "../lib/local-cache-coordination.ts";
 import {
   measureOwnerStorage,
   listOwnerPdfEntries,
@@ -130,7 +133,7 @@ test("storage measurement isolates accounts and universities", async () => {
   assert.equal(mA.totalBytes > 2048, true);
 });
 
-test("stale/expired and invalid PDF entries are excluded from measurement and list", async () => {
+test("stale and invalid entries still occupy measurable bytes and can be removed", async () => {
   const cacheA = await globalThis.caches.open("pansgpt-reader-pdfs-v1:user-1:uni-1");
   // Expired PDF (older than 30 days)
   const expiredTime = Date.now() - 31 * 24 * 60 * 60 * 1000;
@@ -158,13 +161,14 @@ test("stale/expired and invalid PDF entries are excluded from measurement and li
   );
 
   const m = await measureOwnerStorage(ownerA);
-  assert.equal(m.pdfDocumentCount, 1);
-  assert.equal(m.pdfBytes, 1024);
+  assert.equal(m.pdfDocumentCount, 3);
+  assert.equal(m.pdfBytes, 4096 + 9 + 1024);
 
   const list = await listOwnerPdfEntries(ownerA);
-  assert.equal(list.length, 1);
-  assert.equal(list[0].documentId, "doc-valid");
-  assert.equal(list[0].bytes, 1024);
+  assert.equal(list.length, 3);
+  assert.equal(list.find((entry) => entry.documentId === "doc-valid").bytes, 1024);
+  await removeAllOwnerPdfs(ownerA);
+  assert.equal((await measureOwnerStorage(ownerA)).totalBytes, 0);
 });
 
 test("removeOwnerPdfEntry removes all revisions of target document only", async () => {
@@ -257,6 +261,75 @@ test("handles unavailable Cache Storage gracefully", async () => {
   assert.equal(m.availability, "unavailable");
   assert.equal(m.totalBytes, 0);
 
-  const list = await listOwnerPdfEntries(ownerA);
-  assert.deepEqual(list, []);
+  await assert.rejects(listOwnerPdfEntries(ownerA), /unavailable/);
+});
+
+test("cache read failures do not become successful zero measurements", async () => {
+  globalThis.caches.open = async () => {
+    throw new Error("denied");
+  };
+  await assert.rejects(measureOwnerStorage(ownerA), /denied/);
+});
+
+test("measurement uses bytes rather than an untrusted size header and sums every revision", async () => {
+  const cache = await caches.open("pansgpt-reader-pdfs-v1:user-1:uni-1");
+  const response = createPdfResponse(17);
+  response.headers.set("content-length", "NaN");
+  await cache.put("https://app.example.test/__private-reader-pdf/doc?revision=new", response);
+  await cache.put(
+    "https://app.example.test/__private-reader-pdf/doc?revision=old",
+    createPdfResponse(31, Date.now() - 1000)
+  );
+  assert.equal((await measureOwnerStorage(ownerA)).pdfBytes, 48);
+  assert.equal((await listOwnerPdfEntries(ownerA))[0].bytes, 48);
+});
+
+test("a download started before removal cannot recreate an owned PDF or thumbnail", async () => {
+  const pdfEpoch = localCacheEpoch("pdf", ownerA);
+  const thumbEpoch = localCacheEpoch("thumbnail", ownerA);
+  await removeAllOwnerPdfs(ownerA);
+  await clearOwnerThumbnailCache(ownerA);
+  const signal = new AbortController().signal;
+  await storePdfCopy(ownerA, "doc", "v1", new Blob(["%PDF-synthetic"]), signal, pdfEpoch);
+  await writeThumbnail(ownerA, "doc", "v1", new Blob(["image"]), signal, thumbEpoch);
+  assert.equal(await readPdfCopy(ownerA, "doc", "v1"), null);
+  assert.equal(await readThumbnail(ownerA, "doc", "v1"), null);
+  await storePdfCopy(ownerA, "doc", "v1", new Blob(["%PDF-synthetic"]), signal);
+  assert.ok(await readPdfCopy(ownerA, "doc", "v1"));
+});
+
+test("removal waits for an active write and leaves no resurrected PDF", async () => {
+  const cache = await caches.open("pansgpt-reader-pdfs-v1:user-1:uni-1");
+  let release, started;
+  const barrier = new Promise((resolve) => {
+    release = resolve;
+  });
+  const writing = new Promise((resolve) => {
+    started = resolve;
+  });
+  const put = cache.put.bind(cache);
+  cache.put = async (...args) => {
+    started();
+    await barrier;
+    return put(...args);
+  };
+  const write = storePdfCopy(
+    ownerA,
+    "doc",
+    "v1",
+    new Blob(["%PDF-synthetic"]),
+    new AbortController().signal
+  );
+  await writing;
+  const removal = removeAllOwnerPdfs(ownerA);
+  release();
+  await Promise.all([write, removal]);
+  assert.equal((await measureOwnerStorage(ownerA)).pdfBytes, 0);
+});
+
+test("a failed delete is not reported as a successful removal", async () => {
+  const cache = await caches.open("pansgpt-reader-pdfs-v1:user-1:uni-1");
+  await cache.put("https://app.example.test/__private-reader-pdf/doc", createPdfResponse());
+  cache.delete = async () => false;
+  await assert.rejects(removeOwnerPdfEntry(ownerA, "doc"), /Couldn't remove/);
 });

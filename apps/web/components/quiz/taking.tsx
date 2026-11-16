@@ -1,6 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  readQuizDraft,
+  rememberQuizDraft,
+  confirmQuizDraft,
+  forgetQuizDraft,
+} from "@/lib/quiz-drafts";
 import { ArrowLeft, ArrowRight, Check, Clock3, Flag, LoaderCircle } from "lucide-react";
 import { DialogPrimitive as Dialog } from "@pansgpt/ui/shell";
 import { Button } from "./button";
@@ -139,25 +145,28 @@ export function QuestionInput({
 
 export function QuizTaking({
   initial,
+  draftScope,
   api,
   onResult,
   onLeave,
 }: {
   initial: QuizAttempt;
+  draftScope: string;
   api: QuizApi;
   onResult: (result: QuizResult) => void;
   onLeave: () => void;
 }): React.ReactElement {
-  const [answers, setAnswers] = useState<QuizAnswer[]>(initial.answers);
+  const [draft] = useState(() => readQuizDraft(draftScope, initial));
+  const [answers, setAnswers] = useState<QuizAnswer[]>(draft?.answers ?? initial.answers);
   const [questions, setQuestions] = useState(initial.questions);
   const [generation, setGeneration] = useState(initial.generation_status);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
-  const [flags, setFlags] = useState(initial.flagged_ids);
+  const [flags, setFlags] = useState(draft?.flagged_ids ?? initial.flagged_ids);
   const [index, setIndex] = useState(0);
   const [confirm, setConfirm] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [saveState, setSaveState] = useState("All changes saved");
+  const [saveState, setSaveState] = useState(draft ? "Unsaved changes" : "All changes saved");
   const [error, setError] = useState<string | null>(null);
   const [remaining, setRemaining] = useState<number | null>(() =>
     initial.deadline_at
@@ -176,7 +185,16 @@ export function QuizTaking({
   const latest = useRef({ answers, flags });
   useEffect(() => {
     latest.current = { answers, flags };
-  }, [answers, flags]);
+    if (
+      initial.status === "in_progress" &&
+      JSON.stringify([answers, flags]) !== saved.current.signature
+    )
+      rememberQuizDraft(draftScope, initial.id, {
+        revision: saved.current.revision,
+        answers,
+        flagged_ids: flags,
+      });
+  }, [answers, flags, draftScope, initial.id, initial.status]);
   const mounted = useRef(true);
   const submitting = useRef(false);
   const autoSubmitted = useRef(false);
@@ -255,6 +273,7 @@ export function QuizTaking({
     const next = pending.current.then(async () => {
       if (!mounted.current || signature === saved.current.signature) return;
       setSaveState("Saving your answers…");
+      const previousRevision = saved.current.revision;
       const result = await api.save(
         initial.id,
         saved.current.revision,
@@ -262,6 +281,7 @@ export function QuizTaking({
         snapshot.flags
       );
       saved.current = { revision: result.revision, signature };
+      confirmQuizDraft(draftScope, initial.id, previousRevision, result.revision, signature);
       if (mounted.current) {
         setSaveState("All changes saved");
         setError(null);
@@ -269,7 +289,7 @@ export function QuizTaking({
     });
     pending.current = next.catch(() => undefined);
     return next;
-  }, [api, initial.id]);
+  }, [api, initial.id, draftScope]);
   useEffect(() => {
     if (status !== "in_progress" || submitting.current || remaining === 0) return;
     const timer = setTimeout(() => {
@@ -309,6 +329,7 @@ export function QuizTaking({
         await pending.current;
         if (!expired && status === "in_progress") await save();
         const result = await api.submit(initial.id);
+        forgetQuizDraft(draftScope, initial.id);
         if (mounted.current) onResult(result);
       } catch (failure: unknown) {
         if (mounted.current) {
@@ -330,7 +351,7 @@ export function QuizTaking({
         if (mounted.current) setBusy(false);
       }
     },
-    [api, initial.id, onResult, save, status]
+    [api, initial.id, onResult, save, status, draftScope]
   );
   useEffect(() => {
     if (remaining === 0 && !autoSubmitted.current && status === "in_progress") {
@@ -502,7 +523,10 @@ export function QuizTaking({
               <button
                 type="button"
                 className="quiz-text-button"
-                onClick={() => window.location.reload()}
+                onClick={() => {
+                  forgetQuizDraft(draftScope, initial.id);
+                  window.location.reload();
+                }}
               >
                 Reload saved attempt
               </button>

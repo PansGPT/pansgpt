@@ -73,6 +73,74 @@ def test_image_normalization_strips_metadata_and_flattens_transparency() -> None
         assert max(preview.size) <= 384
 
 
+async def test_owned_attachment_download_is_bounded_private_and_allows_used_files(
+    client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    session, row = image_record(tenant_state)
+    data = b"%PDF-synthetic owned download"
+    row.update(
+        filename="Synthetic notes.pdf",
+        byte_size=len(data),
+        content_type="application/pdf",
+        message_id=str(uuid.uuid4()),
+    )
+    fake_storage(monkeypatch, row)
+    monkeypatch.setattr(routes.limiter, "enabled", False)
+    download = AsyncMock(return_value=data)
+    monkeypatch.setattr(routes.storage_engine, "download_bytes", download)
+    response = await client.get(
+        f"/api/v1/ai/chat/sessions/{session}/attachments/{row['id']}/download"
+    )
+    assert response.status_code == 200 and response.content == data
+    assert response.headers["cache-control"] == "private, no-store"
+    assert response.headers["x-content-type-options"] == "nosniff"
+    assert response.headers["content-type"] == "application/octet-stream"
+    assert (
+        response.headers["content-disposition"]
+        == "attachment; filename*=UTF-8''Synthetic%20notes.pdf"
+    )
+    download.assert_awaited_once_with(row["object_key"], max_bytes=10 * 1024 * 1024)
+
+
+@pytest.mark.parametrize(
+    "failure",
+    ["missing", "wrong_owner", "wrong_university", "oversize", "storage", "mismatched_size"],
+)
+async def test_attachment_download_rejects_inaccessible_or_corrupt_storage(
+    client: AsyncClient,
+    tenant_state: TenantTestState,
+    monkeypatch: pytest.MonkeyPatch,
+    failure: str,
+) -> None:
+    session, row = image_record(tenant_state)
+    row["byte_size"] = 5
+    if failure == "wrong_owner":
+        row["object_key"] = str(row["object_key"]).replace(
+            str(tenant_state.user.id), str(uuid.uuid4())
+        )
+    if failure == "wrong_university":
+        row["object_key"] = str(row["object_key"]).replace(
+            str(tenant_state.user.university_id), str(uuid.uuid4())
+        )
+    if failure == "oversize":
+        row["byte_size"] = 11 * 1024 * 1024
+    fake_storage(monkeypatch, None if failure == "missing" else row)
+    monkeypatch.setattr(routes.limiter, "enabled", False)
+    download = (
+        AsyncMock(side_effect=RuntimeError("PRIVATE STORAGE DETAILS"))
+        if failure == "storage"
+        else AsyncMock(return_value=b"truncated")
+    )
+    monkeypatch.setattr(routes.storage_engine, "download_bytes", download)
+    response = await client.get(
+        f"/api/v1/ai/chat/sessions/{session}/attachments/{row['id']}/download"
+    )
+    assert response.status_code == (503 if failure in {"storage", "mismatched_size"} else 404)
+    assert "PRIVATE" not in response.text and "object_key" not in response.text
+    if failure not in {"storage", "mismatched_size"}:
+        download.assert_not_awaited()
+
+
 async def test_image_upload_stores_pixels_without_calling_vision(
     client: AsyncClient, tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:

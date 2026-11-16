@@ -7,7 +7,7 @@ import json
 import time
 import uuid
 from collections.abc import AsyncGenerator
-from typing import Any
+from typing import Any, Literal
 
 import structlog
 from anyio import CancelScope
@@ -20,6 +20,7 @@ from fastapi import (
     HTTPException,
     Query,
     Request,
+    Response,
     UploadFile,
     status,
 )
@@ -208,11 +209,15 @@ async def create_chat_session(
     summary="List student's active chat sessions",
 )
 async def list_chat_sessions(
+    response: Response,
     limit: int = Query(default=30, ge=1, le=100),
     archived: bool = Query(default=False),
+    offset: int = Query(default=0, ge=0, le=100000),
+    scope: Literal["chat", "all"] = Query(default="chat"),
     current_user: UserContext = Depends(get_current_user),
 ) -> ChatSessionListResponse:
     """Returns a list of conversation threads for the student."""
+    response.headers["Cache-Control"] = "private, no-store"
     user_id = str(current_user.id)  # [TENANT FIX]
     require_university(current_user)  # [TENANT FIX]
     sessions: list[ChatSessionResponse] = []
@@ -227,13 +232,23 @@ async def list_chat_sessions(
                            created_at::text, updated_at::text, is_pinned, archived_at::text,title_source,last_message_at::text
                     FROM public.chat_sessions
                     WHERE user_id = $1 AND deleted_at IS NULL AND (archived_at IS NOT NULL) = $3
-                      AND ($3 OR (document_id IS NULL AND (title_source='manual' OR EXISTS (
+                      AND EXISTS (SELECT 1 FROM public.users u WHERE u.id=chat_sessions.user_id AND u.university_id=$4 AND u.deleted_at IS NULL)
+                      AND (document_id IS NULL OR EXISTS (SELECT 1 FROM public.documents d WHERE d.id=chat_sessions.document_id AND d.university_id=$4 AND d.deleted_at IS NULL))
+                      AND ($5 OR $3 OR (document_id IS NULL AND (title_source='manual' OR EXISTS (
                         SELECT 1 FROM public.chat_messages m WHERE m.session_id=chat_sessions.id AND m.role='user'
                       ))))
                     ORDER BY is_pinned DESC, coalesce(last_message_at,created_at) DESC, id DESC
-                    LIMIT $2;
+                    LIMIT $2 OFFSET $6;
                 """
-                rows = await conn.fetch(sql, uuid.UUID(user_id), limit, archived)
+                rows = await conn.fetch(
+                    sql,
+                    uuid.UUID(user_id),
+                    limit,
+                    archived,
+                    current_user.university_id,
+                    scope == "all",
+                    offset,
+                )
                 for r in rows:
                     sessions.append(
                         ChatSessionResponse(

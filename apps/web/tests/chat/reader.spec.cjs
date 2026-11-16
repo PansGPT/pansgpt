@@ -804,6 +804,39 @@ test("study chat owns its history and creates new document-bound conversations",
   await expect(page.getByRole("alert")).toHaveCount(0);
 });
 
+test("explicit study-session links open saved history while ordinary document opens stay fresh", async ({
+  page,
+}) => {
+  const state = await setup(page, {
+    trees: {
+      [chat]: [
+        {
+          id: "01900000-0000-7000-8000-000000000055",
+          role: "user",
+          content: "Saved document question from an archive",
+          parent_message_id: null,
+          is_active_branch: true,
+        },
+      ],
+    },
+  });
+  await page.goto(`/app/library/${doc}/read?session=${chat}`);
+  await painted(page);
+  await expect(
+    page.getByText("Saved document question from an archive", { exact: true })
+  ).toBeVisible();
+  expect(state.creates).toBe(0);
+  await page.goto(`/app/library/${doc}/read`);
+  await painted(page);
+  await page.getByRole("button", { name: "Open study chat", exact: true }).click();
+  await expect(
+    page.getByText("Saved document question from an archive", { exact: true })
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("textbox", { name: "Ask about this document", exact: true })
+  ).toHaveValue("");
+});
+
 async function snipPage(page, touch = false) {
   await page.getByRole("button", { name: "Snip document area", exact: true }).click();
   await page.locator(".reader-scroll").evaluate((scroll) => {
@@ -938,6 +971,27 @@ test("failed snip Ask AI keeps the image and draft with its error above the inpu
   state.failSnip = false;
   await page.getByRole("button", { name: "Send message", exact: true }).click();
   await expect.poll(() => state.posts.filter((item) => item.endpoint === "stream").length).toBe(1);
+});
+
+test("a failed snip Ask AI restores its question when the composer was empty", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const state = await setup(page, { failSnip: true });
+  await ready(page);
+  await snipPage(page, true);
+  await page.getByRole("button", { name: "Ask AI", exact: true }).click();
+  await expect(page.getByRole("alert")).toHaveText("Couldn't upload. Try again.");
+  await expect(
+    page.getByRole("textbox", { name: "Ask about this document", exact: true })
+  ).toHaveValue("Can you explain this snippet for me?");
+  await expect(
+    page.getByRole("button", { name: "Preview Snippet.png", exact: true })
+  ).toBeVisible();
+  state.failSnip = false;
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect.poll(() => state.posts.filter((item) => item.endpoint === "stream").length).toBe(1);
+  expect(state.posts.find((item) => item.endpoint === "stream").message).toBe(
+    "Can you explain this snippet for me?"
+  );
 });
 
 test("closing study chat during snip upload cancels Ask AI without a late send", async ({
@@ -1093,8 +1147,8 @@ test("PDF and progress failures stay visible and retry without fake content", as
   const state = await setup(page, { failPdf: true, failProgress: true });
   await page.goto(`/app/library/${doc}/read`);
   await expect(page.getByRole("alert")).toContainText("PDF file could not be loaded");
-  await expect(page.locator(".reader-header")).toBeHidden();
-  await expect(page.locator(".reader-toolbar")).toBeHidden();
+  await expect(page.locator(".reader-header")).toBeVisible();
+  await expect(page.locator(".reader-toolbar")).toBeVisible();
   await expect(page.locator(".reader-chat-panel")).toBeHidden();
   expect(await page.locator(".reader-page canvas").count()).toBe(0);
   state.failPdf = false;
@@ -1170,7 +1224,7 @@ test("PDF copies reuse disk bytes, refresh revisions and never bypass revoked ac
   expect(entries).toBe(0);
 });
 
-test("reader loading and failures stay full page without sidebar or workspace headers", async ({
+test("reader loading and failures retain reader controls without the app sidebar or topbar", async ({
   page,
 }) => {
   const state = await setup(page, { readerDelay: 1000, readerStatus: 503 });
@@ -1182,7 +1236,7 @@ test("reader loading and failures stay full page without sidebar or workspace he
   const bounds = await page.locator(".reader-route").boundingBox();
   expect(bounds.x).toBe(0);
   expect(bounds.width).toBe(1440);
-  expect(bounds.height).toBe(975);
+  expect(bounds.height).toBe(page.viewportSize().height);
   await page.screenshot({ path: test.info().outputPath("reader-full-page-error.png") });
   state.readerStatus = 200;
   state.readerDelay = 0;

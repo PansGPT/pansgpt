@@ -1,5 +1,9 @@
 # PansGPT — Full Ground-Up Rebuild Plan
 
+> **2026-11-16 mobile Settings and private reads:** Shared Settings detail content renders as desktop dialogs/mobile pages. Private copies survive unresolved auth/profile failure; confirmed sign-out or verified loss of university scope still clears them. Original attachments download through a bounded owned backend endpoint; image previews remain normalized private blobs. [Contract and verification](settings-mobile-and-downloads-2026-11-16.md).
+
+> **2026-11-16 Settings review and study recovery:** Owner-scoped cache management coordinates pending writes; quiz navigation drafts stay in memory and respect backend revisions; failed snip upload and quiz retry recovery preserve user intent. [Implementation, verification and open acceptance gates](settings-review-and-study-recovery-2026-11-16.md). Hosted, real-SQL and remaining Settings handoff work are not certified complete.
+
 > **2026-11-06 Quiz queue:** Recovered the saved five-question local quiz by starting its missing worker; hardened the API handoff against cold Redis connection timeouts. [Diagnosis and verification](quiz-queue-recovery-2026-11-06.md).
 
 > **2026-11-05 implementation:** Local Quiz loading is restored and user-confirmed after explicit flag/client-key configuration. Restore the pre-consolidation Library layout with later header refinements; task paging, serialized saves and neutral keyboard focus are in verification. Timetable UI remains deferred and streak behavior will be discussed after implementation. [Scope, contracts and verification](tasks-2026-11-05.md).

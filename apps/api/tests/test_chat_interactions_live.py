@@ -24,6 +24,7 @@ from app.main import app
 from app.models.chat import ComplexityLevel, IntentType, QueryClassification, RouteType
 from app.routers import chat, chat_discovery, chat_sessions, reader
 from app.routers import chat_interactions as routes
+from app.routers import settings as settings_routes
 
 pytestmark = [pytest.mark.live, pytest.mark.asyncio]
 
@@ -79,9 +80,19 @@ async def live_chat(monkeypatch):
         async def connection(*args, **kwargs):
             yield conn
 
-        for module in (chat, routes, engine, authorization, chat_sessions, chat_discovery, reader):
+        for module in (
+            chat,
+            routes,
+            engine,
+            authorization,
+            chat_sessions,
+            chat_discovery,
+            reader,
+            settings_routes,
+        ):
             monkeypatch.setattr(module, "get_db_connection", connection)
         app.dependency_overrides[get_current_user] = lambda: user
+        monkeypatch.setattr(settings_routes.limiter, "enabled", False)
         monkeypatch.setattr(chat, "_deduct_user_credit", AsyncMock(return_value=100))
         monkeypatch.setattr(chat, "_finish_chat_credit", AsyncMock())
         monkeypatch.setattr(chat, "_auto_generate_session_title", AsyncMock())
@@ -560,3 +571,62 @@ async def test_failed_question_can_be_reopened_retried_or_followed_by_a_new_ques
             await client.post(path + "/stream", json={"message": "Synthetic immediate follow-up"})
         )
     assert len(calls) == 4
+
+
+async def test_real_settings_upload_list_excludes_other_storage_tenants(live_chat):
+    client, conn, user, _ = live_chat
+    session = uuid7()
+    await conn.execute(
+        "INSERT INTO public.chat_sessions(id,user_id,title) VALUES($1,$2,'Synthetic uploads')",
+        session,
+        user.id,
+    )
+    owned, wrong_tenant = uuid7(), uuid7()
+    for attachment, university in ((owned, user.university_id), (wrong_tenant, uuid7())):
+        await conn.execute(
+            """INSERT INTO public.chat_attachments(id,session_id,user_id,object_key,filename,content_type,byte_size)
+               VALUES($1,$2,$3,$4,'synthetic.txt','text/plain',10)""",
+            attachment,
+            session,
+            user.id,
+            f"chat/{university}/{user.id}/{session}/{attachment}",
+        )
+    response = await client.get("/api/v1/settings/uploads")
+    assert response.status_code == 200, response.text
+    assert [item["id"] for item in response.json()["attachments"]] == [str(owned)]
+    assert response.headers["cache-control"] == "private, no-store"
+    await conn.execute("UPDATE public.chat_sessions SET deleted_at=now() WHERE id=$1", session)
+    assert (await client.get("/api/v1/settings/uploads")).json()["attachments"] == []
+
+
+async def test_real_settings_feedback_excludes_internal_notes_and_paginates(live_chat):
+    client, conn, user, _ = live_chat
+    ids = [uuid7(), uuid7()]
+    for ticket in ids:
+        await conn.execute(
+            "INSERT INTO public.support_tickets(id,user_id,subject,category) VALUES($1,$2,'Synthetic report','bug')",
+            ticket,
+            user.id,
+        )
+        for internal, message in (
+            (True, "PRIVATE INTERNAL NOTE"),
+            (False, "Synthetic public submission"),
+        ):
+            await conn.execute(
+                "INSERT INTO public.support_ticket_replies(ticket_id,sender_id,message,is_internal_note) VALUES($1,$2,$3,$4)",
+                ticket,
+                user.id,
+                message,
+                internal,
+            )
+    first = await client.get("/api/v1/settings/feedback?limit=1")
+    assert first.status_code == 200, first.text
+    assert first.json()["next_offset"] == 1
+    second = await client.get("/api/v1/settings/feedback?limit=1&offset=1")
+    assert second.status_code == 200, second.text
+    assert second.json()["next_offset"] is None
+    assert {first.json()["tickets"][0]["id"], second.json()["tickets"][0]["id"]} == set(
+        map(str, ids)
+    )
+    assert "PRIVATE INTERNAL" not in first.text + second.text
+    assert first.json()["tickets"][0]["first_message"] == "Synthetic public submission"

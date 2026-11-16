@@ -60,10 +60,11 @@ export async function requestSession(
 
 export async function listArchivedSessions(
   token: string | undefined,
-  signal: AbortSignal
+  signal: AbortSignal,
+  offset = 0
 ): Promise<ChatSessionSummary[]> {
   if (!token) throw new Error("Sign in again to view archived chats.");
-  const response = await fetchWithRecovery(`${base}?archived=true&limit=100`, {
+  const response = await fetchWithRecovery(`${base}?archived=true&limit=100&offset=${offset}`, {
     headers: { Authorization: `Bearer ${token}` },
     signal,
   });
@@ -74,13 +75,17 @@ export async function listArchivedSessions(
 
 export async function listActiveSessions(
   token: string | undefined,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  offset = 0
 ): Promise<ChatSessionSummary[]> {
   if (!token) throw new Error("Sign in again to view conversations.");
-  const response = await fetchWithRecovery(`${base}?archived=false&limit=100`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal,
-  });
+  const response = await fetchWithRecovery(
+    `${base}?archived=false&limit=100&scope=all&offset=${offset}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      signal,
+    }
+  );
   if (!response.ok) throw new Error("Conversations could not be loaded. Please retry.");
   return z.object({ sessions: z.array(chatSessionSummarySchema) }).parse(await response.json())
     .sessions;

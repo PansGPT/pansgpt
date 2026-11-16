@@ -19,6 +19,43 @@ from tests.conftest import TenantTestState
 SESSION = "018f3a30-0001-7000-8000-000000000001"
 
 
+async def test_settings_session_listing_paginates_without_changing_default_history(
+    client: AsyncClient, tenant_state: TenantTestState
+) -> None:
+    tenant_state.connection.fetch.side_effect = None
+    tenant_state.connection.fetch.return_value = []
+    response = await client.get("/api/v1/ai/chat/sessions?scope=all&limit=100&offset=100")
+    assert response.status_code == 200
+    assert response.headers["cache-control"] == "private, no-store"
+    assert response.json() == {"sessions": [], "total": 0}
+    assert tenant_state.connection.fetch.call_args.args[1:] == (
+        tenant_state.user.id,
+        100,
+        False,
+        tenant_state.user.university_id,
+        True,
+        100,
+    )
+    response = await client.get("/api/v1/ai/chat/sessions")
+    assert response.status_code == 200
+    assert tenant_state.connection.fetch.call_args.args[1:] == (
+        tenant_state.user.id,
+        30,
+        False,
+        tenant_state.user.university_id,
+        False,
+        0,
+    )
+
+
+@pytest.mark.parametrize("query", ["scope=other", "offset=-1", "offset=100001", "limit=101"])
+async def test_session_listing_rejects_unbounded_or_unknown_queries(
+    client: AsyncClient, tenant_state: TenantTestState, query: str
+) -> None:
+    response = await client.get(f"/api/v1/ai/chat/sessions?{query}")
+    assert response.status_code == 422
+
+
 async def response_for(state: TenantTestState, *, disconnected: bool = False) -> StreamingResponse:
     request = MagicMock(spec=Request)
     request.is_disconnected = AsyncMock(return_value=disconnected)

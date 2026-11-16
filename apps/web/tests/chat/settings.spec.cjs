@@ -346,11 +346,12 @@ test("mobile settings retains grouped menus, separate Security and usable storag
     });
   expect(storageInset).toEqual(rowInset);
   await expect(content.getByText("Downloads", { exact: true })).toBeVisible();
+  const downloads = content.locator('[data-settings-label="Downloaded documents"]');
+  await expect(downloads.locator(".settings-row-description.settings-copy-mobile")).toHaveText(
+    "PDF copies saved in this browser."
+  );
   await expect(
-    content.getByText("Files saved for offline reading.", { exact: true })
-  ).toBeVisible();
-  await expect(
-    content.getByText("Files saved to read offline.", { exact: true })
+    downloads.locator(".settings-row-description.settings-copy-desktop")
   ).not.toBeVisible();
   await page.screenshot({ path: test.info().outputPath("settings-storage-mobile.png") });
   await page.keyboard.press("Escape");

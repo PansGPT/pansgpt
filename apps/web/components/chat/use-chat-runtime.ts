@@ -828,6 +828,8 @@ export function useChatRuntime({
       } catch (failure) {
         if (!lifetime.current?.signal.aborted && !controller.signal.aborted) {
           setError(failureFrom(failure, "upload").message);
+          if (!runtime.thread.composer.getState().text.trim())
+            runtime.thread.composer.setText(text);
           // Keep the image available for a deliberate Send after an upload failure.
           if (runtime.thread.composer.getState().attachments.length < 4)
             await runtime.thread.composer.addAttachment(file).catch(() => undefined);

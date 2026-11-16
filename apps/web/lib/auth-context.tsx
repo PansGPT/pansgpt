@@ -6,6 +6,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { desktopAuth } from "./desktop-auth";
 import { clearThumbnailCaches } from "./document-thumbnail-cache";
 import { clearPdfCopies } from "./reader-pdf-cache";
+import { retainQuizDrafts } from "./quiz-drafts";
 import type { User, Session } from "@supabase/supabase-js";
 import { createClient } from "./supabase/client";
 import type { AuthProfileResponse, UpdateProfileRequest } from "@pansgpt/types";
@@ -41,6 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [snapshot, setSnapshot] = useState<ProfileSnapshot | null>(null);
   const [lastVerified, setLastVerified] = useState<UserProfile | null>(null);
   const [bootstrapping, setBootstrapping] = useState(true);
+  const [authResolved, setAuthResolved] = useState(false);
   const [sessionError, setSessionError] = useState<ProfileFailure | null>(null);
   const [verifier] = useState(() =>
     createProfileVerifier(
@@ -53,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
   const applySession = useCallback(
     (next: Session | null) => {
+      setAuthResolved(true);
       if (currentSession.current?.user.id !== next?.user.id) setLastVerified(null);
       if (
         currentSession.current?.access_token !== next?.access_token ||
@@ -152,24 +155,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [applySession, bootstrapping, supabase]);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !authResolved) return;
     const active = session?.user.id;
+    retainQuizDrafts(
+      active && profile?.id === active && profile.university_id
+        ? `${active}:${profile.university_id}`
+        : undefined
+    );
     if (!active) {
       void clearThumbnailCaches();
       void clearPdfCopies();
       return;
     }
-    void clearThumbnailCaches(
-      profile?.id === session?.user.id && profile?.university_id
-        ? { userId: profile.id, universityId: profile.university_id }
-        : undefined
-    );
-    void clearPdfCopies(
-      profile?.id === session?.user.id && profile?.university_id
-        ? { userId: profile.id, universityId: profile.university_id }
-        : undefined
-    );
-  }, [loading, profile?.id, profile?.university_id, session?.user.id]);
+    // A transient profile error must not be treated as sign-out. Reading still
+    // requires verified identity and current document authorization.
+    if (profile?.id !== active) return;
+    if (!profile.university_id) {
+      void clearThumbnailCaches();
+      void clearPdfCopies();
+      return;
+    }
+    const owner = { userId: profile.id, universityId: profile.university_id };
+    void clearThumbnailCaches(owner);
+    void clearPdfCopies(owner);
+  }, [authResolved, loading, profile?.id, profile?.university_id, session?.user.id]);
 
   const signOut = async (scope: "global" | "local" = "global") => {
     await clearThumbnailCaches();

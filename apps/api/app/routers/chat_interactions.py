@@ -3,6 +3,7 @@
 import asyncio
 import io
 from typing import Literal
+from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, UploadFile
 from PIL import Image
@@ -298,6 +299,55 @@ async def attachment_preview(
         preview,
         media_type="image/png",
         headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+    )
+
+
+@router.get(
+    "/sessions/{session_id}/attachments/{attachment_id}/download",
+    response_class=Response,
+    responses={200: {"content": {"application/octet-stream": {}}}},
+)
+@limiter.limit("30/minute")
+async def download_attachment(
+    request: Request,
+    session_id: str,
+    attachment_id: str,
+    user: UserContext = Depends(get_current_user),
+) -> Response:
+    require_university(user)
+    await require_owned_session(session_id, user)
+    try:
+        async with asyncio.timeout(20):
+            async with get_db_connection() as conn:
+                if conn is None:
+                    raise HTTPException(503, "File download is unavailable. Please retry.")
+                row = await conn.fetchrow(
+                    """SELECT id,object_key,filename,byte_size FROM public.chat_attachments
+                       WHERE id=$1 AND session_id=$2 AND user_id=$3""",
+                    identifier(attachment_id),
+                    identifier(session_id),
+                    user.id,
+                )
+            if row is None:
+                raise HTTPException(404, "File not found.")
+            expected = f"chat/{user.university_id}/{user.id}/{identifier(session_id)}/{identifier(attachment_id)}"
+            if row["object_key"] != expected or not 0 < row["byte_size"] <= MAX_UPLOAD_BYTES:
+                raise HTTPException(404, "File not found.")
+            data = await storage_engine.download_bytes(expected, max_bytes=MAX_UPLOAD_BYTES)
+            if len(data) != row["byte_size"]:
+                raise ValueError("Stored file size mismatch")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(503, "File download is unavailable. Please retry.") from exc
+    return Response(
+        data,
+        media_type="application/octet-stream",
+        headers={
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+            "Content-Disposition": f"attachment; filename*=UTF-8''{quote(row['filename'], safe='')}",
+        },
     )
 
 

@@ -1036,6 +1036,81 @@
   gap: 10px;
   margin-top: 20px;
 }
+.settings-spinner-row {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+.settings-muted-note {
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.settings-retry-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: inherit;
+  cursor: pointer;
+}
+.settings-button-danger {
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 14px;
+  background: var(--bg-error-solid);
+  color: var(--text-white);
+  font: inherit;
+  cursor: pointer;
+}
+.settings-button-danger:disabled,
+.settings-pdf-remove:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+.settings-pdf-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.settings-pdf-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-secondary);
+}
+.settings-pdf-info {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+.settings-pdf-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.settings-pdf-meta {
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+}
+.settings-pdf-remove {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--text-error-primary-600);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
 @media (min-width: 861px) {
   .settings-account-value-input {
     width: 220px;
@@ -1734,6 +1809,55 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+.settings-detail-page {
+  --settings-detail-list-height: none;
+}
+.settings-detail-header-spacer {
+  width: 38px;
+  flex: none;
+}
+.settings-detail-page .settings-pdf-list {
+  max-height: none;
+  overflow-y: visible;
+}
+.settings-detail-page .settings-confirm-actions {
+  flex-wrap: wrap;
+}
+.settings-upload-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+.settings-conversation-open {
+  padding: 4px 8px;
+  color: var(--text-secondary-700);
+  text-decoration: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.settings-upload-action {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--text-secondary-700);
+  background: var(--bg-secondary);
+  cursor: pointer;
+}
+.settings-upload-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.settings-upload-image {
+  display: block;
+  width: 100%;
+  max-height: 60svh;
+  object-fit: contain;
+  border-radius: 12px;
 }
 .settings-subpage-error {
   color: var(--text-error-primary-600);

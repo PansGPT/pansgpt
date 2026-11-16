@@ -1,8 +1,9 @@
 "use client";
+import { SettingsDetailView } from "./settings-detail-view";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { AlertTriangle, RefreshCw } from "lucide-react";
-import { DialogPrimitive, Button, toast } from "@pansgpt/ui/shell";
+import { AlertTriangle, LoaderCircle, RefreshCw } from "lucide-react";
+import { Button, toast } from "@pansgpt/ui/shell";
 import { listActiveSessions, requestSession, type ChatSessionSummary } from "@/lib/chat-sessions";
 
 export function DeleteHistoryDialog({
@@ -23,6 +24,11 @@ export function DeleteHistoryDialog({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const alive = useRef(true);
+  const mutation = useRef<AbortController | null>(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const offset = useRef(0);
+  useEffect(() => () => mutation.current?.abort(), []);
 
   const loadSessions = useCallback(async () => {
     if (!token) return;
@@ -32,6 +38,8 @@ export function DeleteHistoryDialog({
       const list = await listActiveSessions(token);
       if (!alive.current) return;
       setSessions(list);
+      offset.current = list.length;
+      setHasMore(list.length === 100);
       setSelectedIds(new Set(list.map((s) => s.id)));
       setLoading(false);
     } catch {
@@ -49,6 +57,8 @@ export function DeleteHistoryDialog({
         .then((list) => {
           if (!alive.current) return;
           setSessions(list);
+          offset.current = list.length;
+          setHasMore(list.length === 100);
           setSelectedIds(new Set(list.map((s) => s.id)));
           setLoading(false);
           setLoadError(null);
@@ -67,6 +77,25 @@ export function DeleteHistoryDialog({
       alive.current = false;
     };
   }, [open, token]);
+  async function loadMore(): Promise<void> {
+    if (loadingMore || busy) return;
+    setLoadingMore(true);
+    try {
+      const list = await listActiveSessions(token, undefined, offset.current);
+      if (!alive.current) return;
+      offset.current += list.length;
+      setHasMore(list.length === 100);
+      setSessions((old) => [
+        ...old,
+        ...list.filter((item) => !old.some((saved) => saved.id === item.id)),
+      ]);
+      setError(null);
+    } catch {
+      if (alive.current) setError("Couldn't load more conversations. Please retry.");
+    } finally {
+      if (alive.current) setLoadingMore(false);
+    }
+  }
 
   function handleToggleOne(id: string) {
     setSelectedIds((prev) => {
@@ -86,24 +115,34 @@ export function DeleteHistoryDialog({
   }
 
   async function handleConfirm(): Promise<void> {
-    if (!token || selectedIds.size === 0 || busy) return;
+    if (!token || selectedIds.size === 0 || mutation.current || loadingMore) return;
+    const controller = new AbortController();
+    mutation.current = controller;
     setBusy(true);
     setError(null);
-    let deletedCount = 0;
+    const deleted = new Set<string>();
     const errors: string[] = [];
 
     const toDelete = Array.from(selectedIds);
     for (const id of toDelete) {
+      if (!alive.current || controller.signal.aborted) break;
       try {
-        await requestSession(token, id, "delete");
-        deletedCount++;
+        await requestSession(token, id, "delete", controller.signal);
+        deleted.add(id);
+        if (alive.current)
+          window.dispatchEvent(new CustomEvent("pansgpt-chat-removed", { detail: { id } }));
       } catch (err) {
         errors.push(err instanceof Error ? err.message : "Deletion failed");
       }
     }
 
+    mutation.current = null;
     if (!alive.current) return;
     setBusy(false);
+    setSessions((old) => old.filter((item) => !deleted.has(item.id)));
+    setSelectedIds((old) => new Set([...old].filter((id) => !deleted.has(id))));
+    const deletedCount = deleted.size;
+    offset.current = Math.max(0, offset.current - deletedCount);
 
     if (deletedCount > 0) {
       toast.success(
@@ -122,157 +161,159 @@ export function DeleteHistoryDialog({
   }
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="settings-confirm-overlay" />
-        <DialogPrimitive.Content
-          className="settings-confirm-dialog"
-          aria-describedby="delete-history-desc"
-          style={{ maxWidth: 480, width: "92vw" }}
-        >
-          <div className="settings-confirm-icon-wrap" aria-hidden="true">
-            <AlertTriangle size={24} className="settings-confirm-icon" />
-          </div>
-          <DialogPrimitive.Title className="settings-confirm-title">
-            Delete conversation history?
-          </DialogPrimitive.Title>
-          <DialogPrimitive.Description
-            id="delete-history-desc"
-            className="settings-confirm-description"
+    <SettingsDetailView
+      open={open}
+      onOpenChange={onOpenChange}
+      title="Delete conversation history?"
+      icon={<AlertTriangle size={24} className="settings-confirm-icon" />}
+      description={
+        <>
+          Deleted conversations can be restored within 30 days from Settings › Privacy &amp; Data ›
+          Deleted chats. After 30 days, they are permanently removed.
+        </>
+      }
+      maxWidth={480}
+      closeLabel={false}
+    >
+      {loading && (
+        <div className="settings-spinner-row" aria-label="Loading conversations…">
+          <LoaderCircle size={20} className="animate-spin" aria-hidden="true" />
+        </div>
+      )}
+
+      {loadError && (
+        <div className="settings-error-notice" role="alert">
+          {loadError}
+          <button
+            type="button"
+            className="settings-retry-icon"
+            aria-label="Retry loading conversations"
+            onClick={() => void loadSessions()}
           >
-            Deleted conversations can be restored within 30 days from Settings › Privacy &amp; Data
-            › Deleted chats. After 30 days, they are permanently removed.
-          </DialogPrimitive.Description>
+            <RefreshCw size={14} />
+          </button>
+        </div>
+      )}
 
-          {loading && (
-            <div className="settings-spinner-row" aria-label="Loading conversations…">
-              <span className="settings-spinner" aria-hidden="true" />
-            </div>
-          )}
+      {!loading && !loadError && sessions.length === 0 && (
+        <p className="settings-muted-note">No active conversations found.</p>
+      )}
 
-          {loadError && (
-            <div className="settings-error-notice" role="alert">
-              {loadError}
-              <button
-                type="button"
-                className="settings-retry-icon"
-                aria-label="Retry loading conversations"
-                onClick={() => void loadSessions()}
-              >
-                <RefreshCw size={14} />
-              </button>
-            </div>
-          )}
-
-          {!loading && !loadError && sessions.length === 0 && (
-            <p className="settings-muted-note">No active conversations found.</p>
-          )}
-
-          {!loading && !loadError && sessions.length > 0 && (
-            <div style={{ marginTop: 12, marginBottom: 12 }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  fontSize: 13,
-                  marginBottom: 8,
-                }}
-              >
-                <span className="settings-muted-note">
-                  {selectedIds.size} of {sessions.length} selected
-                </span>
-                <button
-                  type="button"
-                  onClick={handleSelectAll}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "var(--brand-primary, #0284c7)",
-                    cursor: "pointer",
-                    fontSize: 13,
-                    padding: 0,
-                  }}
-                >
-                  {selectedIds.size === sessions.length ? "Deselect all" : "Select all"}
-                </button>
-              </div>
-
-              <div
-                style={{
-                  maxHeight: 180,
-                  overflowY: "auto",
-                  border: "1px solid var(--border-secondary)",
-                  borderRadius: 8,
-                  padding: "4px 8px",
-                }}
-              >
-                {sessions.map((s) => (
-                  <label
-                    key={s.id}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      padding: "6px 4px",
-                      fontSize: 13,
-                      cursor: "pointer",
-                      borderBottom: "1px solid var(--border-secondary, #eee)",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.has(s.id)}
-                      onChange={() => handleToggleOne(s.id)}
-                      disabled={busy}
-                    />
-                    <span
-                      style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        flex: 1,
-                      }}
-                    >
-                      {s.title || "Untitled chat"}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {error && (
-            <p className="settings-error-notice" role="alert">
-              {error}
-            </p>
-          )}
-
-          <div className="settings-confirm-actions">
-            <Button
-              variant="secondary"
-              leadingIcon={null}
-              trailingIcon={null}
-              disabled={busy}
-              onClick={() => onOpenChange(false)}
-            >
-              Cancel
-            </Button>
+      {!loading && !loadError && sessions.length > 0 && (
+        <div style={{ marginTop: 12, marginBottom: 12 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              fontSize: 13,
+              marginBottom: 8,
+            }}
+          >
+            <span className="settings-muted-note">
+              {selectedIds.size} of {sessions.length} selected
+            </span>
             <button
               type="button"
-              disabled={busy || selectedIds.size === 0 || loading}
-              onClick={() => void handleConfirm()}
-              className="settings-button-danger"
+              onClick={handleSelectAll}
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--brand-primary, #0284c7)",
+                cursor: "pointer",
+                fontSize: 13,
+                padding: 0,
+              }}
             >
-              {busy
-                ? "Deleting…"
-                : selectedIds.size > 0
-                  ? `Delete ${selectedIds.size} chat${selectedIds.size === 1 ? "" : "s"}`
-                  : "Delete selected"}
+              {selectedIds.size === sessions.length ? "Deselect all" : "Select all"}
             </button>
           </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+
+          <div
+            style={{
+              maxHeight: "var(--settings-detail-list-height, 180px)",
+              overflowY: "auto",
+              border: "1px solid var(--border-secondary)",
+              borderRadius: 8,
+              padding: "4px 8px",
+            }}
+          >
+            {sessions.map((s) => (
+              <label
+                key={s.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 4px",
+                  fontSize: 13,
+                  cursor: "pointer",
+                  borderBottom: "1px solid var(--border-secondary, #eee)",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(s.id)}
+                  onChange={() => handleToggleOne(s.id)}
+                  disabled={busy}
+                />
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    flex: 1,
+                  }}
+                >
+                  {s.title || "Untitled chat"}
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {hasMore && (
+        <Button
+          variant="secondary"
+          leadingIcon={null}
+          trailingIcon={null}
+          disabled={busy || loadingMore}
+          onClick={() => void loadMore()}
+        >
+          {loadingMore ? "Loading…" : "Load more"}
+        </Button>
+      )}
+
+      {error && (
+        <p className="settings-error-notice" role="alert">
+          {error}
+        </p>
+      )}
+
+      <div className="settings-confirm-actions">
+        <Button
+          variant="secondary"
+          leadingIcon={null}
+          trailingIcon={null}
+          disabled={busy}
+          onClick={() => onOpenChange(false)}
+        >
+          Cancel
+        </Button>
+        <button
+          type="button"
+          disabled={busy || selectedIds.size === 0 || loading}
+          onClick={() => void handleConfirm()}
+          className="settings-button-danger"
+        >
+          {busy
+            ? "Deleting…"
+            : selectedIds.size > 0
+              ? `Delete ${selectedIds.size} chat${selectedIds.size === 1 ? "" : "s"}`
+              : "Delete selected"}
+        </button>
+      </div>
+    </SettingsDetailView>
   );
 }
