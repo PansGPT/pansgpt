@@ -45,7 +45,7 @@ export function ChatHeader({
             throw new Error("Conversation ownership mismatch.");
           setSaved(result);
           setMetadataError(false);
-          if (result.title_source === "pending" && hasQuestion && !running && polls++ < 6)
+          if (result.title_source === "pending" && hasQuestion && polls++ < 6)
             timer = setTimeout(load, 2500);
           if (
             (result.title_source === "generated" ||

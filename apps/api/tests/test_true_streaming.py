@@ -5,11 +5,10 @@ from collections.abc import AsyncIterator  # [CHAT FIX 2]
 from unittest.mock import AsyncMock  # [CHAT FIX 2]
 
 import pytest  # [CHAT FIX 2]
-from fastapi.testclient import TestClient  # [CHAT FIX 2]
+from httpx import AsyncClient
 
 from app.core.config import settings  # [CHAT FIX 2]
 from app.engines.llm import MultiTierLlmEngine  # [CHAT FIX 2]
-from app.main import app  # [CHAT FIX 2]
 from tests.conftest import TenantTestState  # [CHAT FIX 2]
 
 
@@ -50,6 +49,32 @@ def stream_engine(monkeypatch: pytest.MonkeyPatch) -> MultiTierLlmEngine:  # [CH
     engine.openrouter_key = None  # [CHAT FIX 2]
     monkeypatch.setattr(engine, "_record_telemetry", AsyncMock())  # [CHAT FIX 2]
     return engine  # [CHAT FIX 2]
+
+
+async def test_real_tool_packets_keep_stream_alive_without_publishing_arguments(
+    stream_engine: MultiTierLlmEngine, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(settings, "CHAT_FIRST_CHUNK_TIMEOUT_S", 0.01)
+    monkeypatch.setattr(settings, "CHAT_CHUNK_GAP_TIMEOUT_S", 0.5)
+    calls: list[dict[str, object]] = []
+
+    async def packets() -> AsyncIterator[str]:
+        yield ""
+        for _ in range(3):
+            await asyncio.sleep(0.02)
+            yield ""
+        calls.append(
+            {"id": "synthetic", "name": "read_document", "arguments": {"private": "not public"}}
+        )
+
+    async def create():
+        return calls, packets()
+
+    result, stream = await stream_engine._bounded_model_turn(
+        "fixture", create, {}, tool_expected=True
+    )
+    assert [packet async for packet in stream] == ["", "", "", ""]
+    assert result[0]["arguments"] == {"private": "not public"}
 
 
 @pytest.mark.parametrize("allowed", [True, False])
@@ -190,7 +215,8 @@ async def test_no_first_chunk_uses_the_next_model(  # [CHAT FIX 2]
 
 
 @pytest.mark.parametrize("scenario", ["mid_answer", "all_hang"])  # [CHAT FIX 2]
-def test_stream_errors_finish_with_done_without_switching_after_text(  # [CHAT FIX 2]
+async def test_stream_errors_finish_with_done_without_switching_after_text(  # [CHAT FIX 2]
+    client: AsyncClient,
     stream_engine: MultiTierLlmEngine,  # [CHAT FIX 2]
     tenant_state: TenantTestState,  # [CHAT FIX 2]
     monkeypatch: pytest.MonkeyPatch,  # [CHAT FIX 2]
@@ -209,7 +235,9 @@ def test_stream_errors_finish_with_done_without_switching_after_text(  # [CHAT F
     monkeypatch.setattr(stream_engine, "_call_gemma_turn", call)  # [CHAT FIX 2]
     tenant_state.ai.side_effect = stream_engine.stream_agentic_chat  # [CHAT FIX 2]
     started = time.monotonic()  # [CHAT FIX 2]
-    response = TestClient(app).post(  # [CHAT FIX 2]
+    # Use the initialized async client so the deadline measures the request,
+    # not the synchronous client's first thread/portal imports.
+    response = await client.post(  # [CHAT FIX 2]
         "/api/v1/ai/chat/sessions/018f3a30-0001-7000-8000-000000000001/stream",  # [CHAT FIX 2]
         json={"message": "Offline question", "enable_tools": False},  # [CHAT FIX 2]
     )  # [CHAT FIX 2]

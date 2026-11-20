@@ -16,6 +16,7 @@ import httpx
 import structlog
 
 from app.core.config import settings
+from app.core.diagnostics import error_fields
 from app.engines.guard import policy_guard
 from app.engines.recovery import retry_transient
 from app.models.web_search import SearchScope, WebReference
@@ -88,7 +89,7 @@ class WebSearchEngine:
                 if val is not None:
                     return int(val)
             except Exception as r_err:
-                logger.debug("redis_quota_get_failed_falling_back", error=str(r_err))
+                logger.debug("redis_quota_get_failed_falling_back", **error_fields(r_err))
 
         # 2. Check in-memory fallback
         if user_id in self._in_memory_daily_counts:
@@ -123,7 +124,7 @@ class WebSearchEngine:
                 await r.aclose()
                 redis_incremented = True
             except Exception as r_err:
-                logger.debug("redis_quota_incr_failed", error=str(r_err))
+                logger.debug("redis_quota_incr_failed", **error_fields(r_err))
 
         # 2. Update in-memory count
         if user_id in self._in_memory_daily_counts:
@@ -205,7 +206,7 @@ class WebSearchEngine:
                         datetime.strptime(today, "%Y-%m-%d").date(),
                     )
         except Exception as db_err:
-            logger.debug("db_web_search_usage_sync_skipped", error=str(db_err))
+            logger.debug("db_web_search_usage_sync_skipped", **error_fields(db_err))
 
     async def search(
         self,
@@ -386,7 +387,7 @@ class WebSearchEngine:
         except httpx.TimeoutException:
             return unavailable("timeout", "The web search timed out. Please retry.")
         except Exception as exc:
-            logger.warning("tavily_api_call_failed", error_type=type(exc).__name__)
+            logger.warning("tavily_api_call_failed", **error_fields(exc))
             return unavailable(
                 "provider_error", "The web-search provider is unavailable. Please retry."
             )

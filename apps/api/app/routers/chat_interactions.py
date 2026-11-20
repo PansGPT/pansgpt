@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Request, Response, 
 from PIL import Image
 
 from app.core.authorization import check_document_scope, require_owned_session, require_university
+from app.core.chat_limits import admit_chat_action
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
@@ -104,7 +105,6 @@ async def submit_feedback(
 @router.post(
     "/sessions/{session_id}/attachments", response_model=ChatAttachmentResponse, status_code=201
 )
-@limiter.limit("10/minute")
 async def upload_attachment(
     request: Request,
     session_id: str,
@@ -114,6 +114,7 @@ async def upload_attachment(
     require_university(user)
     await require_owned_session(session_id, user)
     content_type = (file.content_type or "").split(";")[0].lower()
+    await admit_chat_action(user, "upload")
     allowed = {
         "application/pdf",
         PPTX,
@@ -152,22 +153,32 @@ async def upload_attachment(
                     image.verify()
 
             await asyncio.to_thread(verify_image)
-            # Store validated pixels now; vision uses the actual question at Send.
+            data = await asyncio.to_thread(image_pixels, data, for_storage=True)
+            content_type = "image/png" if data.startswith(b"\x89PNG\r\n\x1a\n") else "image/jpeg"
+            if len(data) > MAX_UPLOAD_BYTES:
+                raise HTTPException(413, "The prepared image exceeds 10 MB. Use a smaller image.")
+            # Only normalized pixels reach storage; inference waits for Send.
             text = ""
         else:
             text = await document_text(data, content_type)
+    except TimeoutError as exc:
+        raise HTTPException(504, "The file took too long to read. Please retry.") from exc
     except (ValueError, RuntimeError, OSError, Image.DecompressionBombError) as exc:
         raise HTTPException(
             422,
             "The file could not be read. Use a readable PDF/PPTX (up to 50 pages/slides), DOCX or UTF-8 text (40,000 characters), PNG or JPEG.",
         ) from exc
-    except TimeoutError as exc:
-        raise HTTPException(504, "The file took too long to read. Please retry.") from exc
     filename = (file.filename or "Attachment").replace("\\", "/").split("/")[-1]
     filename = (
         "".join(character for character in filename if character.isprintable())[:160]
         or "Attachment"
     )
+    if content_type.startswith("image/"):
+        extension = ".png" if content_type == "image/png" else ".jpg"
+        if not filename.lower().endswith(
+            (".jpg", ".jpeg") if content_type == "image/jpeg" else (".png",)
+        ):
+            filename = f"{filename.rsplit('.', 1)[0] or 'Image'}{extension}"
     return await save_attachment(session_id, user, data, filename, content_type, text)
 
 

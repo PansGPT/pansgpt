@@ -28,6 +28,8 @@ dependencies = [
     "openpyxl>=3.1.5",
     "python-multipart>=0.0.32",
     "flashrank>=0.2.9",
+    "filelock>=3.16,<5",
+    "requests>=2.32.5,<3",
     "slowapi>=0.1.9",
     "tzdata>=2026.5",
 ]

@@ -13,6 +13,7 @@ import {
   MarkdownTextPrimitive,
   type MarkdownTextPrimitiveProps,
   type CodeHeaderProps,
+  type SyntaxHighlighterProps,
 } from "@assistant-ui/react-markdown";
 import type { ChatMessageView } from "@pansgpt/types";
 import { Tooltip } from "@pansgpt/ui/shell";
@@ -36,8 +37,12 @@ import { documentSources, safeChatLink } from "@/lib/chat-message";
 import { useChatActions } from "./actions-context";
 import "katex/dist/katex.min.css";
 import { ThinkingStatus } from "./motion";
-import { ChatAttachment } from "./attachment";
+import { MessageContextTags } from "./message-context";
+import { thinkingHeading } from "@/lib/chat-message";
+import { ChatAttachment, LibraryAttachment } from "./attachment";
 import { ChatError } from "./connection-notice";
+import { ToolActivity } from "./tool-activity";
+import { DiagramView } from "@/components/artifacts/DiagramView";
 
 function useOriginalMessage(): ChatMessageView | undefined {
   return useAuiState((state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]);
@@ -104,6 +109,11 @@ const markdownComponents: NonNullable<MarkdownTextPrimitiveProps["components"]> 
   ),
 };
 
+function MarkdownDiagram({ code }: SyntaxHighlighterProps): React.ReactElement {
+  const running = useAuiState((state) => state.message.status?.type === "running");
+  return <DiagramView code={code} pending={running} />;
+}
+const diagramComponents = { mermaid: { SyntaxHighlighter: MarkdownDiagram } };
 function ChatMarkdown(): React.ReactElement {
   return (
     <MarkdownTextPrimitive
@@ -111,6 +121,7 @@ function ChatMarkdown(): React.ReactElement {
       remarkPlugins={remarkPlugins}
       rehypePlugins={rehypePlugins}
       components={markdownComponents}
+      componentsByLanguage={diagramComponents}
       smooth
       defer
     />
@@ -126,6 +137,7 @@ function MessageExtras(): React.ReactElement | null {
   if (!message) return null;
   return (
     <>
+      <ToolActivity tools={message.tools} running={message.status === "running"} />
       {message.artifacts?.map((artifact, index) => (
         <div className="study-chat-artifact" key={`${artifact.skill_name}:${index}`}>
           <ArtifactRenderer artifact={artifact} />
@@ -253,6 +265,7 @@ export function UserMessageEditing(): React.ReactElement {
 }
 
 function UserMessageContent({ editing = false }: { editing?: boolean }): React.ReactElement {
+  const original = useOriginalMessage();
   const id = useAuiState((state) => state.message.id);
   return (
     <MessagePrimitive.Root
@@ -264,10 +277,14 @@ function UserMessageContent({ editing = false }: { editing?: boolean }): React.R
     >
       <div className="study-chat-turn">
         <div className="study-chat-message-attachments">
+          {original?.context?.library_document && (
+            <LibraryAttachment source={original.context.library_document} />
+          )}
           <MessagePrimitive.Attachments>{() => <ChatAttachment />}</MessagePrimitive.Attachments>
         </div>
         <div className="study-chat-bubble" data-role="user">
-          <MessagePrimitive.Parts />
+          <MessageContextTags context={original?.context} />
+          <span className="study-chat-user-text">{original?.content}</span>
         </div>
       </div>
       {editing ? (
@@ -290,15 +307,7 @@ export function AssistantMessage(): React.ReactElement {
     (!!message.recovery ||
       !message.content ||
       message.tools?.some((tool) => tool.status === "running"));
-  const currentProgress = message?.progress
-    ?.slice()
-    .reverse()
-    .find((update) => !message.activity || update.code === message.activity);
-  const statusLabel = message?.recovery
-    ? message.recovery === "retrying"
-      ? "Trying again…"
-      : "This is taking longer than usual."
-    : currentProgress?.label;
+  const statusLabel = message ? thinkingHeading(message) : undefined;
   const empty = !message?.content && !message?.artifacts?.length;
   return (
     <MessagePrimitive.Root
@@ -313,6 +322,11 @@ export function AssistantMessage(): React.ReactElement {
           {waiting && (
             <div className="study-chat-live-status">
               <ThinkingStatus label={statusLabel} />
+              {(message?.recovery === "slow" || message?.delayed) && (
+                <span className="study-chat-wait-hint" role="status">
+                  This is taking longer than usual.
+                </span>
+              )}
             </div>
           )}
           <MessagePrimitive.Parts
@@ -328,6 +342,7 @@ export function AssistantMessage(): React.ReactElement {
           )}
           {message?.status === "error" && (
             <ChatError
+              reference={message.failure?.reference}
               message={message.error || "The response could not be completed. Please try again."}
             >
               <div className="study-chat-recovery-actions">
@@ -346,6 +361,11 @@ export function AssistantMessage(): React.ReactElement {
             </ChatError>
           )}
           <MessageExtras />
+          {message?.completionWarning === "additional_work_incomplete" && (
+            <p className="study-chat-response-state" role="status">
+              Your material is ready. The rest of the response couldn’t finish.
+            </p>
+          )}
           {message?.status === "cancelled" && !empty && (
             <p className="study-chat-response-state">Response stopped.</p>
           )}

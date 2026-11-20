@@ -323,15 +323,13 @@ async def test_provider_failures_are_not_cached_as_success(
 
 
 @pytest.mark.parametrize("early_timer", [False, True])
-async def test_total_deadline_survives_a_receive_checkpoint_swallowing_cancellation(
+async def test_total_deadline_survives_routing_swallowing_cancellation(
     client: httpx.AsyncClient,
     tenant_state: TenantTestState,
     monkeypatch: pytest.MonkeyPatch,
     early_timer: bool,
 ) -> None:
     import asyncio
-
-    from starlette.requests import Request
 
     monkeypatch.setattr(settings, "CHAT_TOTAL_TIMEOUT_S", 0.02)
     if early_timer:
@@ -341,14 +339,16 @@ async def test_total_deadline_survives_a_receive_checkpoint_swallowing_cancellat
             chat, "time", SimpleNamespace(monotonic=lambda: 100.0, time=chat.time.time)
         )
 
-    async def receive_checkpoint(self: Request) -> bool:
+    original = chat.intent_classifier.classify
+
+    async def classify(*args: object, **kwargs: object):
         try:
             await asyncio.sleep(0.05)
         except asyncio.CancelledError:
-            return False
-        return False
+            pass
+        return await original(*args, **kwargs)
 
-    monkeypatch.setattr(Request, "is_disconnected", receive_checkpoint)
+    monkeypatch.setattr(chat.intent_classifier, "classify", classify)
     response = await asyncio.wait_for(
         client.post(
             "/api/v1/ai/chat/sessions/018f3a30-0001-7000-8000-000000000001/stream",

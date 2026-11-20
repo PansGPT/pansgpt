@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Presentation, FileCode, PanelRightOpen } from "lucide-react";
+import { FileText, Presentation, NotebookPen, PanelRightOpen } from "lucide-react";
 import type { ArtifactItem } from "@pansgpt/types";
 import { presentationMetadataSchema } from "@/lib/presentation-preview";
 import { usePresentationWorkspace } from "./PresentationWorkspace";
@@ -10,7 +10,14 @@ import "./DocumentCard.css";
 export function DocumentCard({ artifact }: { artifact: ArtifactItem }): React.ReactElement {
   const workspace = usePresentationWorkspace();
   const ext = (artifact.file_extension || "file").toLowerCase();
-  const Icon = ext === "pptx" ? Presentation : ext === "docx" ? FileCode : FileText;
+  const Icon = ext === "pptx" ? Presentation : ext === "md" ? NotebookPen : FileText;
+  const kinds: Record<string, string> = {
+    pptx: "Presentation",
+    docx: "Word document",
+    pdf: "Revision sheet",
+    md: "Study notes",
+  };
+  const kind = kinds[ext] || "Study file";
   const metadata = presentationMetadataSchema.safeParse(artifact.content);
   const count = metadata.success ? metadata.data.slides_count : undefined;
   const previewable =
@@ -24,7 +31,7 @@ export function DocumentCard({ artifact }: { artifact: ArtifactItem }): React.Re
         <strong>{artifact.title}</strong>
         <span className="study-artifact-extension">
           {count ? `${count} slides · ` : ""}
-          {ext}
+          {kind} · {ext}
         </span>
       </span>
     </>

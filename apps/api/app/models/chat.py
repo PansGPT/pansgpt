@@ -4,6 +4,7 @@
 
 from enum import StrEnum
 from typing import Any, Literal  # [CHAT FIX 2]
+from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
@@ -48,6 +49,23 @@ ChatActionMode = Literal[
     "make_revision_sheet",
     "create_mnemonics",
 ]
+
+
+class ChatLibrarySource(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    id: str
+    title: str = Field(min_length=1, max_length=500)
+
+    @field_validator("id")
+    @classmethod
+    def valid_identifier(cls, value: str) -> str:
+        return str(UUID(value))
+
+
+class ChatMessageContext(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    action_mode: ChatActionMode | None = None
+    library_document: ChatLibrarySource | None = None
 
 
 class QueryClassification(BaseModel):
@@ -257,6 +275,7 @@ class ChatMessageResponse(BaseModel):
     """Individual chat message with citations and optional public workflow progress."""
 
     id: str
+    context: ChatMessageContext | None = None
     session_id: str
     role: str
     content: str
@@ -267,6 +286,7 @@ class ChatMessageResponse(BaseModel):
     thinking_text: str | None = None
     public_progress: list[PublicProgressUpdate] = Field(default_factory=list)
     extra_parts: dict[str, Any] | None = None
+    completion_warning: Literal["additional_work_incomplete"] | None = None
     attachment_metadata: dict[str, Any] | None = None
     feedback: Literal["positive", "negative"] | None = None
     created_at: str

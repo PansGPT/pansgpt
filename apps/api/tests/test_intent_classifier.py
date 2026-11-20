@@ -81,6 +81,37 @@ async def test_arbitrary_simple_wording_uses_model_answer_without_a_phrase_catal
     assert json.loads(completion.call_args.args[4])["current_message"] == query
 
 
+async def test_shared_admission_outage_stops_fallbacks_without_poisoning_circuits(
+    router: tuple[IntentClassifier, AsyncMock],
+) -> None:
+    from app.engines.provider_capacity import CapacityDeferred
+
+    engine, completion = router
+    completion.side_effect = CapacityDeferred(30, "capacity_store_unavailable")
+    result = await engine.classify("Synthetic greeting")
+    assert result.routing_source == "fallback"
+    assert not result.requires_rag and not result.requires_tools
+    assert completion.await_count == 1
+    assert engine.circuits.available("groq-primary")
+
+
+async def test_long_selected_history_is_declared_without_sending_hidden_branches(
+    router: tuple[IntentClassifier, AsyncMock],
+) -> None:
+    engine, completion = router
+    history = [
+        {
+            "role": "user" if i % 2 == 0 else "assistant",
+            "content": f"Synthetic selected message {i}",
+        }
+        for i in range(12)
+    ]
+    await engine.classify("What did we agree to do first?", history=history)
+    context = json.loads(completion.call_args.args[4])
+    assert context["earlier_selected_history_available"] is True
+    assert len(context["recent_conversation"]) <= 6
+
+
 async def test_short_clinical_request_cannot_bypass_grounding_with_conflicting_answer(
     router: tuple[IntentClassifier, AsyncMock],
 ) -> None:

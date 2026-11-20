@@ -31,9 +31,11 @@ from app.core.authorization import (  # [TENANT FIX]
     require_owned_session,  # [TENANT FIX]
     require_university,  # [TENANT FIX]
 )  # [TENANT FIX]
+from app.core.chat_limits import admit_chat_action
 from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
+from app.core.diagnostics import async_phase, error_fields, phase
 from app.core.governance_access import check_ai_access
 from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.chat_images import analyze_image
@@ -45,14 +47,17 @@ from app.engines.chat_interactions import (
     select_path,
 )
 from app.engines.chat_progress import ChatProgress, public_progress_text
+from app.engines.chat_runs import ManagedRun, chat_runs
 from app.engines.governance_policy import GenerationPolicy, configured_generation, load_policy
 from app.engines.guard import policy_guard
 from app.engines.intent_classifier import intent_classifier
 from app.engines.llm import llm_engine
+from app.engines.message_context import saved_message_context
 from app.engines.rag import rag_engine  # [CHAT FIX 2]
 from app.engines.reader_snips import require_reader_attachments
 from app.engines.recovery import retry_transient
 from app.engines.thinking import ThinkingStreamParser, strip_thinking_tokens
+from app.engines.tool_policy import retry_safe_tool
 from app.engines.web_grounding import WebSearchUnavailable, external_context, search_error
 from app.engines.web_search import web_search_engine
 from app.models.chat import (
@@ -67,6 +72,7 @@ from app.models.chat import (
     StreamChatRequest,
     VoiceTranscribeResponse,
 )
+from app.models.chat_runs import ChatRunSnapshot
 from app.models.presentation import PresentationPlan, PresentationSource
 from app.models.progress import saved_public_progress
 from app.models.web_search import WebSearchResponse
@@ -113,7 +119,7 @@ async def _deduct_user_credit(user_id: str, reference_id: str) -> int | None:
             )
     except Exception as exc:
         detail = str(exc)
-        logger.warning("credit_deduction_failed", error=detail)
+        logger.warning("credit_deduction_failed", **error_fields(exc))
         if "insufficient credits" in detail.lower():
             raise HTTPException(
                 status_code=status.HTTP_402_PAYMENT_REQUIRED,
@@ -185,7 +191,7 @@ async def create_chat_session(
                 if row:
                     now_str = row["created_at"]
             except Exception as exc:
-                logger.warning("create_chat_session_db_failed", error=str(exc))
+                logger.warning("create_chat_session_db_failed", **error_fields(exc))
                 raise HTTPException(
                     status_code=503, detail="The conversation could not be saved."
                 ) from exc
@@ -266,7 +272,7 @@ async def list_chat_sessions(
                         )
                     )
             except Exception as exc:
-                logger.warning("list_chat_sessions_db_failed", error=str(exc))
+                logger.warning("list_chat_sessions_db_failed", **error_fields(exc))
                 raise HTTPException(503, "Chat history could not be loaded. Please retry.") from exc
 
     return ChatSessionListResponse(sessions=sessions, total=len(sessions))
@@ -365,13 +371,19 @@ async def get_chat_session_details(
                                 feedback=m.get("feedback"),
                                 created_at=m["created_at"],
                                 extra_parts=extra_parts,
+                                completion_warning="additional_work_incomplete"
+                                if isinstance(extra_parts, dict)
+                                and extra_parts.get("completion_warning")
+                                == "additional_work_incomplete"
+                                else None,
                                 attachment_metadata=json.loads(m["image_metadata"])
                                 if isinstance(m["image_metadata"], str)
                                 else m["image_metadata"],
+                                context=saved_message_context(m["image_metadata"]),
                             )
                         )
             except Exception as exc:
-                logger.warning("get_chat_session_details_db_failed", error=str(exc))
+                logger.warning("get_chat_session_details_db_failed", **error_fields(exc))
                 raise HTTPException(
                     503, "Conversation history could not be loaded. Please retry."
                 ) from exc
@@ -407,6 +419,12 @@ async def stream_chat_session(
     """
     user_id = str(current_user.id)  # [TENANT FIX]
     university_id = str(require_university(current_user))  # [TENANT FIX]
+    request_started = time.monotonic()
+    request_id = getattr(getattr(request, "state", None), "request_id", None)
+    if not isinstance(request_id, str):
+        request_id = str(uuid.uuid4())
+    run_background_tasks = BackgroundTasks()
+    chat_runs.require_room(user_id)
     bound_document = await require_owned_session(
         session_id, current_user, payload.parent_message_id
     )
@@ -434,17 +452,13 @@ async def stream_chat_session(
                 current_user.current_level,
                 payload.course_code,
             )
-    if payload.document_id:  # [TENANT FIX]
-        await check_document_scope(  # [TENANT FIX]
-            payload.document_id,  # [TENANT FIX]
-            current_user,  # [TENANT FIX]
-            active_only=True,  # [TENANT FIX]
-        )  # [TENANT FIX]
+    await admit_chat_action(current_user, "send")
     turn = await prepare_turn(session_id, payload, current_user)
     user_message_id = turn.user_id
     assistant_message_id = turn.assistant_id
     credit_reserved = False
     credit_settled = False
+    artifact_saved = False
     cleanup_task: asyncio.Task[None] | None = None
 
     async def finish_run() -> None:
@@ -454,7 +468,9 @@ async def stream_chat_session(
             try:
                 if credit_reserved and not credit_settled:
                     async with asyncio.timeout(5):
-                        await _finish_chat_credit(user_id, assistant_message_id, refund=True)
+                        await _finish_chat_credit(
+                            user_id, assistant_message_id, refund=not artifact_saved
+                        )
             except Exception as exc:
                 logger.warning("chat_credit_cleanup_failed", error_type=type(exc).__name__)
             finally:
@@ -487,12 +503,15 @@ async def stream_chat_session(
     stream_deadline = 0.0
     stream_timeout: asyncio.Timeout | None = None
     event_queue: asyncio.Queue[str | None] = asyncio.Queue(maxsize=8)
+    managed: ManagedRun | None = None
 
     def recovering(attempt: int, delay: float) -> None:
         from app.models.chat import ChatRecoveryEvent
 
         notice = ChatRecoveryEvent(attempt=attempt, retry_after_ms=min(30000, round(delay * 1000)))
-        if not event_queue.full():
+        if managed is not None:
+            managed.emit(f"event: recovery\ndata: {notice.model_dump_json()}\n\n")
+        elif not event_queue.full():
             event_queue.put_nowait(f"event: recovery\ndata: {notice.model_dump_json()}\n\n")
 
     def request_timed_out() -> bool:
@@ -507,7 +526,8 @@ async def stream_chat_session(
         # A cancelled receive scope can consume a simultaneous outer cancellation.
         if request_timed_out():
             raise RequestDeadlineExceeded("Chat request deadline exceeded")
-        disconnected = await request.is_disconnected()
+        # Transport loss is not Stop. The API owns this already accepted run.
+        disconnected = False
         if request_timed_out():
             raise RequestDeadlineExceeded("Chat request deadline exceeded")
         return disconnected
@@ -516,7 +536,11 @@ async def stream_chat_session(
     progress = ChatProgress()
 
     async def save_assistant_message(  # [CHAT FIX 2]
-        text: str, citations: list[CitationItem], thinking: str | None = None
+        text: str,
+        citations: list[CitationItem],
+        thinking: str | None = None,
+        *,
+        incomplete: bool = False,
     ) -> None:
         """Persist retrieval notices and model answers through the same path."""
         async with get_db_connection() as conn:
@@ -539,7 +563,13 @@ async def stream_chat_session(
                         await conn.execute(
                             """INSERT INTO public.chat_messages(
                             id,session_id,parent_message_id,role,content,citations,thinking_text,tool_calls)
-                            VALUES($1,$2,$3,'assistant',$4,$5::jsonb,$6,$7::jsonb) ON CONFLICT(id) DO NOTHING""",
+                            VALUES($1,$2,$3,'assistant',$4,$5::jsonb,$6,$7::jsonb)
+                            ON CONFLICT(id) DO UPDATE SET
+                                content=EXCLUDED.content,citations=EXCLUDED.citations,
+                                thinking_text=EXCLUDED.thinking_text,tool_calls=EXCLUDED.tool_calls
+                            WHERE chat_messages.session_id=EXCLUDED.session_id
+                              AND chat_messages.parent_message_id=EXCLUDED.parent_message_id
+                              AND chat_messages.role='assistant'""",
                             uuid.UUID(assistant_message_id),
                             uuid.UUID(session_id),
                             uuid.UUID(user_message_id),
@@ -549,6 +579,9 @@ async def stream_chat_session(
                             json.dumps(
                                 {
                                     **persisted_parts,
+                                    "completion_warning": "additional_work_incomplete"
+                                    if incomplete
+                                    else None,
                                     "public_progress": [
                                         item.model_dump() for item in progress.updates
                                     ],
@@ -559,17 +592,16 @@ async def stream_chat_session(
                 except Exception as exc:
                     logger.warning(
                         "save_assistant_message_failed",
-                        error_type=type(exc).__name__,
-                        error=repr(exc),
+                        **error_fields(exc),
                     )
                     raise
 
     async def sse_event_generator() -> AsyncGenerator[str, None]:
-        nonlocal model_started, credit_settled  # [CHAT FIX 2]
+        nonlocal model_started, credit_settled, artifact_saved  # [CHAT FIX 2]
         last_heartbeat = time.time()
 
         # 1. Yield init event
-        yield f"event: init\ndata: {json.dumps({'session_id': session_id, 'user_message_id': user_message_id, 'assistant_message_id': assistant_message_id})}\n\n"
+        yield f"event: init\ndata: {json.dumps({'session_id': session_id, 'run_id': turn.run_id, 'request_id': request_id, 'user_message_id': user_message_id, 'assistant_message_id': assistant_message_id, 'context': turn.context.model_dump()})}\n\n"
         if update := progress.emit("reviewing_request"):
             yield update
 
@@ -581,33 +613,6 @@ async def stream_chat_session(
             yield f"event: text_chunk\ndata: {json.dumps({'token': f'⚠️ Policy Guard Notice: {err_msg}', 'provider': 'guard'})}\n\n"
             yield f"event: done\ndata: {json.dumps({'full_text': err_msg, 'citations_count': 0})}\n\n"
             return
-
-        uploaded_sources = attachment_citations(turn.attachments, payload.document_id)
-        image_attachments = [
-            row for row in turn.attachments if str(row.get("content_type", "")).startswith("image/")
-        ]
-        if image_attachments:
-            if update := progress.emit("analysing_image"):
-                yield update
-            try:
-                async with asyncio.timeout(settings.VISION_OVERALL_TIMEOUT_SECONDS):
-                    for image in image_attachments:
-                        image["extracted_text"] = await retry_transient(
-                            lambda: analyze_image(
-                                image, turn.prompt, session_id, user_id, university_id
-                            ),
-                            on_retry=recovering,
-                        )
-            except Exception as exc:
-                logger.warning("chat_image_analysis_failed", error_type=type(exc).__name__)
-                error = {
-                    "error": "The image could not be analysed right now. Please try again.",
-                    "code": "IMAGE_ANALYSIS_UNAVAILABLE",
-                    "retryable": True,
-                }
-                yield f"event: error\ndata: {json.dumps(error)}\n\n"
-                yield 'event: done\ndata: {"full_text":""}\n\n'
-                return
 
         # Only server-owned ancestors may enter model history; client-supplied history is ignored.
         history_turns = turn.history
@@ -627,6 +632,7 @@ async def stream_chat_session(
                         json.dumps(
                             {
                                 "attachment_ids": [str(row["id"]) for row in turn.attachments],
+                                "message_context": turn.context.model_dump(),
                                 "attachments": [
                                     {
                                         "id": str(row["id"]),
@@ -652,21 +658,66 @@ async def stream_chat_session(
                     if not payload.edit_message_id:
                         await select_path(conn, session_id, user_message_id)
 
-        background_tasks.add_task(_auto_generate_session_title, session_id, turn.prompt, user_id)
+        # Naming belongs to the accepted question, not to the answer's outcome.
+        # Start after its transaction commits, before vision/routing/generation.
+        # The tracked task survives a detached view without delaying the stream.
+        chat_runs.defer(_auto_generate_session_title(session_id, turn.prompt, user_id))
+
+        uploaded_sources = attachment_citations(turn.attachments, payload.document_id)
+        image_attachments = [
+            row for row in turn.attachments if str(row.get("content_type", "")).startswith("image/")
+        ]
+        if image_attachments:
+            if update := progress.emit("analysing_image"):
+                yield update
+            try:
+                async with (
+                    asyncio.timeout(settings.VISION_OVERALL_TIMEOUT_SECONDS),
+                    async_phase("image_analysis"),
+                ):
+                    for image in image_attachments:
+                        image["extracted_text"] = await retry_transient(
+                            lambda: analyze_image(
+                                image, turn.prompt, session_id, user_id, university_id
+                            ),
+                            on_retry=recovering,
+                        )
+            except Exception as exc:
+                logger.warning("chat_image_analysis_failed", error_type=type(exc).__name__)
+                error = {
+                    "error": "The image could not be analysed right now. Please try again.",
+                    "code": "IMAGE_ANALYSIS_UNAVAILABLE",
+                    "retryable": True,
+                }
+                yield f"event: error\ndata: {json.dumps(error)}\n\n"
+                yield 'event: done\ndata: {"full_text":""}\n\n'
+                return
+
+        if image_attachments:
+            async with get_db_connection() as conn:
+                if conn is None:
+                    raise RuntimeError("Image context storage is unavailable")
+                await conn.execute(
+                    "UPDATE public.chat_messages SET extracted_image_text=$3 WHERE id=$1 AND session_id=$2",
+                    uuid.UUID(user_message_id),
+                    uuid.UUID(session_id),
+                    attachment_context(turn.attachments) or None,
+                )
 
         # 3b. Intent & Complexity Classification (Fast Path vs. Complex Path)
         model_started = True
-        classification = await intent_classifier.classify(
-            query=turn.prompt,
-            history=history_turns,
-            document_id=payload.document_id,
-            course_code=payload.course_code,
-            user_enable_rag=payload.enable_rag,
-            user_enable_tools=payload.enable_tools,
-            has_attachments=bool(turn.attachments),
-            action_mode=payload.action_mode,
-            on_retry=recovering,
-        )
+        with phase("routing"):
+            classification = await intent_classifier.classify(
+                query=turn.prompt,
+                history=history_turns,
+                document_id=payload.document_id,
+                course_code=payload.course_code,
+                user_enable_rag=payload.enable_rag,
+                user_enable_tools=payload.enable_tools,
+                has_attachments=bool(turn.attachments),
+                action_mode=payload.action_mode,
+                on_retry=recovering,
+            )
         if await client_disconnected():
             return
         if classification.routing_source == "fallback":
@@ -706,6 +757,15 @@ async def stream_chat_session(
             skill_name = ""
 
         progress.configure(classification.public_progress)
+        if (
+            payload.document_id
+            and payload.enable_rag
+            and classification.intent == IntentType.SKILL_GENERATION
+            and not classification.clarification_required
+        ):
+            # The selected source supplies content for the requested material,
+            # even when tool routing needs no general course search.
+            classification.requires_rag = True
         logger.info(
             "query_classified",
             intent=classification.intent.value,
@@ -719,6 +779,7 @@ async def stream_chat_session(
             routing_source=classification.routing_source,
             routing_provider=classification.routing_provider,
             routing_model=classification.routing_model,
+            routing_latency_ms=classification.routing_latency_ms,
         )
         if classification.requires_tools and (
             classification.intent.value == "skill_generation"
@@ -730,7 +791,7 @@ async def stream_chat_session(
                 yield update
 
         if classification.routing_source == "model":
-            background_tasks.add_task(
+            run_background_tasks.add_task(
                 llm_engine._record_telemetry,
                 classification.routing_provider or "google",
                 classification.routing_model or "unknown",
@@ -756,19 +817,20 @@ async def stream_chat_session(
             else:
                 if update := progress.emit("searching_sources"):
                     yield update
-                web_result = WebSearchResponse.model_validate(
-                    await web_search_engine.search(
-                        query=classification.retrieval_query or "",
-                        user_id=user_id,
-                        role=current_user.role,
-                        scope=classification.search_scope,
-                        current_information=classification.current_information,
-                        public_query=classification.public_search_query
-                        and not bool(
-                            turn.attachments or payload.document_id or payload.course_code
-                        ),
+                with phase("web_retrieval"):
+                    web_result = WebSearchResponse.model_validate(
+                        await web_search_engine.search(
+                            query=classification.retrieval_query or "",
+                            user_id=user_id,
+                            role=current_user.role,
+                            scope=classification.search_scope,
+                            current_information=classification.current_information,
+                            public_query=classification.public_search_query
+                            and not bool(
+                                turn.attachments or payload.document_id or payload.course_code
+                            ),
+                        )
                     )
-                )
             if web_result.status != "success" or not web_result.results:
                 if web_result.status == "success":
                     web_result = WebSearchResponse(
@@ -780,7 +842,7 @@ async def stream_chat_session(
                 yield 'event: done\ndata: {"full_text":"","citations_count":0}\n\n'
                 return
             web_context, web_citations = external_context(web_result)
-        if classification.requires_rag and (not image_attachments or bool(bound_document)):
+        if classification.requires_rag and (not image_attachments or bool(payload.document_id)):
             if update := progress.emit("checking_materials"):
                 yield update
             try:
@@ -789,7 +851,7 @@ async def stream_chat_session(
                 )
                 if time.monotonic() >= retrieval_deadline:
                     raise RequestDeadlineExceeded("Chat request deadline exceeded")
-                async with asyncio.timeout_at(retrieval_deadline):
+                async with asyncio.timeout_at(retrieval_deadline), async_phase("course_retrieval"):
                     rag_context, citations = await retry_transient(
                         lambda: rag_engine.retrieve_context(
                             query=classification.retrieval_query or turn.prompt,
@@ -1013,17 +1075,21 @@ async def stream_chat_session(
                     continue
                 elif event_type == "recovery":
                     yield f"event: recovery\ndata: {json.dumps(data)}\n\n"
+                elif event_type == "activity":
+                    yield 'event: activity\ndata: {"stage":"generation"}\n\n'
                 elif event_type == "tool_start":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else dict(data)
-                    # Fence manual replay before the engine resumes and executes any tool.
-                    async with get_db_connection() as conn:
-                        if conn is None:
-                            raise RuntimeError("Tool execution could not be fenced")
-                        await conn.execute(
-                            "UPDATE public.chat_messages SET image_metadata=jsonb_set(coalesce(image_metadata,'{}'::jsonb),'{retry_blocked}','true'::jsonb) WHERE id=$1 AND session_id=$2 AND role='user'",
-                            uuid.UUID(user_message_id),
-                            uuid.UUID(session_id),
-                        )
+                    # Searches are safe to repeat explicitly. Fence other tools
+                    # durably before execution, including unknown future tools.
+                    if not retry_safe_tool(str(dumped.get("tool_name", ""))):
+                        async with get_db_connection() as conn:
+                            if conn is None:
+                                raise RuntimeError("Tool execution could not be fenced")
+                            await conn.execute(
+                                "UPDATE public.chat_messages SET image_metadata=jsonb_set(coalesce(image_metadata,'{}'::jsonb),'{retry_blocked}','true'::jsonb) WHERE id=$1 AND session_id=$2 AND role='user'",
+                                uuid.UUID(user_message_id),
+                                uuid.UUID(session_id),
+                            )
                     model_label = dumped.pop("public_status", None)
                     if update := progress.for_tool(
                         str(dumped.get("tool_name", "")),
@@ -1045,6 +1111,26 @@ async def stream_chat_session(
                 elif event_type == "artifact_ready":
                     dumped = data.model_dump() if hasattr(data, "model_dump") else data
                     persisted_parts["artifacts"].append(dumped)
+                    for item in reversed(persisted_parts["tools"]):
+                        if item.get("tool_name") == dumped.get("skill_name"):
+                            item["status"] = "success"
+                            break
+                    _, checkpoint_text = policy_guard.check_output_safety("".join(collected_tokens))
+                    try:
+                        with phase("artifact_persistence"):
+                            await retry_transient(
+                                lambda: save_assistant_message(
+                                    checkpoint_text, citations, incomplete=True
+                                )
+                            )
+                    except BaseException:
+                        persisted_parts["artifacts"].pop()
+                        raise
+                    artifact_saved = True
+                    logger.info(
+                        "chat_artifact_checkpoint_saved",
+                        artifact_count=len(persisted_parts["artifacts"]),
+                    )
                     if dumped.get("skill_name") == "create_pptx":
                         if update := progress.emit("presentation_ready"):
                             yield update
@@ -1065,7 +1151,7 @@ async def stream_chat_session(
         except RequestDeadlineExceeded:
             raise
         except Exception as exc:
-            logger.error("stream_chat_unhandled_failure", error_type=type(exc).__name__)
+            logger.error("stream_chat_unhandled_failure", **error_fields(exc))
             err_msg = "An unexpected error occurred while generating your answer. Please try again."
             yield f"event: error\ndata: {json.dumps({'error': err_msg})}\n\n"
             yield f"event: done\ndata: {json.dumps({'full_text': ''.join(collected_tokens)})}\n\n"
@@ -1076,15 +1162,19 @@ async def stream_chat_session(
 
         is_safe_output, sanitized_output = policy_guard.check_output_safety(clean_visible)
         full_response_text = sanitized_output
+        if not full_response_text.strip() and not persisted_parts["artifacts"]:
+            logger.warning("chat_empty_response")
+            yield 'event: error\ndata: {"code":"EMPTY_RESPONSE","retryable":true}\n\n'
+            return
         full_thinking_text = progress.text or None
 
         # 7. Asynchronously save assistant message to DB
-        await save_assistant_message(
-            full_response_text, citations, full_thinking_text
-        )  # [CHAT FIX 2]
+        with phase("answer_persistence"):
+            await save_assistant_message(full_response_text, citations, full_thinking_text)
 
         credit_settled = True
-        await _finish_chat_credit(user_id, assistant_message_id, refund=False)
+        with phase("credit_settlement"):
+            await _finish_chat_credit(user_id, assistant_message_id, refund=False)
         # 8. Yield final done event
         yield f"event: done\ndata: {json.dumps({'full_text': full_response_text, 'citations_count': len(citations), 'provider': last_provider})}\n\n"
 
@@ -1101,8 +1191,7 @@ async def stream_chat_session(
                 "chat_request_deadline_exceeded",  # [CHAT FIX]
                 deadline="total",  # [CHAT FIX]
                 timeout_s=settings.CHAT_TOTAL_TIMEOUT_S,  # [CHAT FIX]
-                error_type=type(exc).__name__,  # [CHAT FIX]
-                error=repr(exc),  # [CHAT FIX]
+                **error_fields(exc),
             )  # [CHAT FIX]
             message = {"error": "The answer timed out. Please try again."}  # [CHAT FIX 2]
             if model_started:  # [CHAT FIX 2]
@@ -1111,64 +1200,156 @@ async def stream_chat_session(
             if model_started:  # [CHAT FIX 2]
                 yield f"event: done\ndata: {json.dumps({'full_text': '', 'citations_count': 0})}\n\n"  # [CHAT FIX 2]
 
-    async def transport_events() -> AsyncGenerator[str, None]:
-        queue = event_queue
+    managed = ManagedRun(
+        session_id,
+        user_id,
+        university_id,
+        ChatRunSnapshot(
+            run_id=turn.run_id,
+            status="running",
+            request_id=request_id,
+            user_message_id=user_message_id,
+            assistant_message_id=assistant_message_id,
+        ),
+        started=request_started,
+    )
 
-        async def produce() -> None:
-            terminal: str | None = None
+    async def produce(run: ManagedRun) -> None:
+        terminal: str | None = None
+        partial_failure = False
+
+        def preserve_material(error_code: str) -> None:
+            nonlocal partial_failure
+            partial_failure = True
+            logger.warning(
+                "chat_artifact_followup_failed",
+                error_code=error_code,
+                artifact_count=len(persisted_parts["artifacts"]),
+            )
+
+        async def partial_completion() -> str:
+            # The first checkpoint is durable. Refresh public text and tool
+            # statuses if storage is available, without rerunning tools.
+            for tool in run.snapshot.tools:
+                if tool.status == "running":
+                    completed = any(
+                        item.skill_name == tool.tool_name for item in run.snapshot.artifacts
+                    )
+                    run.emit(
+                        "event: tool_end\ndata: "
+                        + json.dumps(
+                            {
+                                "call_id": tool.call_id,
+                                "tool_name": tool.tool_name,
+                                "status": "success" if completed else "error",
+                            }
+                        )
+                        + "\n\n"
+                    )
+            for item in persisted_parts["tools"]:
+                if item.get("status") == "running":
+                    item["status"] = next(
+                        (
+                            tool.status
+                            for tool in run.snapshot.tools
+                            if tool.call_id == item.get("call_id")
+                        ),
+                        "error",
+                    )
             try:
-                async for event in bounded_sse_events():
-                    if event.startswith("event: done\n"):
-                        terminal = event
-                    else:
-                        await queue.put(event)
-            except Exception:
-                logger.exception("chat_stream_producer_failed")
-                terminal = None
-                await queue.put(
-                    'event: error\ndata: {"error":"The answer could not be saved. Please retry."}\n\n'
+                async with asyncio.timeout(5):
+                    await save_assistant_message(
+                        run.snapshot.content, run.snapshot.citations, incomplete=True
+                    )
+            except Exception as exc:
+                logger.warning("chat_artifact_checkpoint_refresh_failed", **error_fields(exc))
+            return (
+                "event: done\ndata: "
+                + json.dumps(
+                    {
+                        "full_text": run.snapshot.content,
+                        "completion_warning": "additional_work_incomplete",
+                    }
                 )
+                + "\n\n"
+            )
+
+        try:
+            async for event in bounded_sse_events():
+                # Internal retry notices use a nonblocking queue. Flush it
+                # before each public frame; it never owns generation lifetime.
+                while not event_queue.empty():
+                    notice = event_queue.get_nowait()
+                    if notice:
+                        run.emit(notice)
+                if artifact_saved and event.startswith("event: error\n"):
+                    value = json.loads(event.split("data: ", 1)[1])
+                    preserve_material(str(value.get("code") or "GENERATION_FAILED"))
+                elif event.startswith("event: done\n"):
+                    terminal = event
+                else:
+                    run.emit(event)
+        except Exception as exc:
+            logger.error("chat_stream_producer_failed", **error_fields(exc))
+            if artifact_saved:
+                preserve_material("PERSISTENCE_FAILED")
+            else:
+                run.emit('event: error\ndata: {"code":"PERSISTENCE_FAILED","retryable":true}\n\n')
+        finally:
+            try:
+                if partial_failure:
+                    terminal = await partial_completion()
             finally:
                 await finish_run()
-            # Finish persistence, billing and the owned lease before the client
-            # sees done and becomes able to submit the next question.
-            if terminal is not None:
-                await queue.put(terminal)
-            await queue.put(None)
+        # Release/refund the lease before publishing completion or enabling Send.
+        if terminal is not None:
+            run.emit(terminal)
 
-        producer = asyncio.create_task(produce())
-        last_ping = time.monotonic()
-        try:
-            while True:
-                if await request.is_disconnected():
-                    return
-                try:
-                    event = await asyncio.wait_for(queue.get(), timeout=1)
-                except TimeoutError:
-                    if time.monotonic() - last_ping >= 15:
-                        yield ": keep-alive\n\n"
-                        last_ping = time.monotonic()
-                    continue
-                if event is None:
-                    return
-                yield event
-                last_ping = time.monotonic()
-        finally:
-            with CancelScope(shield=True):
-                producer.cancel()
-                try:
-                    await asyncio.shield(asyncio.gather(producer, return_exceptions=True))
-                finally:
-                    await finish_run()
+    async def finalize(run: ManagedRun) -> None:
+        if run.snapshot.status in {"error", "cancelled"}:
+            try:
+                async with get_db_connection() as conn:
+                    if conn is not None:
+                        await conn.execute(
+                            """UPDATE public.chat_messages SET image_metadata=jsonb_set(
+                            coalesce(image_metadata,'{}'::jsonb),'{chat_run}',$3::jsonb)
+                            WHERE id=$1 AND session_id=$2 AND role='user'""",
+                            uuid.UUID(user_message_id),
+                            uuid.UUID(session_id),
+                            json.dumps(
+                                {
+                                    "run_id": turn.run_id,
+                                    "assistant_message_id": assistant_message_id,
+                                    "status": run.snapshot.status,
+                                    "request_id": request_id,
+                                    "error_code": run.snapshot.error_code,
+                                    "retryable": run.snapshot.retryable,
+                                    "tool_started": run.snapshot.tool_started,
+                                    "retry_blocked": run.snapshot.retry_blocked,
+                                }
+                            ),
+                        )
+            except Exception as exc:
+                logger.error("chat_failure_state_not_saved", **error_fields(exc))
+        if run.snapshot.status != "cancelled":
+            # Telemetry does not keep the response or Retry button waiting.
+            chat_runs.defer(run_background_tasks())
+
+    try:
+        chat_runs.start(managed, produce, finalize)
+    except HTTPException:
+        await finish_run()
+        raise
 
     return StreamingResponse(
-        transport_events(),  # [CHAT FIX]
+        managed.events(),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
             "Content-Type": "text/event-stream",
             "X-Accel-Buffering": "no",
+            "X-Chat-Run-ID": turn.run_id,
         },
     )
 
@@ -1194,7 +1375,8 @@ async def transcribe_voice_audio(
             detail="An audio recording file must be provided via 'file' or 'audio' multipart field.",
         )
 
-    audio_bytes = await target_file.read()
+    await admit_chat_action(current_user, "voice")
+    audio_bytes = await target_file.read(settings.WHISPER_MAX_FILE_SIZE_BYTES + 1)
     if not audio_bytes:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

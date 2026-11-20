@@ -19,8 +19,10 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.core.config import settings
-from app.core.database import close_db_pool, init_db_pool
+from app.core.database import close_db_pool, init_db_pool, start_db_recovery
 from app.core.dependencies import prewarm_jwks_cache
+from app.core.diagnostics import RedactAccessQueries, RequestDiagnostics, error_fields
+from app.core.logging_setup import configure_logging
 from app.core.rate_limit import limiter, rate_limit_exceeded_handler
 from app.routers.academic import router as academic_router
 from app.routers.admin import router as admin_router
@@ -37,8 +39,10 @@ from app.routers.settings import router as settings_router
 
 # Suppress SDK-level AFC deprecation warnings from google.genai.models
 logging.getLogger("google.genai.models").setLevel(logging.ERROR)
+logging.getLogger("uvicorn.access").addFilter(RedactAccessQueries())
 
 logger = structlog.get_logger(__name__)
+configure_logging()
 
 # Initialize Sentry if configured
 if settings.SENTRY_DSN:
@@ -59,18 +63,43 @@ if settings.SENTRY_DSN:
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     settings.validate_local_dev_mode()  # [PRELAUNCH FIX]
     # Startup: initialize database pool & prewarm JWKS cache
-    await init_db_pool()
-    await prewarm_jwks_cache()
-    # Pre-warm FlashRank ONNX reranker in a background thread so the first
-    # real user request does not pay the 5-10s cold-start model load penalty.
+    optional = []
     if settings.ENABLE_AI and settings.RERANKER_PROVIDER == "flashrank":
-        await _prewarm_flashrank()
+        optional.append(_prewarm_flashrank())
+    optional.append(_prewarm_capacity())
+    pool, *_ = await asyncio.gather(init_db_pool(), prewarm_jwks_cache(), *optional)
+    if pool is None:
+        start_db_recovery()
     yield
     # Shutdown: cleanly close database and provider capacity pools
+    from app.engines.chat_runs import chat_runs
     from app.engines.provider_capacity import close_capacity
+    from app.engines.provider_http import close_provider_http
 
+    await chat_runs.shutdown()
+    from app.engines.reranker import candidate_reranker
+
+    candidate_reranker.close()
+    await close_provider_http()
     await close_capacity()
     await close_db_pool()
+
+
+async def _prewarm_capacity() -> None:
+    if not settings.ENABLE_AI or not (
+        settings.AI_CAPACITY_ENABLED or settings.CHAT_ACTION_RATE_LIMIT_ENABLED
+    ):
+        return
+    from app.engines.provider_capacity import redis_client
+
+    try:
+        async with asyncio.timeout(4):
+            await redis_client().ping()
+        logger.info("chat_capacity_store_prewarmed", max_connections=8)
+    except Exception as exc:
+        logger.warning(
+            "chat_capacity_store_prewarm_failed", phase="quota_store_connect", **error_fields(exc)
+        )
 
 
 async def _prewarm_flashrank() -> None:
@@ -79,15 +108,28 @@ async def _prewarm_flashrank() -> None:
         from app.engines.reranker import candidate_reranker
 
         ranker = await asyncio.wait_for(
-            asyncio.to_thread(candidate_reranker._get_flashrank_client), timeout=10.0
+            asyncio.shield(asyncio.wrap_future(candidate_reranker.start_warmup())), timeout=10.0
         )
         if ranker is not None:
             logger.info("flashrank_prewarmed")
         else:
             logger.warning("flashrank_prewarm_unavailable", fallback="heuristic")
+    except TimeoutError:
+        logger.info(
+            "flashrank_warmup_pending",
+            timeout_s=10,
+            initialization_continues=True,
+            fallback="heuristic",
+        )
     except Exception as exc:
         # Non-fatal: reranker heuristic fallback will cover any load failure.
-        logger.warning("flashrank_prewarm_failed", error_type=type(exc).__name__)
+        logger.warning(
+            "flashrank_prewarm_failed",
+            phase="public_model_warmup",
+            timeout_s=10,
+            fallback="heuristic",
+            **error_fields(exc),
+        )
 
 
 app = FastAPI(
@@ -127,7 +169,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["X-Request-ID", "X-Chat-Run-ID", "Retry-After"],
 )
+app.add_middleware(RequestDiagnostics)
 
 # Register API v1 Routers
 app.include_router(auth_router, prefix=settings.API_V1_PREFIX)
@@ -184,6 +228,8 @@ async def _readiness_payload() -> ReadinessPayload:
             or (settings.OPENROUTER_API_KEY and settings.provider_privacy_allowed("openrouter"))
         )
         engines["chat"] = "ready" if eligible else "blocked"
+        if settings.AI_CAPACITY_ENABLED or settings.CHAT_ACTION_RATE_LIMIT_ENABLED:
+            engines["redis"] = "error"
     if settings.ENABLE_INGESTION:
         engines.update(redis="error", storage="error", embeddings="blocked")
         if settings.GEMINI_API_KEY and settings.provider_privacy_allowed("google"):
@@ -201,7 +247,14 @@ async def _readiness_payload() -> ReadinessPayload:
             pass
 
     async def probe_redis() -> None:
-        if not settings.ENABLE_INGESTION or not settings.redis_connection_url:
+        if (
+            not (
+                settings.ENABLE_INGESTION
+                or settings.ENABLE_AI
+                and (settings.AI_CAPACITY_ENABLED or settings.CHAT_ACTION_RATE_LIMIT_ENABLED)
+            )
+            or not settings.redis_connection_url
+        ):
             return
         try:
             import redis.asyncio as aioredis

@@ -45,6 +45,21 @@ async def test_health_live(client):
     assert data["service"] == "api"
 
 
+async def test_chat_capacity_requires_redis_even_with_ingestion_disabled(monkeypatch):
+    from app import main
+    from app.core.config import settings
+
+    monkeypatch.setattr(main, "_readiness_cache", None)
+    monkeypatch.setattr(settings, "ENABLE_INGESTION", False)
+    monkeypatch.setattr(settings, "ENABLE_AI", True)
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    monkeypatch.setattr(settings, "REDIS_URL", None)
+    monkeypatch.setattr(settings, "UPSTASH_REDIS_URL", None)
+    payload = await main._readiness_payload()
+    assert payload["engines"]["redis"] == "error"
+    assert payload["status"] == "degraded"
+
+
 @pytest.mark.asyncio
 async def test_health_ready(client):
     """Readiness reflects the configured infrastructure and provider eligibility."""

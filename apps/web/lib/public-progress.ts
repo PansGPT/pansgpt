@@ -36,6 +36,10 @@ export function parsePublicProgress(value: unknown): PublicProgressUpdate | unde
   return { code: item.code as ChatProgressCode, label, source: "model" };
 }
 
+export function parseProgressCode(value: unknown): ChatProgressCode | undefined {
+  return typeof value === "string" && codes.has(value) ? (value as ChatProgressCode) : undefined;
+}
+
 export function parsePublicProgressUpdates(value: unknown): PublicProgressUpdate[] {
   if (!Array.isArray(value)) return [];
   const result: PublicProgressUpdate[] = [];

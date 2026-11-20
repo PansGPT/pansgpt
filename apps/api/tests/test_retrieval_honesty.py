@@ -103,7 +103,8 @@ async def test_embedding_failure_uses_scoped_fulltext_and_trigram(  # [CHAT FIX 
         if call.args[0] == "query_batch_embedding_failed_dense_retrieval_skipped"  # [CHAT FIX 2]
     )  # [CHAT FIX 2]
     assert warning.kwargs["error_type"] == "TimeoutError"  # [CHAT FIX 2]
-    assert "query embedding timed out" in warning.kwargs["error"]  # [CHAT FIX 2]
+    assert warning.kwargs["error_location"]
+    assert "error" not in warning.kwargs
     retrieval_probe.web.assert_not_awaited()  # [CHAT FIX 2]
 
 

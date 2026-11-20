@@ -49,6 +49,8 @@ async def test_social_name_is_published_then_replaced_by_the_substantive_topic(t
     completion.return_value = '{"title":"Morning check-in","provisional":true}'
     await chat_titles.generate_title(SESSION, USER)
     assert state == {"title": "Morning check-in", "title_source": "pending"}
+    assert completion.call_args.kwargs["max_output_tokens"] == 256
+    assert 0 < completion.call_args.kwargs["timeout_s"] <= 6
     rows.append({"role": "user", "content": "What is warfarin?"})
     completion.return_value = '{"title":"Warfarin Medication Overview","provisional":false}'
     await chat_titles.generate_title(SESSION, USER)

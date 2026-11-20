@@ -9,6 +9,7 @@ import httpx
 import structlog
 
 from app.core.config import settings
+from app.core.diagnostics import error_fields
 from app.models.chat import VoiceTranscribeResponse
 
 logger = structlog.get_logger(__name__)
@@ -59,7 +60,7 @@ class AudioTranscriptionEngine:
 
                 self._groq_client = AsyncGroq(api_key=settings.GROQ_API_KEY)
             except Exception as exc:
-                logger.error("failed_to_initialize_groq_client", error=str(exc))
+                logger.error("failed_to_initialize_groq_client", **error_fields(exc))
         return self._groq_client
 
     def _get_http_client(self) -> httpx.AsyncClient:
@@ -136,7 +137,7 @@ class AudioTranscriptionEngine:
                 logger.warning(
                     "groq_whisper_turbo_failed_attempting_secondary",
                     model=settings.WHISPER_PRIMARY_MODEL,
-                    error=str(turbo_err),
+                    **error_fields(turbo_err),
                 )
 
             # ----------------------------------------------------------------------
@@ -170,7 +171,7 @@ class AudioTranscriptionEngine:
                 logger.warning(
                     "groq_whisper_v3_failed_attempting_openai",
                     model=settings.WHISPER_SECONDARY_MODEL,
-                    error=str(v3_err),
+                    **error_fields(v3_err),
                 )
 
         # --------------------------------------------------------------------------
@@ -212,7 +213,7 @@ class AudioTranscriptionEngine:
                         body=response.text[:200],
                     )
             except Exception as openai_err:
-                logger.warning("openai_whisper_request_exception", error=str(openai_err))
+                logger.warning("openai_whisper_request_exception", **error_fields(openai_err))
 
         # --------------------------------------------------------------------------
         # Tier 4: Deterministic Mock / CI Fallback

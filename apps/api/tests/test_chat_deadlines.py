@@ -204,7 +204,8 @@ async def test_hyde_outer_deadline_bounds_a_hanging_client(  # [CHAT FIX]
         if call.args[0] == "hyde_generation_failed"  # [CHAT FIX]
     )  # [CHAT FIX]
     assert failure.kwargs["error_type"] == "TimeoutError"  # [CHAT FIX]
-    assert failure.kwargs["error"]  # [CHAT FIX]
+    assert failure.kwargs["error_location"]
+    assert "error" not in failure.kwargs and "query" not in failure.kwargs
 
 
 async def test_failed_live_models_return_error_instead_of_offline_text(  # [CHAT FIX]
@@ -279,4 +280,5 @@ async def test_reranker_timeout_logs_exception_details(  # [CHAT FIX]
     failure = log.warning.call_args  # [CHAT FIX]
     assert failure.args[0] == "reranker_timeout_fallback_engaged"  # [CHAT FIX]
     assert failure.kwargs["error_type"] == "TimeoutError"  # [CHAT FIX]
-    assert failure.kwargs["error"]  # [CHAT FIX]
+    assert failure.kwargs["error_location"]
+    assert "error" not in failure.kwargs and "query" not in failure.kwargs

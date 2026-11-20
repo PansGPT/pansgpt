@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import math
 import os
 from unittest.mock import AsyncMock, MagicMock
 from uuid import uuid4
@@ -9,12 +10,31 @@ from uuid import uuid4
 import httpx
 import pytest
 from redis.asyncio import Redis
+from redis.exceptions import TimeoutError as RedisTimeoutError
 
 from app.core.config import settings
 from app.core.dependencies import UserContext
 from app.engines import provider_capacity as capacity
 from app.engines.quiz_flight import question_flight
 from app.models.quiz import QuizConfig
+
+
+def test_output_reservation_fits_free_tier_without_truncating_input(monkeypatch):
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    payload = {"messages": [{"role": "user", "content": "x" * 16000}]}
+    before = json.dumps(payload)
+    limit = capacity.generation_token_limit("groq", payload, 4096)
+    estimated = math.ceil(len(json.dumps(payload, ensure_ascii=False, default=str).encode()) / 3)
+    assert 256 <= limit < 4096
+    assert estimated + limit <= settings.AI_PROVIDER_BUDGETS["groq"]["tpm"]
+    assert json.dumps(payload) == before
+
+
+def test_oversized_context_fails_before_inference(monkeypatch):
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    with pytest.raises(capacity.CapacityDeferred) as caught:
+        capacity.generation_token_limit("groq", {"text": "x" * 30000}, 4096)
+    assert caught.value.reason == "request_exceeds_budget"
 
 
 @pytest.mark.parametrize(
@@ -34,6 +54,119 @@ async def test_budget_denial_never_enters_provider_call(monkeypatch):
             pytest.fail("Provider must not run without capacity")
     assert caught.value.seconds == 9
     assert "private synthetic prompt" not in str(store.eval.call_args)
+
+
+async def test_lost_reservation_reply_retries_same_receipt_before_provider_call(monkeypatch):
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    store = MagicMock(eval=AsyncMock(side_effect=[RedisTimeoutError(), [1, 0, 7, 300]]))
+    monkeypatch.setattr(capacity, "redis_client", lambda: store)
+    calls = 0
+    async with capacity.provider_budget("google", "fixture", "synthetic", 100):
+        calls += 1
+    assert calls == 1 and store.eval.await_count == 2
+    assert store.eval.call_args_list[0] == store.eval.call_args_list[1]
+    args = store.eval.call_args.args
+    assert args[1] == 6 and ":receipt:" in args[7]
+    assert capacity.active.get() is None
+
+
+async def test_capacity_outage_fails_closed_after_one_bounded_retry(monkeypatch):
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    store = MagicMock(eval=AsyncMock(side_effect=RedisTimeoutError()))
+    monkeypatch.setattr(capacity, "redis_client", lambda: store)
+    with pytest.raises(capacity.CapacityDeferred) as caught:
+        async with capacity.provider_budget("google", "fixture", "synthetic", 100):
+            pytest.fail("No confirmed reservation means no provider call")
+    assert caught.value.reason == "capacity_store_unavailable"
+    assert store.eval.await_count == 2
+    assert capacity.active.get() is None
+
+
+@pytest.mark.live
+async def test_real_redis_reservation_receipt_does_not_double_count(isolated_redis):
+    client, prefix = isolated_redis
+    receipt = prefix + ":receipt:lost-reply"
+    keys = [prefix + suffix for suffix in (":events", ":weights", ":day", ":blocked", ":limits")]
+    try:
+        first = await client.eval(
+            capacity.RESERVE, 6, *keys, receipt, "lost-reply", 100, 30, 100, 1000, 10000
+        )
+        second = await client.eval(
+            capacity.RESERVE, 6, *keys, receipt, "lost-reply", 100, 30, 100, 1000, 10000
+        )
+        assert first == second and first[0] == 1
+        assert await client.hget(keys[2], "requests") == "1"
+        assert await client.hget(keys[2], "tokens") == "100"
+        assert await client.zcard(keys[0]) == 1
+    finally:
+        await client.delete(receipt)
+
+
+async def test_generation_uses_atomic_output_grant_and_records_exact_reservation(monkeypatch):
+    monkeypatch.setattr(settings, "AI_CAPACITY_ENABLED", True)
+    store = MagicMock(eval=AsyncMock(side_effect=[[1, 0, 1, 2500], 1]))
+    monkeypatch.setattr(capacity, "redis_client", lambda: store)
+    payload = {"text": "synthetic"}
+    estimated = math.ceil(len(json.dumps(payload).encode()) / 3)
+    async with capacity.provider_budget(
+        "groq", "fixture", payload, 4096, fit_output=True
+    ) as output:
+        assert output == 2500 - estimated
+        assert capacity.active.get().reserved == 2500
+    args = store.eval.call_args_list[0].args
+    assert args[-2:] == (estimated, 1024)
+    assert capacity.active.get() is None
+
+
+@pytest.mark.live
+async def test_real_redis_fits_remaining_capacity_without_overbooking(isolated_redis):
+    client, prefix = isolated_redis
+    keys = [prefix + suffix for suffix in (":events", ":weights", ":day", ":blocked", ":limits")]
+
+    async def reserve(identifier, tokens, input_tokens=0, minimum=0):
+        return await client.eval(
+            capacity.RESERVE,
+            5,
+            *keys,
+            identifier,
+            tokens,
+            30,
+            100,
+            8000,
+            100000,
+            input_tokens,
+            minimum,
+        )
+
+    assert (await reserve("routing", 3031))[0] == 1
+    attempts = await asyncio.gather(
+        *(reserve(f"generation-{i}", 8000, 3000, 1024) for i in range(3))
+    )
+    admitted = [row for row in attempts if row[0] == 1]
+    assert len(admitted) == 1 and admitted[0][3] == 4969
+    assert sum(int(value) for value in (await client.hvals(keys[1]))) == 8000
+
+
+@pytest.mark.live
+async def test_real_redis_fitted_output_respects_observed_and_daily_limits(isolated_redis):
+    client, prefix = isolated_redis
+    keys = [prefix + suffix for suffix in (":events", ":weights", ":day", ":blocked", ":limits")]
+    await client.eval(capacity.OBSERVE, 1, keys[4], 6000, 100, 4500, 30, 50, 3600)
+    result = await client.eval(
+        capacity.RESERVE, 5, *keys, "generation", 8000, 30, 100, 8000, 10000, 3000, 1024
+    )
+    assert result[0] == 1 and result[3] == 4500
+    assert (await client.hget(keys[4], "tokens_remaining")) == "0"
+    rejected = await client.eval(
+        capacity.RESERVE, 5, *keys, "next", 8000, 30, 100, 8000, 10000, 3000, 1024
+    )
+    assert rejected[0] != 1
+    await client.hset(keys[4], mapping={"tokens_until": 0})
+    await client.hset(keys[2], mapping={"tokens": 9000})
+    daily_rejected = await client.eval(
+        capacity.RESERVE, 5, *keys, "daily", 8000, 30, 100, 8000, 10000, 100, 1024
+    )
+    assert daily_rejected[0] == 0
 
 
 @pytest.mark.parametrize(

@@ -3,7 +3,8 @@
 import { fetchWithRecovery, publicFailure } from "@/lib/chat-recovery";
 
 // Adapted from assistant-ui's attachment element; see assistant-ui.LICENSE.
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import type { ChatLibrarySource } from "@pansgpt/types";
 import { createPortal } from "react-dom";
 import { AttachmentPrimitive, useAui, useAuiState } from "@assistant-ui/react";
 import { FileText, ImageIcon, Loader2, RotateCcw, X } from "lucide-react";
@@ -14,6 +15,54 @@ import { ChatError, ChatNotice } from "./connection-notice";
 import { useChatActions } from "./actions-context";
 
 export const AttachmentNoticeTargetContext = createContext<HTMLElement | null>(null);
+
+function FileAttachmentContent({ name }: { name: ReactNode }): React.ReactElement {
+  return (
+    <>
+      <FileText size={23} aria-hidden="true" />
+      <span className="study-chat-file-copy">
+        {name}
+        <small>Document</small>
+      </span>
+    </>
+  );
+}
+
+export function LibraryAttachment({
+  source,
+  onRemove,
+}: {
+  source: ChatLibrarySource;
+  onRemove?: () => void;
+}): React.ReactElement {
+  return (
+    <div
+      className="study-chat-attachment-card"
+      data-image="false"
+      data-removable="false"
+      data-library-document={source.id}
+    >
+      <div
+        className="study-chat-attachment-tile"
+        role="group"
+        aria-label={`Document attachment ${source.title}`}
+        title={source.title}
+      >
+        <FileAttachmentContent name={<span>{source.title}</span>} />
+      </div>
+      {onRemove && (
+        <button
+          type="button"
+          className="study-chat-attachment-remove"
+          aria-label="Remove library document from edited message"
+          onClick={onRemove}
+        >
+          <X size={13} />
+        </button>
+      )}
+    </div>
+  );
+}
 
 /** Local files and authenticated previews only; never load a model-supplied image URL. */
 function useAttachmentPreview(expanded = false): {
@@ -136,13 +185,7 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
           <ImageIcon size={24} aria-hidden="true" />
         )
       ) : (
-        <FileText size={23} aria-hidden="true" />
-      )}
-      {!image && (
-        <span className="study-chat-file-copy">
-          <AttachmentPrimitive.Name />
-          <small>Document</small>
-        </span>
+        <FileAttachmentContent name={<AttachmentPrimitive.Name />} />
       )}
       {uploading && (
         <span className="study-chat-attachment-overlay" role="status">
@@ -170,8 +213,8 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
               setRetryError(false);
               void (async () => {
                 try {
-                  await aui.composer().addAttachment(file);
                   await aui.attachment().remove();
+                  await aui.composer().addAttachment(file);
                 } catch {
                   setRetryError(true);
                 }
@@ -240,6 +283,11 @@ export function ChatAttachment({ removable = false }: { removable?: boolean }): 
               <X size={13} />
             </AttachmentPrimitive.Remove>
           </Tooltip>
+        )}
+        {removable && status.type === "requires-action" && (
+          <span className="study-chat-upload-ready" role="status">
+            Ready
+          </span>
         )}
         {image && previewFailed && (
           <button type="button" className="study-chat-preview-retry" onClick={retry}>

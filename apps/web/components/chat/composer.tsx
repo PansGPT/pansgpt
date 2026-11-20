@@ -39,12 +39,21 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import type { ChatActionMode, ChatMessageView, LibraryDocument } from "@pansgpt/types";
+import type {
+  ChatActionMode,
+  ChatMessageView,
+  LibraryDocument,
+  ChatLibrarySource,
+  ChatMessageContext,
+} from "@pansgpt/types";
 import { Tooltip } from "@pansgpt/ui/shell";
 import { AttachmentNoticeTargetContext, ChatAttachment } from "./attachment";
 import { UserMessageEditing } from "./message";
 import { chatActionTools, moreChatActions, primaryChatActions } from "./tools";
 import { ChatLibraryPicker } from "./library-picker";
+import { EditMessageContext, InlineToolInput } from "./message-context";
+import { useChatActions } from "./actions-context";
+import { emptyMessageContext } from "@/lib/message-context";
 import { useVoiceState } from "./voice-store";
 import { AudioWaveform } from "./audio-waveform";
 
@@ -57,6 +66,7 @@ type ChatComposerSlot = {
 
 const ChatComposerSlotContext = createContext<ChatComposerSlot | null>(null);
 function ignoreActionModeChange(): void {}
+function ignoreContextChange(): void {}
 
 export function ChatComposerSlotProvider({
   children,
@@ -78,6 +88,8 @@ export function ChatComposerSlotProvider({
 export function ChatComposer({
   initialDraft,
   editing = false,
+  editingContext = emptyMessageContext,
+  onEditingContextChange = ignoreContextChange,
   actionMode = null,
   onActionModeChange = ignoreActionModeChange,
   libraryDocument = null,
@@ -89,9 +101,11 @@ export function ChatComposer({
 }: {
   initialDraft?: string;
   editing?: boolean;
+  editingContext?: ChatMessageContext;
+  onEditingContextChange?: (context: ChatMessageContext) => void;
   actionMode?: ChatActionMode | null;
   onActionModeChange?: (actionMode: ChatActionMode | null) => void;
-  libraryDocument?: LibraryDocument | null;
+  libraryDocument?: ChatLibrarySource | null;
   onLibraryDocumentSelect?: (document: LibraryDocument | null) => void;
   documentBound?: boolean;
   inputLabel?: string;
@@ -126,10 +140,14 @@ export function ChatComposer({
   const voice = useVoiceState();
   const isVoiceActive = voice.phase !== "idle" || dictating;
   const empty = useAuiState((state) => !state.composer.text.trim());
+  const attachmentsNotReady = useAuiState((state) =>
+    state.composer.attachments.some(
+      (item) => item.status.type === "running" || item.status.type === "incomplete"
+    )
+  );
   const selectedAction = actionMode
     ? chatActionTools.find((action) => action.actionMode === actionMode)
     : undefined;
-  const SelectedActionIcon = selectedAction?.icon;
   const closeMenu = useCallback(
     (restoreFocus = false) => {
       if (!menuOpen) return;
@@ -224,7 +242,12 @@ export function ChatComposer({
     if (!files.length) return;
     setAttachmentError(null);
     void (async () => {
-      const attachedCount = aui.composer().getState().attachments.length + pendingFiles.current;
+      const attached = aui.composer().getState().attachments;
+      const queued = Math.max(
+        0,
+        pendingFiles.current - attached.filter((item) => item.status.type === "running").length
+      );
+      const attachedCount = attached.length + queued;
       if (attachedCount + files.length > 4) {
         setAttachmentError("Attach up to four files at a time.");
         return;
@@ -476,10 +499,11 @@ export function ChatComposer({
       onDrop={(event) => {
         if (!event.dataTransfer.files.length) return;
         event.preventDefault();
+        event.stopPropagation();
         if (!busy) addFiles(Array.from(event.dataTransfer.files));
       }}
       onSubmit={(event) => {
-        if (empty || busy || dictating) event.preventDefault();
+        if (empty || busy || dictating || attachmentsNotReady) event.preventDefault();
       }}
     >
       {editing && (
@@ -496,21 +520,8 @@ export function ChatComposer({
           </ComposerPrimitive.Cancel>
         </div>
       )}
+      {editing && <EditMessageContext context={editingContext} onChange={onEditingContextChange} />}
       <div className="study-chat-composer-attachments p-study-composer-attachments">
-        {selectedAction && SelectedActionIcon && (
-          <div className="study-chat-action-mode-chip">
-            <SelectedActionIcon size={18} aria-hidden="true" />
-            <strong>{selectedAction.modeLabel}</strong>
-            <button
-              type="button"
-              aria-label={`Remove ${selectedAction.modeLabel} action`}
-              title="Remove action"
-              onClick={() => onActionModeChange(null)}
-            >
-              <X size={15} aria-hidden="true" />
-            </button>
-          </div>
-        )}
         {libraryDocument && (
           <div className="study-chat-library-context">
             <LibraryIcon size={17} aria-hidden="true" />
@@ -532,21 +543,31 @@ export function ChatComposer({
           {() => <ChatAttachment removable />}
         </ComposerPrimitive.Attachments>
       </div>
-      <ComposerPrimitive.Input
-        className={`p-study-composer-input ${isVoiceActive ? "is-voice-hidden" : ""}`}
-        style={isVoiceActive ? { display: "none" } : undefined}
-        aria-label={editing ? "Edit question" : inputLabel || "Study question"}
-        placeholder={selectedAction?.placeholder || "Message PansGPT…"}
-        rows={1}
-        maxLength={10000}
-        autoFocus={editing}
-        addAttachmentOnPaste={false}
-        onPaste={(event) => {
-          if (!event.clipboardData.files.length) return;
-          event.preventDefault();
-          if (!busy) addFiles(Array.from(event.clipboardData.files));
-        }}
-      />
+      <InlineToolInput
+        hidden={isVoiceActive}
+        mode={editing ? editingContext.action_mode : actionMode}
+        onRemove={() =>
+          editing
+            ? onEditingContextChange({ ...editingContext, action_mode: null })
+            : onActionModeChange(null)
+        }
+      >
+        <ComposerPrimitive.Input
+          className={`p-study-composer-input ${isVoiceActive ? "is-voice-hidden" : ""}`}
+          style={isVoiceActive ? { display: "none" } : undefined}
+          aria-label={editing ? "Edit question" : inputLabel || "Study question"}
+          placeholder={selectedAction?.placeholder || "Message PansGPT…"}
+          rows={1}
+          maxLength={10000}
+          autoFocus={editing}
+          addAttachmentOnPaste={false}
+          onPaste={(event) => {
+            if (!event.clipboardData.files.length) return;
+            event.preventDefault();
+            if (!busy) addFiles(Array.from(event.clipboardData.files));
+          }}
+        />
+      </InlineToolInput>
       <div
         className={`p-study-composer-toolbar ${isVoiceActive ? "is-voice-hidden" : ""}`}
         style={isVoiceActive ? { display: "none" } : undefined}
@@ -608,7 +629,7 @@ export function ChatComposer({
             <ComposerPrimitive.Send
               className="p-study-composer-control p-study-composer-submit"
               aria-label={editing ? "Send edited message" : "Send message"}
-              disabled={empty || busy || dictating}
+              disabled={empty || busy || dictating || attachmentsNotReady}
             >
               <ArrowUp size={19} aria-hidden="true" />
             </ComposerPrimitive.Send>
@@ -727,6 +748,7 @@ export function ChatComposer({
       <ChatComposerNotices
         error={notice}
         attachmentError={attachmentError}
+        onDismissAttachmentError={() => setAttachmentError(null)}
         actions={noticeActions}
       />
       <div className="study-chat-composer-notices" ref={setAttachmentNoticeTarget} />
@@ -775,6 +797,21 @@ export function ChatComposer({
 }
 
 export function ChatEditComposer(): React.ReactElement {
+  const editActions = useChatActions();
+  const editOriginal = useAuiState(
+    (state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]
+  );
+  const originalId = editOriginal?.id;
+  const originalContext = editOriginal?.context ?? emptyMessageContext;
+  const beginEditedContext = editActions.beginEditedContext;
+  const [editContext, setEditContext] = useState<ChatMessageContext>(() => originalContext);
+  const changeEditContext = (next: ChatMessageContext) => {
+    setEditContext(next);
+    if (originalId) editActions.setEditedContext?.(originalId, next);
+  };
+  useEffect(() => {
+    if (originalId) beginEditedContext?.(originalId, originalContext);
+  }, [originalId, originalContext, beginEditedContext]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const measureRef = useRef<HTMLSpanElement>(null);
   const isMobile = useSyncExternalStore(subscribeEditViewport, getEditViewport, () => false);
@@ -785,14 +822,16 @@ export function ChatEditComposer(): React.ReactElement {
   const originalText = useAuiState(
     (state) => getExternalStoreMessages<ChatMessageView>(state.message)[0]?.content ?? ""
   );
-  const changed = text.trim().length > 0 && text !== originalText;
+  const changed =
+    text.trim().length > 0 &&
+    (text !== originalText || JSON.stringify(editContext) !== JSON.stringify(originalContext));
 
   useLayoutEffect(() => {
     const input = inputRef.current;
     const measure = measureRef.current;
     if (!input || !measure) return;
     fitEditInput(input, measure);
-  }, [isMobile, text]);
+  }, [isMobile, text, editContext.action_mode]);
 
   useEffect(() => {
     const input = inputRef.current;
@@ -812,7 +851,17 @@ export function ChatEditComposer(): React.ReactElement {
 
   const editor = (
     <ComposerPrimitive.Root className="study-chat-edit">
-      <div className="study-chat-edit-input-area">
+      <EditMessageContext context={editContext} onChange={changeEditContext} />
+      <div className="study-chat-message-attachments">
+        <ComposerPrimitive.Attachments>
+          {() => <ChatAttachment removable />}
+        </ComposerPrimitive.Attachments>
+      </div>
+      <InlineToolInput
+        className="study-chat-edit-input-area"
+        mode={editContext.action_mode}
+        onRemove={() => changeEditContext({ ...editContext, action_mode: null })}
+      >
         <ComposerPrimitive.Input
           ref={inputRef}
           aria-label="Edit question"
@@ -827,7 +876,7 @@ export function ChatEditComposer(): React.ReactElement {
         <span ref={measureRef} className="study-chat-edit-measure" aria-hidden="true">
           {text || " "}
         </span>
-      </div>
+      </InlineToolInput>
       <div className="study-chat-edit-actions">
         <Tooltip content="Sending creates a new branch from this question.">
           <span
@@ -850,7 +899,14 @@ export function ChatEditComposer(): React.ReactElement {
     <>
       <UserMessageEditing />
       {portalTarget && composerSlot?.mobileEditing
-        ? createPortal(<ChatComposer editing />, portalTarget)
+        ? createPortal(
+            <ChatComposer
+              editing
+              editingContext={editContext}
+              onEditingContextChange={changeEditContext}
+            />,
+            portalTarget
+          )
         : null}
     </>
   );
@@ -884,7 +940,13 @@ function fitEditInput(input: HTMLTextAreaElement, measure: HTMLSpanElement): voi
     Number.parseFloat(inputStyle.borderLeftWidth) + Number.parseFloat(inputStyle.borderRightWidth);
   const maximumFormWidth = Math.min(760, parentWidth * 0.85);
   const maximumInputWidth = Math.max(48, maximumFormWidth - areaPadding - areaBorder);
-  const contentWidth = measure.getBoundingClientRect().width + inputPadding + inputBorder;
+  const prefixWidth =
+    inputArea?.querySelector(".study-chat-input-prefix")?.getBoundingClientRect().width ?? 0;
+  const contentWidth =
+    measure.getBoundingClientRect().width +
+    inputPadding +
+    inputBorder +
+    (prefixWidth ? prefixWidth + 8 : 0);
   input.style.width = `${Math.min(Math.max(48, contentWidth), maximumInputWidth)}px`;
   input.style.height = "auto";
   input.style.height = `${input.scrollHeight}px`;

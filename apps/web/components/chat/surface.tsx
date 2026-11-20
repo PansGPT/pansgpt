@@ -16,7 +16,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   AssistantRuntimeProvider,
-  ComposerPrimitive,
   ThreadPrimitive,
   useAui,
   useAuiState,
@@ -67,16 +66,18 @@ function ChatThread({
   sessionId: string | null;
   initialTitle?: string;
   onAttachmentError: (message: string | null) => void;
-  libraryDocument: LibraryDocument | null;
+  libraryDocument: Pick<LibraryDocument, "id" | "title"> | null;
   onLibraryDocumentSelect: (document: LibraryDocument | null) => void;
   actionMode: ChatActionMode | null;
   onActionModeChange: (actionMode: ChatActionMode | null) => void;
 }): React.ReactElement {
   const aui = useAui();
   useEffect(() => {
-    const rejected = aui.on("composer.attachmentAddError", () =>
-      onAttachmentError("Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB.")
-    );
+    const rejected = aui.on("composer.attachmentAddError", (event) => {
+      // A retained failed tile owns its upload Retry and notice.
+      if (!event.attachmentId)
+        onAttachmentError("Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB.");
+    });
     const added = aui.on("composer.attachmentAdd", () => onAttachmentError(null));
     const started = aui.on("thread.runStart", () => onAttachmentError(null));
     return () => {
@@ -92,6 +93,8 @@ function ChatThread({
   );
   const empty = useAuiState((state) => state.thread.isEmpty);
   const running = useAuiState((state) => state.thread.isRunning);
+  const [dragging, setDragging] = useState(false);
+  const pendingDropFiles = useRef(0);
   const root = useRef<HTMLDivElement>(null);
   const [viewport, setViewport] = useState<HTMLDivElement | null>(null);
   const [period] = useState(() => {
@@ -99,73 +102,126 @@ function ChatThread({
     return hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
   });
   return (
-    <ComposerPrimitive.AttachmentDropzone asChild disabled={running}>
-      <ThreadPrimitive.Root ref={root} className="study-chat" data-empty={empty}>
-        {empty ? (
-          <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
-            <div className="study-chat-intro">
-              <h1 id="chat-welcome-title">
-                Good {period}, <span>{name}</span>
-              </h1>
-            </div>
-            <ChatComposer
-              notice={error}
-              noticeActions={<VoiceRecoveryAction />}
-              actionMode={actionMode}
-              onActionModeChange={onActionModeChange}
-              libraryDocument={libraryDocument}
-              onLibraryDocumentSelect={onLibraryDocumentSelect}
-            />
-            {desktop && <ChatTools onActionSelect={onActionModeChange} />}
-          </section>
-        ) : (
-          <>
-            {!embedded && <ChatHeader sessionId={sessionId} initialTitle={initialTitle} />}
-            <ThreadPrimitive.Viewport
-              ref={setViewport}
-              className="study-chat-conversation"
-              turnAnchor="top"
-              data-slot="aui_thread-viewport"
-            >
-              <ChatComposerSlotProvider>
-                <div className="study-chat-thread-content">
-                  <div className="study-chat-messages" data-slot="aui_message-group">
-                    <ChatMessages viewport={viewport} />
-                    <span className="p-sr-only" role="status">
-                      {running ? "PansGPT is responding" : ""}
-                    </span>
-                  </div>
-                  <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
-                    <ThreadPrimitive.ScrollToBottom
-                      className="study-chat-scroll-bottom"
-                      aria-label="Scroll to latest message"
-                      title="Scroll to latest message"
-                    >
-                      <ArrowDown size={16} aria-hidden="true" />
-                    </ThreadPrimitive.ScrollToBottom>
-                    <ChatComposer
-                      notice={error}
-                      noticeActions={<VoiceRecoveryAction />}
-                      actionMode={actionMode}
-                      onActionModeChange={onActionModeChange}
-                      libraryDocument={libraryDocument}
-                      onLibraryDocumentSelect={onLibraryDocumentSelect}
-                    />
-                    {desktop && (
-                      <p>
-                        PansGPT supports your studies. Verify clinical facts and dosages with
-                        official monographs.
-                      </p>
-                    )}
-                  </ThreadPrimitive.ViewportFooter>
+    <ThreadPrimitive.Root
+      ref={root}
+      className="study-chat"
+      data-empty={empty}
+      data-dragging={dragging && !running ? "true" : undefined}
+      onDragEnter={(event) => {
+        if (!event.dataTransfer.types.includes("Files")) return;
+        event.preventDefault();
+        if (!running) setDragging(true);
+      }}
+      onDragOver={(event) => {
+        if (!event.dataTransfer.types.includes("Files")) return;
+        event.preventDefault();
+        if (!running) setDragging(true);
+      }}
+      onDragLeave={(event) => {
+        const next = event.relatedTarget;
+        if (next instanceof Node && event.currentTarget.contains(next)) return;
+        setDragging(false);
+      }}
+      onDropCapture={() => setDragging(false)}
+      onDrop={(event) => {
+        if (!event.dataTransfer.files.length) return;
+        event.preventDefault();
+        if (running) return;
+        // The composer claims its own drops. Drops elsewhere in the thread
+        // must also validate the whole batch before starting any uploads.
+        const files = Array.from(event.dataTransfer.files);
+        const attached = aui.composer().getState().attachments;
+        const queued = Math.max(
+          0,
+          pendingDropFiles.current -
+            attached.filter((item) => item.status.type === "running").length
+        );
+        if (attached.length + queued + files.length > 4) {
+          onAttachmentError("Attach up to four files at a time.");
+          return;
+        }
+        onAttachmentError(null);
+        pendingDropFiles.current += files.length;
+        void (async () => {
+          let remaining = files.length;
+          try {
+            for (const file of files) {
+              await aui.composer().addAttachment(file);
+              pendingDropFiles.current--;
+              remaining--;
+            }
+          } catch {
+            // The runtime emits attachmentAddError; failed upload tiles own Retry.
+          } finally {
+            pendingDropFiles.current -= remaining;
+          }
+        })();
+      }}
+    >
+      {empty ? (
+        <section className="study-chat-welcome" aria-labelledby="chat-welcome-title">
+          <div className="study-chat-intro">
+            <h1 id="chat-welcome-title">
+              Good {period}, <span>{name}</span>
+            </h1>
+          </div>
+          <ChatComposer
+            notice={error}
+            noticeActions={<VoiceRecoveryAction />}
+            actionMode={actionMode}
+            onActionModeChange={onActionModeChange}
+            libraryDocument={libraryDocument}
+            onLibraryDocumentSelect={onLibraryDocumentSelect}
+          />
+          {desktop && <ChatTools onActionSelect={onActionModeChange} />}
+        </section>
+      ) : (
+        <>
+          {!embedded && <ChatHeader sessionId={sessionId} initialTitle={initialTitle} />}
+          <ThreadPrimitive.Viewport
+            ref={setViewport}
+            className="study-chat-conversation"
+            turnAnchor="top"
+            data-slot="aui_thread-viewport"
+          >
+            <ChatComposerSlotProvider>
+              <div className="study-chat-thread-content">
+                <div className="study-chat-messages" data-slot="aui_message-group">
+                  <ChatMessages viewport={viewport} />
+                  <span className="p-sr-only" role="status">
+                    {running ? "PansGPT is responding" : ""}
+                  </span>
                 </div>
-              </ChatComposerSlotProvider>
-            </ThreadPrimitive.Viewport>
-          </>
-        )}
-        {empty && !desktop && !embedded && <ChatRecent />}
-      </ThreadPrimitive.Root>
-    </ComposerPrimitive.AttachmentDropzone>
+                <ThreadPrimitive.ViewportFooter className="study-chat-footer aui-thread-viewport-footer">
+                  <ThreadPrimitive.ScrollToBottom
+                    className="study-chat-scroll-bottom"
+                    aria-label="Scroll to latest message"
+                    title="Scroll to latest message"
+                  >
+                    <ArrowDown size={16} aria-hidden="true" />
+                  </ThreadPrimitive.ScrollToBottom>
+                  <ChatComposer
+                    notice={error}
+                    noticeActions={<VoiceRecoveryAction />}
+                    actionMode={actionMode}
+                    onActionModeChange={onActionModeChange}
+                    libraryDocument={libraryDocument}
+                    onLibraryDocumentSelect={onLibraryDocumentSelect}
+                  />
+                  {desktop && (
+                    <p>
+                      PansGPT supports your studies. Verify clinical facts and dosages with official
+                      monographs.
+                    </p>
+                  )}
+                </ThreadPrimitive.ViewportFooter>
+              </div>
+            </ChatComposerSlotProvider>
+          </ThreadPrimitive.Viewport>
+        </>
+      )}
+      {empty && !desktop && !embedded && <ChatRecent />}
+    </ThreadPrimitive.Root>
   );
 }
 
@@ -204,7 +260,6 @@ export function ChatContent({
   const { reload } = useDashboard();
   const [acknowledgedHere, setAcknowledgedHere] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
-  const [libraryDocument, setLibraryDocument] = useState<LibraryDocument | null>(null);
   const seenActionModes = useRef(new Set<string>());
   const seenFiles = useRef(new Set<string>());
   const seenLibraryDocuments = useRef(new Set<string>());
@@ -245,7 +300,10 @@ export function ChatContent({
     retryVoice,
     canRetryVoice,
     currentSessionId,
-    setSelectedLibraryDocumentId,
+    setSelectedLibrarySource,
+    librarySource: libraryDocument,
+    setEditedContext,
+    beginEditedContext,
     actionMode,
     setSelectedActionMode,
   } = useChatRuntime({
@@ -261,10 +319,9 @@ export function ChatContent({
   });
   const onLibraryDocumentSelect = useCallback(
     (document: LibraryDocument | null) => {
-      setLibraryDocument(document);
-      setSelectedLibraryDocumentId(document?.id ?? null);
+      setSelectedLibrarySource(document ? { id: document.id, title: document.title } : null);
     },
-    [setSelectedLibraryDocumentId]
+    [setSelectedLibrarySource]
   );
   useEffect(() => {
     if (
@@ -386,6 +443,8 @@ export function ChatContent({
           retryMessage,
           retryVoice,
           canRetryVoice,
+          setEditedContext,
+          beginEditedContext,
         }}
       >
         {renderThread

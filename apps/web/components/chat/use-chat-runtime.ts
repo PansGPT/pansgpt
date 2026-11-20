@@ -17,6 +17,8 @@ import type {
   ChatBranchRequest,
   ChatSessionCreateRequest,
   ArtifactItem,
+  ChatMessageContext,
+  ChatLibrarySource,
 } from "@pansgpt/types";
 import { z } from "zod";
 import { env } from "@/env";
@@ -31,8 +33,12 @@ import {
   failureFrom,
   responseFailure,
   fetchWithRecovery,
+  retryDelay,
 } from "@/lib/chat-recovery";
 import { parseChatHistory } from "@/lib/chat-history";
+import { parseRunSnapshot, recoveredMessage, trackChatTransport } from "@/lib/chat-run-recovery";
+import { retrySafeTool } from "@/lib/chat-tool-policy";
+import { contextAtParent } from "@/lib/message-context";
 
 const toolArgsSchema = z.record(z.string(), z.json());
 const acceptedFiles = new Set([
@@ -104,6 +110,7 @@ type RunOptions = {
   retryMessageId?: string;
   actionMode?: ChatActionMode | null;
   documentId?: string | null;
+  context?: ChatMessageContext;
   replace?: { questionId: string; answerId: string };
 };
 type RetryContext = {
@@ -145,6 +152,13 @@ export function useChatRuntime({
     () => initialMessages.filter((item) => item.isActive !== false).at(-1)?.id ?? null
   );
   const [isRunning, setIsRunning] = useState(false);
+  const [checkingRun, setCheckingRun] = useState(!!initialSessionId);
+  const recoveringRun = useRef(false);
+  const serverRunId = useRef<string | null>(null);
+  const messagesRef = useRef(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
   const [error, setError] = useState<string | null>(null);
   const [online, setOnline] = useState(true);
   const [recording, setRecording] = useState<Blob | null>(null);
@@ -167,15 +181,35 @@ export function useChatRuntime({
   const [actionMode, setActionMode] = useState<ChatActionMode | null>(initialActionMode);
   const sessionId = useRef(initialSessionId);
   const actionModeRef = useRef<ChatActionMode | null>(initialActionMode);
-  const selectedLibraryDocumentId = useRef<string | null>(null);
+  const selectedLibraryDocument = useRef<ChatLibrarySource | null | undefined>(undefined);
+  const [explicitLibrarySource, setExplicitLibrarySource] = useState<
+    ChatLibrarySource | null | undefined
+  >(undefined);
+  const editedContexts = useRef(new Map<string, ChatMessageContext>());
+  const setEditedContext = useCallback((id: string, context: ChatMessageContext) => {
+    editedContexts.current.set(id, context);
+  }, []);
+  const beginEditedContext = useCallback((id: string, context: ChatMessageContext) => {
+    editedContexts.current.clear();
+    editedContexts.current.set(id, context);
+  }, []);
   const [currentSessionId, setCurrentSessionId] = useState(initialSessionId);
   const sessionPromise = useRef<Promise<string> | null>(null);
   const active = useRef<AbortController | null>(null);
   const readerFileUpload = useRef<AbortController | null>(null);
+  const uploadingFiles = useRef(new Map<string, AbortController>());
+  const uploadedFiles = useRef(
+    new Map<
+      string,
+      { saved: NonNullable<ChatMessageView["attachments"]>[number]; session: string }
+    >()
+  );
+  const draftAttachmentIds = useRef<() => string[]>(() => []);
   const lifetime = useRef<AbortController | null>(null);
   const available = useRef(enabled);
-  const setSelectedLibraryDocumentId = useCallback((documentId: string | null) => {
-    selectedLibraryDocumentId.current = documentId;
+  const setSelectedLibrarySource = useCallback((document: ChatLibrarySource | null) => {
+    selectedLibraryDocument.current = document;
+    setExplicitLibrarySource(document);
   }, []);
   const setSelectedActionMode = useCallback((mode: ChatActionMode | null) => {
     actionModeRef.current = mode;
@@ -185,9 +219,10 @@ export function useChatRuntime({
     lifetime.current = new AbortController();
     return () => {
       lifetime.current?.abort();
-      active.current?.abort();
       readerFileUpload.current?.abort();
-      active.current = null;
+      // An accepted response belongs to the account/conversation, not this view.
+      // Its bounded transport may finish after navigation; auth and Stop own cancellation.
+      available.current = false;
     };
   }, []);
   const headers = useMemo(() => ({ Authorization: `Bearer ${token}` }), [token]);
@@ -198,7 +233,7 @@ export function useChatRuntime({
       if (sessionId.current) return sessionId.current;
       if (!sessionPromise.current) {
         sessionPromise.current = (async () => {
-          const signals = [signal, lifetime.current?.signal].filter(
+          const signals = [signal, ...(signal ? [] : [lifetime.current?.signal])].filter(
             (item): item is AbortSignal => !!item
           );
           const response = await fetch(`${base}/sessions`, {
@@ -213,7 +248,7 @@ export function useChatRuntime({
           const created = sessionSchema.parse(await response.json());
           if (created.user_id !== ownerId)
             throw new Error("The conversation does not belong to this account.");
-          if (signal?.aborted || lifetime.current?.signal.aborted)
+          if (signal?.aborted || (!signal && lifetime.current?.signal.aborted))
             throw new DOMException("Cancelled", "AbortError");
           sessionId.current = created.id;
           setCurrentSessionId(created.id);
@@ -256,7 +291,13 @@ export function useChatRuntime({
   const attachments = useMemo<AttachmentAdapter>(
     () => ({
       accept: ".pdf,.pptx,.docx,.txt,.md,.csv,image/png,image/jpeg",
-      async add({ file }) {
+      async *add({ file }) {
+        const existing = new Set([
+          ...draftAttachmentIds.current(),
+          ...uploadingFiles.current.keys(),
+          ...uploadedFiles.current.keys(),
+        ]);
+        if (existing.size >= 4) throw new Error("Attach up to four files at a time.");
         const origin = readerSnipOrigin(file);
         if (fixedDocumentId && origin && origin.document_id !== fixedDocumentId)
           throw new Error("Snip from the PDF open in this study chat.");
@@ -264,17 +305,49 @@ export function useChatRuntime({
           const message = "Choose a PDF, PPTX, DOCX, text, PNG or JPEG file up to 10 MB.";
           throw new Error(message);
         }
-        return {
+        const draft = {
           id: crypto.randomUUID(),
           name: file.name,
-          type: file.type.startsWith("image/") ? "image" : "document",
+          type: file.type.startsWith("image/") ? ("image" as const) : ("document" as const),
           file,
           contentType: file.type,
-          status: { type: "requires-action", reason: "composer-send" },
         };
+        const controller = new AbortController();
+        uploadingFiles.current.set(draft.id, controller);
+        yield {
+          ...draft,
+          status: { type: "running" as const, reason: "uploading" as const, progress: 0 },
+        };
+        try {
+          const saved = await uploadFile(file, controller.signal);
+          if (controller.signal.aborted || !sessionId.current) return;
+          uploadedFiles.current.set(draft.id, { saved, session: sessionId.current });
+          yield {
+            ...draft,
+            name: saved.name,
+            contentType: saved.content_type,
+            status: { type: "requires-action" as const, reason: "composer-send" as const },
+          };
+        } catch (failure) {
+          if (controller.signal.aborted || lifetime.current?.signal.aborted) return;
+          yield {
+            ...draft,
+            status: {
+              type: "incomplete" as const,
+              reason: "error" as const,
+              message: failureFrom(failure, "upload").message,
+            },
+          };
+        } finally {
+          uploadingFiles.current.delete(draft.id);
+        }
       },
       async send(attachment, options) {
-        const saved = await uploadFile(attachment.file, options?.signal);
+        if (options?.signal?.aborted) throw new DOMException("Cancelled", "AbortError");
+        const ready = uploadedFiles.current.get(attachment.id);
+        if (!ready || ready.session !== sessionId.current)
+          throw new Error("Wait for this file to finish uploading, or retry its upload.");
+        const saved = ready.saved;
         return {
           id: saved.id,
           name: saved.name,
@@ -285,10 +358,13 @@ export function useChatRuntime({
         };
       },
       async remove(attachment) {
-        // Pending files have never left this browser. Bound message files are retained with history.
-        if (attachment.status.type !== "complete" || !sessionId.current) return;
+        uploadingFiles.current.get(attachment.id)?.abort();
+        const ready = uploadedFiles.current.get(attachment.id);
+        uploadedFiles.current.delete(attachment.id);
+        // Message-bound files are retained; only this unsent draft's upload is removed.
+        if (!ready) return;
         const response = await fetch(
-          `${base}/sessions/${sessionId.current}/attachments/${attachment.id}`,
+          `${base}/sessions/${ready.session}/attachments/${ready.saved.id}`,
           {
             method: "DELETE",
             headers,
@@ -343,11 +419,176 @@ export function useChatRuntime({
   useEffect(() => {
     available.current = enabled;
     if (!enabled) {
-      active.current?.abort();
-      readerFileUpload.current?.abort();
       dictation.dispose();
     }
   }, [enabled, dictation]);
+
+  useEffect(() => {
+    for (const answer of initialMessages) {
+      if (answer.role !== "assistant" || answer.status !== "error") continue;
+      const question = initialMessages.find(
+        (item) => item.id === answer.parentId && item.role === "user"
+      );
+      if (question)
+        retryContexts.current.set(answer.id, {
+          prompt: question.content,
+          files: question.attachments || [],
+          questionId: question.id,
+          answerId: answer.id,
+          canonical: true,
+          ambiguous: false,
+          blocked: answer.retryable === false,
+          options: {
+            documentId: fixedDocumentId ?? question.context?.library_document?.id,
+            actionMode: question.context?.action_mode,
+            context: question.context ?? undefined,
+          },
+        });
+    }
+  }, [initialMessages, fixedDocumentId]);
+
+  useEffect(() => {
+    if (!enabled || !token || !currentSessionId || active.current) {
+      setCheckingRun(false);
+      return;
+    }
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let failures = 0;
+    const next = (delay = 1500) => {
+      if (!controller.signal.aborted) timer = setTimeout(() => void poll(), delay);
+    };
+    const history = async () => {
+      const response = await fetchWithRecovery(
+        `${base}/sessions/${currentSessionId}?include_branches=true`,
+        { headers, signal: controller.signal, cache: "no-store" }
+      );
+      if (!response.ok) throw await responseFailure(response);
+      return parseChatHistory(await response.json(), currentSessionId, ownerId);
+    };
+    const poll = async () => {
+      let rescheduled = false;
+      try {
+        const response = await fetchWithRecovery(
+          `${base}/sessions/${currentSessionId}/run`,
+          { headers, signal: controller.signal, cache: "no-store" },
+          { retries: 1, timeoutMs: 10000 }
+        );
+        if (controller.signal.aborted || active.current) return;
+        // An older deployment/test adapter may not implement run snapshots.
+        if (response.status === 404) return;
+        if (response.status === 429) {
+          // Snapshot reads may throttle independently of the accepted answer.
+          // Respect the server's window without replaying inference or hammering it.
+          failures++;
+          if (failures <= 20) {
+            rescheduled = true;
+            setCheckingRun(true);
+            next(Math.max(1000, retryDelay(failures, response.headers.get("Retry-After"))));
+          } else setError("We couldn't check this response. Reopen the chat to try again.");
+          return;
+        }
+        if (!response.ok) throw await responseFailure(response);
+        const snapshot = parseRunSnapshot(await response.json());
+        if (!snapshot || controller.signal.aborted || active.current) return;
+        failures = 0;
+        if (snapshot.run_id) serverRunId.current = snapshot.run_id;
+        const wasRecovering = recoveringRun.current;
+        recoveringRun.current = snapshot.status === "running";
+        let saved: ChatMessageView[] | null = null;
+        if (
+          snapshot.user_message_id &&
+          !messagesRef.current.some((item) => item.id === snapshot.user_message_id)
+        )
+          saved = await history();
+        if (controller.signal.aborted || active.current) return;
+        const message = recoveredMessage(snapshot);
+        if (
+          message &&
+          !messagesRef.current.some(
+            (item) => item.id === message.id && item.isSaved && item.status === "complete"
+          )
+        ) {
+          const source = saved || messagesRef.current;
+          if (source.some((item) => item.id === message.parentId)) {
+            setMessages([
+              ...source.filter(
+                (item) =>
+                  item.id !== message.id &&
+                  !(
+                    item.role === "assistant" &&
+                    item.parentId === message.parentId &&
+                    item.status !== "complete"
+                  )
+              ),
+              message,
+            ]);
+            setHeadId(message.id);
+            if (message.status === "error") {
+              const question = source.find((item) => item.id === message.parentId);
+              if (question)
+                retryContexts.current.set(message.id, {
+                  prompt: question.content,
+                  files: question.attachments || [],
+                  questionId: question.id,
+                  answerId: message.id,
+                  canonical: true,
+                  ambiguous: false,
+                  blocked: snapshot.retry_blocked ?? snapshot.tool_started,
+                  options: {
+                    documentId: fixedDocumentId ?? question.context?.library_document?.id,
+                    actionMode: question.context?.action_mode,
+                    context: question.context ?? undefined,
+                  },
+                });
+            }
+          }
+        }
+        if (snapshot.status === "running") {
+          setIsRunning(true);
+          next();
+        } else {
+          if (wasRecovering && !message) {
+            const latest = await history();
+            if (!controller.signal.aborted && !active.current) {
+              setMessages(latest);
+              setHeadId(latest.filter((item) => item.isActive !== false).at(-1)?.id ?? null);
+            }
+          }
+          setIsRunning(false);
+          if (wasRecovering) onSessionChanged();
+        }
+      } catch {
+        if (!controller.signal.aborted && recoveringRun.current) {
+          failures++;
+          // Polling is a safe read; never repost the student's prompt after an
+          // ambiguous disconnect. Keep the existing partial answer visible.
+          if (failures <= 20) next(Math.min(8000, 1000 * 2 ** Math.min(failures, 3)));
+          else {
+            recoveringRun.current = false;
+            setIsRunning(false);
+            setError("Reconnect to check your response before sending again.");
+          }
+        }
+      } finally {
+        if (!controller.signal.aborted && !rescheduled) setCheckingRun(false);
+      }
+    };
+    void poll();
+    return () => {
+      controller.abort();
+      if (timer) clearTimeout(timer);
+    };
+  }, [
+    enabled,
+    token,
+    currentSessionId,
+    ownerId,
+    headers,
+    isRunning,
+    onSessionChanged,
+    fixedDocumentId,
+  ]);
 
   const run = useCallback(
     async (
@@ -361,7 +602,7 @@ export function useChatRuntime({
         setError(publicFailure("OFFLINE").message);
         return;
       }
-      if (active.current || isSwitching) return;
+      if (active.current || recoveringRun.current || checkingRun || isSwitching) return;
       if (!token || !canSend) {
         setError("Please acknowledge the study notice before sending.");
         return;
@@ -370,18 +611,46 @@ export function useChatRuntime({
         setError("Use a question up to 10,000 characters and at most four attachments.");
         return;
       }
-      const submittedActionMode =
+      let submittedActionMode =
         options.actionMode !== undefined
           ? options.actionMode
           : options.editId || options.regenerateId
             ? null
             : actionModeRef.current;
-      const submittedDocument =
+      const inheritedSource = contextAtParent(
+        messages,
+        options.parentId === undefined ? headId : options.parentId
+      )?.library_document;
+      const selectedSource =
+        options.context?.library_document ??
+        (selectedLibraryDocument.current === undefined
+          ? inheritedSource
+          : selectedLibraryDocument.current);
+      let submittedDocument =
         options.documentId !== undefined
           ? options.documentId
-          : (fixedDocumentId ?? selectedLibraryDocumentId.current);
+          : (fixedDocumentId ?? selectedSource?.id ?? null);
+      let submittedContext: ChatMessageContext = {
+        action_mode: submittedActionMode,
+        library_document: submittedDocument
+          ? (options.context?.library_document ??
+            selectedSource ?? { id: submittedDocument, title: "Library document" })
+          : null,
+      };
       const controller = new AbortController();
       active.current = controller;
+      serverRunId.current = null;
+      const untrack = trackChatTransport(ownerId, () => {
+        const id = sessionId.current,
+          runId = serverRunId.current;
+        if (id && runId)
+          void fetch(`${base}/sessions/${id}/runs/${runId}/cancel`, {
+            method: "POST",
+            headers,
+            keepalive: true,
+          }).catch(() => undefined);
+        controller.abort();
+      });
       const current = () => active.current === controller && !controller.signal.aborted;
       const original = options.regenerateId
         ? messages.find((item) => item.id === options.regenerateId)
@@ -426,6 +695,7 @@ export function useChatRuntime({
                 content: prompt,
                 status: "complete" as const,
                 attachments: files,
+                context: submittedContext,
               },
             ]),
         answer,
@@ -447,14 +717,20 @@ export function useChatRuntime({
         }, 12000);
       };
       scheduleSlow();
+      const delayTimer = setTimeout(() => {
+        if (current() && answer.status === "running") {
+          answer = { ...answer, delayed: true };
+          publish();
+        }
+      }, 30000);
       try {
         const id = await ensureSession(controller.signal);
         if (!current()) return;
         const payload: ChatStreamRequest = {
           message: prompt,
-          action_mode: submittedActionMode ?? undefined,
+          action_mode: submittedActionMode,
           parent_message_id: parentId,
-          document_id: submittedDocument ?? undefined,
+          document_id: submittedDocument,
           edit_message_id: options.editId,
           regenerate_message_id: options.regenerateId,
           retry_message_id: options.retryMessageId,
@@ -474,8 +750,14 @@ export function useChatRuntime({
           rejected = true;
           throw await responseFailure(response);
         }
+        const returnedRunId = response.headers.get("x-chat-run-id");
+        if (uuidSchema.safeParse(returnedRunId).success) serverRunId.current = returnedRunId;
         if (!response.body) throw new Error("The chat service returned no response stream.");
         if (submittedActionMode !== null) setSelectedActionMode(null);
+        if (!options.editId && !options.regenerateId && !options.retryMessageId) {
+          selectedLibraryDocument.current = undefined;
+          setExplicitLibrarySource(undefined);
+        }
         reader = response.body.getReader();
         const decoder = new TextDecoder();
         const parser = new SSEEventStreamReader();
@@ -486,14 +768,27 @@ export function useChatRuntime({
             ? [...parser.push(decoder.decode()), ...parser.flush()]
             : parser.push(decoder.decode(chunk.value, { stream: true }));
           for (const event of events) {
+            if (event.event === "init" && uuidSchema.safeParse(event.data.run_id).success)
+              serverRunId.current = event.data.run_id!;
             if (
-              ["text_chunk", "public_progress", "tool_start", "tool_end", "recovery"].includes(
-                event.event
-              )
+              [
+                "text_chunk",
+                "public_progress",
+                "tool_start",
+                "tool_end",
+                "artifact_ready",
+                "citations",
+                "init",
+                "activity",
+              ].includes(event.event)
             )
               scheduleSlow();
             if (event.event === "error" || event.event === "done") terminal = true;
-            if (event.event === "tool_start" || event.event === "artifact_ready") blocked = true;
+            if (
+              event.event === "artifact_ready" ||
+              (event.event === "tool_start" && !retrySafeTool(event.data.tool_name))
+            )
+              blocked = true;
             if (event.event === "init" && event.data.session_id && event.data.session_id !== id)
               throw new Error("The response belongs to a different conversation.");
             if (
@@ -502,19 +797,27 @@ export function useChatRuntime({
               uuidSchema.safeParse(event.data.assistant_message_id).success
             ) {
               const oldQuestionId = questionId;
+              if (event.data.context) {
+                submittedContext = event.data.context;
+                submittedActionMode = submittedContext.action_mode;
+                submittedDocument = submittedContext.library_document?.id ?? null;
+              }
               questionId = event.data.user_message_id!;
               answer = { ...answer, id: event.data.assistant_message_id!, parentId: questionId };
               canonical = true;
               window.dispatchEvent(new Event("pansgpt-credits-changed"));
               setMessages((previous) =>
                 previous.map((item) =>
-                  item.id === oldQuestionId ? { ...item, id: questionId } : item
+                  item.id === oldQuestionId
+                    ? { ...item, id: questionId, context: submittedContext }
+                    : item
                 )
               );
               setHeadId(answer.id);
             }
             answer = applyChatEvent(answer, event);
-            if (event.event === "artifact_ready") onArtifactReady?.(event.data);
+            if (event.event === "artifact_ready" && available.current)
+              onArtifactReady?.(event.data);
           }
           publish();
           if (chunk.done || events.some((event) => event.event === "done")) break;
@@ -530,7 +833,9 @@ export function useChatRuntime({
             recovery: undefined,
           };
       } finally {
+        untrack();
         if (slowTimer) clearTimeout(slowTimer);
+        clearTimeout(delayTimer);
         if (reader) {
           await reader.cancel().catch(() => undefined);
           reader.releaseLock();
@@ -542,8 +847,11 @@ export function useChatRuntime({
             ...(blocked && answer.status === "error"
               ? {
                   retryable: false,
-                  error:
-                    "Something went wrong. Check any generated results before starting a new request.",
+                  error: publicFailure("TOOL_RETRY_BLOCKED").message,
+                  failure: {
+                    ...publicFailure("TOOL_RETRY_BLOCKED"),
+                    reference: answer.failure?.reference,
+                  },
                 }
               : {}),
           };
@@ -560,6 +868,7 @@ export function useChatRuntime({
                 ...options,
                 documentId: submittedDocument,
                 actionMode: submittedActionMode,
+                context: submittedContext,
                 parentId,
               },
             });
@@ -589,6 +898,8 @@ export function useChatRuntime({
       onArtifactReady,
       setSelectedActionMode,
       fixedDocumentId,
+      checkingRun,
+      ownerId,
     ]
   );
 
@@ -601,7 +912,7 @@ export function useChatRuntime({
         return;
       }
       if (context.blocked) {
-        setError("Check the study-tool results before making a new request.");
+        setError(publicFailure("TOOL_RETRY_BLOCKED").message);
         return;
       }
       try {
@@ -622,7 +933,8 @@ export function useChatRuntime({
         if (!response.ok) throw await responseFailure(response);
         const saved = parseChatHistory(await response.json(), id, ownerId);
         const completed = saved.find(
-          (item) => item.id === context.answerId && item.role === "assistant"
+          (item) =>
+            item.id === context.answerId && item.role === "assistant" && item.status === "complete"
         );
         if (completed) {
           setMessages((previous) =>
@@ -677,7 +989,14 @@ export function useChatRuntime({
         id: item.id,
         name: item.name,
         content_type: item.contentType ?? "application/octet-stream",
-        size: item.file?.size || 1,
+        size:
+          [...uploadedFiles.current.values()].find((value) => value.saved.id === item.id)?.saved
+            .size ??
+          messages
+            .flatMap((message) => message.attachments ?? [])
+            .find((file) => file.id === item.id)?.size ??
+          item.file?.size ??
+          1,
       }));
       if (append.content.some((part) => part.type !== "text")) {
         setError("Use the attachment button to send files.");
@@ -686,9 +1005,26 @@ export function useChatRuntime({
       await run(text || (files.length ? "Explain the attached study material." : ""), files, {
         parentId: append.parentId,
         editId: append.sourceId ?? undefined,
+        ...(append.sourceId
+          ? (() => {
+              const context =
+                editedContexts.current.get(append.sourceId) ??
+                messages.find((item) => item.id === append.sourceId)?.context;
+              return context
+                ? {
+                    context,
+                    actionMode: context.action_mode,
+                    documentId: context.library_document?.id ?? null,
+                  }
+                : {};
+            })()
+          : {}),
       });
+      if (append.sourceId) editedContexts.current.delete(append.sourceId);
+      for (const [key, ready] of uploadedFiles.current)
+        if (files.some((file) => file.id === ready.saved.id)) uploadedFiles.current.delete(key);
     },
-    [run]
+    [run, messages]
   );
   const onReload = useCallback(
     async (parentId: string | null) => {
@@ -703,9 +1039,12 @@ export function useChatRuntime({
       await run(question.content, question.attachments ?? [], {
         regenerateId: target.id,
         parentId: question.parentId,
+        actionMode: question.context?.action_mode,
+        documentId: fixedDocumentId ?? question.context?.library_document?.id,
+        context: question.context ?? undefined,
       });
     },
-    [messages, run]
+    [messages, run, fixedDocumentId]
   );
 
   const persistBranch = useCallback(
@@ -792,13 +1131,35 @@ export function useChatRuntime({
     convertMessage: convertChatMessage,
     isRunning,
     isLoading: isSwitching,
-    isSendDisabled: !enabled || !token || !canSend || isSwitching || !online,
+    isSendDisabled: !enabled || !token || !canSend || isSwitching || checkingRun || !online,
     onNew,
     onEdit: onNew,
     onReload,
     onCancel: async () => {
-      active.current?.abort();
-      readerFileUpload.current?.abort();
+      try {
+        const id = sessionId.current;
+        if (id) {
+          let runId = serverRunId.current;
+          if (!runId) {
+            const response = await fetchWithRecovery(`${base}/sessions/${id}/run`, {
+              headers,
+              cache: "no-store",
+            });
+            if (response.ok) runId = parseRunSnapshot(await response.json())?.run_id ?? null;
+          }
+          if (runId) {
+            const response = await fetch(`${base}/sessions/${id}/runs/${runId}/cancel`, {
+              method: "POST",
+              headers,
+            });
+            if (!response.ok) throw await responseFailure(response);
+          }
+        }
+        active.current?.abort();
+        readerFileUpload.current?.abort();
+      } catch (failure) {
+        setError(failureFrom(failure).message);
+      }
     },
     setMessages: persistBranch,
     adapters: {
@@ -811,6 +1172,13 @@ export function useChatRuntime({
       },
     },
   });
+  useEffect(() => {
+    draftAttachmentIds.current = () =>
+      runtime.thread.composer.getState().attachments.map((item) => item.id);
+    return () => {
+      draftAttachmentIds.current = () => [];
+    };
+  }, [runtime]);
   const sendReaderFile = useCallback(
     async (text: string, file: File): Promise<void> => {
       if (readerFileUpload.current || active.current || !available.current) return;
@@ -866,7 +1234,12 @@ export function useChatRuntime({
     error,
     feedbackPending,
     currentSessionId,
-    setSelectedLibraryDocumentId,
+    setSelectedLibrarySource,
+    // History remains available to follow-up questions, but only an unsent
+    // selection belongs in the composer. Accepted sends consume that selection.
+    librarySource: explicitLibrarySource ?? null,
+    setEditedContext,
+    beginEditedContext,
     actionMode,
     setSelectedActionMode,
   };

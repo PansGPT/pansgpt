@@ -27,16 +27,17 @@ export function publicFailure(
   ): ChatFailureView => ({ code, message, action, retryable: retry });
   if (code === "OFFLINE")
     return result("You're offline. Check your connection and try again.", "retry", true);
+  if (code === "CONTEXT_TOO_LARGE")
+    return result("Try a shorter message or start a new chat.", "edit");
   if (code === "401" || text.includes("token has expired") || text.includes("sign in again"))
     return result("Your session has expired. Sign in again to continue.", "sign_in");
   if (code === "402" || text.includes("insufficient credits"))
     return result("You don't have enough credits to continue. Check your usage.", "usage");
   if (code === "403") return result("You don't have access to this item.", "review");
+  if (code === "TOOL_RETRY_BLOCKED")
+    return result("This response couldn't finish. Please send a new message.", "review");
   if (text.includes("retry_blocked") || text.includes("started a study tool"))
-    return result(
-      "This request already started a study tool. Check its results before making a new request.",
-      "review"
-    );
+    return result("This response couldn't finish. Please send a new message.", "review");
   if (text.includes("already running") || text.includes("stop the current response"))
     return result("A response is still running. Wait for it to finish, then try again.", "wait");
   if (text.includes("already has a saved answer"))
@@ -89,7 +90,10 @@ export function publicFailure(
     preview: "The preview isn't available. Retry, or download the file.",
     mutation: "Your change wasn't saved. Please try again.",
   };
-  return result(labels[context] ?? generic, retryable ? "retry" : "review", retryable);
+  // Older runs incorrectly marked generic provider failures permanent. Known
+  // validation/auth/side-effect fences have already returned above.
+  const canRetry = retryable || (context === "response" && code === "PROVIDER_ERROR");
+  return result(labels[context] ?? generic, canRetry ? "retry" : "review", canRetry);
 }
 
 export function failureFrom(error: unknown, context: FailureContext = "response"): ChatFailureView {
@@ -108,14 +112,15 @@ export async function responseFailure(
     body && typeof body === "object" && "detail" in body && typeof body.detail === "string"
       ? body.detail
       : "";
-  return new ChatFailure(
-    publicFailure(
-      String(response.status),
-      detail,
-      response.status >= 500 || response.status === 408,
-      context
-    )
+  const failure = publicFailure(
+    String(response.status),
+    detail,
+    response.status >= 500 || response.status === 408,
+    context
   );
+  const reference = response.headers.get("x-request-id");
+  if (reference && /^[0-9a-f-]{36}$/i.test(reference)) failure.reference = reference;
+  return new ChatFailure(failure);
 }
 
 export function retryDelay(

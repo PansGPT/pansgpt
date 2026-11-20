@@ -23,6 +23,13 @@
 .study-chat-live-status {
   margin: 6px 0 4px;
 }
+.study-chat-wait-hint {
+  display: block;
+  margin-left: 23px;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  line-height: 1.6;
+}
 .study-chat-thinking-state .t-think {
   text-align: left;
   min-width: 0;

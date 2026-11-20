@@ -1,0 +1,433 @@
+.chat-rich-card {
+  margin: 16px 0;
+  padding: 20px;
+  max-width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border-secondary);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  color: var(--text-primary-900);
+  overflow-wrap: anywhere;
+}
+.chat-rich-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.chat-rich-header > div {
+  flex: 1;
+  min-width: 0;
+}
+.chat-rich-header h3 {
+  margin: 3px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 600;
+}
+.chat-rich-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 11px;
+  background: var(--bg-tertiary);
+  color: var(--fg-brand-primary-600);
+}
+.chat-rich-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary-600);
+}
+.chat-rich-muted,
+.chat-rich-meta,
+.chat-rich-footer {
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.chat-rich-meta,
+.chat-rich-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.chat-rich-meta {
+  margin-bottom: 10px;
+}
+.chat-rich-meta > span:last-child {
+  text-transform: capitalize;
+}
+.chat-flashcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 220px;
+  padding: 24px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 12px;
+  background: var(--bg-primary);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+.chat-flashcard[aria-pressed="true"] {
+  border-color: var(--fg-brand-primary-600);
+}
+.chat-flashcard-text {
+  font-size: 17px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.chat-rich-controls {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 16px 0;
+}
+.chat-rich-controls button,
+.chat-rich-footer button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  padding: 8px 12px;
+  min-height: 36px;
+  background: var(--bg-primary);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.chat-rich-controls button[aria-pressed="true"] {
+  color: var(--fg-brand-primary-600);
+}
+.chat-rich-card button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.chat-rich-footer {
+  border-top: 1px solid var(--border-secondary);
+  padding-top: 12px;
+}
+.chat-rich-footer button {
+  border: 0;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  padding: 4px;
+  min-height: 30px;
+}
+.chat-rich-card button:focus-visible,
+.chat-rich-disclosure button:focus-visible,
+.chat-rich-external:focus-visible {
+  outline: 2px solid var(--fg-brand-primary-600);
+  outline-offset: 3px;
+}
+.chat-rich-disclosure {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.65;
+  min-width: 0;
+}
+.chat-rich-disclosure > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-tertiary-600);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+.chat-rich-disclosure p {
+  margin: 0 0 12px;
+  white-space: pre-wrap;
+}
+.chat-rich-disclosure pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  margin: 0 0 12px;
+}
+.chat-mnemonic-phrase {
+  border-left: 3px solid var(--fg-brand-primary-600);
+  padding: 10px 18px;
+  margin: 0 0 20px;
+  background: var(--bg-primary);
+  border-radius: 0 8px 8px 0;
+  font-size: 19px;
+  line-height: 1.65;
+  font-weight: 500;
+}
+.chat-mnemonic-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.chat-mnemonic-list li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  font-size: 14px;
+  line-height: 1.65;
+}
+.chat-mnemonic-list li > span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 23px;
+  height: 23px;
+  border-radius: 7px;
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary-600);
+  font-size: 11px;
+}
+.chat-mnemonic-list p {
+  margin: 0;
+}
+.chat-chemical-formula {
+  font-family: monospace;
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin: 12px 0 20px;
+}
+.chat-chemical-smiles {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--bg-primary);
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+.chat-rich-external {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--fg-brand-primary-600);
+  font-size: 12px;
+  margin-top: 12px;
+}
+.chat-chart {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.chat-chart text {
+  font: 11px system-ui;
+  fill: var(--text-tertiary-600);
+}
+.chat-chart-grid {
+  stroke: var(--border-secondary);
+  stroke-dasharray: 3 5;
+}
+.chat-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.chat-chart-legend button {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  padding: 6px 9px;
+  color: var(--text-secondary-700);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.chat-chart-legend i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.chat-chart-legend button[aria-pressed="false"] {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+.chat-chart-legend button:disabled {
+  opacity: 1;
+}
+.chat-chart-table {
+  max-height: 320px;
+  overflow: auto;
+}
+.chat-chart-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+.chat-chart-table th,
+.chat-chart-table td {
+  padding: 9px;
+  border-bottom: 1px solid var(--border-secondary);
+}
+.chat-chart-table caption {
+  text-align: left;
+  padding: 8px;
+  color: var(--text-tertiary-600);
+}
+.chat-diagram {
+  padding: 4px;
+  border-radius: 8px;
+  min-width: 0;
+}
+.chat-diagram iframe {
+  width: 100%;
+  height: 360px;
+  border: 0;
+  background: #fafaf9;
+  border-radius: 8px;
+}
+.chat-tool-activity {
+  margin: 8px 0;
+}
+.chat-tool-activity .chat-rich-disclosure > button {
+  justify-content: flex-start;
+  width: auto;
+}
+.chat-tool-activity ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 10px;
+}
+.chat-tool-activity li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 0;
+  color: var(--text-tertiary-600);
+  font-size: 12px;
+}
+.chat-tool-state {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.chat-rich-unavailable p {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--text-tertiary-600);
+}
+.chat-notes-preview {
+  padding: 14px;
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  max-height: 420px;
+  overflow: auto;
+}
+@media (max-width: 640px) {
+  .chat-chart text {
+    font-size: 20px;
+  }
+  .chat-rich-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .chat-flashcard {
+    min-height: 200px;
+    padding: 20px 16px;
+  }
+  .chat-flashcard-text {
+    font-size: 16px;
+  }
+  .chat-rich-controls button {
+    min-height: 40px;
+  }
+  .chat-rich-header h3 {
+    font-size: 14px;
+  }
+  .chat-mnemonic-phrase {
+    font-size: 17px;
+  }
+  .chat-diagram iframe {
+    height: 280px;
+  }
+}
+
+/* Accordion recipe from transitions.dev; license in chat/transitions-dev.LICENSE.txt. */
+:root {
+  --acc-expand: 250ms;
+  --acc-collapse: 250ms;
+  --acc-chevron: 250ms;
+  --acc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* grid-template-rows 0fr → 1fr gives a clean height animation
+   with no JS measurement; the inner element clips overflow. */
+.t-acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--acc-collapse) var(--acc-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--acc-expand) var(--acc-ease);
+}
+.t-acc-panel-inner {
+  overflow: hidden;
+  opacity: 0;
+  filter: blur(2px);
+  transition:
+    opacity var(--acc-collapse) var(--acc-ease),
+    filter var(--acc-collapse) var(--acc-ease);
+}
+.t-acc[data-open="true"] .t-acc-panel-inner {
+  opacity: 1;
+  filter: blur(0);
+  transition:
+    opacity var(--acc-expand) var(--acc-ease),
+    filter var(--acc-expand) var(--acc-ease);
+}
+/* Flip the chevron vertically to turn the "v" into a "^".
+   scaleY(-1) about the centre passes through a flat line at
+   the midpoint (same look as a `d:` path morph) but animates
+   in every browser, unlike CSS `d:` morphing (Chromium only).
+   The chevron path is symmetric about the 16x16 viewBox
+   centre, so the flip lands exactly on the "^"; non-scaling
+   -stroke keeps the stroke width constant through the flip. */
+.t-acc-chevron {
+  display: inline-flex;
+  transform: scaleY(1);
+  transform-origin: center;
+  transition: transform var(--acc-chevron) var(--acc-ease);
+}
+.t-acc-chevron path {
+  vector-effect: non-scaling-stroke;
+}
+.t-acc[data-open="true"] .t-acc-chevron {
+  transform: scaleY(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-acc-panel,
+  .t-acc-panel-inner,
+  .t-acc-chevron {
+    transition: none !important;
+  }
+}

@@ -2,7 +2,7 @@
 
 import json
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from fastapi import HTTPException
@@ -11,8 +11,9 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext
 from app.core.ids import uuid7
+from app.engines.message_context import resolve_message_context
 from app.engines.reader_snips import validate_study_attachments
-from app.models.chat import CitationItem, StreamChatRequest
+from app.models.chat import ChatMessageContext, CitationItem, StreamChatRequest
 from app.models.reader import ReaderSnipOrigin
 
 
@@ -65,6 +66,7 @@ class ChatTurn:
     history: list[dict[str, str]]
     attachments: list[dict[str, Any]]
     regenerate: bool
+    context: ChatMessageContext = field(default_factory=ChatMessageContext)
 
 
 async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserContext) -> ChatTurn:
@@ -139,6 +141,16 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
             prompt = payload.message
             user_message_id = str(uuid7())
             attachment_ids = payload.attachment_ids
+            original = target
+            if (
+                payload.edit_message_id
+                and target
+                and "attachment_ids" not in payload.model_fields_set
+            ):
+                metadata = target.get("image_metadata") or {}
+                if isinstance(metadata, str):
+                    metadata = json.loads(metadata)
+                attachment_ids = metadata.get("attachment_ids", [])
             if target:
                 parent = (
                     str(target["parent_message_id"]) if target.get("parent_message_id") else None
@@ -180,6 +192,14 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
                 if str(parent_row["role"]) != "assistant":
                     raise HTTPException(422, "A question must follow an assistant response.")
             path = active_path(rows, parent)
+            context = await resolve_message_context(
+                conn,
+                payload,
+                user,
+                original,
+                path,
+                str(session["document_id"]) if session.get("document_id") else None,
+            )
             attachments: list[dict[str, Any]] = []
             if attachment_ids:
                 if len(set(attachment_ids)) != len(attachment_ids):
@@ -223,6 +243,7 @@ async def prepare_turn(session_id: str, payload: StreamChatRequest, user: UserCo
         ],
         attachments,
         bool(payload.regenerate_message_id),
+        context,
     )
 
 

@@ -7,7 +7,7 @@ import sys
 import time
 from pathlib import Path
 
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, Field, TypeAdapter
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps/api"))
@@ -15,14 +15,23 @@ sys.path.insert(0, str(ROOT / "apps/api"))
 from app.engines.intent_classifier import IntentClassifier  # noqa: E402
 
 
+class RoutingContext(BaseModel):
+    document_id: str | None = None
+    has_attachments: bool = False
+    action_mode: str | None = None
+
+
 class RoutingCase(BaseModel):
     id: str
     message: str
     history: list[dict[str, str]]
     expected_route: str
-    requires_tools: bool
-    requires_rag: bool
+    requires_tools: bool | None = None
+    requires_rag: bool | None = None
+    evidence_required: bool = False
+    clinical_risk: bool | None = None
     requires_web: bool | None = None
+    context: RoutingContext = Field(default_factory=RoutingContext)
 
 
 async def evaluate() -> int:
@@ -31,14 +40,20 @@ async def evaluate() -> int:
     )
     engine = IntentClassifier()
     failures = 0
-    for case in cases:
+    for index, case in enumerate(cases):
+        if index:
+            await asyncio.sleep(25)
         started = time.monotonic()
-        result = await engine.classify(case.message, history=case.history)
+        result = await engine.classify(
+            case.message, history=case.history, **case.context.model_dump()
+        )
         passed = (
             result.routing_source == "model"
             and result.route.value == case.expected_route
-            and result.requires_tools == case.requires_tools
-            and result.requires_rag == case.requires_rag
+            and (case.requires_tools is None or result.requires_tools == case.requires_tools)
+            and (case.requires_rag is None or result.requires_rag == case.requires_rag)
+            and (not case.evidence_required or result.requires_rag or result.requires_web)
+            and (case.clinical_risk is None or result.clinical_risk == case.clinical_risk)
             and (case.requires_web is None or result.requires_web == case.requires_web)
             and (case.expected_route != "fast_path" or bool(result.direct_answer))
         )

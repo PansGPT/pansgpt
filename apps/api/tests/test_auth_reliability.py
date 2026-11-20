@@ -54,6 +54,8 @@ def test_concurrent_model_initialization_loads_once(
 ) -> None:
     import flashrank
 
+    from app.engines import flashrank_cache
+
     calls: list[dict[str, str]] = []
     model = object()
 
@@ -63,6 +65,7 @@ def test_concurrent_model_initialization_loads_once(
         return model
 
     monkeypatch.setattr(flashrank, "Ranker", create)
+    monkeypatch.setattr(flashrank_cache, "prepare_cache", lambda model, cache: tmp_path)
     monkeypatch.setattr(settings, "RERANKER_CACHE_DIR", str(tmp_path))
     engine = CandidateReranker()
     with ThreadPoolExecutor(max_workers=4) as pool:
@@ -71,18 +74,23 @@ def test_concurrent_model_initialization_loads_once(
     assert calls == [{"model_name": settings.RERANKER_MODEL, "cache_dir": str(tmp_path)}]
 
 
-def test_writable_model_download_caches_are_isolated(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_model_instances_reuse_the_atomically_prepared_cache(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     import flashrank
+
+    from app.engines import flashrank_cache
 
     paths: list[str] = []
     monkeypatch.setattr(settings, "RERANKER_CACHE_DIR", None)
+    monkeypatch.setattr(flashrank_cache, "prepare_cache", lambda model, cache: tmp_path)
     monkeypatch.setattr(
         flashrank, "Ranker", lambda **kwargs: paths.append(kwargs["cache_dir"]) or object()
     )
     engines = [CandidateReranker(), CandidateReranker()]
     for engine in engines:
         assert INITIALIZE_MODEL(engine) is not None
-    assert paths[0] != paths[1]
+    assert paths == [str(tmp_path), str(tmp_path)]
 
 
 async def test_failed_model_initialization_is_not_logged_as_prewarmed(
@@ -111,4 +119,6 @@ async def test_cold_model_initialization_never_runs_on_the_event_loop(
 
     engine = CandidateReranker()
     monkeypatch.setattr(engine, "_get_flashrank_client", create)
+    await asyncio.wrap_future(engine.start_warmup())
     assert await asyncio.wait_for(engine._rerank_with_flashrank("synthetic", []), timeout=1) == []
+    engine.close()

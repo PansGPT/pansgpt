@@ -15,7 +15,9 @@ from app.engines.vision import sniff_image_mime_type, vision_engine
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
 
-def image_pixels(data: bytes, *, preview: bool = False, expanded: bool = False) -> bytes:
+def image_pixels(
+    data: bytes, *, preview: bool = False, expanded: bool = False, for_storage: bool = False
+) -> bytes:
     """Normalize orientation and drop embedded metadata without trusting MIME headers."""
     with Image.open(io.BytesIO(data)) as source:
         if source.format not in {"PNG", "JPEG"} or source.width * source.height > 16_000_000:
@@ -28,7 +30,10 @@ def image_pixels(data: bytes, *, preview: bool = False, expanded: bool = False) 
         clean = Image.new("RGB", image.size, "white")
         clean.paste(rgba, mask=rgba.getchannel("A"))
         out = io.BytesIO()
-        clean.save(out, format="PNG")
+        if for_storage and source.format == "JPEG":
+            clean.save(out, format="JPEG", quality=92)
+        else:
+            clean.save(out, format="PNG")
         if not preview and out.tell() > MAX_IMAGE_BYTES:
             out = io.BytesIO()
             clean.save(out, format="JPEG", quality=92)

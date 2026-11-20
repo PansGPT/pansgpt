@@ -10,6 +10,7 @@ import structlog
 
 from app.core.config import settings
 from app.core.database import get_db_connection
+from app.core.diagnostics import error_fields
 from app.engines.rag import rag_engine
 from app.models.web_search import SearchScope
 
@@ -271,7 +272,7 @@ class ToolExecutionEngine:
                 analysis = await analyze_image(image, prompt, session_id, user_id, university_id)
             return {"status": "success", "attachment_id": attachment_id, "analysis": analysis}
         except Exception as exc:
-            logger.warning("chat_image_tool_failed", error_type=type(exc).__name__)
+            logger.warning("chat_image_tool_failed", **error_fields(exc))
             return {
                 "status": "error",
                 "error": "This image could not be analysed in the current conversation. Please retry.",
@@ -292,7 +293,12 @@ class ToolExecutionEngine:
         document_id: str | None = None,
     ) -> dict[str, Any]:
         """Dispatches an agentic function tool call by name."""
-        logger.info("tool_dispatch_requested", tool_name=tool_name)
+        public_tool = (
+            tool_name
+            if tool_name in {"rag_search", "read_document", "web_search", "vision_analyze"}
+            else "unavailable"
+        )
+        logger.info("tool_dispatch_requested", tool_name=public_tool)
         try:
             if document_id:
                 # The server-owned reader scope wins over model-supplied tool arguments.
@@ -341,8 +347,12 @@ class ToolExecutionEngine:
             else:
                 return {"error": f"Unknown tool name: {tool_name}"}
         except Exception as exc:
-            logger.error("tool_execution_failed", tool=tool_name, error=str(exc))
-            return {"error": f"Tool execution failed: {str(exc)}"}
+            logger.error("tool_execution_failed", tool=public_tool, **error_fields(exc))
+            return {
+                "status": "error",
+                "code": "TOOL_FAILED",
+                "error": "This tool could not complete the request.",
+            }
 
 
 tool_engine = ToolExecutionEngine()

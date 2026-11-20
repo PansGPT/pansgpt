@@ -6,6 +6,7 @@
 # ==============================================================================
 import asyncio
 import json
+import random
 import time
 import uuid
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable  # [CHAT FIX]
@@ -17,11 +18,13 @@ from fastapi import HTTPException
 
 from app.core.config import settings
 from app.core.database import get_db_connection
+from app.core.diagnostics import error_fields, phase
 from app.core.ids import uuid7  # [LEFTOVER FIX]
 from app.engines.presentation_completion import (
     merge_presentation_sources,
     presentation_confirmation,
 )
+from app.engines.provider_capacity import CapacityDeferred
 from app.engines.recovery import retry_transient, transient
 from app.engines.skills import SKILL_TOOL_DEFINITIONS, skill_engine
 from app.engines.thinking import ThinkingStreamParser  # [CHAT FIX]  # [CHAT FIX 2]
@@ -39,6 +42,8 @@ logger = structlog.get_logger(__name__)
 
 ALL_TOOL_DEFINITIONS = CORE_TOOL_DEFINITIONS + SKILL_TOOL_DEFINITIONS
 MAX_AGENT_TURNS = 5
+MAX_CAPACITY_WAIT_S = 15.0
+MAX_CAPACITY_RETRIES = 2
 
 
 class ChatDeadlineError(TimeoutError):  # [CHAT FIX 2]
@@ -112,6 +117,7 @@ class MultiTierLlmEngine:
         from app.engines.circuit import ModelCircuits
 
         self.circuits = ModelCircuits()
+        self.start_cooldowns: dict[str, float] = {}
         self.gemini_key = settings.GEMINI_API_KEY
         self.primary_model = settings.GEMINI_PRIMARY_MODEL
         self.secondary_model = settings.GEMINI_SECONDARY_MODEL
@@ -154,8 +160,19 @@ class MultiTierLlmEngine:
                 thinking = reported
         prompt = count("prompt_token_count", "prompt_tokens")
         completion = count("candidates_token_count", "completion_tokens")
+        from app.engines.provider_capacity import active
+
+        ticket = active.get()
+        if ticket is not None:
+            for name, value in (
+                ("prompt_tokens", prompt),
+                ("completion_tokens", completion),
+                ("thinking_tokens", thinking),
+            ):
+                if value is not None:
+                    setattr(ticket, name, value)
         if any(value is not None for value in (prompt, completion, thinking)):
-            logger.info(
+            logger.debug(
                 "chat_provider_usage",
                 provider=provider,
                 model=model,
@@ -215,7 +232,7 @@ class MultiTierLlmEngine:
                     error_message,
                 )
         except Exception as exc:
-            logger.warning("telemetry_record_failed", error=str(exc))
+            logger.warning("telemetry_record_failed", **error_fields(exc))
 
     async def _call_gemma_turn(
         self,
@@ -396,8 +413,7 @@ class MultiTierLlmEngine:
                 model=attempt_state["model"],  # [CHAT FIX]
                 deadline=getattr(exc, "deadline", "total"),  # [CHAT FIX 2]
                 timeout_s=getattr(exc, "timeout_s", settings.CHAT_TOTAL_TIMEOUT_S),  # [CHAT FIX 2]
-                error_type=type(exc).__name__,  # [CHAT FIX]
-                error=repr(exc),  # [CHAT FIX]
+                **error_fields(exc),
             )  # [CHAT FIX]
             yield (  # [CHAT FIX]
                 "error",  # [CHAT FIX]
@@ -416,8 +432,7 @@ class MultiTierLlmEngine:
             logger.warning(  # [CHAT FIX 2]
                 "chat_stream_failed_after_start",  # [CHAT FIX 2]
                 model=attempt_state["model"],  # [CHAT FIX 2]
-                error_type=type(exc).__name__,  # [CHAT FIX 2]
-                error=str(exc) or repr(exc),  # [CHAT FIX 2]
+                **error_fields(exc),
                 code=code,  # [CHAT FIX 2]
             )  # [CHAT FIX 2]
             yield (  # [CHAT FIX 2]
@@ -428,7 +443,16 @@ class MultiTierLlmEngine:
                     else "The model could not complete this answer. Please try again.",  # [CHAT FIX 2]
                     "code": code,  # [CHAT FIX 2]
                     "retryable": code  # [CHAT FIX 2]
-                    in {"TIMEOUT", "429", "500", "502", "503", "504"},  # [CHAT FIX 2]
+                    in {
+                        "TIMEOUT",
+                        "OUTPUT_TRUNCATED",
+                        "PROVIDER_ERROR",
+                        "429",
+                        "500",
+                        "502",
+                        "503",
+                        "504",
+                    },
                     "model": attempt_state["model"],  # [CHAT FIX 2]
                 },  # [CHAT FIX 2]
                 "error",  # [CHAT FIX 2]
@@ -436,13 +460,18 @@ class MultiTierLlmEngine:
 
     @staticmethod  # [CHAT FIX 2]
     def _stream_error_code(exc: Exception) -> str:  # [CHAT FIX 2]
+        if isinstance(exc, CapacityDeferred) and exc.reason == "request_exceeds_budget":
+            return "CONTEXT_TOO_LARGE"
         if isinstance(exc, TimeoutError):  # [CHAT FIX 2]
             return "TIMEOUT"  # [CHAT FIX 2]
-        code = getattr(exc, "code", None)  # [CHAT FIX 2]
-        response = getattr(exc, "response", None)  # [CHAT FIX 2]
-        return str(  # [CHAT FIX 2]
-            code or getattr(response, "status_code", None) or "PROVIDER_ERROR"  # [CHAT FIX 2]
-        )  # [CHAT FIX 2]
+        status = error_fields(exc).get("http_status")
+        if status is not None:
+            return str(status)
+        if isinstance(exc, CapacityDeferred):
+            return "503"
+        if transient(exc):
+            return "503"
+        return "PROVIDER_ERROR"
 
     async def _bounded_model_turn(  # [CHAT FIX 2]
         self,  # [CHAT FIX 2]
@@ -451,9 +480,15 @@ class MultiTierLlmEngine:
             [], Awaitable[tuple[list[dict[str, Any]], AsyncIterator[str] | None]]  # [CHAT FIX 2]
         ],  # [CHAT FIX 2]
         attempt_state: dict[str, str],  # [CHAT FIX 2]
+        *,
+        tool_expected: bool = False,
     ) -> tuple[list[dict[str, Any]], AsyncGenerator[str, None] | None]:  # [CHAT FIX 2]
         attempt_state["model"] = model  # [CHAT FIX 2]
-        timeout = settings.CHAT_FIRST_CHUNK_TIMEOUT_S  # [CHAT FIX 2]
+        timeout = (
+            settings.CHAT_FIRST_CHUNK_TIMEOUT_S
+            if tool_expected
+            else min(settings.CHAT_FIRST_CHUNK_TIMEOUT_S, settings.CHAT_TEXT_START_TIMEOUT_S)
+        )
         first_deadline = asyncio.get_running_loop().time() + timeout  # [CHAT FIX 2]
         stream: AsyncIterator[str] | None = None  # [CHAT FIX 2]
 
@@ -467,7 +502,7 @@ class MultiTierLlmEngine:
                     logger.warning(  # [CHAT FIX 2]
                         "chat_stream_close_failed",  # [CHAT FIX 2]
                         model=model,  # [CHAT FIX 2]
-                        error=repr(exc),  # [CHAT FIX 2]
+                        **error_fields(exc),
                     )  # [CHAT FIX 2]
 
         def timed_out(  # [CHAT FIX 2]
@@ -480,8 +515,7 @@ class MultiTierLlmEngine:
                 model=model,  # [CHAT FIX 2]
                 deadline=deadline,  # [CHAT FIX 2]
                 timeout_s=seconds,  # [CHAT FIX 2]
-                error_type=type(exc).__name__,  # [CHAT FIX 2]
-                error=repr(exc),  # [CHAT FIX 2]
+                **error_fields(exc),
             )  # [CHAT FIX 2]
             return ChatDeadlineError(model, deadline, seconds)  # [CHAT FIX 2]
 
@@ -492,9 +526,18 @@ class MultiTierLlmEngine:
                 if stream is not None:  # [CHAT FIX 2]
                     iterator = aiter(stream)  # [CHAT FIX 2]
                     async for chunk in iterator:  # [CHAT FIX 2]
-                        if chunk:  # [CHAT FIX 2]
-                            first = chunk  # [CHAT FIX 2]
-                            break  # [CHAT FIX 2]
+                        # Empty deltas explicitly signal real streamed tool data.
+                        # First-packet/gap budgets must not wait for a whole tool JSON.
+                        first = chunk
+                        logger.info(
+                            "model_first_packet",
+                            model=model,
+                            elapsed_ms=round(
+                                (asyncio.get_running_loop().time() - (first_deadline - timeout))
+                                * 1000
+                            ),
+                        )
+                        break
             if not calls and first is None:  # [CHAT FIX 2]
                 raise RuntimeError("The model returned no answer or tool call.")  # [CHAT FIX 2]
         except BaseException as exc:  # [CHAT FIX 2]
@@ -525,8 +568,7 @@ class MultiTierLlmEngine:
                             settings.CHAT_CHUNK_GAP_TIMEOUT_S,  # [CHAT FIX 2]
                             exc,  # [CHAT FIX 2]
                         ) from exc  # [CHAT FIX 2]
-                    if chunk:  # [CHAT FIX 2]
-                        yield chunk  # [CHAT FIX 2]
+                    yield chunk
             finally:  # [CHAT FIX 2]
                 await close()  # [CHAT FIX 2]
 
@@ -579,6 +621,8 @@ class MultiTierLlmEngine:
         if attempt_state is None:  # [CHAT FIX]
             attempt_state = {"model": "unknown"}  # [CHAT FIX]
         start_time = time.time()
+        generation_started = time.monotonic()
+        capacity_waited = 0.0
         collected_tokens: list[str] = []
         active_provider = "groq" if fast_path else "google"
         active_model = self.groq_model if fast_path else self.primary_model
@@ -609,18 +653,84 @@ class MultiTierLlmEngine:
                     "type": "string",
                     "description": "Optional short public activity label in your own words, specific to this tool and the student's topic. One plain-text line, at most 120 characters and 16 words. Describe work starting now, never private reasoning, patient details, credentials, links, invented results or completed work.",
                 }
+                if definition["function"]["name"] in SKILL_NAMES:
+                    definition["function"]["parameters"]["properties"]["_completion_summary"] = {
+                        "type": "string",
+                        "maxLength": 3000,
+                        "description": "Optional public explanation accompanying the requested artifact. Include it when the student asks you to explain or interpret the result; answer that part here in the same generation. Never include private reasoning, credentials or invented results. Shown only after successful artifact creation.",
+                    }
             system_prompt += (
                 "\nFor tool calls, write _public_status as a brief public activity summary "
                 "in your own task-specific words. It is separate from private reasoning. "
                 "Do not invent progress, results or completion. It never authorizes a tool."
+                "\nA successful artifact batch completes this response without another model call. "
+                "Include any requested accompanying explanation in _completion_summary on the "
+                "artifact call; this is public answer text, never private reasoning."
             )
 
         for turn in range(MAX_AGENT_TURNS):
             turn_handled = False
             tool_calls: list[dict[str, Any]] = []
             text_gen: AsyncGenerator[str, None] | None = None
-            # Allow up to 2 tool execution turns; from turn 2 onwards force text synthesis
-            tools_for_turn = active_tools if (turn < 2) else None
+            # Leave room for retrieval followed by artifact creation. Only the
+            # final bounded turn forces synthesis; provider retries reuse the
+            # same messages and never re-execute completed tools.
+            tools_for_turn = active_tools if turn < MAX_AGENT_TURNS - 1 else None
+
+            turn_visible_tokens: list[str] = []
+            file_skills = {"create_doc", "create_pdf", "create_pptx", "create_md"}
+
+            async def consume_stream() -> AsyncGenerator[tuple[str, Any, str], None]:
+                nonlocal text_gen
+                file_generation_turn = presentation_request or any(
+                    tc["name"] in file_skills for tc in tool_calls or []
+                )
+                if text_gen:
+                    from app.engines.stream_guard import StreamGuard
+
+                    output_guard = StreamGuard()
+                    parser = ThinkingStreamParser()
+                    last_activity = 0.0
+                    async for chunk in text_gen:
+                        if not chunk:
+                            if time.monotonic() - last_activity >= 3:
+                                last_activity = time.monotonic()
+                                yield "activity", {"stage": "generation"}, active_provider
+                            continue
+                        visible, thought = parser.feed(output_guard.feed(chunk))
+                        if thought:
+                            if time.monotonic() - last_activity >= 3:
+                                last_activity = time.monotonic()
+                                yield "activity", {"stage": "generation"}, active_provider
+                            yield (
+                                "thinking_chunk",
+                                {"delta": thought, "token": thought},
+                                active_provider,
+                            )
+                        if visible and not file_generation_turn:
+                            turn_visible_tokens.append(visible)
+                            collected_tokens.append(visible)
+                            yield (
+                                "text_chunk",
+                                {"delta": visible, "token": visible},
+                                active_provider,
+                            )
+                    tail_visible, tail_thought = parser.feed(output_guard.flush())
+                    self.circuits.succeeded(active_model)
+                    visible, thought = parser.flush()
+                    visible = tail_visible + visible
+                    thought = tail_thought + thought
+                    if thought:
+                        yield (
+                            "thinking_chunk",
+                            {"delta": thought, "token": thought},
+                            active_provider,
+                        )
+                    if visible and not file_generation_turn:
+                        turn_visible_tokens.append(visible)
+                        collected_tokens.append(visible)
+                        yield "text_chunk", {"delta": visible, "token": visible}, active_provider
+                    text_gen = None
 
             if fast_path:
                 candidates = [
@@ -661,48 +771,153 @@ class MultiTierLlmEngine:
                     ),
                 ]
             failed_attempts = 0
-            for provider, model, key, budget in candidates:
-                if not self._is_live_key(key) or not self.circuits.available(model):
-                    continue
-                active_provider, active_model = provider, model
-                messages = self._build_provider_messages(
-                    system_prompt, user_message, history, agent_tool_messages, budget
-                )
+            capacity_attempt = 0
+            while True:
+                deferred: list[tuple[str, str, CapacityDeferred]] = []
+                store_unavailable = False
+                for provider, model, key, budget in candidates:
+                    if self.start_cooldowns.get(model, 0) > time.monotonic():
+                        logger.info("model_start_cooldown_active", provider=provider, model=model)
+                        continue
+                    if not self._is_live_key(key) or not self.circuits.available(model):
+                        continue
+                    if not settings.provider_privacy_allowed(provider):
+                        logger.info(
+                            "model_candidate_skipped",
+                            provider=provider,
+                            model=model,
+                            reason="privacy_not_verified",
+                        )
+                        continue
+                    active_provider, active_model = provider, model
+                    messages = self._build_provider_messages(
+                        system_prompt, user_message, history, agent_tool_messages, budget
+                    )
 
-                async def create() -> tuple[list[dict[str, Any]], AsyncIterator[str] | None]:
-                    if provider == "google":
-                        return await self._call_gemma_turn(model, messages, tools_for_turn)
-                    if provider == "groq":
-                        if model == self.groq_model:
-                            return await self._call_groq_turn(messages, tools_for_turn)
-                        return await self._call_groq_turn(
+                    async def create() -> tuple[list[dict[str, Any]], AsyncIterator[str] | None]:
+                        if provider == "google":
+                            return await self._call_gemma_turn(model, messages, tools_for_turn)
+                        if provider == "groq":
+                            if model == self.groq_model:
+                                return await self._call_groq_turn(messages, tools_for_turn)
+                            return await self._call_groq_turn(
+                                messages, tools_for_turn, model_name=model
+                            )
+                        return await self._openrouter_turn(
                             messages, tools_for_turn, model_name=model
                         )
-                    return await self._openrouter_turn(messages, tools_for_turn, model_name=model)
 
-                try:
-                    tool_calls, text_gen = await self._bounded_model_turn(
-                        model, create, attempt_state
-                    )
-                    if text_gen is None:
-                        self.circuits.succeeded(model)
-                    turn_handled = True
+                    try:
+                        logger.info(
+                            "model_attempt_started", provider=provider, model=model, turn=turn + 1
+                        )
+                        tool_calls, text_gen = await self._bounded_model_turn(
+                            model, create, attempt_state, tool_expected=bool(tools_for_turn)
+                        )
+                        if text_gen is not None:
+                            async for event in consume_stream():
+                                yield event
+                        else:
+                            self.circuits.succeeded(model)
+                        turn_handled = True
+                        break
+                    except Exception as exc:
+                        # Once answer text is public, do not splice another model's
+                        # answer into it. Tools are dispatched only after this loop.
+                        if turn_visible_tokens:
+                            raise
+                        text_gen = None
+                        tool_calls = []
+                        attempt_state["error_code"] = self._stream_error_code(exc)
+                        if (
+                            isinstance(exc, ChatDeadlineError)
+                            and exc.deadline == "first_chunk"
+                            and not tools_for_turn
+                        ):
+                            self.start_cooldowns[model] = time.monotonic() + 30
+                            logger.info(
+                                "model_start_cooldown",
+                                provider=provider,
+                                model=model,
+                                cooldown_s=30,
+                            )
+                        if not isinstance(exc, CapacityDeferred):
+                            self.circuits.failed(model)
+                        logger.warning(
+                            "model_failover",
+                            provider=provider,
+                            model=model,
+                            **error_fields(exc),
+                        )
+                        if isinstance(exc, CapacityDeferred):
+                            deferred.append((provider, model, exc))
+                        if (
+                            isinstance(exc, CapacityDeferred)
+                            and exc.reason == "capacity_store_unavailable"
+                        ):
+                            store_unavailable = True
+                            break
+                        failed_attempts += 1
+                        if transient(exc) and failed_attempts <= 2:
+                            yield (
+                                "recovery",
+                                {
+                                    "state": "retrying",
+                                    "attempt": failed_attempts,
+                                    "retry_after_ms": 0,
+                                },
+                                provider,
+                            )
+
+                if turn_handled or store_unavailable or not deferred:
                     break
-                except Exception as exc:
-                    self.circuits.failed(model)
+                retryable = [
+                    item for item in deferred if item[2].reason != "request_exceeds_budget"
+                ]
+                if not retryable:
+                    break
+                provider, model, shortage = min(retryable, key=lambda item: item[2].seconds)
+                # Positive jitter prevents clients released by the same quota
+                # window from re-entering together; never retry before reset.
+                delay = max(shortage.seconds, 2**capacity_attempt) + random.uniform(0.05, 0.25)
+                remaining = settings.CHAT_TOTAL_TIMEOUT_S - (time.monotonic() - generation_started)
+                if (
+                    capacity_attempt >= MAX_CAPACITY_RETRIES
+                    or capacity_waited + delay > MAX_CAPACITY_WAIT_S
+                    or delay + settings.CHAT_FIRST_CHUNK_TIMEOUT_S >= remaining
+                ):
                     logger.warning(
-                        "model_failover",
+                        "model_capacity_exhausted",
                         provider=provider,
                         model=model,
-                        error_type=type(exc).__name__,
+                        reason=shortage.reason,
+                        retry_after_s=shortage.seconds,
+                        turn=turn + 1,
+                        waited_ms=round(capacity_waited * 1000),
                     )
-                    failed_attempts += 1
-                    if transient(exc) and failed_attempts <= 2:
-                        yield (
-                            "recovery",
-                            {"state": "retrying", "attempt": failed_attempts, "retry_after_ms": 0},
-                            provider,
-                        )
+                    break
+                capacity_attempt += 1
+                logger.info(
+                    "model_capacity_wait",
+                    provider=provider,
+                    model=model,
+                    reason=shortage.reason,
+                    retry_after_s=shortage.seconds,
+                    delay_ms=round(delay * 1000),
+                    attempt=capacity_attempt,
+                    turn=turn + 1,
+                )
+                yield (
+                    "recovery",
+                    {
+                        "state": "retrying",
+                        "attempt": capacity_attempt,
+                        "retry_after_ms": round(delay * 1000),
+                    },
+                    provider,
+                )
+                await asyncio.sleep(delay)
+                capacity_waited += delay
 
             # ------------------------------------------------------------------
             # OFFLINE DETERMINISTIC AGENT FALLBACK
@@ -790,42 +1005,14 @@ class MultiTierLlmEngine:
             # ------------------------------------------------------------------
             # PROCESS AGENT TURN RESULTS
             # ------------------------------------------------------------------
-            file_skills = {"create_doc", "create_pdf", "create_pptx", "create_md"}
-            file_generation_turn = presentation_request or any(
-                tc["name"] in file_skills for tc in tool_calls or []
-            )
-            turn_visible_tokens: list[str] = []
             if text_gen:
-                from app.engines.stream_guard import StreamGuard
-
-                output_guard = StreamGuard()
-                parser = ThinkingStreamParser()
-                async for chunk in text_gen:
-                    visible, thought = parser.feed(output_guard.feed(chunk))
-                    if thought:
-                        yield (
-                            "thinking_chunk",
-                            {"delta": thought, "token": thought},
-                            active_provider,
-                        )
-                    if visible and not file_generation_turn:
-                        turn_visible_tokens.append(visible)
-                        collected_tokens.append(visible)
-                        yield "text_chunk", {"delta": visible, "token": visible}, active_provider
-                tail_visible, tail_thought = parser.feed(output_guard.flush())
-                self.circuits.succeeded(active_model)
-                visible, thought = parser.flush()
-                visible = tail_visible + visible
-                thought = tail_thought + thought
-                if thought:
-                    yield "thinking_chunk", {"delta": thought, "token": thought}, active_provider
-                if visible and not file_generation_turn:
-                    turn_visible_tokens.append(visible)
-                    collected_tokens.append(visible)
-                    yield "text_chunk", {"delta": visible, "token": visible}, active_provider
-                text_gen = None
+                async for event in consume_stream():
+                    yield event
             if tool_calls:
                 successful_files: list[str] = []
+                successful_flashcards = False
+                successful_rich: list[str] = []
+                completion_summaries: list[str] = []
                 turn_visible_content = "".join(turn_visible_tokens).strip() or None
                 formatted_tool_calls = [
                     {
@@ -854,8 +1041,22 @@ class MultiTierLlmEngine:
                     raw_args = tc.get("arguments", {})
                     t_args = dict(raw_args) if isinstance(raw_args, dict) else raw_args
                     public_status = None
+                    completion_summary = None
                     allowed_names = {tool["function"]["name"] for tool in tools_for_turn or []}
                     if isinstance(t_args, dict):
+                        summary = t_args.pop("_completion_summary", None)
+                        if (
+                            t_name in SKILL_NAMES
+                            and t_name in allowed_names
+                            and isinstance(summary, str)
+                            and len(summary) <= 3000
+                        ):
+                            from app.engines.guard import policy_guard
+
+                            summary_parser = ThinkingStreamParser()
+                            public, _ = summary_parser.feed(summary)
+                            tail, _ = summary_parser.flush()
+                            _, completion_summary = policy_guard.check_output_safety(public + tail)
                         label = t_args.pop("_public_status", None)
                         if isinstance(label, str) and t_name in allowed_names:
                             try:
@@ -900,20 +1101,21 @@ class MultiTierLlmEngine:
                                     ) from exc
                                 presentation_slide_count = plan.slide_count
                                 presentation_request = True
-                            artifact = await skill_engine.dispatch_skill(
-                                t_name,
-                                t_args,
-                                user_id=user_id,
-                                university_id=university_id,
-                                **(
-                                    {
-                                        "requested_slide_count": presentation_slide_count,
-                                        "sources": deck_sources,
-                                    }
-                                    if t_name == "create_pptx"
-                                    else {}
-                                ),
-                            )
+                            with phase("artifact_generation", tool=t_name):
+                                artifact = await skill_engine.dispatch_skill(
+                                    t_name,
+                                    t_args,
+                                    user_id=user_id,
+                                    university_id=university_id,
+                                    **(
+                                        {
+                                            "requested_slide_count": presentation_slide_count,
+                                            "sources": deck_sources,
+                                        }
+                                        if t_name == "create_pptx"
+                                        else {}
+                                    ),
+                                )
                         except HTTPException as exc:
                             yield (
                                 "tool_end",
@@ -940,6 +1142,12 @@ class MultiTierLlmEngine:
                         yield "artifact_ready", artifact, active_provider
                         if t_name in file_skills:
                             successful_files.append(t_name)
+                        elif t_name == "generate_flashcards":
+                            successful_flashcards = True
+                        else:
+                            successful_rich.append(t_name)
+                        if completion_summary and completion_summary.strip():
+                            completion_summaries.append(completion_summary.strip())
                         tool_res = {
                             "status": "success",
                             "title": artifact.title,
@@ -988,16 +1196,42 @@ class MultiTierLlmEngine:
                         }
                     )
 
-                if successful_files:
+                if successful_files or successful_flashcards or successful_rich:
+                    # A validated deck is already the requested answer. Do not
+                    # make its completion depend on another inference request.
                     confirmation = (
-                        "Your presentation is ready to download."
+                        "Your flashcards are ready."
+                        if successful_flashcards and not successful_files
+                        else "Your study materials are ready."
+                        if successful_flashcards
+                        else "Your presentation is ready to download."
                         if successful_files == ["create_pptx"]
                         else "Your file is ready to download."
                         if len(successful_files) == 1
                         else "Your files are ready to download."
                     )
-                    if successful_files == ["create_pptx"] and isinstance(artifact.content, dict):
+                    if (
+                        not successful_flashcards
+                        and not successful_rich
+                        and successful_files == ["create_pptx"]
+                        and isinstance(artifact.content, dict)
+                    ):
                         confirmation = presentation_confirmation(artifact.content)
+                    if successful_rich:
+                        confirmation = (
+                            "Your study materials are ready."
+                            if successful_files or successful_flashcards or len(successful_rich) > 1
+                            else {
+                                "plot_graph": "Your diagram is ready."
+                                if isinstance(artifact.content, dict)
+                                and artifact.content.get("type") == "mermaid"
+                                else "Your graph is ready.",
+                                "generate_mnemonics": "Your mnemonics are ready.",
+                                "draw_chemical_structure": "Your chemical structure is ready.",
+                            }[successful_rich[0]]
+                        )
+                    if completion_summaries:
+                        confirmation = "\n\n".join(completion_summaries)
                     collected_tokens.append(confirmation)
                     yield (
                         "text_chunk",

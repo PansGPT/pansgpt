@@ -28,6 +28,8 @@ def test_public_progress_is_allowlisted_and_deduplicated():
     assert progress.emit("untrusted model paragraph") is None
     assert "searching_sources" in progress.for_tool("web_search")
     assert "creating_presentation" in progress.for_tool("create_pptx")
+    assert "checking_materials" in progress.for_tool("rag_search")
+    assert "creating_materials" in progress.for_tool("generate_flashcards")
     assert (
         public_progress_text(
             "```\nPRIVATE PLAN\n```\nReviewing your request.\nReviewing your request."

@@ -213,6 +213,10 @@ async function setupChat(page) {
               { headers: { "Content-Type": "image/png", "Cache-Control": "private, no-store" } }
             );
           }
+          if (window.__holdUpload)
+            await new Promise((resolve) => {
+              window.__releaseUpload = resolve;
+            });
           if (window.__failUpload) return json({ detail: "Synthetic upload unavailable" }, 503);
           const file = options.body.get("file");
           const saved = {
@@ -1097,6 +1101,46 @@ test("artifact preparation is visible before tool execution without exposing pri
   await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
 });
 
+test("draft uploads start before Send and the ready upload is reused", async ({ page }) => {
+  await setupChat(page);
+  await page.goto(`/?session=${session}`);
+  await page.evaluate(() => {
+    window.__holdUpload = true;
+  });
+  const chooser = await openAttachmentPicker(page);
+  await chooser.setFiles({
+    name: "synthetic-diagram.png",
+    mimeType: "image/png",
+    buffer: imageFixture,
+  });
+  await page.getByLabel("Study question").fill("Explain the synthetic diagram");
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          window.__calls.filter((c) => c.url.endsWith("/attachments") && c.method === "POST").length
+      )
+    )
+    .toBe(1);
+  await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
+  expect(
+    await page.evaluate(() => window.__calls.filter((c) => c.url.endsWith("/stream")).length)
+  ).toBe(0);
+  await page.evaluate(() => {
+    window.__holdUpload = false;
+    window.__releaseUpload();
+  });
+  await expect(page.getByText("Ready", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByText("Attachment synthetic answer", { exact: true })).toBeVisible();
+  expect(
+    await page.evaluate(
+      () =>
+        window.__calls.filter((c) => c.url.endsWith("/attachments") && c.method === "POST").length
+    )
+  ).toBe(1);
+});
+
 test("image tiles preview locally, upload securely, reopen and recover", async ({ page }) => {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -1114,9 +1158,13 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
   const preview = page.getByRole("button", { name: "Preview synthetic-diagram.png", exact: true });
   await pick();
   await expect(preview).toBeVisible();
+  await expect(page.getByText("Ready", { exact: true })).toBeVisible();
   expect(
-    await page.evaluate(() => window.__calls.filter((c) => c.url.endsWith("/attachments")).length)
-  ).toBe(0);
+    await page.evaluate(
+      () =>
+        window.__calls.filter((c) => c.url.endsWith("/attachments") && c.method === "POST").length
+    )
+  ).toBe(1);
   await expect(preview.locator("img")).toHaveJSProperty("naturalWidth", 640);
   await page.screenshot({ path: test.info().outputPath("image-composer-desktop.png") });
   await preview.click();
@@ -1139,12 +1187,12 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
   await expect(preview).toBeFocused();
   await page.getByRole("button", { name: "Remove synthetic-diagram.png", exact: true }).click();
   await expect(preview).toHaveCount(0);
-  await pick();
   await page.evaluate(() => {
     window.__failUpload = true;
   });
+  await pick();
   await page.getByLabel("Study question").fill("Which sample does the arrow point to?");
-  await page.getByRole("button", { name: "Send message", exact: true }).click();
+  await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
   await expect(page.getByRole("alert")).toHaveText(
     "We couldn't upload this file. Please try again."
   );
@@ -1177,8 +1225,16 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
     bubble.getByRole("button", { name: "Preview synthetic-diagram.png", exact: true })
   ).toHaveCount(0);
   await expect(userTurn).not.toContainText("synthetic-diagram.png");
-  const imageBounds = await preview.boundingBox();
-  const bubbleBounds = await bubble.boundingBox();
+  // Read both rectangles in one frame while the thread is auto-scrolling.
+  const { imageBounds, bubbleBounds } = await userTurn.evaluate((element) => {
+    const image = element.querySelector(".study-chat-message-attachments button");
+    const bubble = element.querySelector(".study-chat-bubble");
+    if (!image || !bubble) throw new Error("Missing image or question bubble");
+    return {
+      imageBounds: image.getBoundingClientRect().toJSON(),
+      bubbleBounds: bubble.getBoundingClientRect().toJSON(),
+    };
+  });
   expect(imageBounds.y + imageBounds.height).toBeLessThanOrEqual(bubbleBounds.y);
   expect(
     Math.abs(imageBounds.x + imageBounds.width - bubbleBounds.x - bubbleBounds.width)
@@ -1237,6 +1293,13 @@ test("image tiles preview locally, upload securely, reopen and recover", async (
     window.__failImagePreview = true;
   });
   await page.reload({ waitUntil: "commit" });
+  await expect
+    .poll(
+      () =>
+        page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/preview")).length),
+      { timeout: 15000 }
+    )
+    .toBeGreaterThanOrEqual(3);
   await expect(page.getByRole("button", { name: "Retry preview", exact: true })).toBeVisible();
   await page.evaluate(() => {
     window.__failImagePreview = false;
@@ -1526,9 +1589,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         "placeholder",
         "What should I include in the slides?"
       );
-      await expect(
-        page.getByRole("button", { name: "Remove Slides action", exact: true })
-      ).toBeVisible();
+      await expect(page.locator(".study-chat-input-prefix")).toContainText("Make slides");
       expect(
         await page.evaluate(
           () => window.__calls.filter((item) => item.url.endsWith("/stream")).length
@@ -1542,9 +1603,7 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
         "adaptive"
       );
       await expect(page.getByLabel("Study question")).toHaveValue("");
-      await expect(
-        page.getByRole("button", { name: "Remove Slides action", exact: true })
-      ).toBeVisible();
+      await expect(page.locator(".study-chat-input-prefix")).toContainText("Make slides");
       await page
         .getByLabel("Study question")
         .fill(
@@ -1581,7 +1640,9 @@ test("saved branches, feedback, editing, files, voice and virtualized history", 
       });
       await page.getByLabel("Study question").fill("Synthetic progress visibility test");
       await page.getByRole("button", { name: "Send message", exact: true }).click();
-      await expect(page.locator(".study-chat-live-status").last()).toContainText("Thinking");
+      await expect(page.locator(".study-chat-live-status").last()).toContainText(
+        "Checking your course materials."
+      );
       await expect(page.getByRole("button", { name: "Steps", exact: true })).toHaveCount(0);
       await expect(page.getByRole("button", { name: "Stop generating", exact: true })).toHaveClass(
         /p-study-composer-submit/
@@ -1828,7 +1889,9 @@ test("presentation workspace previews actual slides, navigates, retries and clea
   await expect(
     preview.getByRole("navigation", { name: "Slides", exact: true }).getByRole("button")
   ).toHaveCount(5);
-  await expect(page.locator(".study-artifact-extension")).toHaveText("5 slides · pptx");
+  await expect(page.locator(".study-artifact-extension")).toHaveText(
+    "5 slides · Presentation · pptx"
+  );
   await page.screenshot({ path: test.info().outputPath("presentation-workspace-desktop.png") });
   await preview.getByRole("button", { name: "Next slide", exact: true }).click();
   await expect(
@@ -2207,8 +2270,11 @@ test("mobile Home sheet retains draft and attachments, streams, cancels and rese
     .toBe(2);
   await page.keyboard.press("Escape");
   await expect(sheet).not.toBeVisible();
-  await expect.poll(() => page.evaluate(() => window.__reasoningAborted)).toBe(true);
+  expect(await page.evaluate(() => window.__reasoningAborted)).not.toBe(true);
   await trigger.click();
+  await expect(sheet.getByRole("button", { name: "Stop generating", exact: true })).toBeVisible();
+  await sheet.getByRole("button", { name: "Stop generating", exact: true }).click();
+  await expect.poll(() => page.evaluate(() => window.__reasoningAborted)).toBe(true);
   await expect(sheet.getByRole("button", { name: "Stop generating", exact: true })).toHaveCount(0);
   await input.fill("Still private on Home");
   expect(page.url()).not.toContain("private");
@@ -2614,7 +2680,7 @@ for (const reduced of [false, true]) {
   });
 }
 
-test("native paste and drop attach privately, reject unsupported files and upload only on Send", async ({
+test("native paste and drop upload privately before Send and reject unsupported files", async ({
   page,
 }) => {
   await setupChat(page);
@@ -2652,8 +2718,19 @@ test("native paste and drop attach privately, reject unsupported files and uploa
       )
   );
   await expect(page.locator(".study-chat-composer .study-chat-attachment-card")).toHaveCount(2);
+  await expect(page.locator(".study-chat")).not.toHaveAttribute("data-dragging");
+  await expect(
+    page.locator(".study-chat-composer").getByText("Ready", { exact: true })
+  ).toHaveCount(2);
   expect(
-    await page.evaluate(() => window.__calls.filter((call) => call.method === "POST").length)
+    await page.evaluate(
+      () =>
+        window.__calls.filter((call) => call.method === "POST" && call.url.endsWith("/attachments"))
+          .length
+    )
+  ).toBe(2);
+  expect(
+    await page.evaluate(() => window.__calls.filter((call) => call.url.endsWith("/stream")).length)
   ).toBe(0);
   await page.evaluate(() => {
     const files = new DataTransfer();
@@ -2931,13 +3008,13 @@ test("offline chat keeps the draft and lays notices above a compact input at bot
     const composer = page.locator(".study-chat-composer");
     const before = await composer.boundingBox();
     await context.setOffline(true);
-    const notice = page.getByText(
-      width < 861
-        ? "You're offline. Reconnect to send."
-        : "You're offline. Your draft is kept. Reconnect to send a message.",
-      { exact: true }
-    );
+    const notice = page.getByText("You're offline. Check your connection.", { exact: true });
+    const offlineBanner = page.locator(".study-chat-offline-banner");
+    await expect(offlineBanner.getByRole("button")).toHaveCount(0);
     await expect(notice).toBeVisible();
+    const bounds = await offlineBanner.boundingBox();
+    const composerBounds = await composer.boundingBox();
+    expect(Math.abs(bounds.width - composerBounds.width)).toBeLessThan(2);
     const messageBox = await notice.boundingBox();
     const after = await composer.boundingBox();
     expect(messageBox.y + messageBox.height).toBeLessThan(after.y);
@@ -2947,7 +3024,35 @@ test("offline chat keeps the draft and lays notices above a compact input at bot
     await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
     await input.press("Enter");
     await expect(input).toHaveValue("Keep this offline question");
+    await input.evaluate((node) => {
+      const transfer = new DataTransfer();
+      for (let i = 0; i < 5; i++)
+        transfer.items.add(new File(["Synthetic"], `note-${i}.txt`, { type: "text/plain" }));
+      node
+        .closest("form")
+        .dispatchEvent(
+          new DragEvent("drop", { dataTransfer: transfer, bubbles: true, cancelable: true })
+        );
+    });
+    const toast = page.locator(".study-chat-toast-stack .study-chat-notice-banner");
+    await expect(toast).toBeVisible();
+    await expect(composer.locator(".study-chat-attachment-card")).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () =>
+          window.__calls.filter(
+            (call) => call.url.endsWith("/attachments") && call.method === "POST"
+          ).length
+      )
+    ).toBe(0);
+    expect(await toast.evaluate((node) => !node.closest(".study-chat-composer-host"))).toBe(true);
+    await expect(offlineBanner).toBeVisible();
+    const toastBox = await toast.boundingBox();
+    expect(toastBox.y + toastBox.height).toBeLessThan(bounds.y);
     await page.screenshot({ path: test.info().outputPath(`chat-notice-above-${width}.png`) });
+    await toast.getByRole("button", { name: "Dismiss notice", exact: true }).click();
+    await expect(toast).toHaveCount(0);
+    await expect(offlineBanner).toBeVisible();
     await context.setOffline(false);
     await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
     expect(
@@ -3024,7 +3129,7 @@ for (const mobile of [false, true]) {
     });
     await page.getByLabel("Study question").fill("Question with supporting file");
     const form = page.locator(".study-chat-composer");
-    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
     await expect(page.getByRole("button", { name: "Retry upload", exact: true })).toBeVisible();
     const banner = page.locator(".study-chat-composer-notices .study-chat-error-row");
     const warning = banner.getByRole("alert");

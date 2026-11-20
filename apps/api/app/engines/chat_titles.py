@@ -91,6 +91,10 @@ async def generate_title(session_id: str, user_id: str, *, question: str | None 
                             TITLE_PROMPT,
                             context,
                             response_schema=TitleSuggestion,
+                            # Naming now runs alongside the answer. Reserve a
+                            # small title budget, not a full routing completion.
+                            max_output_tokens=256,
+                            timeout_s=budget,
                         )
                     parser = ThinkingStreamParser()
                     visible, _ = parser.feed(raw)

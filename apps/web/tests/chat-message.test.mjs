@@ -6,14 +6,81 @@ import {
   safeChatLink,
   publicProgressLines,
   documentSources,
+  thinkingHeading,
 } from "../lib/chat-message.ts";
 import { SSEEventStreamReader } from "../lib/sse-parser.ts";
+import { parseChatHistory } from "../lib/chat-history.ts";
 
 const pending = () => ({
   id: "synthetic-answer",
   role: "assistant",
   content: "",
   status: "running",
+});
+
+test("saved artifacts retain a public completion warning through SSE and history", () => {
+  const artifact = {
+    skill_name: "plot_graph",
+    title: "Synthetic curve",
+    content: {
+      type: "line",
+      title: "Synthetic curve",
+      data: { labels: ["A"], datasets: [{ label: "Series", data: [1] }] },
+    },
+  };
+  const parser = new SSEEventStreamReader();
+  const events = parser.push(
+    `event: artifact_ready\ndata: ${JSON.stringify(artifact)}\n\nevent: done\ndata: {"full_text":"","completion_warning":"additional_work_incomplete"}\n\n`
+  );
+  const message = events.reduce(applyChatEvent, pending());
+  assert.equal(message.status, "complete");
+  assert.equal(message.completionWarning, "additional_work_incomplete");
+  assert.equal(message.artifacts.length, 1);
+  assert.equal(message.error, undefined);
+  const session = "00000000-0000-4000-8000-000000000001";
+  const owner = "00000000-0000-4000-8000-000000000002";
+  const restored = parseChatHistory(
+    {
+      session: { id: session, user_id: owner },
+      messages: [
+        {
+          id: "00000000-0000-4000-8000-000000000003",
+          role: "assistant",
+          content: "",
+          extra_parts: { artifacts: [artifact], completion_warning: "additional_work_incomplete" },
+        },
+      ],
+    },
+    session,
+    owner
+  );
+  assert.equal(restored[0].completionWarning, message.completionWarning);
+  assert.equal(restored[0].status, "complete");
+  assert.equal(restored[0].artifacts[0].title, artifact.title);
+  const unsafe = parser.push('event: done\ndata: {"completion_warning":"PRIVATE TRACE"}\n\n');
+  assert.equal(unsafe[0].data.completion_warning, undefined);
+});
+
+test("task-specific thinking heading survives delay and ignores labels for inactive stages", () => {
+  const message = {
+    ...pending(),
+    activity: "creating_materials",
+    recovery: "slow",
+    delayed: true,
+    progress: [
+      { code: "creating_materials", label: "Building your surfactant flashcards", source: "model" },
+    ],
+  };
+  assert.equal(thinkingHeading(message), "Building your surfactant flashcards");
+  assert.equal(
+    thinkingHeading({ ...message, activity: "checking_materials" }),
+    "Checking your course materials."
+  );
+  assert.equal(thinkingHeading(pending()), "Thinking…");
+  const active = applyChatEvent(message, { event: "activity", data: { stage: "generation" } });
+  assert.equal(active.recovery, undefined);
+  assert.equal(active.delayed, true);
+  assert.equal(thinkingHeading(active), "Building your surfactant flashcards");
 });
 
 test("typed model progress stays separate from raw thoughts and survives terminal events", () => {

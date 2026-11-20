@@ -195,14 +195,20 @@ export function ChatLibraryPicker({
     return filteredItems;
   }, [filteredItems]);
 
-  const toggleSelection = useCallback((id: string) => {
-    setSelectedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }, []);
+  const toggleSelection = useCallback(
+    (id: string) => {
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) next.delete(id);
+        else {
+          if (!onSelectMultiple) next.clear();
+          next.add(id);
+        }
+        return next;
+      });
+    },
+    [onSelectMultiple]
+  );
 
   const handleConfirm = useCallback(() => {
     if (selectedIds.size === 0) return;

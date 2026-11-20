@@ -21,6 +21,17 @@ export const CHAT_PROGRESS_LABELS: Record<ChatProgressCode, string> = {
   presentation_ready: "Presentation ready to preview.",
 };
 
+/** Keep the real task heading when a slow response needs a separate wait hint. */
+export function thinkingHeading(message: ChatMessageView): string {
+  const label = message.progress
+    ?.slice()
+    .reverse()
+    .find((update) => !message.activity || update.code === message.activity)?.label;
+  return (
+    label || (message.activity ? CHAT_PROGRESS_LABELS[message.activity] : undefined) || "Thinking…"
+  );
+}
+
 export function publicProgressLines(text: string | undefined): string[] {
   const allowed = new Set(Object.values(CHAT_PROGRESS_LABELS));
   return [
@@ -51,8 +62,12 @@ export function documentSources(citations: CitationItem[], byPage = false): Cita
 /** Apply only parser-validated events. A terminal error survives a later done frame. */
 export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent): ChatMessageView {
   switch (event.event) {
+    case "activity":
+      return message.status === "running" ? { ...message, recovery: undefined } : message;
     case "recovery":
-      return message.status === "running" ? { ...message, recovery: "retrying" } : message;
+      // Transport failover is routine. Only the elapsed-time timer may show
+      // the slow status; switching providers must not create a warning.
+      return message;
     case "public_progress":
       return {
         ...message,
@@ -108,6 +123,7 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
         event.data.error,
         event.data.retryable ?? true
       );
+      if (event.data.request_id) failure.reference = event.data.request_id;
       return {
         ...message,
         status: "error",
@@ -120,6 +136,7 @@ export function applyChatEvent(message: ChatMessageView, event: SSEParsedEvent):
     case "done":
       return {
         ...message,
+        completionWarning: event.data.completion_warning,
         content:
           message.status === "error" && !event.data.full_text
             ? message.content

@@ -267,6 +267,7 @@ async function setup(page, options = {}) {
           parent_message_id: user,
           is_active_branch: true,
           citations,
+          extra_parts: { artifacts: state.richArtifacts || [] },
         },
       ];
       state.trees[currentChat] = state.tree;
@@ -316,6 +317,9 @@ async function setup(page, options = {}) {
             assistant_message_id: assistant,
           }) +
           frame("text_chunk", { token: answer }) +
+          (state.richArtifacts || [])
+            .map((artifact) => frame("artifact_ready", artifact))
+            .join("") +
           frame("citations", citations) +
           frame("done", { full_text: answer }),
       });
@@ -426,6 +430,57 @@ async function swipeSheet(page, from, to, cancelled = false) {
 }
 
 for (const mobile of [false, true]) {
+  if (mobile)
+    test("closing the study sheet keeps an accepted response running", async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const state = await setup(page, { streamMode: "slow" });
+      await ready(page);
+      await page.getByRole("button", { name: "Open study chat", exact: true }).click();
+      await page
+        .getByRole("textbox", { name: "Ask about this document" })
+        .fill("Explain this synthetic passage");
+      await page.getByRole("button", { name: "Send message", exact: true }).click();
+      await expect.poll(() => typeof state.finishSlowResponse).toBe("function");
+      await page.getByRole("button", { name: "Back to reader", exact: true }).click();
+      state.finishSlowResponse();
+      await expect
+        .poll(() => state.tree.filter((item) => item.role === "assistant").length)
+        .toBe(1);
+      await page.getByRole("button", { name: "Open study chat", exact: true }).click();
+      await expect(
+        page.getByText("This synthetic passage describes a signal and a response.", { exact: true })
+      ).toBeVisible();
+      expect(state.posts.filter((post) => post.endpoint === "stream")).toHaveLength(1);
+    });
+  test(`study chat renders rich flashcards on ${mobile ? "mobile" : "desktop"}`, async ({
+    page,
+  }) => {
+    if (mobile) await page.setViewportSize({ width: 390, height: 844 });
+    const state = await setup(page, {
+      richArtifacts: [
+        {
+          skill_name: "generate_flashcards",
+          title: "Reader recall",
+          storage_key: null,
+          download_url: null,
+          content: {
+            topic: "Reader recall",
+            total: 1,
+            cards: [{ front: "Reader question", back: "Reader answer" }],
+          },
+        },
+      ],
+    });
+    await ready(page);
+    await page.getByRole("button", { name: "Open study chat", exact: true }).click();
+    await page.getByRole("textbox", { name: "Ask about this document" }).fill("Make a recall card");
+    await page.getByRole("button", { name: "Send message", exact: true }).click();
+    const deck = page.getByRole("region", { name: "Reader recall", exact: true });
+    await expect(deck).toBeVisible();
+    await deck.getByRole("button", { name: "Show answer", exact: true }).click();
+    await expect(deck.getByText("Reader answer", { exact: true })).toBeVisible();
+    expect(state.posts.find((post) => post.endpoint === "stream").document_id).toBe(doc);
+  });
   test(`study chat supporting uploads keep separate sources and survive reopening on ${mobile ? "mobile" : "desktop"}`, async ({
     page,
   }) => {
@@ -1539,7 +1594,8 @@ for (const mobile of [false, true]) {
     await expect(page.getByRole("alert")).toHaveText(
       mobile ? "Up to 4 files per message." : "Attach up to four files at a time."
     );
-    expect(state.posts).toHaveLength(0);
+    expect(state.posts.filter((post) => post.endpoint !== "create")).toHaveLength(0);
+    expect(state.uploads).toHaveLength(4);
   });
 
   test(`reader guide appears once before reading and Help reopens it on ${mobile ? "mobile" : "desktop"}`, async ({

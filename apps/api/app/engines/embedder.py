@@ -7,11 +7,14 @@ import asyncio  # [EMBED FIX]
 import hashlib  # [EMBED FIX]
 import math  # [EMBED FIX]
 import re  # [EMBED RETRY FIX]
+from contextlib import nullcontext
 from typing import Literal  # [EMBED FIX]
 
 import structlog  # [EMBED RETRY FIX]
 
 from app.core.config import settings  # [EMBED FIX]
+from app.core.diagnostics import error_fields
+from app.engines.provider_capacity import CapacityDeferred, provider_budget
 
 logger = structlog.get_logger(__name__)  # [EMBED RETRY FIX]
 
@@ -190,91 +193,106 @@ class GeminiEmbeddingEngine:  # [EMBED FIX]
         config = types.EmbedContentConfig(output_dimensionality=dimensions)  # [EMBED FIX]
         all_embeddings: list[list[float]] = []  # [EMBED FIX]
 
-        for i in range(0, len(formatted_texts), max_batch_size):  # [EMBED FIX]
-            batch = formatted_texts[i : i + max_batch_size]  # [EMBED FIX]
-            contents = [  # [EMBED FIX]
-                types.Content(parts=[types.Part.from_text(text=s)])  # [EMBED FIX]
-                for s in batch  # [EMBED FIX]
-            ]  # [EMBED FIX]
+        try:
+            for i in range(0, len(formatted_texts), max_batch_size):  # [EMBED FIX]
+                batch = formatted_texts[i : i + max_batch_size]  # [EMBED FIX]
+                contents = [  # [EMBED FIX]
+                    types.Content(parts=[types.Part.from_text(text=s)])  # [EMBED FIX]
+                    for s in batch  # [EMBED FIX]
+                ]  # [EMBED FIX]
 
-            max_429_attempts = 5  # [EMBED RETRY FIX]
-            attempt_429 = 0  # [EMBED RETRY FIX]
-            retries_other = 3  # [EMBED RETRY FIX]
-            delay_other = 1.0  # [EMBED RETRY FIX]
+                max_429_attempts = 5  # [EMBED RETRY FIX]
+                attempt_429 = 0  # [EMBED RETRY FIX]
+                retries_other = 3  # [EMBED RETRY FIX]
+                delay_other = 1.0  # [EMBED RETRY FIX]
 
-            while True:  # [EMBED RETRY FIX]
-                try:  # [EMBED FIX]
-                    resp = await asyncio.wait_for(  # [EMBED FIX]
-                        client.aio.models.embed_content(  # [EMBED FIX]
-                            model=model_name,  # [EMBED FIX]
-                            contents=contents,  # [EMBED FIX]
-                            config=config,  # [EMBED FIX]
-                        ),  # [EMBED FIX]
-                        timeout=15.0,  # [EMBED FIX]
-                    )  # [EMBED FIX]
+                while True:  # [EMBED RETRY FIX]
+                    try:  # [EMBED FIX]
+                        async with (
+                            provider_budget("google", model_name, {"texts": batch}, 0)
+                            if kind == "query"
+                            else nullcontext()
+                        ):
+                            resp = await asyncio.wait_for(  # [EMBED FIX]
+                                client.aio.models.embed_content(  # [EMBED FIX]
+                                    model=model_name,  # [EMBED FIX]
+                                    contents=contents,  # [EMBED FIX]
+                                    config=config,  # [EMBED FIX]
+                                ),  # [EMBED FIX]
+                                timeout=15.0,
+                            )
 
-                    if not resp.embeddings or len(resp.embeddings) != len(batch):  # [EMBED FIX]
-                        raise EmbeddingError(  # [EMBED FIX]
-                            f"Embedding count mismatch: expected {len(batch)}, got {len(resp.embeddings) if resp.embeddings else 0}"  # [EMBED FIX]
-                        )  # [EMBED FIX]
-
-                    for emb in resp.embeddings:  # [EMBED FIX]
-                        vec = list(emb.values)  # [EMBED FIX]
-                        if len(vec) != dimensions:  # [EMBED FIX]
+                        if not resp.embeddings or len(resp.embeddings) != len(batch):  # [EMBED FIX]
                             raise EmbeddingError(  # [EMBED FIX]
-                                f"Vector dimension mismatch: expected {dimensions}, got {len(vec)}"  # [EMBED FIX]
+                                f"Embedding count mismatch: expected {len(batch)}, got {len(resp.embeddings) if resp.embeddings else 0}"  # [EMBED FIX]
                             )  # [EMBED FIX]
-                        all_embeddings.append(vec)  # [EMBED FIX]
-                    break  # [EMBED FIX]
 
-                except EmbeddingError:  # [EMBED FIX]
-                    raise  # [EMBED FIX]
-                except Exception as exc:  # [EMBED FIX]
-                    if _is_rate_limit(exc):  # [EMBED RETRY FIX]
-                        attempt_429 += 1  # [EMBED RETRY FIX]
-                        if attempt_429 >= max_429_attempts:  # [EMBED RETRY FIX]
-                            orig_msg = getattr(exc, "message", None) or str(
-                                exc
-                            )  # [EMBED RETRY FIX]
-                            raise EmbeddingError(orig_msg) from exc  # [EMBED RETRY FIX]
-                        parsed_wait = _parse_retry_delay(exc)  # [EMBED RETRY FIX]
-                        wait_base = (
-                            parsed_wait if parsed_wait is not None else 60.0
-                        )  # [EMBED RETRY FIX]
-                        sleep_seconds = min(65.0, wait_base + 1.0)  # [EMBED RETRY FIX]
-                        logger.warning(  # [EMBED RETRY FIX]
-                            "embed_rate_limited",  # [EMBED RETRY FIX]
-                            wait_seconds=sleep_seconds,  # [EMBED RETRY FIX]
-                            attempt=attempt_429,  # [EMBED RETRY FIX]
-                            attempt_number=attempt_429,  # [EMBED RETRY FIX]
-                        )  # [EMBED RETRY FIX]
-                        await asyncio.sleep(sleep_seconds)  # [EMBED RETRY FIX]
-                        continue  # [EMBED RETRY FIX]
+                        for emb in resp.embeddings:  # [EMBED FIX]
+                            vec = list(emb.values)  # [EMBED FIX]
+                            if len(vec) != dimensions:  # [EMBED FIX]
+                                raise EmbeddingError(  # [EMBED FIX]
+                                    f"Vector dimension mismatch: expected {dimensions}, got {len(vec)}"  # [EMBED FIX]
+                                )  # [EMBED FIX]
+                            all_embeddings.append(vec)  # [EMBED FIX]
+                        break  # [EMBED FIX]
 
-                    is_retryable = False  # [EMBED FIX]
-                    if isinstance(exc, (TimeoutError, asyncio.TimeoutError)):  # [EMBED FIX]
-                        is_retryable = True  # [EMBED FIX]
-                    elif isinstance(exc, errors.APIError):  # [EMBED FIX]
-                        code = getattr(exc, "code", None)  # [EMBED FIX]
-                        if code is not None and 500 <= code < 600:  # [EMBED RETRY FIX]
-                            is_retryable = True  # [EMBED FIX]
-                    elif "timeout" in str(exc).lower():  # [EMBED RETRY FIX]
-                        is_retryable = True  # [EMBED FIX]
-
-                    if not is_retryable:  # [EMBED FIX]
+                    except CapacityDeferred as exc:
                         raise EmbeddingError(
-                            f"Non-retryable embedding failure: {exc}"
-                        ) from exc  # [EMBED FIX]
+                            "Query embedding capacity is temporarily unavailable"
+                        ) from exc
+                    except EmbeddingError:  # [EMBED FIX]
+                        raise  # [EMBED FIX]
+                    except Exception as exc:  # [EMBED FIX]
+                        if _is_rate_limit(exc):  # [EMBED RETRY FIX]
+                            attempt_429 += 1  # [EMBED RETRY FIX]
+                            if attempt_429 >= max_429_attempts:  # [EMBED RETRY FIX]
+                                orig_msg = getattr(exc, "message", None) or str(
+                                    exc
+                                )  # [EMBED RETRY FIX]
+                                raise EmbeddingError(orig_msg) from exc  # [EMBED RETRY FIX]
+                            parsed_wait = _parse_retry_delay(exc)  # [EMBED RETRY FIX]
+                            wait_base = (
+                                parsed_wait if parsed_wait is not None else 60.0
+                            )  # [EMBED RETRY FIX]
+                            sleep_seconds = min(65.0, wait_base + 1.0)  # [EMBED RETRY FIX]
+                            logger.warning(  # [EMBED RETRY FIX]
+                                "embed_rate_limited",  # [EMBED RETRY FIX]
+                                wait_seconds=sleep_seconds,  # [EMBED RETRY FIX]
+                                attempt=attempt_429,  # [EMBED RETRY FIX]
+                                attempt_number=attempt_429,  # [EMBED RETRY FIX]
+                            )  # [EMBED RETRY FIX]
+                            await asyncio.sleep(sleep_seconds)  # [EMBED RETRY FIX]
+                            continue  # [EMBED RETRY FIX]
 
-                    retries_other -= 1  # [EMBED RETRY FIX]
-                    if retries_other == 0:  # [EMBED RETRY FIX]
-                        raise EmbeddingError(  # [EMBED FIX]
-                            f"Embedding call failed after 3 attempts: {exc}"  # [EMBED FIX]
-                        ) from exc  # [EMBED FIX]
-                    await asyncio.sleep(delay_other)  # [EMBED RETRY FIX]
-                    delay_other *= 2.0  # [EMBED RETRY FIX]
+                        is_retryable = False  # [EMBED FIX]
+                        if isinstance(exc, (TimeoutError, asyncio.TimeoutError)):  # [EMBED FIX]
+                            is_retryable = True  # [EMBED FIX]
+                        elif isinstance(exc, errors.APIError):  # [EMBED FIX]
+                            code = getattr(exc, "code", None)  # [EMBED FIX]
+                            if code is not None and 500 <= code < 600:  # [EMBED RETRY FIX]
+                                is_retryable = True  # [EMBED FIX]
+                        elif "timeout" in str(exc).lower():  # [EMBED RETRY FIX]
+                            is_retryable = True  # [EMBED FIX]
 
-        return all_embeddings  # [EMBED FIX]
+                        if not is_retryable:  # [EMBED FIX]
+                            raise EmbeddingError(
+                                f"Non-retryable embedding failure: {exc}"
+                            ) from exc  # [EMBED FIX]
+
+                        retries_other -= 1  # [EMBED RETRY FIX]
+                        if retries_other == 0:  # [EMBED RETRY FIX]
+                            raise EmbeddingError(  # [EMBED FIX]
+                                f"Embedding call failed after 3 attempts: {exc}"  # [EMBED FIX]
+                            ) from exc  # [EMBED FIX]
+                        await asyncio.sleep(delay_other)  # [EMBED RETRY FIX]
+                        delay_other *= 2.0  # [EMBED RETRY FIX]
+
+            return all_embeddings  # [EMBED FIX]
+        finally:
+            try:
+                await client.aio.aclose()
+            except Exception as exc:
+                logger.warning("embedding_client_close_failed", **error_fields(exc))
 
 
 gemini_embedder = GeminiEmbeddingEngine()  # [EMBED FIX]

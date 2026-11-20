@@ -104,7 +104,8 @@ async def test_google_preserves_tools_results_and_output_ceiling(
         },
     ]
     calls, stream = await provider_adapters.google_turn("mock", "model", messages, tools)
-    assert [part async for part in stream] == []
+    # Empty deltas indicate real tool packet activity without exposing arguments.
+    assert [part async for part in stream] == [""]
     assert calls[0]["name"] == "rag_search"
     config = captured["config"]
     assert config.max_output_tokens == settings.TEXT_CHAT_MAX_TOKENS
@@ -282,7 +283,7 @@ async def test_openrouter_preserves_fragmented_tool_calls_and_zdr_routing(
     monkeypatch.setattr(provider_adapters.httpx, "AsyncClient", lambda **kwargs: Client())
     messages = [{"role": "user", "content": "dose"}]
     calls, stream = await provider_adapters.openrouter_turn("mock", "model:free", messages, [])
-    assert [text async for text in stream] == []
+    assert [text async for text in stream] == ["", ""]
     assert calls == [{"id": "call-1", "name": "rag_search", "arguments": {"query": "dose"}}]
     assert captured["json"]["provider"] == {"zdr": True, "data_collection": "deny"}
     assert captured["json"]["messages"] == messages
@@ -355,9 +356,12 @@ async def test_chat_refunds_incomplete_turns_and_settles_saved_answers(
 
 
 @pytest.mark.asyncio
-async def test_cancelling_full_sse_queue_does_not_deadlock_and_refunds(tenant_state, monkeypatch):
+async def test_detaching_full_sse_queue_does_not_deadlock_or_refund_saved_answer(
+    tenant_state, monkeypatch
+):
     from fastapi import BackgroundTasks
 
+    from app.engines.chat_runs import chat_runs
     from app.models.chat import StreamChatRequest
     from app.routers import chat
 
@@ -381,7 +385,14 @@ async def test_cancelling_full_sse_queue_does_not_deadlock_and_refunds(tenant_st
     await anext(response.body_iterator)
     await asyncio.sleep(0.01)
     await asyncio.wait_for(response.body_iterator.aclose(), timeout=1)
-    assert finish.await_args.kwargs["refund"] is True
+    run = chat_runs.get(
+        "018f3a30-0001-7000-8000-000000000001",
+        str(tenant_state.user.id),
+        str(tenant_state.user.university_id),
+    )
+    await asyncio.wait_for(run.task, timeout=1)
+    assert run.snapshot.status == "complete"
+    assert finish.await_args.kwargs["refund"] is False
 
 
 @pytest.mark.asyncio

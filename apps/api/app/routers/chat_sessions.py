@@ -1,5 +1,7 @@
 """Owner-authorized session metadata and reversible organization controls."""
 
+import asyncio
+import time
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Response
@@ -9,11 +11,80 @@ from app.core.config import settings
 from app.core.database import get_db_connection
 from app.core.dependencies import UserContext, get_current_user
 from app.engines.chat_interactions import identifier
+from app.engines.chat_runs import chat_runs
 from app.models.chat import ChatSessionResponse, ChatSessionUpdateRequest
+from app.models.chat_runs import ChatRunSnapshot
 
 router = APIRouter(prefix="/ai/chat", tags=["Chat sessions"])
 METADATA_COLUMNS = """id::text,user_id::text,document_id::text,title,summary,
 created_at::text,updated_at::text,is_pinned,archived_at::text,title_source,last_message_at::text"""
+
+
+@router.get("/sessions/{session_id}/run", response_model=ChatRunSnapshot)
+async def run_snapshot(
+    session_id: str, response: Response, user: UserContext = Depends(get_current_user)
+) -> ChatRunSnapshot:
+    university = str(require_university(user))
+    await require_owned_session(session_id, user)
+    response.headers["Cache-Control"] = "private, no-store"
+    run = chat_runs.get(session_id, str(user.id), university)
+    if run and run.snapshot.status == "running":
+        return run.snapshot.model_copy(deep=True)
+    async with get_db_connection() as conn:
+        if conn is None:
+            raise HTTPException(503, "Conversation state is unavailable.")
+        row = await conn.fetchrow(
+            """SELECT active_run_id,active_run_started_at > now()-($3 * interval '1 second') AS busy,
+            (SELECT m.id FROM public.chat_messages m WHERE m.session_id=$1 AND m.role='user' AND m.is_active_branch AND NOT EXISTS(SELECT 1 FROM public.chat_messages a WHERE a.parent_message_id=m.id AND a.role='assistant') ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS question_id,
+            (SELECT coalesce((m.image_metadata->>'retry_blocked')::boolean,false) FROM public.chat_messages m WHERE m.session_id=$1 AND m.role='user' AND m.is_active_branch AND NOT EXISTS(SELECT 1 FROM public.chat_messages a WHERE a.parent_message_id=m.id AND a.role='assistant') ORDER BY m.created_at DESC,m.id DESC LIMIT 1) AS tool_started
+            FROM public.chat_sessions WHERE id=$1 AND user_id=$2 AND deleted_at IS NULL""",
+            identifier(session_id),
+            user.id,
+            settings.CHAT_TOTAL_TIMEOUT_S + 30,
+        )
+    if (
+        row
+        and row.get("active_run_id")
+        and (not run or str(row["active_run_id"]) != run.snapshot.run_id)
+    ):
+        # Another worker may still own it. Never clear its lease or replay its
+        # tools. Polling history will pick up its committed result.
+        return ChatRunSnapshot(
+            run_id=str(row["active_run_id"]),
+            status="running" if row.get("busy") else "interrupted",
+            error_code=None if row.get("busy") else "RUN_INTERRUPTED",
+            user_message_id=str(row["question_id"]) if row.get("question_id") else None,
+            assistant_message_id=str(row["active_run_id"]) if row.get("question_id") else None,
+            tool_started=bool(row.get("tool_started")),
+            retry_blocked=bool(row.get("tool_started")),
+            retryable=not bool(row.get("tool_started")),
+        )
+    if run:
+        return run.snapshot.model_copy(
+            deep=True, update={"elapsed_ms": round((time.monotonic() - run.started) * 1000)}
+        )
+    return ChatRunSnapshot()
+
+
+@router.post("/sessions/{session_id}/runs/{run_id}/cancel", response_model=ChatRunSnapshot)
+async def cancel_run(
+    session_id: str, run_id: str, response: Response, user: UserContext = Depends(get_current_user)
+) -> ChatRunSnapshot:
+    university = str(require_university(user))
+    identifier(run_id)
+    await require_owned_session(session_id, user)
+    response.headers["Cache-Control"] = "private, no-store"
+    run = chat_runs.get(session_id, str(user.id), university)
+    if run is None or run.snapshot.run_id != run_id:
+        raise HTTPException(409, "The response has changed. Reopen the conversation.")
+    if run.task and not run.task.done() and run.snapshot.status == "running":
+        await run.ready.wait()
+        run.task.cancel()
+        try:
+            await asyncio.wait_for(asyncio.shield(run.task), 25)
+        except TimeoutError:
+            raise HTTPException(503, "The response is still stopping. Please retry.") from None
+    return run.snapshot.model_copy(deep=True)
 
 
 async def metadata(session_id: str, user: UserContext) -> ChatSessionResponse:

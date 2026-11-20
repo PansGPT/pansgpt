@@ -9,7 +9,16 @@ import httpx
 
 from app.core.config import settings
 from app.engines.governance_policy import temperature
-from app.engines.provider_capacity import observe, provider_budget
+from app.engines.provider_capacity import generation_token_limit, observe, provider_budget
+
+
+class IncompleteProviderOutput(RuntimeError):
+    code = "OUTPUT_TRUNCATED"
+
+
+def check_finish_reason(reason: object) -> None:
+    if str(reason).upper() in {"LENGTH", "MAX_TOKENS", "FINISHREASON.MAX_TOKENS"}:
+        raise IncompleteProviderOutput("The provider reached its output limit")
 
 
 def finalize_calls(calls: list[dict[str, Any]]) -> None:
@@ -90,22 +99,37 @@ async def google_turn(
         max_output_tokens=settings.TEXT_CHAT_MAX_TOKENS,
         automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
     )
-    client = genai.Client(api_key=key)
+    # One retry policy owns the budget; do not hide SDK retries inside each
+    # outer generation attempt and accidentally multiply free-tier requests.
+    client = genai.Client(
+        api_key=key,
+        http_options=types.HttpOptions(
+            retry_options=types.HttpRetryOptions(attempts=1),
+        ),
+    )
     calls: list[dict[str, Any]] = []
 
     async def stream() -> AsyncIterator[str]:
+        last_thinking = 0
+        last_output = 0
         try:
+            token_limit = generation_token_limit(
+                "google", {"messages": messages, "tools": tools}, settings.TEXT_CHAT_MAX_TOKENS
+            )
             async with provider_budget(
                 "google",
                 model,
                 {"messages": messages, "tools": tools},
-                settings.TEXT_CHAT_MAX_TOKENS,
-            ):
+                token_limit,
+                fit_output=True,
+            ) as admitted_output:
+                config.max_output_tokens = admitted_output
                 response = await client.aio.models.generate_content_stream(
                     model=model, contents=contents, config=config
                 )
                 async for chunk in response:
                     for candidate in chunk.candidates or []:
+                        check_finish_reason(getattr(candidate, "finish_reason", None))
                         for part in (candidate.content.parts if candidate.content else []) or []:
                             if part.function_call:
                                 calls.append(
@@ -116,6 +140,7 @@ async def google_turn(
                                         "arguments": part.function_call.args or {},
                                     }
                                 )
+                                yield ""
                             if part.text:
                                 yield f"<think>{part.text}</think>" if part.thought else part.text
                     if getattr(chunk, "usage_metadata", None) is not None:
@@ -129,6 +154,22 @@ async def google_turn(
                         MultiTierLlmEngine._log_provider_usage(
                             "google", model, chunk.usage_metadata
                         )
+                        thinking = getattr(chunk.usage_metadata, "thoughts_token_count", None)
+                        output = getattr(chunk.usage_metadata, "candidates_token_count", None)
+                        advanced = (
+                            type(thinking) is int
+                            and thinking > last_thinking
+                            or type(output) is int
+                            and output > last_output
+                        )
+                        if type(thinking) is int:
+                            last_thinking = max(last_thinking, thinking)
+                        if type(output) is int:
+                            last_output = max(last_output, output)
+                        if advanced:
+                            # A content-free signal of observed generation,
+                            # never a fabricated heartbeat or private reasoning.
+                            yield ""
         finally:
             await client.aio.aclose()
 
@@ -146,18 +187,27 @@ async def groq_turn(
 
     async def stream() -> AsyncIterator[str]:
         try:
+            token_limit = generation_token_limit(
+                "groq", {"messages": messages, "tools": tools}, settings.TEXT_CHAT_MAX_TOKENS
+            )
             async with provider_budget(
-                "groq", model, {"messages": messages, "tools": tools}, settings.TEXT_CHAT_MAX_TOKENS
-            ):
+                "groq",
+                model,
+                {"messages": messages, "tools": tools},
+                token_limit,
+                fit_output=True,
+            ) as admitted_output:
                 kwargs: dict[str, Any] = {
                     "model": model,
                     "messages": messages,
                     "stream": True,
-                    "max_tokens": settings.TEXT_CHAT_MAX_TOKENS,
+                    "max_tokens": admitted_output,
                     "temperature": temperature.get(),
                 }
                 if tools:
                     kwargs.update(tools=tools, tool_choice="auto")
+                if model.startswith("qwen/"):
+                    kwargs["reasoning_format"] = "hidden"
                 response = await client.chat.completions.create(**kwargs)
                 async for chunk in response:
                     usage = getattr(chunk, "usage", None) or getattr(
@@ -173,11 +223,13 @@ async def groq_turn(
                         )
                         MultiTierLlmEngine._log_provider_usage("groq", model, usage)
                     if chunk.choices:
-                        text = openai_delta(
-                            chunk.choices[0].delta.model_dump(exclude_none=True), calls
-                        )
+                        check_finish_reason(getattr(chunk.choices[0], "finish_reason", None))
+                        delta = chunk.choices[0].delta.model_dump(exclude_none=True)
+                        text = openai_delta(delta, calls)
                         if text:
                             yield text
+                        elif delta.get("tool_calls"):
+                            yield ""
                 finalize_calls(calls)
         finally:
             await client.close()
@@ -202,7 +254,11 @@ async def openrouter_turn(
         payload.update(tools=tools, tool_choice="auto")
 
     async def stream() -> AsyncIterator[str]:
-        async with provider_budget("openrouter", model, payload, settings.TEXT_CHAT_MAX_TOKENS):
+        token_limit = generation_token_limit("openrouter", payload, settings.TEXT_CHAT_MAX_TOKENS)
+        async with provider_budget(
+            "openrouter", model, payload, token_limit, fit_output=True
+        ) as admitted_output:
+            payload["max_tokens"] = admitted_output
             async with httpx.AsyncClient(timeout=settings.CHAT_CHUNK_GAP_TIMEOUT_S) as client:
                 async with client.stream(
                     "POST",
@@ -229,9 +285,13 @@ async def openrouter_turn(
                         if data.get("error"):
                             raise RuntimeError("OpenRouter reported a streaming error")
                         if data.get("choices"):
-                            text = openai_delta(data["choices"][0].get("delta") or {}, calls)
+                            check_finish_reason(data["choices"][0].get("finish_reason"))
+                            delta = data["choices"][0].get("delta") or {}
+                            text = openai_delta(delta, calls)
                             if text:
                                 yield text
+                            elif delta.get("tool_calls"):
+                                yield ""
                     finalize_calls(calls)
 
     return calls, stream()

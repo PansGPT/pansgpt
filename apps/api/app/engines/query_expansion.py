@@ -12,7 +12,9 @@ from typing import Any
 import structlog
 
 from app.core.config import settings
+from app.core.diagnostics import error_fields
 from app.engines.guard import policy_guard
+from app.engines.provider_capacity import provider_budget
 
 logger = structlog.get_logger(__name__)
 
@@ -127,33 +129,46 @@ class QueryExpansionEngine:
         ):
             return None
 
+        client = None
         try:
             from groq import AsyncGroq
 
             settings.require_provider_privacy("groq")
-            client = AsyncGroq(api_key=self.groq_key)
+            client = AsyncGroq(api_key=self.groq_key, max_retries=0)
 
-            response = await asyncio.wait_for(
-                client.chat.completions.create(
-                    model=self.groq_expansion_model,
-                    messages=[
-                        {
-                            "role": "system",
-                            "content": "You are a clinical pharmacology retrieval specialist. Always reply in valid JSON.",
-                        },
-                        {"role": "user", "content": prompt},
-                    ],
-                    temperature=0.2,
-                    max_tokens=256,
-                    response_format={"type": "json_object"},
-                ),
-                timeout=self.groq_timeout,
-            )
+            async with provider_budget(
+                "groq",
+                self.groq_expansion_model,
+                {
+                    "prompt": prompt,
+                    "system": "You are a clinical pharmacology retrieval specialist. Always reply in valid JSON.",
+                },
+                256,
+            ):
+                response = await asyncio.wait_for(
+                    client.chat.completions.create(
+                        model=self.groq_expansion_model,
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": "You are a clinical pharmacology retrieval specialist. Always reply in valid JSON.",
+                            },
+                            {"role": "user", "content": prompt},
+                        ],
+                        temperature=0.2,
+                        max_tokens=256,
+                        response_format={"type": "json_object"},
+                    ),
+                    timeout=self.groq_timeout,
+                )
             content = response.choices[0].message.content or "{}"
             return json.loads(content)
         except Exception as exc:
-            logger.debug("groq_expansion_json_failed", error=str(exc))
+            logger.debug("groq_expansion_json_failed", **error_fields(exc))
             return None
+        finally:
+            if client is not None:
+                await client.close()
 
     async def _call_hyde_generation(self, prompt: str) -> str | None:
         """Generates a synthetic monograph passage via Gemma (Google AI Studio)."""
@@ -170,31 +185,37 @@ class QueryExpansionEngine:
             from google.genai.errors import ServerError as GoogleServerError
 
             settings.require_provider_privacy("google")
-            client = genai.Client(api_key=self.gemini_key)
+            client = genai.Client(
+                api_key=self.gemini_key,
+                http_options=types.HttpOptions(retry_options=types.HttpRetryOptions(attempts=1)),
+            )
 
             try:
-                response = await asyncio.wait_for(
-                    client.aio.models.generate_content(
-                        model=self.hyde_model,
-                        contents=prompt,
-                        config=types.GenerateContentConfig(
-                            automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                                disable=True
-                            )
+                async with provider_budget("google", self.hyde_model, {"prompt": prompt}, 256):
+                    response = await asyncio.wait_for(
+                        client.aio.models.generate_content(
+                            model=self.hyde_model,
+                            contents=prompt,
+                            config=types.GenerateContentConfig(
+                                max_output_tokens=256,
+                                automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                                    disable=True
+                                ),
+                            ),
                         ),
-                    ),
-                    timeout=self.hyde_timeout,
-                )
+                        timeout=self.hyde_timeout,
+                    )
             except GoogleServerError as gse:
                 # Backend 500 — non-fatal, fall back to heuristic template
-                logger.debug("hyde_generation_server_error", error=str(gse))
+                logger.debug("hyde_generation_server_error", **error_fields(gse))
                 return None
+            finally:
+                await client.aio.aclose()
             return response.text.strip() if response.text else None
         except Exception as exc:
             logger.warning(  # [CHAT FIX]
                 "hyde_generation_failed",  # [CHAT FIX]
-                error_type=type(exc).__name__,  # [CHAT FIX]
-                error=f"{type(exc).__name__}: {exc!s}" if str(exc) else repr(exc),  # [CHAT FIX]
+                **error_fields(exc),
                 timeout_s=self.hyde_timeout,  # [CHAT FIX]
             )  # [CHAT FIX]
             return None
@@ -223,7 +244,7 @@ Return ONLY JSON:
                 results = [norm_query] + [q.strip() for q in res["queries"] if q.strip()]
                 return list(dict.fromkeys(results))[:4]
         except Exception as exc:
-            logger.debug("multi_query_expansion_circuit_breaker_tripped", error=str(exc))
+            logger.debug("multi_query_expansion_circuit_breaker_tripped", **error_fields(exc))
 
         return self.generate_heuristic_expansions(norm_query)
 
@@ -255,8 +276,7 @@ Keep it factual, dense, and between 100-140 words. Do NOT include conversational
         except Exception as exc:
             logger.warning(  # [CHAT FIX]
                 "hyde_generation_failed",  # [CHAT FIX]
-                error_type=type(exc).__name__,  # [CHAT FIX]
-                error=f"{type(exc).__name__}: {exc!s}" if str(exc) else repr(exc),  # [CHAT FIX]
+                **error_fields(exc),
                 timeout_s=settings.HYDE_TIMEOUT_S,  # [CHAT FIX]
             )  # [CHAT FIX]
 
@@ -283,7 +303,7 @@ Keep it factual, dense, and between 100-140 words. Do NOT include conversational
             )
             return expanded_queries, hyde_passage
         except Exception as exc:
-            logger.warning("expansion_and_hyde_gather_failed", error=str(exc))
+            logger.warning("expansion_and_hyde_gather_failed", **error_fields(exc))
             norm = policy_guard.normalize_medical_acronyms(query)
             return self.generate_heuristic_expansions(norm), self.generate_heuristic_hyde(norm)
 

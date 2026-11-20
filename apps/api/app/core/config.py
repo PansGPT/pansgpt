@@ -13,6 +13,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Application Mode
     ENVIRONMENT: Literal["development", "staging", "production"] = "development"
+    LOG_FORMAT: Literal["auto", "console", "json"] = "auto"
+    LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
+    LOG_COLOR: Literal["auto", "always", "never"] = "auto"
     LOCAL_DEV_MODE: bool = False  # [PRELAUNCH FIX]
     ENABLE_AI: bool = True
     ENABLE_QUIZ: bool = False
@@ -22,6 +25,20 @@ class Settings(BaseSettings):
     ENABLE_QUIZ_INVENTORY: bool = False
     AI_CAPACITY_ENABLED: bool = True
     AI_CAPACITY_SCOPE: str = "pansgpt"
+    CHAT_ACTION_RATE_LIMIT_ENABLED: bool = True
+    CHAT_ACTION_LIMITS: dict[Literal["send", "upload", "voice"], int] = Field(
+        default_factory=lambda: {"send": 60, "upload": 10, "voice": 10}
+    )
+
+    @field_validator("CHAT_ACTION_LIMITS")
+    @classmethod
+    def validate_chat_action_limits(cls, value: dict[str, int]) -> dict[str, int]:
+        if set(value) != {"send", "upload", "voice"} or any(
+            type(limit) is not int or limit < 1 for limit in value.values()
+        ):
+            raise ValueError("All chat actions require positive per-minute limits")
+        return value
+
     # Conservative application ceilings; observed provider headers can lower them.
     AI_PROVIDER_BUDGETS: dict[str, dict[str, int]] = Field(
         default_factory=lambda: {
@@ -213,6 +230,7 @@ class Settings(BaseSettings):
     # Purpose-Driven Token Ceilings (Section 6.5.3)
     TEXT_CHAT_MAX_TOKENS: int = 4096
     CHAT_FIRST_CHUNK_TIMEOUT_S: float = Field(default=25, gt=0)  # [CHAT FIX]
+    CHAT_TEXT_START_TIMEOUT_S: float = Field(default=10, gt=0, le=25)
     CHAT_CHUNK_GAP_TIMEOUT_S: float = Field(default=30, gt=0)  # [CHAT FIX]
     CHAT_TOTAL_TIMEOUT_S: float = Field(default=120, gt=0)  # [CHAT FIX]
     INTENT_ROUTER_TOTAL_TIMEOUT_S: float = Field(default=24, gt=0, le=30)
@@ -245,6 +263,8 @@ class Settings(BaseSettings):
     OPENROUTER_VISION_MODEL: str = "nvidia/nemotron-nano-12b-v2-vl:free"
     GROQ_VISION_MODEL: str = "qwen/qwen3.8-27b"
     VISION_MAX_OUTPUT_TOKENS: int = 1024  # [PHASE2 FIX]
+    # Conservative admission estimate; actual provider usage reconciles it.
+    VISION_INPUT_TOKEN_RESERVE: int = Field(default=4096, ge=1)
     VISION_MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024  # 10 MB maximum payload
     VISION_PER_TIER_TIMEOUT_SECONDS: float = 10.0  # 10s per provider tier
     VISION_OVERALL_TIMEOUT_SECONDS: float = 25.0  # 25s global pipeline timeout

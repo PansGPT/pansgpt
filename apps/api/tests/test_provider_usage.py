@@ -39,7 +39,7 @@ def test_logs_actual_reported_usage(
     log = MagicMock()
     monkeypatch.setattr(llm, "logger", log)
     llm.MultiTierLlmEngine._log_provider_usage(provider, "configured-model", usage)
-    log.info.assert_called_once_with(
+    log.debug.assert_called_once_with(
         "chat_provider_usage",
         provider=provider,
         model="configured-model",
@@ -47,6 +47,7 @@ def test_logs_actual_reported_usage(
         completion_tokens=expected[1],
         thinking_tokens=expected[2],
     )
+    log.info.assert_not_called()
 
 
 @pytest.mark.parametrize("usage", [None, {}, MagicMock(), {"prompt_tokens": "100"}])
@@ -55,3 +56,4 @@ def test_missing_usage_is_never_fabricated(monkeypatch: pytest.MonkeyPatch, usag
     monkeypatch.setattr(llm, "logger", log)
     llm.MultiTierLlmEngine._log_provider_usage("groq", "configured-model", usage)
     log.info.assert_not_called()
+    log.debug.assert_not_called()

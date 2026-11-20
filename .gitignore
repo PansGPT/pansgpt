@@ -29,6 +29,7 @@ env/
 venv/
 ENV/
 .pytest_cache/
+.cache/
 .ruff_cache/
 .coverage
 htmlcov/

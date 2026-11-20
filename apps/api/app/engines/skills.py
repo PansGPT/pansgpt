@@ -15,6 +15,13 @@ from pydantic import ValidationError
 from app.engines.storage import build_artifact_storage_key, r2_storage
 from app.models.chat import ArtifactReadyPayload
 from app.models.presentation import PresentationContentSlide, PresentationSource
+from app.models.study_artifacts import (
+    ChartContent,
+    ChemicalContent,
+    DiagramContent,
+    FlashcardContent,
+    MnemonicContent,
+)
 
 logger = structlog.get_logger(__name__)
 
@@ -142,7 +149,10 @@ SKILL_TOOL_DEFINITIONS = [
                         "description": "Graph representation type",
                     },
                     "title": {"type": "string", "description": "Graph title"},
-                    "data": {"type": "object", "description": "Labels, datasets, and coordinates"},
+                    "data": {
+                        "type": "object",
+                        "description": "For line/bar: labels (strings), datasets [{label, data: finite numbers}]. Scatter uses datasets [{label, data: [{x,y}]}]. Optional x_label/y_label. At most 8 series, 200 points each. Mermaid: {code: string}, no directives, HTML, links or click actions.",
+                    },
                 },
                 "required": ["graph_type", "title", "data"],
             },
@@ -431,7 +441,10 @@ class SkillExecutionEngine:
             title=title,
             mime_type="application/json",
             file_extension="json",
-            content={"type": graph_type, "title": title, "data": data},
+            content=self._rich_content(
+                DiagramContent if graph_type == "mermaid" else ChartContent,
+                {"type": graph_type, "title": title, "data": data},
+            ),
         )
 
     async def execute_generate_flashcards(
@@ -443,7 +456,9 @@ class SkillExecutionEngine:
             title=f"Flashcards: {topic}",
             mime_type="application/json",
             file_extension="json",
-            content={"topic": topic, "cards": cards, "total": len(cards)},
+            content=self._rich_content(
+                FlashcardContent, {"topic": topic, "cards": cards, "total": len(cards)}
+            ),
         )
 
     async def execute_generate_mnemonics(
@@ -459,12 +474,15 @@ class SkillExecutionEngine:
             title=f"Mnemonic: {drug_or_class}",
             mime_type="application/json",
             file_extension="json",
-            content={
-                "concept": drug_or_class,
-                "mnemonic": mnemonic,
-                "breakdown": breakdown,
-                "clinical_notes": clinical_notes,
-            },
+            content=self._rich_content(
+                MnemonicContent,
+                {
+                    "concept": drug_or_class,
+                    "mnemonic": mnemonic,
+                    "breakdown": breakdown,
+                    "clinical_notes": clinical_notes,
+                },
+            ),
         )
 
     async def execute_draw_chemical_structure(
@@ -481,13 +499,32 @@ class SkillExecutionEngine:
             mime_type="application/json",
             file_extension="json",
             content={
-                "compound_name": compound_name,
-                "smiles": smiles,
-                "formula": formula,
-                "notes": pharmacophore_notes,
+                **self._rich_content(
+                    ChemicalContent,
+                    {
+                        "compound_name": compound_name,
+                        "smiles": smiles,
+                        "formula": formula,
+                        "notes": pharmacophore_notes,
+                    },
+                ),
                 "depiction_url": f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/smiles/{smiles}/PNG",
             },
         )
+
+    @staticmethod
+    def _rich_content(
+        schema: type[
+            ChartContent | DiagramContent | FlashcardContent | MnemonicContent | ChemicalContent
+        ],
+        content: dict[str, Any],
+    ) -> dict[str, Any]:
+        try:
+            return schema.model_validate(content).model_dump(exclude_none=True)
+        except ValidationError as exc:
+            raise HTTPException(
+                422, "The study material could not be prepared. Please try again."
+            ) from exc
 
     async def dispatch_skill(
         self,

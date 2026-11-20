@@ -13,6 +13,15 @@ import { applyChatEvent } from "../lib/chat-message.ts";
 import { SSEEventStreamReader } from "../lib/sse-parser.ts";
 
 const originalFetch = globalThis.fetch;
+
+test("legacy provider failures offer Retry without bypassing tool replay protection", () => {
+  assert.equal(publicFailure("PROVIDER_ERROR", "", false).retryable, true);
+  const blocked = publicFailure("TOOL_RETRY_BLOCKED", "", false);
+  assert.equal(blocked.retryable, false);
+  assert.match(blocked.message, /send a new message/);
+  assert.doesNotMatch(blocked.message, /generated|results/);
+  assert.equal(publicFailure("403", "", false).retryable, false);
+});
 afterEach(() => {
   globalThis.fetch = originalFetch;
 });
@@ -149,6 +158,15 @@ test("empty terminal done frames preserve a partial failed answer and its retry 
   assert.equal(message.errorCode, "TIMEOUT");
   assert.equal(message.recovery, undefined);
   assert.equal(message.error, "Something went wrong. Please try again.");
+});
+
+test("provider failover leaves thinking unchanged and cannot trigger or clear the elapsed slow status", () => {
+  const event = new SSEEventStreamReader().push(
+    'event: recovery\ndata: {"state":"retrying","attempt":1,"retry_after_ms":5000}\n\n'
+  )[0];
+  const running = { id: "synthetic", role: "assistant", content: "", status: "running" };
+  assert.equal(applyChatEvent(running, event).recovery, undefined);
+  assert.equal(applyChatEvent({ ...running, recovery: "slow" }, event).recovery, "slow");
 });
 
 test("malformed recovery frames cannot inject public copy or invalid delay data", () => {

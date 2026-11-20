@@ -106,7 +106,7 @@ async def test_run_is_released_before_done_allows_an_immediate_next_send(
     assert tenant_state.ai.call_count == 1
 
 
-async def test_disconnect_cancellation_waits_for_protected_refund_and_release(
+async def test_explicit_stop_waits_for_protected_refund_and_release(
     tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     provider_started = asyncio.Event()
@@ -142,17 +142,23 @@ async def test_disconnect_cancellation_waits_for_protected_refund_and_release(
     task = asyncio.create_task(consume())
     await asyncio.wait_for(provider_started.wait(), 3)
     scopes[0].cancel()
-    await asyncio.wait_for(cleanup_started.wait(), 3)
-    assert not task.done() and not released
-    allow_release.set()
     await asyncio.wait_for(task, 3)
+    from app.engines.chat_runs import chat_runs
+
+    run = chat_runs.get(SESSION, str(tenant_state.user.id), str(tenant_state.user.university_id))
+    assert run is not None and not run.task.done()
+    run.task.cancel()
+    await asyncio.wait_for(cleanup_started.wait(), 3)
+    assert not run.task.done() and not released
+    allow_release.set()
+    await asyncio.wait_for(run.task, 3)
     assert released
     release_mock.assert_awaited_once()
     finish_credit.assert_awaited_once()
     assert finish_credit.call_args.kwargs["refund"] is True
 
 
-async def test_disconnect_before_producer_starts_still_releases_the_run(
+async def test_disconnected_browser_does_not_cancel_an_accepted_run(
     tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     release = AsyncMock()
@@ -160,9 +166,43 @@ async def test_disconnect_before_producer_starts_still_releases_the_run(
     monkeypatch.setattr(chat, "release_turn", release)
     monkeypatch.setattr(chat, "_finish_chat_credit", finish_credit)
     response = await response_for(tenant_state, disconnected=True)
-    assert [frame async for frame in response.body_iterator] == []
+    frames = [frame async for frame in response.body_iterator]
+    assert any(frame.startswith("event: done") for frame in frames)
     release.assert_awaited_once()
-    assert finish_credit.call_args.kwargs["refund"] is True
+    assert finish_credit.call_args.kwargs["refund"] is False
+
+
+async def test_title_starts_before_the_answer_finishes(
+    tenant_state: TenantTestState, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    title_started = asyncio.Event()
+    generation_started = asyncio.Event()
+    allow_generation = asyncio.Event()
+
+    async def name_question(*args: object) -> None:
+        title_started.set()
+
+    async def inference(
+        **kwargs: object,
+    ) -> AsyncGenerator[tuple[str, dict[str, object], str], None]:
+        generation_started.set()
+        await allow_generation.wait()
+        yield "error", {"code": "PROVIDER_ERROR", "retryable": True}, "mock"
+
+    naming = AsyncMock(side_effect=name_question)
+    monkeypatch.setattr(chat, "_auto_generate_session_title", naming)
+    tenant_state.ai.side_effect = inference
+    response = await response_for(tenant_state)
+    try:
+        await asyncio.wait_for(generation_started.wait(), 1)
+        await asyncio.wait_for(title_started.wait(), 1)
+        naming.assert_awaited_once_with(
+            SESSION, "Synthetic lifecycle question", str(tenant_state.user.id)
+        )
+    finally:
+        allow_generation.set()
+        frames = [frame async for frame in response.body_iterator]
+    assert any("event: error" in frame for frame in frames)
 
 
 async def test_failed_reply_still_schedules_a_title_from_the_saved_question(

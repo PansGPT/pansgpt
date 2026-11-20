@@ -3,6 +3,7 @@
 import asyncio
 import base64
 import io
+import json
 import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -62,6 +63,21 @@ def fake_storage(
     monkeypatch.setattr(images, "get_db_connection", database)
     monkeypatch.setattr(routes, "get_db_connection", database)
     return conn
+
+
+def test_upload_normalization_preserves_jpeg_and_bounds_oriented_pixels() -> None:
+    original = Image.new("RGB", (1200, 3600), "white")
+    exif = Image.Exif()
+    exif[274] = 6
+    exif[315] = "Private author"
+    source = io.BytesIO()
+    original.save(source, format="JPEG", exif=exif)
+    normalized = images.image_pixels(source.getvalue(), for_storage=True)
+    with Image.open(io.BytesIO(normalized)) as prepared:
+        assert prepared.format == "JPEG" and prepared.mode == "RGB"
+        assert prepared.size == (3072, 1024)
+        assert not prepared.getexif()
+    assert len(normalized) <= images.MAX_IMAGE_BYTES
 
 
 def test_image_normalization_strips_metadata_and_flattens_transparency() -> None:
@@ -157,7 +173,11 @@ async def test_image_upload_stores_pixels_without_calling_vision(
     assert response.status_code == 201
     assert response.json()["content_type"] == "image/png"
     analyse.assert_not_awaited()
-    assert upload.call_args.args[1] == png()
+    stored = upload.call_args.args[1]
+    with Image.open(io.BytesIO(stored)) as clean:
+        assert clean.format == "PNG" and clean.mode == "RGB"
+        assert clean.size == (80, 40)
+        assert not clean.info
     insert = next(
         call
         for call in conn.execute.call_args_list
@@ -338,6 +358,14 @@ async def test_failed_vision_does_not_continue_without_image(
     assert "IMAGE_ANALYSIS_UNAVAILABLE" in response.text and '"retryable": true' in response.text
     tenant_state.ai.assert_not_called()
     tenant_state.retrieval.assert_not_awaited()
+    saved = next(
+        call
+        for call in tenant_state.connection.execute.await_args_list
+        if "INSERT INTO public.chat_messages" in call.args[0] and "'user'" in call.args[0]
+    )
+    assert str(saved.args[1]) == turn.user_id
+    assert json.loads(saved.args[5])["attachment_ids"] == [row["id"]]
+    assert "message_context" in json.loads(saved.args[5])
 
 
 @pytest.mark.parametrize(

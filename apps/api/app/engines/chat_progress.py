@@ -67,10 +67,16 @@ class ChatProgress:
         code = {
             "create_pptx": "creating_presentation",
             "web_search": "searching_sources",
+            "rag_search": "checking_materials",
             "search_course_materials": "checking_materials",
             "course_search": "checking_materials",
             "read_document": "reading_document",
             "analyze_image": "analysing_image",
             "analyse_image": "analysing_image",
+            "vision_analyze": "analysing_image",
+            "generate_flashcards": "creating_materials",
+            "generate_mnemonics": "creating_materials",
+            "plot_graph": "creating_materials",
+            "draw_chemical_structure": "creating_materials",
         }.get(name, "creating_materials" if name.startswith("create_") else "using_tool")
         return self.emit(code, model_label)

@@ -1,6 +1,7 @@
 """Bounded, private JSON completions for semantic routing; no tool execution."""
 
 import asyncio
+import re
 from typing import Literal
 
 import httpx
@@ -9,6 +10,7 @@ from pydantic import BaseModel, Field
 
 from app.core.config import settings
 from app.engines.provider_capacity import mark_request_unsent, observe, provider_budget
+from app.engines.provider_http import routing_http_client
 from app.models.chat import SemanticDecision
 from app.models.presentation import PresentationPlan
 
@@ -54,6 +56,16 @@ async def routing_completion(
     google_thinking_level: Literal["minimal"] | None = None,
 ) -> str:
     settings.require_provider_privacy(provider)
+    if provider == "groq" and model in STRICT_GROQ_MODELS and response_schema is SemanticDecision:
+        # Constrained decoding already supplies the exact schema. Sending the
+        # same long JSON example again wastes the small free-tier TPM budget;
+        # preserve all semantic, evidence and conversational instructions.
+        system = re.sub(
+            r"Return ONLY one JSON object with these exact fields:\n\{[^\n]+\}\n",
+            "Return ONLY a JSON object matching the supplied schema.\n",
+            system,
+            count=1,
+        )
     sent_schema = (
         (
             structured_schema
@@ -195,6 +207,7 @@ async def _routing_completion(
         payload["reasoning_effort"] = "low"
     if provider == "groq" and model == "qwen/qwen3.8-27b":
         payload["reasoning_effort"] = "none"
+        payload["reasoning_format"] = "hidden"
     if provider == "openrouter":
         payload["provider"] = {"zdr": True, "data_collection": "deny"}
     phase = "client_setup"
@@ -207,17 +220,18 @@ async def _routing_completion(
 
     timeout = httpx.Timeout(attempt_timeout, connect=min(4.0, attempt_timeout))
     try:
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            response = await client.post(
-                url,
-                headers={"Authorization": f"Bearer {key}"},
-                json=payload,
-                extensions={"trace": trace},
-            )
-            await observe(response.headers)
-            response.raise_for_status()
-            phase = "response_validation"
-            result = CompletionEnvelope.model_validate_json(response.text)
+        client = routing_http_client()
+        response = await client.post(
+            url,
+            headers={"Authorization": f"Bearer {key}"},
+            json=payload,
+            timeout=timeout,
+            extensions={"trace": trace},
+        )
+        await observe(response.headers)
+        response.raise_for_status()
+        phase = "response_validation"
+        result = CompletionEnvelope.model_validate_json(response.text)
     except asyncio.CancelledError as exc:
         if phase in {"connection.connect_tcp.started", "connection.start_tls.started"}:
             mark_request_unsent()

@@ -7,15 +7,16 @@
 
 import asyncio
 import re
-import tempfile
 import threading
 import time
+from concurrent.futures import Future, ThreadPoolExecutor
 from typing import Any
 
 import httpx
 import structlog
 
 from app.core.config import settings
+from app.core.diagnostics import error_fields
 
 logger = structlog.get_logger(__name__)
 
@@ -33,30 +34,63 @@ class CandidateReranker:
     def __init__(self) -> None:
         self._flashrank_client: Any = None
         self._flashrank_lock = threading.Lock()
-        self._flashrank_cache: tempfile.TemporaryDirectory[str] | None = None
+        self._warm_lock = threading.Lock()
+        self._warm_future: Future[Any] | None = None
+        self._retry_at = 0.0
+        self._inference_slots = threading.BoundedSemaphore(2)
+        self._executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="rerank")
 
     def _get_flashrank_client(self) -> Any:
         """Lazy thread-safe initialization of FlashRank Ranker model."""
         with self._flashrank_lock:
             if self._flashrank_client is None:
                 try:
-                    from flashrank import Ranker
+                    from app.engines.flashrank_cache import load_ranker
 
                     model_name = settings.RERANKER_MODEL or "ms-marco-TinyBERT-L-2-v2"
-                    cache_dir = settings.RERANKER_CACHE_DIR
-                    if not cache_dir:
-                        # FlashRank downloads/unpacks non-atomically. Never share its
-                        # writable download directory across reload/server processes.
-                        self._flashrank_cache = tempfile.TemporaryDirectory(
-                            prefix="pansgpt-flashrank-"
-                        )
-                        cache_dir = self._flashrank_cache.name
-                    self._flashrank_client = Ranker(model_name=model_name, cache_dir=cache_dir)
+                    self._flashrank_client = load_ranker(model_name, settings.RERANKER_CACHE_DIR)
                     logger.info("flashrank_model_loaded", model=model_name)
                 except Exception as exc:
-                    logger.warning("flashrank_initialization_failed", error_type=type(exc).__name__)
+                    logger.warning(
+                        "flashrank_initialization_failed",
+                        warmup_retry_after_s=60,
+                        **error_fields(exc),
+                    )
                     self._flashrank_client = False
         return self._flashrank_client if self._flashrank_client is not False else None
+
+    def start_warmup(self) -> Future[Any]:
+        with self._warm_lock:
+            if self._warm_future is not None and (
+                not self._warm_future.done()
+                or time.monotonic() < self._retry_at
+                or self._warm_future.result() is not None
+            ):
+                return self._warm_future
+            future: Future[Any] = Future()
+            self._warm_future = future
+            if self._flashrank_client is False:
+                self._flashrank_client = None
+
+            def initialize() -> None:
+                try:
+                    model = self._get_flashrank_client()
+                except Exception as exc:
+                    logger.warning("flashrank_warmup_failed", **error_fields(exc))
+                    model = None
+                self._retry_at = time.monotonic() + 60 if model is None else 0
+                future.set_result(model)
+                logger.info(
+                    "flashrank_warmup_finished",
+                    ready=model is not None,
+                    fallback=None if model is not None else "heuristic",
+                )
+
+            threading.Thread(target=initialize, name="flashrank-warmup", daemon=True).start()
+            return future
+
+    def close(self) -> None:
+        self._executor.shutdown(wait=False, cancel_futures=True)
 
     @staticmethod
     def classify_confidence(score: float) -> str:
@@ -152,7 +186,8 @@ class CandidateReranker:
         self, query: str, candidates: list[dict[str, Any]]
     ) -> list[dict[str, Any]]:
         """Executes FlashRank cross-encoder in a background thread."""
-        ranker = await asyncio.to_thread(self._get_flashrank_client)
+        warmup = self.start_warmup()
+        ranker = warmup.result() if warmup.done() else None
         if not ranker:
             raise RuntimeError("FlashRank model unavailable")
 
@@ -167,7 +202,19 @@ class CandidateReranker:
         def _sync_rerank() -> list[dict[str, Any]]:
             return ranker.rerank(rerank_req)
 
-        results = await asyncio.to_thread(_sync_rerank)
+        if not self._inference_slots.acquire(blocking=False):
+            raise RuntimeError("Local reranker is busy")
+        try:
+            pending = self._executor.submit(_sync_rerank)
+        except BaseException:
+            self._inference_slots.release()
+            raise
+        pending.add_done_callback(lambda _: self._inference_slots.release())
+        wrapped = asyncio.wrap_future(pending)
+        wrapped.add_done_callback(
+            lambda future: future.exception() if not future.cancelled() else None
+        )
+        results = await asyncio.shield(wrapped)
 
         scored_candidates: list[dict[str, Any]] = []
         for r in results:
@@ -267,21 +314,20 @@ class CandidateReranker:
         except TimeoutError as exc:  # [CHAT FIX]
             logger.warning(
                 "reranker_timeout_fallback_engaged",
-                error_type=type(exc).__name__,  # [CHAT FIX]
-                error=repr(exc),  # [CHAT FIX]
+                **error_fields(exc),
                 provider=provider,
                 timeout_s=timeout,
-                query=query[:60],
             )
             scored = self.fallback_heuristic_scoring(query, candidates)
+            provider = "heuristic_fallback"
         except Exception as exc:
             logger.warning(
                 "reranker_error_fallback_engaged",
                 provider=provider,
-                error=str(exc),
-                query=query[:60],
+                **error_fields(exc),
             )
             scored = self.fallback_heuristic_scoring(query, candidates)
+            provider = "heuristic_fallback"
 
         # Sort descending by neural/composite score
         scored.sort(key=lambda x: x.get("rerank_score", 0.0), reverse=True)
@@ -296,9 +342,15 @@ class CandidateReranker:
         logger.info(
             "rerank_completed",
             provider=provider,
+            model=(settings.RERANKER_MODEL or "ms-marco-TinyBERT-L-2-v2")
+            if provider == "flashrank"
+            else (settings.COHERE_RERANK_MODEL or "rerank-v3.5")
+            if provider == "cohere"
+            else None,
             latency_ms=latency_ms,
             candidates_in=len(candidates),
             candidates_passed=len(filtered),
+            candidates_kept=len(final_candidates[:top_k]),
             top_score=final_candidates[0].get("rerank_score") if final_candidates else 0.0,
         )
 

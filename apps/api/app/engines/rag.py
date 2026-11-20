@@ -14,6 +14,7 @@ import structlog
 
 from app.core.config import settings
 from app.core.database import get_db_connection
+from app.core.diagnostics import error_fields
 from app.engines.embedder import gemini_embedder
 from app.engines.guard import policy_guard
 from app.engines.query_expansion import query_expansion_engine
@@ -195,7 +196,7 @@ class RagRetrievalEngine:
                     hyde_passage,
                 ) = await query_expansion_engine.expand_and_generate_hyde(search_query)
             except Exception as exp_exc:
-                logger.warning("query_expansion_failed", error=str(exp_exc))
+                logger.warning("query_expansion_failed", **error_fields(exp_exc))
                 expanded_queries = self.generate_multi_query_expansions(search_query)
                 hyde_passage = self.generate_hyde_passage(search_query)
 
@@ -228,8 +229,7 @@ class RagRetrievalEngine:
         except Exception as exc:  # [EMBED FIX]
             logger.warning(  # [CHAT FIX 2]
                 "query_batch_embedding_failed_dense_retrieval_skipped",  # [EMBED FIX]
-                error_type=type(exc).__name__,  # [CHAT FIX 2]
-                error=str(exc) or repr(exc),  # [CHAT FIX 2]
+                **error_fields(exc),
                 msg="Dense vector retrieval skipped due to embedding failure; proceeding with FTS/trigram only",  # [EMBED FIX]
             )  # [EMBED FIX]
             embeddings = []  # [EMBED FIX]
@@ -321,7 +321,7 @@ class RagRetrievalEngine:
                 except Exception as hybrid_exc:
                     if not vector_str:  # [CHAT FIX 2]
                         raise  # [CHAT FIX 2]
-                    logger.info("match_documents_hybrid_rpc_fallback", error=str(hybrid_exc))
+                    logger.info("match_documents_hybrid_rpc_fallback", **error_fields(hybrid_exc))
                     rows = await self._keyword_search(
                         conn,
                         filter_uni_uuid,
@@ -432,12 +432,12 @@ class RagRetrievalEngine:
                         except (TimeoutError, asyncpg.QueryCanceledError):
                             raise
                         except Exception as exp_err:
-                            logger.debug("expansion_retrieval_skipped", error=str(exp_err))
+                            logger.debug("expansion_retrieval_skipped", **error_fields(exp_err))
 
             except (TimeoutError, asyncpg.QueryCanceledError):
                 raise
             except Exception as exc:
-                logger.warning("rag_retrieval_query_error", error_type=type(exc).__name__)
+                logger.warning("rag_retrieval_query_error", **error_fields(exc))
                 raise
 
         # 5. Neural Candidate Re-Ranking & Precision Relevance Filtering
@@ -581,7 +581,7 @@ class RagRetrievalEngine:
                                     before_text + top_chunk["content"] + after_text
                                 )
             except Exception as exp_err:
-                logger.debug("sibling_expansion_failed", error=str(exp_err))
+                logger.debug("sibling_expansion_failed", **error_fields(exp_err))
 
         # 8. Format Citations & Assembled Context Blocks
         citations: list[CitationItem] = []

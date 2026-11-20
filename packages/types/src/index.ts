@@ -18,6 +18,8 @@ export interface AuthSessionUser {
 }
 
 export * from "./chat";
+export * from "./chat-runs";
+export * from "./study-artifacts";
 export * from "./presentations";
 export * from "./web-search";
 export * from "./quiz";

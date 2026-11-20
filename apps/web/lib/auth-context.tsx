@@ -5,6 +5,7 @@ import { env } from "@/env";
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from "react";
 import { desktopAuth } from "./desktop-auth";
 import { clearThumbnailCaches } from "./document-thumbnail-cache";
+import { disposeChatTransports } from "./chat-run-recovery";
 import { clearPdfCopies } from "./reader-pdf-cache";
 import { retainQuizDrafts } from "./quiz-drafts";
 import type { User, Session } from "@supabase/supabase-js";
@@ -156,6 +157,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (loading || !authResolved) return;
+    disposeChatTransports(session?.user.id);
     const active = session?.user.id;
     retainQuizDrafts(
       active && profile?.id === active && profile.university_id
@@ -171,6 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // requires verified identity and current document authorization.
     if (profile?.id !== active) return;
     if (!profile.university_id) {
+      disposeChatTransports();
       void clearThumbnailCaches();
       void clearPdfCopies();
       return;
@@ -181,6 +184,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [authResolved, loading, profile?.id, profile?.university_id, session?.user.id]);
 
   const signOut = async (scope: "global" | "local" = "global") => {
+    disposeChatTransports();
     await clearThumbnailCaches();
     await clearPdfCopies();
     try {

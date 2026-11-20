@@ -17,6 +17,8 @@ import structlog
 from PIL import Image
 
 from app.core.config import settings
+from app.core.diagnostics import error_fields
+from app.engines.provider_capacity import CapacityDeferred, observe, provider_budget
 
 logger = structlog.get_logger(__name__)
 
@@ -310,9 +312,9 @@ class VisionAnalysisEngine:
                 break
             except Exception as exc:
                 analysis_text = None
-                logger.warning(
-                    "vision_provider_failed", provider=provider, error_type=type(exc).__name__
-                )
+                logger.warning("vision_provider_failed", provider=provider, **error_fields(exc))
+                if isinstance(exc, CapacityDeferred) and exc.reason == "capacity_store_unavailable":
+                    break
 
         # Tier 4: Deterministic Fallback
         if not analysis_text:
@@ -388,20 +390,34 @@ class VisionAnalysisEngine:
             image_part = types.Part.from_bytes(data=image_bytes, mime_type=mime_type)
             full_prompt = f"{system_instructions}\n\nUser Question:\n{prompt}"
 
-            resp = await asyncio.wait_for(
-                client.aio.models.generate_content(
-                    model=settings.GEMINI_VISION_MODEL,
-                    contents=[full_prompt, image_part],
-                    config=types.GenerateContentConfig(
-                        temperature=0.2,
-                        max_output_tokens=settings.VISION_REPLY_MAX_TOKENS,
-                        automatic_function_calling=types.AutomaticFunctionCallingConfig(
-                            disable=True
+            async with provider_budget(
+                "google",
+                settings.GEMINI_VISION_MODEL,
+                {"prompt": full_prompt},
+                settings.VISION_REPLY_MAX_TOKENS,
+                input_token_reserve=settings.VISION_INPUT_TOKEN_RESERVE,
+            ):
+                resp = await asyncio.wait_for(
+                    client.aio.models.generate_content(
+                        model=settings.GEMINI_VISION_MODEL,
+                        contents=[full_prompt, image_part],
+                        config=types.GenerateContentConfig(
+                            temperature=0.2,
+                            max_output_tokens=settings.VISION_REPLY_MAX_TOKENS,
+                            automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                                disable=True
+                            ),
                         ),
                     ),
-                ),
-                timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS,
-            )
+                    timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS,
+                )
+                usage = getattr(resp, "usage_metadata", None)
+                if usage is not None:
+                    await observe(
+                        {},
+                        getattr(usage, "prompt_token_count", None),
+                        getattr(usage, "candidates_token_count", None),
+                    )
             return resp.text or ""
 
         finally:
@@ -441,15 +457,28 @@ class VisionAnalysisEngine:
             "max_tokens": settings.VISION_REPLY_MAX_TOKENS,
             "temperature": 0.2,
         }
-        async with httpx.AsyncClient(timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS) as client:
+        async with (
+            provider_budget(
+                "openrouter",
+                settings.OPENROUTER_VISION_MODEL,
+                {"prompt": prompt, "system": system_instructions},
+                settings.VISION_REPLY_MAX_TOKENS,
+                input_token_reserve=settings.VISION_INPUT_TOKEN_RESERVE,
+            ),
+            httpx.AsyncClient(timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS) as client,
+        ):
             resp = await client.post(
                 "https://openrouter.ai/api/v1/chat/completions",
                 headers=headers,
                 json=payload,
             )
-            if resp.status_code != 200:
-                raise ValueError(f"OpenRouter Vision HTTP {resp.status_code}: {resp.text}")
+            await observe(resp.headers)
+            resp.raise_for_status()
             data = resp.json()
+            if data.get("usage"):
+                await observe(
+                    {}, data["usage"].get("prompt_tokens"), data["usage"].get("completion_tokens")
+                )
             return data["choices"][0]["message"]["content"]
 
     async def _call_groq_vision(
@@ -473,32 +502,43 @@ class VisionAnalysisEngine:
             },
         )
         try:
-            completion = await asyncio.wait_for(
-                client.chat.completions.create(
-                    model=settings.GROQ_VISION_MODEL,
-                    messages=[
-                        {"role": "system", "content": system_instructions},
-                        {
-                            "role": "user",
-                            "content": [
-                                {"type": "text", "text": prompt},
-                                {
-                                    "type": "image_url",
-                                    "image_url": {"url": f"data:{mime_type};base64,{b64_str}"},
-                                },
-                            ],
-                        },
-                    ],
-                    max_tokens=settings.VISION_REPLY_MAX_TOKENS,
-                    temperature=0.2,
-                    **(
-                        {"reasoning_effort": "none"}
-                        if settings.GROQ_VISION_MODEL == "qwen/qwen3.8-27b"
-                        else {}
+            async with provider_budget(
+                "groq",
+                settings.GROQ_VISION_MODEL,
+                {"prompt": prompt, "system": system_instructions},
+                settings.VISION_REPLY_MAX_TOKENS,
+                input_token_reserve=settings.VISION_INPUT_TOKEN_RESERVE,
+            ):
+                completion = await asyncio.wait_for(
+                    client.chat.completions.create(
+                        model=settings.GROQ_VISION_MODEL,
+                        messages=[
+                            {"role": "system", "content": system_instructions},
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": prompt},
+                                    {
+                                        "type": "image_url",
+                                        "image_url": {"url": f"data:{mime_type};base64,{b64_str}"},
+                                    },
+                                ],
+                            },
+                        ],
+                        max_tokens=settings.VISION_REPLY_MAX_TOKENS,
+                        temperature=0.2,
+                        **(
+                            {"reasoning_effort": "none"}
+                            if settings.GROQ_VISION_MODEL == "qwen/qwen3.8-27b"
+                            else {}
+                        ),
                     ),
-                ),
-                timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS,
-            )
+                    timeout=settings.VISION_PER_TIER_TIMEOUT_SECONDS,
+                )
+                if getattr(completion, "usage", None) is not None:
+                    await observe(
+                        {}, completion.usage.prompt_tokens, completion.usage.completion_tokens
+                    )
             return completion.choices[0].message.content or ""
 
         finally:

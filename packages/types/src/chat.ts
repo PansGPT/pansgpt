@@ -1,4 +1,5 @@
 export type SSEEventType =
+  | "activity"
   | "init"
   | "citations"
   | "thinking_chunk"
@@ -68,13 +69,21 @@ export interface ArtifactItem {
   file_extension?: string;
   storage_key?: string;
   download_url?: string;
-  content?: Record<string, unknown>;
+  content?: Record<string, unknown> | string;
 }
 
 // [CHAT FIX 2] Keep payload types paired with their event; no identity or `any` casts.
 export interface SSEEventData {
+  activity: { stage: "generation" };
   recovery: { state: "retrying"; attempt: number; retry_after_ms: number };
-  init: { session_id?: string; user_message_id?: string; assistant_message_id?: string };
+  init: {
+    context?: ChatMessageContext;
+    session_id?: string;
+    user_message_id?: string;
+    assistant_message_id?: string;
+    run_id?: string;
+    request_id?: string;
+  };
   citations: CitationItem[];
   text_chunk: { token?: string; delta?: string };
   thinking_chunk: { code?: string; token?: string; delta?: string };
@@ -82,8 +91,8 @@ export interface SSEEventData {
   tool_start: Omit<ToolExecutionState, "status">;
   tool_end: Partial<ToolExecutionState> & { call_id: string };
   artifact_ready: ArtifactItem;
-  done: { full_text?: string };
-  error: { error?: string; code?: string; retryable?: boolean };
+  done: { full_text?: string; completion_warning?: "additional_work_incomplete" };
+  error: { error?: string; code?: string; retryable?: boolean; request_id?: string };
 }
 
 export type SSEParsedEvent = {
@@ -98,6 +107,16 @@ export type ChatActionMode =
   | "create_study_notes"
   | "make_revision_sheet"
   | "create_mnemonics";
+
+/** Saved user-message selections; titles are resolved by the API, never authorization. */
+export interface ChatLibrarySource {
+  id: string;
+  title: string;
+}
+export interface ChatMessageContext {
+  action_mode: ChatActionMode | null;
+  library_document: ChatLibrarySource | null;
+}
 
 /** The existing FastAPI stream request; clients never supply provider configuration. */
 export interface ChatStreamRequest {
@@ -137,6 +156,7 @@ export interface ChatFeedbackRequest {
 
 /** Client presentation of a saved or streaming turn; not a database row. */
 export interface ChatMessageView {
+  context?: ChatMessageContext | null;
   id: string;
   role: "user" | "assistant";
   content: string;
@@ -153,15 +173,20 @@ export interface ChatMessageView {
   citations?: CitationItem[];
   tools?: ToolExecutionState[];
   artifacts?: ArtifactItem[];
+  /** Saved material remains usable when subsequent work could not finish. */
+  completionWarning?: "additional_work_incomplete";
   status: "running" | "complete" | "cancelled" | "error";
   error?: string;
   errorCode?: string;
   retryable?: boolean;
   recovery?: "retrying" | "slow";
+  /** Elapsed wait hint; activity may continue while a response is delayed. */
+  delayed?: boolean;
   failure?: ChatFailureView;
 }
 
 export interface ChatFailureView {
+  reference?: string;
   code: string;
   message: string;
   retryable: boolean;

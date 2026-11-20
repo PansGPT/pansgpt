@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { AlertCircle, AlertTriangle, Info, RotateCcw, X } from "lucide-react";
 import { useChatActions } from "./actions-context";
 
@@ -25,6 +26,8 @@ const mobileCopy: Record<string, string> = {
   "You're offline. Check your connection and try again.": "You're offline. Reconnect to send.",
   "Something went wrong. Please try again.": "Something went wrong. Try again.",
   "The response could not be completed. Please try again.": "Couldn't finish. Try again.",
+  "This response couldn't finish. Please send a new message.":
+    "Couldn't finish. Send a new message.",
   "Attach up to four files at a time.": "Up to 4 files per message.",
   "Use a question up to 10,000 characters and at most four attachments.":
     "Use a shorter message and up to 4 files.",
@@ -61,13 +64,19 @@ function useChatNoticeMessage(message: string): string {
 export function ChatError({
   message,
   children,
+  reference,
 }: {
   message: string;
   children?: ReactNode;
+  reference?: string;
 }): React.ReactElement {
   const copy = useChatNoticeMessage(message);
   return (
-    <div className="study-chat-error-row">
+    <div
+      className="study-chat-error-row"
+      data-request-id={reference}
+      title={reference ? `Response reference: ${reference}` : undefined}
+    >
       <AlertCircle size={18} aria-hidden="true" />
       <p role="alert">{copy}</p>
       <div className="study-chat-error-actions">{children}</div>
@@ -80,11 +89,13 @@ export function ChatNotice({
   kind = "warning",
   role = "alert",
   children,
+  onDismiss,
 }: {
   message: string;
   kind?: "warning" | "info";
   role?: "alert" | "status";
   children?: ReactNode;
+  onDismiss?: () => void;
 }): React.ReactElement | null {
   const [dismissed, setDismissed] = useState<string | null>(null);
   const copy = useChatNoticeMessage(message);
@@ -101,7 +112,10 @@ export function ChatNotice({
         type="button"
         className="study-chat-notice-dismiss"
         aria-label="Dismiss notice"
-        onClick={() => setDismissed(message)}
+        onClick={() => {
+          setDismissed(message);
+          onDismiss?.();
+        }}
       >
         <X size={16} />
       </button>
@@ -113,10 +127,12 @@ export function ChatComposerNotices({
   error,
   attachmentError,
   actions,
+  onDismissAttachmentError,
 }: {
   error?: string | null;
   attachmentError?: string | null;
   actions?: ReactNode;
+  onDismissAttachmentError?: () => void;
 }): React.ReactElement | null {
   const { canRetryVoice, retryVoice } = useChatActions();
   const online = useSyncExternalStore(
@@ -136,22 +152,35 @@ export function ChatComposerNotices({
   return (
     <div className="study-chat-composer-notices">
       {!online && (
-        <ChatNotice
-          message="You're offline. Your draft is kept. Reconnect to send a message."
-          role="status"
-        />
+        <div className="study-chat-offline-banner" role="status">
+          <AlertTriangle size={17} aria-hidden="true" />
+          <p>{"You're offline. Check your connection."}</p>
+        </div>
       )}
-      {errors.map((message) =>
-        message === error && canRetryVoice && retryVoice ? (
+      {errors
+        .filter((message) => message === error && canRetryVoice && retryVoice)
+        .map((message) => (
           <ChatError key={message} message={message}>
             {actions}
           </ChatError>
-        ) : (
-          <ChatNotice key={message} message={message}>
-            {message === error ? actions : undefined}
-          </ChatNotice>
-        )
-      )}
+        ))}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <div className="study-chat-toast-stack" aria-label="Chat notices" data-offline={!online}>
+            {errors
+              .filter((message) => !(message === error && canRetryVoice && retryVoice))
+              .map((message) => (
+                <ChatNotice
+                  key={message}
+                  message={message}
+                  onDismiss={message === attachmentError ? onDismissAttachmentError : undefined}
+                >
+                  {message === error ? actions : undefined}
+                </ChatNotice>
+              ))}
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

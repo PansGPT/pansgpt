@@ -42,7 +42,9 @@
     "history": [],
     "expected_route": "complex_path",
     "requires_tools": false,
-    "requires_rag": true
+    "requires_rag": null,
+    "evidence_required": true,
+    "clinical_risk": true
   },
   {
     "id": "mixed_greeting_clinical",
@@ -50,7 +52,9 @@
     "history": [],
     "expected_route": "complex_path",
     "requires_tools": false,
-    "requires_rag": true
+    "requires_rag": null,
+    "evidence_required": true,
+    "clinical_risk": true
   },
   {
     "id": "artifact_followup",
@@ -94,5 +98,61 @@
     "expected_route": "fast_path",
     "requires_tools": false,
     "requires_rag": false
+  },
+  {
+    "id": "typo_definition",
+    "message": "cn u xplain osmosis lyk im new to dis pls",
+    "history": [],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false,
+    "requires_web": false
+  },
+  {
+    "id": "spanish_followup",
+    "message": "Ahora explícamelo con un ejemplo sencillo, por favor.",
+    "history": [
+      { "role": "user", "content": "¿Qué es la difusión?" },
+      {
+        "role": "assistant",
+        "content": "La difusión es el movimiento de partículas desde una zona de mayor concentración hacia una de menor concentración."
+      }
+    ],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false,
+    "requires_web": false,
+    "review": ["Use Spanish and continue the diffusion topic with a concrete example."]
+  },
+  {
+    "id": "open_document_general_question",
+    "message": "What is the difference between a micelle and an emulsion? Keep it brief.",
+    "history": [],
+    "context": { "document_id": "018f3a30-0001-7000-8000-000000000001" },
+    "review": [
+      "Distinguish a surfactant aggregate (micelle) from a dispersion of liquid droplets (emulsion); do not equate all emulsified oil droplets with micelles."
+    ],
+    "expected_route": "fast_path",
+    "requires_tools": false,
+    "requires_rag": false,
+    "requires_web": false
+  },
+  {
+    "id": "unseen_uploaded_notes",
+    "message": "Summarize the key points from the notes I just uploaded.",
+    "history": [],
+    "context": { "has_attachments": true },
+    "expected_route": "complex_path",
+    "evidence_required": true,
+    "requires_web": false
+  },
+  {
+    "id": "selected_flashcard_action",
+    "message": "Osmosis and diffusion",
+    "history": [],
+    "context": { "action_mode": "create_flashcards" },
+    "expected_route": "complex_path",
+    "requires_tools": true,
+    "requires_web": false
   }
 ]

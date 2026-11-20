@@ -5,6 +5,7 @@
 import type { CitationItem, SSEParsedEvent } from "@pansgpt/types";
 import { parsePublicProgress } from "./public-progress.ts";
 import { parseCitationGeometry } from "./citation-geometry.ts";
+import { parseMessageContext } from "./message-context.ts";
 export type {
   SSEEventType,
   BoundingBoxCoordinates,
@@ -80,6 +81,8 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
   }
   if (!isRecord(value)) return undefined;
   switch (event) {
+    case "activity":
+      return value.stage === "generation" ? { event, data: { stage: "generation" } } : undefined;
     case "recovery":
       return value.state === "retrying" &&
         typeof value.attempt === "number" &&
@@ -107,6 +110,9 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
       return {
         event,
         data: {
+          run_id: typeof value.run_id === "string" ? value.run_id : undefined,
+          context: parseMessageContext(value.context),
+          request_id: typeof value.request_id === "string" ? value.request_id : undefined,
           session_id: typeof value.session_id === "string" ? value.session_id : undefined,
           user_message_id:
             typeof value.user_message_id === "string" ? value.user_message_id : undefined,
@@ -129,12 +135,20 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
     case "done":
       return {
         event,
-        data: { full_text: typeof value.full_text === "string" ? value.full_text : undefined },
+        data: {
+          full_text: typeof value.full_text === "string" ? value.full_text : undefined,
+          ...(value.completion_warning === "additional_work_incomplete"
+            ? { completion_warning: "additional_work_incomplete" as const }
+            : {}),
+        },
       };
     case "error":
       return {
         event,
         data: {
+          ...(typeof value.request_id === "string" && /^[0-9a-f-]{36}$/i.test(value.request_id)
+            ? { request_id: value.request_id }
+            : {}),
           error: typeof value.error === "string" ? value.error : undefined,
           code: typeof value.code === "string" ? value.code : undefined,
           retryable: typeof value.retryable === "boolean" ? value.retryable : undefined,
@@ -164,7 +178,10 @@ function parseEvent(event: string, value: unknown): SSEParsedEvent | undefined {
             typeof value.file_extension === "string" ? value.file_extension : undefined,
           storage_key: typeof value.storage_key === "string" ? value.storage_key : undefined,
           download_url: typeof value.download_url === "string" ? value.download_url : undefined,
-          content: isRecord(value.content) ? value.content : undefined,
+          content:
+            isRecord(value.content) || typeof value.content === "string"
+              ? value.content
+              : undefined,
         },
       };
   }

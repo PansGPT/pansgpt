@@ -162,6 +162,8 @@ function StudyConversation({
     sendReaderFile,
     retryVoice,
     canRetryVoice,
+    setEditedContext,
+    beginEditedContext,
   } = useChatRuntime({
     active,
     token: session?.access_token,
@@ -225,6 +227,9 @@ function StudyConversation({
           retryMessage,
           retryVoice,
           canRetryVoice,
+          setEditedContext,
+          beginEditedContext,
+          fixedDocumentId: document.id,
         }}
       >
         {renderThread(

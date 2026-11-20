@@ -1,5 +1,6 @@
 """Regression coverage for the remaining chat and approval gaps. [CHAT FIX 2]"""
 
+import json
 import uuid
 from unittest.mock import AsyncMock
 
@@ -32,9 +33,13 @@ def test_missing_material_still_generates_and_saves_an_answer(
         for call in tenant_state.connection.execute.call_args_list
         if "'assistant'" in call.args[0]
     ]
-    assert len(inserts) == 1
-    assert inserts[0].args[4] == "Scoped test answer."
-    assert inserts[0].args[5] is None
+    # The checkpoint and final update target one canonical assistant row.
+    assert len(inserts) == 2
+    assert len({call.args[1] for call in inserts}) == 1
+    assert json.loads(inserts[0].args[7])["completion_warning"] == "additional_work_incomplete"
+    assert inserts[-1].args[4] == "Scoped test answer."
+    assert inserts[-1].args[5] is None
+    assert json.loads(inserts[-1].args[7])["completion_warning"] is None
     tenant_state.ai.assert_called_once()
     assert "This topic was not found" not in response.text
     assert tenant_state.retrieval.call_args.kwargs["allow_web_search"] is False
