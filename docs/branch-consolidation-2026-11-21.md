@@ -45,6 +45,12 @@ CI browser commands now add Playwright's GitHub reporter alongside list output,
 so failed assertions can be diagnosed without credential extraction or weakening
 the tests. Local runner behavior is unchanged.
 
+The annotations identified a stale auth-shell assertion for the removed
+`Remove Document action` button. The approved composer uses an inline tool
+prefix removed by Backspace. The journey now verifies that prefix, absence of
+the old button, Backspace removal and retained input focus. Product behavior is
+unchanged; the real signup/onboarding/security portions remain intact.
+
 Hosted worker, provider availability, native-device and student release gates
 remain open. Repository consolidation does not certify these integrations.
 

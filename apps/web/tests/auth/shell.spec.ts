@@ -210,9 +210,13 @@ test("verified workspace navigation, profile, account themes, failures and mobil
           "placeholder",
           "What should the document cover?"
         );
+        await expect(page.locator(".study-chat-input-prefix")).toHaveText("Create a document");
         await expect(
           page.getByRole("button", { name: "Remove Document action", exact: true })
-        ).toBeVisible();
+        ).toHaveCount(0);
+        await expect(page.getByLabel("Study question")).toBeFocused();
+        await page.getByLabel("Study question").press("Backspace");
+        await expect(page.locator(".study-chat-input-prefix")).toHaveCount(0);
         await expect(page.getByLabel("Study question")).toBeFocused();
       }
       await page.goto("/app");
