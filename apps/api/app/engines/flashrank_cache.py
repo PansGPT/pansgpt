@@ -18,7 +18,21 @@ logger = structlog.get_logger(__name__)
 
 MAX_ARCHIVE_BYTES = 64 * 1024 * 1024
 MAX_EXPANDED_BYTES = 256 * 1024 * 1024
-DEFAULT_CACHE = Path(__file__).resolve().parents[4] / ".cache" / "flashrank"
+
+
+def _default_cache(module_path: Path) -> Path:
+    # Local checkouts retain their cache across reloads. Installed/container
+    # layouts may have fewer ancestors and use a writable temporary fallback.
+    workspace = next(
+        (parent for parent in module_path.parents if (parent / "pnpm-workspace.yaml").is_file()),
+        None,
+    )
+    if workspace is not None:
+        return workspace / ".cache" / "flashrank"
+    return Path(tempfile.gettempdir()) / "pansgpt" / "flashrank"
+
+
+DEFAULT_CACHE = _default_cache(Path(__file__).resolve())
 
 
 class ModelCacheError(ValueError):

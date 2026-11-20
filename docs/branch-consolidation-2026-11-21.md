@@ -33,6 +33,12 @@ publication. All 15 cache tests passed, including a simulated read-only cache
 with both locking and downloading forbidden. The existing non-root container
 smoke remains the real deployment verification gate; it is not bypassed.
 
+The next container run exposed a second layout boundary: a module-level default
+assumed five filesystem ancestors and raised `IndexError` under `/app/app/engines`.
+Default cache discovery now finds an actual workspace marker or uses the OS
+temporary directory, without changing the explicit container cache setting.
+Regression coverage includes the shallow installation and local workspace paths.
+
 Hosted worker, provider availability, native-device and student release gates
 remain open. Repository consolidation does not certify these integrations.
 

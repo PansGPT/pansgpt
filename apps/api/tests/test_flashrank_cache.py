@@ -3,6 +3,7 @@
 import io
 import stat
 import zipfile
+from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
@@ -11,6 +12,19 @@ import requests
 from app.engines import flashrank_cache as cache
 
 MODEL = "ms-marco-TinyBERT-L-2-v2"
+
+
+def test_default_cache_supports_shallow_container_layout(monkeypatch):
+    monkeypatch.setattr(Path, "is_file", lambda self: False)
+    assert cache._default_cache(Path("/app/app/engines/flashrank_cache.py")) == (
+        Path(cache.tempfile.gettempdir()) / "pansgpt" / "flashrank"
+    )
+
+
+def test_default_cache_preserves_local_workspace_cache(tmp_path):
+    (tmp_path / "pnpm-workspace.yaml").write_text("packages: []", encoding="utf-8")
+    module = tmp_path / "apps" / "api" / "app" / "engines" / "flashrank_cache.py"
+    assert cache._default_cache(module) == tmp_path / ".cache" / "flashrank"
 
 
 def package(extra=None, *, macos_metadata=False):
