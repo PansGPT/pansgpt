@@ -51,6 +51,20 @@ def test_complete_cache_is_reused_without_redownload(tmp_path, monkeypatch):
     assert not list(tmp_path.glob(".download-*"))
 
 
+def test_packaged_cache_needs_no_runtime_lock_or_download(tmp_path, monkeypatch):
+    monkeypatch.setattr(cache.requests, "get", MagicMock(return_value=response(package())))
+    cache.prepare_cache(MODEL, str(tmp_path))
+    # Docker's packaged model is readable but not writable by its runtime user.
+    # Simulate that boundary portably rather than relying on Windows chmod.
+    lock = MagicMock(side_effect=PermissionError("Read-only packaged cache"))
+    get = MagicMock(side_effect=AssertionError("Packaged models must not download"))
+    monkeypatch.setattr(cache, "FileLock", lock)
+    monkeypatch.setattr(cache.requests, "get", get)
+    assert cache.prepare_cache(MODEL, str(tmp_path)) == tmp_path
+    lock.assert_not_called()
+    get.assert_not_called()
+
+
 def test_official_package_macos_metadata_is_ignored(tmp_path, monkeypatch):
     # Synthetic contents reproduce the observed public ZIP's packaging layout.
     monkeypatch.setattr(

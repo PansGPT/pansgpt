@@ -58,8 +58,14 @@ def prepare_cache(model_name: str, cache_dir: str | None) -> Path:
             for name in required
         )
 
+    target = root / model_name
+    # Deployment images ship a complete, read-only cache. Reading it must not
+    # require creating a lock file as the non-root runtime user. Downloads are
+    # published atomically; only preparation needs the cross-process lock.
+    if complete(target):
+        return root
+
     with FileLock(str(root / (model_name + ".lock")), timeout=0):
-        target = root / model_name
         if complete(target):
             return root
         if target.exists():
