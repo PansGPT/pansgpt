@@ -543,6 +543,28 @@ async function setupChat(page) {
   );
 }
 
+test("welcome tool selection focuses its replacement input and Backspace preserves focus", async ({
+  page,
+}) => {
+  await setupChat(page);
+  await page.setViewportSize({ width: 1764, height: 975 });
+  await page.goto("http://127.0.0.1:4178/");
+  await page
+    .getByRole("button", {
+      name: "Create a document Word documents and assignments",
+      exact: true,
+    })
+    .click();
+  await expect(page.locator(".study-chat-input-prefix")).toHaveText("Create a document");
+  await expect(page.getByLabel("Study question")).toBeFocused();
+  await page.getByLabel("Study question").press("Backspace");
+  await expect(page.locator(".study-chat-input-prefix")).toHaveCount(0);
+  await expect(page.getByLabel("Study question")).toBeFocused();
+  expect(
+    await page.evaluate(() => window.__calls.filter((item) => item.url.endsWith("/stream")).length)
+  ).toBe(0);
+});
+
 for (const width of [1440, 390]) {
   test(`sent question actions are visible before an answer arrives at ${width}px`, async ({
     page,

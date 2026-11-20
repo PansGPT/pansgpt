@@ -122,12 +122,15 @@ export function ChatTools({
               className="study-chat-tool-card"
               title={actionMode === null ? "Coming later" : detail}
               disabled={actionMode === null}
-              onClick={() => {
+              onClick={(event) => {
                 if (actionMode === null) return;
+                const welcome = event.currentTarget.closest(".study-chat-welcome");
                 onActionSelect(actionMode);
-                document
-                  .querySelector<HTMLTextAreaElement>(".study-chat-welcome textarea")
-                  ?.focus();
+                // Selecting a tool can replace the plain input with its prefix
+                // wrapper. Focus the committed input, not the detached one.
+                window.requestAnimationFrame(() =>
+                  welcome?.querySelector<HTMLTextAreaElement>("textarea")?.focus()
+                );
               }}
             >
               <span className="study-chat-tool-icon">

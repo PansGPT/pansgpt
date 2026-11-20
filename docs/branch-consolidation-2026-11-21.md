@@ -51,6 +51,13 @@ prefix removed by Backspace. The journey now verifies that prefix, absence of
 the old button, Backspace removal and retained input focus. Product behavior is
 unchanged; the real signup/onboarding/security portions remain intact.
 
+The updated assertion then exposed an actual focus regression: selecting a
+welcome tool focused the old textarea before React committed the prefix wrapper.
+The tool now focuses the replacement input in the next animation frame, scoped
+to its welcome surface. Both the full auth journey and the existing chat welcome
+regression assert focus and Backspace removal without sending an inference.
+The focused local Chrome case passed (27.3 seconds), and scoped ESLint passed.
+
 Hosted worker, provider availability, native-device and student release gates
 remain open. Repository consolidation does not certify these integrations.
 
