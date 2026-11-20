@@ -37,7 +37,10 @@ try:
             except Exception:
                 if time.monotonic() > deadline: raise RuntimeError("Auth test server did not become ready.") from None
                 time.sleep(1)
-    result = subprocess.run([PNPM, "--filter", "@pansgpt/web", "exec", "playwright", "test"], cwd=ROOT, env=env)
+    test_command = [PNPM, "--filter", "@pansgpt/web", "exec", "playwright", "test"]
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        test_command.append("--reporter=list,github")
+    result = subprocess.run(test_command, cwd=ROOT, env=env)
     if "--preview" in sys.argv:
         print(f"Auth review server ready at http://localhost:{PORT}/login", flush=True)
         while True: time.sleep(10)

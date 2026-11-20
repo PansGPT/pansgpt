@@ -39,6 +39,12 @@ Default cache discovery now finds an actual workspace marker or uses the OS
 temporary directory, without changing the explicit container cache setting.
 Regression coverage includes the shallow installation and local workspace paths.
 
+The disposable auth browser job also failed on successive runs. Its existing
+list-only reporter exposed only an exit code through public check annotations.
+CI browser commands now add Playwright's GitHub reporter alongside list output,
+so failed assertions can be diagnosed without credential extraction or weakening
+the tests. Local runner behavior is unchanged.
+
 Hosted worker, provider availability, native-device and student release gates
 remain open. Repository consolidation does not certify these integrations.
 

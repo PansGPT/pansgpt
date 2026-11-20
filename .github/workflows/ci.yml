@@ -199,7 +199,7 @@ jobs:
       - name: Install Chromium and runtime dependencies
         run: pnpm --filter @pansgpt/ui exec playwright install --with-deps chromium
       - name: Build a fresh preview and verify shared UI contracts
-        run: pnpm --filter @pansgpt/ui test --global-timeout=900000
+        run: pnpm --filter @pansgpt/ui test --global-timeout=900000 --reporter=list,github
       - name: Preserve failed fixture traces for diagnosis
         if: failure()
         uses: actions/upload-artifact@v4
@@ -229,11 +229,11 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @pansgpt/web exec playwright install --with-deps chromium
       - name: Verify synthetic chat interactions without hosted credentials
-        run: pnpm --filter @pansgpt/web test:chat
+        run: pnpm --filter @pansgpt/web test:chat --reporter=list,github
       - name: Verify quiz practice journeys without hosted credentials
-        run: pnpm --filter @pansgpt/web test:quiz
+        run: pnpm --filter @pansgpt/web test:quiz --reporter=list,github
       - name: Verify administrative workspace journeys without hosted credentials
-        run: pnpm --filter @pansgpt/web test:admin
+        run: pnpm --filter @pansgpt/web test:admin --reporter=list,github
 
   build-web:
     name: Web Smoke Build Check
